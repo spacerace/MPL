@@ -1,0 +1,348 @@
+Microsoft Systems Journal
+Volume 3; Issue 3; May, 1988
+
+Code Listings For:
+
+	OS/2 Semaphore Examples
+	pp. 19-26
+
+Author(s): Kevin Ruddell
+Title:     Using OS/2 Semaphores To Coordinate Concurrent THreads of Execution
+
+
+
+
+Figure 1
+========
+
+
+if( rc=DosCreateSem( NoExclusive, &sysSem, &semName))
+    if( rc == ERROR_ALREADY_EXISTS)
+	   DosOpenSem( &sysSem, &semName) ;
+    else
+		... error ...
+
+... use the semaphore ...
+
+    DosCloseSem( sysSem) ;
+
+
+
+
+
+Figure 2
+========
+
+
+long resourceSem = 0;
+
+thread1()
+{
+	.
+	.
+	.
+	DosSemRequest( &resourceSem, -1L);
+	
+	... read/modify resource ...
+
+	DosSemClear( &resourceSem);
+	.
+	.
+	.
+}
+
+thread2()
+{	.
+	.
+	.
+	DosSemRequest( &resourceSem, -1L);
+	
+	... read/modify resource...
+
+	DosSemClear( &resourceSem);
+	.
+	.
+	.
+}
+
+
+
+
+
+Figure 3
+========
+
+
+main()
+{
+	.
+	.
+	.
+	DosExitList( 1, &Cleanup);    /* add to exit list */
+	.
+	.
+	.
+}
+
+Cleanup()
+{
+     if( DosFSRamSemRequest( &sem, 0L) != ERR_TIMEOUT)
+     {
+	      ... put in a consistent state ...
+	      DosFSRamSemClear( &sem);
+     }
+     DosExitList( 3, 0);  /* goto next ExitList routine*/
+}
+
+
+
+
+Figure 4
+========
+
+DosSemSet( sigSem);
+
+thread1()
+{	.
+	.
+	.
+	F1
+	DosSemClear( sigSem);
+	.
+	.
+	.
+}
+
+thread2()
+{	.
+	.
+	.
+	DosSemWait( sigSem, -1L);
+	F2
+	.
+	.
+	.
+}
+
+
+
+
+Figure 5
+========
+
+
+thread1()
+{	.
+	.
+	.
+	while(1)
+	{
+		F1
+		DosSemClear( sigSem) ;
+	}
+	.
+	.
+	.
+}
+
+thread2()
+{	.
+	.
+	.
+	while(1)
+	{
+		DosSemSetWait( segSem, -1L) ;
+		F2
+	}
+	.
+	.
+	.
+}
+
+
+
+
+Figure 6
+========
+
+
+struct {
+     int numSem;
+     int res1;
+     unsigned long semHandle1;
+     int res2;
+     unsigned long semHandle2;
+     int res3;
+     unsigned long semHandle3;
+} muxSemList ;
+
+int muxIndex;
+
+thread1()
+{	.
+	.
+	.
+	F1
+	DosSemClear( sigSem1) ;
+	.
+	.
+	.
+}
+
+thread2()
+{	.
+	.
+	.
+	F2
+	DosSemClear( sigSem2) ;
+	.
+	.
+	.
+}
+
+thread3()
+{	.
+	.
+	.
+	F3
+	DosSemClear( sigSem3) ;
+	.
+	.
+	.
+}
+
+thread4()
+{	.
+	.
+	.
+	muxSemList.numSem = 3 ;
+	muxSemList.res1 = 0;
+	muxSemList.semHandle1 = sigSem1 ;
+	muxSemList.res2 = 0 ;
+	muxSemList.semHandle2 = sigSem2 ;
+	muxSemList.res3 = 0 ;
+	muxSemList.semHandle3 = sigSem3 ;
+	.
+	.
+	.
+	DosMuxSemWait( &muxIndex, &muxSemList, -1L) ;
+	switch( muxIndex) {
+	case 1:
+		.
+		.	/* respond to F1 */
+		.
+	case 2: 
+		.
+		.	/* respond to F2 */
+		.
+	case 3: 
+		.
+		.	/* respond to F3 */
+		.
+	}
+}
+
+
+
+
+Figure 7
+========
+
+
+thread1()
+{	.
+	.
+	.
+
+	... get item c ...
+	DosSemWait( &fullSem, -1L) ;
+
+	DosSemRequest( &mutexSem, -1L);
+	Buffer.head = c;	 /* store c in Buffer */
+	head++;		 /* advance head of Buffer */
+	head %= bufSize;	 /* wrap around to beginning */
+	if((head==tail)||((tail==0)&&(head==bufSize-1)))
+		DosSemSet( &fullSem);    /* set if full */
+	DosSemClear( &emptySem);	   /* not empty */
+	DosSemClear( &mutexSem);
+	.
+	.
+	.
+}
+
+thread2()
+{	.
+	.
+	.
+	DosSemWait( &emptySem, -1L);
+
+	DosSemRequest( &mutexSem, -1L);
+	c = Buffer.tail;	/* get c from Buffer */
+	tail++;			/* advance tail of Buffer */
+	tail %= bufSize;	/* wrap around to beginning */
+	if( head==tail)
+		DosSemSet( &emptySem);	/* set if empty */
+	DosSemClear( &fullSem);		/* not full */
+	DosSemClear( &mutexSem);
+
+	... use item c ...
+
+	.
+	.
+	.
+}
+
+
+
+
+
+Figure 8
+========
+
+
+
+P()
+{
+	... wait until classicCountSem > 0 ...
+	classicCountSem--;
+}
+
+V()
+{
+	classicCountSem++;
+}
+
+
+
+
+
+Figure 9
+========
+
+
+P()
+{
+	int blocked=1;
+
+	while( blocked == 1)
+	{
+		DosSemWait( &countSem);		/* wait til maybe ok */
+
+		DosSemRequest( &mutexSem, -1L); /* mutual excl */
+		if( count == 0)		/* not ready yet */
+		DosSemSet( &countSem);	/* set up block */
+	else	{
+			count--;	/* decrement count */
+			blocked--;	/* set up loop exit */
+	}
+	DosSemClear( &mutexSem);	/* mutual excl */
+	}
+}
+
+V()
+{
+	DosSemRequest( &mutexSem, -1L);	/* mutual excl */
+	count++;			/* increment count */
+	DosSemClear( &countSem);	/* free waiters */
+	DosSemClear( &mutexSem);	/* mutual excl */
+}

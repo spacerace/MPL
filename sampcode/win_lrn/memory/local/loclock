@@ -1,0 +1,6 @@
+loclock.obj: loclock.c
+    cl -c -W2 -AS -Gsw -Od -Zped loclock.c
+
+loclock.exe: loclock.obj loclock.def
+    link4 loclock,/align:16,/map/li, slibw, loclock.def
+    mapsym loclock

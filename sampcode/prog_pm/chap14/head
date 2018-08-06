@@ -1,0 +1,19 @@
+#----------------
+# HEAD make file
+#----------------
+
+head.obj : head.c head.h easyfont.h
+     cl -c -G2sw -W3 head.c
+
+easyfont.obj : easyfont.c
+     cl -c -G2sw -W3 easyfont.c
+
+head.res : head.rc head.h
+     rc -r head
+
+head.exe : head.obj easyfont.obj head.def
+     link head easyfont, /align:16, NUL, os2, head
+     rc head.res
+
+head.exe : head.res
+     rc head.res

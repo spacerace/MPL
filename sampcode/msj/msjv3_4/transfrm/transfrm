@@ -1,0 +1,16 @@
+#--------------------
+# TRANSFRM make file
+#--------------------
+
+transfrm.obj : transfrm.c transfrm.h
+     cl -c -G2sw -W3 transfrm.c
+
+transfrm.res : transfrm.rc transfrm.h
+     rc -r transfrm
+
+transfrm.exe : transfrm.obj transfrm.def
+     link transfrm, /align:16, NUL, os2, transfrm
+     rc transfrm.res
+
+transfrm.exe : transfrm.res
+     rc transfrm.res

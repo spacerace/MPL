@@ -1,0 +1,4 @@
+#include <style.h>
+
+SMILE  BITMAP smile.bmp
+

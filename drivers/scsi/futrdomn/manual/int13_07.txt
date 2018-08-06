@@ -1,0 +1,16 @@
+Code 07                                  -Format Unit, No List
+
+Input registers - AL contains the interleave which is output as byte 
+4 of the command.
+
+Special output registers - none.
+
+Operation:
+
+    The SCSI Format Unit (04) command is issued to the device. Byte 1
+    contains only the LUN  with no special flags set. Byte 4 is the 
+    interactive. After the command is issued, the BIOS waits for the 
+    completion by looking for the Status/Message phase of the 
+    operation. There is no predetermined length of time to use for a 
+    timeout, so if the device hangs, the only method of recovery is 
+    to restart the system.

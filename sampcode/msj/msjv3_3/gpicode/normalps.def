@@ -1,0 +1,10 @@
+;-------------------------------------
+; NORMALPS.DEF module definition file
+;-------------------------------------
+
+NAME           NORMALPS
+DESCRIPTION    'Demonstrates Normal-PS (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

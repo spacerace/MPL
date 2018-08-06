@@ -1,0 +1,39 @@
+
+
+       NAME
+               soundon -- turn on the speaker
+               soundoff -- turn off the speaker
+
+       SYNOPSIS
+               void soundon();
+               void soundoff();
+
+
+
+       DESCRIPTION
+       These are very low level functions to manipulate the speaker
+       port control.  It may be used with any function, but was developed
+       for use with the mktone() function.  Timer values should be set
+       before turning the speaker on.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

@@ -1,0 +1,18 @@
+comments about CALC
+
+
+
+CALC is a simple calculator, ported from the Windows version.
+You can operate the calculator keys by clicking with the
+left mouse button.  Keyboard operation is also supported:
+
+    Q = square root
+    N = sign change
+    M = memory shift key.  For memory operations, hold down the
+	'M' key and then one of 'C', 'R', '+', and '-'.
+
+Hit-testing on the calculator keys is done by explicit calculation
+in the CALC program.
+
+DCALC achieves the same functionality by using a dialog box, so that
+PM does the work of deciding which calculator key was selected.

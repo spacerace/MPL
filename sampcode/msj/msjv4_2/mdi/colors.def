@@ -1,0 +1,17 @@
+NAME                    COLORS
+DESCRIPTION             'Multiple Document Interface'
+STUB                    'WINSTUB.EXE'
+
+CODE                    MOVEABLE DISCARDABLE PURE LOADONCALL SHARED
+DATA                    MOVEABLE MULTIPLE
+
+HEAPSIZE                2048
+STACKSIZE               2048
+
+EXPORTS
+   MainWndProc          @1
+   ColorWndProc         @2
+   MainDlgNew           @3
+   MainDlgAbout         @4
+   MdiMsgHook           @5
+   MdiDlgUnhide         @6

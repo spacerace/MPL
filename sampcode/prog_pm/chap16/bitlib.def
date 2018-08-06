@@ -1,0 +1,7 @@
+;-----------------------------------
+; BITLIB.DEF module definition file
+;-----------------------------------
+
+LIBRARY        BITLIB
+
+DESCRIPTION    'Bitmap LIbrary for SHOWBIT (C) Charles Petzold, 1988'

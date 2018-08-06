@@ -1,0 +1,190 @@
+
+                        Chapter 1 - Getting Started
+
+
+                          WHAT IS AN IDENTIFIER?
+
+             Before you can do anything in any language, you must at
+        least  know  how you name an identifier.  An  identifier  is
+        used  for any variable, function, data definition, etc.   In
+        the  programming language C, an identifier is a  combination
+        of alphanumeric characters, the first being a letter of  the
+        alphabet or an underline, and the remaining being any letter
+        of  the alphabet, any numeric digit, or the  underline.   In
+        the  case of Turbo C, a dollar sign is permitted but not  as
+        the first character of an identifier.  It should be  pointed
+        out that even though a dollar sign is permitted by the Turbo
+        C  compiler, it is not used anywhere in this tutorial  since
+        it  is not in general use by C programmers, and is not  even
+        allowed by most compilers.  If you do not plan to write  any
+        portable  code, you can use it at will if you feel it  makes
+        your code more readable.
+
+             Two rules must be kept in mind when naming identifiers.
+
+        1.   The  case  of  alphabetic  characters  is  significant.
+             Using  "INDEX" for a variable is not the same as  using
+             "index"  and  neither  of them is  the  same  as  using
+             "InDeX"  for a variable.   All three refer to different
+             variables.
+
+        2.   As Turbo C is defined, up to 32 significant  characters
+             can  be  used and will be considered  significant.   If
+             more  than  32 are used, they will be  ignored  by  the
+             compiler.  You can reduce the number used  to  anything
+             less  than 32 if you desire as a compiler option.   You
+             should  not do this for the duration of your  study  of
+             this  tutorial  as  you could  get  some  odd  compiler
+             diagnostics.
+
+                         WHAT ABOUT THE UNDERLINE?
+
+             Even  though  the  underline can be used as part  of  a
+        variable  name, and adds greatly to the readability  of  the
+        resulting  code,  it  seems  to  be  used  very  little   by
+        experienced   C  programmers.   It  adds  greatly   to   the
+        readability  of  a  program to  use  descriptive  names  for
+        variables  and  it  would be to your  advantage  to  do  so.
+        Pascal  programmers tend to use long descriptive names,  but
+        most C programmers tend to use short cryptic names.  Most of
+        the  example programs in this tutorial use very short  names
+        for that reason.
+
+             Any computer program has two entities to consider,  the
+        data,  and  the program.   They are highly dependent on  one
+        another  and  careful planning of both will lead to  a  well
+
+
+                                 Page 4
+
+
+
+
+
+
+
+
+
+                        Chapter 1 - Getting Started
+
+
+        planned and well written program.   Unfortunately, it is not
+        possible  to study either completely without a good  working
+        knowledge of the other.  For this reason, this tutorial will
+        jump  back  and forth between teaching  methods  of  program
+        writing  and  methods of data  definition.    Simply  follow
+        along and you will have a good understanding of both.   Keep
+        in  mind that,  even though it seems expedient to  sometimes
+        jump right into the program coding,  time spent planning the
+        data  structures  will be well spent and the  final  program
+        will reflect the original planning.
+
+                        HOW THIS TUTORIAL IS WRITTEN
+
+             As  you go through the example programs,  you will find
+        that  every  program  is complete.   There  are  no  program
+        fragments that could be confusing.   This allows you to  see
+        every  requirement that is needed to use any of the features
+        of  Turbo  C as they are presented.  Some tutorials  I  have
+        seen give very few, and very complex examples.  They  really
+        serve  more  to confuse the student.  This tutorial  is  the
+        complete  opposite  because  it strives to  cover  each  new
+        aspect  of programming in as simple a context  as  possible.
+        This  method, however, leads to a lack of knowledge  in  how
+        the  various parts are combined.  For that reason, the  last
+        chapter is devoted entirely to using the features taught  in
+        the  earlier  chapters. It will illustrate how  to  put  the
+        various features together to create a usable program.   They
+        are given for your study, and are not completely  explained.
+        Enough details of their operation are given to allow you  to
+        understand how they work after you have completed all of the
+        previous lessons.
+
+             At this point, you should load and run FIRSTEX.C if you
+        have  not yet done so, to see that the Turbo C  compiler  is
+        properly  loaded and operating.  If you have  any  problems,
+        see  the COMPILER.DOC file for help in properly  setting  up
+        your computer to compile and run Turbo C programs.
+
+                     A DISCUSSION OF SOME OF THE FILES
+
+                                  LIST.EXE
+
+             This  file will list the source files for you with line
+        numbers  and  filename.   To  use  it,  simply  type  "LIST"
+        followed by the appropriate filename.   Type LIST  FIRSTEX.C
+        now  for  an example.   The C source code is given later  in
+        Chapter 14 along with a brief description of its operation.
+        After  you  have completed your study of Turbo C,  you  will
+        have the ability to read and understand the source code  for
+        this program.
+
+
+
+                                 Page 5
+
+
+
+
+
+
+
+
+
+                        Chapter 1 - Getting Started
+
+
+                                PRINTALL.BAT
+
+             This is a batch file that will call the above  LIST.EXE
+        file  once for each of the example C programs,  printing all
+        of  the  files out.   If you want a hardcopy of all  of  the
+        files,  enter PRINTALL and watch as your printer fills about
+        150 sheets of paper with C programs.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 Page 6

@@ -1,0 +1,9 @@
+#-------------------
+# MINMAX1 make file
+#-------------------
+
+minmax1.obj : minmax1.c
+     cl -c -G2sw -W3 minmax1.c
+
+minmax1.exe : minmax1.obj minmax1.def
+     link minmax1, /align:16, NUL, os2, minmax1

@@ -1,0 +1,10 @@
+getobj.obj: getobj.c
+    cl -d -c -AS -Gsw -Os -Zpe getobj.c
+
+getobj.res: getobj.rc
+     rc -r getobj.rc
+
+getobj.exe: getobj.obj getobj.def
+    link4 getobj,/align:16,/map,slibw/NOE,getobj.def
+    mapsym getobj
+    rc getobj.res

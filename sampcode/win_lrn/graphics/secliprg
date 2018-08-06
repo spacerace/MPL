@@ -1,0 +1,6 @@
+
+secliprg.obj: secliprg.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 secliprg.c
+
+secliprg.exe: secliprg.obj secliprg.def
+    link4 /align:16 secliprg,,nul,slibw/NOE,secliprg.def

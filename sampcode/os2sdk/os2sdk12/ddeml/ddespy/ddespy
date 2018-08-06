@@ -1,0 +1,41 @@
+#===================================================================
+#
+#   DDESpyr Application Make file
+#
+#===================================================================
+#
+# Default compilation macros
+#
+# CVP = -Zid
+# CVPLINK = /codeview
+CVP =
+CVPLINK =
+CC  = cl -W3 -DLINT_ARGS -DSLOOP -u -c -Asnw -G2s -Od -Zpe -PLM
+
+#===================================================================
+#
+# Default inference rules
+#
+#===================================================================
+
+.rc.res:
+    rc -r $*.rc
+
+.c.obj:
+    $(CC) $(CVP) $*.c
+
+#===================================================================
+#
+# Dependencies
+#
+#===================================================================
+
+ddespy.res: ddespy.rc ddespy.dlg dialog.h ddespy.h
+
+ddespy.obj: ddespy.c ddespy.h
+
+ddespy.exe:  ddespy.rc ddespy.obj ddespy.def
+    link $(CVPLINK) ddespy, ddespy, ddespy/map, os2 ..\ddeml libh slibcp/nod, ddespy.def
+    rc ddespy
+    mapsym ddespy
+

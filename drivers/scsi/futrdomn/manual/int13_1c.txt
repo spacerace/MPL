@@ -1,0 +1,16 @@
+Code 1C                            Locate Driver Letter Table
+
+Input registers - none.
+
+    
+Special output registers - ES:BS points to a character array that could be 
+used by utilities or a loadable driver as a table of drive letters. In Host 
+adapters using BIOS 1.0-1.2 and 6.0, this table is 26 bytes long and in 
+Host adapters using BIOS 4.0 and 5.0-5.2 the table is 6 bytes long.
+
+Operation:
+
+    This table is filled with the assigned DOS disk drive letters when the 
+    Future Domain Loadable driver is executed. The table is then used to 
+    specify the drive letter for utilities. It is not necessary to use this 
+    feature to make the ROM BIOS operational.

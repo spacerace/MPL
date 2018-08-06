@@ -1,0 +1,3 @@
+#include <style.h>
+
+WindowIcon ICON setclswd.ico

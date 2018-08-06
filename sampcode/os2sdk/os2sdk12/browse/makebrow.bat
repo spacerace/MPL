@@ -1,0 +1,10 @@
+cd avbrowse
+nmake browse
+del *.obj
+del *.res
+del *.map
+cd ..\vbrowse
+nmake browse
+del *.obj
+del *.map
+cd ..

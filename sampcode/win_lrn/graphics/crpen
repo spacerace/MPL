@@ -1,0 +1,6 @@
+
+crpen.obj: crpen.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 crpen.c
+
+crpen.exe: crpen.obj crpen.def
+    link4 /align:16 crpen,,nul,slibw/NOE,crpen.def

@@ -1,0 +1,8 @@
+#include <style.h>
+#include "loadstr.h"
+
+STRINGTABLE
+BEGIN
+  STRING1, "This came from STRING1"
+  STRING2, "This came from STRING2"
+END

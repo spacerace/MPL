@@ -1,0 +1,11 @@
+CFLAGS=-c -AS -FPa -Gsw -Os -Zep
+
+finder.res: finder.h finder.ico finder.rc
+   rc -r finder.rc
+   
+finder.obj: finder.h finder.c
+   cl $(CFLAGS) finder.c
+
+finder.exe: finder.res finder.obj finder.def
+   link4 finder /NOE /AL:16,,,slibw+slibcaw,finder
+   rc finder.res

@@ -1,0 +1,71 @@
+@[^ A-Z]@e
+?1?2
+@GLOBAL@e
+#include "bc.h"
+@CON .+@e
+#define ?2
+@MAIN@e
+?1main() {
+@BEGIN@e
+?1{
+[^;/]$
+?1;
+\[:n*,@r
+[?1][
+@PRINT -[^#]+;@e
+?1printf(?3);
+@PRINT -#:d,.+;@e
+?1fprintf(fp?3,?4);
+@RETURN@e
+?1return
+@STOP@e
+?1exit(1)
+INTEGER
+int
+REAL
+double
+CHAR
+char
+FUNCTION .+(.+;@e
+?1(?2
+@[^ CEFINORUW]@e
+?1?2
+<>
+!=
+ AND 
+ && 
+ OR 
+ || 
+ NOT 
+ !
+@IF .+;@e
+?1if(?2) {
+@ELSE;@e
+?1} else {
+@ELSE IF .+;@e
+?1} else if {
+@END -:n*;@e
+?1}/*?2?3*/
+@FOR :n+ -= -:n+ TO :n+;@e
+?1for(?2 = ?5; ?2 <= ?6; ?2++) {
+@NEXT :n+;@e
+?1}/*?2*/
+@WHILE .+;@e
+?1while(?2) {
+@REPEAT;@e
+?1do {
+@UNTIL .+@e
+?1} while(\!(?2))
+@OPEN -#:d,[^,]+,.+;@e
+?1if((fp?3=fopen(?4,?5))==0){puts("can't open #?3");exit(1);}
+@CLOSE -#:d@e
+?1fclose(fp?3)
+@INPUT[ #,0-9]+[^#,][^#,]+.*, -[^&].*;@r
+?1INPUT?2?3?4?5,?6&?7?8;
+@INPUT.+&\*.+@r
+?1INPUT?2?3
+@INPUT -#:d,[^,]+,.+;@e
+?1IEOF = fscanf(fp?3,?4,?5);
+@INPUT -[^#,]+,.+;@e
+?1IEOF = scanf(?3,?4);
+

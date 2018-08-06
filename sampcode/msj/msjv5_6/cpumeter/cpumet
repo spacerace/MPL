@@ -1,0 +1,9 @@
+#-------------------
+# CPUMET make file
+#-------------------
+
+cpumet.obj : cpumet.c
+     cl -c -MT -G2sw -W3 cpumet.c
+
+cpumet.exe : cpumet.obj cpumet.def
+     link cpumet, /align:16, NUL, /nod llibcmt os2, cpumet

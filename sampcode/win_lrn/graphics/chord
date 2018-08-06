@@ -1,0 +1,7 @@
+
+chord.obj: chord.c
+   cl -c -W2 -AS -Gsw -Od -Zped chord.c
+
+chord.exe: chord.obj chord.def
+   link4 chord,/align:16,/map/li,slibw/NOE,chord.def
+   mapsym chord

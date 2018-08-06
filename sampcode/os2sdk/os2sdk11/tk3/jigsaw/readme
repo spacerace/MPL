@@ -1,0 +1,54 @@
+Comments about JIGSAW
+
+
+
+General Description
+-------------------
+
+This program demonstrates the use of GPI retained segments by turning
+an arbitrary bitmap into a jigsaw puzzle.  The bitmap is divided into
+pieces, each piece represented by a single retained segment.  The
+user can jumble the pieces, or drag them around the screen.  Dragging
+can be accomplished with a piece which contains the appropriate bitmap
+fragment, or with a piece drawn in the faster outline mode.
+
+
+Commands
+--------
+
+Options
+
+    Zoom In
+	make each piece appear larger
+
+    Zoom Out
+	make each piece appear smaller
+
+    Fast Drag
+	toggle bitmap/outline representation while dragging
+
+
+Load!
+
+    invoke the dialog box which loads a bitmap
+
+
+Jumble!
+
+    throw the pieces pseudo-randomly around the screen
+
+
+Exit
+
+    Exit Jigsaw
+	terminate the app
+
+    Resume
+	don't exit
+
+
+
+Bitmaps
+-------
+
+4 sample bitmaps can be found in the ..\bitmaps directory.

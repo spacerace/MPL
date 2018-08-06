@@ -1,0 +1,11 @@
+#include "style.h"
+#include "enddia.h"
+
+MenuName MENU
+BEGIN
+    MENUITEM "Dialog box",  IDM_1
+END
+
+rcinclude enddia.dlg
+
+

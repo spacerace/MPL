@@ -1,0 +1,47 @@
+#   stock - make file for stock.exe
+#
+#   NOTE:   CFLAGS = -DCHECKASSERTS -Zi
+#		turns on assertion checking
+#	    LFLAGS = /CO
+#		for code view
+#
+
+.SUFFIXES:
+.SUFFIXES:	.c .asm .h .obj .def .rc .res .lrf .exe .com .inc
+
+# command line definitions
+
+CC=cl -Lp -W3 -c -u -AS -Gsw2 -Zep $(CFLAGS) -PLM
+AFLAGS=-Mx -t
+
+
+# inference rules
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+# default make target
+
+all: stock.exe
+
+# dependencies
+
+stock.res:  stock.rc ids.h fileid.h stock.ico
+
+# -------------------------------------
+
+ea.obj:     stock ea.c     ea.h mem.h
+
+file.obj:   stock file.c   file.h fileid.h mem.h
+
+mem.obj:    stock mem.c    mem.h
+
+print.obj:  stock print.c  mem.h print.h
+
+stock.obj:  stock stock.c  ea.h file.h ids.h mem.h print.h
+
+
+stock.exe:  ea.obj file.obj mem.obj print.obj stock.obj stock.def stock.lrf stock.res
+	link $(LFLAGS) @stock.lrf

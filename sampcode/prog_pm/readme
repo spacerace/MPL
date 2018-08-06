@@ -1,0 +1,44 @@
+  -------------------------------------------------------------
+  Companion Disk to "Programming the OS/2 Presentation Manager"
+  -------------------------------------------------------------
+
+                    (C) Charles Petzold, 1989
+
+
+     This disk contains source code and executable files for 
+all programs shown in "Programming the OS/2 Presentation Manager" 
+(Microsoft Press, 1989).  The files are organized in directories 
+by chapter (CHAP02, CHAP03, and so forth).
+
+     Before you begin working with this disk, make a backup copy 
+using the OS/2 DISKCOPY command.  You can copy the disk 
+contents to your hard disk by first creating a directory for it:
+
+          MD C:\PMBOOK
+
+and then using the OS/2 XCOPY command:
+
+          XCOPY A:\*.* C:\PMBOOK /S
+
+     The disk includes executable (.EXE) files for all 
+programs.  However, to determine if you have the C compiler and 
+other programming tools installed correctly, you may want to 
+recompile and link the programs yourself.  All programs have a 
+MAKE file that performs the compile and link commands.  To 
+compile the WELCOME1 program from CHAP02, for example, switch
+to the CHAP02 directory and execute
+
+          MAKE WELCOME1 
+
+You can also recompile all programs in a particular directory by 
+using this OS/2 command:
+
+          FOR %X IN (*.) DO MAKE %X
+
+     If you have a question or comment about this disk, contact 
+Charles Petzold via CompuServe (user ID 72241,56) or MCI Mail 
+(user name CPETZOLD or 143-6815).  If this disk proves defective, 
+contact Consumer Sales, Microsoft Press, 16011 NE 36th Way, Box 
+97017, Redmond, WA  98073-9717.
+
+

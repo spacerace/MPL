@@ -1,0 +1,28 @@
+#include <windows.h>
+#include "demo.h"
+
+demo MENU
+BEGIN
+  MENUITEM "Dialog...",	IDM_TEST
+END	
+
+STRINGTABLE
+BEGIN
+IDS_COLOR1,	"RED"
+IDS_COLOR2,	"BLUE"
+IDS_COLOR3,	"GREEN"
+IDS_COLOR4,	"ORANGE"
+IDS_COLOR5,	"YELLOW"
+IDS_COLOR6,	"PURPLE"
+IDS_COLOR7,	"BLACK"
+IDS_COLOR8,	"WHITE"
+IDS_STRING1,	"IBM"
+IDS_STRING2,	"Microsoft"
+IDS_STRING3,	"Tencor"
+IDS_STRING4,	"Varian"
+IDS_STRING5,	"Other"
+END
+
+rcinclude demo.dlg
+
+

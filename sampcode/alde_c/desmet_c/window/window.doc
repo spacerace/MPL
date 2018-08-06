@@ -1,0 +1,65 @@
+
+
+                          Window Management Library Documentation
+
+                              Ray L. McVay - 30 August, 1984
+                                        S P A R K S
+                                        908 Newton
+                                   Arlington, TX  76010
+                                      (817) 265-7688
+
+            WINDOW.C -
+
+            Window.c ia a simple window management library based on the article
+            "A Simple Window Package" by  Edward Mitchell  in the  January 1984
+            issue of  Dr. Dobb's Journal.  This implementation uses dynamically
+            allocated buffers for window control blocks and screen save buffers
+            instead of the fixed arrays used by Mitchell. Although this library
+            is written  to be  used with  the DeSmet  C compiler, the only non-
+            standard characteristic  of the source is that some of the function
+            names are more than 8 characters long.
+
+            VLIB.A -
+
+            An assembly  language  support  library  called  VLIB  is  used  to
+            interface the  DeSmet C  compiler  with  the  IBM  ROM  BIOS  video
+            routines.  VLIB will undoubtedly have to be rewritten if the window
+            package  is   to  be  used  with  other  compilers.  The  following
+            paragraphs should  be of  help to  those folks  who must tread this
+            path.
+
+            The calling  convention for  DeSmet is to push parameters rightmost
+            first then do an intrasegment call to the function. In other words,
+            functions are NEAR procedures. Most other compilers do intersegment
+            (FAR) calls to assembly language functions so their parameters will
+            be 2 bytes farther away on the stack.
+
+            Functions return  char's and  int's in  the AX register. Long's are
+            returned in DX:AX.
+
+            The compiler  adds an  underscore  character  to  the  end  of  all
+            function names  so getmode() would become getmode_ in the assembler
+            source.
+
+            WNDEMO.C -
+
+            Just what it says. WNDEMO shows how to open windows, write strings
+            in them and close 'em.
+
+            FINALLY -
+
+            Since all  the windowing  functions go  through the  standard  BIOS
+            calls, any display mode can be accommodated. The graphic modes will
+            require more  attention from  the host  program than  was  paid  in
+            WNDEMO, but  that (as is so often said) is left as an excercise for
+            the reader (programmer).
+
+
+
+
+
+
+
+
+
+

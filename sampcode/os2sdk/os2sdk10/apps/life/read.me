@@ -1,0 +1,84 @@
+This is a OS/2 implementation of the game of Life.  It is designed to be bound
+to allow it to operate in both the protect mode of OS/2 and in earlier MS-DOS
+versions.  The program uses a mouse if one is installed, but one is not needed.
+If no mouse is installed, the F9 and INS buttons act as if they were the
+left mouse button and the F10 and DEL buttons act as the right mouse buttons.
+The cursor keys move the mouse pointer.
+When not in the active screen group, Life does not print to the screen and
+can thus execute in the background.
+
+Life was invented by mathematician John Conway.  Life is played on a grid
+that contains cells which are either on or off.  At the start, a pattern of
+cells are turned on in the grid.  The following three rules are then applied to
+the entire grid simultaneously.  One full aplication of the rules to the grid
+is called a "generation." The three rules are:
+
+	1)  If a cell has two neighbors (counting both cells immediately
+	    adjacent and diagonal from the one in question), the cell
+	    remains in its current state (on or off).
+
+	2)  If a cell has three neighbors, it is turned on (or remains on
+	    if that was already its state).
+
+	3)  If a cell has one or fewer or four or more neighbors, it is
+	    turned off (or remains off if that was already its state).
+
+The history of Life and many patterns of cells which produce interesting
+results, including those contained here, can be found in the Scientific
+American articles that introduced the game (October 1970 and February 1971) and
+the book The Recursive Universe, by William Poundstone (Contemporary Books:
+Chicago, 1985).
+
+******************************************************************************
+
+Files:
+	LIFE.C	   - main Life program source code
+	LIFE2.ASM  - fast assembler routines called by LIFE.C
+	MOUAPI.C   - real mode mouse calls to simulate protect mode calls
+	INT33H.ASM - short routine to call mouse real mode API, used by MOUAPI
+	MOUAPI.LIB - library created from MOUAPI for linking with BIND to LIFE
+	LIFE	   - directions for MAKE.EXE to build LIFE.EXE
+	LIFE.EXE   - the executable program built from the files listed above
+	*.LIF	   - sample files which can be read by LIFE.EXE
+
+******************************************************************************
+
+This program illustrates the following concepts used in OS/2 programs:
+
+	* Binding programs for use in both OS/2 and earlier versions of MS-DOS
+
+		Tools:	BIND.EXE, API.LIB, LIB.EXE
+
+	* Calling OS/2 functions from C and assembler
+
+	* Screen graphics in protect mode
+
+		Calls:	VioGetMode, VioSetMode, VioGetPhysBuf, VioScrLock,
+			VioScrUnLock, VioGetFont
+
+	* Mouse support in protect and real graphics modes
+
+		Calls:	MouOpen, MouSetDevStatus, MouReadEventQue, MouSetPtrPos
+			MouGetNumQueEl
+			Int 33h functions 0, 3, and 4
+
+	* Memory allocation and reallocation
+
+		Calls:	DosAllocSeg, DosReAllocSeg
+
+	* Keyboard input
+
+		Calls:	KbdCharIn, KbdPeek
+
+	* File input and output
+
+		Calls:	DosOpen, DosRead, DosWrite, DosClose
+
+	* Signal handling
+
+		Calls:	DosSetSigHandler
+
+	* Other functions
+
+		Calls:	DosExit, DosBeep
+

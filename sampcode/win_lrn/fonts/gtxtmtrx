@@ -1,0 +1,22 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+gtxtmtrx.obj: gtxtmtrx.c
+
+gtxtmtrx.exe: gtxtmtrx.obj gtxtmtrx.def
+    link4 gtxtmtrx,/align:16,/map,slibw/NOE,gtxtmtrx.def
+    mapsym gtxtmtrx

@@ -1,0 +1,114 @@
+			     WNTERM
+
+		A Simple Windows Terminal Program
+
+			 William S. Hall
+		     3665 Benton Street, #66
+		      Santa Clara, CA 95051
+
+
+			  Introduction
+
+     WNTERM is a dumb terminal program written for Microsoft
+Windows.  The purpose of the program is educational and it is
+distributed with source code.  No attempt has been made to add
+features such as memory paging, clipboard data exchange, or smart
+terminal emulation.  The primary goal is to show how to use the
+Windows communications features and to illustrate subclassing and
+font enumeration.  Despite its limitations, the program functions
+quite adequately as a means for basic communication with another
+computer through the serial port.
+
+     WNTERM has a useful option allowing you to choose a font
+which will provide the maximum number of visible lines on the
+screen.  One possible application is to use WNTERM as a debugging
+terminal.  See the sections below on selecting a small font and
+the caveats about maximum baud rates.
+
+
+			Program Operation
+
+     To use the program, copy WNTERM.EXE to an appropriate
+directory and run it under Windows.  The program  first tries to
+open COM1.  If not successful, it tries successively COM2, COM3,
+and COM4.  If this fails, the program exits.  if a port can be
+opened, the baud rate, parity, and word size will be set
+according to the COMx: strings in the [ports] section of win.ini. 
+You should modify these values (use the Control Panel) if to do
+so does not interfere with a serial printer setting.  Otherwise,
+you can set the desired parameters with the program's
+'Communications' menu after startup.
+
+     Before trying to use COM3 or COM4, you must set up the port
+addresses used by your hardware.  The entry for COM3 is at 40:6;
+COM4 is located at 40:8.  Use DEBUG and the examine command to
+enter the values.  Remember that the addresses must be entered in
+Intel format (low-order byte first).  Look at the values for COM1
+and COM2 found at 40:0 and 40:2 for guidance.  Also, you should
+update the equipment word at 40:10, bits 11-9, to show the number
+of communications ports your machine has.
+
+     WNTERM, when run in Real or Standard mode Windows, will most
+likely operate correctly on COM3 or COM4 after you have made the
+entries suggested above in the BIOS data area.  On an ISA bus 386
+machine, expect complete failure.  You may be successful on an
+EISA bus or Microchannel computer.  At this time there seems to
+be lots of problems with how Enhanced mode Windows handles COM3
+and COM4.  The general rule is: stay with COM1 and COM2.
+
+     When the window appears, the program will be ready to
+communicate with the port shown in the title bar.  You can switch
+between line and local operations by toggling the 'Line/Local'
+menu item.  At any time, you can clear the screen with the
+'ClearScreen' menu choice.  If needed, Local Echo can be
+selected.  Scrolling can be started and stopped with the Scroll
+Lock key.  Finally, a dialog box is provided to allow you to
+vary the communications parameters.
+
+
+		       Using a Small Font
+
+     After the program has run for the first time, an entry is
+made in win.ini of the form:
+
+	[Wnterm]
+	SmallFont=0
+
+If you change 0 to 1, the program will search all Courier fonts
+installed on your system for the one with the smallest height. 
+If one is found with a height less than and of width less than or
+equal to that of the Windows system font, then the smaller font
+will be used.  In this way, it is possible to have more lines on
+the screen.  If you install COURA.FON (which is normally copied
+to your Windows directory only if you have a CGA, so you may have
+to retrieve it from the distribution disks), you can have as many
+as 73 lines on a VGA screen and 53 on the EGA.  If no small font
+is found, then the system font will be used.  You will then have
+a maximum of 29 lines on the VGA and 32 on the EGA.  (The EGA
+system font is only 10 pixels high, whereas on the VGA it is 15).
+
+
+		   Flow Control and Baud Rates
+
+     The program needs XON-XOFF on the host side for baud rates
+above 2400.  At 2400 baud or below, the performance on a 16 mHz.
+386 machine is adequate for sustained operation without
+handshaking at full screen.  You may have to experiment with
+machines of lower performance to find the maximum usable baud
+rate with no flow control.  Generally this is of no concern
+unless the host is incapable of XON-XOFF as might be the case
+when WNTERM is being used as a debugging terminal.
+
+
+			   Source Code
+
+     The source code is enclosed on the disk.  If you know
+Windows programming, it should not be too difficult to read.
+For more information, see the following articles:
+
+     1.  A Simple Terminal Program for Windows, Programmer's
+Journal 7.6, November/December, 1989, pp. 26-38.
+
+     2.  A Simple Terminal Program in Presentation Manager,
+Programmer's Journal 7.4, July/August, 1989, pp. 32-43.
+

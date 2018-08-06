@@ -1,0 +1,41 @@
+
+
+        NAME
+                cursor_style -- alter the cursor style
+
+        SYNOPSIS
+                void cursor_style(type, startscan, stopscan);
+                int type;         type of cursor as defined below
+                int startscan;    top scanline of cursor
+                int stopscan;     bottom scanline of cursor
+
+
+        DESCRIPTION
+        This function allows selection of several pre-defined cursor
+        styles, or user-specified cursor size.  If "type" is 0, then
+        user must supply a starting scanline and stopping scanline
+        value.  If "type is 1-5, then these values may be set to
+        anything to simply satisfy the argument count.  Cursor
+        scanlines are numbered from the top (0) to the bottom, which
+        is 7 for CGA boards, and 13 for Monochrome Adapters.  The
+        Predefined values are:
+            type == 1      Normal underline cursor for CGA
+            type == 2      same, Mono Adapter
+            type == 3      Block cursor for CGA
+            type == 4      same, Mono Adapter
+            type == 5      Cursor becomes invisible
+
+
+        EXAMPLE
+
+             /* for CGA video modes: */
+            cursor_style(4, 0, 0);    /* set block cursor */
+            cursor_style(1, 0, 0);    /* restore underline cursor */
+            cursor_style(0, 1, 7);    /* set a very large block cursor */
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

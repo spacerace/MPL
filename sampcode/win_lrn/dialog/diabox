@@ -1,0 +1,10 @@
+
+diabox.obj: diabox.c diabox.h
+    cl  -c -AS -Gsw -Os -Zpe -W2 diabox.c
+
+diabox.res: diabox.rc diabox.h
+    rc -r diabox.rc
+
+diabox.exe: diabox.obj diabox.res diabox.def
+    link4 /align:16 diabox,,nul,slibw/NOE,diabox.def
+    rc diabox.res

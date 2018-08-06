@@ -1,0 +1,9 @@
+#-----------------
+# STAR5 make file
+#-----------------
+
+star5.obj : star5.c
+     cl -c -G2sw -W3 star5.c
+
+star5.exe : star5.obj star5.def
+     link star5, /align:16, NUL, os2, star5

@@ -1,0 +1,39 @@
+
+
+        NAME
+                get_data_adr -- get a data item address
+
+        SYNOPSIS
+                void get_data_adr(item, offset, segment);
+                int *item;         name of data item
+                int *offset;       destination of offset value
+                int *segment;      destination of segment value
+
+
+        DESCRIPTION
+        This function is used to get the absolute segment and offset
+        values for the address of a data item within a program.
+        It is useful for installing interrupt handlers and
+        interfacing to assembly language modules.
+
+
+
+        EXAMPLE
+
+               int somenumber;
+
+               main() {
+                 int segment, offset;
+                 get_data_adr(&somenumber, &offset, &segment);
+                 printf("Address is %x:%x\n", segment, offset);
+                 }
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

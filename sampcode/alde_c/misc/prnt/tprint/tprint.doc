@@ -1,0 +1,57 @@
+	TPRINÔ  ió  yeô  anotheò prinô program¬  thaô  haó  threå 
+marginallù usefuì features® Yoõ invokå iô by:
+
+	TPRINT <file> <options>
+
+	Anä  iô  jusô printó thå filå tï  PRN:®  <file¾  musô  bå 
+unambiguous¬  anä  cannoô bå á path®  TPRINÔ alwayó expandó  tabó 
+everù  eighô columns®  Alì optionó arå singlå letteró (nï - oò /© 
+anä musô bå separateä bù spaces.
+
+
+	Options are:
+
+		C	'C' source file
+
+	Thió  ió  thå onlù reallù usefuì  one¬  besideó  T®  Thió 
+causeó  á  formfeeä afteò eacè Ã function¬  tï makå iô easieò  tï 
+reaä  Ã programs®  iô alsï countó thå wigglù brackeô  level¬  anä 
+displayó thió alonç thå lefô edge¬ likå so:
+
+{0}	main() {
+{1}
+{2}	if (nothing) {
+{2}		die();
+{2}	} otherwise {
+{2}		if (nothing) {
+{3}			if (nothing) {
+{4}				die();
+{3}			}
+{2}		}
+{1}	}
+{0} }
+
+	Addinç  linå numberó makeó debugginç froí compileò  erroò 
+messageó á loô easier® 
+
+	NOTEº  Thió makeó findinç screweä uğ bracketó easier®  Iæ 
+yoõ seå á ne÷ pagå starô beforå thå enä oæ á function¬ yoõ haä aî 
+extrá }¬ iæ iô startó á ne÷ pagå toï early¬ yoõ haä aî extrá {.
+
+		T	Top of page title.
+
+	Putó thå namå oæ thå filå anä thå pagå numbeò acrosó  thå 
+toğ oæ eacè page®  8° columnó ió assumed¬  wilì oæ courså worë oî 
+wideò paper.
+
+		N	Line numbers
+
+	Likå  ancienô PIP¬  numberó eacè linå witè á threå  digiô 
+number.
+
+
+		M	Add a left Margin
+
+	Jusô  causeó  á taâ tï bå addeä afteò anù otheò  optionaì Šrubbisè aô thå lefô edgå oæ thå paper.
+
+

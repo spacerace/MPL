@@ -1,0 +1,199 @@
+ 
+
+	OS/2 Profiler
+------------------------------------------------------------
+
+The OS/2 Profiler allows you to determine where your programs
+are spending their time. It will tell you the percentage of execution 
+time spent in your program at a function level when used with a .MAP 
+file. It will also show what percentage of execution time is being used
+by the system.
+
+IMPORTANT NOTE: The profiling programming interfaces and tools are
+provided here in the Microsoft OS/2 1.1 Software Development Kit as an
+aid to developers. These features will NOT be present in the
+end-user version of the product. If you insert the profiling calls
+into your code during development you must remove them in your
+final code otherwise your application will fail to load on the
+retail end user system. In addition we will change and improve
+these calls over time and future versions may not be compatible
+with those in the current kit. These calls are not part of the
+standard MS OS/2 Application Programming Interface.
+
+The profiling tools requires a special kernel called OS2KRNLP (we have also
+included a version of this kernel for PS/2s:  OS2KRNLP.PS2).  To use 
+these tools remove the HIDDEN and READ ONLY permission from the retail kernel 
+(using the Toolkit tool Chmode like this: chmode -hr OS2KRNL), and then
+copy the retail kernel to OS2KRNLR.  Next, copy the appropriate profiling
+kernel (OS2KRNLP or OS2KRNLP.PS2) to OS2KRNL and reboot.  The special kernel
+is a super set of the retail kernel so it can be used in the same way as the
+retail kernel.
+
+
+Profile Library Calls:
+======================
+
+
+-----------------------------
+ProfInit( type, modulelist);
+   int	    type;	     /* type = 0      system		  */
+			     /*      = 5      PT_USER|PT_USEKP	  */
+   char far *modulelist;     /* should be NULL for user profiling */
+
+ProfInit() initializes internal data space.
+
+ProfInit clears the data areas after it has allocated them. In 
+addition to the profiling coutner segments, the profiler allocates a 64K
+block for internal use. 
+
+
+------------------------------
+ProfOn( type);
+   int type;		/* type = system or user (0/1) */
+
+ProfOn() starts the counters.
+
+
+------------------------------
+ProfOff( type);
+   int type;		/* type = system or user (0/1) */
+
+ProfOff() stops the counters.
+
+
+------------------------------
+ProfDump( type, filename);
+   int type;		/* type = system or user (0/1) */
+   char far *filename;  /* long pointer to ASCIIZ filename */
+
+
+ProfDump() dumps the profiling information to the specified filename.
+The file is used later as input for the profiling utility PINFO.EXE
+which displays the usage statistics.
+
+------------------------------
+ProfFree( type);
+   int type;		/* type = system or user (0/1) */
+
+ProfFree() is the final call in a profiling session. ProfFree frees
+all memory used by the profiling data segments and data allocated 
+for internal use.
+
+
+------------------------------
+ProfClear( type);
+   int type;		/* type = system or user (0/1) */
+
+ProfClear() Clears all counters. 
+
+
+
+
+To use the profiler follow these steps:
+---------------------------------------
+
+1>  a. Copy PINFO.EXE and PSET.EXE into a directory on your path.
+    b. Put PROFILE.DLL in a directory in your LIBPATH.
+
+
+   USER PROFILING
+   --------------
+
+2> a. Get testprof.c, testprof.def, testprof.lrf, profile.h and profile.lib
+      from the profiler\example, include, lib directories to use as an 
+      example.
+   b. Insert calls to the profiling functions in your application,
+      using testprof.c as a model.
+   c. Build your executable.
+   d. Run your executable.
+   e. use PINFO to display profiling results   
+
+   SYSTEM PROFILING
+   ----------------
+3> a. Make a batch file with the following lines:
+        pset init
+        pset on
+        (your commands here...)
+        pset off
+        pset dump (your filename)
+        pset free
+   b. Run the batch file.
+
+4>  Using PINFO.EXE with dump files
+
+
+(Your results may be different than this example.)
+
+    Example 1.	"pinfo testprof.pro"
+
+		Module	  Segment  Length  Tics      Percent
+		--------  -------  ------  --------  -------
+		kernel				  9    1.88
+		TESTPROF    0001    182c	470   98.12
+					   --------
+				   Total	479
+
+    Example 2.	"pinfo testprof.pro testprof.map"
+
+		Module TESTPROF
+
+		Segment 1:
+		0001:003e	   6 (	1.25%)	 _main
+		0001:0128	 464 ( 96.87%)	 _inner
+
+    NOTE: pinfo extracts data on the segments belonging to the module
+          represented in the map file.
+
+
+PINFO.EXE   (NOTE: OS/2 Protected mode only)
+---------
+USAGE: pinfo [-etz] dump_file [ [-f] file]
+         -e : print every tic count (subject to -z)
+	 -t : print totals for each segment (subject to -z)
+         -z : print 0 counts
+   dump_file: output of ProfDump() API;
+        file: map file to correlate with dump file
+     -f file: file is list of map files to correlate with dump file,
+		file names listed one per line.
+
+	(See above examples)
+
+PSET.EXE    (NOTE: OS/2 Protected mode only)
+--------
+USAGE: pset INIT | CLEAR | ON | OFF | DUMP file | FREE
+   CLEAR      reset counts to zero
+   DUMP file  dump profile data to <file>
+   FREE       deallocate system profiling data space
+   INIT       allocate system profiling data space
+   OFF        turn off profiling
+   ON         turn on profiling
+
+	(See the Profile Library function descriptions for further
+		detail.)
+
+
+Misc. Info
+----------
+
+ProfInit() initializes the segment selector table used to determine later
+if the interrupted CS has a corresponding data area and then allocates
+the data areas. For each CS in the LDT, a parallel data segment is
+allocated with the same size as the CS. The IP from the IRET frame
+has the lower two bits masked off for DWORD resolution and is then used 
+as an offset into this data segment to increment a DWORD. This gives
+a profiling granularity of a DWORD. The overhead of the profiler is
+less than 5% of non-profiling execution. 
+
+
+The profiler uses Timer 0 of the 8243 Timer Chip. Any applications that
+use this timer will not profile correctly. 
+
+Real mode profiling is NOT supported. Since real mode uses Timer 0 for
+other things, real mode should not be used.
+
+The profiler supports nested calls to ProfOn() and ProfOff(). There must
+be a matching ProfOff() call for every ProfOn() call.
+
+
+
+

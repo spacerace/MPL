@@ -1,0 +1,126 @@
+/****************************************************************************
+
+    Tedhlep.rc
+
+    Created by Microsoft Corporation, IBM Corporation 1989.
+
+-----------------------------------------------------------------------------
+
+        This file contains the resource Help Manager tables that
+        define the contextual help.
+
+*****************************************************************************/
+
+
+
+/* Includes */
+
+#include "tedhp.h"
+
+
+
+/****************************************************************************
+    The subtables are used to associate a specific window id with a specific
+    help panel defined in the *.itl file.  When contextual help is requested
+    for the current item in the application, help manager will search through
+    these tables for the id of the item that is currently selected and then
+    display the appropriate help panel.
+****************************************************************************/
+
+
+/* Sub table for all items in main menu */
+
+HELPSUBTABLE SUBTBL_MAIN_MENU
+SUBITEMSIZE 2
+
+BEGIN
+
+
+    HELPSUBITEM        IDM_FILE,	     FILE_AAB_HP
+    HELPSUBITEM            IDM_NEWFILE,      CREATENEW_HP
+    HELPSUBITEM            IDM_OPENFILE,     OPEN_HP
+    HELPSUBITEM            IDM_SAVE,         SAVE_HP
+    HELPSUBITEM            IDM_SAVEAS,       SAVEAS_HP
+    HELPSUBITEM            SC_CLOSE,         EXIT_HP
+
+    HELPSUBITEM        IDM_EDIT,             EDIT_AAB_HP
+    HELPSUBITEM            IDM_UNDO,         UNDO_HP
+    HELPSUBITEM            IDM_CUT,          CUT_HP
+    HELPSUBITEM            IDM_COPY,         COPY_HP
+    HELPSUBITEM            IDM_PASTE,        PASTE_HP
+    HELPSUBITEM            IDM_FIND,         FIND_HP
+    HELPSUBITEM            IDM_SELECT_ALL,   SELECTALL_HP
+
+    HELPSUBITEM        IDM_OPT,              OPTIONS_AAB_HP
+    HELPSUBITEM            IDM_QUERYLINES,   QUERY_LINES_HP
+    HELPSUBITEM            IDM_SETWRAP,      WORD_WRAP_HP
+
+    HELPSUBITEM        MIS_HELP,             HELP_AAB_HP
+    HELPSUBITEM            IDM_DISPLAY_HELP, HELPONHELP_MENU_HP
+    HELPSUBITEM            IDM_EXT_HELP,     EXTHELP_MENU_HP
+    HELPSUBITEM            IDM_KEYS_HELP,    KEYS_MENU_HP
+    HELPSUBITEM            IDM_INDEX_HELP,   INDEX_MENU_HP
+    HELPSUBITEM            IDM_ABOUT,        ABOUT_HP
+
+END
+
+
+
+
+/* Sub table for Find dialog box */
+
+/*************************************************************************
+    Note: Sub tables could be left out for dialog box entries in
+          which case the user simply would not have contextual help
+          for those entries that were not defined in a resource
+          sub-table.
+*************************************************************************/
+
+
+
+
+
+HELPSUBTABLE SUBTBL_FIND_DIALOG
+SUBITEMSIZE 2
+
+BEGIN
+
+    HELPSUBITEM        DID_FIND_TEXT,        FIND_FINDEDIT_HP
+    HELPSUBITEM        DID_CHANGE_TEXT,      FIND_CHANGETOEDIT_HP
+    HELPSUBITEM        DID_FIND,             FIND_FIND_BUTN_HP
+    HELPSUBITEM        MBID_HELP,             HELP_BUTTON_HP
+    HELPSUBITEM        DID_SENSITIVE,        FIND_CASE_HP
+    HELPSUBITEM        DID_FIND_CHANGE_ALL,  FIND_CHGALL_BUTN_HP
+    HELPSUBITEM        MBID_CANCEL,           CANCEL_BUTTON_HP
+    HELPSUBITEM        MB_HELP,	             HELP_BUTTON_HP
+
+END
+
+/* Sub table for About dialog box */
+
+HELPSUBTABLE SUBTBL_ABOUT_DIALOG
+SUBITEMSIZE 2
+
+BEGIN
+
+    HELPSUBITEM        DID_OK,               GENERAL_HP,
+    HELPSUBITEM        MBID_HELP,             HELP_BUTTON_HP,
+
+END
+
+
+/************************************************************************
+    Help Table - associates help panels and helpsubtables with windows
+    and dialogs.
+************************************************************************/
+
+
+HELPTABLE TED_HELP_TABLE
+BEGIN
+
+
+    HELPITEM   ID_RESOURCE, SUBTBL_MAIN_MENU,    GENERAL_HP
+    HELPITEM   DLG_FIND,    SUBTBL_FIND_DIALOG,	 OPEN_HP
+    HELPITEM   DLG_ABOUT,   SUBTBL_ABOUT_DIALOG, ABOUT_HP
+
+END

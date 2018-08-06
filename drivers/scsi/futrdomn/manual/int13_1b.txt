@@ -1,0 +1,92 @@
+Code 1B                             -Locate Table 
+
+Input registers - none.
+
+Special output registers - ES:BX points to the internal table maintained for 
+the specified disk.
+
+The table in Host adapters using 1.0-1.2, 4.0 or 6.0 is organized as follows:
+
+      Type     Function
+
+              -Bit 0     Not used
+
+    Char      -Bit 1     is set to cause checking of SCSI bus parity.
+              
+              -Bit 2     set is for 256 byte sectors, else 512.
+
+              -Bit 3     set is for nonstandard sector size.
+
+              -Bit 4     set for removable drives
+
+              -Bit 5     set for non-valid SCSI devices.
+
+              -Bit 6     set for non-direct access SCSI devices.
+
+              -Bit 7     flag used internally by the ROM.
+
+    Int       -Total number of cylinders calculated in Read Capacity.
+
+    Char      -Total number of heads calculated in Read Capacity
+
+    Char      -Sectors per track, set to 17.
+ 
+    Char      -SCSI selection codes. These are determined during the ROM boot
+               process. Bits 5-3 are the SCSI address of the disk, and 
+               bits 2-0 are the LUN of the drive.
+
+    Char      -Ready flag used internally in the ROM. This must be nonzero 
+               for the disk to be used.
+
+    Char(4)   -The four bytes from the last SCSI Request Sense command that 
+               occurred as a result of an error are saved. This information 
+               can be used to assist in further defining any errors that 
+               occur or for diagnostic printouts.
+
+    Char(10)  -The command bytes sent that caused the SCSI Request Sense to 
+               be issued. This is useful for diagnostic help.
+
+    Long      -Total disk capacity in equivalent 512 byte sectors as returned
+               by the SCSI Read Capacity command. Note that the Read Capacity
+               command actually returns the address of the last sector. This
+               is that number +1.
+
+    Char[24]  -Name of the disk manufacturer as returned by the SCSI Inquiry 
+               command.   (Not returned in BIOS 6.0.)
+
+The table in the Host adapters using BIOS 5.0-5.2 are organized as follows:
+
+              -Bit 0     Not used
+
+    Char      -Bit 1     is set to cause checking of SCSI bus parity.
+
+              -Bit 2     set is for 256 byte sectors, else 512.
+
+              -Bit 3     set is for nonstandard sector size.
+
+              -Bit 4     set for removable drives.
+
+              -Bit 5     set for non valid SCSI drives.
+
+              -Bit 6     Not used
+
+              -Bit 7     Not used
+
+    Int       -Total number of cylinders calculated in Read Capacity.
+
+    Char      -Total number of heads calculated in Read Capacity.
+
+    Char      -Sectors per track, set to 17.
+
+    Char      -SCSI selection codes. These are determined during the ROM boot
+               process. Bits 5-3 are the SCSI address of the disk, and bits 
+               0-2 are the LUN.
+
+    Long      -Total disk capacity in equivalent 512 byte sectors as returned
+               by the SCSI Read Capacity command. Note that the Read Capacity
+               command actually returns the address of the last sector. This
+               is that number +1.
+
+    Note: This command can be used to "unlock the removable drives for Write 
+          commands.
+

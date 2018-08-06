@@ -1,0 +1,42 @@
+# HELLO makefile 
+# Created by Microsoft Corp., 1988
+#
+
+#===================================================================
+#
+#  Standard command line definitions
+#
+#===================================================================
+
+cp=cl -c -W3 -AS -G2sw -Os -Zpei
+
+#===================================================================
+#
+#  Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(cp) $*.c
+
+.asm.obj:
+    masm $*.asm;
+
+.rc.res:
+    rc -r $*.rc
+
+all: cascade.exe
+
+#===================================================================
+#
+#  Dependencies
+#
+#===================================================================
+
+Cascade.OBJ: Cascade.C
+
+Cascade.res: Cascade.RC Cascade.ICO Cascade.H
+
+Cascade.EXE: Cascade.OBJ Cascade.RES Cascade.LNK Cascade.DEF
+    Link @Cascade.LNK
+    RC Cascade.RES

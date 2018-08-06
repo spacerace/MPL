@@ -1,0 +1,33 @@
+       page      60,132
+       .8087
+       include   lattice.mac
+       PSEG
+_MAIN  proc      near              ; you MUST have a procedure _MAIN !!!
+
+       _fopen    fname,imode,fp1   ; Open input file    (console)
+       _fopen    fname,omode,fp2   ; Open output file   (console)
+       ..
+       ..
+       ..
+       ret
+
+_MAIN  endp
+
+; Subroutine section
+;
+;
+;
+       ENDPS
+;
+; DATA AREA
+;
+       DSEG
+fp1    dw        ?                  ; file for input
+fp2    dw        ?                  ; file for output
+
+fname  db        'CON:',0           ; name of file
+imode  db        'r',0              ; mode for read-only
+omode  db        'w',0              ; mode for write-only
+       ENDDS                       ; End of data segment
+       end
+

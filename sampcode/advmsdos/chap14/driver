@@ -1,0 +1,9 @@
+driver.obj : driver.asm
+  masm driver;
+
+driver.sys : driver.obj
+  link driver;
+  exe2bin driver.exe driver.sys
+  del driver.exe
+
+

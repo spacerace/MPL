@@ -1,0 +1,33 @@
+     There are a number of functions in ADVC which are intended to be used
+with a mouse.  In specific, they rely on a Microsoft-compatible mouse.
+Most of the functions are self-explanatory, but the mouse cursor location
+needs to be explained further.
+
+     The mouse cursor location is automatically updated by the mouse
+driver.  You don't need to write any control routines for that at all.  In
+order to provide a generalized interface, though, the location is returned
+in a somewhat unusual manner.  It may be helpful to go into that in a bit
+more depth.
+
+     The mouse cursor location is returned as a range of values equivalent
+to the dimensions of a CGA screen.  That is, the columns range from 0-639,
+and the rows from 0-199.  This holds true whether the display is in text
+or one of the color modes.  To find where the cursor actually is, then,
+requires conversion factors.
+
+     If you're in hi-res color mode (640x200), there is no conversion
+factor.  The values directly correspond to the screen location.
+
+     If you're in lo-res color mode (320x200), you need to apply a
+conversion factor of two to the columnar location.  That is, if you want
+to position to the middle of the screen, you must set the mouse to column
+160 * 2, or 320.  The row location is still accurate, however.
+
+     If you're in text mode (80x25), you need to apply conversion factors
+of eight to both the column and row locations, and add an offset of one.
+For example, if the mouse locations were returned as column 80, row 24,
+you would translate this to meaning text column 11, which is 80 / 8 + 1,
+and text row 4, which is 24 / 8 + 1.  In effect, a text mode character is
+equivalent to an 8x8 block of graphics pixels.  The offset is added
+because the graphics screen has its origin at (0,0), whereas the text
+screen has its offset at (1,1) in the usual notation.

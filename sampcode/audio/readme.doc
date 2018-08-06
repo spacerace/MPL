@@ -1,0 +1,14 @@
+Sample code for MS CD-ROM Extensions audio:
+----------------------------------------------------------------------------
+The code in this directory is used to play CD AUDIO from the CD-ROM drive
+using the CD-ROM Extentions.
+
+The code first determines if the CD-ROM Extensions are operating in the
+system. After finding the Extensions, it will retrieve a pointer to the
+first device driver.
+
+By making a IOCTL call, the code will read the TOC (Table Of Contents) from
+the active drive.  The TOC contains the position of each audio track.
+
+After receiving this information, all that is needed is to make a single
+play call for each track of audio.

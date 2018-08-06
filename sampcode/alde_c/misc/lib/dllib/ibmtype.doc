@@ -1,0 +1,39 @@
+
+
+
+        NAME
+                ibmtype -- find out type of computer
+
+        SYNOPSIS
+                r = ibmtype();
+                int r;   r = 0 for PC or XT, 1 for PC Jr.,
+                         2 for AT, 3 for unknown type
+
+
+        DESCRIPTION
+        This function examines the byte in ROM at F000:FFFEh.
+        For real IBM computers, this should be:
+           0xff  PC
+           0xfe  XT
+           0xfd  JR
+           0xfc  AT
+        Many close clones will also encode this byte in the above manner,
+        although there is no requirement for this feature.
+
+        CAVEAT
+        The results of this test should be taken with a grain of salt
+        the size of Salt Lake City.  Even IBM has shipped XTs with
+        the PC id byte.  The NOVAS AT clone correctly has 0xfc,
+        but the Z-NIX XT clone (which is a very close clone) has 0x05.
+        Don't depend too heavily on the results being really accurate.
+
+        EXAMPLE
+                 r = ibmtype();
+                 if(r = 2) printf("This machine is an AT, maybe!");
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

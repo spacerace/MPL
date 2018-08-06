@@ -1,0 +1,203 @@
+**************** interrupt driven routines *****************
+
+;--------------------------------------------------------------
+;
+; name		key_intercept - intercept hardware key interrupt
+;
+; synopsis	key_intercept();
+;
+; description	Intercepts the hardware keyboard interrupt.  You can
+;		use this routine to gain absolute control over the 
+;		keyboard.  The disadvantage is that you have to work
+;		with scan codes directly, not nice ascii characters.
+;		Up to 512 scan codes are buffered.
+;
+; notes
+;		The key_nointercept routine MUST be called before
+;		leaving your program, or the machine will hang.
+;
+;		You must not attempt to use any other routine that
+;		reads the keyboard, or your program will hang.  This
+;		routine absolutely intercepts the keyboard.
+;
+;		You are in control of the keyboard, but that means that
+;		it is your responsibility to manage the state of the
+;		shift keys, the caps lock, and numlock keys and any other
+;		command keys, like the control key.
+;
+;		Each key returns two scan codes, one when pressed, one
+;		when released.  The code returned when the key is pressed
+;		is called a MAKE code, the one returned when a key is
+;		released is called a BREAK code.  The BREAK code is 
+;		the same as the make code, except that the high order bit
+;		is set in the BREAK code.
+;
+;-------------------------------------------------------------- 	
+
+
+
+
+;--------------------------------------------------------------
+; name		key_nointercept - remove keyboard interception
+;
+; synopsis	VOID key_nointercept()
+;
+; description	Removes	the interrupt structure	installed by key_intercept.
+;		Must be done before passing control to DOS, else your 
+;		machine will hang.
+;--------------------------------------------------------------
+
+
+
+
+;--------------------------------------------------------------
+; 
+; name		key_intbcnt - Return # chars in interrupt buffer
+;
+; synopsis	count = key_intbcnt();
+;
+; description	Returns the number of scan codes available in the
+;		keyboard intercept interrupt buffer.
+;
+; notes		Call this to make sure that there are keystrokes
+;		available before attempting to read a code out of
+;		the buffer.  If there are no codes available, DO NOT
+;		attempt to read the buffer.
+;
+;--------------------------------------------------------------  
+
+
+
+;--------------------------------------------------------------
+;
+; name		key_intbflush - Flush the interrupt buffer.
+;
+; synopsis	VOID key_intbflush()
+;
+; description	Flushes any key strokes in the keyboard interrupt
+;		intercept buffer.
+;
+;--------------------------------------------------------------
+
+
+;--------------------------------------------------------------
+;
+; name		key_intbread - get a char from the input buffer.
+;
+; synopsis	ch = key_intbread();
+;
+; description	returns the next character from the keyboard
+;		interrupt intercept buffer. Assumes you have called
+;		key_intbcnt to see if there are any characters to get.
+;
+; notes:
+;		Will probably crash if called when the buffer is
+;		empty.  Call key_intbcnt first to see if there is
+;		anything available to read !!!!!!!!
+;
+;--------------------------------------------------------------
+
+
+
+**************** Non-interrupt driven routines follow ***************
+
+
+
+;--------------------------------------------------------------
+;
+; name		key_flush	- flush keyboard buffer
+;
+; synopsis	VOID	key_flush()
+;
+; description	Flushes (clears out) the keyboard buffer.
+;
+;
+;--------------------------------------------------------------
+
+
+
+;--------------------------------------------------------------
+;
+; name		key_getch -- read a char from the keyboard
+;
+; synopsis	int	ch;
+;		ch = key_getch();
+;		scan = ch >> 8;
+;		ascii = ch & 255;
+;
+; description	Waits for a key to be pressed on the keyboard and
+;		returns the character.  Removes character from input 
+;		buffer.  Returns both ASCII char and scan code.
+;		scan code is in the high 8 bits, ASCII in the low 8 bits.
+; Notes:
+;		arrow keys and some others return only scan codes. Shift
+;		keys, control keys and some others do not show up at all
+; 		when using this function.
+;
+;--------------------------------------------------------------
+
+
+
+
+;--------------------------------------------------------------
+; 
+; name		key_scan - see if key is available from keyboard
+;
+; synopsis	ch = key_scan();
+;
+; description	Check the DOS keyboard buffer for characters available.
+;		returns 0 if no characters area available, or character
+;		and scan code in the same manner as key_getch().  Note
+;		that this routine does not remove characters from the
+;		buffer - you must use key_getch() to do that.  Several
+;		calls to this routine will return the same character -
+;		i.e. the first character available in keyboard buffer.
+;
+; Notes:
+;		NOT identical to the CI-C86 library function of the 
+;		same name, which returns EOF or 0xffff if no chars
+;		are available.
+;--------------------------------------------------------------
+
+
+
+
+
+;--------------------------------------------------------------
+;
+; name		key_shift - return shift and other indicators
+;
+; synopsis	int key_shift()
+;
+; description	Returns status of shift and other indicators.
+;
+;		st = key_shift();
+;		The following are TRUE if Non - zero:
+;
+;		right_shift = st & 0x01;
+;		left_shift  = st & 0x02;
+;		control_key = st & 0x04;
+;		alt_key     = st & 0x08;
+;		scroll_lock = st & 0x10;
+;		num_lock    = st & 0x20;
+;		caps_lock   = st & 0x40;
+;		insert_key  = st & 0x80;
+;
+; Notes:
+;		The high byte return of this is unknown.  If you intend
+;		to not use the examples shown above, mask the returned
+;		value to remove the unknown:
+;	
+;		 st = key_shift() & 255; 	
+;
+;--------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+

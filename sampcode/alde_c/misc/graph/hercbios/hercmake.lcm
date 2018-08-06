@@ -1,0 +1,33 @@
+#
+# Makefile for HERCBIOS.COM
+#       (designed for Larry Campbell's version of MAKE)
+#
+
+hercbios.com : hercbios.obj gchar.obj graph.obj
+	link hercbios gchar graph,,/MAP;
+	exe2bin  hercbios.exe  hercbios.com
+	del hercbios.exe
+
+hercbios.obj : hercbios.asm hercbios.h
+        masm hercbios,,;
+
+gchar.obj : gchar.asm hercbios.h
+        masm gchar,,;
+
+graph.obj : graph.asm hercbios.h
+        masm graph,,;
+
+
+#
+# Makes for the demo & test program, using Lattice
+#       (Note: you may have to change the drive and path specs)
+#
+
+testpix.exe : testpix.obj hercpixl.obj
+	link g:\lc\s\c testpix hercpixl,testpix,testpix/m,g:\lc\s\lc
+
+testpix.obj : testpix.c
+	lc -ms -n -ig:\lc\ testpix
+
+hercpixl.obj : hercpixl.c
+	lc -ms -n -ig:\lc\ hercpixl

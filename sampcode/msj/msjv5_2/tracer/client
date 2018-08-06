@@ -1,0 +1,37 @@
+#===================================================================
+#
+#  Standard command line definitions
+#
+#===================================================================
+
+cp=cl -c -W3 -Alfw -G2sw -Os -Zpei
+
+#===================================================================
+#
+#  Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(cp) $*.c
+
+.asm.obj:
+    masm $*.asm;
+
+.rc.res:
+    rc -r $*.rc
+
+#===================================================================
+#
+#  Dependencies
+#
+#===================================================================
+
+client.obj: client.c client.h
+
+client.res: client.rc client.ico client.h
+
+client.exe: client.obj client.res client.lnk client.def
+    link @client.lnk
+    rc client.res
+

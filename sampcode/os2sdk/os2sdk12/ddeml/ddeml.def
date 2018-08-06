@@ -1,0 +1,70 @@
+LIBRARY DDEML INITINSTANCE
+
+DESCRIPTION 'DDE Manager Library'
+
+STUB        'OS2STUB.EXE'
+
+DATA SHARED PRELOAD
+
+SEGMENTS
+    _TEXT       CLASS 'CODE'         PRELOAD
+
+HEAPSIZE    16384
+STACKSIZE   8192
+
+EXPORTS
+        DDEINITIALIZE                     @1 
+        DDEUNINITIALIZE                   @2
+        
+        DDEBEGINENUMSERVERS               @3
+        DDEGETNEXTSERVER                  @4
+        DDEENDENUMSERVERS                 @5
+                                  
+        DDECONNECT                        @6
+        DDEDISCONNECT                     @7
+                                  
+        DDEQUERYCONVINFO                  @8
+        DDEPOSTADVISE                     @9
+        DDECLIENTXFER                     @10
+        DDECHECKQUEUE                     @11
+                                  
+        DDEPUTDATA                        @12 
+        DDEADDDATA                        @13
+        DDEGETDATA                        @14
+        DDEACCESSDATA                     @15
+        DDEFREEDATA                       @16
+                                  
+        DDEGETLASTERROR                   @17
+        DDEPOSTERROR                      @18
+        DDEGETERRORSTRING                 @19
+        DDEDEBUGBREAK                     @20
+                                  
+        DDECOPYBLOCK                      @21
+                                  
+        DDEGETHSZ                         @22
+        DDEFREEHSZ                        @23 
+        DDEGETHSZSTRING                   @24
+        DDEINCHSZCOUNT                    @25
+        DDECMPHSZ                         @26
+                                  
+        DDEENABLECALLBACK                 @27
+                                  
+        DDEAPPNAMESERVER                  @28
+        DDECREATEINITPKT                  @29
+        DDEPROCESSPKT                     @30
+                                  
+        DDETEST                           @31
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  

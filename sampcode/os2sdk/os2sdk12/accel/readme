@@ -1,0 +1,6 @@
+Comments about ACCEL
+
+This application allows the user to define their own keyboard accelerators.
+It might be more useful if this application had the facility for the user
+to type the desired sequence, and have the application store it away, instead
+of interfacing through a dialog box.

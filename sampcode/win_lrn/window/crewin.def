@@ -1,0 +1,14 @@
+NAME	crewin
+
+DESCRIPTION 'Demonstration of the CreateWindow function'
+
+STUB  'WINSTUB.EXE'
+
+CODE	MOVEABLE
+DATA	MOVEABLE MULTIPLE
+
+HEAPSIZE    1024
+STACKSIZE   4096
+
+EXPORTS
+    CreateWindowWindowProc	@1

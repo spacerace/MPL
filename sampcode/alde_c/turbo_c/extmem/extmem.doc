@@ -1,0 +1,167 @@
+
+
+
+
+
+
+                              Accessing Extended Memory
+                            from Turbo C and Turbo Pascal
+
+               "Extended memory" refers to the memory at addresses above
+          the 1 Megabyte that DOS can handle.  It is only available on the
+          AT and compatibles and the XT-286.  The PC and the XT do not have
+          extended memory.
+               In order to access extended memory, you must first determine
+          that there is, in fact, extended memory present, and the amount
+          of extended memory present.  This is done through BIOS interrupt
+          15H, function 88H.  On return, the carry flag will be set if an
+          error occurred (for instance, if the program is running on a PC,
+          where function 88H isn't supported).  If the carry flag is
+          cleared on return, then register AX contains the number of
+          kilobytes of extended memory present in the system.
+               One caution on detecting extended memory: technically, as I
+          understand it, your program should also check that the switches
+          on the extended memory board have been set so that the board will
+          back-fill main memory out to 640K, and only use the remainder for
+          extended memory.  I don't know what happens if you haven't set
+          the switches this way, and I haven't been able to get the test
+          for the switch settings to work.  Anybody who wants to poke into
+          VDISK.LST and sort it out is welcome to.
+               Once you've determined the amount of extended memory
+          present, you still have to figure out if any other program (such
+          as a RAMDISK) is using extended memory.  There is no system-level
+          memory manager for extended memory, so it's up to each program to
+          talk to any other programs and sort out their own allocations. 
+          Ordinarily, all you'll have to worry about is device drivers like
+          VDISK.  In fact, the only program I know how to detect is VDISK.
+               When VDISK is installed, it takes over interrupt 19H, which
+          is invoked during a boot to load MS-DOS from your boot disk.  The
+          only reason it does this is so that later installations of VDISK
+          can tell that they're not the first.  The only processing that
+          VDISK does on an int 19H call is to restore the original
+          interrupt vector and jump to that routine.
+               The benefit of redirecting interrupt 19H is that the jump
+          vector for interrupt 19H can be used to find where VDISK is
+          installed.  The segment where VDISK is located is found in the
+          second word of the interrupt 19H vector.  The address of that
+          word is 0000:0066.  Take the word located at that address as the
+          segment of VDISK.
+               To actually detect the presence of VDISK, your program has
+          to check offset 12H within the segment where VDISK is located. 
+          Beginning at that location VDISK will contain the character
+          string "VDISK  V3.2".  (Note -- two spaces between VDISK and
+          V3.2).  If that string isn't present, VDISK isn't installed and
+          all of extended memory is available to your program.
+               If VDISK is installed, the address of the first available
+          location in extended memory is stored at offsets 2CH, 2DH, and
+          2EH in the segment where VDISK is located.  Just grab those three
+          bytes and save them somewhere.  If VDISK isn't installed, the
+          first available location in extended memory is 100000H.
+               Once you know where available extended memory begins, you
+
+
+
+
+
+          can figure out exactly how much space is available for your
+          program to use.  Just subtract 100000H from the address of the
+          first availabe location in extended memory and you'll have the
+          amount of extended memory already in use.  Subtract this number
+          from the total size of extended memory (gotten with int 15H,
+          function 88H), and you'll have the amount of space available.
+               Now that you know how much extended memory space is
+          available and where it begins, you're ready to use it. 
+          Unfortunately, all you can do is copy data into it or out of it. 
+          You can't directly access it.  To copy data to or from extended
+          memory you use interrupt 15H, function 87H.  You call function
+          87H by setting register AH to 87H, register CX to the number of
+          words to be moved (maximum of 32768 words), and setting ES:SI to
+          point to a Global Descriptor Table.
+               Now, Global Descriptor Tables are extremely important in
+          programming the 80286 in protected mode.  Here, they're just a
+          hassle, but it's something we have to go through in order to get
+          function 87H to work.  First, we have to set up a DESCRIPTOR.  A
+          DESCRIPTOR describes a segment of memory.  It's laid out like
+          this:
+
+               Offset    # of Bytes     Description
+                 00          2            Maximum size of segment
+                 02          2            Low word of address of segment
+                 04          1            High byte of address
+                 05          1            Access rights byte
+                 06          2            Reserved (must be 00)
+
+               The maximum size of the segment will always be less than or
+          equal to 65536, since that's the largest number of bytes we can
+          move at a time.  In the demonstration program it's set each time
+          to the number of bytes to actually be moved, but just leaving it
+          at 65536 would probably work as well.
+               Addresses in protected mode are 24 bits long.  They're
+          treated as a high byte and a low word.  So, for example, the
+          first byte of extended memory is at address 100000H, which splits
+          up into a high byte of 10H and a low byte of 0000H.  That's easy. 
+          To convert a DOS-style address (segment:offset), just use 16
+          times the segment plus the offset.  Strip off the low 8 bytes as
+          the low word, and the remaining 4 bytes as the high word.  For
+          example,  5EB4:002C becomes 5EB6C, having a high byte of 05H and
+          a low word of EB6CH.
+               For our purposes, the access rights byte will always be set
+          to 93H, and the reserved area will always be set to 0.
+               Now, to produce a GDT, we need six of these DESCRIPTORs.  Do
+          this by rote -- don't expect it to make a lot of sense.  They
+          should be laid out like this:
+
+               Dummy Descriptor
+               GDT Descriptor
+               Source Descriptor
+               Target Descriptor
+               Code Segment Descriptor
+               Stack Segment Descriptor
+
+
+
+
+
+
+               All those descriptors should be initialized to 0, except for
+          the Source Descriptor and the Target Descriptor.  The Source
+          Descriptor should be filled in with the appropriate data for the
+          block to be copied, and the Target Descriptor should be filled in
+          for the location to be copied to.
+               Once that's all done, just call interrupt 15H, function 87H. 
+          When it returns, if the Carry flag is cleared, the copy was
+          successful.
+               Now, isn't that simple?
+               Oh, one note concerning Turbo C and interrupt 15H: if you
+          try to access function 88H through int86() it will always return
+          with the carry flag set.  That's why the demonstration code uses
+          geninterrupt() instead of int86().
+               Concerning the code: the Pascal code will compile and run
+          under Turbo Pascal version 3.  The C code will compile and run
+          under Turbo C version 1.0.  The C code is broken up into separate
+          files as follows:
+
+               xmemasm.c      contains the function 88H call.  Must be
+                              compiled under TCC, because it uses inline
+                              assembler code
+
+               xmemcopy.c     contains the routine to copy blocks using
+                              interrupt 15H, function 88H
+
+               xmemc.c        contains the rest of the support routines
+
+               xmemtest.c     contains the main() program and the calls to
+                              the initialization routines
+
+               xmemtest.prj   .PRJ file for xmemtest.
+
+               To compile the C code, compile xmemasm.c with TCC.  Then use
+          TC and the project file xmemtest.prj to build xmemtest.exe.
+               The demonstration programs both do the same thing: they
+          check the system paramaters and give you some information on the
+          available extended memory.  Then they initialize a 16384 byte
+          buffer with recognizable data, copy the buffer into extended
+          memory, clear the buffer, copy the data back from extended memory
+          into the buffer, then check the data against the original data.
+
+

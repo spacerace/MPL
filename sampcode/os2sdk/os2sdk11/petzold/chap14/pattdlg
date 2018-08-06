@@ -1,0 +1,16 @@
+#-------------------
+# PATTDLG make file
+#-------------------
+
+pattdlg.obj : pattdlg.c pattdlg.h
+     cl -c -G2sw -W3 pattdlg.c
+
+pattdlg.res : pattdlg.rc pattdlg.h
+     rc -r pattdlg
+
+pattdlg.exe : pattdlg.obj pattdlg.def
+     link pattdlg, /align:16, NUL, os2, pattdlg
+     rc pattdlg.res
+
+pattdlg.exe : pattdlg.res
+     rc pattdlg.res

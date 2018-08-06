@@ -1,0 +1,781 @@
+
+                            TCXL Quick Reference
+                            --------------------
+
+TCXLDEF.H   - Miscellaneous Functions
+-------------------------------------
+
+void beep(void);
+sounds a beep in the speaker
+
+char *biosver(void);
+returns the BIOS version date
+
+int clockcal(void);
+determines if a clock-calendar board is installed
+
+void delay_(unsigned duration);
+delays program execution for a specified time period
+
+unsigned expmem(void);
+determines the amount (if any) of expanded memory on the system
+
+unsigned extmem(void);
+determines the amount of extended memory on an AT machine
+
+int gameport(int equip);
+determines if a game port is installed
+
+int machid(void);
+returns the value of the machine ROM ID byte
+
+int mathchip(int equip);
+determines if a math coprocessor is installed
+
+int numflop(int equip);
+returns the number of floppy disk drives installed
+
+int numpar(int equip);
+returns the number of parallel ports
+
+int numser(int equip);
+returns the number of serial ports installed
+
+void sound_(unsigned pitch,unsigned duration);
+sounds a tone in the speaker for specified pitch and duration
+
+int tabstop(int col,int tabwidth);
+calculates a tab stop from given column and tab width
+
+unsigned long timer(void);
+returns the value of the BIOS timer
+
+
+
+
+
+
+
+
+                                      1    
+
+
+TCXLDSK.H   - Disk Functions
+----------------------------
+
+int disktoscrn(char *fname);
+copies a saved screen disk file to screen
+
+int disktowin(char *fname);
+copies a saved window disk file to screen
+
+int fcmpdatm(char *fname1,char *fname2);
+compares the dates and times of 2 files
+
+int fexist(char *fname);
+determines if a disk file exists
+
+int fhide(char *filename);
+hides a disk file
+
+unsigned getktot(int drive);
+gets the total disk space in kilobytes
+
+char *getvol(char drive);
+gets the volume label from a disk drive
+
+int scrntodisk(char *fname);
+copies the current screen to a disk file
+
+int wintodisk(int srow,int scol,int erow,int ecol,char *fname);
+copies a window of the screen to a disk file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      2    
+
+
+TCXLEMS.H   - EMS Functions
+---------------------------
+
+unsigned emsalloc(int numpages);
+allocates pages of EMS memory
+
+int emsdealloc(int handle);
+deallocates previously allocated pages of EMS memory
+
+int emsexist(void);
+determines if the EMS device driver is loaded.
+
+unsigned emsframe(void);
+returns the EMS page frame base address
+
+unsigned emsfree(void);
+returns the number of free EMS pages (16K blocks)
+
+int emsmap(int handle,int lpage,int ppage);
+maps a logical EMS page onto a physical page address
+
+int emsread(void *dest,unsigned emsofs,unsigned numbytes);
+reads bytes from an EMS page(s)
+
+unsigned emstotal(void);
+returns the total number of EMS pages (16K blocks) on the system
+
+char *emsver(void);
+returns the current EMS version
+
+int emswrite(void *src,unsigned emsofs,unsigned numbytes);
+writes bytes to an EMS page(s)
+
+unsigned expmem(void);
+determines the amount (if any) of expanded memory on the system
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      3    
+
+
+TCXLKEY.H   - Keyboard Functions
+--------------------------------
+
+void capsoff(void);
+toggles the CapsLock key off
+
+void capson(void);
+toggles the CapsLock key on
+
+void clearkeys(void);
+clears the keyboard buffer
+
+int getchf(char *valid);
+gets a character from the keyboard from a list of valid characters
+
+int getns(char *str,int max);
+inputs a string of specified length from the keyboard
+
+void getxch(int *ch,int *xch);
+gets a key (ASCII code/extended ASCII code) from the keyboard
+
+int inputsf(char *str,char *fmt);
+inputs a formatted string from the keyboard
+
+int kbstat(void);
+returns the status of the keyboard control keys
+
+void numoff(void);
+toggles the NumLock key off
+
+void numon(void);
+toggles the NumLock key on
+
+void prompts(char *prompt,char *str);
+prompts for a string and accepts keyboard input
+
+int waitkey(void);
+halts execution until a key is pressed, the keyboard buffer is cleared first
+
+int waitkeyt(int duration);
+halts execution until a key is pressed or specified time expires
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      4    
+
+
+TCXLMOU.H   - Microsoft Mouse Functions
+---------------------------------------
+
+void msbpress(int button,int *bstat,int *bcount,int *x,int *y);
+gets info about specific button presses of mouse
+
+void msbreles(int button,int *bstat,int *bcount,int *x,int *y);
+gets info about specific button releases of mouse
+
+void mscursor(int curtype,int smask,int cmask);
+sets the mouse cursor mode
+
+void msgotoxy(int x,int y);
+sets the mouse coordinates
+
+void mshbounds(int left,int right);
+sets the mouse horizontal bounds
+
+void mshidecur(void);
+hides the mouse cursor
+
+int msinit(void);
+initializes mouse/determines if present
+
+void msmotion(int *xcount,int *ycount);
+gets info about movement of mouse
+
+void msshowcur(void);
+reveals the mouse cursor
+
+void msspeed(int xratio,int yratio);
+adjusts the mouse sensitivity
+
+void msstatus(int *bstat,int *x,int *y);
+gets the mouse status
+
+void msvbounds(int top,int bottom);
+sets the mouse vertical bounds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      5    
+
+
+TCXLPRN.H   - Printer Functions
+-------------------------------
+
+void lcrlf(void);
+prints a carriage return and line feed on the printer
+
+void lprintc(int ch);
+prints a character on the printer
+
+void lprintf(const char *format,...);
+sends formatted output to the printer
+
+void lprintns(char *str,int width);
+prints a string on the printer, formatting width
+
+void lprints(char *str);
+prints a string on the printer
+
+void lprintsb(char *str,int reps);
+prints a bold-faced string on the printer
+
+void lprintsu(char *str);
+prints an underlined string on the printer
+
+void scrndump(void);
+dumps the current screen to the printer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      6    
+
+
+TCXLSTR.H   - String and Character Functions
+--------------------------------------------
+
+int cvaltype(int ch,int ctype);
+tests a character with character type code, checking validity
+
+char *strbmatch(char *str,char *strarr[]);
+returns the best match of a string in an array of strings
+
+char *strchg(char *str,char oldch,char newch);
+changes all matching characters in a string to another
+
+char *strcode(char *str,int key);
+encodes/decodes a string
+
+char *strdel(char *substr,char *str);
+deletes a substring from within a string
+
+char *strichg(char *str,char oldch,char newch);
+changes all matching characters in a string to another, ignores case
+
+char *stridel(char *substr,char *str);
+deletes a substring from within a string, ignores case
+
+char *striinc(char *str1,char *str2);
+determines if one string is included in another, ignores case
+
+char *strinc(char *str1,char *str2);
+determines if one string is included in another
+
+char *strins(char *instr,char **str,int st_pos);
+inserts one string into another
+
+int striocc(char *str,int ch);
+returns the number of occurrences of a character in a string, ignores case
+
+char *strleft(char *str,int num_chars);
+returns a new substring from the left of a string
+
+char *strltrim(char **str);
+trims leading spaces from a string
+
+int strmatch(char *str1,char *str2);
+compares 2 strings, returns a match score
+
+char *strmid(char *str,int st_pos,int num_chars);
+returns a new substring from the middle of a string
+
+int strocc(char *str,int ch);
+returns the number of occurrences of a character in a string
+
+char *strright(char *str,int num_chars);
+returns a new substring from the right of a string
+
+char *strrol(char *str,int count);
+
+
+                                      7    
+rotates a string specified number of characters left, characters wrap around
+
+char *strror(char *str,int count);
+rotates a string specified number of characters right, characters wrap around
+
+char *strsetsz(char **str,int newsize);
+adjusts the length of a string by truncation or padding with spaces
+
+char *strshl(char *str,int count);
+shifts a string specified number of characters left, characters 'drop off'
+
+char *strshr(char *str,int count);
+shifts a string specified number of characters right, characters 'drop off'
+
+char *strtrim(char *str);
+trims trialing spaces from a string
+
+char *struplow(char *str);
+converts a string to mixed upper and lower case characters
+
+int touplow(char *str,char *pos,int ch);
+converts a character to upper or lower case depending on previous character
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      8    
+
+
+TCXLVID.H   - Video and Screen Functions
+----------------------------------------
+
+int attrib(int fore,int back,int bright,int blink);
+creates an attribute
+
+void box(int srow,int scol,int erow,int ecol,int btype,int attr);
+draws a box on the screen
+
+void boxd(int srow,int scol,int erow,int ecol,int btype,int attr);
+draws a box directly on the screen (no BIOS calls)
+
+void clreol_(void);
+clears to the end of line
+
+void clrscrn(void);
+clears the screen and homes the cursor
+
+void clrwin(srow,scol,erow,ecol);
+clears a window of the screen
+
+int disktoscrn(char *fname);
+copies a saved screen disk file to screen
+
+void fill(int srow,int scol,int erow,int ecol,int ch,int attr);
+fills in a region of the screen with specified character/attribute
+
+void filld(int srow,int scol,int erow,int ecol,int ch,int attr);
+fills in a region of screen with specified character/attribute (no BIOS calls)
+
+void gotoxy_(int row,int col);
+sets cursor coordinates on the screen
+
+void home(void);
+homes the cursor (row 0, column 0)
+
+void mode(int mode_code);
+sets the video mode
+
+void printc(int row,int col,int attr,int ch,int count);
+prints a character to the screen at specified location and attribute
+
+void printcd(int row,int col,int attr,int ch);
+prints a character directly to the screen at specified location and attribute
+
+void prints(int row,int col,int attr,char *str);
+displays a string on the screen at specified location and attribute
+
+void printsd(int row,int col,int attr,char *str);
+displays a string directly on the screen at specified location and attribute
+
+int readchat(void);
+reads the character and attribute under the cursor
+
+void readcur(int *row,int *col);
+
+
+                                      9    
+reads the current cursor location
+
+void revattr(int count);
+reverses the attribute of the character under the current cursor location
+
+int scrntodisk(char *fname);
+copies the current screen to a disk file
+
+void setattr(int attr,int count);
+sets the attribute of the character under the current cursor location
+
+void setcursz(int sline,int eline);
+sets the cursor size
+
+int setlines(int numlines);
+sets the number of lines on the display
+
+void spc(int num);
+displays a specified number of spaces to the screen
+
+void srestore(int *sbuf);
+restores a previously saved screen
+
+int *ssave(void);
+saves the current screen to a buffer
+
+void videoinit(void);
+initializes TCXL's video system to the present video setup
+
+int vidtype(void);
+returns the video display adapter type
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      10   
+
+
+TCXLWIN.H   - Windowing Functions
+---------------------------------
+
+int attrib(int fore,int back,int bright,int blink);
+creates an attribute
+
+int disktowin(char *fname);
+copies a saved window disk file to screen
+
+int vidtype(void);
+returns the video display adapter type
+
+int wactiv(int whandle);
+activates an already opened window
+
+int wcclear(int attr);
+clears the active window using specified attribute
+
+int wchgattr(int newattr);
+changes attribute of the active window
+
+int wclear(void);
+clears the active window
+
+int wclose(void);
+closes the active window
+
+int wcloseall(void);
+closes all open windows
+
+int wclreol(void);
+clears to the end of the active window's line
+
+int wcopy(int nsrow,int nscol);
+creates a new window duplicating the active window, becomes the active window
+
+char *werrmsg(void);
+returns an error message from the last windowing function
+
+int wgetc(void);
+gets a character from the keyboard within the active window
+
+int wgetchf(char *valid);
+gets a character from the keyboard within the active window
+
+int wgetns(char *str,int maxlen);
+gets a string from the keyboard within active window, limits length of input
+
+int wgets(char *str);
+gets a string from the keyboard within the active window
+
+int wgotoxy(int wrow,int wcol);
+plots cursor coordinates within the active window
+
+int *whide(int **wbuf);
+
+
+                                      11   
+hides a previously saved window
+
+int whline(int wsrow,int wscol,int count,int btype);
+draws a horizontal text line in active window
+
+int winpdef(int wrow,int wcol,char *str,int ftype,int fattr);
+defines an area of the active window for keyboard input
+
+int winpread(void);
+processes keyboard of all defined areas of active window, allows full editing
+
+int winputsf(char *str,char *fmt);
+inputs a formatted string from the keyboard within a window
+
+int wintodisk(int srow,int scol,int erow,int ecol,char *fname);
+copies a window of the screen to a disk file
+
+int wisactiv(int whandle);
+determines if specified window handle is active
+
+int wmbardef(int wrow,int wcol,int attr,char *str,int tagchar);
+defines a window bar menu option
+
+int wmbarget(int barattr,int taginit,int pulldown);
+gets a window bar-selection menu selection from the keyboard
+
+int wmbarxcel(void);
+cancels all defined window bar menu options
+
+int wmove(int nsrow,int nscol);
+moves the active window to a new location
+
+int wnopen(void);
+returns the number of open windows
+
+int wopen(int srow,int scol,int erow,int ecol,int btype,int attr);
+opens a screen window and makes it active
+
+int wpgotoxy(int wrow,int wcol);
+plots pseudo cursor coordinates within the active window by wrapping around
+
+int wprintc(int row,int col,int attr,int ch);
+prints a character in the active window, does not adjust cursor position
+
+int wprintf(const char *format,...);
+outputs a formatted string to active window, works like printf() does
+
+int wprints(int row,int col,int attr,char *str);
+prints a string in the active window, does not adjust cursor position
+
+int wputc(int ch);
+prints a character in the active window at current cursor location
+
+int wputns(char *str,int width);
+prints a string in the active window, formats width of output
+
+int wputs(char *str);
+
+
+                                      12   
+prints a string in the active window at the current cursor location
+
+void wrestore(int *wbuf);
+restores a previously saved window of screen memory
+
+int *wsave(int srow,int scol,int erow,int ecol);
+saves a window of screen memory
+
+int wscanf(const char *format,...);
+inputs a formatted string from the keyboard, works like scanf() does
+
+int wscroll(int count,int direction);
+scrolls text within the active window, up or down
+
+int wsetesc(int option);
+turns Escape checking for several window input functions on/off
+
+int wsize(int nerow,int necol);
+adjusts the size of the active window
+
+int wtextattr(int attr);
+sets the default text attribute of the active window
+
+int wtitle(char *str,int tpos);
+gives active window a title
+
+int *wunhide(int **wbuf);
+unhides a previously hidden window
+
+int wvline(int wsrow,int wscol,int count,int btype);
+draws a vertical text line in active window
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      13   
+

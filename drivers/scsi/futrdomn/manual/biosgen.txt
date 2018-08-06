@@ -1,0 +1,114 @@
+o- General 
+
+The ROM BIOS functions according to the IBM PC/XT/AT ROM BIOS specifications
+and utilizes the standard Interrupt 13H mass storage vector. As a subset,
+it contains enough compatibility to allow booting from devices that can be
+made IBM media compatible.
+
+In addition to the basic set of commands, extensions are available to provide
+direct control of SCSI devices for the purposes of control, identification,
+formatting, extended addressing, etc.
+
+The ROM BIOS also maintains information in a private RAM table that may be
+useful to the writer of device drivers or utilities. This information is also 
+made available through extensions to the INT 13H BIOS call.
+
+o- Addressing Conventions
+
+The ROM BIOS has conventions concerning the use of SCSI addresses and LUN 
+assignments. The BIOS performs its scan for drives at SCSI addresses in the 
+order as follows:
+
+                      SCSI Address 0 LUN 0
+                      SCSI Address 1 LUN 0
+                      SCSI Address 2 LUN 0
+                      SCSI Address 3 LUN 0
+                      SCSI Address 4 LUN 0
+                      SCSI Address 4 LUN 1
+                      SCSI Address 4 LUN 2
+                      SCSI Address 4 LUN 3
+                      SCSI Address 5 LUN 0
+                      SCSI Address 5 LUN 1
+                      SCSI Address 5 LUN 2
+                      SCSI Address 5 LUN 3
+                      SCSI Address 7 LUN 0                        
+
+A SCSI device that allows addressing of LUNs other than 0 must be setup at 
+SCSI address 4 or 5.
+
+If a device does not properly return an error code when the incorrect LUN is 
+addressed, it cannot be set at SCSI address 4 or 5. The symptom of this error
+is that the same drive name will show up multiple times on the screen during 
+boot time.
+
+SCSI address 6 is used by the Future Domain drivers that utilize arbitration 
+and reselection.
+
+o- Boot Sequence
+
+The ROM BIOS follows the rules for a mapped BIOS in the system and is executed
+at boot time by the system BIOS. The SCSI Drives are scanned in the address 
+order described above and are located as follows:
+
+LOOP1 - Scan the bus once for any devices that respond (READY or NOT READY)
+        and add them in an ID list if it is a direct access device.
+
+LOOP2 - Go through the ID list until all the devices respond with READY. 
+        (spend  a maximum of 30 seconds on any given drive). This loop is 
+        bypassed if all the devices found in LOOP1 responded with READY.
+
+LOOP3 - Scan the bus once more and any device that is found is issued an 
+        INQUIRY command.  The BIOS also issues a READ CAPACITY 	command if it
+        is a direct access device.
+
+
+NOTE 1:  The SCSI bus was checked for a parity error during the issuing of 
+         the Test Unit Ready command. If the adapter detected a parity error,
+         further checking of parity on the SCSI bus is disabled. A message 
+         is output indicating that SCSI bus parity is not being checked.
+
+NOTE 2:  The SCSI Read Capacity command is issued to determine the size of the
+         drive. This number is used to make up drive parameters to report to 
+         ROM BIOS users. (See  "Return Parameters" command, Code AH=08h.) 
+
+NOTE 3:  If the sector size of the drive does not equal 256 or 512, a message 
+         indicating that there is a nonstandard sector size is output. This 
+         may occur for such things as optical drives which have a nonstandard
+         sector size and are supported by a separate loadable driver.
+
+NOTE 4:  BIOS scan of the SCSI Bus continues until the SCSI ID 7 is reached 
+         or maximum 6 drives are located.
+
+
+o- Special Sector Size Handling
+
+Two different sector sizes are supported. They are 256 and 512 bytes per 
+sector. If the ROM BIOS detects a sector size of 256 bytes during the Read 
+Capacity command, a flag is set in the BIOS RAM area that causes all commands 
+associated with number of sectors to compensate for the smaller sector size.
+
+All drives with 256 byte sectors appear to the user of the ROM BIOS to have 
+512 bytes. Compensation for the 256 byte sector size is handled by the 
+commands which follow:
+
+  Read Capacity command: The size that is read is divided by two.
+
+  Read Command:  The number of sectors to be transferred and the logical block 
+       address are multiplied by two before being put into the SCSI command.
+
+  Write Command: Same as Read.
+
+  Verify Command: Same as Read.
+
+Drives for which nonstandard sector sizes have been reported are part of the 
+drive addressing scheme, but all read, write, verify commands are completed 
+with an error code.
+
+Magnetic media that is to be run by the system should be assigned to the lower
+SCSI addresses, while such things as optical media should be assigned to an 
+upper SCSI address, i.e. SCSI address 5. This allows booting from the magnetic
+media, whereas a device with a nonstandard sector size will not be allowed to
+boot.
+
+ROM BIOS will always attempt to boot from the drive at the lowest SCSI
+address.

@@ -1,0 +1,39 @@
+
+
+       NAME
+               getkey -- extended keyboard fetch
+
+       SYNOPSIS
+               #include "keys.h"
+               r = getkey();
+               int r;          returns keyboard value
+
+
+       DESCRIPTION
+       This function eases the reading of all keys, whether normal
+       or function keys.  The getch() function is used to return a keyboard
+       value.  If the first value received is 0, then a second value
+       is fetched and 256 (0x100) is added to flag the return value
+       as an extended function key.  The calling program should check
+       for a return value greater than 256.  If true, subtract 256 and
+       consider the result as a function key.  Most function keys
+       are defined in tools.h, and others may be user added.
+
+       EXAMPLE
+             This example tests for function key 3 (FK3)
+
+             #include "tools.h"
+             int r;
+
+             while(TRUE) {
+                r = getkey();
+                if(r < 256) {
+                   printf("Not FK3 key");
+                   continue;
+                   }
+                else r -= 256;
+                if(r == FK3) printf("FK3 sensed!!!");
+                }
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

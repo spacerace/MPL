@@ -1,0 +1,194 @@
+/*
+ * COLORS.RC - Resources for COLORS program
+ *
+ * LANGUAGE      : Microsoft C5.1
+ * MODEL         : medium
+ * ENVIRONMENT   : Microsoft Windows 2.1 SDK
+ * STATUS        : operational
+ *
+ * Developed by:
+ *   Geoffrey Nicholls
+ *   Kevin P. Welch
+ *
+ * (C) Copyright 1988
+ * Eikon Systems, Inc.
+ * 989 E. Hillsdale Blvd, Suite 260
+ * Foster City  CA  94404
+ *
+ */
+
+/**/
+
+/*
+ *
+ * COLORS section of file
+ *
+ */
+
+#include <windows.h>
+#include "colors.h"
+#include "mdi.h"
+
+MainIcon ICON  colors.ico
+
+MainMenu MENU
+BEGIN
+   POPUP "&File"
+   BEGIN
+      MENUITEM "&New...",                 IDM_NEW
+      MENUITEM "&Open...",                IDM_OPEN, GRAYED
+      MENUITEM "&Save",                   IDM_SAVE, GRAYED
+      MENUITEM "Save &As...",             IDM_SAVEAS, GRAYED
+      MENUITEM "&Close",                  IDM_CLOSE, GRAYED
+      MENUITEM SEPARATOR
+      MENUITEM "&Exit",                   IDM_EXIT
+      MENUITEM "A&bout...",               IDM_ABOUT
+   END
+END
+
+RedMenu MENU
+BEGIN
+   POPUP "&File"
+   BEGIN
+      MENUITEM "&New...",                 IDM_NEW
+      MENUITEM "&Open...",                IDM_OPEN, GRAYED
+      MENUITEM "&Save",                   IDM_SAVE, GRAYED
+      MENUITEM "Save &As...",             IDM_SAVEAS, GRAYED
+      MENUITEM "&Close",                  IDM_CLOSE
+      MENUITEM SEPARATOR
+      MENUITEM "&Exit",                   IDM_EXIT
+      MENUITEM "A&bout...",               IDM_ABOUT
+   END
+   POPUP "&Red"
+   BEGIN
+      MENUITEM "&0 %",                    IDM_0
+      MENUITEM "&25 %",                   IDM_25
+      MENUITEM "&50 %",                   IDM_50
+      MENUITEM "&75 %",                   IDM_75
+      MENUITEM "&100 %",                  IDM_100, CHECKED
+   END
+END
+
+GreenMenu MENU
+BEGIN
+   POPUP "&File"
+   BEGIN
+      MENUITEM "&New...",                 IDM_NEW
+      MENUITEM "&Open...",                IDM_OPEN, GRAYED
+      MENUITEM "&Save",                   IDM_SAVE, GRAYED
+      MENUITEM "Save &As...",             IDM_SAVEAS, GRAYED
+      MENUITEM "&Close",                  IDM_CLOSE
+      MENUITEM SEPARATOR
+      MENUITEM "&Exit",                   IDM_EXIT
+      MENUITEM "A&bout...",               IDM_ABOUT
+   END
+   POPUP "&Green"
+   BEGIN
+      MENUITEM "&0 %",                    IDM_0
+      MENUITEM "&25 %",                   IDM_25
+      MENUITEM "&50 %",                   IDM_50
+      MENUITEM "&75 %",                   IDM_75
+      MENUITEM "&100 %",                  IDM_100, CHECKED
+   END
+END
+
+BlueMenu MENU
+BEGIN
+   POPUP "&File"
+   BEGIN
+      MENUITEM "&New...",                 IDM_NEW
+      MENUITEM "&Open...",                IDM_OPEN, GRAYED
+      MENUITEM "&Save",                   IDM_SAVE, GRAYED
+      MENUITEM "Save &As...",             IDM_SAVEAS, GRAYED
+      MENUITEM "&Close",                  IDM_CLOSE
+      MENUITEM SEPARATOR
+      MENUITEM "&Exit",                   IDM_EXIT
+      MENUITEM "A&bout...",               IDM_ABOUT
+   END
+   POPUP "&Blue"
+   BEGIN
+      MENUITEM "&0 %\t  0",               IDM_0
+      MENUITEM "&25 %\t  2",              IDM_25
+      MENUITEM "&50 %\t  5",              IDM_50
+      MENUITEM "&75 %\t  7",              IDM_75
+      MENUITEM "&100 %\t  1",             IDM_100, CHECKED
+   END
+END
+
+BlueAccel   ACCELERATORS
+BEGIN
+   "0",        IDM_0
+   "2",        IDM_25
+   "5",        IDM_50
+   "7",        IDM_75
+   "1",        IDM_100
+END
+
+STRINGTABLE
+BEGIN
+   IDS_TITLE,              "Multiple Document Interface"
+   IDS_MAINCLASS,          "MdiMainClass"
+   IDS_COLORCLASS,         "MdiChildClass"
+END
+
+MainNew  DIALOG   50, 50, 144, 60
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+   GROUPBOX "New"                              -1,   4,  4, 100, 52
+   RADIOBUTTON "&Red",                 DLGNEW_RED,   8, 16,  88, 10
+   RADIOBUTTON "&Green",             DLGNEW_GREEN,   8, 28,  88, 10
+   RADIOBUTTON "&Blue",               DLGNEW_BLUE,   8, 40,  88, 10
+   DEFPUSHBUTTON "&OK"                       IDOK, 108,  8,  32, 14
+   PUSHBUTTON "&Cancel"                  IDCANCEL, 108, 28,  32, 14
+END
+
+MainAbout   DIALOG   22, 17, 156, 100
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+    CTEXT "Multiple Document Interface",        -1,  0,  8,152,  8
+    CTEXT "By Geoffrey D. Nicholls",            -1,  0, 20,152,  8
+    CTEXT "and Kevin P. Welch",                 -1,  0, 28,152,  8
+    CTEXT "(C) Copyright 1988",                 -1,  0, 40,152,  8
+    CTEXT "Eikon Systems, Inc.",                -1,  0, 48,152,  8
+    CTEXT "Version 1.00  1-Nov-88",             -1,  0, 60,152,  8
+    DEFPUSHBUTTON "Ok"                        IDOK, 60, 80, 32, 14, WS_GROUP
+END
+
+/**/
+
+/*
+ *
+ * MDI section of file
+ *
+ */
+
+MdiMenu MENU
+BEGIN
+   MENUITEM "&New",                    IDM_NEWWINDOW, GRAYED
+   MENUITEM SEPARATOR
+   MENUITEM "&Tile",                   IDM_ARRANGE, GRAYED
+   MENUITEM "Tile &Always",            IDM_ARRANGEALL, GRAYED
+   MENUITEM SEPARATOR
+   MENUITEM "&Hide",                   IDM_HIDE, GRAYED
+   MENUITEM "&Unhide...",              IDM_UNHIDE
+END
+
+MdiChildAccel  ACCELERATORS
+BEGIN
+   VK_F4,      IDM_CLOSE,        VIRTKEY, NOINVERT, CONTROL
+   VK_F5,      IDM_RESTORE,      VIRTKEY, NOINVERT, CONTROL
+   VK_F6,      IDM_NEXTWINDOW,   VIRTKEY, NOINVERT, CONTROL
+   VK_F6,      IDM_PREVWINDOW,   VIRTKEY, NOINVERT, CONTROL, SHIFT
+   VK_F7,      IDM_MOVE,         VIRTKEY, NOINVERT, CONTROL
+   VK_F8,      IDM_SIZE,         VIRTKEY, NOINVERT, CONTROL
+   VK_F10,     IDM_MAXIMIZE,     VIRTKEY, NOINVERT, CONTROL
+END
+
+MdiUnhide   DIALOG 50, 50, 132, 68
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+   LTEXT "&Unhide",                            -1,   4,  4,  88, 10
+   LISTBOX                           DLGUNHIDE_LB,   4, 16,  88, 48, WS_TABSTOP
+   DEFPUSHBUTTON "&OK"                       IDOK,  96,  8,  32, 14
+   PUSHBUTTON "&Cancel"                  IDCANCEL,  96, 28,  32, 14
+END

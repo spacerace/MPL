@@ -1,0 +1,7 @@
+
+invertrg.obj: invertrg.c
+   cl -c -W2 -AS -Gsw -Od -Zped invertrg.c
+
+invertrg.exe: invertrg.obj invertrg.def
+   link4 invertrg,/align:16,/map/li,slibw/NOE,invertrg.def
+   mapsym invertrg

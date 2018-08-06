@@ -1,0 +1,44 @@
+#
+# Makefile for the mandelbrot demo program.
+#
+INC=..\..\..\include
+LIB=..\..\..\lib
+
+CC=cl
+CFLAGS=-Ox -G2 -Zp -Lp -I$(INC)
+
+ASM=masm
+AFLAGS=-Mx -t
+
+
+CLIBS=libh.lib em.lib doscalls.lib
+SLIBS=slibfp.lib slibc.lib slibcp.lib
+MLIBS=mlibfp.lib mlibc.lib mlibcp.lib
+
+
+EXE=mandel.exe mdraw.exe mstat.exe
+
+mandel.obj:	mandel.c mandel
+		$(CC) $(CFLAGS) -c mandel.c
+
+manditer.obj:	manditer.asm mandel
+		$(ASM) $(AFLAGS) -r manditer.asm;
+
+mdraw.obj:	mdraw.c mandel
+		$(CC) $(CFLAGS) -AM -c mdraw.c
+
+mstat.obj:	mstat.c mandel
+		$(CC) $(CFLAGS) -c mstat.c
+
+setscan.obj:	setscan.asm mandel
+		$(ASM) $(AFLAGS) setscan.asm;
+
+
+mandel.exe:	mandel.obj manditer.obj mandel
+		link /noe mandel manditer,mandel,,$(CLIBS) $(SLIBS),;
+
+mdraw.exe:	mdraw.obj setscan.obj mandel
+		link /noe mdraw setscan,mdraw,,$(MLIBS) $(CLIBS),mdraw;
+
+mstat.exe:	mstat.obj mandel
+		link /noe mstat,,,$(CLIBS) $(SLIBS),;

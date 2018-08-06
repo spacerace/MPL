@@ -1,0 +1,17 @@
+#include <style.h>
+#include "loadacc.h"
+
+example MENU
+BEGIN
+  POPUP "CHOICE"
+     BEGIN
+     MENUITEM "CHOICE1\t^A", CHOICE1
+     MENUITEM "CHOICE2\t^B", CHOICE2
+     END
+END
+
+example ACCELERATORS
+BEGIN
+  "^A", CHOICE1
+  "^B", CHOICE2
+END

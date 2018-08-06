@@ -1,0 +1,9 @@
+#------------------
+# BRICKS make file
+#------------------
+
+bricks.obj : bricks.c
+     cl -c -G2sw -W3 bricks.c
+
+bricks.exe : bricks.obj bricks.def
+     link bricks, /align:16, NUL, os2, bricks

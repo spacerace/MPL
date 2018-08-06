@@ -1,0 +1,39 @@
+
+
+        NAME
+                basename -- split a string into path and/or filename
+
+        SYNOPSIS
+                function(s1, s2, s3);
+                char *s1;      original string
+                char *s2;      destination for path portion
+                char *s3;      destination for name portion
+
+        DESCRIPTION
+        This function will split a potential filename specification into
+        the subdirectory path and the filename itself.  The split
+        is made at the final '\' character.  If none exists, s3 will
+        be the same as s1, and s2[0] will be NULL.  If only a path
+        exists, s2 equals s1, and s3[0] is NULL.
+
+        EXAMPLE
+             char *name[] = "C:\looney\bin\wumpus.com";
+             char path[32], file[16];
+             basename(name, path, file);
+
+             after execution, arrays are as follows (NULL terminated):
+                *name (unchanged)
+                *path C:\looney\bin\
+                *file wumpus.com
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

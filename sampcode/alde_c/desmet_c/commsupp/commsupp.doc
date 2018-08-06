@@ -1,0 +1,583 @@
+
+            =================================================
+            =                                               =
+            = Communications support for DeSmet C compiler  =
+            =                                               =
+            =================================================
+
+
+          Written by Tom Poindexter  (70040,1223), March 1984
+
+
+Acknowledgements:   Vern Buerg - for an example of comm support for
+                                 the Lattice C compiler. (DRIVER.ASM)
+                    Curt Klinsing - the author listed in DRIVER.ASM
+                    Earl Terwilliger Jr. - referring me to the PC Tech
+                                 Journal series on 8088 interrupts
+                    Chris Dunford - author of the 2 part series in PC Tech
+                                 Journal (12/83 & 1/84).
+
+=========
+
+The following files constitute the communication support routines.
+
+COMMSUPP.C - The actual C interface routines.
+
+COMMASM.A  - Internal assembler routines used by commsupp.c.
+
+COMMSUPP.H - An #include file containing declares and defines for
+             an application program using commsupp.c.
+
+COMMSUPP.DOC - This documentation.
+
+-------------
+
+COMMTERM.C  - Optional, an example C communications program using
+              commsupp.c
+
+=========
+
+
+   COMMSUPP provides interrupt driven buffered communication support for the
+DeSmet C compiler.  Features: XON/XOFF support, two ports active
+concurrently, modem break signal generation, status reporting, and
+event trapping.
+
+   Most of the routines are written in C so that it may be possible to
+port these routines to another compiler.  The assembler language routines
+are coded in DeSmet ASM88 syntax, which is somewhat different than the
+IBM Macro Assembler syntax.
+
+   DeSmet library functions that may or may not be available on other
+compilers are:
+
+  _lmove(num_bytes,source_offset,source_segment,target_offset,target_segment);
+
+    Performs a memory move using REP MOVSB so that overlapping moves are
+    handled correctly (processor direction flag set correctly).
+
+  _move(num_bytes,source_offset,target_offset);
+
+    Similiar to _lmove, except that the move is within the C data segment.
+
+  c_ds = _showds();
+
+    Returns the C data segment.
+
+  c_cs = _showcs();
+
+    Returns the C program segment.
+
+  ptr = malloc(num_bytes);
+
+    Allocate a specific number of bytes in memory and return a pointer
+    to the area.
+
+
+The following functions are not available in DeSmet C, but may or may not
+be included in other compilers.  These routines are in COMMASM.A:
+
+  struct { int ax,bx,cx,dx,si,di,ds,es;} in_regs,out_regs;
+  flags = sysint (interrupt, &in_regs, &out_regs);
+
+    Call a system interrupt routine, passing and returning register values.
+
+  value = inb(hardware_port);
+
+    Input a byte value from a hardware port address.
+
+  outb(hardware_port,value);
+
+    Output a byte value to a hardware port address.
+
+   cli();
+
+     Disable system interrupts (CLI).
+
+   sti();
+
+     Enable system interrupts (STI);
+
+
+
+DeSmet C compiler use
+=====================
+
+  1. Compile COMMSUPP.C with C88
+     A>c88 commsupp
+
+  2. Assemble COMMASM.A with ASM88
+     A>asm88 commasm
+
+  3. If you maintain your own library, use LIB88 to add commsupp and commasm
+     A>lib88 commasm commsupp -oyourlib
+
+  4. Create and compile your program.  #include "commsupp.h".
+     A>c88 yourprog
+
+  5. Bind your program with your library (as in #3) or with the object
+     modules alone.
+     A>bind yourprog (your-other-modules) commsupp commasm     w/o private lib
+     A>bind yourprog yourlib.s                                 w/  private lib
+
+
+
+
+Description of routines:
+========================
+
+init_com  -  Initializes the serial port, enables and sets interrupt vectors,
+             sets communication parameters (baud, parity, data length,
+             stop bits), and allocates a receive buffer.
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+       baud: 110, 150, 300, 450, 600, 1200, 2400, 4800, 9600
+       parity: 0 = none, 1 = odd, 2 = even, 3 = mark, 4 = space
+       data: 5, 6, 7, 8
+       stop: 1, 2
+       buff_len: length of receive buffer up to 32767 bytes
+
+     Returns:
+       ERROR (-1): comm port not available or invalid parm
+       TRUE (1): ok
+
+     Example:
+
+       int port, baud, parity, data, stop, buff_len;
+
+       port = 1;
+       baud = 300;
+       parity = 0;
+       data = 8;
+       stop = 1;
+       buff_len = 1024;
+
+       if (init_com(port,baud,parity,data,stop,buff_len) == ERROR)
+         puts("\nComm port initialzation failed.\n");
+
+     Notes:
+       See defines for parity values in COMMSUPP.H.  This function sets the
+       8250 modem controller chip and the 8259 interrupt controller chip.
+       Also, this routine "pokes" the value of the C data segment into
+       the interrupt handler routine so that no matter where the
+       interrupt occurs, the interrupt handler will have access to the
+       C data segment.
+       See the PC Tech Journal (12/83 & 1/84) for details on the
+       interrupt controller.
+
+=========
+
+uninit_com - Disables interrupts, flushes buffer. Optionally leaves serial
+             port open.
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+       lv_open: TRUE (1) = leave serial open (DTR enabled), FALSE (0) = close
+                serial port (drop DTR).
+
+     Returns:
+       ERROR (-1): comm port never intialized or invalid port number.
+       TRUE (1): ok
+
+     Example:
+       int port, lv_open;
+
+       port = 1;
+       lv_open = TRUE;
+
+       uninit_com(port,lv_open);
+       puts("\n\nProgram terminating.......Comm port left open.\n\n");
+
+     Notes:
+       It is VERY important that this function is successfully completed
+       prior to the termination of the user program.  Otherwise, any incoming
+       chars will trigger the interrupt and control will pass to the interrupt
+       handler address, whether or not there is a valid routine to process
+       the interrupt.
+
+=========
+
+send_brk - Send a break signal to the specified port.  1/2 second of mark
+           signal is generated.
+
+     Parms:
+       Port: 1 = com1:, 2 = com2:
+
+     Returns:
+       ERROR (-1): comm port never intialized or invalid port number.
+       TRUE (1): ok
+
+     Example:
+       int port;
+
+       port = 1;
+       send_brk(port);
+
+     Notes:
+       See this routine in commsupp.c on using the SYSINT function.  The
+       time-of-day interrupt (documented in the tech reference) is invoked
+       to return the current time-of-day tick count.  The effect of the
+       routine is a delay for a specified time that is independent
+       of processor speed.
+
+=========
+
+set_xoff - Enables or disables the XON/XOFF protocol.  See companion functions
+           recd_xoff and sent_xoff.  If enabled, an XOFF received will set
+           a flag which can be parsed with the recd_xoff function.  The user
+           program must check recd_xoff to suspend transmission, i.e.,
+           outp_char and outp_strn are not automatically suspended.  Also, if
+           the receive buffer becomes 75% full, an XOFF is sent to the remote
+           computer, and a flag is set, which can be parsed with sent_xoff.
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+       state: TRUE (1) = XON/XOFF enabled, FALSE (0) = XON,XOFF disabled
+
+     Returns:
+       ERROR (-1): comm port never intialized or invalid port number.
+       TRUE (1): ok
+
+     Example:
+       int port, state;
+
+       port = 1;
+       puts("\nDo you want XON/XOFF enabled (y/n) ? ");
+       state = (getchar() == 'y') ? TRUE : FALSE;
+       set_xoff(port,state);
+
+     Notes:
+       XON/XOFF should be disabled anytime binary transmissions are performed,
+       i.e., all 8 bits significant.  When XON/XOFF is disabled, there is no
+       mechansism to prevent or report buffer overrun.  In this case the
+       user program should be alert to the number of bytes in the buffer using
+       the inp_cnt function.
+
+=========
+
+recd_xoff - Report if an XOFF character has been received.  If TRUE, then
+            also reset the recd_xoff flag to FALSE.
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+
+     Returns:
+       ERROR (-1): comm port never intialized or invalid port number.
+       TRUE (1): XOFF has been received
+       FALSE (0): XOFF has not been received
+
+     Example:
+       int port, curr_state;
+
+       port = 1;
+       curr_state = recd_xoff(port);
+       if (curr_state == TRUE)
+         {
+           puts(" XOFF received..press any key to continue ");
+           getchar();
+         }
+
+     Notes:
+       recd_xoff will always return FALSE if XON/XOFF is disabled.
+       The recd_xoff flag is reset upon calling this function, so that
+       recd_xoff will return FALSE until another XOFF is received.
+
+=========
+
+sent_xoff - Report if XOFF has been sent, indicating that the receive buffer
+            is 75% or more full.  If TRUE, then also reset the sent_xoff flag
+            to FALSE.
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+
+     Returns:
+       ERROR (-1): comm port never intialized or invalid port number.
+       TRUE (1): XOFF has been sent.
+       FALSE (0): XOFF has not been sent.
+
+     Example:
+       int port;
+
+       port = 1;
+       if (sent_xoff(port) == TRUE)
+         {
+           puts("Your in trouble now...here's the rest of the buffer: ");
+           while (inp_cnt(port))
+             putchar(inp_char(port));
+         }
+
+     Notes:
+       sent_xoff will always return FALSE if XON/XOFF is disabled.
+       The sent_xoff flag is reset upon calling this function, so that
+       sent_xoff will return FALSE until another XOFF is sent.
+
+=========
+
+inp_cnt - Reports the number of bytes available in the buffer waiting to be
+          read.
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+
+     Returns:
+       ERROR (-1): comm port never intialized or invalid port number.
+       other: the number of bytes in the buffer.
+
+
+     Example:
+       int port;
+       char c;
+
+       port = 1;
+
+       while (inp_cnt(port))
+         {
+           c = inp_char(port);
+           switch (c)
+             {
+               case ESC: ...
+               case CR: ...
+               case LF: ...
+               case BS: ...
+               default:
+                 putchar(c);
+             }
+         }
+
+     Notes:
+       If inp_cnt is equal to the buffer length, a buffer overflow has
+       probably occurred.  The incoming characters are dropped into the
+       AMBB (All Mighty Bit Bucket) so that the buffer is not corrupted.
+
+=========
+
+inp_char - Return one byte from the receive buffer.  All serial port
+           control lines (carrier detect, etc) are ignored.
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+
+     Returns:
+       ERROR (-1): comm port never intialized, invalid port number, or
+                   no character available
+       other: Next (FIFO) character in the buffer.
+
+
+     Example:
+       int port;
+       char c;
+
+       port = 1;
+
+       outp_strn("\nWhich option (1, 2, or 3)? ");
+       while (inp_cnt(port) == 0)
+         ;
+       c = inp_char(port);
+       switch (c)
+         {
+           case '1': ....
+           etc.
+         }
+
+     Notes:
+       The value return is type int, which should convert to char in most
+       compilers.
+
+=========
+
+inp_strn - Transfer n bytes from the receive buffer to a string, up to a
+           maximum length.  It is the responsibility of the user program
+           to insure that the maximum number of bytes is less than or equal
+           to the string length.  If the buffer contains less than the
+           number of bytes requested, only the available bytes are
+           transferred.
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+       &strn: address of the string to receive the bytes.
+       cnt: the maximum number of bytes to transfer.
+
+     Returns:
+       ERROR (-1): comm port never intialized, invalid port number,
+                   or no characters available.
+       other: the number of bytes actually transferred.
+
+
+     Example:
+       #define STR_LEN 80
+       int port;
+       char strn[STR_LEN];
+       int cnt;
+
+       port = 1;
+       cnt = inp_strn(port,&strn,STR_LEN-1);
+       strn[cnt] = '\0';
+
+       printf("%d bytes were returned. Here it is: %s",cnt,strn);
+
+     Notes:
+       This is trivially faster that a looping inp_char, using the _move
+       library function.  This may be the trick if you are having buffer
+       overrun problems.
+
+=========
+
+outp_char - Transmits one byte over the serial port.  Carrier detect, clear
+            to send, and data set ready signals are ignored (full duplex
+            is implied).
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+          c: the character to send
+
+     Returns:
+       ERROR (-1): comm port never intialized, invalid port number, or
+                   timeout on THRE (transmitter holding register empty).
+       TRUE (1): ok.
+
+
+     Example:
+       int port;
+       char c;
+
+       port = 1;
+       c = 'A';
+       outp_char(port,c);
+
+     Notes:
+       A timeout is unlikely, since only the THRE is checked.  If you need
+       true half duplex operation, check clear to send using com_stat
+       before sending.  Also, if you have enabled XON/XOFF (set_xoff),
+       you may want to call recd_xoff to see if the remote computer has
+       sent you an XOFF.
+
+=========
+
+outp_strn - Transmits a zero terminated string or up to a specified length.
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+       &strn: address of the string to send.
+       cnt: maximum characters to send.
+
+     Returns:
+       ERROR (-1): comm port never intialized, invalid port number, or
+                   timeout.
+       TRUE: ok
+
+
+     Example:
+       #define STR_LEN 80
+       int port;
+       char strn[STR_LEN];
+
+       port = 1;
+       puts("\nWhat is your password on system X? ");
+       gets(strn);
+       outp_strn(port,&strn,STR_LEN);
+
+     Notes:
+       This utilizes the outp_char function above; hence the same conditions
+       apply.  If you need to control clear to send and XON/XOFF, then don't
+       use outp_strn.  See the commterm.c upload routine for a method
+       of sending a string while checking for XOFF.
+
+=========
+
+com_stat - Return the serial port line status and the modem status.
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+
+     Returns:
+       ERROR (-1): comm port never intialized or invalid port number.
+       other: line status (high byte) and modem status (low byte)
+
+
+     Example:
+       int port;
+       int status;
+       port = 1;
+
+       status = com_stat(port);
+
+     Notes:
+       Use the defines in COMMSUPP.H to check for certain conditions by
+       anding the status returned with the condition value, i.e.,
+
+       if (com_stat(port) & BREAK_IND)
+         puts("We got a break; quick -- do something!");
+
+       if (com_stat(port) & CARRIER)
+         puts("\nONLINE\n");
+
+=========
+
+on_com  - Specify a C routine to execute when a byte is received.
+
+     Parms:
+       port: 1 = com1:, 2 = com2:
+        rtn: the address of a valid C routine or NULL (0).
+
+     Returns:
+       ERROR (-1): comm port never intialized or invalid port number.
+       TRUE: ok
+
+
+     Example:
+       extern int total;
+       int port;
+       int counter();
+       port = 1;
+
+       com_stat(port,counter);
+
+
+       counter ()
+       {
+         total++;
+       }
+
+     Notes:
+       This function is similar to BASICA's event trapping statements.
+           ON COM(n) GOSUB nnn
+           COM(n) ON
+           COM(n) OFF
+
+       The following rules apply:
+       1. The routine must be a valid C routine or an assembler routine
+          that conforms to C's entry and exit.
+       2. The routine should not expect any arguments or return any
+          values.  Any communication to the routine is by global or
+          external variables.
+       3. Local variables should be kept to a minimun, i.e., declare
+          as static whenever possible.
+       4. Keep function calls to a minimum.
+       5. on_com routines will never be recursive.  Once the routine
+          is given control, any incoming characters will not trigger
+          reactivation of the routine.  Any incoming characters will
+          be buffered, assuming an adequate buffer size was specified.
+       6. To deactivate the on_com routine, call on_com with a zero
+          as the routine ( on_com(port,0); ).  This is evquivalent to
+          BASICA's   COM(1) OFF.   Note that there is no COM(1) STOP
+          equivalent, i.e. when the on_com routine is active, commsupp
+          will not 'remember' later incoming characters, and will not
+          reactivate the on_com routine until the next character.
+
+       Many of the limitations have to do with the stack segment in use
+       at the time of the interrupt.  Your C program may be active or
+       DOS may be active, thus the stack segment and stack pointer
+       could be DOS's.  The C data segment is always guaranteed for the
+       small memory model (DeSmet ver 2.1).  All registers (except
+       SS and SP) are saved during the interrupt.
+
+=========
+
+
+End of commsupp.doc
+
+==============================================================================
+
+                                                                                                                                                           

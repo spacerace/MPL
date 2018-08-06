@@ -1,0 +1,6 @@
+moveto.obj:   moveto.c
+     cl  -d  -c  -Asnw	-Gsw  -Os  -Zdpe  moveto.c
+
+moveto.exe:  moveto.obj moveto.def
+     link4 moveto,moveto/align:16,moveto/map,slibw,moveto.def
+     mapsym moveto

@@ -1,0 +1,34 @@
+#include "demo.h"
+
+POINTER  IDR_DEMO demo.ico
+
+/******** Main Menu ********/
+
+MENU    IDR_DEMO PRELOAD
+BEGIN
+    SUBMENU   "File", -1
+    BEGIN
+        MENUITEM    "New",          CMD_NEW
+        MENUITEM    "Open...",      CMD_OPEN
+        MENUITEM    "Save",         CMD_SAVE
+        MENUITEM    "Save As...",   CMD_SAVEAS
+    END
+    SUBMENU   "Edit", -2
+    BEGIN
+        MENUITEM    "Undo\tSh+Esc", CMD_UNDO
+        MENUITEM    "Cut\tDel",     CMD_CUT
+        MENUITEM    "Copy\tF2",     CMD_COPY
+        MENUITEM    "Paste\tIns",   CMD_PASTE
+        MENUITEM    "Clear",        CMD_CLEAR
+    END
+END
+
+/****** Accelerator table *****/
+
+ACCELTABLE      IDR_DEMO PRELOAD
+BEGIN
+    VK_ESC,	CMD_UNDO,   VIRTUALKEY, SHIFT
+    VK_DELETE,	CMD_CUT,    VIRTUALKEY
+    VK_INSERT,	CMD_PASTE,  VIRTUALKEY
+    VK_F2,      CMD_COPY,   VIRTUALKEY
+END

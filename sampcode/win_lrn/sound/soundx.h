@@ -1,0 +1,10 @@
+#define ID_NOTES   524
+#define ID_NOISE   626
+#define ID_SOUND   723
+#define ID_COUNT   724
+#define ID_SYNC    725
+#define ID_ENV	   726
+#define ID_EVENT   727
+#define ID_STATUS  728
+#define ID_SETVT   729
+#define LUDWIG	   1222

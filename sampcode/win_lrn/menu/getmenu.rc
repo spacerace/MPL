@@ -1,0 +1,12 @@
+#include    <style.h>
+#include    "getmenu.h"
+
+#define GRP      WS_GROUP
+#define TAB      WS_TABSTOP
+#define TABGRP   WS_TABSTOP | WS_GROUP
+#define DLGMODAL WS_POPUP | WS_DLGFRAME
+
+GetMenuFunc MENU
+BEGIN
+   MENUITEM "Item_1",   ENTRY_1
+END

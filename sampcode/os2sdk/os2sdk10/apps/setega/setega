@@ -1,0 +1,10 @@
+#
+# MS-DOS makefile for the setega application
+#
+
+INC=..\..\..\include
+LIB=..\..\..\lib
+
+setega.exe:	setega.c setega
+		cl -Ox -Zp -Lp -I$(INC) setega.c
+		bind setega $(LIB)\api.lib $(LIB)\doscalls.lib

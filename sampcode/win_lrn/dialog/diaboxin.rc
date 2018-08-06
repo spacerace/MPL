@@ -1,0 +1,11 @@
+#include <style.h>
+#include "diaboxin.h"
+
+diabox MENU
+BEGIN
+  POPUP "DialogBox"
+  BEGIN
+    MENUITEM "Modal", IDDBOX
+  END
+END
+

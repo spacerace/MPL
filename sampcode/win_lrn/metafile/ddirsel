@@ -1,0 +1,10 @@
+
+ddirsel.obj: ddirsel.c ddirsel.h
+    cl  -c -AS -Gsw -Os -Zpe -W2 ddirsel.c
+
+ddirsel.res: ddirsel.rc ddirsel.h
+    rc -r ddirsel.rc
+
+ddirsel.exe: ddirsel.obj ddirsel.res ddirsel.def
+    link4 /align:16 ddirsel,,nul,slibw/NOE,ddirsel.def
+    rc ddirsel.res

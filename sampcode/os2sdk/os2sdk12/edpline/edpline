@@ -1,0 +1,32 @@
+# Makefile for EDPLINE.EXE
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC	=	cl -c -W3 -Alfw -G2sc -Od -Zip
+LF	=	/align:16 /codeview /map /NOD
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+all:edpline.exe
+
+# Resources
+#
+edpline.res:	edpline edpline.h edpline.rc
+
+# C Files
+#
+edpline.obj:	edpline edpline.c edpline.h
+
+# Files:  EDPLINE.EXE
+#
+edpline.exe:   edpline edpline.def edpline.obj edpline.res
+    link $(LF) edpline, , edpline.map, os2 llibcmt, edpline.def
+    rc edpline.res edpline.exe

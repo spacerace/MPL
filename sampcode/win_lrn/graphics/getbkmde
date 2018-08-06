@@ -1,0 +1,7 @@
+
+getbkmde.obj: getbkmde.c
+   cl -c -W2 -AS -Gsw -Od -Zped getbkmde.c
+
+getbkmde.exe: getbkmde.obj getbkmde.def
+   link4 getbkmde,/align:16,/map/li,slibw/NOE,getbkmde.def
+   mapsym getbkmde

@@ -1,0 +1,885 @@
+
+
+
+
+
+
+                                         C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+
+
+          NAME
+
+               clrscr, d_erasel, d_ereol, d_nextc, d_nextl, d_putc, d_puts
+                                        - clear screen, erase line, erase
+                                        end of line, advance cursor,
+                                        write character and string to
+                                        screen
+
+          SYNOPSIS
+
+               clrscr();                Clear the current window.  Set the
+                                        cursor in the upper left hand
+                                        corner. 
+
+               d_erasel();              Erase the line the cursor is on. 
+                                        The cursor ends at the beginning of
+                                        the line.
+
+               d_ereol();               Erase from the current cursor to
+                                        the end of the line.  Do not move
+                                        the cursor.
+
+               d_nextc();               Move the cursor to the next
+                                        position on the current screen.  At
+                                        the end of a line, goes to the
+                                        start of a new line.  At the end of
+                                        the screen, scrolls the screen up 1
+                                        line and goes to the start of the
+                                        bottom line.
+
+               d_nextl();               Moves the cursor to the start of
+                                        the next line on the current
+                                        screen.  At the end of the screen,
+                                        scrolls the screen up 1 line and
+                                        goes to the start of the bottom
+                                        line.
+
+               d_putc(ch);              Writes a single character with
+                                        attribute d_attr on the current
+                                        screen at the current cursor
+                                        position, then moves the cursor to
+                                        the next position.  See d_nextc
+                                        above for details.
+
+
+
+                                                                          1
+          clrscr, d_erasel, d_ereol, d_nextc, d_nextl, d_putc, d_puts
+
+
+
+
+
+                                         C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+               i = d_puts(s);           Writes string s with attribute
+                                        d_attr on the current screen,
+                                        starting at the current cursor
+                                        position, then moves the cursor the
+                                        position following the last
+                                        character of s.  See d_nextc above
+                                        for details.
+
+               char ch;                 Character to write.
+
+               int i;                   Number of characters actually
+                                        written.
+
+               char *s;                 Pointer to string to write.
+
+
+          DESCRIPTION
+
+                    These functions use BIOS calls from DISPIO and the
+               DISP_PAR variables.  
+                    Except for d_attr, the DISP_PAR variables are basically
+               window specifications.  They are set by this module as full
+               screen size, but you can set them smaller in other modules. 
+               See the write up for d_newmode for functions which set these
+               variables for changes in monitor, mode or page.   
+                    The initial value of d_attr, the attribute for output,
+               is 7, which is normal reversed video.  None of the d_newmode
+               functions changes it.  You can change it independently.
+
+          RETURNS
+
+                    d_puts is limited to MAXSTRING characters, which is
+               originally set to 254.  It returns the number of characters
+               written, which lets you test whether this limit is
+               exceeded.  In this count, a "\n" is 1 character.
+
+          CAUTIONS
+
+                    Since these functions use BIOS calls, they do not
+               support redirection.
+
+          LIBRARIES USED
+
+               DISPIO
+
+
+
+
+                                                                          2
+          clrscr, d_erasel, d_ereol, d_nextc, d_nextl, d_putc, d_puts
+
+
+
+
+
+
+
+
+                                      C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+
+
+          NAME
+
+               CURPOS, WRTCHAR -- 
+                         BIOS macros to set cursor and write one character
+
+          SYNOPSIS
+
+               CURPOS(row, col);        Set cursor position to row (0-24),
+                                        col (0-39) or (0-79)
+
+               WRTCHAR(ch);             Write one character at the cursor
+                                        position.  Does not move cursor.
+
+               int row;                 Row to set cursor to.
+
+               int col;                 Column to set cursor to.
+
+               char ch;                 Character to write.
+
+          DESCRIPTION
+
+                    These macros simplify certain operations programmed in
+               dispio.  They are contained in file DISPIO.H.
+
+          RETURNS
+
+                    See above
+
+          CAUTIONS
+
+                    WRTCHAR does not move the cursor.
+
+          LIBRARIES USED
+
+                    DISPIO
+
+
+
+
+
+
+
+
+
+
+
+                                                                          1
+          CURPOS, WRTCHAR
+
+
+
+
+
+
+
+
+
+                                      C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+          NAME
+
+               dispio, c40_disp, c80_disp, mono_dsp, read_loc, read_typ,
+                       write_ac, write_ch, writ_tty
+                                                       -- I/O for display
+
+          SYNOPSIS
+
+               c40_disp();              Change to 40 column color monitor,
+                                        mode 0 (40 column black and white)
+
+               c80_disp();              Change to 80 column color monitor,
+                                        mode 2 (80 column black and white)
+
+               mono_dsp();              Change to monochrome monitor, mode
+                                        7
+
+               dispio (mode);           set mode                          
+                                                   
+               dispio (SET_TYPE, (start_line<<8) + end_line);
+               Greenleaf curtype (type, n1, n2);
+                                        set cursor type
+
+               dispio (SET_CUR, page, (row<<8) + col);
+               Greenleaf curset (y, x, pg);
+                                        set cursor position
+
+               row_col = dispio (READ_POSITION, page, &start_line, 
+                                 &end_line, &row, &col);
+                                        read cursor type and position
+
+               type_line = read_typ (page, &start_line, &end_line);
+                                        read cursor type
+
+               row_col = read_loc (page, &row, &col);
+                                        read cursor position
+
+               row_col = dispio (READ_LIGHT_PEN_POSITION, &switch, &pixel,
+                                 &raster, &row, &col);
+                                        read light pen position
+
+               dispio (SELECT_PAGE + new_page_value);
+               Greenleaf vpage (n);
+                                        select active page
+
+               dispio (SCROLL_UP + number_of_lines, fill_attr, 
+                       (lrow<<8) + lcol, (rrow<<8) + rcol);
+
+                                                                          1
+dispio, c40_disp, d80_disp, mono_dsp, read_loc, read_typ, write_ac,
+        write_ch, writ_tty
+
+
+
+
+
+
+
+                                      C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+               Greenleaf upscroll (n, y1, y2, x1, x2, a);
+                                        scroll active page up
+
+               dispio (SCROLL_DN + number_of_lines, fill_attr, 
+                       (lrow<<8) + lcol, (rrow<<8) + rcol);
+               Greenleaf dnscroll (n, y1, y2, x1, x2, a);
+                                        scroll active page down
+
+               attr_char = dispio (READ_ATTRIBUTE_CHAR, page, 
+                                   &attribute, &character);
+                                        get attribute and character at
+                                        current cursor position
+                                        
+               dispio (WRITE_ATTRIBUTE_CHAR + character, 
+                       (page<<8) + attribute, repeat_count);
+               write_ac (attribute, character, page, repeat_count);
+                                         write attribute character
+
+               dispio (WRITE_CHAR + character, page, repeat_count);
+               write_ch (character, page, repeat_count);
+                                        write character
+
+               dispio (SET_PALETTE, (palette<<8) + color_value);
+               Greenleaf palette (id, value);
+                                        set palette
+
+               dispio (WRITE_DOT + color, col, row);
+               Greenleaf wtdot (y, x, color);
+                                        write dot
+
+               dot = dispio (READ_DOT, col, row);
+                                        read dot
+
+               dispio (WRITE_TELETYPE + char, (page<<8) + color);
+               writ_tty (character, color, page);
+                                        write teletype.  Send cr/lf if
+                                        column 79 (0-79) is written to. 
+                                        Scroll screen up if row 24 (0-24)
+                                        of column 79 is written to.  Ctrl-g
+                                        beeps.  Destructive back space.
+
+               dispio (GET_STATE, &mode, &cols, &page);
+                                        get state
+
+               Except for mode, READ_TYPE and READ_LOC, the first argument
+               name is 256 * AH for BIOS video interrupt 10.  They are all
+               defined in include file DISPIO.H.
+
+                                                                          2
+dispio, c40_disp, d80_disp, mono_dsp, read_loc, read_typ, write_ac,
+        write_ch, writ_tty
+
+
+
+
+
+
+
+                                      C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+               int mode;                Defined in DISPIO.H
+                                             color character mode
+                                                  S40X25_BW      0
+                                                  S40X25_COLOR   1
+                                                  S80X25_BW      2
+                                                  S80X25_COLOR   3
+                                             color graphics
+                                                  MED_COLOR      4
+                                                  MED_BW         5
+                                                  HIGH_BW        6
+
+               int start_line;          starting line for cursor < 16
+               int end_line;            ending line for cursor < 16
+
+               int page;                active page, 0-3 for modes 0 and 1,
+                                        0 or 1 for modes 2 and 3, 0
+                                        otherwise
+
+               int row;                 row, 0 is top
+               int col;                 column, 0 is left
+
+               int row_col;             High byte is (char) row, low byte
+                                        is (char) column.  Same as
+                                        (row<<8)+col.
+
+               int type_lines;          High byte is (char) start_line. 
+                                        Low byte is (char) end_line.  Same
+                                        as (start_line<<8)+end_line. 
+
+               int switch;              active (1) / inactive (0)
+               int pixel;               pixel column (0-319, 639)
+               int raster;              raster line (0-199)
+
+               int new_page_value;      page to select, 0-3 for modes 0 and
+                                        1, 0 or 1 for modes 2 or 3.
+
+               int lrow;                upper row, 0 is top
+               int lcol;                left column, 0 is far left
+               int rrow;                lower row
+               int rcol;                right column
+               int fill_attr;           attribute to fill blank line with
+
+               int attribute;           attribute to write
+               int character;           character to write
+
+
+
+
+                                                                          3
+dispio, c40_disp, d80_disp, mono_dsp, read_loc, read_typ, write_ac,
+        write_ch, writ_tty
+
+
+
+
+
+
+
+                                      C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+               int attr_char;           High byte is attribute.  Low byte
+                                        is character.  Same as
+                                        (attribute<<8)+character.
+
+               int repeat_count;        count of duplicate characters to
+                                        write
+
+               int palette;             palette color id being set (0-127)
+               int color_value;         color value to be used with color
+                                        ID.  For write_dot, if bit 7 is
+                                        set, the color value is exclusive
+                                        or'd with the current color
+
+               int dot;                 dot (color) at cursor
+
+               int color;               foreground color
+
+               int cols;                number of columns on screen
+
+          DESCRIPTION
+
+               Video IO by BIOS interrupt 10.  Include DISPIO.H, which also
+               contains some macros which use these calls.
+
+          RETURNS
+
+               See above.
+
+          CAUTIONS
+
+               Set mode 0-6 does not switch monitors.
+               Scroll up and scroll down need at least two rows.
+
+          LIBRARIES USED
+
+               None known.
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                          4
+dispio, c40_disp, d80_disp, mono_dsp, read_loc, read_typ, write_ac,
+        write_ch, writ_tty
+
+
+
+
+
+
+
+
+                                      C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+
+
+          NAME
+
+               d_newmode, d_newpage, d_toc40, d_toc80, d_tomono, set_dfull
+                                        - major display changes, with
+                                        DISP_PAR updates
+
+          SYNOPSIS
+
+               i = d_newmode(newmode);       Set display to mode newmode
+
+               i = d_newpage(newpage);       Set active page to newpage
+
+               d_toc40();                    Set 40 column color monitor,
+                                             mode 0
+
+               d_toc80();                    Set 80 column color monitor,
+                                             mode 2
+
+               d_tomono();                        Set mono monitor, mode 7
+
+               set_dfull();                  Set DISP_PAR parameters
+                                             except d_attr to current 
+                                             values
+
+               int i;                             1 if the operation is
+                                             valid; 0 if it is not.
+
+               int newmode;                       0-6 for color monitor. 
+                                             Not used for monochrome
+                                             monitor.  See some IBM
+                                             reference.
+
+               int newpage;                       0-7 for 40 column color
+                                             monitor (modes 0 and 1).  0-3
+                                             for 80 column color monitor
+                                             (modes 2 and 3).  Not used
+                                             otherwise.
+
+
+
+
+
+
+
+
+
+                                                                          1
+          d_newmode, d_newpage, d_tomono, d_toc40, d_toc80, set_dfull
+
+
+
+
+
+
+
+
+
+                                      C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+          DESCRIPTION
+
+                    All these functions call the associated functions in
+               DISPIO, then reset the parameters for DISPIOF.  
+                    These parameters can be declared extern in other
+               modules by including file DISP_PAR.H.  If you don't use any
+               of these major changes in your program, then you can use the
+               DISPIO functions instead.
+                    The parameters are originally set for the monochrome
+               monitor.  You can change the original values by changing
+               some pre-processor defines in the source.
+
+
+          RETURNS
+
+                    See above
+
+
+          CAUTIONS
+
+               None known
+
+          LIBRARIES USED
+
+               DISPIO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                          2
+          d_newmode, d_newpage, d_tomono, d_toc40, d_toc80, set_dfull
+
+
+
+
+
+
+
+
+
+
+                                      C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+
+
+          NAME
+
+               d_printf -- formatted write to console, no redirection
+
+          SYNOPSIS
+
+               d_printf(cs, ...args...);
+
+               char *cs;                format control string
+               ---...args...;           list of arguments to be formatted
+
+          DESCRIPTION
+
+                    See Lattice manual, p. 3-30 or any reference for a
+               description of printf.
+                    This function is much faster than Lattice C's.  In
+               addition, it only uses _pfmt, which does no call in all the
+               file handling of _main.  It uses BIOS calls from DISPIO
+               and the DISP_PAR variables.  It wraps lines at the edge of
+               the current window.
+                    Except for d_attr, the DISP_PAR variables are basically
+               window specifications.  They are part of module DISPIOF  and
+               are set as full screen size, but you can set them smaller in
+               other modules.  See the write up for d_newmode for functions
+               which set these variables for changes in monitor, mode or
+               page.   
+                    The initial value of d_attr, the attribute for output,
+               is 7, which is normal reversed video.  None of the d_newmode
+               functions changes it.  You can change it independently.
+
+
+          RETURNS
+
+               Nothing
+
+          CAUTIONS
+
+               None known.
+
+          LIBRARIES USED
+
+               DISPIOF, DISPIO
+
+
+
+
+                                                                          1
+          d_printf
+
+
+
+
+
+
+
+
+
+                                      C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+
+
+          NAME
+
+               frame -- draw a box on the screen
+
+          SYNOPSIS
+
+               i = frame (ulrow, ulcol, lrrow, lrcol, nlines);
+
+               int frame                0 if good specification, 1 if bad
+               int ulrow                upper left hand row (0-24)
+               int ulcol                upper left hand column (0-79)
+               int lrrow                lower right hand row
+               int lrcol                lower right hand column
+               int nlines               1 for single line, 2 for double line
+
+          DESCRIPTION
+
+                    Functions to draw a box given the upper left hand and
+               the lower right hand corner.
+
+          RETURNS
+
+               0 if successful, -1 if invalid parameters.
+
+          CAUTIONS
+
+               None known.
+
+          LIBRARIES USED
+
+               DISPIO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                          1
+          frame
+
+
+
+
+
+
+
+
+
+                                         C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+
+
+          NAME
+
+               hline, horline, verline, vline, _hline, _vline 
+                                        - draw horizontal and vertical
+                                        lines
+
+          SYNOPSIS
+
+               n = hline(row, col, ch, width);
+                                             Draw a horizontal line of at
+                                        most width characters consisting of
+                                        character c in the current window
+                                        starting at row, col.  Do nothing
+                                        if row, col is outside of the
+                                        current window.  If no errors, the
+                                        cursor ends after the end of the
+                                        line for width positive or just
+                                        before the beginning of the line
+                                        for width negative.
+
+               n = horline(ch, width);       Draw a horizontal line of at
+                                        most width characters consisting of
+                                        character c in the current window
+                                        starting at the current cursor.  If
+                                        no errors, the cursor ends after
+                                        the end of the line for width
+                                        positive or just before the
+                                        beginning of the line for width
+                                        negative.
+
+
+               n = _hline(row, col, ch, width);
+                                             Draw a horizontal line of at
+                                        most width characters consisting of
+                                        character c in the current window
+                                        starting at row, col.  The function
+                                        does not check row and column for
+                                        validity.  If no errors, the cursor
+                                        ends after the end of the line for
+                                        width positive or just before the
+                                        beginning of the line for width
+                                        negative.
+
+
+
+
+                                                                          1
+          hline, horline, verline, vline, _hline, _vline
+
+
+
+
+
+
+
+                                         C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+               n = verline(ch, length);      Draw a vertical line of at
+                                        most length characters consisting
+                                        of character c in the current
+                                        window starting at row, col.  Do
+                                        nothing if row, col is outside of
+                                        the current window.  If no errors,
+                                        the cursor ends below the end of
+                                        the line for length positive or
+                                        just above the beginning of the
+                                        line for length negative.
+
+
+               n = vline(row, col, ch, length);
+                                             Draw a vertical line of at
+                                        most length characters consisting
+                                        of character c in the current
+                                        window starting at the current
+                                        cursor.  If no errors, the cursor
+                                        ends below the end of the line for
+                                        length positive or just above the
+                                        beginning of the line for length
+                                        negative.
+
+               n = _vline(row, col, ch, length);
+                                             Draw a vertical line of at
+                                        most length characters consisting
+                                        of character c in the current
+                                        window starting at row, col.  The
+                                        function does not check row and
+                                        column for validity.  If no errors,
+                                        the cursor ends below the end of
+                                        the line for length positive or
+                                        just above the beginning of the
+                                        line for length negative.
+
+               int n;                        The actual number of charact-
+                                        ers written.  n is positive if at
+                                        least one character is written, 0
+                                        otherwise.
+
+               int row;                      The row to start the line at. 
+                                        The physical top of the screen is
+                                        row 0.
+
+               int col;                      The column to start the line
+                                        at.  The physical left hand edge of
+                                        the screen is column 0.
+
+                                                                          2
+          hline, horline, verline, vline, _hline, _vline
+
+
+
+
+
+
+
+                                         C MANUAL
+
+          RUN TIME AND I/O LIBRARY SECTION
+
+
+               char ch;                      The character to make the line
+                                        from.
+
+               int width;                    The number of characters in a
+                                        horizontal line.  If positive, draw
+                                        the line to the right.  If nega-
+                                        tive, draw it to the left.
+
+               int length;                   The number of characters in a
+                                        vertical line.  If positive, draw
+                                        the line down.  If negative, draw
+                                        it up.
+
+          DESCRIPTION
+
+                    The functions draw "lines", that is, repeat one
+               character, on the display.  They use BIOS calls from DISPIO
+               and the DISP_PAR variables.  They all stop at the edge of
+               the current window.
+                    Except for d_attr, the DISP_PAR variables are basically
+               window specifications.  They are set by this module as full
+               screen size, but you can set them smaller in other modules. 
+               See the write up for d_newmode for functions which set these
+               variables for changes in monitor, mode or page.   
+                    The initial value of d_attr, the attribute for output,
+               is 7, which is normal reversed video.  None of the d_newmode
+               functions changes it.  You can change it independently.
+
+          RETURNS
+
+                    The number of characters actually written.  Note that
+               this is not negative, even if width or length is.  0 if no
+               characters written for any reason, including width or length
+               specified as 00 and row or col out of the current window in
+               hline or vline.
+
+          CAUTIONS
+
+                    None known.
+
+          LIBRARIES USED
+
+                    DISPIO
+
+
+
+
+
+                                                                          3
+          hline, horline, verline, vline, _hline, _vline
+
+
+

@@ -1,0 +1,72 @@
+ 
+/*
+ * ctoc.lxi  --  Convert old C operators to new C form
+ *
+ * Adapted from example in C. Forsythe's LEX manual.
+ *
+ * NOTE:
+ *      Forsythe's program put an entire comment into the token
+ *      buffer. Either define a huge token buffer for my typical
+ *      monster comments, or filter text within comments as if
+ *      it were real C code. This is what I did. So =+ inside
+ *      a comment will get changed to +=, etc.  Note tnat you
+ *      may use the commen() function in LEXLIB if you want the
+ *      comments eaten. I wanted 'em in the output.
+ * by
+ *      Bob Denny
+ *      28-Feb-81
+ */
+ 
+%{
+ 
+char tbuf[80];          /* Token buffer */
+ 
+main()
+  {
+  while (yylex())
+    ;
+  }
+ 
+%}
+ 
+any             = [\0-\177];
+nesc            = [^\\];
+nescquote       = [^\\"];
+nescapost       = [^\\'];
+schar           = "\\" any | nescquote;
+cchar           = "\\" any | nescapost;
+string          = '"' schar* '"';
+charcon         = "'" cchar* "'";
+%%
+ 
+"=" ( << | >> | "*" | + | - | "/" | "%" | "&" | "|" | "^" )
+                {
+                gettoken(tbuf, sizeof tbuf);
+                printf("%s=",tbuf+1);
+                }
+ 
+[<=>!]"=" | "="[<>]
+                {
+                lexecho(stdout);
+                }
+ 
+"=" / ( ++ | -- )
+                {
+                lexecho(stdout);
+                }
+ 
+charcon
+                {
+                lexecho(stdout);
+                }
+ 
+string
+ 
+                {
+                lexecho(stdout);
+                }
+ 
+[\0-\377]
+                {
+                lexecho(stdout);
+                }

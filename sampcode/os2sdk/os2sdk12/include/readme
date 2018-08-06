@@ -1,0 +1,4 @@
+To place "opendlg.h" in this directory, "cd ..\opendlg" and "make opendlg".
+To place "spyhook.h" in this directory, "cd ..\spy" and "make spy(hook)"
+
+selector.h in this directory should remain untouched, as should cmacros.inc.

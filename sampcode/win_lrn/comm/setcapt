@@ -1,0 +1,12 @@
+setcapt.obj: setcapt.c 
+  cl -c -W2 -AS -Gsw -Od -Zped setcapt.c
+
+setcapt.res: setcapt.rc setcapt.ico
+  rc -r setcapt.rc
+
+setcapt.exe: setcapt.obj setcapt.def setcapt.res 
+    link4 setcapt,/align:16,,slibw,setcapt.def
+    rc setcapt.res
+    del setcapt.obj
+    del setcapt.map
+

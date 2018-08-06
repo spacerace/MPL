@@ -1,0 +1,21 @@
+#include <style.h>
+#include "dlgbox.h"
+
+dlgicon ICON dlgbox.ico
+
+dlgbox MENU
+BEGIN
+  POPUP "&DialogBox"
+  BEGIN
+    MENUITEM "&Modal",    IDM_MODAL
+    MENUITEM "M&odeless", IDM_MODELESS
+  END
+END
+
+dlgtemp MENU
+BEGIN
+  POPUP "&Top Menu"
+  BEGIN
+    MENUITEM "&One", IDM_ONE
+  END
+END

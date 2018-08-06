@@ -1,0 +1,58 @@
+# WNTERM - A Simple Windows Terminal Program
+#
+# Copyright (c) 1989, 1990 by
+# William S. Hall
+# 3665  Benton Street, #66
+# Santa Clara, CA 95051
+#
+
+# This program should be made using the Windows 3.0 SDK and
+# Microsoft C version 5.1 or 6.0.
+# Use the overlay linker, version 5.x supplied with the Microsoft C
+# 5.1 or 6.0 compiler.
+
+## Macros
+# location of tty window code
+TTYDIR=.
+
+# compile macro for Microsoft C 6.0.
+cp=cl -c -AM -Ghsw -Osler -Zpe -W3 -I$(TTYDIR) -DWINDOWS
+
+# compile macro for Microsoft C 5.1
+# cp=cl -c -AM -Gsw -Os -Zpe -W3 -I$(TTYDIR) -DWINDOWS
+
+all : wnterm.exe
+
+#
+# make the terminal .RES file
+#
+wnterm.res : wnterm.rc wntmnu.rc wnterm.h wntdlg.dlg wntdlg.h
+    rc -r wnterm.rc
+
+#
+# make the terminal .OBJ files
+#
+wnterm.obj : wnterm.c wnterm.h $(TTYDIR)\ttycls.h
+    $(cp) -NT _TERMRES wnterm.c
+
+wntfns.obj : wntfns.c wnterm.h wntdlg.h $(TTYDIR)\ttycls.h
+    $(cp) -NT _TERMRES wntfns.c
+
+wntint.obj : wntint.c wnterm.h $(TTYDIR)\ttycls.h
+    $(cp) -NT _TERMINT wntint.c
+
+wntmsc.obj : wntmsc.c wnterm.h wntdlg.h $(TTYDIR)\ttycls.h
+    $(cp) -NT _TERMMSC wntmsc.c
+
+ttycls.obj : $(TTYDIR)\ttycls.c $(TTYDIR)\ttycls.h
+    $(cp) -NT _TERMRES $(TTYDIR)\ttycls.c
+
+#
+# create the .EXE file and add resources
+#
+wnterm.exe : wnterm.def wnterm.lnk wnterm.res \
+	     wnterm.obj wntfns.obj wntint.obj wntmsc.obj ttycls.obj
+    link @wnterm.lnk
+    rc wnterm.res wnterm.exe
+
+

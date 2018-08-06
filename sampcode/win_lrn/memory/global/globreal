@@ -1,0 +1,6 @@
+globreal.obj: globreal.c
+   cl -c -W2 -AS -Gsw -Od -Zped globreal.c
+
+globreal.exe: globreal.obj globreal.def
+   link4 globreal,/align:16,/map/li,slibw/NOE,globreal.def
+   mapsym globreal

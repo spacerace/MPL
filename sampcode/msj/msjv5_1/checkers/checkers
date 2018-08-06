@@ -1,0 +1,21 @@
+#----------------------------------
+# CHECKERS make file, version 0.10
+#----------------------------------
+
+CC = cl -c -G2sw -W3
+
+checkers.obj : checkers.c checkers.h ckrdraw.h
+     $(CC) checkers.c
+
+ckrdraw.obj : ckrdraw.c checkers.h ckrdraw.h
+     $(CC) ckrdraw.c
+
+checkers.res : checkers.rc checkers.h
+     rc -r checkers
+
+checkers.exe : checkers.obj ckrdraw.obj checkers.def
+     link checkers ckrdraw, /align:16, NUL, os2, checkers
+     rc checkers.res checkers.exe
+
+checkers.exe : checkers.res
+     rc checkers.res

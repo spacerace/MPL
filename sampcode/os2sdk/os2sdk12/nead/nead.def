@@ -1,0 +1,18 @@
+;-------------------------------------
+; NEAD.DEF module definition file
+;-------------------------------------
+
+NAME           NEAD  WINDOWAPI
+
+DESCRIPTION    'Extended Attributes Editor, Jeff Johnson'
+PROTMODE
+HEAPSIZE       28000
+STACKSIZE      25600
+EXPORTS        MainDlgProc
+               IconDlgProc
+               OpenFileProc
+               AddEAProc
+               AsciiEditProc
+               MultiTypeProc
+
+

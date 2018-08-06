@@ -1,0 +1,6 @@
+
+demenu.obj: demenu.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 demenu.c
+
+demenu.exe: demenu.obj demenu.def
+    link4 /align:16 demenu,,nul,slibw/NOE,demenu.def

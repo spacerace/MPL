@@ -1,0 +1,40 @@
+Code 08                                  -Return Parameters
+
+Input registers - none.
+
+Special output registers.
+
+    DH - Number of heads-1
+    DL - Number of drives in HF_NUM.
+    CH - LSB 8 bits of number of cylinders-1.
+    CL - Number of sectors per track + 2 MSB of cylinders - 1.
+
+Operation:
+
+    This function returns the parameters that are used to convert the
+    caller's disk address specification into a logical sector number
+    to be issued to the SCSI device. The formula used by the ROM BIOS 
+    is:
+
+    Sector=cyl*(HEADS*SECTS)+head*SECTS+(sect-1)
+
+         SECTOR   -Logical sector number
+         HEADS    -Number of heads reported for device
+         SECTS    -Sectors per track reported for device
+         cyl      -Caller specified cylinder number
+         head     -Caller specified head number
+         sect     -Caller specified sector number
+
+    Note that these values need have no relationship to the actual 
+    values on the physical drive for cylinders, heads, and sectors 
+    per track. These are only "funny" numbers used for the Int 13h 
+    call.
+
+    These parameters are based on the standard sector size of 512 
+    bytes. If, in fact, the drive used 256 byte sectors, the fact is 
+    masked from the system.
+
+    Before the caller makes an Int 13h call to read, write, or verify 
+    a logical sector, the reverse of the above algorithm needs to be 
+    performed on the desired logical sector number for setting up of 
+    the registers.

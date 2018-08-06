@@ -1,0 +1,12 @@
+; Figure 7
+; ========
+
+; DLL_CHAT DEF File
+; =================
+
+
+IMPORTS CHATLIB.login
+IMPORTS CHATLIB.get_msg_cnt
+IMPORTS CHATLIB.send_msg
+IMPORTS CHATLIB.logout
+IMPORTS CHATLIB.get_msg

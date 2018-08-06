@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "GdblclkT.h"
+
+GdblclkT MENU
+    BEGIN
+        POPUP "&Menu"
+            BEGIN
+                MENUITEM  "&Get Double Click Time",         IDM_GDBLCLKT
+            END					            
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

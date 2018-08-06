@@ -1,0 +1,13 @@
+
+qchecked.res: qchecked.rc qchecked.h
+    rc -r qchecked.rc
+
+qchecked.obj: qchecked.c
+   cl -c -W2 -AS -Gsw -Od -Zped qchecked.c
+
+qchecked.exe: qchecked.obj qchecked.def
+   link4 qchecked,/align:16,/map/li,slibw/NOE,qchecked.def
+   rc qchecked.res
+
+qchecked.exe: qchecked.res
+    rc qchecked.res

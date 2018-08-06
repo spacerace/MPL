@@ -1,0 +1,5 @@
+talk.obj : talk.asm
+  masm talk;
+
+talk.exe : talk.obj
+  link talk;

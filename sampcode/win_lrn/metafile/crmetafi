@@ -1,0 +1,6 @@
+
+crmetafi.obj: crmetafi.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 crmetafi.c
+
+crmetafi.exe: crmetafi.obj crmetafi.def
+    link4 /align:16 crmetafi,,nul,slibw/NOE,crmetafi.def

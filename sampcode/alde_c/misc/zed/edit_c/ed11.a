@@ -1,0 +1,542 @@
+;	ED11.A	--	Screen and keyboard interface routines for the PC
+;
+;	This is a modified version of the PCIO.A routines included with the
+;		C ware (Desmet) C compiler and included with permission of
+;		C ware
+;
+
+		dseg
+;
+;	CHARACTER ATTRIBUTE EQUATES
+;
+NORMAL	EQU	7
+REVERSE	EQU	112
+BLINK	EQU	128
+INTENSE	EQU	8
+;
+;	ATTRIBUTE SET CODES
+;
+SETNORMAL	EQU	0
+SETREVERSE	EQU	1
+SETINTENSE	EQU	2
+SETFAINT	EQU	3
+SETBLINK	EQU	4
+NOBLINK		EQU	5
+;
+
+;/* control key translations */
+UP1	EQU	10
+DOWN1	EQU	13
+UP2	EQU	21
+DOWN2	EQU	4
+LEFT1	EQU	25
+RIGHT1	EQU	18
+INS1	EQU	14
+EDIT1	EQU	5
+ESC1	EQU	27
+DEL1	EQU	127
+ZAP1	EQU	26
+ABT1	EQU	24
+SPLT1	EQU	19
+JOIN1	EQU	16
+DTOCH	EQU	1
+GTOCH	EQU	2
+HOME	EQU	6
+DSCROL 	EQU	7
+GOTO	EQU	17
+LSTRT	EQU	11
+LEND	EQU	12
+USCROL	EQU	15
+ERASE	EQU	20
+LFTDEL	EQU	8
+BEGINPL	EQU	200
+ENDPL	EQU	201
+PUTIT	EQU	202
+PICKIT	EQU	203
+RECORD	EQU	204
+REPLAY	EQU	205
+ABSLEFT	EQU	206
+ABSRGHT	EQU	207
+PAGEUP	EQU	208
+PAGEDN	EQU	209
+
+;	the table that is used to make the translation
+
+convert:
+		db	72, UP2			;up_char
+		db	80, DOWN2		;down_char
+		db	75, LEFT1		;left_char
+		db	77, RIGHT1		;right_char
+		db	71, HOME		;home
+		db	79, DEL1	 	;end
+		db	73, USCROL		;pageup_char
+		db	81, DSCROL		;pagedown_char
+		db	82, UP1			;Ins_char
+		db	83, ZAP1		;Del_char
+		db	115, LSTRT		;ctl-left
+		db	116, LEND		;ctl-rgt
+		db	59, ESC1		;F1
+		db	60, EDIT1		;F2
+		db	61, GOTO		;F3
+		db	62, INS1		;F4
+		db	63, ERASE		;F5
+		db	64, ABT1		;F6
+		db	65, BEGINPL		;F7
+		db	66, ENDPL		;F8
+		db	67, PICKIT		;F9
+		db	68, PUTIT		;F10
+		db	120,SPLT1		;alt-1
+		db	121,JOIN1		;alt-2
+		db	122,DTOCH		;alt-3
+		db	123,GTOCH		;alt-4
+		db	130,ABSLEFT		;alt -
+		db	131,ABSRGHT		;alt +
+		db	132,PAGEUP		;ctl-Pg Up
+		db	118,PAGEDN		;ctl-Pg Dn
+		db	0, 255 ; illegal character
+
+;	equates for bios interface.
+
+;	the interrupt and codes for the screen interface interrupt.
+
+video		equ	10h		;interrupt for dealing with screen
+
+mode		equ	0		;code for setting new screen mode
+curtype		equ	1		;code for setting new cursor type
+setcur		equ	2		;code for addressing cursor
+readcur		equ	3		;code for reading cursor location
+readlp		equ	4		;code for reading light pen position
+setpage		equ	5		;code to select active page
+scrollup	equ	6		;code to scroll screen up
+scrolldn	equ	7		;code to scroll screen nown
+readch		equ	8		;code to read a character from screen
+writeach	equ	9		;code to write char and attributes
+writech		equ	10		;code to write character only
+setpal		equ	11		;code to set new setpal or border
+wdot		equ	12		;code to write a dot
+rdot		equ	13		;code to read a dot
+wtty		equ	14		;code to write as if teletype
+state		equ	15		;code to find current screen status
+
+
+
+;	the interrupt and codes for the keyboard interface.
+
+keyboard	equ	16h		;interrupt 16 to deal with keyboard
+
+cicode		equ	0		;code for reading a character
+cstscode	equ	1		;code for keyboard status
+
+
+
+
+;	caution: must change column number if 40 column mode
+
+crt_cols	equ	80
+
+;	variables available to a C88 program
+
+		public	scr_cols_, scr_rows_
+		public	scr_mode_,scr_page_,scr_attr_
+
+scr_cols_:	dw	crt_cols	;current number of columns
+scr_rows_:	dw	25		;current number of rows
+scr_mode_	db	0		;current screen mode
+scr_page_	db	0		;current page
+scr_attr_	db	NORMAL		;current attributes for screen
+					;NORMAL is white letters on black
+
+
+
+		cseg
+
+;	SCR_SETUP_	scr_setup must be called before any use of any
+;			other routine unless the starting mode is 80X25
+;			character mode (3,4 or 7).
+
+;			Usage:	scr_setup();
+
+		public	scr_setup_
+scr_setup_:	push	bp
+		mov	ah,state		;get current state
+		int	video
+		mov	scr_mode_,al		;current mode
+		mov	cl,ah			;make cols a word
+		mov	ch,0
+		mov	scr_cols_,cx		;40 or 80 columns
+		mov	scr_page_,bh
+		mov	scr_attr_,NORMAL		;set to white chars on black
+		cmp	al,4			;see if a character mode
+		jc	got_attr
+		cmp	al,7			;7 is for graphics mode
+		jz	got_attr
+		mov	scr_attr_,0		;attribute is zero in graphics
+got_attr:	mov	ah,0			;return int containing mode
+		pop	bp
+		ret
+
+
+
+;	SCR_SETMODE_		set a new screen mode
+
+;				Usage:	scr_setmode(new mode);
+
+		public	scr_setmode_
+scr_setmode_:	push	bp
+		mov	bp,sp
+		mov	al,[bp+4]	; new mode value
+		mov	ah,mode
+		int	video		; set new mode
+		call	scr_setup_	;remember new values
+		pop	bp
+		ret
+
+
+;	SCR_ROWCOL_		sets cursor at any location.
+
+;				Usage:	scr_rowcol(new row, new column);
+
+		public	scr_rowcol_
+scr_rowcol_:				; move cursor to x,y
+		push	bp		; save from bios
+		mov	bp,sp
+		mov	dx,[bp+6]	; column
+		mov	ax,[bp+4]	; row
+		mov	dh,al
+		mov	bh,scr_page_	; force page zero
+		mov	ah,setcur	; set cursor location
+		int	video		; call bios
+		pop	bp
+		ret
+
+
+
+;	SCR_CLR_		clear entire screen
+
+;				Usage:	scr_clr();
+
+		public	scr_clr_
+scr_clr_:				; clear screen
+
+
+		push	bp		;save from video call
+		mov	al,0		;ask for a clear window
+		xor	cx,cx		;start at 0,0
+		mov	dh,24		;24 is the last line
+		mov	dl,byte scr_cols_	;clear entire width
+		dec	dl		;last column is width-1
+		mov	bh,scr_attr_	;attributes for new blanks
+		mov	ah,scrollup	;ask for a scrollup to clear
+		int	video		;do the clear
+		pop	bp
+		ret
+
+
+
+;	SCR_CLRL_		clear rest of line.
+
+;				Usage:		scr_clrl();
+
+		public	scr_clrl_		
+scr_clrl_:				; clear rest of line
+		push	bp
+		mov	ah,readcur	;see where we are
+		int	video
+		mov	cl,byte scr_cols_	;calc how many chars left in line
+		sub	cl,dl		;number left
+		mov	ch,0		;number of blanks needed
+		mov	al,' '		;write blanks
+		mov	bl,scr_attr_	;normal attributes
+		mov	ah,writeach	;write the blanks
+		int	video
+		pop	bp
+		ret
+
+
+
+
+
+;	SCR_SCUP_		scroll text up leaving top line alone.
+
+;				Usage:	scr_scup();
+
+		public	scr_scup_
+scr_scup_:			; scroll last line, screen from line 2 to 24
+		mov	ax,scr_cols_	;need last column of screen
+		dec	ax
+		push	ax
+		mov	ax,24		;scroll through last line
+		push	ax
+		xor	ax,ax		;from column 0
+		push	ax
+		inc	ax		;leave top line alone
+		push	ax
+		push	ax		;scroll by 1
+		call	scr_scrup_	;do the scroll
+		add	sp,10		;clear arge
+		ret
+
+
+;	SCR_SCDN_		scroll all but the top line down one.
+
+;				Usage:	scr_scdn();
+
+		public	scr_scdn_
+scr_scdn_:
+		mov	ax,scr_cols_	;need last column of screen
+		dec	ax
+		push	ax
+		mov	ax,24		;scroll through last line
+		push	ax
+		xor	ax,ax		;from column 0
+		push	ax
+		inc	ax		;leave top line alone
+		push	ax
+		push	ax		;scroll by 1
+		call	scr_scrdn_	;do the scroll
+		add	sp,10		;clear arge
+		ret
+
+		push	ax
+		xor	ax,ax		;from column 0
+		push	ax
+		inc	ax		;leave top line alone
+		push	ax
+		push	ax		;scroll by 1
+		call	scr_scrup_	;do the scroll
+		add	sp,10		;clear arge
+		ret
+
+;	SCR_SCRUP_		Scroll the screen up. The window is scrolled
+;				up nline lines. A zero nline will clear the
+;				window. Top left of the screen in 0,0.
+
+;			Usage: scr_scrup(nline,fromrow,fromcol,torow,tocol);
+
+		public	scr_scrup_
+scr_scrup_:	push	bp
+		mov	bp,sp
+		mov	al,[bp+4]	;number of lines
+		mov	ch,[bp+6]	;starting row
+		mov	cl,[bp+8]	;starting column
+		mov	dh,[bp+10]	;ending row
+		mov	dl,[bp+12]	;ending column
+		mov	bh,scr_attr_	;current attribute
+		mov	ah,scrollup
+		int	video		;do the scroll
+		pop	bp
+		ret
+
+
+
+;	SCR_SCRDN_		scroll the screen down. the window is scrolled
+;				down nline lines. A zero nline will clear the
+;				window. Top left of the screen in 0,0.
+
+;			Usage: scr_scrdn(nline,fromrow,fromcol,torow,tocol);
+
+		public	scr_scrdn_
+scr_scrdn_:	push	bp
+		mov	bp,sp
+		mov	al,[bp+4]	;number of lines
+		mov	ch,[bp+6]	;starting row
+		mov	cl,[bp+8]	;starting column
+		mov	dh,[bp+10]	;ending row
+		mov	dl,[bp+12]	;ending column
+		mov	bh,scr_attr_	;current attribute
+		mov	ah,scrolldn
+		int	video		;do the scroll
+		pop	bp
+		ret
+
+
+
+;	SCR_CO_			write a character to the screen. this
+;				routine increments the cursor position
+;				after writing. normal C88 puts and printf
+;				statements can also be used to write to the
+;				screen.
+
+;				Usage:	scr_co_(character);
+
+		public	scr_co_
+scr_co_:					; standard console output
+		push	bp
+		mov	bp,sp
+		mov	al,[bp+4]	;character to write
+		push	ax
+		push	ax
+		mov	bh,scr_page_
+		mov	ah,readcur
+		int	video
+		cmp	dl,crt_cols-1
+		jle	u20
+		mov	dl,crt_cols-1	
+u20:	pop	ax
+		cmp	al,8
+		je	u8
+		cmp	al,0dh
+		je	u9
+		cmp	al,0ah
+		je	u10
+		cmp	al,07h
+		je	u11
+		mov	bh,scr_page_
+		mov	bl,scr_attr_
+		mov	ah,writeach		;use write char/attr routine
+		mov	cx,1
+		int video
+		inc	dl
+		cmp	dl,crt_cols
+		jnz	u7
+		dec	dl
+		jmp	u7
+
+;		mov	dl,0
+;		cmp	dh,24
+;		jnz	u6
+
+u1:		mov	ah,setcur
+		mov	bh,0
+		int	video
+		mov	bh,scr_attr_
+u3:		mov	ax,0601h
+		mov	cx,0
+		mov	dh,24
+		mov	dl,crt_cols
+		dec	dl
+u4:		int	video
+u5:		pop	ax		
+		pop	bp
+		ret
+u6:		inc	dh
+u7:		mov	ah,setcur
+		jmp	u4
+u8:		cmp	dl,0
+		je	u7
+		dec	dl
+		jmp	u7
+u9:		mov	dl,0
+		jmp	u7
+u10:	cmp	dh,24
+		jne	u6
+		jmp	u1
+u11:	jmp	u5		
+;
+;	SCR_CHR_ATTR_	set screen attribute
+;
+;				Usage:  scr_chr_attr_(character);
+;
+		public	scr_chr_attr_
+scr_chr_attr_:
+		push	bp
+		mov	bp,sp
+		mov	al,[bp+4]	;attribute
+		cmp	al,SETNORMAL
+		je	norset
+		cmp	al,SETREVERSE
+		je	revset
+		cmp	al,SETBLINK
+		je	blnkset
+		cmp	al,SETINTENSE
+		je	intset
+		cmp	al,SETFAINT
+		je	fntset
+		cmp	al,NOBLINK
+		je	blnkres
+attfin:	
+		pop	bp
+		ret
+norset:	mov	al,scr_attr_
+		and	al,136	;save intensity and blink state
+		or	al,NORMAL
+		mov	scr_attr_,al
+		jmp	attfin
+revset:	mov	al,scr_attr_
+		and	al,136
+		or	al,REVERSE
+		mov	scr_attr_,al
+		jmp attfin
+blnkset:mov	al,scr_attr_
+		and	al,INTENSE
+		or	al,NORMAL
+		or	al,BLINK
+		mov	scr_attr_,al
+		jmp	attfin
+blnkres:mov	al,scr_attr_
+		and	al,INTENSE
+		or	al,NORMAL
+		mov	scr_attr_,al
+		jmp	attfin
+intset:	mov	al,scr_attr_
+		or	al,INTENSE
+		mov	scr_attr_,al
+		jmp	attfin
+fntset: mov	al,scr_attr_
+		and	al,247
+		mov	scr_attr_,al
+		jmp	attfin
+
+
+;	SCR_CI_			keyboard input. function and soft keys are
+;				translated. see equates for values.
+
+;				Usage:	character = scr_ci();
+
+		public	scr_ci_
+scr_ci_:				;return the next character
+					; translate if necessary
+		push	bp
+		mov	ah,cicode	;ask for a keyboard character
+		int	keyboard
+		CMP	AH,74
+		JE	PLUS_KEY  
+		CMP	AH,78
+		JE	MINUS_KEY 
+		cmp	al,0
+		jne	not_special
+		mov	bx, offset convert	; convert special key
+ci_loop:
+		cmp	byte[bx],0
+		jz	got_it
+		cmp	ah, byte[bx]
+		je	got_it
+		add	bx,2
+		jmp	ci_loop
+got_it:		inc	bx
+		mov	al,[bx]
+		mov	ah,0
+		pop	bp
+		ret
+not_special:	mov	ah,0
+		pop	bp
+		ret
+
+PLUS_KEY:	MOV	AL,RECORD
+		JMP	not_special
+MINUS_KEY:	MOV	AL,REPLAY
+		JMP	not_special
+	
+
+
+;	SCR_CSTS_		return character if any available. otherwise
+;				return zero.
+
+;				Usage:	character = scr_csts();
+
+		public	scr_csts_
+scr_csts_:				;return coded character if any available
+		push	bp
+		mov	ah,cstscode
+		int	keyboard
+		mov	ax,0
+		jz	csts_over
+		call	scr_ci_		;get the coded character
+csts_over:	pop	bp
+		ret
+
+
+
+
+
+

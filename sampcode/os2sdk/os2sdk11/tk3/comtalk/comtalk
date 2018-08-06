@@ -1,0 +1,44 @@
+# Makefile for COMTALK
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC	=	cl -c -G2s -Od -W3 -Zpi
+LF	=	/align:16 /codeview /map /NOD
+OBJS	=	comtalk.obj avio.obj circleq.obj comport.obj threads.obj
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+# Dependencies
+#
+comtalk.res:	comtalk.h comtalk.ico comtalk.rc global.h
+
+comtalk.obj:	avio.h comtalk.c comtalk.h global.h threads.h
+
+avio.obj:	avio.c avio.h circleq.h global.h
+
+circleq.obj:	circleq.c circleq.h global.h
+
+comport.obj:	comport.c comport.h global.h
+
+threads.obj:	circleq.h comport.h threads.c threads.h global.h
+
+comtalk.lnk:	comtalk
+    echo    $(OBJS)	>  comtalk.lnk
+    echo    comtalk.exe >> comtalk.lnk
+    echo    comtalk.map >> comtalk.lnk
+    echo    os2 slibce	>> comtalk.lnk
+    echo    comtalk.def >> comtalk.lnk
+
+comtalk.exe:	$(OBJS) comtalk.def comtalk.res
+    link $(LF) @comtalk.lnk
+    rc comtalk.res
+    mapsym comtalk
+    del comtalk.lnk

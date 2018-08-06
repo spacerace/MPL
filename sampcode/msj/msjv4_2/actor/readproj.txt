@@ -1,0 +1,190 @@
+                         PC-Project README.TXT
+
+Introduction
+------------
+
+PC-Project is a complete critical path project management application that
+runs under Microsoft Windows.  PC-Project is written entirely in Actor,
+an object-oriented programming language for Microsoft Windows.  Complete
+source code is included.   PC-Project was written as a sample Windows
+program and may be freely distributed for non-commercial use.
+
+If any files are missing from the version you have or if you'd like to get
+the latest version, you can order it directly from the author at the
+nominal charge of $5.00 to the U.S. and $10 elsewhere.  The address is
+given at the end of this file.
+
+
+The files on this disk are:
+ READPROJ.TXT   -This "readme" file
+ INSTALL.BAT    -Installation program
+ ZOO.EXE        -Zoo compression/decompression utility program.
+ PROJECT.ZOO    -A compressed file that contains PC-Project program,
+                 source code, sample projects and manual.
+
+I encourage you to share PC-Project with others.  Please distribute as
+is with all of the files.  If you are distributing electronically, please
+be sure to send the ZOO.EXE, PROJECT.ZOO and READPROJ.TXT files.
+
+The ZOO file also contains the READPROJ.TXT and INSTALL.BAT file for
+easy electronic or disk distribution.
+
+
+PC-Project Installation:
+------------------------
+
+If you received this disk directly from the Whitewater Group, there is
+an INSTALL.BAT program on the disk.  To install type:
+
+        A: INSTALL A: C: C:\ACTOR
+
+If you downloaded this program from a bulletin board system, then follow
+these instructions.  You will also need the ZOO.EXE utility which can be
+downloaded from most BBS systems.
+
+If you don't have Actor, then make 4 subdirectories as shown below:
+   MD ACTOR
+   CD ACTOR
+   MD CLASSES
+   MD ACT
+   MD RES
+
+Then install the application and the source code by typing
+   CD ACTOR                      (or wherever Actor is installed)
+   ZOO x/ PROJECT.ZOO            (install source into subdirectories)
+
+The ZOO command above will install the source code into the appropriate
+subdirectories.
+
+Zoo is a public domain archiving utility similar to ARC but faster.  Type
+   ZOO h
+for help.
+
+
+Installed files
+---------------
+
+During the installation process the following files will be created
+on your hard disk.
+
+ PMANUAL.TXT   -How to use PC-Project (16 pages of text)
+ PDESIGN.TXT   -How PC-Project was designed (11 pages of text)
+ PROJECT.EXE   -Executable PC-Project program file
+ PROJECT.IMA   -Sealed off image file required to run above
+ *.PRJ         -Various test files
+
+If you installed the source code, the following files will also be found:
+
+ PROJ.LOD      -A "load file" to load the source code if you have Actor
+ PROJSEAL.LOD  -A "load file" to seal off the application if you have Actor
+ PROJ.H        -Header file of constant definitions
+ CLASSES\*.CLS -Source code to the classes that define the application
+ ACT\*.ACT     -Miscelaneous Actor source code methods
+ RES\*.RC      -Resource script files.
+ RES\PROJ.ICO  -Resource icon.
+ FIX_LE.ACT    -Fixes to Language Extensions I upto version 1.2
+
+
+Printing the documentation
+--------------------------
+
+To print the documentation type:
+
+        COPY PMANUAL.TXT PRN
+        COPY PDESIGN.TXT PRN
+
+
+Starting PC-Project
+-------------------
+
+The project manager application requires Microsoft Windows 2.x.  To start
+the project manager start Windows and then double click on the PROJECT.EXE
+file.  If you have Actor DON'T click on the PROJECT.IMA file since you
+won't have the resources to run the application correctly.  Or you can
+run directly from the DOS C> prompt by typing
+
+        WIN PROJECT.EXE
+
+Refer to the Help screens and PMANUAL.TXT for more instructions.  If you'd
+like to know more about the design of PC-Project, refer to PDESIGN.TXT.
+
+
+NOTES
+-----
+Version 1.02B 11/30/88
+ -Minor changes to the ProjWindow and Date classes, PROJ.H and PROJECT.RC
+  files to make translation to other languages easier.  The only file that
+  needs to be changed now is PROJECT.RC.
+
+Version 1.01B 11/22/88
+ -Minor changes to the ProjWindow class.  Added the Options Zoom view choice
+  to zoom in and out on the PERT chart. The right mouse button does the
+  same thing.  Rewrote the command method using a data driven approach.
+  Box sizes are now based on the font size for better display on any
+  monitor.
+
+Version 1.0A  11/01/88
+
+ -Version 1.0A was made slightly smaller and some minor changes were made
+  to clean up the windows and dialog box code.  Date arithmetic was speeded
+  up also.  There have been no functional changes from version 1.0.
+ -Version 1.0A corrects a minor bug that occurred when exiting
+  PC-Project with Windows still running.
+
+Version 1.0  09/01/88
+
+ -Printing uses the MS-Windows spooler.  The WIN.INI file must have
+  the entry spooler=yes for printing to work.  If there is not enough
+  memory to print with the spooler, an error message will be displayed.
+
+ -PC-Project may give an "insufficient memory error" on some 80386
+  machines with older versions of Windows/386.  If necessary, use the
+  /N command line flag to run, e.g.
+
+        WIN386 /N PROJECT.EXE
+
+
+Limitations
+-----------
+
+PC-Project has some limitations compared to "professional" project
+management packages.  These may be addressed in the future.
+
+ -Time is in days only.  There is no "calendar" facility to skip days.
+ -PC-Project does not balance resources or check for conflicts.
+ -PC-Project prints a summary report only; no graphics.
+
+Please let me know if there are any bugs or suggestions by sending
+mail to the address at the bottom of this file.  Because PC-Project
+is distributed free of charge, I cannot provide technical support
+beyond answering questions by mail.
+
+
+Actor Users
+-----------
+
+You may wish to use the date arithmetic or printing in your own programs.
+Please refer to the associated CLS and ACT files for documentation, or
+check The Whitewater Group BBS for the most recent versions.  The printer
+support was written by Mark Solinski.  The date arithmetic and space
+optimizer were written by Adam Rauch.
+
+
+About Actor
+-----------
+
+Actor is an object-oriented programming language for Microsoft Windows.
+Actor is a complete development system capable of creating standalone
+MS-Windows applications.  No licensing fees are required to distribute
+applications written in Actor.
+
+PC-Project was written by Zack Urlocker and is copyright 1988, The
+Whitewater Group.  All rights reserved.  For more information about Actor
+contact:
+
+         The Whitewater Group,
+         Technology Innovation Center
+         906 University Place,
+         Evanston, IL, 60201.
+
+         (312)491-2370

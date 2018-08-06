@@ -1,0 +1,18 @@
+main.c    (stevie.h)
+alloc.c   (stevie.h)
+edit.c    (stevie.h)
+linefunc.c (stevie.h)
+normal.c  (stevie.h)
+cmdline.c (stevie.h)
+hexchars.c (stevie.h)
+misccmds.c (stevie.h)
+help.c     (stevie.h)
+ptrfunc.c  (stevie.h)
+search.c   (stevie.h)
+mark.c     (stevie.h)
+screen.c   (stevie.h)
+fileio.c   (stevie.h)
+param.c    (stevie.h)
+os2.c      (stevie.h)
+regsub.c
+regexp.c

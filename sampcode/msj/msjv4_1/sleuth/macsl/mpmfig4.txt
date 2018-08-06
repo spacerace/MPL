@@ -1,0 +1,94 @@
+HWND APIENTRY WinCreateStdWindow( hwndParent, flStyle, pCtlData,
+                                  pszClassClient, pszTitle,
+                                  flStyleClient, hmod, idResources,
+                                  phwndClient )
+    HWND        hwndParent;
+    ULONG       flStyle, flStyleClient;
+    PVOID       pCtlData;
+    PSZ         pszClassClient, pszTitle;
+    HMODULE     hmod;
+    USHORT      idResources;
+    PHWND       phwndClient;
+{
+    HWND        hwndFrame, hwndClient;
+    SHORT       x, y, cx, cy;
+    ULONG       flFrameFlags;
+
+    /* Pick up frame flags, take care of special hwndParent values */
+
+    flFrameFlags = ( pCtlData ? *(PULONG)pCtlData : 0 );
+
+    if( ! hwndParent || hwndParent == HWND_DESKTOP )
+      hwndParent = _hwndDesktop;
+
+    ASSERT( hwndParent == _hwndDesktop,
+            "WinCreateStdWindow: Must be a top level window" );
+    ASSERT( ! hmod,
+            "WinCreateStdWindow: hmod must be NULL" );
+    ASSERT( ! (flStyle & WS_CLIPCHILDREN),
+            "WinCreateStdWindow: WS_CLIPCHILDREN not allowed" );
+
+    /* Assign default position if visible */
+
+    if( flStyle & WS_VISIBLE )
+    {
+      x = 10;       /* TEMP HACK */
+      y = screenBits.bounds.bottom - 200;
+      cx = 250;
+      cy = 150;
+    }
+    else
+      x = y = cx = cy = 0;
+
+    /* Create the frame window itself */
+
+    hwndFrame =
+      WinCreateWindow( hwndParent, WC_FRAME, _szNull,
+                       flStyle & ~WS_VISIBLE, x, y, cx, cy,
+                       NULL, HWND_TOP, idResources, pCtlData, NULL );
+
+    if( ! hwndFrame )
+      return NULL;
+
+    /* Create frame controls according to flFrameFlags */
+
+    MpmFrameUpdate( hwndFrame, flFrameFlags );
+
+    /* Create client window if requested */
+
+    if( pszClassClient && *pszClassClient )
+    {
+      *phwndClient = hwndClient =
+        WinCreateWindow(
+          hwndFrame, pszClassClient, _szNull, flStyleClient,
+          0, 0, 0, 0, hwndFrame, HWND_BOTTOM, FID_CLIENT, NULL, NULL
+        );
+      if( ! hwndClient )
+        goto exitDestroy;
+    }
+
+    /* Create menu and initialize title */
+
+    if( flFrameFlags & FCF_MENU )
+      if( ! MpmMenuLoad( hwndFrame, idResources ) )
+        goto exitDestroy;
+
+    if( flFrameFlags & FCF_TITLEBAR )
+      WinSetWindowText( hwndFrame, pszTitle );
+
+    /* Make window visible if requested */
+
+    if( flStyle & WS_VISIBLE )
+    {
+      WinSendMsg( hwndFrame, WM_FORMATFRAME, 0L, 0L );
+      WinShowWindow( hwndFrame, TRUE );
+    }
+
+    return hwndFrame;
+
+exitDestroy:
+    if( pszClassClient && *pszClassClient )
+      *phwndClient = NULL;
+    WinDestroyWindow( hwndFrame );
+    return NULL;
+}

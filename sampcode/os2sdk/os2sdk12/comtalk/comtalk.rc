@@ -1,0 +1,142 @@
+/*
+    Resources (menu and dialog templates, accelerator table, ...) for COMTALK
+    Created by Microsoft Corporation, 1989
+*/
+#include <os2.h>
+#include "comtalk.h"
+
+POINTER ID_RESOURCE	comtalk.ico
+
+ACCELTABLE ID_RESOURCE {
+    VK_F1,	IDM_HELP,	VIRTUALKEY
+    VK_F3,	IDM_CONNECT,	VIRTUALKEY
+    VK_F4,	IDM_CLOSE,	VIRTUALKEY
+    VK_F10,	IDM_BREAK,	VIRTUALKEY
+    VK_PAGEUP,	IDM_UP,		VIRTUALKEY
+    VK_PAGEDOWN,IDM_PAGE,	VIRTUALKEY
+}
+
+MENU ID_RESOURCE {
+    SUBMENU "~Session", IDM_SESSIONMENU {
+	MENUITEM "~Settings...",	IDM_SETTINGS,	MIS_TEXT
+	MENUITEM "~Open Port\tF3",	IDM_CONNECT,	MIS_TEXT
+	MENUITEM "~Close Port\tF4",	IDM_CLOSE,	MIS_TEXT, MIA_DISABLED
+	MENUITEM SEPARATOR
+	MENUITEM "E~xit ComTalk",	SC_CLOSE,	MIS_SYSCOMMAND
+	MENUITEM "A~bout ComTalk...",	IDM_ABOUT,	MIS_TEXT
+    }
+    SUBMENU "~Commands", IDM_COMMANDMENU {
+	MENUITEM "~Page Mode",		IDM_PAGING,	MIS_TEXT
+	MENUITEM "~Break\tF10",		IDM_BREAK,	MIS_TEXT, MIA_DISABLED
+	MENUITEM SEPARATOR
+	MENUITEM "~Up\tPage Up",	IDM_UP,		MIS_TEXT
+	MENUITEM "~Down\tPage Down",	IDM_PAGE,	MIS_TEXT
+    }
+    MENUITEM "~Errors!",		IDM_ERRORS,	MIS_TEXT, MIA_DISABLED
+    MENUITEM "F1=~Help",		IDM_HELP,MIS_TEXT | MIS_BUTTONSEPARATOR
+}
+
+DLGTEMPLATE IDD_ABOUT {
+    DIALOG "", 0, 10, 60, 160, 75, WS_SAVEBITS | FS_DLGBORDER {
+	CTEXT	"OS/2 Presentation Manager"	   -1, 10, 60, 140, 10
+	CTEXT	"ComTalk"			   -1, 10, 50, 140, 10
+	ICON	ID_RESOURCE		 	   -1,  8, 40,   0,  0
+	CTEXT	"Communications Program"	   -1, 10, 30, 140, 10
+	CTEXT	"Created by Microsoft Corp., 1988" -1, 10, 20, 140, 10
+	DEFPUSHBUTTON "OK"		   DID_OK, 64,  4, 32,  14, WS_GROUP
+    }
+}
+
+DLGTEMPLATE IDD_SET {
+    DIALOG "", 0, 5, 9, 149, 135, WS_SAVEBITS | FS_DLGBORDER {
+	CTEXT	"ComTalk Options"	-1,  9, 115,133, 10
+	LTEXT		"Port:"		-1,  9, 100, 50, 10
+	EDITTEXT	""	  IDD_PORT, 45, 102, 35, 10
+
+	LTEXT		"Baud:"		-1,  9,  85, 50, 10
+	EDITTEXT	""	  IDD_BAUD, 45,  87, 35, 10
+
+	AUTOCHECKBOX	"Wrap"	  IDD_WRAP, 95,  84, 40, 14 
+
+	LTEXT	"Handshaking:"		-1,  9,  70, 70, 10
+
+	AUTOCHECKBOX	"HW"	    IDD_HW, 80,  70, 30, 14
+
+	AUTOCHECKBOX	"SW"	    IDD_SW,115,  70, 30, 14
+
+	LTEXT		"Parity:"	-1,  9,  55, 28, 10
+	AUTORADIOBUTTON	"N"	IDD_NOP   , 48,  55, 20, 14, WS_GROUP|WS_TABSTOP
+	AUTORADIOBUTTON	"O"	IDD_ODDP  , 68,  55, 20, 14
+	AUTORADIOBUTTON	"E"	IDD_EVENP , 88,  55, 20, 14
+	AUTORADIOBUTTON "M"	IDD_MARKP ,108,  55, 20, 14
+	AUTORADIOBUTTON "S"	IDD_SPACEP,128,  55, 20, 14
+
+	LTEXT		"Data Bits:"	-1,  9,  40, 48, 10
+	AUTORADIOBUTTON "5"      IDD_FIVE , 59,  40, 20, 14, WS_GROUP
+	AUTORADIOBUTTON "6"	 IDD_SIX  , 81,  40, 20, 14
+	AUTORADIOBUTTON "7"      IDD_SEVEN,104,  40, 20, 14
+	AUTORADIOBUTTON "8"      IDD_EIGHT,125,  40, 20, 14, WS_TABSTOP
+
+	LTEXT		"Stop Bits:"	-1,  9,  25, 48, 10
+	AUTORADIOBUTTON	"1"    IDD_ONESTOP, 59,  25, 28, 14, WS_GROUP|WS_TABSTOP
+	AUTORADIOBUTTON	"1.5"  IDD_ONEFIVE, 89,  25, 28, 14
+	AUTORADIOBUTTON	"2"    IDD_TWOSTOP,125,  25, 20, 14
+
+	DEFPUSHBUTTON "Ok"	     DID_OK,  9,  5, 32, 14
+	PUSHBUTTON    "Cancel"   DID_CANCEL, 55,  5, 40, 14  
+	PUSHBUTTON    "Save"       IDD_SAVE,109,  5, 32, 14
+	PUSHBUTTON    "F1=Help" IDD_SETHELP, 90,102, 48, 10, BS_HELP
+    }
+}
+
+DLGTEMPLATE IDD_MAINHELPBOX {
+    DIALOG "", 0, 10, 60, 280, 175, WS_SAVEBITS | FS_DLGBORDER {
+	CTEXT "ComTalk Help"				-1, 10,158,260, 8
+	LTEXT "Session"					-1, 10,142,100, 8
+	LTEXT "Settings..."				-1, 10,134,100, 8
+	LTEXT "Allows change of port configuration"	-1,110,134,160, 8
+	LTEXT "Open Port"				-1, 10,126,100, 8
+	LTEXT "Opens port according to settings"	-1,110,126,160, 8
+	LTEXT "Close Port"				-1, 10,118,100, 8
+	LTEXT "Closes port, flushes buffers"		-1,110,118,160, 8
+	LTEXT "Exit ComTalk"				-1, 10,110,100, 8
+	LTEXT "Exits the application"			-1,110,110,160, 8
+	LTEXT "About ComTalk..."			-1, 10,102,100, 8
+	LTEXT "Displays program information"		-1,110,102,160, 8
+	LTEXT "Commands"				-1, 10, 86,100, 8
+	LTEXT "Page Mode"				-1, 10, 78,100, 8
+	LTEXT "Freezes the screen, allowing paging"	-1,110, 78,160, 8
+	LTEXT "Send Break"				-1, 10, 70,100, 8
+	LTEXT "Sends Break character"			-1,110, 70,160, 8
+	LTEXT "Up, Down"				-1, 10, 62,100, 8
+	LTEXT "Page Up/Down Screenful"			-1,110, 62,160, 8
+	LTEXT "Errors!"					-1, 10, 46,100, 8
+	LTEXT "Displays last DosRead error"		-1,110, 46,160, 8
+	LTEXT "F1=Help"					-1, 10, 30,100, 8
+	LTEXT "Displays this dialog box"		-1,110, 30,160, 8 
+	DEFPUSHBUTTON "Ok"		   DID_OK, 124,  4, 32, 14, WS_GROUP
+    }
+}
+
+DLGTEMPLATE IDD_SETHELPBOX {
+    DIALOG "", 0, 0, 0, 224, 150, WS_SAVEBITS | FS_DLGBORDER {
+	CTEXT "Settings Help"				-1, 10,130, 204, 10
+	LTEXT "Port:"					-1, 10,110,  70, 10
+	LTEXT "Port to open (COMn)",			-1, 80,110, 140, 10
+	LTEXT "Baud:"					-1, 10,100,  70, 10
+	LTEXT "Baud rate (300, 1200, ..., 9600)",	-1, 80,100, 140, 10
+	LTEXT "Wrap:"					-1, 10, 90,  70, 10
+	LTEXT "Word wrap mode",				-1, 80, 90, 140, 10
+	LTEXT "Handshaking:",				-1, 10, 80,  70, 10
+	LTEXT "Hardware, Software",			-1, 80, 80, 140, 10
+	LTEXT "Parity:"					-1, 10, 70,  70, 10
+	LTEXT "None, Odd, Even, Mark, Space",		-1, 80, 70, 140, 10
+	LTEXT "Data bits:"				-1, 10, 60,  70, 10
+	LTEXT "Number of bits in data word",		-1, 80, 60, 140, 10
+	LTEXT "Stop bits:"				-1, 10, 50,  70, 10
+	LTEXT "Number of stop bits",			-1, 80, 50, 140, 10
+	LTEXT "1.5 stop bits require 5 data bits.",	-1, 10, 30, 170, 10
+	LTEXT "2 stop bits require 6, 7, or 8 data bits.",-1, 10, 20, 170, 10
+	DEFPUSHBUTTON "Ok"		     DID_OK, 96, 4, 32, 14, WS_GROUP
+    }
+}

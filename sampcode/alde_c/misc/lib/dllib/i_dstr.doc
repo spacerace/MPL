@@ -1,0 +1,39 @@
+
+
+
+
+        NAME
+                i_dstr -- make an integer from a decimal ascii string
+
+        SYNOPSIS
+                c = i_dstr(p, r);
+                char *p;       destination string pointer
+                int r;         integer to convert
+                int c;         count of characters in string
+
+
+        DESCRIPTION
+        Convert an integer into an ascii decimal string (unsigned).
+        Range is that of 16 bits unsigned, or 0-65535.  The function
+        returns the number of characters placed in the string.  The string
+        is NULL terminated, and must be at least six bytes long to
+        accomodate the longest number plus the NULL.  Numbers are assumed
+        to be positive.
+
+
+        EXAMPLE
+
+               char string[6];
+               int count;
+               count = i_dstr(string, 1357);
+                 count will equal 4
+                 string will be "1357\0"
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

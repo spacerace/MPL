@@ -1,0 +1,11 @@
+#include <windows.h>
+#include "demo.h"
+
+demo MENU
+BEGIN
+  MENUITEM "Dialog...",  IDM_DIALOG
+END
+
+rcinclude demo.dlg
+
+

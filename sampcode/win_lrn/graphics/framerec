@@ -1,0 +1,6 @@
+framerec.obj: framerec.c
+    cl -d -c -AS -Gsw -Os -Zpe framerec.c
+
+framerec.exe: framerec.obj framerec.def
+    link4 framerec,/align:16,/map,slibw/NOE,framerec.def
+    mapsym framerec

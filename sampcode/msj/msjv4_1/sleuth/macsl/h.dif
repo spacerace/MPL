@@ -1,0 +1,567 @@
+############################################################################## 
+# # # # c:\h\bsedos.h : d:\a\sleuth\mac\bsedos.h # # # # 
+############################################################################## 
+60c60
+< #if (defined(INCL_DOSPROCESS) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_DOSPROCESS
+86c86
+< typedef VOID (PASCAL FAR *PFNTHREAD)(VOID);
+---
+> typedef VOID (PASCAL FAR *PFNTHREAD)(/*VOID*/);
+118c118
+< typedef VOID (PASCAL FAR *PFNEXITLIST)(USHORT);
+---
+> typedef VOID (PASCAL FAR *PFNEXITLIST)(/*USHORT*/);
+251c251
+< #if (defined(INCL_DOSFILEMGR) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_DOSFILEMGR
+360c360
+< #if (defined(INCL_DOSMEMMGR) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_DOSMEMMGR
+400c400
+< #if (defined(INCL_DOSSEMAPHORES) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_DOSSEMAPHORES
+473c473
+< #if (defined(INCL_DOSDATETIME) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_DOSDATETIME
+521c521
+< #if (defined(INCL_DOSRESOURCES) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_DOSRESOURCES
+############################################################################## 
+# # # # c:\h\os2def.h : d:\a\sleuth\mac\os2def.h # # # # 
+############################################################################## 
+5c5
+< * OS/2 Common Definitions file
+---
+> * OS/2 Common Definitions file - Macintosh version
+12,14c12,14
+< #define PASCAL  pascal
+< #define FAR     far
+< #define NEAR    near
+---
+> #define PASCAL
+> #define FAR
+> #define NEAR
+18c18
+< typedef void far      *LHANDLE;
+---
+> typedef void FAR      *LHANDLE;
+20,21c20,21
+< #define EXPENTRY pascal far
+< #define APIENTRY pascal far
+---
+> #define EXPENTRY PASCAL FAR
+> #define APIENTRY PASCAL FAR
+43,44c43,44
+< typedef char far  *PSZ;
+< typedef char near *NPSZ;
+---
+> typedef char FAR  *PSZ;
+> typedef char NEAR *NPSZ;
+46,47c46,47
+< typedef char far  *PCH;
+< typedef char near *NPCH;
+---
+> typedef char FAR  *PCH;
+> typedef char NEAR *NPCH;
+49,51c49,51
+< typedef int   (pascal far  *PFN)();
+< typedef int   (pascal near *NPFN)();
+< typedef PFN far *PPFN;
+---
+> typedef int   (PASCAL FAR  *PFN)();
+> typedef int   (PASCAL NEAR *NPFN)();
+> typedef PFN FAR *PPFN;
+54c54
+< typedef BYTE   near *NPBYTE;
+---
+> typedef BYTE   NEAR *NPBYTE;
+89c89
+< #define MAKETYPE(v, type)   (*((type far *)&v))
+---
+> #define MAKETYPE(v, type)   (*((type FAR *)&v))
+182c182
+< typedef POINTL  near *NPPOINTL;
+---
+> typedef POINTL  NEAR *NPPOINTL;
+191c191
+< typedef RECTL near *NPRECTL;
+---
+> typedef RECTL NEAR *NPRECTL;
+193c193
+< typedef CHAR STR8[8];	    /* str8 */
+---
+> typedef CHAR STR8[8];     /* str8 */
+241c241
+< typedef DRIVDATA far *PDRIVDATA;
+---
+> typedef DRIVDATA FAR *PDRIVDATA;
+312c312
+< typedef FATTRS far *PFATTRS;
+---
+> typedef FATTRS FAR *PFATTRS;
+367c367
+< typedef FONTMETRICS far *PFONTMETRICS;
+---
+> typedef FONTMETRICS FAR *PFONTMETRICS;
+371c371,376
+< typedef LHANDLE HWND;      /* hwnd */
+---
+> #ifdef MACPM_INTERNAL
+>   typedef struct _MYWND **HWND;
+> #else
+>   typedef LHANDLE HWND;      /* hwnd */
+> #endif
+> 
+385c390
+< typedef WRECT near *NPWRECT;
+---
+> typedef WRECT NEAR *NPWRECT;
+394c399
+< typedef WPOINT near *NPWPOINT;
+---
+> typedef WPOINT NEAR *NPWPOINT;
+############################################################################## 
+# # # # c:\h\pm.h : d:\a\sleuth\mac\pm.h # # # # 
+############################################################################## 
+5c5,6
+< * This is the top level include file for Presentation Manager
+---
+> * This is the top level include file that includes all the files necessary
+> * for writing a Presentation Manager application.
+6a8,16
+> * History:
+> *  24-Sep-87 MPerks    Created
+> *  14-Nov-87 MPerks    DCR23505
+> *  19-Nov-87 MPerks    taken out conditions
+> *                      1) AVIO needs FONTMETRICS/FATTRS from GPI
+> *                      2) HMF shared between DEV and GPI
+> *                      3) DRIVDATA shared between DEV and SPL
+> *   3-Dec-87 MPerks    implemented name change
+> *
+14,24c24,30
+< *   INCL_PM               -  ALL of OS/2 Presentation Manager
+< *   INCL_WIN              -  OS/2 Window Manager
+< *   INCL_GPI              -  OS/2 GPI
+< *   INCL_DEV              -  OS/2 Device Support
+< *   INCL_AVIO             -  OS/2 Advanced VIO
+< *   INCL_SPL              -  OS/2 Spooler
+< *   INCL_PIC              -  OS/2 Picture
+< *   INCL_ORDERS           -  OS/2 Graphical Order Formats
+< *   INCL_BITMAPFILEFORMAT -  OS/2 Bitmap File Format
+< *   INCL_FONTFILEFORMAT   -  OS/2 Font File Format
+< *   INCL_ERRORS           -  OS/2 Errors
+---
+> *   INCL_PM     -  ALL of OS/2 Presentation Manager
+> *   INCL_WIN    -  OS/2 Window Manager
+> *   INCL_GPI    -  OS/2 GPI
+> *   INCL_DEV    -  OS/2 Device Support
+> *   INCL_AVIO   -  OS/2 Advanced VIO
+> *   INCL_SPL    -  OS/2 Spooler
+> *   INCL_ERRORS -  OS/2 Errors
+35,38d40
+<     #define INCL_PIC
+<     #define INCL_ORDERS
+<     #define INCL_BITMAPFILEFORMAT
+<     #define INCL_FONTFILEFORMAT
+50,61d51
+< #endif
+< #ifdef INCL_PIC
+< #include <pmpic.h>     /* OS/2 Picture definitions */
+< #endif
+< #ifdef INCL_ORDERS
+< #include <pmord.h>     /* OS/2 Graphical Order Formats */
+< #endif
+< #ifdef INCL_BITMAPFILEFORMAT
+< #include <pmbitmap.h>  /* OS/2 Bitmap File Format definition */
+< #endif
+< #ifdef INCL_FONTFILEFORMAT
+< #include <pmfont.h>    /* OS/2 Font File Format definition */
+############################################################################## 
+# # # # c:\h\pmgpi.h : d:\a\sleuth\mac\pmgpi.h # # # # 
+############################################################################## 
+110c110
+< #if (defined(INCL_GPICONTROL) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_GPICONTROL
+497c497
+< #if (defined(INCL_GPIPRIMITIVES) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_GPIPRIMITIVES
+1069c1069
+< #if (defined(INCL_GPIBITMAPS) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_GPIBITMAPS
+############################################################################## 
+# # # # c:\h\pmshl.h : d:\a\sleuth\mac\pmshl.h # # # # 
+############################################################################## 
+1,199c1
+< /**********************************************************************\
+< *                                                                      *
+< * Module Name: PMSHL.H                                                 *
+< *                                                                      *
+< * OS/2 Presentation Manager Shell constants, types, messages and       *
+< * function declarations                                                *
+< * Copyright (c) 1988  IBM Corporation                                  *
+< * Copyright (c) 1988  Microsoft Corporation                            *
+< *                                                                      *
+< * =====================================================================*
+< *                                                                      *
+< * The following symbols are used in this file for conditional sections.*
+< *                                                                      *
+< *   INCL_WINSHELLDATA    Include Winthorn Data private entries         *
+< *   INCL_SHLERRORS       defined if INCL_ERRORS is defined             *
+< *   INCL_WINSWITCHLIST   Include Switch List Calls                     *
+< *                                                                      *
+< * History:                                                             *
+< *  17June88  DCR 24018   AP - moved Switch List + Program List API's   *
+< *                             to PMSHLP.H                              *
+< *  23May88   DCR 23914   ...ies -> ize  - SD, part 2 (remove old)      *
+< *  16May88   DCR 23914   ...ies -> ize  - SD                           *
+< *   9May88   PTR 3944    Message values - SD                           *
+< *                                                                      *
+< \**********************************************************************/
+<  
+< /* common types, constants and function declarations             */
+<  
+< /* maximum file name length */
+< #define MAXNAMEL 60
+<  
+< /* program handle */
+< typedef LHANDLE HPROGRAM;       /* hprog */
+< typedef HPROGRAM FAR * PHPROGRAM;
+<  
+< /* window size structure */
+< typedef struct _XYWINSIZE {     /* xywin */
+<     SHORT x;
+<     SHORT y;
+<     SHORT cx;
+<     SHORT cy;
+<     SHORT fsWindow;
+< } XYWINSIZE;
+< typedef XYWINSIZE FAR *PXYWINSIZE;
+<  
+< /* Definitions for fsWindow */                            /* PTR 3317 */
+< #define XYF_NOAUTOCLOSE  0x0008                           /* PTR 3317 */
+< #define XYF_MINIMIZED    0x0004                           /* D23914 */
+< #define XYF_MAXIMIZED    0x0002                           /* D23914 */
+< #define XYF_INVISIBLE    0x0001
+< #define XYF_NORMAL       0X0000
+<  
+< #if (defined(INCL_WINSWITCHLIST) | !defined(INCL_NOCOMMON))
+<  
+< typedef LHANDLE HSWITCH;        /* hsw */
+< typedef HSWITCH FAR *PHSWITCH;
+<  
+< /* visibility flag for SWCNTRL structure */
+< #define SWL_VISIBLE   (BYTE)0x00
+< #define SWL_INVISIBLE (BYTE)0x01
+< #define SWL_GRAYED    (BYTE)0x02
+<  
+< /* visibility flag for SWCNTRL structure */
+< #define SWL_JUMPABLE    (BYTE)0x00
+< #define SWL_NOTJUMPABLE (BYTE)0x01
+<  
+< typedef struct _SWCNTRL {       /* swctl */                     /* DCR 23781 */
+<     HWND     hwnd;                                              /* DCR 23781 */
+<     HWND     hwndIcon;                                          /* DCR 23781 */
+<     HPROGRAM hprog;                                             /* DCR 23781 */
+<     USHORT   idProcess;                                         /* DCR 23781 */
+<     USHORT   idSession;                                         /* DCR 23781 */
+<     UCHAR    uchVisibility;                                     /* DCR 23781 */
+<     UCHAR    fbJump;                                            /* DCR 23781 */
+<     CHAR     szSwtitle[MAXNAMEL+1];                             /* DCR 23781 */
+<     BYTE     fReserved;        /* To align on word boundary */  /* DCR 23781 */
+< } SWCNTRL;
+< typedef SWCNTRL FAR *PSWCNTRL;
+<  
+< /*** Switching Program functions */
+< HSWITCH APIENTRY WinAddSwitchEntry( PSWCNTRL );
+< USHORT  APIENTRY WinRemoveSwitchEntry( HSWITCH );
+< USHORT  APIENTRY WinSave( PSZ );
+<  
+< /* PTR 3994 define message for WinSave */
+< #define WM_WINSAVE      0x008F   /* WM_SHELLFIRST + 0x0F */
+<  
+< #endif  /* not INCL_NOCOMMON */
+<  
+< #ifdef INCL_WINSWITCHLIST
+<  
+< USHORT   APIENTRY WinChangeSwitchEntry( HSWITCH, PSWCNTRL );
+< USHORT   APIENTRY WinQueryTaskTitle( USHORT, PSZ , USHORT );
+<  
+< #endif
+<  
+< /* if error definitions are required then allow Shell errors */
+< #ifdef INCL_ERRORS
+<     #define INCL_SHLERRORS
+< #endif /* INCL_ERRORS */
+<  
+< #ifdef INCL_WINSHELLDATA
+<  
+< /*** OS2.INI Access functions */
+< SHORT  APIENTRY WinQueryProfileInt ( HAB , PSZ , PSZ , SHORT );
+< USHORT APIENTRY WinQueryProfileString ( HAB , PVOID , PVOID
+<                                       , PVOID , PVOID , USHORT );
+< BOOL   APIENTRY WinWriteProfileString ( HAB , PSZ , PVOID , PVOID );
+< USHORT APIENTRY WinQueryProfileSize ( HAB , PSZ , PSZ , PUSHORT );
+< USHORT APIENTRY WinQueryProfileData ( HAB , PSZ , PSZ , PVOID , PUSHORT );
+< USHORT APIENTRY WinWriteProfileData ( HAB , PSZ , PSZ , PVOID , USHORT );
+<  
+< #endif /* INCL_WINSHELLDATA */
+<  
+< #ifdef INCL_SHLERRORS
+<  
+< #define PMERR_INVALID_PIB                0x1101
+< #define PMERR_INSUFF_SPACE_TO_ADD        0x1102
+< #define PMERR_INVALID_GROUP_HANDLE       0x1103
+< #define PMERR_DUPLICATE_TITLE            0x1104
+< #define PMERR_INVALID_TITLE              0x1105
+< #define PMERR_HANDLE_NOT_IN_GROUP        0x1107
+< #define PMERR_INVALID_TARGET_HANDLE      0x1106
+< #define PMERR_INVALID_PATH_STATEMENT     0x1108
+< #define PMERR_NO_PROGRAM_FOUND           0x1109
+< #define PMERR_INVALID_BUFFER_SIZE        0x110A
+< #define PMERR_BUFFER_TOO_SMALL           0x110B
+< #define PMERR_PL_INITIALISATION_FAIL     0x110C
+< #define PMERR_CANT_DESTROY_SYS_GROUP     0x110D
+< #define PMERR_INVALID_TYPE_CHANGE        0x110E
+< #define PMERR_INVALID_PROGRAM_HANDLE     0x110F
+<  
+< #define PMERR_NOT_CURRENT_PL_VERSION     0x1110
+< #define PMERR_INVALID_CIRCULAR_REF       0x1111
+< #define PMERR_MEMORY_ALLOCATION_ERR      0x1112
+< #define PMERR_MEMORY_DEALLOCATION_ERR    0x1113
+< #define PMERR_TASK_HEADER_TOO_BIG        0x1114
+<  
+< #define PMERR_DOS_ERROR                  0x1200
+<  
+< #define PMERR_NO_SPACE                   0x1201
+< #define PMERR_INVALID_SWITCH_HANDLE      0x1202
+< #define PMERR_NO_HANDLE                  0x1203
+< #define PMERR_INVALID_PROCESS_ID         0x1204
+< #define PMERR_NOT_SHELL                  0x1205
+< #define PMERR_INVALID_WINDOW             0x1206
+< #define PMERR_INVALID_POST_MSG           0x1207
+< #define PMERR_INVALID_PARAMETERS         0x1208
+< #define PMERR_INVALID_PROGRAM_TYPE       0x1209
+< #define PMERR_NOT_EXTENDED_FOCUS         0x120A
+< #define PMERR_INVALID_SESSION_ID         0x120B
+<  
+< #define PMERR_OPENING_INI_FILE           0x1301
+< #define PMERR_INI_FILE_CORRUPT           0x1302
+< #define PMERR_INVALID_PARM               0x1303
+< #define PMERR_NOT_IN_IDX                 0x1304
+<  
+< #define PMERR_INI_WRITE_FAIL             0x1306
+< #define PMERR_IDX_FULL                   0x1307
+< #define PMERR_INI_PROTECTED              0x1308
+< #define PMERR_MEMORY_ALLOC               0x1309
+< #define PMERR_INI_INIT_ALREADY_DONE      0x130A
+< #define PMERR_INVALID_INTEGER            0x130B
+< #define PMERR_INVALID_ASCIIZ             0x130C
+< #define PMERR_CAN_NOT_CALL_SPOOLER       0x130D
+< #define PMERR_VALIDATION_REJECTED        PMERR_CAN_NOT_CALL_SPOOLER
+<  
+< #define PMERR_WARNING_WINDOW_NOT_KILLED  0x1401
+< #define PMERR_ERROR_INVALID_WINDOW       0x1402
+< #define PMERR_ALREADY_INITIALIZED        0x1403
+< #define PMERR_MSG_PROG_NO_MOU            0x1405
+< #define PMERR_MSG_PROG_NON_RECOV         0x1406
+< #define PMERR_WINCONV_INVALID_PATH       0x1407
+< #define PMERR_PI_NOT_INITIALISED         0x1408
+< #define PMERR_PL_NOT_INITIALISED         0x1409
+< #define PMERR_NO_TASK_MANAGER            0x140A
+< #define PMERR_SAVE_NOT_IN_PROGRESS       0x140B
+< #define PMERR_NO_STACK_SPACE             0x140C
+< #define PMERR_INVALID_COLR_FIELD         0x140d
+< #define PMERR_INVALID_COLR_VALUE         0x140e
+< #define PMERR_COLR_WRITE                 0x140f
+<  
+< #define PMERR_TARGET_FILE_EXISTS         0x1501
+< #define PMERR_SOURCE_SAME_AS_TARGET      0x1502
+< #define PMERR_SOURCE_FILE_NOT_FOUND      0x1503
+< #define PMERR_INVALID_NEW_PATH           0x1504
+< #define PMERR_TARGET_FILE_NOT_FOUND      0x1505
+< #define PMERR_INVALID_DRIVE_NUMBER       0x1506
+< #define PMERR_NAME_TOO_LONG              0x1507
+< #define PMERR_NOT_ENOUGH_ROOM_ON_DISK    0x1508
+< #define PMERR_NOT_ENOUGH_MEM             0x1509
+<  
+< #define PMERR_LOG_DRV_DOES_NOT_EXIST     0x150B
+< #define PMERR_INVALID_DRIVE              0x150C
+< #define PMERR_ACCESS_DENIED              0x150D
+< #define PMERR_NO_FIRST_SLASH             0x150E
+< #define PMERR_READ_ONLY_FILE             0x150F
+<  
+< #endif /* INCL_SHLERRORS */
+---
+> /* PmShl.h (empty dummy file) */
+############################################################################## 
+# # # # c:\h\pmwin.h : d:\a\sleuth\mac\pmwin.h # # # # 
+############################################################################## 
+120,121c120
+< #if (defined(INCL_WINCOMMON) | !defined(INCL_NOCOMMON) |  \
+<      defined(INCL_WINMESSAGEMGR))
+---
+> #if 1
+159c158
+< typedef MRESULT (PASCAL FAR *PFNWP)(HWND, USHORT, MPARAM, MPARAM);
+---
+> typedef MRESULT (PASCAL FAR *PFNWP)( /* HWND, USHORT, MPARAM, MPARAM */ );
+307a307,313
+> #ifdef PM_MACINTOSH
+>     HWND   hwnd;
+>     HWND   hwndInsertBehind;
+>     SHORT  x;
+>     SHORT  y;
+>     SHORT  cx;
+>     SHORT  cy;
+308a315,316
+> #else
+>     USHORT fs;
+314a323
+> #endif
+355c364
+< 			     USHORT fs);
+---
+>            USHORT fs);
+363c372
+< #define DBM_IMAGEATTRS	0x0008
+---
+> #define DBM_IMAGEATTRS  0x0008
+367c376
+< 			   LONG clrFore, LONG clrBack, USHORT rgfCmd);
+---
+>          LONG clrFore, LONG clrBack, USHORT rgfCmd);
+385c394
+< #define DT_TEXTATTRS	    0x0040
+---
+> #define DT_TEXTATTRS      0x0040
+389c398
+< 			    LONG clrFore, LONG clrBack, USHORT rgfCmd);
+---
+>           LONG clrFore, LONG clrBack, USHORT rgfCmd);
+400c409
+< #define DB_AREAATTRS	    0x0010
+---
+> #define DB_AREAATTRS      0x0010
+437c446
+< #if (defined(INCL_WINWINDOWMGR) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_WINWINDOWMGR
+447a457,469
+> #ifdef PM_MACINTOSH
+>     HWND   hwndParent;
+>     PSZ    pszClass;
+>     PSZ    pszText;
+>     ULONG  flStyle;
+>     SHORT  x;
+>     SHORT  y;
+>     SHORT  cx;
+>     SHORT  cy;
+>     HWND   hwndOwner;
+>     HWND   hwndInsertBehind;
+>     USHORT id;
+>     PVOID  pCtlData;
+448a471,472
+> #else
+>     PVOID  pPresParams;
+460a485
+> #endif
+563c588
+< #if (defined(INCL_WINMESSAGEMGR) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_WINMESSAGEMGR
+655a681,683
+> 
+> #ifdef PM_MACINTOSH
+> 
+656a685,696
+>     USHORT unused;          /* mp1 */
+>     USHORT cmd;
+>     BOOL   fMouse;          /* mp2 */
+>     USHORT source;
+> };
+> 
+> #define COMMANDMSG(pmsg) \
+>         ( (struct _COMMANDMSG FAR *)( (pmsg) + 1 ) )
+> 
+> #else
+> 
+> struct _COMMANDMSG {
+665a706,707
+> #endif
+> 
+812c854
+< #if (defined(INCL_WININPUT) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_WININPUT
+895a938,940
+> 
+> #ifdef PM_MACINTOSH
+> 
+896a942,953
+>     SHORT  y;               /* mp1 */
+>     SHORT  x;
+>     USHORT unused;        /* mp2 */
+>     USHORT codeHitTest;
+> };
+> 
+> #define MOUSEMSG(pmsg) \
+>         ( (struct _MOUSEMSG FAR *)( (pmsg) + 1 ) )
+> 
+> #else
+> 
+> struct _MOUSEMSG {
+905a963,964
+> #endif
+> 
+909a969,971
+> 
+> #ifdef PM_MACINTOSH
+> 
+910a973,985
+>     UCHAR  scancode;
+>     UCHAR  cRepeat;         /* mp1 */
+>     USHORT fs;
+>     USHORT vkey;            /* mp2 */
+>     USHORT chr;
+> };
+> 
+> #define CHARMSG(pmsg) \
+>         ( (struct _CHARMSG FAR *)( (pmsg) + 1 ) )
+> 
+> #else
+> 
+> struct _CHARMSG {
+920a996,997
+> #endif
+> 
+1005c1082
+< #if (defined(INCL_WINDIALOGS) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_WINDIALOGS
+1026c1103
+< 						MPARAM mp2);
+---
+>             MPARAM mp2);
+1593c1670
+< #if (defined(INCL_WINFRAMEMGR) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_WINFRAMEMGR
+2075c2152
+< #if (defined(INCL_WINCURSORS) | !defined(INCL_NOCOMMON))
+---
+> #ifdef INCL_WINCURSORS
+2273a2351
+> #ifndef PM_MACINTOSH
+2274a2353
+> #endif
+############################################################################## 

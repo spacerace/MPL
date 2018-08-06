@@ -1,0 +1,47 @@
+
+[  The original distribution referred to a "ctags" clone.  I removed
+   it, as ctags is available from your nearest comp.sources.unix archive,
+   and I believe  with the GNU distribution.  I repacked the archive.  --r$  ]
+
+STEVIE is a vi clone I've been working on for quite a while now. It
+began as an Atari ST editor written by Tim Thompson and posted to the
+net about a year ago. I've hacked on it off and on since then and ported
+it to UNIX and OS/2.
+
+This is a reasonably stable release. There's plenty of work to be done
+still, but there's been a lot of interest in comp.os.minix recently so
+I thought I'd go ahead a post the current version.
+
+The system-dependent files for the ST, UNIX, and OS/2 are all included.
+
+Thanks...
+
+Tony Andrews			UUCP: onecom!wldrdg!tony
+Netwise, Inc.			Phone:303-442-8280
+4745 Walnut St.
+Boulder, CO 80301
+
+
+Turbo C 1.5 port:
+
+I have added to the archive the necessary files for the regular expression
+handling.  Note that not all of these file are used in the creation of the
+editor.  I have kept the regexp archive intact as per Henry Spencers request.
+Using PKXARC or ARCE, dearc regexp.arc into the same directory as the st files.
+The included st.prj file will ensure the inclusion of the proper file when the
+editor is built.
+
+I have also added some code to properly define delay() & sleep() for operation
+under Turbo C 1.5.  The editor compiles without error and appears to run
+properly.  I have _NOT_ tested the operation of the editor extensively so
+proceed cautiously. I'll leave it to the next guy to twiddle those bits!
+
+I am redistributing this arc as is for those of you who would like to have
+a vi type editor for dos work that they can personalize.
+
+Oh yes, I have compiled under both the COMPACT and LARGE models without
+problem.  The .tc file currently uses COMPACT but modify as you will.
+
+Have at it, Denny Muscatelli CIS PPN [76077,2146]. 061988
+
+*eof

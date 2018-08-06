@@ -1,0 +1,8 @@
+#include "style.h"
+#include "addfont.h"
+
+ResMenu MENU
+  BEGIN
+    MENUITEM "&AddFont", IDM_ADDFONT
+    MENUITEM "&RemoveFont", IDM_REMOVEFONT
+  END

@@ -1,0 +1,347 @@
+/*
+Microsoft Systems Journal
+Volume 2; Issue 3; July, 1987
+
+Code Listings For:
+
+	TILER
+	pp. 19-36
+
+Author(s): Michael Geary
+Title:     Microsoft Windows 2.0: Enhancements Offer Developers More Control
+
+
+
+
+Figure 7.
+=========
+
+Caption: Code Listing for TILER.C
+
+
+
+TILER.C
+*/
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *\
+ *  Tiler.c                                                        *
+ *  Windows 2.0 Tiling Utility                                     *
+ *  Written by Michael Geary                                       *
+\* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#include <windows.h>
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#define MAXINT      32767
+
+/* Menu command definitions */
+
+#define CMD_TILECOLS    1
+#define CMD_TILEROWS    2
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+typedef struct {
+    HWND    hWnd;
+    RECT    rect;
+} WINDOW;
+
+WINDOW      Window[4];        /* Window info for each tiled window */
+int         nWindows;         /* How many windows we will tile */
+
+HANDLE      hInstance;        /* Our instance handle */
+int         hWndTiler;        /* hWnd of our icon */
+RECT        TileRect;         /* Overall tiling rectangle */
+
+char        szClass[] = "Tiler!";         /* Our window class name */
+char        szTitle[] = "Tiler";          /* Our window title */
+char        szTileCols[] = "&Tile Columns";
+char        szTileRows[] = "Tile &Rows";
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+/*  Declare full templates for all our functions.  This gives us 
+ *  strong type checking on our functions.
+ */
+
+void                CalcWindowRects( BOOL );
+BOOL                Initialize( void );
+BOOL                IsTileable( HWND );
+long    FAR PASCAL  TilerWndProc( HWND, unsigned, WORD, LONG );
+void                TileWindows( BOOL );
+int         PASCAL  WinMain( HANDLE, HANDLE, LPSTR, int );
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+/*  Calculate window rectangles for the four topmost tileable windows
+ *  and set up the Window array for them.  This is a simple-minded
+ *  tiling algorithm that simply divides the tiling area into equal
+ *  rows and columns.
+ */
+
+void CalcWindowRects( bColumns )
+    BOOL        bColumns;
+{
+    HWND        hWnd;
+    int         n;
+
+    n = 0;
+    for(
+        hWnd = GetWindow( hWndTiler, GW_HWNDFIRST );
+        hWnd;
+        hWnd = GetWindow( hWnd, GW_HWNDNEXT )
+    ) {
+        if( ! IsTileable( hWnd ) )  continue;
+
+        Window[n].hWnd = hWnd;
+        CopyRect( &Window[n].rect, &TileRect );
+
+        switch( n ) {
+            case 0:
+                break;
+            case 1:
+                if( bColumns ) {
+                    Window[0].rect.right = TileRect.right / 2;
+                    Window[1].rect.left = Window[0].rect.right - 1;
+                } else {
+                    Window[0].rect.bottom = TileRect.bottom / 2;
+                    Window[1].rect.top = Window[0].rect.bottom - 1;
+                }
+                break;
+            case 2:
+                if( bColumns ) {
+                    Window[2].rect.left = Window[1].rect.left;
+                    Window[1].rect.bottom = TileRect.bottom / 2;
+                    Window[2].rect.top = Window[1].rect.bottom - 1;
+                } else {
+                    Window[2].rect.top = Window[1].rect.top;
+                    Window[1].rect.right = TileRect.right / 2;
+                    Window[2].rect.left = Window[1].rect.right - 1;
+                }
+                break;
+            case 3:
+                if( bColumns ) {
+                    Window[3].rect.right = Window[0].rect.right;
+                    Window[0].rect.bottom = TileRect.bottom / 2;
+                    Window[3].rect.top = Window[0].rect.bottom - 1;
+                } else {
+                    Window[3].rect.bottom = Window[0].rect.bottom;
+                    Window[0].rect.right = TileRect.right / 2;
+                    Window[3].rect.left = Window[0].rect.right - 1;
+                }
+                break;
+        }
+        if( ++n == 4 )  break;
+    }
+    nWindows = n;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+/*  Initialize TILER.  Assumes a single instance.
+ *  Returns TRUE if initialization succeeded, FALSE if failed.
+ */
+
+BOOL Initialize()
+{
+    WNDCLASS    Class;        /* Class structure for RegisterClass */
+    HMENU       hMenu;        /* Menu handle of system menu */
+
+    /* Register our window class */
+    Class.style          = 0;
+    Class.cbClsExtra     = 0;
+    Class.cbWndExtra     = 0;
+    Class.lpfnWndProc    = TilerWndProc;
+    Class.hInstance      = hInstance;
+    Class.hIcon          = LoadIcon( hInstance, szClass );
+    Class.hCursor        = LoadCursor( NULL, IDC_ARROW );
+    Class.hbrBackground  = COLOR_WINDOW + 1;
+    Class.lpszMenuName   = NULL;
+    Class.lpszClassName  = szClass;
+
+    if( ! RegisterClass( &Class ) )  return FALSE;
+
+    /* Create our window but don't iconize it yet */
+    hWndTiler = CreateWindow(
+        szClass, szTitle,
+        WS_OVERLAPPED | WS_SYSMENU,
+        CW_USEDEFAULT, 0,
+        CW_USEDEFAULT, 0,
+        NULL, NULL, hInstance, NULL
+    );
+    if( ! hWndTiler )  return FALSE;
+
+    /* Since we took the default size, the bottom of our window is
+     * the base Y coordinate for tiling */
+    GetWindowRect( hWndTiler, &TileRect );
+    TileRect.top = TileRect.left = -1;
+    TileRect.right = GetSystemMetrics( SM_CXSCREEN ) + 1;
+
+    /* Add our menu items to the System (Control) menu */
+    hMenu = GetSystemMenu( hWndTiler, FALSE);
+    ChangeMenu( hMenu, 0, NULL, MAXINT, MF_APPEND | MF_SEPARATOR );
+    ChangeMenu( hMenu, 0, szTileCols, CMD_TILECOLS, 
+                MF_APPEND | MF_STRING );
+    ChangeMenu( hMenu, 0, szTileRows, CMD_TILEROWS, 
+                MF_APPEND | MF_STRING );
+
+    /* Now display our window as an icon */
+    ShowWindow( hWndTiler, SW_SHOWMINIMIZED );
+
+    return TRUE;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+/*  Tells whether a window can be tiled, returns TRUE if so.
+ *  We will tile only top level, resizable windows that are not
+ *  minimized and not maximized.
+ */
+
+BOOL IsTileable( hWnd )
+    HWND        hWnd;
+{
+    DWORD       dwStyle;
+
+    dwStyle = GetWindowLong( hWnd, GWL_STYLE );
+    return(
+        ! ( dwStyle & ( WS_POPUP | WS_MINIMIZE | WS_MAXIMIZE ) )  &&
+          ( dwStyle & WS_SIZEBOX )  &&
+          ( dwStyle & WS_VISIBLE )
+    );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+/*  Tiler's window function.
+ */
+
+long FAR PASCAL TilerWndProc( hWnd, wMsg, wParam, lParam )
+    HWND        hWnd;            /* Window handle */
+    unsigned    wMsg;            /* Message number */
+    WORD        wParam;          /* Word parameter for the message */
+    LONG        lParam;          /* Long parameter for the message */
+{
+    RECT        rect;            /* A rectangle */
+
+    switch( wMsg ) {
+
+    /* Destroy-window message - time to quit the application */
+        case WM_DESTROY:
+            PostQuitMessage( 0 );
+            return 0L;
+
+    /* Query open icon message - don't allow icon to be opened! */
+        case WM_QUERYOPEN:
+            return 0L;
+
+    /* System menu command message - process the command if ours */
+        case WM_SYSCOMMAND:
+            switch( wParam ) {
+                case CMD_TILECOLS:
+                    TileWindows( TRUE );
+                    return 0L;
+                case CMD_TILEROWS:
+                    TileWindows( FALSE );
+                    return 0L;
+                default:
+                    break;
+            }
+            break;
+
+    /* For all other messages, we pass them on to DefWindowProc */
+        default:
+            break;
+    }
+    return DefWindowProc( hWnd, wMsg, wParam, lParam );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  This function actually tiles the windows.  First, it calls
+ *  CalcWindowRects to determine the window positions.  Then, it 
+ *  loops through the windows and moves them into place.
+ */
+
+void TileWindows( bColumns )
+    BOOL        bColumns;     /* TRUE = tile columns; FALSE = rows */
+{
+    int         n;
+    HWND        hWnd = NULL;
+
+    CalcWindowRects( bColumns );  /* Assign window rectangles */
+
+    if( nWindows == 0 ) {
+        MessageBox(
+            hWndTiler,
+            "There are no windows that can be tiled.",
+            szTitle,
+            MB_OK | MB_ICONEXCLAMATION
+        );
+        return;
+    }
+
+    /* Move, size, and reorder windows */
+    for( n = 0;  n < nWindows;  ++n ) { 
+        SetWindowPos(
+            Window[n].hWnd,
+            hWnd,
+            Window[n].rect.left,
+            Window[n].rect.top,
+            Window[n].rect.right  - Window[n].rect.left,
+            Window[n].rect.bottom - Window[n].rect.top,
+            SWP_NOACTIVATE
+        );
+        hWnd = Window[n].hWnd;
+        if( GetClassWord( hWnd, GCW_STYLE ) & 
+                        ( CS_HREDRAW | CS_VREDRAW ) )
+            /* Make sure it's redrawn */
+            InvalidateRect( hWnd, NULL, TRUE );
+    }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Application main program. */
+
+int PASCAL WinMain( hInst, hPrevInst, lpszCmdLine, nCmdShow )
+
+    /* Our instance handle */
+    HANDLE      hInst; 
+    /* Previous instance of this application*/
+    HANDLE      hPrevInst; 
+    /* Pointer to any command line params*/
+    LPSTR       lpszCmdLine;
+    /* Parameter to use for first ShowWindow */
+    int         nCmdShow; 
+{
+    MSG         msg;                /* Message structure */
+
+    /* Allow only a single instance */
+    if( hPrevInst ) {
+        MessageBeep( 0 );
+        return 0;
+    }
+
+    /* Save our instance handle in static variable */
+    hInstance = hInst;
+
+    /* Initialize application, quit if any errors */
+    if( ! Initialize() )  return FALSE;
+
+    /* Main message processing loop */
+    while( GetMessage( &msg, NULL, 0, 0 ) ) {
+        DispatchMessage( &msg );
+    }
+
+    return msg.wParam;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

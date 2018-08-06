@@ -1,0 +1,4 @@
+#include <style.h>
+
+WindowIcon ICON setrop2.ico
+

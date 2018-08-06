@@ -1,0 +1,157 @@
+/*
+Microsoft Systems Journal
+Volume 2; Issue 4; September, 1987
+
+Code Listings For:
+
+	TOUCH
+	pp. 15-22
+
+Author(s): Augie Hansen
+Title:     Programming in C the Fast and Easy Way with Microsoft QuickC
+
+
+
+
+
+Figure 7
+========
+
+*/
+
+/*
+ * PROGRAM:  TOUCH
+ *
+ * DESCRIPTION:  Update the last modification time of a file or a
+ *	group of files to the current time.
+ *
+ * ENTRY:  A list of files to "touch".  The filenames can be preceded
+ *      by one or both of the following options:
+ *
+ *		-c	don't create any files
+ *              -v      operate in verbose mode (report activity)
+ *
+ * SYNTAX:
+ *      touch [-cv] filename ...
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <io.h>
+#include <errno.h>
+#include <sys\types.h>
+#include <sys\stat.h>
+#include <sys\utime.h>
+
+#define ERR     0x7FFF
+#define MAXNAME 8
+
+typedef enum { FALSE, TRUE } BOOLEAN;
+extern void usage(char *);
+
+int
+main(argc, argv)
+int argc;
+char *argv[];
+{
+	int ch;                 /* character buffer */
+	char *cp;               /* character pointer */
+	int badcount;           /* number of files that cannot */
+				/* be successfully updated */
+	struct stat statbuf;	/* buffer for stat results */
+	BOOLEAN errflag;	/* error flag */
+	BOOLEAN cflag;          /* creation control flag */
+	BOOLEAN vflag;          /* verbose control flag */
+	FILE *fp;		/* file pointer */
+
+	static char pgm[MAXNAME + 1] = { "touch" };
+
+
+	/*
+	 * Initialize flags and variables
+	 */
+	errflag = cflag = vflag = FALSE;
+	badcount = 0;
+
+	/*
+	 * Move past the command name argument and look for
+	 * optional arguments (signaled by a leading dash)
+	 */
+	++argv;
+	--argc;
+	while (argc > 1) {
+		cp = *argv;
+		if (*cp != '-')
+			/* not an option flag */
+			break;
+
+		/*
+		 * Having seen an option flag ('-'), look at
+		 * any option letters that follow it in the
+		 * current argument string
+		 */
+		for (++cp; *cp != '\0'; ++cp)
+			switch (*cp) {
+			case 'c':
+				/* don't create files */
+				cflag = TRUE;
+				puts("CREATION flag set");
+				break;
+			case 'v':
+				/* verbose -- report activity */
+				vflag = TRUE;
+				break;
+			default:
+				fprintf(stderr, "%s: unknown option %c\n",
+					pgm, *cp);
+				usage(pgm);
+				exit(ERR);
+			}
+		++argv;
+		--argc;
+	}
+
+
+	/*
+	 * Update modification times of files
+	 */
+	for (; argc-- > 0; ++argv) {
+		if (stat(*argv, &statbuf) == -1) {
+			/* file doesn't exist */
+			if (cflag == TRUE) {
+				/* don't create it */
+				++badcount;
+				continue;
+			}
+			else if ((fp = fopen(*argv, "w")) == NULL) {
+				fprintf(stderr, "%s: Cannot create %s\n",
+					pgm, *argv);
+				++badcount;
+				continue;
+			}
+			else {
+				if (fclose(fp) == EOF) {
+					perror("Error closing file");
+					exit(ERR);
+				}
+				if (stat(*argv, &statbuf) == -1) {
+					fprintf(stderr, "%s: Can't stat %s\n",
+						pgm, *argv);
+					++badcount;
+					continue;
+				}
+			}
+		}			
+		if (utime(*argv, NULL) == -1) {
+			++badcount;
+			perror("Error updating date/time stamp");
+			continue;
+		}
+		if (vflag == TRUE)
+			fprintf(stderr, "Touched file %s\n", *argv);
+	}
+
+	return (badcount);
+}

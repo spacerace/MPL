@@ -1,0 +1,39 @@
+
+
+       NAME
+               mkbox -- make a box on the screen
+
+       SYNOPSIS
+               #include "graphics.h"
+               void mkbox(startr, startc, width, ht, page);
+               int startr;       starting row (top)
+               int startc;       starting column (left)
+               int width;        how many columns wide
+               int ht;           how many rows high
+               int page;         which video page (assuming
+                                 proper video mode)
+
+       DESCRIPTION
+       This function will make a double line box using the IBM
+       graphics characters on the "page" specified.  The "startr"
+       and "startc" parameters anchor the upper left corner.  The
+       "ht" and "width" set the dimensions.  No checks are made for
+       valid numbers.  Function has been used with both CGA and Mono
+       cards, but has not been tested with EGA cards as yet.
+
+       EXAMPLE
+              mkbox(0, 0, 80, 23, 0);
+          will make a box around the outside of an 80 x 24 screen.
+
+
+
+
+
+
+
+
+
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

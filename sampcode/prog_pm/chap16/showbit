@@ -1,0 +1,9 @@
+#-------------------
+# SHOWBIT make file
+#-------------------
+
+showbit.obj : showbit.c
+     cl -c -G2sw -W3 showbit.c
+
+showbit.exe : showbit.obj showbit.def
+     link showbit, /align:16, NUL, os2, showbit

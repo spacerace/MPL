@@ -1,0 +1,9 @@
+#-------------------
+# BEEPER1 make file
+#-------------------  
+
+beeper1.obj : beeper1.c
+     cl -c -G2sw -W3 beeper1.c
+
+beeper1.exe : beeper1.obj beeper1.def
+     link beeper1, /align:16, NUL, os2, beeper1

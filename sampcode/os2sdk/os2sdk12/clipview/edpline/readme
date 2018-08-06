@@ -1,0 +1,40 @@
+Comments about EDPLINE (Edit Polyline)
+
+
+This program is a prototype for the standard mouse interface of
+dragging points around and rubberbanding primitives.
+
+
+To use:
+-------
+
+To add or move points, click on the LEFT mouse button.
+
+  If you click within about 3 pels of an existing point, you can drag it
+    around in the usual way.
+
+  If you click within about 3 pels of an existing line, but not near a
+    point, you will insert a point between the endpoints of the nearest line
+    segment.
+
+  Otherwise, you will append a control point to the list.
+
+
+To remove points, click on a point with the RIGHT mouse button.
+
+  You can drag the point around, but it will disappear as
+  soon as you lift up on the mouse button.
+
+
+The primitives can be displayed independently, and show up in different
+colors so they can be distinguished (especially near endpoints).  Selecting
+"None" clears all the selected primitives.
+
+Rubberbanding is done by drawing in xor mode, so for each movement
+you will draw the object twice.  When moving, adding, or removing control
+points, only the one currently selected will be drawn.
+
+There's a limit of 20 control points.  If you try to add more than that,
+a message box appears.	There's a bug that forces you to click twice after
+closing down the error message box before you can grab a point for moving
+or removing.

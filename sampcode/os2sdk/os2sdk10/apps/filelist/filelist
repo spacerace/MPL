@@ -1,0 +1,16 @@
+#
+# This is a makefile to build filelist.exe using Microsoft make.exe.
+#
+# The libraries are explicitly declared to make the build process
+# independent of environment variables.
+#
+
+LIBS=..\..\..\lib
+INCLUDE=..\..\..\include
+CFLAGS=-Lp -Ox -Zp -I$(INCLUDE)
+
+filelist:   filelist.exe
+
+filelist.exe: filelist.c
+	cl  $(CFLAGS) filelist.c
+	bind filelist $(LIB)\api.lib $(LIB)\doscalls.lib

@@ -1,0 +1,39 @@
+
+
+
+        NAME
+                getpos -- get current cursor position
+
+        SYNOPSIS
+                position = getpos(page);
+                unsigned int position;      returned position
+                int page;          video page to check
+
+
+        DESCRIPTION
+        Returns the row and column of the cursor on the specified
+        video page.  Row is in upper 8 bits of returned integer
+        and column in lower 8 bits.  Values are in binary.
+
+
+
+
+        EXAMPLE
+
+               unsigned int position;
+               short row, column;
+               position = getpos(0);    /* on video page 0 */
+               row = (position >> 8) & 0xff;
+               column = position & 0xff;
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

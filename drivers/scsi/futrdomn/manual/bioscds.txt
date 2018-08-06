@@ -1,0 +1,553 @@
+Code 00                                  Initialize the System
+
+Input registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    The SCSI Reset line is asserted and deasserted followed by a delay of 
+    about 2 seconds. After the delay, each drive that was recognized during 
+    the boot operation is issued a Recalibrate command, and if an error is 
+    returned, the status is read via a Request Sense Command. This clears out
+    any error status that  may have been caused by the reset.
+
+    The status from the request sense command is not returned to the caller 
+    as this is done for every disk connected to the adapter.
+    
+Code 01                                  -Request Sense
+
+Input registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    A SCSI Request Sense is issued to the specified disk. The results of the 
+    command are converted to the BIOS Error Code and returned in AH/AL.
+
+    Pre 4.0L, 1.0E, 5.0C BIOS used the non-extended request sense format, and
+    the four bytes returned by the device are stored in the data table 
+    (except 5.X series).
+
+Code 02                                  -Disk Read
+
+Input registers - as defined under general assignment.
+
+Special output registers - none.
+
+Operation:
+
+    Two internal parameters are used to convert the caller's head, sector, and
+    cylinder number to a SCSI logical block number. These parameters are the 
+    heads per cylinder and sectors per track numbers. The source of these 
+    numbers is discussed under Codes 08 and 19. If the drive has 256 byte 
+    sectors, the logical block number and the length are multiplied by two 
+    before being sent to the drive.
+
+    If the SCSI bus is not in an idle condition at the start of the command 
+    execution, an Initialize System (Code 00) is executed and an error return
+    made to the caller.
+
+    A SCSI Read command (08) is issued to the specified disk. The BIOS then 
+    waits for SCSI Request to be asserted. When it is asserted, a check is 
+    made to verify that SCSI C/D is not asserted. If C/D is asserted, 
+    operation proceeds directly to the Status/Message phase.
+
+    Data is transferred in blocks of 512 and 256 bytes, depending on the 
+    drive's sector size. After the request is detected, a sector sized block
+    is transferred to the caller's buffer. If the  transfer is complete,
+    the operation proceeds to the Status/Message phase; otherwise, it waits 
+    again for the SCSI Request line to be asserted.
+
+    If there is an error reported in the Status/Message phase of the
+    operation, the SCSI Request Sense command is issued and the results 
+    returned as an error in AH/AL.
+
+Code 03                                  -Disk Write
+
+Identical to the Disk Read, Code 02, with the exception that a SCSI Write 
+command (0A0) is issued to the specified drive.
+
+Code 04                                  -Disk Verify
+
+Input registers - As defined under general assignment except for the ES:BX. 
+There is no buffer associated with this command.
+
+Special output registers - none.
+
+Operation:
+
+    This command is executed in the same manner as the Disk Read with the 
+    exception that the data read from disk is not stored anywhere. The 
+    purpose of this command is to verify that there are no read errors 
+    detected.
+
+    If there is an error reported, the SCSI Request Sense command is issued 
+    and the results of the Sense command returned in AH/AL.
+
+Code 05                                  -Mode Select
+
+Input registers - ES:BX points to a buffer containing the bytes that are to 
+be output during the data phase of the mode select command. Byte 0 contains 
+the length of the buffer in bytes to be output. Bytes 1-n are the data bytes.
+
+Special output registers - none.
+
+Operation:
+
+    The purpose of this command is to send the required parameters to the 
+    device in preparation for the issuing of the unit format command. The 
+    SCSI Mode Select (15h) command is issued to the specified device. The 
+    length of the data phase is taken from byte 0 of the caller's buffer.
+    During the data phase of the command, successive bytes are taken from the
+    caller's buffer and sent to the device.
+
+    A check is made for SCSI Request asserted, and SCSI C/D deasserted between
+    each byte. If C/D is asserted or the buffer is exhausted, the operation 
+    proceeds to the Status/Message phase.
+
+    If an error is detected during the Status/Message phase, a SCSI Request 
+    Sense is issued and the results returned in AH/AL.
+
+Code 06                                  -Format Unit with Passed List
+
+Input registers - ES:BX points to a buffer containing the bytes of data that 
+are to be output during the data phase of the command. Byte 0 contains the 
+MSB and byte 1 the LSB of the length(N) of the number of bytes to be output
+during the data phase. Bytes 2-N contain the data that is to be output. If the
+length is 0, no bytes are output.
+
+DH contains flags that are part of the format command. The specific definition
+of the flags to the device are device dependent. This byte is OR'ed with byte
+1 of the command before it is output to the device.
+
+AL contains the interleave factor. This is output as byte 4 of the command.
+
+Special output registers - none.
+
+Operation:
+
+    This command is normally used to send defect lists to the drive for 
+    formatting. By changing the flags and the contents of the buffer, this
+    could be a format cylinder command, format  unit command, format with
+    manufacturer's defect list, format with passed list, format with spares,
+    etc. The specific operation is dependent on what the specific disk drive
+    manufacturer has implemented.
+
+    The SCSI Format Unit (04) command is issued to the device. The contents 
+    of the caller's DH register are OR'ed with the LUN to form byte 1 on the 
+    command. The caller's AL register is sent as byte 4 for the interleave.
+
+    The length of the data phase is taken from bytes 0 and 1 of the caller's 
+    buffer. Note that the  MSB is in byte 0 and the LSB in byte 1. During the
+    data phase of the command, successive  bytes are taken from the caller's 
+    buffer and sent to the device.
+
+    A check is made for SCSI Request asserted, and SCSI C/D deasserted between
+    each byte. If C/D is asserted or buffer is exhausted, the operation 
+    proceeds to the Status/Message phase. There is no timeout for this 
+    command. Many devices pick up the data bytes, such as for    defect 
+    management,	as they are needed during the formatting operation. As a 
+    result, there is no predetermined timeout interval. If the device hangs,
+    the system must be restarted.
+
+    If an error is detected during the Status/Message phase, a SCSI Request 
+    Sense is issued and  the results returned in AH/AL.
+
+
+
+
+
+
+
+
+
+
+
+Code 07                                  -Format Unit, No List
+
+Input registers - AL contains the interleave which is output as byte 4 of the command.
+
+Special output registers - none.
+
+Operation:
+
+    The SCSI Format Unit (04) command is issued to the device. Byte 1 contains only the LUN 
+    with no special flags set. Byte 4 is the interactive. After the command is issued, the BIOS 
+    waits for the completion by looking for the Status/Message phase of the operation. There is 
+    no predetermined length of time to use for a timeout, so if the device hangs, the only method 
+    of recovery is to restart the system.
+
+Code 08                                  -Return Parameters
+
+Input registers - none.
+
+Special output registers.
+
+    DH - Number of heads-1
+    DL - Number of drives in HF_NUM.
+    CH - LSB 8 bits of number of cylinders-1.
+    CL - Number of sectors per track + 2 MSB of cylinders - 1.
+
+Operation:
+
+    This function returns the parameters that are used to convert the caller's disk address speci-
+    fication into a logical sector number to be issued to the SCSI device. The formula used by 
+    the ROM BIOS is:
+
+    Sector=cyl*(HEADS*SECTS)+head*SECTS+(sect-1)
+
+         SECTOR   -Logical sector number
+         HEADS    -Number of heads reported for device
+         SECTS     -Sectors per track reported for device
+         cyl       -Caller specified cylinder number
+         head      -Caller specified head number
+         sect       -Caller specified sector number
+
+    Note that these values need have no relationship to the actual values on the physical drive 
+    for cylinders, heads, and sectors per track. These are only "funny" numbers used for the Int 
+    13h call.
+
+    These parameters are based on the standard sector size of 512 bytes. If, in fact, the drive 
+    used 256 byte sectors, the fact is masked from the system.
+
+    Before the caller makes an Int 13h call to read, write, or verify a logical sector, the reverse 
+    of the above algorithm needs to be performed on the desired logical sector number for set-
+    ting up of the registers.
+
+
+
+
+
+
+
+
+Code OC                                 -Disk Seek
+
+Input registers - As defined under general usage with the exception that there is no use of the 
+buffer pointer ES:BX.
+
+Special output registers - none.
+
+Operation:
+
+    The caller's parameters are converted to a logical sector address in the same manner as is 
+    done in the Disk Read command. A SCSI Seek command is issued. All SCSI read and 
+    writes have implied seeks.
+
+    WARNING:  There are some "performance" tests on the market that use this BIOS call to 
+              check for seek times. With SCSI drives, invalid results are obtained because 
+              the parameters returned (See Code 19) are not the actual physical parame-
+              ters of the drive.
+
+Code 0E                                  -Read Local Buffer
+
+Input registers - ES:BS points to the caller's 512 byte buffer.
+
+Special output registers - none.
+
+Operation (For Host adapters using BIOS 4.0):
+
+    The contents of a local 512 byte buffer are returned to the caller. This is the same data 
+    written out by the Write Local Buffer command. The command is one of the diagnostic tests 
+    for the adapter.
+
+Operation (for Host adapters using BIOS 1.0-1.2, 5.0-5.2 or 6.0):
+
+    This command is not implemented. There is insufficient RAM on the adapter to store the 
+    required information.
+
+Code 0F                                  -Write Local Buffer
+
+Input registers - ES:BX points to the caller's 512 byte buffer.
+
+Special output registers - none.
+
+Operation (for Host adapters using BIOS 4.0)
+
+    The contents of the caller's buffer are written into the local buffer. This is part of a diagnos-
+    tic test of the adapter to be used in conjunction with the Real Local Buffer command to 
+    check operation.
+
+Operation (for Host adapters using BIOS 1.0-1.2, 5.0-5.2 or 6.0):
+
+    This command is not implemented.
+
+
+
+
+
+
+
+
+Code 10                                  -Test Unit Ready
+
+Output registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    A SCSI Test Unit Ready (00) command is issued to the specified disk. If an error is detected 
+    during the Status/Message phase, a SCSI Request Sense is issued and the results returned in 
+    AH/AL.
+
+Code 11                                  -Recalibrate
+
+Input registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    A SCSI Recalibrate (01) command is issued to the specified disk. The resultant status of the 
+    command is returned to AH/AL.
+
+Code 12                                  -Drive Stop
+
+Input registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    A SCSI stop (1Bh) command is issued to the specified disk. Some manufacturers use this 
+    command to park the heads in preparation for moving.
+
+Code 13                                  -Request Sense
+
+This is the same as code 01.
+
+Code 14                                  -Adapter Diagnostic
+
+Input registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    A complete wrap around test is run on the SCSI data path. 256 data patterns are placed on 
+    the SCSI data bus and read back for comparison. If there is any difference, an error is re-
+    turned in AH/AL.
+
+
+
+
+
+
+
+
+
+
+Code 15                                  -Return DASD
+
+Input registers - none.
+
+Special output registers -
+
+    AX    - 300h to mean that this is a hard disk.
+
+    CX:DX: - Capacity of the addressed disk. If this is zero, the execution of the SCSI Read 
+           Capacity command failed. This usually means that the disk needs to be format-
+           ted. If the drive has 256 byte sectors, the size information returned is equivalent 
+           to 512 byte sectors.
+
+
+Code 17                             Return Inquiry Information
+
+Input registers - AL=00-Subfunction. ES:BX - pointer to buffer where Inquiry string to be placed. 
+Ch-Number of bytes to return. (Not to exceed but could return less.)
+
+Special output registers - none.
+
+Operation:
+
+    A SCSI Inquiry (12h) command is issued to the specified disk. The resultant status of the 
+    command is returned in AH/AL.
+
+    If an error is detected during the Status/Message phase, a SCSI request sense command is 
+    issued and the results returned in AH/AL.
+
+Code 18                             Identify ROM
+
+Input registers - none.
+
+Special output registers -
+
+         AX  - 4321h. This code identifies this as a Future Domain ROM BIOS.
+
+         BH  - Number of disks being supported by this ROM BIOS.
+
+         BL  - Index number for this SCSI disk.
+
+         CH  - ROM Firmware version number. This is 4 for Host adapters using BIOS 
+              1.0-1.2, 4.0 or 6.0, and 5 for host adapters using BIOS 5.0-5.2.
+
+         CL  - Drive type code. This is 10 for host adapters using BIOS 1.0-1.2, 4.0 or 6.0 
+              and 13 for host adapters using BIOS 5.0-5.2.
+Operation:
+
+    The purpose of this command is to locate and identify the address codes that are required for 
+    use of the SCSI disks. The Int 13 calls for the SCSI drives are addressed to the hard drives, 
+    i.e., disk 0 is 80h, disk 1 is 81h,...Note that this addressing includes internal IBM disks as 
+    well as the SCSI disks. This command identifies what the base address is for SCSI disks.
+
+    Assume that there is one internal hard disk and four SCSI disks. Addressing this command 
+    to hard disk address 82h would result in BH=4 and BL=1. That means that there are 4 SCSI 
+    disks and that this is the second disk, i.e., they are numbered 1, 1,... The base address for the 
+    SCSI disks is therefore 82h-1=h1h, or SCSI disk 0 is address 81h, SCSI disk 1 address is 
+    82h,....
+
+    If this command is issued to an IBM disk controller, it will return an error code.
+
+Code 19                                  -Read Drive Capacity
+
+Input registers - none.
+
+Special output registers - Same as for Code 15.
+
+Note:     Future Domain ROM BIOS' write protect removable media drives until this call is 
+         made. This is designed to protect data on removable cartridges until a driver that 
+         understands removable media makes this call.
+
+Operation:
+
+    A SCSI Read Capacity (25h) command is issued to the specified disk. All of the command 
+    bytes are set to zero. The following parameters are then updated in the internal table for the 
+    disk. See Code 1Bh for a complete explanation of the internal table.
+
+    Total Capacity - This is a double work parameter. The capacity is returned as the number of 
+    equivalent 512 byte sectors.
+
+    The number of heads, sectors per track, and cylinders are calculated as follows: The number 
+    of sectors per track is fixed at 17 because there are some RAM BIOS systems which use that 
+    as a fixed assumption and will not work with a different number. The number of cylinders 
+    cannot exceed 1024 as this is the maximum field size. Therefore, the total capacity is divid-
+    ed by 1024 and the result divided by 17. The result is incremented by one and becomes the 
+    number of heads. The new heads value is multiplied by 17 and divided into the total capaci-
+    ty again with the result becoming the total number of cylinders to use. Note that these 
+    numbers will probably not match the physical characteristics of the disk.
+
+Code 1A                            -Read Cylinder Capacity
+
+Input registers - none.
+
+Special output registers - CX:DX is the address of the last logical block of the specified cylinder.
+
+Operation:
+
+
+
+
+
+
+
+    The SCSI Read Capacity (25h) Command is issued to the specified disk with the PMI bit set 
+    in byte 8 bit 0 of the command sequence. Note that not all disks support this operation. It is 
+    sometimes used for incremental formatting of the disk by cylinder and marking defects by 
+    cylinder as on Adaptec controllers.
+
+Code 1B                             -Locate Table 
+
+Input registers - none.
+
+Special output registers - ES:BX points to the internal table maintained for the specified disk.
+
+The table in Host adapters using 1.0-1.2, 4.0 or 6.0 is organized as follows:
+
+      Type     Function
+
+              -Bit 0     Not used
+
+    Char      -Bit 1     is set to cause checking of SCSI bus parity.
+              
+              -Bit 2     set is for 256 byte sectors, else 512.
+
+              - Bit 3    set is for nonstandard sector size.
+
+              -Bit 4     set for removable drives
+
+              -Bit 5     set for non-valid SCSI devices.
+
+              -Bit 6     set for non-direct access SCSI devices.
+
+              -Bit 7     flag used internally by the ROM.
+
+    Int        -Total number of cylinders calculated in Read Capacity.
+
+    Char      -Total number of heads calculated in Read Capacity
+
+    Char      -Sectors per track, set to 17.
+ 
+    Char      -SCSI selection codes. These are determined during the ROM boot process. 
+              Bits 5-3 are the SCSI address of the disk, and bits 2-0 are the LUN of the 
+              drive.
+
+    Char      -Ready flag used internally in the ROM. This must be nonzero for the disk to 
+              be used.
+
+    Char(4)    -The four bytes from the last SCSI Request Sense command that occurred as 
+              a result of an error are saved. This information can be used to assist in further 
+              defining any errors that occur or for diagnostic printouts.
+
+    Char(10)    -The command bytes sent that caused the SCSI Request Sense to be issued. 
+              This is useful for diagnostic help.
+
+
+
+
+
+
+
+
+
+    Long      -Total disk capacity in equivalent 512 byte sectors as returned by the SCSI 
+              Read Capacity command. Note that the Read Capacity command actually 
+              returns the address of the last sector. This is that number +1.
+
+    Char[24]    -Name of the disk manufacturer as returned by the SCSI Inquiry command. 
+              (Not returned in BIOS 6.0.)
+
+The table in the Host adapters using BIOS 5.0-5.2 are organized as follows:
+
+              -Bit 0     Not used
+
+    Char      -Bit 1     is set to cause checking of SCSI bus parity.
+
+              -Bit 2     set is for 256 byte sectors, else 512.
+
+              -Bit 3     set is for nonstandard sector size.
+
+              -Bit 4     set for removable drives.
+
+              -Bit5     set for non valid SCSI drives.
+
+              -Bit 6     Not used
+
+              -Bit 7     Not used
+
+    Int        -Total number of cylinders calculated in Read Capacity.
+
+    Char      -Total number of heads calculated in Read Capacity.
+
+    Char      -Sectors per track, set to 17.
+
+    Char      -SCSI selection codes. These are determined during the ROM boot process. 
+              Bits 5-3 are the SCSI address of the disk, and bits 0-2 are the LUN.
+
+    Long      -Total disk capacity in equivalent 512 byte sectors as returned by the SCSI 
+              Read Capacity command. Note that the Read Capacity command actually 
+              returns the address of the last sector. This is that number +1.
+
+    Note: This command can be used to "unlock the removable drives for Write commands.
+
+Code 1C                            Locate Driver Letter Table
+
+Input registers - none.
+
+    
+Special output registers - ES:BS points to a character array that could be used by utilities or a 
+loadable driver as a table of drive letters. In Host adapters using BIOS 1.0-1.2 and 6.0, this table is 
+26 bytes long and in Host adapters using BIOS 4.0 and 5.0-5.2 the table is 6 bytes long.
+

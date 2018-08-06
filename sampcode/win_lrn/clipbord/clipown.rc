@@ -1,0 +1,6 @@
+#include <style.h>
+
+clipown MENU
+    BEGIN
+	MENUITEM "&Test", 100
+    END

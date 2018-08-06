@@ -1,0 +1,34 @@
+Code 02                                  -Disk Read
+
+Input registers - as defined under general assignment.
+
+Special output registers - none.
+
+Operation:
+
+    Two internal parameters are used to convert the caller's head, sector, and
+    cylinder number to a SCSI logical block number. These parameters are the 
+    heads per cylinder and sectors per track numbers. The source of these 
+    numbers is discussed under Codes 08 and 19. If the drive has 256 byte 
+    sectors, the logical block number and the length are multiplied by two 
+    before being sent to the drive.
+
+    If the SCSI bus is not in an idle condition at the start of the command 
+    execution, an Initialize System (Code 00) is executed and an error return
+    made to the caller.
+
+    A SCSI Read command (08) is issued to the specified disk. The BIOS then 
+    waits for SCSI Request to be asserted. When it is asserted, a check is 
+    made to verify that SCSI C/D is not asserted. If C/D is asserted, 
+    operation proceeds directly to the Status/Message phase.
+
+    Data is transferred in blocks of 512 and 256 bytes, depending on the 
+    drive's sector size. After the request is detected, a sector sized block
+    is transferred to the caller's buffer. If the  transfer is complete,
+    the operation proceeds to the Status/Message phase; otherwise, it waits 
+    again for the SCSI Request line to be asserted.
+
+    If there is an error reported in the Status/Message phase of the
+    operation, the SCSI Request Sense command is issued and the results 
+    returned as an error in AH/AL.
+

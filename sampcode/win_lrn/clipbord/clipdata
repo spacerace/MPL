@@ -1,0 +1,6 @@
+clipdata.obj: clipdata.c
+    cl -c -d -AS -Gsw -Os -Zpe clipdata.c
+
+clipdata.exe: clipdata.obj clipdata.def
+    link4 clipdata,/align:16,/map, slibw/NOE, clipdata.def
+    mapsym clipdata

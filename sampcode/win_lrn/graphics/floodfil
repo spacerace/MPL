@@ -1,0 +1,6 @@
+floodfil.obj: floodfil.c
+    cl -d -c -AS -Gsw -Os -Zpe floodfil.c
+
+floodfil.exe: floodfil.obj floodfil.def
+    link4 floodfil,/align:16,/map,slibw/NOE,floodfil.def
+    mapsym floodfil

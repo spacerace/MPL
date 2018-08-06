@@ -1,0 +1,24 @@
+#include "style.h"
+#include "gnearclr.h"
+
+NearMenu MENU
+BEGIN
+   MENUITEM "&Begin Demo...", ID_NEAR
+END
+
+NEARBOX DIALOG LOADONCALL MOVEABLE DISCARDABLE 101, 6, 131, 75
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+	   CONTROL "Enter RGB Values and Press OK:", -1, "static", SS_CENTER | WS_CHILD, 4, 9, 126, 9
+	   CONTROL "", ID_REDIT, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 27, 26, 17, 12
+	   CONTROL "", ID_GEDIT, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 56, 26, 17, 12
+	   CONTROL "", ID_BEDIT, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 85, 26, 17, 12
+	   CONTROL "Red", -1, "static", SS_CENTER | WS_CHILD, 25, 42, 21, 10
+	   CONTROL "Green", -1, "static", SS_CENTER | WS_CHILD, 53, 42, 23, 10
+	   CONTROL "Blue", -1, "static", SS_CENTER | WS_CHILD, 83, 42, 21, 10
+	   CONTROL "Ok", ID_MYOK, "button", BS_DEFPUSHBUTTON | WS_TABSTOP | WS_CHILD, 37, 54, 24, 14
+	   CONTROL "Done", ID_DONE, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 67, 54, 24, 14
+END
+
+
+

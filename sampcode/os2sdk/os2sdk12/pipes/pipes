@@ -1,0 +1,30 @@
+#
+# Makefile for the pipes demonstration routines.
+#
+INC=..\..\..\include
+CFLAGS=-Zip -Ox -I$(INC) -c
+
+.c.obj:
+        cl $(CFLAGS) $*.c
+
+all: pipes.exe pp.exe pc.exe pchild.exe
+
+pp.obj: pp.c
+
+pc.obj: pc.c
+
+pchild.obj: pchild.c
+
+pipes.obj: pipes.c
+
+pp.exe: pp.obj
+        link pp,,,/nod:slibce slibcep;
+
+pc.exe: pc.obj
+        link pc,,,/nod:slibce slibcep;
+
+pchild.exe: pchild.obj
+        link pchild,,,/nod:slibce slibcep;
+
+pipes.exe: pipes.obj
+        link pipes,,,/nod:slibce slibcep;

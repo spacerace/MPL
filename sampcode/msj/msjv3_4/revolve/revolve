@@ -1,0 +1,9 @@
+#-------------------
+# REVOLVE make file
+#-------------------
+
+revolve.obj : revolve.c
+     cl -c -G2sw -W3 revolve.c
+
+revolve.exe : revolve.obj revolve.def
+     link revolve, /align:16, NUL, os2, revolve

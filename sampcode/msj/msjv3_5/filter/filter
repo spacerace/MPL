@@ -1,0 +1,11 @@
+#
+# makefile for the filter extensions
+#
+filter.obj: filter.c
+	cl /c /Gs /Asfu filter.c
+
+filter.mxt: filter.obj
+	cl /Lr /AC /Fefilter.mxt exthdr.obj filter.obj
+
+filter.dll: filter.obj
+	cl /Lp /AC /Fefilter.dll exthdrp.obj filter.obj skel.def

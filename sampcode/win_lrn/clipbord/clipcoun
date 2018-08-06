@@ -1,0 +1,6 @@
+clipcoun.obj: clipcoun.c
+    cl -c -d -AS -Gsw -Os -Zpe clipcoun.c
+
+clipcoun.exe: clipcoun.obj clipcoun.def
+    link4 clipcoun,/align:16,/map, slibw/NOE, clipcoun.def
+    mapsym clipcoun

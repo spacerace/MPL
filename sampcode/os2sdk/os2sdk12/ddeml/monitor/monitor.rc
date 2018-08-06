@@ -1,0 +1,21 @@
+#include <os2.h>
+#include "res.h"
+
+ICON    IDR_MAIN        monitor.ico
+
+MENU    IDR_MAIN        PRELOAD
+BEGIN
+    SUBMENU         "~Output",      IDSM_OUTPUT
+    BEGIN
+        MENUITEM    "~File(monitor.txt)\tCtrl-F",   IDM_OUTPUT_FILE
+        MENUITEM    "~Debug Terminal\tCtrl-D",      IDM_OUTPUT_DEBUG
+        MENUITEM    "~Screen\tCtrl-S",              IDM_OUTPUT_SCREEN
+    END
+END
+
+ACCELTABLE IDR_MAIN
+BEGIN
+    "f",        IDM_OUTPUT_FILE ,       CONTROL
+    "d",        IDM_OUTPUT_DEBUG,       CONTROL
+    "s",        IDM_OUTPUT_SCREEN,      CONTROL
+END

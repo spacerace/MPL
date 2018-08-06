@@ -1,0 +1,6 @@
+#include <style.h>
+
+PtVisibleMenu	    MENU
+BEGIN
+  MENUITEM    "Visible?"	 1
+END

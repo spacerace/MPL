@@ -1,0 +1,4 @@
+CFLAGS=-c -u -AS -FPa -Gsw -Os -Zep 
+
+spectrum.obj: spectrum.c spectrum.h
+	cl $(CFLAGS) spectrum.c

@@ -1,0 +1,28 @@
+LIBRARY Example
+
+DESCRIPTION 'Examples using Call/Register with Excel'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    FIXED SINGLE
+
+HEAPSIZE  4096
+STACKSIZE 0
+
+EXPORTS
+
+    TestBool   @1
+    TestDouble @2
+    TestChar   @3
+    TestByte   @4
+    TestFloatBuff @5
+    TestZBuff  @6
+    TestByteBuff @7
+    TestUInt   @8
+    TestInt    @9
+    TestLong   @10
+    TestAddK   @11
+    ChangeK    @12
+
+

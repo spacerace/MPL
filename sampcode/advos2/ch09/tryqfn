@@ -1,0 +1,9 @@
+qfn.obj : qfn.asm
+  masm qfn;
+
+tryqfn.obj : tryqfn.asm
+  masm tryqfn;
+
+tryqfn.exe : tryqfn.obj qfn.obj tryqfn tryqfn.def
+  link tryqfn+qfn,,,os2,tryqfn.def
+

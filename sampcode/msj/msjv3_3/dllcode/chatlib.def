@@ -1,0 +1,17 @@
+; Figure 8
+; ========
+
+
+; CHATLIB DEF File
+; ================
+
+
+LIBRARY CHATLIB INITGLOBAL
+
+DATA SINGLE SHARED
+
+EXPORTS login
+EXPORTS get_msg_cnt
+EXPORTS send_msg
+EXPORTS logout
+EXPORTS get_msg

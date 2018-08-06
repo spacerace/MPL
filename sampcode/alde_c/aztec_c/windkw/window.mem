@@ -1,0 +1,249 @@
+/************************************************************************
+* vwrtch(), write a character and attribute to a specific XY location	*
+*	on the screen. The attribute is the high byte of the character.	*
+************************************************************************/
+
+vwrtch(x, y, c)
+int		x, y, c;
+
+/************************************************************************
+* vrdch(), return the character and attribute at screen XY		*
+************************************************************************/
+
+vrdch(x, y)
+int		x, y;
+
+/************************************************************************
+* draw_row(), output a row of one character/attribute at XY		*
+************************************************************************/
+
+draw_row(x, y, count, c)
+int		x, y, count,c;
+
+/************************************************************************
+* wopen(), 	open a window of given size with upper left corner at	*
+*		XY. Allocates buffers for the window control block and	*
+*		screen save buffers. Copies overwritten screen to the	*
+*		buffer. Draws the blank window. Returns the address of	*
+*		the window control block or NULL if no buffer space.	*
+*	NOTE:	The border attributes are given in the structure 	*
+*		pointer bord and can be different than the window's	*
+*		contents attribute.					*
+************************************************************************/
+
+WINDOW *wopen(wbd, x, y, width, height, attrib)
+BORDER *wbd;
+int	x, y, width, height, attrib;
+
+/************************************************************************
+* wclose(), erase the window at the window control block.		*
+*	Must be the "top" window if overlapping windows are		*
+*	used. "Tiled" windows could be removed randomly.		*
+************************************************************************/
+
+wclose(wn)
+WINDOW *wn;
+
+/************************************************************************
+* wputstr(), print a string inside a window using cx, cy in WCB		*
+************************************************************************/
+
+wputstr(wn, string)
+register WINDOW *wn;
+register char	*string;
+
+/************************************************************************
+* wputs(), print a string inside a window using cx, cy in WCB. 		*
+*	Note that the CR, LF, BS, TAB, and DEL keys are processed.	*
+************************************************************************/
+
+wputs(wn, string)
+register WINDOW *wn;
+register char	*string;
+
+/************************************************************************
+* wputch(), print a character inside a window using cx, cy in WCB	*
+*	while processing for CR, LF, BS, TAB, and DEL.			*
+************************************************************************/
+
+wputch(wn, c)
+register WINDOW *wn;
+char	c;
+
+/************************************************************************
+* wputchar(), print a character as is where ever the cursor might be 	*
+* 	inside a window using cx, cy in WCB.				*
+*	Note that the negitive value of cx is handled and that the	*
+*	   window is not scrolled.					*
+************************************************************************/
+
+wputchar(wn, c)
+register WINDOW *wn;
+char	c;
+
+
+/************************************************************************
+* wins_row(), insert a row of blanks by scrolling the lower portion	*
+*	of a window down.						*
+*	The current (cy) row is inserted.				*
+************************************************************************/
+
+wins_row(wn)
+register WINDOW *wn;
+
+
+/************************************************************************
+* wdel_row(), delete a row by scrolling the lower portion of a window 	*
+*	up and inserting a row of blanks at the bottom row		*
+*	The current (cy) row is deleted.				*
+************************************************************************/
+
+wdel_row(wn)
+register WINDOW *wn;
+
+
+/************************************************************************
+* wcls(), clear the "active" part of a window				*
+*	and "home" internal text cursor					*
+************************************************************************/
+
+wcls(wn)
+register WINDOW *wn;
+
+/************************************************************************
+* wceol(), clear to end of the line of the window.			*
+************************************************************************/
+
+wceol(wn)
+register WINDOW *wn;
+
+/************************************************************************
+* wcursor(), cursor controls for a window.				*
+************************************************************************/
+
+wcursor(wn,c)
+register WINDOW *wn;
+
+
+/************************************************************************
+* wdelch(), Deletes a character at the current window cursor position.	*
+************************************************************************/
+
+wdelch(wn)
+register WINDOW *wn;
+
+
+/************************************************************************
+* winsch(), Inserts a character at the current window cursor position.	*
+************************************************************************/
+
+winsch(wn,c)
+register WINDOW *wn;
+int c;
+
+/************************************************************************
+* wgets(), Gets a string of characters at the current  window cursor	*
+*	position.  The number of characters to obtain cnt or reaching	*
+*	the end of the window terminates the function.  The number of	*
+*	charaters retrived is returned.					* 
+************************************************************************/
+
+wgets(wn,s,cnt)
+register WINDOW *wn;
+char *s;		/* Where to place the null terminated string.	*/
+int cnt;		/* Number of character to retrive. 		*/
+
+/************************************************************************
+* wscroll(), Scrolls the window up one line.				*
+************************************************************************/
+
+wscroll(wn)
+register WINDOW *wn;
+
+/************************************************************************
+* wbound(), Check to see if cursor is within the window.		*
+*	Returns a code indicating whether the cursor is in the window.  *
+************************************************************************/
+
+wbound(wn)
+register WINDOW *wn;
+
+
+/************************************************************************
+* wgetch(), Returns the character at window cursor location or the	*
+*	boundry code if the location is not within the window.		*
+************************************************************************/
+
+wgetch(wn)
+register WINDOW *wn;
+
+/************************************************************************
+* set_wcxy(), Sets the relative window cursor to the give x,y location. *
+*	If either x or y is zero the cursor is moved in the given axis  *
+* 	the number of spaces given, where positive x is to the right 	*
+*	and positive y is down.						*
+*	Note that the home position for a window is 1,1.		*
+************************************************************************/
+
+set_wcxy(wn,x,y)
+register WINDOW *wn;
+int x,y;
+
+
+/************************************************************************
+* get_wcxy(), Gets the relative window cursor.				*
+*	x = get_wcur() & 0xff, and y = get_wcur() >> 8			*
+*	Note that the home position for a window is 1,1.		*
+************************************************************************/
+
+get_wcxy(wn)
+register WINDOW *wn;
+
+/************************************************************************
+* set_cxy(), Sets the screen cursor to the give x,y location. 		*
+*	Note that the home position is 0,0.				*
+************************************************************************/
+
+set_cxy(x,y)
+register int x,y;
+
+
+/************************************************************************
+* get_cxy(), Gets the screen cursor location of page 0.			*
+*	x = get_wcur() & 0xff, and y = get_wcur() >> 8			*
+*	Note that the home position is 0,0.				*
+************************************************************************/
+
+get_cxy()
+
+/************************************************************************
+* get_page(), Gets the current video page being used.
+************************************************************************/
+
+get_page()
+
+/************************************************************************
+* set_page(), Sets the active video page and udates page.		*
+************************************************************************/
+
+set_page(n)
+char n;
+
+/************************************************************************
+* wprintf(), Works like printf for a window.				*
+************************************************************************/
+
+wprintf(wn,cs,a,b,c,d,e,f,g,h,i,j,k,l,m,n)
+WINDOW *wn;
+char *cs;
+
+
+/************************************************************************
+* wprinta(), Works like wprintf with the addtion of the x,y		*
+*	position.							*
+************************************************************************/
+
+wprinta(x,y,wn,cs,a,b,c,d,e,f,g,h,i,j,k,l,m,n)
+int x,y;
+WINDOW *wn;
+char *cs;

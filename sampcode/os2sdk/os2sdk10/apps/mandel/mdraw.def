@@ -1,0 +1,13 @@
+NAME
+DESCRIPTION  'Mandelbrot drawing program for EGA'
+PROTMODE
+CODE	PRELOAD
+SEGMENTS _SCRIO CLASS 'CODE' IOPL
+	EXPORTS SetDVideo
+	EXPORTS SetEVideo
+	EXPORTS SetScan 3
+	EXPORTS SetScanClear
+	EXPORTS SetScanRestore 2
+	EXPORTS SetScanRFont  1
+	EXPORTS SetScanSave 2
+	EXPORTS SetScanSFont  1

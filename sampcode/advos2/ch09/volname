@@ -1,0 +1,5 @@
+volname.obj : volname.asm
+ masm volname;
+
+volname.exe : volname.obj volname.def
+ link volname,,,os2,volname

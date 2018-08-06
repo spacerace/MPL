@@ -1,0 +1,24 @@
+#===================================================================
+#
+#   Messenger Application Make file
+#
+#===================================================================
+
+CC  = cl -W3 -J -c -u -Asnw -Gsc2 -Zep -DSLOOP
+NOBOGUS =
+
+.c.obj:
+    $(CC) $*.c $(NOBOGUS)
+
+monitor.obj: monitor.c ..\ddeml.h res.h
+
+testsubs.obj: testsubs.c
+
+monitor.res:    monitor.rc res.h
+        rc -r monitor.rc
+
+monitor.exe: monitor.obj testsubs.obj monitor.def monitor.res ..\ddeml.lib 
+    link monitor testsubs, monitor, monitor/map, os2 ..\ddeml slibcep/nod, monitor.def
+    rc monitor.res
+    mapsym monitor
+

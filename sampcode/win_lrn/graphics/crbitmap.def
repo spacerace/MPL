@@ -1,0 +1,22 @@
+;Module definition file for CreateBitMap
+
+NAME	CrBitMap	; application's module name
+
+DESCRIPTION 'Sample Microsoft Windows Application'
+
+STUB	'WINSTUB.EXE'	; make sure it doesn't run w/o windows
+
+CODE	MOVEABLE	; code can be moved in memory
+
+;DATA must be MULTIPLE if program can be invoked more than once
+DATA	MOVEABLE MULTIPLE
+
+HEAPSIZE 1024
+STACKSIZE 4096		; recommended minimum for windows applications
+
+; All functions which will be called by any other Windows routine
+; must be exported
+EXPORTS
+    CreateBitMapWndProc @1	; name of window processing function
+    About @2		; name of "About" processing function
+ 

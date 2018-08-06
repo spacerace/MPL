@@ -1,0 +1,15 @@
+NAME    snap WINDOWAPI
+
+DESCRIPTION 'SNAP Application'
+
+STUB 'OS2STUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE    1024        ; Must be non-zero to use Local memory manager
+STACKSIZE   4096        ; Must be non-zero for SS == DS
+                        ; suggest 4k as minimum stacksize
+
+SEGMENTS
+    _TEXT   PRELOAD MOVEABLE

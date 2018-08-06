@@ -1,0 +1,17 @@
+#-----------------
+# PMCAP make file
+#-----------------
+all:pmcap.exe
+
+pmcap.obj : pmcap.c pmcap.h
+     cl -AL -c -G2s -W3 pmcap.c
+
+pmcap2.obj : pmcap2.c pmcap.h
+     cl -AL -c -G2s -W3 pmcap2.c
+
+pmcap.res : pmcap.rc pmcap.h
+     rc -r pmcap
+
+pmcap.exe : pmcap.obj pmcap2.obj pmcap.def pmcap.res
+     link pmcap pmcap2, /align:16, pmcap.map/map, os2 llibcep /NOD, pmcap
+     rc pmcap.res

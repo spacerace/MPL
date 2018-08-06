@@ -1,0 +1,35 @@
+#
+# Makefile for the Atari ST - Megamax C compiler
+#
+
+LIBS = \megamax\regexp.lib
+
+CFLAGS = -DMEGAMAX
+
+#	Megamax rule
+.c.o:
+	mmcc $(CFLAGS) $<
+	mmimp $*.o
+	mmlib rv vi.lib $*.o
+
+MACH=	tos.o
+
+OBJ=	main.o edit.o linefunc.o normal.o cmdline.o hexchars.o \
+	misccmds.o help.o ptrfunc.o search.o alloc.o \
+	mark.o screen.o fileio.o param.o $(MACH)
+
+all : stevie.ttp
+
+stevie.ttp : $(OBJ)
+	$(LINKER) vi.lib $(LIBS) -o stevie.ttp
+
+clean :
+	$(RM) $(OBJ) vi.lib
+
+arc :
+	arc a vi.arc alloc.c ascii.h cmdline.c edit.c
+	arc a vi.arc fileio.c help.c hexchars.c keymap.h linefunc.c
+	arc a vi.arc main.c makefile.os2 makefile.tos makefile.usg mark.c
+	arc a vi.arc misccmds.c normal.c os2.c param.c param.h porting.doc
+	arc a vi.arc ptrfunc.c readme screen.c search.c source.doc stevie.doc
+	arc a vi.arc stevie.h term.h tos.c unix.c

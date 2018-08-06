@@ -1,0 +1,20 @@
+NAME            DdeApp
+DESCRIPTION     'DDE Dummy Application'
+STUB            'WINSTUB.EXE'
+
+DATA            MOVEABLE
+HEAPSIZE        2048
+STACKSIZE       8192
+
+SEGMENTS
+        _TEXT           MOVEABLE PRELOAD
+
+EXPORTS
+        DdeWndProc      @1
+        InitiateDlg     @3
+        ExecuteDlg      @4
+        TermDlg         @5
+        RequestDlg      @6
+        UnadviseDlg     @7
+        PokeDlg         @8
+

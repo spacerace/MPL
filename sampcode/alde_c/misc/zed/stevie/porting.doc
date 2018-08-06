@@ -1,0 +1,69 @@
+
+		 Release Notes for STEVIE - Version 3.10
+
+		   Atari ST Editor for VI Enthusiasts
+
+			        Porting
+
+
+			      Tony Andrews
+
+			 	 3/6/88
+
+
+	Porting the editor is a relatively simple task. Most of the
+code is pretty machine-independent. For each environment, there is
+a file of routines that perform various low-level operations that
+tend to vary a lot from one machine to another. Another file contains
+the escape sequences to be used for each machine.
+
+	The machine-dependent files currently used are:
+
+tos.c:	Atari ST - ifdef for either Megamax or Alcyon
+
+unix.c:	UNIX System V
+
+os2.c:	Microsoft OS/2
+
+
+	Each of these files are around 150 lines long and deal with
+low-level issues like character I/O to the terminal, terminal
+initialization, cursor addressing, and so on. There are different
+tradeoffs to be made depending on the environment. For example, the
+UNIX version buffers terminal output because of the relatively high
+overhead of system calls. A quick look at the files will make it clear
+what needs to be done in a new environment.
+
+	Terminal escape sequences are in the file "term.h". These are
+defined statically, for the time being. There is some discussion in
+term.h regarding which sequences are optional and which are not. The
+editor is somewhat flexible in dealing with a lack of terminal
+capabilities.
+
+	Because not all C compilers support command line macro definitions,
+the #define's for system-specific macros are placed at the beginning of the
+file 'stevie.h'. If you port to a new system, add another line there to
+define the macro you choose for your port.
+
+	The basic process for doing a new port is:
+
+	1. Come up with a macro name to use when ifdef'ing your system-
+	   specific changes. Add a line at the top of 'stevie.h' to define
+	   the macro name you've chosen.
+
+	2. Look at unix.c, tos.c, and os2.c and copy the one that comes
+	   closest to working on your system. Then modify your new file
+	   as needed.
+
+	3. Look at term.h and edit the file appropriately adding a new
+	   set of escape sequence definitions for your system.
+
+	4. If you haven't already, get a copy of Henry Spencer's regular
+	   expression library and compile it. This has been very simple
+	   every time I've done it.
+
+	5. Compiling and debug the editor.
+
+
+	In most cases it should really be that simple. I've done two
+ports (UNIX and OS/2) and both were complete in just a couple of hours.

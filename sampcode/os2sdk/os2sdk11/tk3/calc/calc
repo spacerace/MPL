@@ -1,0 +1,39 @@
+#===================================================================
+#
+#   Calc Application Make file
+#
+#===================================================================
+#
+# Default compilation macros
+#
+
+CC  = cl -W3 -DLINT_ARGS -u -c -Asnd -G2sc -Od -Zi
+
+#===================================================================
+#
+# Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+#===================================================================
+#
+# Dependencies
+#
+#===================================================================
+
+calc.res: calc calc.rc calc.ico calc.h calc.dlg finger.ptr
+
+calc.obj: calc calc.c calc.h
+
+calcmath.obj: calc calcmath.c calc.h
+
+calc.exe: calc calc.obj calcmath.obj calc.res calc.def
+    link calc calcmath, calc, calc/nod/map/co, os2 slibce, calc.def
+    rc calc.res
+    mapsym calc

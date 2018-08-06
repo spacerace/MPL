@@ -1,0 +1,7 @@
+shwcaret.obj: shwcaret.c
+  cl -c -Fs -W2 -AS -Gsw -Od -Zped shwcaret.c
+
+shwcaret.exe: shwcaret.obj shwcaret.def
+    link4 shwcaret,/align:16,,slibw,shwcaret.def
+    del shwcaret.obj
+    del shwcaret.map

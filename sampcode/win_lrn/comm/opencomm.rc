@@ -1,0 +1,4 @@
+#include <style.h>
+
+WindowIcon ICON opencomm.ico
+

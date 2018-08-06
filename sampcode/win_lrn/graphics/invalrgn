@@ -1,0 +1,7 @@
+
+invalrgn.obj: invalrgn.c
+   cl -c -W2 -AS -Gsw -Od -Zped invalrgn.c
+
+invalrgn.exe: invalrgn.obj invalrgn.def
+   link4 invalrgn,/align:16,/map/li,slibw/NOE,invalrgn.def
+   mapsym invalrgn

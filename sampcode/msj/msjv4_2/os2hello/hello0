@@ -1,0 +1,13 @@
+#
+# make file for hello0.c
+#
+
+INCLUDE=\os2\include\mt
+LIB=\os2\lib
+COPT=/Lp /W3 /Zp /Zie /Zl /G2s /I$(INCLUDE) /Alfw
+
+hello0.exe: hello0.c hello0
+	cl $(COPT) hello0.c /link /co llibcmt
+
+
+

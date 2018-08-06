@@ -1,0 +1,16 @@
+#--------------------
+# RESOURCE make file
+#--------------------
+
+resource.obj : resource.c resource.h
+     cl -c -G2sw -W3 resource.c
+
+resource.res : resource.rc resource.h resource.ico resource.ptr
+     rc -r resource
+
+resource.exe : resource.obj resource.def
+     link resource, /align:16, NUL, os2, resource
+     rc resource.res
+
+resource.exe : resource.res
+     rc resource.res

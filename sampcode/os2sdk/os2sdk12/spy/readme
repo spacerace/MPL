@@ -1,0 +1,54 @@
+The spy program and dynamic link library, is a sample application that
+hooks the HK_INPUT and/or HK_SENDMSG hooks, and spys on what messages
+are sent to which window.  
+
+The application currently has two threads:
+  1) The main thread controls the user interface.
+  2) The second thread waits for messages from the hooks.
+
+This tool is very useful for debugging, and looks up symbols
+from symbol files with the "Spy...List Near Symbol..." selection.
+This is "context sensitive" -- given the appropriate PID, you can
+identify symbols given that context.  For example, you could run
+another application, look at the window for that application
+(using the Windows...Window List... option), get the window's PID,
+and perhaps print out where in the window procedure you are (by
+looking in the Pfnwp: field).
+
+Note:  Since the "List Near Symbol" dialog box is modeless, you can move
+it off to the side while you work on something else (although its position
+is saved relative to the SPY main window).
+
+
+File List:
+  message.c	- Processes Message dialog box
+  options.c	- Processes Options style dialog boxes
+  queues.c	- Processes "Message Queue List" dialog
+  readme	- This file
+  spy		- Make file for the program and the DLL
+  spy.c		- The source to the executable program
+  spy.def	- Definition file for executable program
+  spy.h		- Headers
+  spy.ico	- The icon for the application
+  spy.rc	- The resource file
+  spydlgs.dlg	- Dialog definitions
+  spyhook	- Makefile for the SPYHOOK library
+  spyhook.c	- Source to the DLL
+  spyhook.def	- Definition file for the DLL
+  spyhook.h	- Header file for the DLL
+  spyhstrt.asm	- Startup code for the DLL
+  spytbls.c	- Output Message Tables for SPY program
+  spyutil.asm	- Assembly language utility routines
+  symbol.c	- Code for displaying symbols
+  symbol.h	- Headers needed to read .SYM symbol files
+  window.c	- Spy Window dialog processing
+
+  spyhook.h	- include file gets copied to ..\include
+  spyhook.lib	- import library gets copied to ..\lib (and deleted)
+  spyhook.dll	- dynamic link library gets copied to ..\dll (and deleted)
+
+Note:   This application needs "selector.h", which should be in ..\include.
+
+Bugs:	Spy...List Near Symbol produces a dialog box with a size border.
+	However, the controls are not always redrawn as expected if you
+	change the size of the dialog box.

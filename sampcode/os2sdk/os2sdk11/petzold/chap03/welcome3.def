@@ -1,0 +1,12 @@
+;-------------------------------------
+; WELCOME3.DEF module definition file
+;-------------------------------------
+
+NAME           WELCOME3  WINDOWAPI
+
+DESCRIPTION    'Creates Top-Level and Two Children (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc
+               ChildWndProc

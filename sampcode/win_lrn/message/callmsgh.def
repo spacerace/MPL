@@ -1,0 +1,11 @@
+LIBRARY        CALLMSGH
+DESCRIPTION    'Sample Program'
+STUB           'WINSTUB.EXE'
+CODE           FIXED
+DATA           MOVEABLE SINGLE
+HEAPSIZE       128
+EXPORTS        InitHook                @1
+               KillHook                @2
+               CallMsgMessageFilter    @3
+
+

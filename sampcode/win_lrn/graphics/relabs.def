@@ -1,0 +1,9 @@
+NAME           relabs
+DESCRIPTION    'This program demonstrates the functions SetRelAbs and GetRelAbs'
+STUB           'WINSTUB.EXE'
+CODE           MOVEABLE
+DATA           MOVEABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        WndProc
+

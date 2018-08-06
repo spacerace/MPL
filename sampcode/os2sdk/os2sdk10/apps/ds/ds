@@ -1,0 +1,29 @@
+#   Definitions
+
+INCLUDE= ..\..\..\include
+LIB=..\..\..\lib
+CFLAGS= -c -Lp -Ox -Zp -G2 -I$(INCLUDE)
+
+OBJS   = ds.obj vars.obj display.obj help.obj option.obj tree.obj file.obj
+
+#   Rules
+
+.c.obj:
+	cl $(CFLAGS) $*.c
+
+ds.obj: 	ds.c ds.h vars.h
+
+display.obj:	display.c ds.h vars.h
+
+file.obj:	file.c ds.h vars.h
+
+help.obj:	help.c ds.h vars.h
+
+option.obj:	option.c ds.h vars.h
+
+tree.obj:	tree.c ds.h vars.h
+
+vars.obj:	vars.c ds.h
+
+ds.exe:	$(OBJS)
+	cl -Lp $(OBJS) -Feds.exe

@@ -1,0 +1,812 @@
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+
+     Commercial Announcement:
+
+         This  product  is  offered  as user-supported software.  If you
+         find it useful, please send your (printed)  name  and  address,
+         the version number of your copy, and $10 to:
+
+                    Brand Name Software
+                    1365 N. Broadway
+                    Suite 111
+                    Walnut Creek, CA 94596
+
+         This  will  make  you  a  'registered  user'  of  BNSLIB.  As a
+         registered user, you will be notified by mail  (electronic,  if
+         possible)  of any major updates to the program.  Also, you will
+         have the satisfaction of knowing you are supporting development
+         of future, improved, versions of this product.
+
+         Support  for this product is available to REGISTERED USERS ONLY
+         via CompuServe by leaving a message on the Programmers' SIG (GO
+         PROGSIG)  for  *sysop (the asterisk is important) or by leaving
+         an EasyPlex (electronic mail) message for User  ID  76703,1005.
+         If  you  have  a  MCI Mail account, you can also get support by
+         leaving an electronic message for BPAULSEN (CompuServe  support
+         will  be faster -- the MCI mailbox is only checked about once a
+         week, CompuServe is checked at least once per day, seven days a
+         week).
+
+
+     A Simple License:
+
+         BNSLIB  is  licensed, at no charge, subject  to  the  following
+         terms and conditions:
+
+         1.  You may copy this program and its related  documentation as
+             many times as you wish, provided that the copyright  notice
+             and  disclaimers  of  warranty  are reproduced in full each
+             time.
+
+         2.  Copies of this  program  may  not  be  sold  without  prior
+             written consent of Brand Name Software.
+
+         3.  The program and  its  related  documentation  are  supplied
+             as-is. Brand Name Software hereby disclaims all warranties,
+             express  or  implied,  including,  without limitation,  the
+             warranties  of   merchantability  and   the  warranties  of
+             fitness for any purpose.
+
+
+
+                                   - Page 1 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+
+     Introduction:
+
+         Brand Name Software's Object Module Library Manager (BNSLIB) is
+         designed expressly for use with Borland  International's  TLINK
+         linkage  editor.   BNSLIB  is  command-line  and  response-file
+         syntax compatible with  Microsoft's  Library  Manager,  MS LIB.
+         Thus,  if you have MS LIB command BATCH files or response files
+         set up  to  do routine maintenance,  they should  work  without
+         modification (except changing the program name) with BNSLIB.
+
+         BNSLIB  can  copy  object  modules  out of libraries created by
+         MS LIB, examine MS LIB libraries and convert  MS LIB  libraries
+         to  Borland's QLIB format (hereafter referred to as the 'BNSLIB
+         format').  In addition, BNSLIB allows you to examine individual
+         object module files and provides a  flexible report  format for
+         examining both standalone object module files and libraries.
+
+          Specifically, the features of BNSLIB are:
+
+              o Add object module(s) to a BNSLIB format library.  If the
+                named  library does not exist, you are asked if you want
+                to create a new library:  thus, library creation is just
+                a special case of adding an object module to a library.
+
+              o Delete object  module(s)  from a BNSLIB format  library.
+                When the last object module is deleted from the library,
+                an 'empty library' remains (as well as the previous .BAK
+                image of that library).
+
+              o Copy object module(s) from a BNSLIB  _or_  MS LIB format
+                library.  The named modules are copied out to individual
+                .OBJ files with the module name as the file's root name.
+
+              o Combine one or more BNSLIB _or_  MS LIB format libraries
+                (the result is a BNSLIB format library).
+
+              o Convert  libraries created with MS LIB to BNSLIB format.
+                BNSLIB  format  libraries  are about  25%  smaller  than
+                MS LIB format libraries and they are processed  somewhat
+                faster by TLINK.
+
+              o Examine whole libraries (BNSLIB  _or_  MS LIB format) or
+                individual object module files (produced  by  any  Intel
+                object  format  translator:  Turbo C, MASM, Microsoft C,
+                etc.).
+
+         As  you  can see,  BNSLIB  does everything  for  BNSLIB  format
+         libraries MS LIB does for MS LIB  format  libraries,  with  the
+         same  command  line  or response  file syntax.   The additional
+
+                                   - Page 2 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+         features are accessed by way of command line extensions  (which
+         also  work  via response file input).  Thus, if you are already
+         familiar with MS LIB operation, you can skip the first part  of
+         this  Guide  and proceed directly to Part 2, "BNSLIB Extensions
+         to MS LIB."
+
+         If you're really anxious to get started using  BNSLIB,  you may
+         want to just take a look at the on-line help available.   There
+         are several screens of on-line help.   To access  them,  simply
+         type BNSLIB at the DOS command prompt.
+
+         BNSLIB  requires an  IBM  PC/XT/AT  or close compatible with  a
+         minimum of 384K _free_ conventional  memory.   BNSLIB  uses any
+         available conventional memory  (up to 640K)  for its workspace.
+         The larger the  library  (or object module)  being operated on,
+         the more conventional memory BNSLIB requires.  Thus, should the
+         program abort  with  a  "memory allocation error" message,  try
+         freeing up some conventional memory, if possible.   A hard disk
+         is highly  recommended,  but not necessary.   BNSLIB is written
+         entirely in  Turbo  C  (no  ASM,  in-line or otherwise) and the
+         object modules used to compile BNSLIB.EXE are kept in a library
+         created and maintained with BNSLIB.
+
+
+
+     1. BNSLIB Commands
+
+          1.1 General Command Format
+
+              The general format of the command line for BNSLIB is:
+
+                bnslib <ol> [/PAGESIZE:<n>] [cmds][,[<lfile>]][,nl]] [;]
+
+              Where:
+
+                    ol    =  Original library file name.   If no filname
+                             extension  is  given,  BNSLIB  assumes   an
+                             extension of ".LIB".  A full directory path
+                             may be specified.   This  is  the  file  to
+                             which <cmds>, if any, will apply.
+
+                    n     =  A number (power of 2, range 16 - 32768). If
+                             specified,   the   /PAGESIZE:    (or   /P:)
+                             parameter is ignored by BNSLIB.
+
+                    cmds  =  The  command   list  (explained  in  detail
+                             below).  Optional.  If no command  list  is
+                             specified,  BNSLIB does a consistency check
+                             of the library and produces  a  report  (as
+                             discussed  in  Part  2,  below)  if  one is
+
+                                   - Page 3 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+                             requested.  The commands in  the  list  are
+                             separated by one or more spaces, tabs or by
+                             single commas.
+
+                    lfile =  This  is  the  name  of the output  file or
+                             device for non-error messages from  BNSLIB.
+                             To  see  BNSLIB  messages  on  the console,
+                             you'd specify 'con' here (after  the  comma
+                             which   is  required   if  a   <lfile>   is
+                             specified).
+
+                    nl    =  An  optional new  library  filename.    The
+                             results of applying <cmds> to the  original
+                             library  are  written  to this file (except
+                             for the copy operation), if specified.   If
+                             not  specified,  the  original  library  is
+                             saved as <ol>.BAK before  any  changes  are
+                             applied to it.
+
+                             Note the required comma when this parameter
+                             is specified.   If  you  wish  to specify a
+                             new  library  name,   but  do  not  wish to
+                             specify a <lfile>, follow the  last command
+                             (or  the  original  library  name,  or  the
+                             /PAGESIZE:  parameter)   with   two  commas
+                             followed by the new library name.
+
+              The semi-colon terminates the  command  line  (as  does  a
+              CR/LF  pair).   It  does  _not_  result in prompts for any
+              remaining  parameters  to  be  displayed  (as it does with
+              MS LIB).
+
+              The general format for the response file for BNSLIB is:
+
+                    record #1:   <ol> [/PAGESIZE:<n>]
+                    record #2:   <cmd>[,|<space>|<tab>]... [&]
+                    record #n:   <lfile>
+                    record #n+1: <nl>
+
+              Where <ol>, <cmd>, <lfile>  and  <nl>  mean  the  same  as
+              described above.   The elipses (...)  following <cmd> mean
+              that more than one command may be specified via a response
+              file.   Furthermore,  the command list may be continued on
+              more than one consecutive line in the file,  provided  the
+              last  character  on  each   line  being  continued  is  an
+              ampersand (&). If a semi-colon (;) appears anywhere in the
+              file,  input  from  the response file is halted and BNSLIB
+              begins executing.   Again, the semi-colon does _not_ cause
+              prompts for any remaining parameters to be displayed.
+
+
+                                   - Page 4 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+
+          1.2 Adding Object Modules to a Library or Creating a Library
+
+              The  command  to  add  an object module to a library is as
+              follows:
+
+                    +<objmodname>
+
+              Where <objmodname> is the file specification of the object
+              module  filename  to  be added to the library.  A filename
+              extension of .OBJ is assumed, but any extension  specified
+              will  be  used.   The  file to be added must reside in the
+              current working directory.
+
+              The full command line syntax to  add  one  object  module,
+              named  MYOBJ.OBJ, to a library named MYLIB.LIB would be as
+              follows:
+
+                    bnslib mylib +myobj
+
+              It  is  also possible to specify a list file (for progress
+              messages) and/or a new library file.   If  a  new  library
+              file  is  specified,  the original library plus the object
+              modules contained in the file(s) specified via the command
+              list added will be written to the new library.  Otherwise,
+              the  library plus  the  object  modules contained  in  the
+              file(s) specified will have the same name as  the original
+              library and the original library will have been saved with
+              the same root name and the extension of .BAK (in the above
+              example, MYLIB.BAK).
+
+              If  the  original library file does not exist (i.e., there
+              is no MYLIB.LIB), you will be prompted as follows:
+
+                    Library file does not exist.  Create?
+
+              If you answer 'Y' (or 'y'), a new library  containing  the
+              object module  files specified in the command list  (in the
+              above  example,   there's  just  one  object  module   file
+              specified in the command list) will be created.   The  full
+              directory path to  the  library file name may be specified.
+              If you respond to this prompt with any character other than
+              'y' or 'Y', the BNSLIB  session is cancelled  and  you  are
+              returned to the DOS prompt.
+
+
+
+
+
+
+
+                                   - Page 5 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+
+          1.3 Deleting Library Modules
+
+              The command to delete an object module from a  library  is
+              as follows:
+
+                    -<objmodname>
+
+              Where <objmodname> is the module name as it appears in the
+              object module's THEADR  (minus  any  filename  extensions)
+              record.  This version of the name can be obtained with one
+              of the BNSLIB report options discussed in Part 2, below.
+
+              The full command line syntax to delete one object  module,
+              named  MYOBJ.OBJ,  from a library named MYLIB.LIB would be
+              as follows:
+
+                    bnslib mylib -myobj
+
+              It is also possible to specify a list file  (for  progress
+              messages)  and/or  a  new  library file.  If a new library
+              file is specified, the original library  with  the  object
+              module(s)  specified in  the command list deleted will  be
+              written to the new library.   Otherwise,  the library with
+              the specified  object module(s) deleted will have the same
+              name as the original library and the original library will
+              have been saved with the  same root name and the extension
+              of .BAK (in the example above, as MYLIB.BAK).
+
+              If the original library file  does  not  exist,  an  error
+              message is displayed on stderr (the console).
+
+
+
+          1.4 Copying Library Modules
+
+              The command to copy an object module from a library is  as
+              follows:
+
+                    *<objmodname>
+
+              Where <objmodname> is the module name as it appears in the
+              object module's THEADR  (minus  any  filename  extensions)
+              record.  This version of the name can be obtained with one
+              of the BNSLIB report options discussed in Part  2,  below.
+              The  file  name  given  to  the  module  copied out of the
+              library is this module name plus the extension  .OBJ.   As
+              with MS LIB, the output .OBJ file is placed in the current
+              working directory.   You  may,  however,  specify  a  full
+              directory path to the library.
+
+                                   - Page 6 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+              The  full  command  line syntax to copy one object module,
+              named MYOBJ, from a library  named  MYLIB.LIB  to  a  file
+              named  MYOBJ.OBJ in the current working directory would be
+              as follows:
+
+                    bnslib mylib *myobj
+
+              It is also possible to specify a list file  (for  progress
+              messages).   Any new  library  file specification will  be
+              ignored.   No .BAK file is produced as the result of  this
+              operation (the original library is not altered).
+
+              If the original library file  does  not  exist,  an  error
+              message is displayed on stderr (the console).
+
+
+
+          1.5 Replacing Library Modules
+
+              The command to replace an object module in a library is as
+              follows:
+
+                    -+<objmodname>
+
+              Where <objmodname> is the module name as it appears in the
+              object module's THEADR  (minus  any  filename  extensions)
+              record.  This version of the name can be obtained with one
+              of the BNSLIB report options discussed in Part 2, below.
+
+              The full command line syntax to replace one object module,
+              named  MYOBJ,  in  a  library  named MYLIB.LIB would be as
+              follows:
+
+
+                    bnslib mylib -+myobj
+
+              It is also possible to specify a list file  (for  progress
+              messages)  and/or  a  new  library file.  If a new library
+              file is specified, the original library  with  the  object
+              module(s) replaced  will  be  written  to the new library.
+              Otherwise, the library with the object module(s)  replaced
+              will  have  the  same name as the original library and the
+              original library will have been saved with the  same  root
+              name   and  the  extension of .BAK  (in the example above,
+              as MYLIB.BAK).
+
+              If the original library file  does  not  exist,  an  error
+              message is displayed on stderr (the console).
+
+
+
+                                   - Page 7 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+
+          1.6 Extracting Library Modules
+
+              The command to extract an object module  from a library is
+              as follows:
+
+                    -*<objmodname>
+
+              Where <objmodname> is the module name as it appears in the
+              object   module's   THEADR   record  (minus  any  filename
+              extensions). This version of the name can be obtained with
+              one of the  BNSLIB  report  options  discussed in  Part 2,
+              below. The file name given to the module copied out of the
+              library is this module name plus the extension  .OBJ.   As
+              with MS LIB, the output .OBJ file is placed in the current
+              working directory.  You may specify a  full directory path
+              to the library, however.
+
+              The full command line syntax to extract one object module,
+              named MYOBJ, in a library  named  MYLIB.LIB  would  be  as
+              follows:
+
+                    bnslib mylib -*myobj
+
+              It  is  also possible to specify a list file (for progress
+              messages) and/or a new library file.   If  a  new  library
+              file is specified,  the original library minus  the object
+              module(s)  extracted will be written to the  new  library.
+              Otherwise,   the   library  minus   the  object  module(s)
+              extracted will have the same name as the original  library
+              and the original library will  have  been saved  with  the
+              same root  name and  the extension of  .BAK  (in the above
+              example, MYLIB.BAK).
+
+              If the original library file  does  not  exist,  an  error
+              message is displayed on stderr (the console).
+
+
+
+          1.7 Combining Libraries
+
+              The command to add an object module to a library may  also
+              be used  to  combine  one  (BNSLIB  format)  library  with
+              another.  This command looks like the following:
+
+                    +<libname>.LIB
+
+              Where <libname> is the file name of the library file to be
+              combined with the original library. The filename extension
+
+
+                                   - Page 8 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+              .LIB _must_ be specified (otherwise, BNSLIB will look  for
+              a  file in  the  current  directory  with  the  root  name
+              <libname> and an .OBJ extension.   The source library file
+              for  the combine operation  must  reside  in  the  current
+              working directory.
+
+              The full command line syntax  to combine a  library  file,
+              named LIBNAME.LIB, to a library named MYLIB.LIB  would  be
+              as follows:
+
+                    bnslib mylib +libname.lib
+
+              It  is  also possible to specify a list file (for progress
+              messages) and/or a new library file.   If  a  new  library
+              file is specified,  the original  library plus all  of the
+              object modules in  the specified  source  library will  be
+              written  to  the  new  library.   Otherwise,  the original
+              library plus all of the object modules  in  the  specified
+              source  library  will  have  the same name as the original
+              library and the original library will have been saved with
+              the same root name and the extension of .BAK (in the above
+              example, MYLIB.BAK).
+
+              If  the  original  library  file  does  not exist an error
+              message will be displayed on stderr (the console).
+
+
+
+          1.8 Checking Library Consistency
+
+              The command to check the consistency  (i.e., integrity) of
+              a library (or object module, see  below) is  _no command_.
+              That's  right,  just  don't specify any command and BNSLIB
+              will run through the  library  and  check  it's  validity.
+              Unless otherwise specified (see below), or unless an error
+              is discovered, nothing will be sent  to  the  <lfile>.  In
+              other words, no news is good news.
+
+              You may specify a full  directory  path  to  the  original
+              library  file.   If  the  original  library  file does not
+              exist, an error message will be displayed on  stderr  (the
+              console).
+
+              You  may  use  this  command with  libraries in the BNSLIB
+              format _or_ the MS LIB format.
+
+
+
+
+
+
+                                   - Page 9 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+
+          1.9  General Considerations
+
+              More than one command or command type may be specified per
+              BNSLIB  session.  Indeed, you may specify as many commands
+              as will fit on the command line or as many as you want  to
+              stuff in a response file (up to 100 total -- including the
+              original library name,  the  <lfile>  and the new  library
+              name).   Regardless  of  the  order in which  commands are
+              entered on the command line or in a  response  file,  they
+              are always executed in the following order:
+
+                    1. Copy commands (*)
+                    2. Delete commands (-)
+                    3. Add commands (+)
+
+              The Replace command is treated as a  Delete command and an
+              Add command.   Similarly,  the Extract commmand is treated
+              as a  Copy command followed by a Delete command.   This is
+              the case regardless of  how  the  composite  commands  are
+              actually issued  (i.e.,  regardless of whether you specify
+              -+ or +- for Replace or -* or *- for Extract).
+
+              Within each of the  three basic  command  categories,  the
+              module names are arranged in  ascending  alphabetic  order
+              before any command operations are performed.  Modules in a
+              BNSLIB  format  library are always  stored  physically  in
+              ascending alphabetic order by module name.
+
+              In addition to the explicit conversion operation mentioned
+              in Part 2 of  this  Guide  for  converting  MS LIB  format
+              libraries to BNSLIB format libraries,  implicit conversion
+              is  performed  if  any  of  the  following  operations are
+              carried out on an MS LIB format library:
+
+                   1.  Add module or add library
+                   2.  Delete/Replace module
+
+              If  no  new  library  file  is  specified,  the  .BAK file
+              resulting from the _first_ application  of  one  of  these
+              operations to the MS LIB library will be in MS LIB format.
+              The new .LIB file will be in  BNSLIB  format.   If  a  new
+              library  name  is  specified, the .BAK file is not created
+              and the original library remains in  MS LIB  format  while
+              the new library is written in BNSLIB format.
+
+              It  is important in the former case (where the MS LIB file
+              winds up in the .BAK file) to rename the old  MS LIB  file
+              to  something  other  than  .BAK if you want to retain it.
+              Otherwise, the next operation that changes the new, BNSLIB
+
+                                   - Page 10 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+              format,  version  of  the  library  will  overlay the .BAK
+              version of the file and your MS LIB format version of  the
+              library will be gone for good.
+
+              Note  that  if  you just copy (*) a module out of a MS LIB
+              format library, no implicit conversion is performed.   The
+              .LIB file will still be in the MS LIB format when the copy
+              operation is complete.  Thus,  you may copy object modules
+              from your  favorite  MS LIB  format libraries using BNSLIB
+              without fear of altering the MS LIB libraries.
+
+
+
+     2. BNSLIB Extensions to MS LIB
+
+          2.1 Flexible Reporting Options
+
+              BNSLIB  allows  you  to examine some of the 'internals' of
+              object modules, whether they are stored in  a  library  or
+              are  standalone  .OBJ  files.   BNSLIB  can examine either
+              MS LIB format libraries or BNSLIB format libraries.    Any
+              standalone  Intel  object format file can be examined, not
+              just those produced  by  Turbo  C.   In  addition,  BNSLIB
+              allows  you  to  determine the 'level' of information that
+              will be reported from the examination.
+
+              The syntax for specifying the level of information  detail
+              for a particular report is as follows:
+
+                 bnslib <library>[(<displaylist>)][, <listfile>]
+
+              Notice that <listfile> is shown as optional.  Technically,
+              it is.  But, it would be pretty silly to order a report on
+              a library or object module and then  not  send  the report
+              anywhere you could look at it, right? So, in reality, this
+              parameter is required.   Also,  note that <displaylist> is
+              enclosed in parentheses.  When a report is desired,  these
+              are required and there may be no space between the end  of
+              <library> and the left (starting) parenthesis.
+
+              The lowest level of reporting is to provide no information
+              unless there is an  internal  problem  with  the  library.
+              This   is   equivalent  to  MS LIB's  'consistency  check'
+              operation.  Example:
+
+                    bnslib mylib
+
+              would display nothing (save the advisory message mentioned
+              in Part 1 of this Guide) if all went well.   If  there was
+              something  wrong with MYLIB, error message(s) would appear
+
+                                  - Page 11 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+              on stderr (the console screen).
+
+              The <displaylist> is composed of one  or  more  characters
+              from the following list (the characters may  be  typed  in
+              upper or lower-case, only lower-case is shown here):
+
+                    h:  Displays the object module's name  (each module,
+                        if a library is being examined) and the module's
+                        combined code and data size (and, if  a  library
+                        is   being  examined,  the  particular  module's
+                        offset  from  the  beginning  of  the  library).
+                        Example:
+
+                            bnslib mylib(h), con
+
+                        Note  that ', con' specifies the console device,
+                        but this could just as well have been ', prn' or
+                        ', drive:\path\filename'.
+
+
+                    c:  Displays  the  comment  records  in  the  object
+                    	module  (each module,  if  a  library  is  being
+                    	examined).   This level includes  the  'h' level
+                        (thus, when c is specified, BNSLIB reports as if
+                        h had also been specified).  Example:
+
+                            bnslib mylib(c), con
+
+                        This would display the module's name,  its  code
+                        and  data size (and offset, if in a library) and
+                        the  human-readable  content  of  each   comment
+                        record  in  the  module.   Comment  records  are
+                        placed  in  the  .OBJ  file  by   the   language
+                        translator  and  are  used for various purposes,
+                        including passing  information  to  the  linkage
+                        editor.  They can be interesting!
+
+
+                    s:  Displays the public symbols in the object module
+                        (each  object  module,  if  a  library  is being
+                        examined).  This  level,  like  the  'c'  level,
+                        includes the 'h' level.  Example:
+
+                             bnslib mylib(s), con
+
+                        The   symbols   are   displayed   in   ascending
+                        alphabetic  order  within  each  module  in  the
+                        library (or within the object module file) being
+                        examined.    A space appears between each symbol
+                        and symbol names are not broken across lines.
+
+                                  - Page 12 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+                    n:  Displays  the segment  and  group  names in  the
+                        object  module  (each  module,  if  a library is
+                        being examined).  This level includes  both  the
+                        's' level and the 'h' level.  Example:
+
+                             bnslib mylib(n), con
+
+
+                    w:  Wait between modules.   This option applies only
+                        to  display  lists  given  in  conjunction  with
+                        library  names.   If  given  with an object file
+                        name, it is simply ignored.  Also,  if  this  is
+                        the only option given,  it is ignored.  Finally,
+                        if the  <listfile>  is anything except CON, this
+                        option,  if specified,  is ignored.
+
+                        When  active,   this  option  causes  the report
+                        output  to pause  between  each  module  in  the
+                        library.  The prompt:
+
+                             more ->
+
+                        is displayed on the console.    Pressing any key
+                        (except CTRL-C  or  CTRL-BREAK) will advance the
+                        display  to  the  next   object  module  in  the
+                        library. If CTRL-C or CTRL-BREAK is pressed, the
+                        program terminates gracefully back to DOS.
+
+              Obviously,  the  lowest level of reporting (aside from the
+              'no report, consistency check' level) is to  specify  only
+              'h.'  But,  more  complex  reports  can  be  generated  by
+              specifing a report option  list.   The  highest  level  of
+              reporting possible with BNSLIB is:
+
+                    bnslib mylib(cn), con
+
+              This would display the comment records, the public symbols
+              (because 'n' includes 's'), the segment and  group  names,
+              and the module name and size information (because both 'c'
+              and 'n' include 'h') for each module in MYLIB.LIB.
+
+
+
+          2.2 Examining Individual Object Modules
+
+              BNSLIB allows you to examine standalone object files.  The
+              syntax is _exactly_ the same as that given in section 2.1,
+              above.  However, to indicate that an object  file  is  the
+              subject  of  the  examination and report, you must preface
+              the file's name with the '#' character.  Thus,
+
+
+                                  - Page 13 -
+                    BNSLIB - An Object Module Library Manager
+                                  User's Guide
+                    Copyright (C) 1987 by Brand Name Software
+                               All Rights Reserved
+
+
+                    bnslib #myobject(cn), con
+
+              would give a 'full report' on the  .OBJ  file  'myobject.'
+              Note  that  BNSLIB assumes the file's extension is '.obj'.
+              Thus, it is not necessary to provide this information with
+              the  command. But, if an extension is specified it will be
+              used.
+
+
+
+          2.3 Converting MS LIB Format Library to BNSLIB Format
+
+              You can convert your existing MS LIB format  libraries  to
+              BNSLIB format.  This has several advantages:
+
+                   1.   If  you  don't  have  MS LIB,  you  can  now  do
+                        complete  library  maintenance  on  those MS LIB
+                        libraries that came with your  favorite  utility
+                        package (or with Turbo C).
+
+                   2.   BNSLIB format libraries are approximately 20-25%
+                        smaller  than  MS LIB  format  libraries.   This
+                        saves disk space.
+
+                   3.   TLINK  will  process  BNSLIB   format  libraries
+                   	faster than MS LIB format libraries. This speeds
+                   	the link phase of Turbo C program development.
+
+              The command to convert from a  MS LIB  format library to a
+              BNSLIB format library is:
+
+                    bnslib !<mslibrary> <bnslibrary>[, <listfile>]
+
+              The <listfile> should be specified if you want to view (or
+              save) 'progress' messages from BNSLIB.  Report options, if
+              specified, are ignored.
+
+              The  <mslibrary>  is  not altered.  Full path names may be
+              specified for either library.  If <bnslibrary> exists, you
+              will  be  asked if you're _sure_ you want to overwrite it.
+              The exclamation point is required.  It  must  preceed  the
+              <mslibrary> parameter with no intervening spaces.
+
+
+
+
+
+
+                        -- END OF BNSLIB USER'S GUIDE --
+
+                                   - Page 14 -
+

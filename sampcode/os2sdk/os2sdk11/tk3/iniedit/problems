@@ -1,0 +1,15 @@
+
+
+		Problems with the IniEdit Sample
+
+
+ ** It uses fixed size string variables for all the OS2.ini strings.
+    This should be changed to use heap allocation.  The current
+    implementation is wasteful of space and fails in bizarre ways
+    when it encounters a string longer than its built-in limit.
+
+    One example of such a long string is when the Epson printer driver
+    is loaded.
+
+ ** The scroll bars are not tied to the arrow keys.  This is a great
+    inconvenience for keyboard-only OS/2 users.

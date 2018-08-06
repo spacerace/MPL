@@ -1,0 +1,7 @@
+setblt.obj: setblt.c
+  cl -c -Fs -W2 -AS -Gsw -Od -Zped setblt.c
+
+setblt.exe: setblt.obj setblt.def
+    link4 setblt,/align:16,,slibw,setblt.def
+    del setblt.obj
+    del setblt.map

@@ -1,0 +1,77 @@
+LOCAL BOOL MpmMsgMouse( pqmsg, pEvent, msg )
+    PQMSG       pqmsg;
+    EventRecord *pEvent;
+    USHORT      msg;
+{
+    SHORT       sArea;
+    POINTL      ptl;
+    WindowPeek  pwin;
+    USHORT      fid, usHitHi;
+    HWND        hwnd;
+
+    sArea = FindWindow( pEvent->where, &pwin );
+
+    fid = usHitHi = 0;
+    ptl = pqmsg->ptl;
+    pqmsg->hwnd = hwnd = ( pwin ? HWNDOFPWIN(pwin) : _hwndDesktop );
+
+    switch( sArea )
+    {
+      case inContent:
+        WinMapWindowPoints( _hwndDesktop, hwnd, &ptl, 1 );
+        MpmMsgFindChild( pqmsg, &ptl );
+        hwnd = pqmsg->hwnd;
+        break;
+
+      case inDesk:
+        break;
+
+      case inDrag:
+        fid = FID_TITLEBAR;
+        break;
+
+      case inGoAway:
+        fid = FID_SYSMENU;
+        break;
+
+      case inGrow:
+        fid = FID_SIZEBORDER;
+        break;
+
+      case inMenuBar:
+        hwnd = _hwndMenu;
+        if( ! hwnd )
+          return FALSE;
+        break;
+
+      case inSysWindow:
+        SystemClick( pEvent, pwin );
+        return FALSE;
+
+      case inZoomIn:
+      case inZoomOut:
+        usHitHi = sArea;
+        fid = FID_MINMAX;
+        break;
+
+      default:
+        return FALSE;
+    }
+
+    if( fid )
+    {
+      hwnd = WinWindowFromID( hwnd, fid );
+      ASSERT( hwnd,
+              "MpmMsgMouse: missing frame control" );
+    }
+
+    if( MYWNDOF(hwnd).flStyle & WS_DISABLED )
+      return FALSE;
+
+    pqmsg->hwnd = hwnd;
+    pqmsg->msg  = msg;
+    pqmsg->mp1  = MPFROM2SHORT( ptl.x, ptl.y );
+    pqmsg->mp2  = MPFROM2SHORT( HT_NORMAL, usHitHi );
+
+    return TRUE;
+}

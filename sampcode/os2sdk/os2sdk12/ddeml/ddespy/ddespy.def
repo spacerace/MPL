@@ -1,0 +1,18 @@
+NAME    browse WINDOWAPI
+
+DESCRIPTION 'Wowser DDE Browser'
+
+STUB    'OS2STUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  4096
+STACKSIZE 4096
+
+EXPORTS
+        dataxfer        @1
+        ClientWndProc   @2
+        GetTimeoutDlgProc @3
+        EnhancedEFWndProc @4
+

@@ -1,0 +1,12 @@
+cdll.obj : cdll.c
+  cl /c /Asnu /Gs cdll.c
+
+cinit.obj : cinit.asm
+  masm /Mx /T cinit.asm;
+
+cdll.dll : cdll.obj cinit.obj cdll.def
+  link /NOI /NOD cdll+cinit,cdll.dll,,os2,cdll
+  implib cdll.lib cdll.def
+
+testcdll.exe : testcdll.c cdll.lib
+  cl testcdll.c /link cdll.lib

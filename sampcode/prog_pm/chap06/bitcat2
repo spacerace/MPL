@@ -1,0 +1,9 @@
+#-------------------
+# BITCAT2 make file
+#-------------------
+
+bitcat2.obj : bitcat2.c bitcat.h
+     cl -c -G2sw -W3 bitcat2.c
+
+bitcat2.exe : bitcat2.obj bitcat2.def
+     link bitcat2, /align:16, NUL, os2, bitcat2

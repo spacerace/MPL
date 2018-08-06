@@ -1,0 +1,6 @@
+app appinit appdoc appdata+
+mdi mdiinit mdidoc mdidata arrange mdisplit
+mdi.exe
+mdi.map
+os2 llibce
+app.def

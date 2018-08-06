@@ -1,0 +1,31 @@
+#----------------------------------
+# CHECKERS make file, Version 0.30
+#----------------------------------
+
+CC = cl -c -G2sw -W3
+
+checkers.obj : checkers.c checkers.h
+     $(CC) checkers.c
+
+ckrjudge.obj : ckrjudge.c checkers.h ckrmoves.h
+     $(CC) ckrjudge.c
+
+ckrboard.obj : ckrboard.c checkers.h ckrdraw.h
+     $(CC) ckrboard.c
+
+ckrmoves.obj : ckrmoves.c checkers.h ckrmoves.h
+     $(CC) ckrmoves.c
+
+ckrdraw.obj  : ckrdraw.c  checkers.h ckrdraw.h
+     $(CC) ckrdraw.c
+
+checkers.res : checkers.rc checkers.h ckruhand.ptr ckrdhand.ptr
+     rc -r checkers
+
+checkers.exe : checkers.obj ckrjudge.obj ckrboard.obj \
+               ckrmoves.obj ckrdraw.obj  checkers.def
+     link @checkers.lnk
+     rc checkers.res checkers.exe
+
+checkers.exe : checkers.res
+     rc checkers.res

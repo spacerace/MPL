@@ -1,0 +1,39 @@
+
+
+        NAME
+                error -- report a fatal error and exit
+
+        SYNOPSIS
+                error(string);
+                char *string;   error message to report
+
+
+        DESCRIPTION
+        This function sends the specified error message to stderr, and
+        then exits through this library's aabort() function, sounding
+        the console bell on its way out.
+
+
+
+
+        EXAMPLE
+             error("Invalid syntax");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

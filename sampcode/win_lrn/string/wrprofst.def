@@ -1,0 +1,13 @@
+NAME           wrprofst
+
+DESCRIPTION    'Microsoft Windows Sample Application'
+
+CODE           MOVEABLE
+
+DATA           MOVEABLE MULTIPLE
+
+HEAPSIZE       4096
+
+STACKSIZE      4096
+
+STUB           'WINSTUB.EXE'

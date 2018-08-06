@@ -1,0 +1,45 @@
+#===================================================================
+#
+#   sort Application Make file
+#
+#===================================================================
+#
+# Default compilation macros
+#
+
+CC = cl -Alfw -Zi -W3 -DLINT_ARGS -c -G2sw -Od -Zped
+
+ASM = masm
+
+#===================================================================
+#
+# Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(CC) $*.c
+
+.asm.obj:
+    $(ASM) $*.asm;
+
+.rc.res:
+    rc -r $*.rc
+
+all: sort.exe
+
+#===================================================================
+#
+# Dependencies
+#
+#===================================================================
+
+sort.res: sort.rc sort.h sort.ico
+
+sort.obj: sort.c sort.h
+
+sort.exe: sort.obj sort.res sort.def
+ link sort,sort/codeview ,sort/map, os2 llibcmt /nod:llibce llibcep, sort.def
+    rc sort.res
+
+

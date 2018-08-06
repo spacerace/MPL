@@ -1,0 +1,6 @@
+globlock.obj: globlock.c
+   cl -c -W2 -AS -Gsw -Od -Zped globlock.c
+
+globlock.exe: globlock.obj globlock.def
+   link4 globlock,/align:16,/map/li,slibw,globlock.def
+   mapsym globlock

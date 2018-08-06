@@ -1,0 +1,39 @@
+
+
+
+        NAME
+                exit2dos -- permission to exit program
+
+        SYNOPSIS
+                void exit2dos();
+
+
+        DESCRIPTION
+        When invoked, this function clears the screen and places
+        the message "Exit to DOS?" in the center of the display.
+        The keyboard is read, and if the response is 'Y' or 'y',
+        an aabort(0) function is called.  For any other response,
+        the function simply returns to the users program, which
+        must then do whatever is necessary to continue with the
+        program.
+
+
+
+        EXAMPLE
+                if(getche() == ESC) exit2dos();  /* watch for ESCape key */
+                else domorework();
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

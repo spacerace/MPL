@@ -1,0 +1,9 @@
+#-----------------
+# AVIO2 make file
+#-----------------
+
+avio2.obj : avio2.c
+     cl -c -G2sw -W3 avio2.c
+
+avio2.exe : avio2.obj avio2.def
+     link avio2, /align:16, NUL, os2, avio2

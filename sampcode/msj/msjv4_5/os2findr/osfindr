@@ -1,0 +1,14 @@
+CFLAGS=-c -AS -G2sw -Osal -W3 -Zp
+
+finder.obj: finder.c finder.h
+    cl $(CFLAGS) finder.c
+
+finder.res: finder.h finder.ico finder.rc
+    rc -r finder.rc
+   
+finder.exe: finder.obj finder.def
+    link finder, finder /ALIGN:16, finder, os2 slibcap /NOD, finder
+    rc finder.res
+
+finder.exe: finder.res
+    rc finder.res

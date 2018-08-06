@@ -1,0 +1,39 @@
+
+
+
+
+
+        NAME
+                d_pos -- position the cursor on a video page
+
+        SYNOPSIS
+                void d_pos(r, c, p);
+                int r;      row number
+                int c;      column number
+                int p;      video page (must match current mode)
+
+
+        DESCRIPTION
+        This function positions the cursor on the specified video
+        page.  Row, column, and page values must match the current
+        video mode.
+
+        EXAMPLE
+
+             d_pos(10, 15, 0);   /* position cursor on row 10, column 15,
+                                    video page 0 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

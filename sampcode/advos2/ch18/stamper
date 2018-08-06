@@ -1,0 +1,5 @@
+stamper.obj : stamper.asm
+ masm stamper;
+
+stamper.exe : stamper.obj stamper.def
+ link stamper,,,os2,stamper

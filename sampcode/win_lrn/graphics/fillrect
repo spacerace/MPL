@@ -1,0 +1,6 @@
+
+fillrect.obj: fillrect.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 fillrect.c
+
+fillrect.exe: fillrect.obj fillrect.def
+    link4 /align:16 fillrect,,nul,slibw/NOE,fillrect.def

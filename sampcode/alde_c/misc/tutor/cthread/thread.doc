@@ -1,0 +1,309 @@
+                                 Thread
+                         An On-Line C Help File
+
+                             Version 1.01
+                          Copyright (c), 1986
+                             Fran Horvath
+
+Abstract
+
+     Thread is a C language help utility.  It was written by a member of
+     the U.S.D.A. Grad School faculty to help students learning the C
+     language.  Thread is a variable record-length database, together
+     with an index, that enables fast look up and display of C keywords,
+     standard library functions, and other items.
+
+Usage summary
+
+     Operation of thread is self explanatory.
+
+     -  Simply enter "thread" at the DOS level.
+     -  When the menu screen appears, type in the keyword,
+           operator, or function desired as shown on the menu.
+           Only the first 5 characters are required, but you
+           may enter the complete entry if you choose.
+     -  If you make a typing error, the item will not be found
+           in the search list, and the menu screen will redisplay.
+           To correct an error, you may use the function keys
+           as in DOS.
+
+     For faster reference, you may also use command line arguments at
+     the DOS level to look up entries.
+
+
+Features
+
+     Thread contains two features that are unusual in a help facility.
+
+ (1) Thread will accept lookup items from the command line. That is,
+     enter:
+                         thread precedence
+
+     on the command line, and you'll receive a quick screenful of the C
+     language precedence table.
+
+     Thread will accept more than one item on the command line, and look
+     up each in sequence.  In other words, enter:
+
+                thread char short int long float double
+
+     and thread will provide a quick survey of C's variable storage
+     types. The multiple command line argument feature can be used to
+     dissect a line of C code into its major components.  For example,
+     enter the line
+
+                    thread while (fahr <= upper) {
+
+     and thread will show screens of information about the "while"
+     keyword, and the the "<=" operator.  The other items will not be
+     found in the help file and will be passed over.
+
+     Be sure to use a space between keywords and operators if using this
+     option.  Thread will not find matches in the line
+
+                    thread printf("\nitem",name);
+
+     because it will treat the item as a single word argument. (Maybe a
+     future version....)
+
+
+ (2) At any time, when the help screen is shown, it's possible the help
+     item may contain a "thread".  A thread is a related keyword or
+     concept that may help clarify the meaning of the current search
+     item.
+
+     When an item contains a thread, the continuation message at the
+     bottom of the screen will read:
+
+        Press space to continue, T to follow thread, Esc to quit
+
+     Press the 't' key, (upper or lower case accepted), and thread will
+     search for the related item immediately and display its help
+     screen.
+
+     The thread option will not terminate the command line argument
+     sequence.  The processing of command line items will resume when
+     when you choose to stop threading, or when there are no further
+     thread items to follow.
+
+
+DOS redirection characters
+
+     Since DOS intercepts the characters '|', '<' and '>' for purposes
+     of redirecting files, some special handling of these characters had
+     to be added.  If the string you are seeking contains one of these
+     special characters and you wish to enter it from the command line,
+     place double quotes around the argument.  That is:
+
+                        thread ">>" void "|"
+
+     would look up the >> operator, the word void, and then the |
+     operator. No quotes are necessary when using lookup from the main
+     menu.
+
+
+Processing search items
+
+     When you enter a search item at the menu prompt, thread strips all
+     blanks from your response.  Entries of:   char,char  , and c h a r
+     are all equivalent.
+
+     If you make a typing error entering a search item, you can use the
+     function keys F1, F2, and F3 together with the backspace, insert,
+     and delete keys as in standard DOS command editing.
+
+
+
+Exiting thread
+
+     After presenting the help screen, thread will prompt for a carriage
+     return to return to the menu, possibly a thread item, or the Esc
+     key.  Entering  a carriage return will return the user to the main
+     menu.   Entering escape will exit the program immediately, and
+     leave the help screen on the user's screen.   If you use a editor
+     like Sidekick's note facility, you can then see both the upper part
+     of the help screen and your own work file.  Seeing the correct
+     syntax along with the file you're working on may be useful.
+
+     Thread may also be exited by entering a carriage return at the main
+     menu prompt.
+
+     A Ctrl-Brk at any time will also terminate thread.
+
+
+Installation
+
+     The easiest way to operate thread is simply to place the three
+     files THREAD.EXE, THREAD.DAT, and THREAD.NDX in your current
+     working directory.  A good choice for the location of THREAD might
+     be the directory that contains your C compiler or interpreter.
+
+     THREAD can also be installed on your system so that it can be
+     invoked from any current working directory.  To do so, place
+     THREAD.EXE in a directory included in your DOS path, or
+     change your path to pass through the directory that holds
+     THREAD.EXE.
+
+     In addition, you need to create a DOS environment variable to
+     indicate the directory location of the files THREAD.DAT and
+     THREAD.NDX.  To do so, use the DOS SET command to establish a
+     variable called THREAD that gives the fully qualified directory
+     name of the directory where you have placed THREAD.DAT and
+     THREAD.NDX files.
+
+     For example, if you had placed all 3 of the THREAD files on a hard
+     disk identified as drive C: in a directory named C_HELP, you should
+     enter the DOS command:
+
+                        SET THREAD=C:\C_HELP
+
+     and make sure that your current path includes the C_HELP
+     directory.  For example, one path meeting this requirement would
+     be:
+
+                    PATH=C:\BIN;C:\C3;C:\C_HELP
+
+     Another example, for those with ample memory space, is to place the
+     files THREAD.DAT and THREAD.NDX on a RAM drive, and to include the
+     THREAD.EXE file somewhere in the current path.  The program works
+     very quickly in this configuration.  If THREAD.EXE were located in
+     C:\BIN, and the DAT and NDX files on a RAM drive identified as D:,
+     a sample setup might be:
+
+                    PATH=C:\;C:\C3;C:\BIN
+                    SET THREAD=D:
+
+     The program checks the environment for the THREAD variable before
+     it looks in the current working directory.  Thus, if you use the
+     SET THREAD option, it will have to be correct, even if the files
+     are subsequently moved into the same working directory.  To disable
+     the THREAD variable, enter the command
+
+                    SET THREAD=
+
+     at the DOS level, which will erase the value from the DOS
+     environment.
+
+     If you use THREAD frequently, you can add the SET and PATH commands
+     to your AUTOEXEC.BAT file.  Since the program THREAD.EXE is not
+     itself memory resident, it will not conflict with any memory
+     resident programs you use.  The order of placement of the SET
+     THREAD command within the autoexec file is of no importance.
+
+     If you wish, you can rename the .EXE file to a shorter name, or one
+     that you find more appropriate.  However, the .DAT and .NDX
+     filenames and the environment variable THREAD are hard-coded and
+     should not be renamed.
+
+
+C_COURSE.BAT
+
+     A file named C_COURSE.bat is included with the package.  It is a
+     DOS batch file which repeatedly executes thread, with items laid
+     out in the order they might be presented in a typical C course.
+     The easiest way to use C_COURSE is to continually press the return
+     key to step through the entire listing.  The batch file can provide
+     a quick summary of C.
+
+
+Resist the urge to rewrite the help file
+
+     The help file is accessed via the thread.ndx file, which contains
+     the offset of the search item in the thread.dat text file.  If you
+     are dissatisfied with any of the explanations or examples given in
+     the help screens, you may feel a need to access the thread.dat file
+     and edit the offending screen.  Please don't.  Any change in the
+     thread.dat file will invalidate the thread.ndx file and cause the
+     program to search through inappropriate locations in the text file.
+
+     If you are dissatisfied with an explanation or example shown,
+     please write:
+
+                            Fran Horvath
+                            2524 N. Key Blvd.
+                            Arlington, VA. 22201
+
+                        (Compuserve ID 75265,1117 )
+
+     with comments or complaints.  Any corrections or changes you would
+     like to see made will be considered, and will certainly improve any
+     future versions released.
+
+
+Acknowledgements
+
+     Thread was compiled using Microsoft C, version 3.0.
+
+     Thread originated as a homework assignment for adults in USDA's C
+     Programming class, ECOMP 275 in the Fall of 1985.  Students were
+     asked to write up descriptive screens for individually assigned
+     keywords, operators, and functions.  I am grateful to those
+     students who participated in the exercise by completing some form
+     of usable description.  Those screens formed the core around which
+     the program was designed.  In the course of a year, however, every
+     screen has been substancially edited or compeletely rewritten, so
+     that any resemblance to the originals are purely coincidental.
+
+     An assembly screen writing routine was used to speed up screen
+     displays.  The original routine was the product of Brian Foley,
+     David B. Rein, and Michael D. Most.  The version used here is a
+     modified routine which changes end-of-line processing for both
+     color and monochrome monitors.
+
+     The idea for the index creation routine was suggested by a package
+     provided by Philip Mongelluzzo, named BOSS0508.ARC.  The program
+     used in connection with this package was a modification of the
+     index program presented there. The index generation routine is not
+     included with the THREAD package.
+
+     I'm grateful to Pete Olympia and Bob Blacher for their reviews and
+     comments on a pre-release version of THREAD.
+
+     The "K & R" reference at the top right of the display screen refer
+     to the book: The C Programming Language, by Brian W. Kernighan and
+     Dennis M Ritchie, Prentice Hall Software Series, 1978.  No
+     connection with or approval by these authors is implied by the
+     reference.  It is included solely for those wishing to find more
+     details about a particular concept.
+
+     While this program was written for the use by students in USDA
+     class ECOMP 275, no approval or authorization by the USDA Grad
+     School is implied by this connection.  The author takes sole
+     responsibility for content here, and any remaining errors or
+     misstatements.
+
+
+Revision history
+
+     Version
+       1.01  11-07-86
+             - Shortened required user input to 5 characters
+             - Added THREAD environment option
+
+
+Copyright and disclaimer
+
+     THREAD and this documentation are copyrighted by the author. THREAD
+     is intended for PRIVATE, NONCOMMERCIAL USE ONLY.  You may make
+     copies of the program and the documentation for your own use, and
+     may copy the files for others.  You may not, however, charge for
+     such copies, or in any other way sell the program or otherwise
+     attempt to make money from it, or any modified version of it.
+
+     An institution, professional organization, training program or
+     special class conducted for profit may NOT use or distribute THREAD
+     as part of its instructional material, unless it submits a one-time
+     payment equal to the minimum registration amount required of a
+     participant for attending the program.
+
+     An exception to the above is granted to RECOGNIZED USER'S GROUPS,
+     which are hereby authorized to charge a small amount (not to
+     execeed $8.00) for media, postage and handling.
+
+     I do not warrant that the program is accurate, or that it operates
+     as claimed here.  I will not be liable for any damages of any kind
+     sustained through the use of the program, or because of the
+     information in the program.  By using the program, you agree to
+     these conditions.
+
+

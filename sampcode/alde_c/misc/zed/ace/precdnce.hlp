@@ -1,0 +1,19 @@
+®                Precedence of Operators:
+
+®     Operator                               Associativity
+®     ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+®     () [] -> .                          ®³  ®left to right     
+     ! ~ ++ -- - (type) * & sizeof       ®³  ®right to left
+     *  /  %                             ®³  ®left to right
+     +  -                                ®³  ®left to right 
+     << >>                               ®³  ®left to right
+     <  <=  >  >=                        ®³  ®left to right 
+     ==  !=                              ®³  ®left to right     
+     &                                   ®³  ®left to right 
+     ^                                   ®³  ®left to right 
+     ³                                   ®³  ®left to right 
+     &&                                  ®³  ®left to right 
+     ³³                                  ®³  ®left to right 
+     ?:                                  ®³  ®right to left
+     =  +=  -=  etc.                     ®³  ®right to left
+     ,  (K%R, Chapter 3)                 ®³  ®left to right

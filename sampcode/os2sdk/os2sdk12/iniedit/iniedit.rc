@@ -1,0 +1,38 @@
+#include <os2.h>
+#include "IniEdit.h"
+
+POINTER IDI_INIEDIT iniedit.ico
+
+MENU IDI_INIEDIT   PRELOAD
+BEGIN
+    SUBMENU "S~how",		     IDM_SHOW
+	BEGIN
+	MENUITEM "A~ll Names",	     IDMI_SHOW_ALL
+	MENUITEM "A~pplication Names",IDMI_SHOW_APPNAMES,  MIS_TEXT,MIA_CHECKED
+	MENUITEM SEPARATOR
+	MENUITEM "~Refresh",	     IDMI_REFRESH
+	MENUITEM SEPARATOR
+	MENUITEM "E~xit",		SC_CLOSE,	MIS_SYSCOMMAND
+	MENUITEM "A~bout IniEdit...", IDMI_ABOUT
+	END
+    SUBMENU "~Print",		     IDM_PRINT
+	BEGIN
+	MENUITEM "A~ll Names",	     IDMI_PRINT_ALL
+	MENUITEM "A~pplication Names",	     IDMI_PRINT_APP
+	END
+    SUBMENU "~Edit",			   IDM_EDIT
+	BEGIN
+	MENUITEM "~Add Key Name...",	   IDMI_EDIT_ADD_KEY
+	MENUITEM "~Change Key Value...",    IDMI_EDIT_CHANGE
+	MENUITEM "~Delete Key Name...",	   IDMI_EDIT_DELETE_KEY
+	MENUITEM "Delete Application ~Entries...",  IDMI_EDIT_DELETE_APP
+	END
+    MENUITEM "~Search!",	IDM_SEARCH
+END
+
+ACCELTABLE	IDI_INIEDIT
+BEGIN
+    "n",	IDDI_SEARCH_NEXT,   ALT
+END
+
+rcinclude inires.dlg

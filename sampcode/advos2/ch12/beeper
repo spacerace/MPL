@@ -1,0 +1,5 @@
+beeper.obj : beeper.asm
+ masm beeper;
+
+beeper.exe : beeper.obj beeper.def 
+ link beeper,,,os2,beeper

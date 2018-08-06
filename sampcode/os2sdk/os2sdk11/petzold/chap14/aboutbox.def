@@ -1,0 +1,12 @@
+;-------------------------------------
+; ABOUTBOX.DEF module definition file
+;-------------------------------------
+
+NAME           ABOUTBOX  WINDOWAPI
+
+DESCRIPTION    'Sample About Box Dialog Procedure (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc
+               AboutDlgProc

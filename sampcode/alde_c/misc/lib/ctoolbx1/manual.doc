@@ -1,0 +1,1298 @@
+.mt 8
+.he
+.op
+
+
+
+                           C Tool Box
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   A Library of Functions for
+                          Turbo C 1.00
+
+                   Containing Graphics, Fonts,
+                Windows, Sound, Background Sound
+              Mouse, Joystick and Printer Controls
+                            and more
+
+
+
+
+                         Version 1.00 
+                   release date 22 August 1987
+
+
+
+
+
+
+
+
+
+
+                       Copyright (c) 1987
+                               by
+                        David A.  Miller
+                        Unicorn Software
+                        8018 NE 123rd St.
+                       Kirkland, WA 98034
+                  (206) 823-4656 after 6:30 PM
+                        Pacific Time Zone
+                    (No collect calls Please)
+Š
+
+
+
+Welcomå  tï thå realí oæ thå mysticaì Unicorn®   Iô haó  beeî  aî 
+enjoyablå  procesó creatinç thió librarù anä thå authoò hopeó yoõ 
+find it equally enjoyable to use.
+
+
+ 
+
+                           Disclaimer
+
+Thå authoò haó takeî duå carå iî thå preparatioî oæ thió manuaì 
+anä thå associateä programó tï insurå thaô alì informatioî 
+presenteä ió correcô anä functionaì aó stated®  Nï warrantù ió 
+madå regardinç thå suitabilitù oæ thió producô foò anù specifiã 
+purpose.  Consistenô witè thå requiremenô oæ speeä iî mucè oæ 
+thå librarù anä thå generaì philosophù oæ Ã iî allowinç thå 
+programmeò completå freedom¬ thå amounô oæ erroò checkinç haó 
+beeî helä tï á minimum.
+
+  Thå authoò herebù grantó permissioî tï alì useró tï transfeò 
+copieó oæ thå librarù tï thirä partieó subjecô tï thå conditionó 
+thaô thå entirå librarù anä alì fileó includinç copyrightó bå 
+transferreä iî fulì foò nï feå execepô iî thå caså oæ useró groupó 
+whicè maù chargå á copyinç feå noô tï exceeä $7.00.
+
+  Whilå yoõ maù uså thå librarù foò personaì programó withouô 
+registration¬ thoså whï creatå programó foò salå oò distributioî 
+arå requesteä tï registeò theiò copy®  Thå sourcå codå maù NOÔ bå 
+distributeä tï á thirä partù iî anù forí withouô thå writteî 
+permissioî oæ thå author.
+
+
+
+
+
+
+Turbï Ã ió á trademarë oæ Borlanä International¬ Microsofô C¬ 
+MASÍ anä MSDOÓ arå trademarkó oæ Microsofô Corp®  IBM¬ IBÍ PC¬ 
+PÃ XT¬ AT¬ DOÓ anä PCDOÓ arå trademarkó oæ Internationaì Businesó 
+Machineó Corp.¬ Epsoî ió á trademarë oæ Epsoî Corp® Tandy¬ Tandù 
+1000 A and DMP 130 are trademarks of Tandy Corp.
+
+.paŠ.he C_Tool_Box_______________________________________________Page_#
+                           Background
+
+
+   Thió librarù ió thå successoò tï thå originaì Unicorî Librarù 
+whicè haó undergonå severaì revisionó anä essentiallù haó becomå 
+á ne÷ entity®  Somå oæ thå currenô revisionó concerî simplå 
+orderinç oæ thå parameteró iî calló tï makå thå librarù morå 
+consistent®  Useró oæ thå Unicorî librarù shoulä takå particulaò 
+notå oæ thió point®  Functionó havå beeî developeä foò whicè thå 
+authoò haó nï specifiã neeä buô founä interestinç tï implement®  
+Manù oæ thå functionó arå á resulô oæ useò suggestionó foò whicè 
+wå thanë thå useró involved®  Thå authoò inviteó useró tï makå 
+furtheò suggestions¬ aó á worthwilå challengå ió alwayó aî 
+interestinç learninç experience.
+   
+   Thió librarù containó functionó tï perforí á widå varietù oæ 
+taskó  Thå functionó maù bå divideä roughlù intï thå followinç 
+categories:
+
+1®  Generaì videï includinç windowó anä fasô strinç writes.
+2®  Graphics¬ includinç á varietù oæ normaì anä rotateä fonts
+3®  Sounä includinç backgrounä sounä functionó similaò tï BASIC
+4®  Generaì functionó servinç á widå varietù oæ purposes
+5®  Printeò control¬ botè graphicó anä daisù wheel
+6®  Mouså control
+7®  Joysticë control
+  
+   Eacè oæ theså groupingó overlapó tï somå extenô buô iî generaì 
+all¬ excepô thå graphicó iî grouğ 2¬ maù bå useä witè á 
+monochromå system® Thå generaì librarù ió designeä tï bå useä 
+witè Turbï Ã froí Borlanä anä programó writteî usinç thå smalì 
+memorù model®  Otheò compileró arå supporteä anä librarieó maù bå 
+requesteä froí thå authoò upoî registration®  Iî additioî tï thió 
+basiã library¬ thoså availablå includå thå largå modeì foò Turbï 
+Ã anä botè modeló foò Microsofô Ã ¨ Currenô versioî )®  Thå 
+authoò wilì alsï makå á Latticå Ã versioî 3.° librarù availablå 
+iæ therå arå enougè requests®  Whilå theså arå thå basiã 
+compileró thå authoò haó accesó to¬ otheró maù bå supporteä iæ 
+thå numbeò oæ requestó warrant.
+
+  Thå entirå manuaì ió noô supplieä witè thå Bulletiî Boarä 
+versioî oæ thå librarù duå tï space®  Enougè oæ thå manuaì ió 
+includeä tï makå thå librarù usablå includinç á brieæ descriptioî 
+oæ eacè functioî anä á calì iî á forí similaò tï functioî 
+prototyping®  Thå entirå manuaì ió availablå oî disë iî Wordstaò 
+oò ASCIÉ texô formaô anä wilì bå senô tï alì registereä owneró 
+(pleaså specifù whicè format)®  Preprinteä manualó arå availablå 
+foò thoså whï don'ô wisè tï prinô oveò 20° pages®  Seå thå 
+registratioî forí foò details®  
+.paŠ                       First Things First
+
+
+Iæ yoõ havå registereä youò librarù anä havå thå fulì sourcå 
+distributioî disks¬ yoõ shoulä havå onå disë oæ Ã sourcå codå anä 
+headers¬ onå oæ ASÍ sourcå codå anä eitheò á disë containinç thå 
+manuaì oò thå preprinteä manuaì.
+
+Checë youò diskó tï insurå thaô alì fileó arå readable®  Therå 
+shoulä bå 1´ Ã sourcå files¬ 1´ ASÍ sourcå fileó anä ³ headeò 
+fileó aó oæ thió writing®  Thió amountó tï oveò 500Ë oæ sourcå 
+code®  
+
+Therå ió nï particulaò installatioî procesó foò thió library®  Iô 
+ió readù tï uså aó is®  Simplù placå thå librarù iî thå directorù 
+with the other libraries you use with your compiler.
+
+Manù oæ thå criticaì functionó havå beeî codeä iî assembleò foò 
+speed®  Somå oæ thå presenô functionó codeä iî Ã (thå fontó 
+remaininç iî Ã anä rotateä fontó iî particular© wilì bå codeä iî 
+assembleò iî futurå revisions®  Therå arå á fe÷ instanceó wherå 
+functionó perforí similaò taskó buô arå codeä differently®  Foò 
+example¬ therå ió botè aî assembleò anä á Ã functioî tï seô thå 
+videï mode®  Somå oæ theså havå beeî lefô aó learninç tooló foò 
+thå useò aó theù illustratå botè approacheó tï solutioî oæ á 
+particulaò task®  Sincå thió librarù waó beguî aó á learninç 
+project¬ iô ió felô thå useò maù benefiô froí sucè material®  
+
+Makå á backuğ copù beforå yoõ dï anythinç else®  Thå diskó arå 
+noô copy-protected‚ iî anù manner®  Also¬ iô woulä bå helpfuì iæ 
+yoõ reaä thå filå READ.MÅ aó iô containó thå latesô informatioî 
+concerninç thå library®  Wherå thió manuaì anä READ.MÅ conflict¬ 
+pleaså regarä thå READ.MÅ filå aó beinç thå mosô currenô 
+information®  
+
+Therå arå demï programó oî thå disk¬ thå largesô beinç CTDEMO.EXÅ 
+anä CTDEMO.C®  Thió waó compileä witè thå librarù oî thå 
+distributioî diskó anä illustrateó thå capabilitù oæ thå librarù 
+itselæ althougè iô bù nï meanó useó oò illustrateó everù functioî 
+iî thå library.
+
+Thå library¬ aó delivereä normally¬ ió thå smalì memorù modeì oæ 
+Turbï C¬ anä alì references¬ unlesó otherwiså stated¬ wilì refeò 
+tï thaô configuration.
+
+Therå arå oveò 20° functions‚ containeä withiî thå Ã Tooì Boø anä 
+therå ió á shorô referencå sectioî givinç á brieæ samplå calì anä 
+descriptioî oæ eacè functioî lateò iî thå manual®  Thå 
+comprehensivå sectioî followinç thaô giveó á completå call¬ 
+parameteò description¬ samplå prograí oò codå fragmenô Šillustratinç thå fuctionó usage¬ returnó anä anù caveató thaô maù 
+occuò witè thaô function.
+
+Alì oæ thå functionó wilì perforí correctlù witè IBÍ PC'ó oò 
+closå compatibles¬ buô bå awarå thaô foò severaì oæ thå criticaì 
+timinç functionó direcô screeî writinç ió useä tï improvå 
+performance®  Unlesó youò machinå addresseó videï memorù iî thå 
+samå manneò aó thå IBM¬ á probleí maù exist®  Thå librarù waó 
+writteî oî á Tandù 100° Á  anä haó beeî ruî oî severaì otheò 
+machineó witè completå success.
+
+Alì functionó beginninç witè dø arå designeä tï supporô á daisù 
+wheeì printer®  Theù werå developeä oî á Epsoî printeò thaô ió 
+compatiblå witè thå DW-630®  Alì functionó begininç witè gò arå 
+designeä tï supporô thå IBÍ graphicó printeò oò compatible®  
+Theså werå developeä oî á TANDÙ DMĞ 130®  
+
+Thoså whï arå registereä owneró anä havå thå sourcå codå wilì 
+finä thaô onlù fouò functionó neeä tï bå altereä tï supporô otheò 
+graphicó systems®  Theså arå thå twï doô routineó (internaì anä 
+external© anä thå twï functionó tï returî thå coloò oæ á pixeì 
+(internaì anä external)®  Alì otheò functionó arå baseä oî theså 
+tï makå conversioî easier®  Thå authoò doeó noô havå accesó tï á 
+Herculeó systeí foò thió conversion®  Á conversioî tï thå EGÁ ió 
+currentlù underwaù althougè accesó tï aî EGÁ systeí ió verù 
+limiteä foò testinç purposes.
+
+
+
+                          Update Policy
+
+Iô ió thå policù oæ Unicorî Softwarå tï providå onå freå updatå 
+foò thå librarù itselæ (noô thå sourcå codå whicè maù bå updateä 
+foò á smalì fee© anä notificatioî oæ onå updatå beyonä that®  Iæ 
+thå ne÷ librarù ió registereä foò thå updatå fee¬ theî wå wilì 
+starô thå procesó oveò agaiî anä yoõ wilì agaiî receivå onå freå 
+updatå anä onå notificatioî beyonä thaô point®  Thió insureó 
+useró whï registeò wilì alwayó havå accesó tï thå latesô versioî 
+oæ thå Tooì Box®  Minoò releaseó wilì bå placeä oî bulletiî 
+boardó, buô registereä useró wilì noô bå notifieä directlù unlesó 
+theù sï request® (Iô ió felô thaô mosô woulä prefeò tï uså thå 
+freå updatå foò á majoò release)®  Currentlù thå authoò placeó 
+copieó oæ thå Tooì Boø (majoò anä minoò releases© directlù oî thå 
+followinç boardó iî thå Seattlå area.
+
+1.  Journey to Mars      (RBBS)  206  486-3136
+2.  Night Shift          (RBBS)  206  488-0924
+3.  Planet Claire        (RBBS)  206  783-8037
+4.  PNW IBM user group   (RBBS)  206  343-7843
+Š
+
+Thå authoò logó oî witè thå namå 'Davå Miller§ oî eacè oæ theså 
+boards.
+
+Thå mosô likelù spoô tï finä thå authoò foò feedbacë woulä bå 
+Journey to Mars or Nightshift.
+
+
+
+                        Programming Style
+
+
+Thå sourcå codå ió writteî iî standarä Ë ¦ Ò witè onå deviation®  
+Thå authoò preferó thå openinç anä closinç braceó tï linå uğ sï 
+insteaä of:
+
+               if (i = 2) {
+                    printf("I = 2");
+               }
+
+you will find:
+
+               if (i = 2)
+               {
+                  printf("I = 2");
+               }
+
+in the source code for the Tool Box.
+
+
+                    Declaration of Functions
+
+
+Mosô functionó arå eitheò voiä oò returî int® Iô ió noô strictlù 
+requireä tï declarå theí prioò tï use®  Iô ió GOOÄ PROGRAMMINÇ 
+PRACTICE‚ tï declarå alì functionó prioò tï use®  Thió practicå 
+wilì avoiä problemó witè thå fe÷ functionó whicè dï returî á 
+differenô value¬ sucè aó á pointeò tï á window®  
+
+
+
+
+
+
+.paŠ                           Technical
+
+Thió librarù waó createä usinç thå followinç tools.
+
+     Turbï Ã 1.00
+     Microsofô Linë 3.51
+     MASÍ 4.0
+     Microsofô Librarù Manageò 3.02
+
+
+Thå moduleó useä anä thå ordeò theù shoulä appeaò iî thå librarù 
+maù bå founä bù usinç LIÂ tï creatå aî LSÔ filå oæ thå library®  
+Iæ yoõ registeò anä wisè tï recompilå foò á differenô memorù 
+modeì oò compileò, thió ordeò shoulä bå preserved.
+
+Aô presenô, á smalì buç existó iî thå endsounä function®  Iô wilì 
+bå besô iæ yoõ leô backgrounä sounä ruî itó course¬ anä noô 
+attempô tï stoğ iô witè thió command®  Thió wilì bå fixeä iî thå 
+nexô majoò releaså ¨ Jaî 198¸ )®  Registereä owneró wilì 
+automaticallù receivå thå ne÷ sourcå foò thió functioî witè theiò 
+freå updatå disk.
+ 
+Revisionó arå possiblå iî somå functionó iî thå nexô release®  
+Everù possiblå efforô wilì bå useä tï maintaiî FULÌ 
+compatibility¬ buô bå awarå thaô thå calló tï somå windo÷ 
+functionó anä tï thå backgrounä sounä functionó maù bå altereä 
+somewhat®  Wheî usinç thå Tooì Boø pleaså keeğ thió iî minä iæ 
+yoõ plaî tï upgrade®  Iô ió anticipateä thå changeó wilì noô bå 
+extensivå anä additionaì functionó wilì bå addeä whereveò 
+possiblå ratheò thaî alterinç thå existinç functions®  Thå authoò 
+wilì preservå alì currenô functioî calló intacô iî alì releaseó 
+beyonä thió point.
+
+.paŠ                       Your First Program
+
+
+  Usinç thå Ã Tooì Box‚ ió essentiallù quitå simple®  Witè Turbï Ã 
+yoõ musô specifù anù moduleó tï bå linkeä iî youò projecô file®  
+Iæ theù arå noô Ã fileó theî thå completå extensioî musô bå used®  
+Foò examplå supposå yoõ wisè tï builä á filå 'mytest.exe§ froí 
+mytest.ã anä thå Ã Tooì Box‚ library®  Youò projecô filå shoulä bå 
+iî á forí similaò tï thå below:
+
+
+                             mytest
+                             CTB100.LIB
+
+
+Wheî yoõ arå withiî thå Turbï Ã environmenô, simply uså Alô Ğ tï 
+indicatå thå projecô filå namå anä theî Alô Ò tï builä anä ruî 
+youò program®  Yoõ maù alsï builä youò prograí froí thå commanä 
+linå bù typing:
+
+                      TCÃ mytesô CTB100.lib
+
+
+Eitheò approacè wilì builä youò prograí anä linë iô witè thå Ã 
+Tooì Box‚ librarù.
+
+
+Thå demï prograí waó builô usinç thå command:
+
+                     TCÃ CTDEMÏ CTB100.LIB
+
+Therå ió á projecô filå oî thå disë iæ yoõ prefeò tï worë withiî 
+thå Turbï Ã environment®  Thå demï maù bå builô bù specifyinç 
+ctdemï aó thå filå anä ctdemo.prê aó thå projecô file®  Uså ALÔ ò 
+tï ruî thå prograí oò ALÔ ã tï compilå it.
+
+.paŠ                           The Future
+
+
+Thå nexô majoò releaså ió planneä foò Jaî., 1988®  Somå 
+of the ideas being considered and/or worked on are:
+     
+     1.  Animation functions
+     2.  Data entry functions
+     3.  Menu functions (including pulldown)
+     4.  Additional window functions
+     5®  Additionaì sounä functions
+     6®  Fontó - rewrittinç thoså lefô codeä iî Ã iî assembleò          
+         foò speeä anä á truå strokå fonô capability®  Thió waó           
+         containeä iî thå originaì Latticå Ã version»  Thå authoò
+         woulä likå tï restorå iô witè fulì rotation¬ 
+         translatioî anä scalinç foò thå nexô majoò release.
+
+     
+Thå authoò wisheó tï continuå providinç thió librarù tï useró iî 
+thå forí oæ sharewarå consistenô witè useò support®  Iô haó beeî 
+aî enjoyablå sparå timå projecô oveò thå lasô yeaò anä á half® 
+Thå authoò feeló sharewarå ió aî importanô elemenô iî today'ó 
+computeò environment.
+
+Pleaså feeì freå tï expresó youò opinioî oî whaô yoõ wisè tï seå 
+madå available®  Leô uó know!
+
+.paŠ                    Internaì Globaì Variables
+
+
+   The librarù contains a serieó oæ globaì variables®  Yoõ 
+shoulä noô uså theså nameó iî youò programó unlesó yoõ 
+specificallù wisè tï referencå thaô variable®  Foò examplå usinç 
+á variablå nameä bdr± iî youò prograí wilì resulô iî á linë erroò 
+aô besô oò failurå oæ thå windowinç functionó thaô uså bordeò ± 
+aô worst®  Belo÷ ió á lisô oæ theså variableó anä theiò internaì 
+meaningó tï thå library.
+
+int       BLACK          the color black
+int       BLUE           the color blue
+int       GREEN          the color green
+int       CYAN           the color cyan
+int       RED            the color red
+int       MAGENTA        the color magenta
+int       BROWN          the color brown
+int       GRAY           the color gray
+int       GREY           the color gray
+int       WHITE          the color gray
+int       DARK_GRAY      the color dark gray
+int       DARK_GREY      the color dark gray
+int       LTBLUE         the color light blue
+int       LTGREEN        the color light green
+int       LTCYAN         the color light cyan
+int       LTRED          the color light red
+int       LTMAGENTA      the colorlight magenta
+int       LTBROWN        the color yellow
+int       YELLOW         the color yellow
+int       LTWHITE        the color light or bright white
+
+int       NORMAL         the normal monochrome attribute
+int       UNDERLINE      the underline monochrome attribute
+int       REVERSE        the reverse video monochrome attribute
+int       BRIGHT         the highlighted monochrome attribute
+int       BLINK          monochrome blink bit indicator
+
+int       v_start        starting address for video memory
+int       ct_mode_       current video mode
+int       ct_col_        current number of video columns
+inô       ct_colorß      indicateó iæ coloò ió alloweä (1© oò noô 
+
+BORDER    bdr1           a single line border for windows
+BORDEÒ    bdr1²          á bordeò witè á singlå verticaì linå anä 
+                         double horizontal lines.
+BORDEÒ    bdr2±          á bordeò witè doublå verticaì lineó anä 
+                         a single horizontal line
+BORDER    star           a border of "*" characters
+BORDER    dot            a border of "." charactersŠBORDER    solid          a border of solid blocks ( char 219)
+BORDER    heart          a border of heart characters
+BORDER    space          a blank border of space characters
+
+                         NOTE - The default border is a double
+                                line.
+                                BORDEÒ ió á pointeò tï á bordeò. 
+                                WINDOW is a pointer to a box, 
+                                generallù indicateä bù 'bp§ iî 
+                                documentation.
+            
+
+Seå thå headeò CTB.È foò additionaì variableó anä defineó thaô 
+maù bå useful.
+
+
+                         
+.paŠ                        Registration Form
+
+   Thió librarù ió distributeä aó sharewarå whicè simplù meanó 
+yoõ arå freå tï copy¬ uså anä pasó copieó oî tï friendó foò 
+evaluation®  Iæ yoõ decidå iô ió useful¬ yoõ maù registeò youò 
+copù witè thå author®  Upoî registratioî yoõ wilì receivå thå 
+completå sourcå codå foò thå librarù anä á copù oæ thå manuaì oî 
+disk®  Thió wilì consisô oæ ³ disks®  Iî additioî yoõ wilì 
+receivå thå firsô updatå disë free‚ anä notificatioî oæ anù 
+furtheò updates®  Majoò releaså updateó arå occurinç abouô ³ 
+timeó á year.
+
+Thå currenô registratioî feå ió $29.95‚   
+
+
+Name:             ______________________________________________
+
+Computer Type:    ______________________________________________
+
+Address:          ______________________________________________
+
+                  ______________________________________________
+
+City/State/Zip:   _________________________  ____  _____________
+
+Library Version:  _CTB_1.00___________________________________
+
+Compiler: (check 1)
+                  Turbo C ___  Microsoft C ___  other __________
+
+Morå thaî onå versioî maù bå requested®  Pleaså adä aî updatå fee
+oæ $12.95 foò eacè additionaì version.
+
+Preprinteä manuaì pageó suitablå foò placemenô iî á threå rinç 
+bindeò wilì bå supplieä foò aî additionaì $18.00.
+
+                         User Statement
+
+É realizå thaô whilå thå librarù maù bå freelù giveî awaù tï 
+thirä partieó thå sourcå codå ió noô publiã domaiî anä É agreå tï 
+protect the authors code and not to pass it on to third parties.
+
+ 
+Signed:  ___________________________     Date:  ________________
+
+
+
+Commentó oò additionaì informatioî maù bå placeä oî thå bacë oæ 
+this page.
+.paŠ                      Functioî Descriptions
+
+atsay     (row, col, fore, back, *string);
+          Print a string in color at row, column
+          bacë ió foò graphics. It'ó á dummù paramteò iî texô 
+          mode.
+
+bac16_4   (fore, back)
+          Setó 4° columî texô modå tï uså highlighteä backgrounä 
+          colors
+
+back16_8  (fore, back)
+          Setó 8° columî texô modå tï uså highlighteä  backgrounä 
+          colors
+
+backclr   (color)
+          Set the background color
+
+backsnd   ()
+          Background sound function
+
+beepsp    ()
+          Beeps the speaker with a tone similar to the DOS beep
+
+blink16_4 (fore, back)
+          Sets 40 column text mode to normal blink attribute
+
+blink16_8 (fore, back)
+          Sets 80 column text mode to normal blink attribute
+
+boxfill   (x1, y1, x2, y2, color)
+          Draws a box and fills it with color (assembler)
+
+boxtitle  (bp, position, col, title, fore, back)
+          Print a window title in the border
+
+burble    (1/pitch, duration)
+          Playó aî undescribablå sounä iî thå speaker® Yoõ havå 
+          to try various numbers to see the variety.
+
+button    ()
+          Returns joy stick button press status
+
+circle    (rc, cc, radius, aspect_num, aspect_den, color)
+          Draws graphics cicrle with aspect ratio
+
+cls       ()
+          Clear the screen and return mode and number of columns
+
+Š
+
+cls_clr   (fore, back)
+          Clearó texô screeî (8° col)¬ setó attributeó anä placeó 
+          the cursor in the 'home' position
+
+CM_INCH   (cm)
+          Convert cm to inches
+
+countch   (*string, char)
+          Returns # of times a char occurs in a string
+
+ct_bkclr  (color)
+          Set background color
+
+ct_char   (row, col, fore, back, char)
+          Write a character directly to the video buffer
+
+ctinit    ()
+          Initializes video data for the windowing functions
+
+ctone     (freq, duration)
+          Sounds a tone of given frequency and duration
+
+ct_peek   (row, col)
+          Returns the WORD at row, col
+
+ct_poke   (row, col, char)
+          Pokes a WORD at row, col
+
+ctposit   (row, col)
+          Returns address of video memory byte at row, col
+
+ct_sm     (mode)
+          Set the video mode
+
+ct_str    (row, col, fore, back, *string)
+          Write a string directly to video buffer
+
+ct_vstr   (row, col, fore, back, *string)
+          Write a string vertically directly to video memory
+
+ct_wstr   (row, col, fore, back, *string, bp)
+          Write a string to video memory in a window
+
+ct_wvstr  (row, col, fore, back, *string, bp)
+          Write a vertical string to video memory in a window
+
+DEG_RAD   (degrees)
+          Convert degrees to radiansŠ
+
+delay     (millisecs)
+          Delay a number of ms, assumes 4.77 MHz clock
+
+drawbox   (bp)
+          Draws a predefined box on the screen
+
+dwarn2    ()
+          Issue a warning & exit if not DOS 2.00 or greater
+
+dwarn3    ()
+          Issue a warning & exit if not DOS 3.00 or greater
+
+dx120bs   ()
+          Backspace the DW printer 1/120th inch
+
+dxback    ()
+          Select backwards printing on the DW printer
+
+dxbi      ()
+          Select bidirectional printing
+
+dxboldst  ()
+          Begin bold print
+
+dxbs      ()
+          Send a backspace
+
+dxbsend   ()
+          End bold/shadow printing
+
+dxchwide  (number)
+          Set character width HMI (1/120ths inch)
+
+dxclr1tab ()
+          Clear 1 tab
+
+dxclrtab  ()
+          Clear all tabs
+
+dxcr      ()
+          Send a carriage return
+
+dxdefwid  ()
+          Set DW printer to default HMI
+
+dxeject   ()
+          Eject paper
+Š
+
+dxff      ()
+          Send a form feed
+
+dxfor     ()
+          Select forward printing
+
+dxhlf     ()
+          Send a half line feed
+
+dxht      ()
+          Horizontal tab
+
+dxinit    ()
+          Initialize the DW printer
+
+dxlf      ()
+          Send a line feed
+
+dxlinsp   (number)
+          Set line spacing in (n-1)/48 inch
+
+dxlmarg   ()
+          Set left margin
+
+dxpglen   (length)
+          Set page length
+
+dxrhlf    ()
+          Send a reverse half line feed
+
+dxrlf     ()
+          Send a reverse line feed
+
+dxsetht   ()
+          Set a horizontal tab position
+
+dxshast   ()
+          Start shadow printing
+
+dxundend  ()
+          End underlined printing
+
+dxundlst  ()
+          Begin underlining
+
+dxuni     ()
+          Select unidirectional printing
+Š
+
+endsound  ()
+          Uninstalì thå sounä timeò interrupô anä turî backgrounä 
+          music off
+
+equip     ()
+          Returns a word indicating installed equipment
+
+flagdec   ()
+          Decrements mouse cursor flag by one
+          
+forward   (pixels)
+          Move the turtle forward a number of pixels
+
+GAL_LT    (gallons)
+          Convert gallons to liters
+
+gcomtype  ()
+          Returns a byte indicating the computer type in use
+
+gcurpos   (row, col, page)
+          Return current cursor position
+
+getatch   (page)
+          Returns char and attribute at current cursor position
+
+getbcnt   (which_button)
+          Returns the count of mouse button presses
+
+getbrcnt  (which_button)
+          Returns mouse button releases
+
+getbstat  ()
+          Returns current mouse button status
+
+getchne   ()
+          Return keyboard character with no echo
+
+getctype  (start, end, page)
+          Return the current cursor start & end lines and page
+
+getcurp   (&row, &col)
+          Return cursor position
+
+getcurps  (page, &row, &col)
+          Returns cursor position on a specified page
+
+getdmaj   ()
+          Return the DOS major version numberŠ
+
+getdmin   ()
+          Return the DOS minor version number
+
+getdver   ()
+          Return the DOS version number
+
+gethpos   ()
+          Returns the current mouse horizontal position
+
+getkey    ()
+          Destructive read of keyboard buffer
+
+getkeycd  ()
+          Return keycode - waits for key stroke
+
+getmode   ()
+          Returns the current video mode
+
+getpage   ()
+          Returns the current video page
+
+getscode  ()
+          Returns scan code for key stroke, waits for key
+
+getstate  ()
+          Get video state, mode, width, page into register struct
+
+get_str   ()
+          Get user string and replace CR with \0
+
+getvpos   ()
+          Returns the mouse current vertical position
+
+gliss     (start_freq, end_freq, rate)
+          sounds a glissando through the speaker
+
+GM_OZ     (grams)
+          Convert grams to ounces
+
+gothic    (char, row, col, color)
+          Writes a gothic character to the graphics screen
+
+hollow    (char, row, col, color)
+          Writes an outline character to the graphics screen
+
+INCH_CM   (inches)
+          Convert inches to cm
+Š
+
+indexch   (*string, char)
+          Return the first position of a character in a string
+
+indexr    (*string, char)
+          Return the rightmost position of char in string
+
+iskey     ()
+          Returns non-0 if key in buffer / 0 if no key
+
+kbstat    ()
+          Returns the keyboard status byte
+
+keystat   ()
+          DOS interrupt to return keyboard status byte
+
+KG_LB     (kilograms)
+          Convert kilograms to pounds
+
+KM_MI     (kilometers)
+          Convert kilometers to miles
+
+LB_KG     (pounds)
+          Convert pounds to kilograms
+
+lhjoystk  ()
+          Return the current horizontal pos, of left joystick
+
+lightpen  (&row, &col, &rasline, &ras_col)
+          Read the lightpen position
+
+line      (x1, y1, x2, y2, color)
+          Draw a graphics line
+
+lprintf   (*string)
+          Print a string to the line printer
+
+lputch    (char)
+          Send a character to the printer
+
+lrotate   (yc, xc, ys, xs, ye, xe, 3, angle)
+          Draw a rotated line around a center point
+
+lsthpos   (which_button)
+          Return last mouse horiz. position when button pressed
+
+lsthrpos  (which_button)
+          Last mouse horiz. position when button released
+Š
+
+lstvpos   (which_button)
+          Last mouse vertical pos. when button pressed
+
+lstrvpos  (which_button)
+          Last mouse vertical pos. when button release
+
+LT_GAL    (liters)
+          Conver liters to gallons
+
+lvjoystk  ()
+          Return the current vertical pos. of left joystick
+
+M_YD      (meters)
+          Convert meters to yards
+
+makebdr   (bp, type)
+          Sets a border type for a window/box
+
+makebox   (row, col, height, width, bfore, bback, ffore, fback)
+          Defines a new box/window and returns a pointer to it
+
+memsize   ()
+          Return memory size using int86 call
+
+mgun      ()
+          Makes a machine gun tye sound through the speaker
+
+MI_KM     (miles)
+          Convert miles to kilometers
+
+moveto    (row, col)
+          Move the turtle to an absolute position
+
+mreset    ()
+          Checks to see if mouse is installed
+
+msize     ()
+          Returns the number of K Bytes of memory installed
+
+note      (voice, octave, note, volume)
+          Set a musical note for TANDY 1000 voice
+
+OZ_GM     (ounces)
+          Convert ounces to grams
+
+paint     (row, col, color, border_color)
+          fill a bounded region with color
+Š
+
+palette   (a, b, c)
+          Change color set for graphics modes
+          a = palette (0-3)
+          b = 4 for normal colors / 5 for alternate color set
+          c = background color
+
+pcurpos   (row, col, page)
+          Places cursor to location
+
+pencolor  (color)
+          Defines turtle pen color
+
+pendown   ()
+          Places trutle pen on screen to draw
+
+penup     ()
+          Lifts turtle pen off screen 
+
+play      (note, octave, time)
+          plays a foreground tone in the speaker
+
+point     (row, col, color)
+          Lights a single graphics pixel
+
+prtbs     ()
+          Send backspace to the graphics printer
+
+prtbuzz   ()
+          Sound the printer bell
+
+prtcan    ()
+          Cancel and clear the printer buffer
+
+prtcomof  ()
+          Turn off compressed print
+
+prtcomon  ()   
+          Turn on compressed print mode
+
+prtcr     ()
+          Send a carriage return to the graphics printer
+
+prtdubof  ()
+          Turn off double print mode
+
+prtdubon  ()
+          Turn on double print mode
+Š
+
+prtempof  ()
+          Turn off emphasized print mode
+  
+prtempon  ()
+          Turn on emphasized print mode
+
+prtsec    ()
+          Send an ESC code to the printer
+
+prtff     ()
+          Send a form feed to the graphics printer
+
+prtlf     ()
+          Send a line feed
+
+prttab    ()
+          Send atab to the graphics printer
+
+prtwidof  ()
+          Turn off the double width character mode
+
+prtwidon  ()
+          Turn on the double width character mode
+
+RAD_DEG   (radians)
+          Convert radians to degrees
+
+raschaò   (char¬ ULR¬ ULC¬ hmag¬ vmag¬ color)
+          Useó thå internaì characteò fonô descriptionó tï 
+          display characters at larger sizes
+     
+rdhcount  ()
+          Reads current mouse horizontal motion counter
+
+rdvcount  ()
+          Reads current mouse vertical motion counter
+
+readkey   ()
+          Destructivå returî oæ ASCIÉ anä scaî codeó foò keù 
+
+rect      (ULR, ULC, LRR, LRC, color)
+          Draw a filled rectangle
+
+rect1     (ULR, ULC, LRR, LRC, bdr_clr, rect_clr)
+          Draw a flled rectangle bounded by a single pixel border
+
+rect2     (ULR, ULC, LRR, LRC, bdr_clr, rect_clr)
+          Dra÷ á flleä rectanglå boundeä bù á double pixeì borderŠ
+
+redalert  ()
+          Plays a red alert sound through the speaker
+
+replacech (*string, old_char, new_char)
+          Replaces ALL occurences of char in string
+
+resbox    (bp)
+          Removes a window/box from the screen and restores video
+
+rhjoystk  ()
+          Return right joystick horizontal position
+
+rotate    (yc, xc, x, y, angle)
+          rotate a point around a given center point
+
+rvjoystk  ()
+          Return right joystick vertical position
+
+savebox   (bp)
+          Saves the memory where a window/box will be drawn
+
+scankey   ()
+          Returns scan and ASCII codes (non-destructive)
+
+script    (char, row, col, color)
+          Dra÷ á simulateä handwritteî characteò oî thå graphicó 
+          screen
+
+scrolldî  (up_l_row¬ up_l_col¬ low_r_row¬ low_r_col¬ fore¬ back¬ 
+          num_rows)
+          Scroll a bios window down
+
+scrollup  (up_l_row¬ up_l_col¬ low_r_row¬ low_r_col¬ fore¬ back¬ 
+          num_rows)
+          Scroll a bios window up  
+
+setatten  (voice, level)
+          Sets attenuation level on Tandy 1000 sound chip
+
+setcallm  (mask, address)
+          Define a mouse subroutine mask
+
+setcur    (h_hot, v_hot, cursor)
+          Define and pass a mouse graphics cursor
+
+setcurp   (row, col)
+          Sets the cursor to location
+Š
+setcurps  (page, row, col)
+          Sets position of cursor on the page
+
+setcurt   (start, end)
+          Sets the cursor type parameters
+
+setcurtp  (start, end)
+          Sets start and end lines for cursor
+
+setfreq   (voice, freq)
+          Set Tandy voice frequency
+
+sethor    (min, max)
+          Sets mouse min and max positions
+
+setpage   (page)
+          Set the current visual page number
+
+set_pal   (color_set)
+          Selects either color set 0 or 1 for graphics
+
+setpal    (0/1)
+          Selects a palette for graphics modes
+
+setpos    (hor, ver)
+          Set mouse cursor postion
+
+setsound  ()
+          enableó thå backgrounä sounä interrupô anä useó noteó 
+          iî arraù melodù anä timinç iî arraù beaô tï producå 
+          background sound
+
+settxtc   (type,screen_mask/first_line, cur_mask/lst_line)
+          Select and define mouse text cursor
+
+setver    (min, max)
+          Set max and min vertical mouse positions
+
+sm        (mode)
+          Set the video mode
+
+smode     (mode)
+          set video moe using int86
+
+soundoff  ()
+          Turn off Tandy sound chip
+
+soundon   ()
+          Turn on the Tandy sound chipŠ
+spalreg   (reg#, color)
+          Set the palette register values (Tandy & EGA only)
+
+spratio   (hor, ver)
+          Set mouse movement ratios
+
+str_cent  (*string, *destination, width)
+          Center a string within width
+
+strclr    (fore, back, *string)
+          C function to write a string in color
+
+strdel    (*string, start, number)
+          Delete a substring from a string
+
+strpad    (*string, number)
+          Add spaces to the left of a string
+
+strtolow  (*string)
+          Convert a string to all lower case
+
+strtoup   (*string)
+          Convert a string to all upper case
+
+tcos      (angle)
+          returî ² digiô valuå oæ cosinå foò wholå degreeó - 
+          operates faster for graphics plotting
+
+tone      (freq, time_in_ms)
+          play a tone - time assumes 4.77 MHz clock
+
+tsin      (angle)
+          returî ² digiô valuå oæ siî foò wholå degreeó - 
+          operates faster for graphics than does the sin function
+
+turnleft  (angle)        
+          Turns the turtle heading left
+
+turnright (angle)
+          Turns the turtle heading right
+
+usrfont   (char, ULR, ULC, hmag, vmag, color, font#)
+          Allowó useò tï selecô froí predetermineä fontó thå 
+          style of character to display
+
+vbar3d    (base, height, col, width, depth, color, outline_color)
+          3d bar graph plot function
+
+Š
+wac       (char, color/attribute, xor_flag)
+          Write a character and attribute/color using BIOS call
+
+waitkey   ()
+          Pauses and waits for key stroke if none in buffer
+
+watch     (page, num_chars, char, fore, back)
+          Writes character(s) in color using BIOS call
+
+wch       (page, num_chars, char, color)
+          Writeó char(s© tï pagå (texô mode© iî coloò (graphicó 
+          mode)
+
+wchtty    (char, fore)
+          Writeó characteò usinç ttù BIOÓ mode¬ coloò iæ graphicó 
+          mode in use
+
+wco       (char, color)
+          Writå characteò onlù (coloò ió activå iî graphics¬ 
+          dummy parameter in text modes)
+
+wgets     (bp, row, col, len)
+          Return a string that exists inside a window
+
+w_hline   (row, col,fore, back, char, width)
+          Draw a horizontal line of character
+
+wnoise    (low_freq, high_freq, duration)
+          Produces white noise over a specified freq range
+
+wputs     (bp, str, row, col)
+          Puts s string to a window using BIOS
+
+wtty      (char, color)
+          Writå characteò iî TTÙ mode¬ coloò ió onlù activå iî 
+          graphics modes, in text modes it is a dummy parameter
+
+w_hline   (row, col, fore, back, ch, width)
+          Draw a horizontal line of character
+
+w_vline   (row, col, fore, back, char, height)
+          Draws a vertical string of character
+
+YD_M      (yards)
+          Convert yards to meters
+
+.paŠ
+
+
+
+
+
+                           Appendix A
+
+
+
+
+
+   Thió sectioî oæ thå manuaì ió á detaileä descriptioî oæ thå 
+functions®  Iô includeó á descriptioî oæ thå function¬ á samplå 
+calì froí C¬ á samplå prograí oò prograí fragmenô usinç thå 
+functioî anä anù returnó froí thå function®  Includeä alsï arå 
+anù limits¬ peculiaritieó oò otheò informatioî abouô thå 
+functionó requireä foò effectivå uså iî programming.
+
+.paŠ.he _C_Tool_Box___________________________________________Appendix_A_
+                             atsay                     
+
+
+
+Thió functioî ió similaò tï thå dBASÅ functioî oæ thå samå namå 
+iî thaô iô allowó thå useò tï print¬ iî color¬ á strinç aô á 
+specified location on the screen.
+
+
+Call:
+          atsay(row, col, fore, back, *string)
+
+          row       = the starting row for the string
+          col       = the starting column for the string
+          fore      = the foreground color of the string
+          back      = the background color of the string
+          string    = the string to be printed on the screen
+
+Example:
+          main()
+          {
+               /* sm(4); */
+               atsay(5, 10, 3, 2, "Testing");
+          }
+
+          Thió prograí wilì prinô thå strinç "Testing¢ oî thå           
+          screeî iî coloò 3¬ startinç aô ro÷ µ columî 10® Iæ iî 
+          graphicó modå (removå thå comments© thå backgrounä 
+          coloò wilì bå coloò 2¬ foò texô modå thió parameteò ió 
+          a dummy parameter.
+
+ 
+Return:
+          None
+
+
+Caveats:
+          Backgrounä coloò ió onlù activå iî graphicó modes®  Foò 
+          texô modeó iô ió á dummù parameter®  Foò writtinç witè 
+          á backgrounä coloò iî texô modeó uså thå watcè 
+          function.
+          Bå surå thå strinç parameteró liå withiî thå screeî 
+          boundries.
+
+
+
+
+
+.paŠ
+
+   This ends the Board version of the manual.
+
+
+
+
+
+Thå fulì manuaì wilì bå senô witè alì librarù sourcå codå tï alì 
+registereä owneró oæ thå Ã Tooì boø Library®  Therå simplù ió noô 
+enough room in a bulletin board sized file.
+
+Thió sectioî oæ thå manuaì ió aî earlù version®  Thå finaì manuaì 
+wilì contaiî completå descriptionó oæ alì aspectó oæ thå tooì 
+Box®  Iô ió availablå iî twï disë formats®  Onå suitablå foò 
+printinç froí DOÓ anä onå iî WordStaò format®  Iô ió alsï 
+availablå iî thå forí oæ preprinteä pageó suitablå foò á threå 
+ring binder.
+
+
+Thå  followinç ió includeä sincå thå fulì manuaì ió noô witè thió 
+file.
+
+
+BACKGROUND SOUND FUNCTIONS INFORMATION
+
+Thå numberó foò thå musicaì noteó arå listeä belo÷ foò thå octavå 
+starting with middle C:
+
+C    C#   D   D#   E    F    F#    G    G#    A   A#    B
+24   25   26  27  28   29    30    31   32    33  34    35
+
+The note 100 may be used for rests.
+
+Timing for the notes is in timer ticks (18.2 per second).
+
+See the full manual for further details.
+
+Placå thå noteó iî aî arraù calleä melody[İ anä thå timinç counô 
+iî aî arraù calleä beat[]¬ seå ctdemo.ã foò aî example®  Otheò 
+songó maù bå defineä witè noteó anä timinç iî differenô arrayó 
+buô theså wilì havå tï bå copieä intï thå melodù anä beaô arrayó 
+beforå activatioî thå backgrounä sounä function®  Á futurå 
+release will pass a pointer to the desired array.
+  

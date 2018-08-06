@@ -1,0 +1,13 @@
+NAME           getprofi
+
+DESCRIPTION    'Microsoft Windows Demonstration Application'
+
+STUB           'WINSTUB.EXE'
+
+CODE           MOVEABLE
+
+DATA           MOVEABLE MULTIPLE
+
+HEAPSIZE       1024
+
+STACKSIZE      4096

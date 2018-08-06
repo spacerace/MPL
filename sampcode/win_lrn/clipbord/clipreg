@@ -1,0 +1,6 @@
+clipreg.obj: clipreg.c
+    cl -c -d -AS -Gsw -Os -Zpe clipreg.c
+
+clipreg.exe: clipreg.obj clipreg.def
+    link4 clipreg,/align:16,/map, slibw/NOE, clipreg.def
+    mapsym clipreg

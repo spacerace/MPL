@@ -1,0 +1,1042 @@
+Figure 1:  An OS/2 Rosetta Stone
+
+
+In C (using Microsoft C 5.1):
+
+/* from bsedos.h */
+USHORT APIENTRY DosGetModName(HMODULE, USHORT, PCHAR);
+
+/* enumdll.c */
+#include <stdio.h>
+
+#define INCL_DOSMODULEMGR
+#include "os2.h"
+
+main()
+{
+    char buf[128];
+    register unsigned int i;
+    
+    for (i=0; i<=0xFFFF; i++)
+        if (! DosGetModName(i, 128, buf))
+            printf("%u\t%s\n", i, buf);
+}
+
+
+In Forth (using Laboratory Microsystems 80286 UR/Forth 1.1 for OS/2):
+
+\ no header files
+
+CREATE BUF 128 ALLOT                    \ create a buffer
+
+: ENUMDLL                               \ define a new word
+    65535 0 DO                          \ for i=0 to 65535 do
+        I 128 DS0 BUF DOSGETMODNAME     \ DosGetModName(i,128,ds:buf)
+        0= IF                           \ if no error
+            CR                          \ carriage return
+            I 5 U.R 3 SPACES            \ display i nicely
+            BUF -ASCIIZ COUNT TYPE      \ convert ASCII string and print it
+        THEN
+    LOOP ;
+
+ENUMDLL                                 \ invoke the word
+
+
+In Lisp (using OS2XLISP, version 1.10):
+
+; no header files
+
+(define doscalls (loadmodule "DOSCALLS"))
+(define dosgetmodname (getprocaddr doscalls "DOSGETMODNAME"))
+(define buf (make-string 32 128))           ; string of 128 spaces
+
+(dotimes
+    (i #xFFFF)
+    (if (zerop (call dosgetmodname (word i) (word 128) buf))
+    ; then
+        (format stdout "~A\t~A\n" i buf)))
+
+
+In Modula-2 (using Stony Brook Software Modula-2 for OS/2):
+
+(* from doscalls.def *)
+PROCEDURE DosGetModName ['DOSGETMODNAME'] (
+    ModuleHandle    : CARDINAL; (* the module handle to get name for *)
+    BufferLength    : CARDINAL; (* the length of the output buffer *)
+    Buffer          : Asciiz    (* the address of output buffer *)
+    ) : CARDINAL;
+
+(* enumdll.mod *)        
+MODULE ENUMDLL;
+
+FROM SYSTEM IMPORT ADR;
+
+FROM InOut IMPORT Write, WriteLn, WriteString, WriteInt;
+
+IMPORT DosCalls;
+
+VAR
+    i : CARDINAL;
+    buf : ARRAY [0..128] OF CHAR;
+
+BEGIN
+    FOR i := 0 TO 65535 DO
+        IF DosCalls.DosGetModName(i, 128, ADR(buf)) = 0 THEN
+            WriteInt(i, 5); Write(CHAR(9)); WriteString(buf); WriteLn;
+        END
+    END;
+
+END ENUMDLL.
+
+
+In BASIC (using Microsoft BASIC Compiler 6.0):
+
+' enumdll.bas
+' compile with /d so you can Ctrl-Break
+
+' from bsedospe.bi
+DECLARE FUNCTION DosGetModName%( _
+        BYVAL P1 AS INTEGER,_
+        BYVAL P2 AS INTEGER,_
+        BYVAL P3s AS INTEGER,_ 
+        BYVAL P3o AS INTEGER)
+
+' include file for Program Execution Support
+REM $INCLUDE: 'bsedospe.bi'
+
+buf$ = SPACE$(128)
+
+FOR i% = 0 TO 32765                 ' only signed integers available
+    Result = DosGetModName%(i%, 128, VARSEG(buf$), SADD(buf$))
+    IF Result = 0 THEN
+        PRINT i%, RTRIM$(buf$)
+        buf$ = SPACE$(128)          ' have to reset buffer, because
+    END IF                          ' BASIC doesn't know about ASCIIZ 
+NEXT i%
+
+
+
+sample output:
+
+        140     A:\HARDERR.EXE
+        220     D:\OS2\DLL\BMSCALLS.DLL
+        380     D:\OS2\SYS\SHELL.EXE
+        630     A:\SWAPPER.EXE
+        750     D:\OS2\DLL\BKSCALLS.DLL
+        930     D:\OS2\DLL\ANSICALL.DLL
+        1210    D:\OS2\DLL\EPS-LIB.DLL
+        1230    D:\OS2\DLL\MOUCALLS.DLL
+        1240    D:\OS2\DLL\QUECALLS.DLL
+        1330    D:\OS2\DLL\SESMGR.DLL
+        1340    D:\OS2\DLL\BVSCALLS.DLL
+        1380    D:\OS2\DLL\VIOCALLS.DLL
+        1390    D:\OS2\DLL\KBDCALLS.DLL
+        1480    D:\OS2\DLL\DOSCALL1.DLL
+        1490    D:\OS2\DLL\NLS.DLL
+        1550    D:\OS2\DLL\MSG.DLL
+        1590    D:\OS2\E\EPSILON.EXE
+        2240    D:\OS2\DLL\MONCALLS.DLL
+        2320    D:\URFOS2\FORTH.EXE
+        2960    D:\OS2\DLL\CRTLIB.DLL
+        2980    E:\XLISP\NEW\OS2XLISP.EXE
+        3190    D:\OS2\DLL\ALIAS.DLL
+        3630    D:\OS2\SYS\CMD.EXE
+
+
+
+
+Figure 2
+
+A better Forth implementation of the Rosetta Stone Program
+
+
+FORGET ENUMDLL      \ get rid of previous definition
+CREATE BUF 128 ALLOT
+: MODULE? ( n -- flag )   128 DS0 BUF DOSGETMODNAME 0= ;
+: .ASCIIZ ( addr -- )   -ASCIIZ COUNT TYPE ;
+: .MODULE ( n -- )   CR   5 U.R   3 SPACES   BUF .ASCIIZ ;
+: ENUMDLL ( -- )   65535 0 DO I MODULE? IF I .MODULE THEN LOOP ;
+
+
+
+
+Figure 3
+
+Code listing for threads.4th
+
+\ threads.4th
+\ Andrew Schulman 23-July-1988
+\ revised 27-July: using GETNUM from input stream, not stack
+\ revised 3-August: using new TASKER.BIN (08-02-88)
+
+TASKER
+
+\ ============================================================
+\ note that each thread has its own view of the LDT
+VARIABLE GIS   VARIABLE LIS
+DS0 GIS DS0 LIS DOSGETINFOSEG DROP
+
+: SELF ( -- thread# of current thread )   LIS @ 6 @L ;
+
+: CHAR ( n -- char )   DUP 9 > IF 55 ELSE 48 THEN + ;
+
+\ ============================================================
+\ stolen from os2demo.scr
+VARIABLE SEED
+: (RAND)   SEED @ 259 * 3 + 32767 AND DUP SEED ! ;
+: RANDOM   (RAND) 32767 */ ;
+
+: RY ( -- y ) ?YMAX 1+ RANDOM ;
+: RX ( -- x ) SELF 4 MOD 20 * 20 + RANDOM SELF 4 MOD 20 * MAX;
+
+\ ============================================================
+\ use UR/F semaphores, instead of directly calling OS/2
+SEMAPHORE SEM   
+
+VARIABLE ID
+VARIABLE ATTR   12 ATTR !
+
+\ display thread ID -- multiple threads will execute through
+\ this same code if the semaphore is removed, you can see
+\ each thread grab wrong thread id#
+: SHOW-ID ( -- )
+    BEGIN
+        SEM SGET
+        SELF CHAR ID !
+        \ use VioWrtCharStrAtt because it is properly 
+        \ reentrant and also does not screw with the cursor
+        \ position
+        DS0 ID   1   RY   RX   DS0 ATTR   0 VIOWRTCHARSTRATT   DROP
+        SEM SREL
+        PAUSE
+    AGAIN ;
+
+\ ============================================================
+\ simulate the cobegin-coend construct, so all threads 
+\ start together
+: COBEGIN ( -- )   DOSENTERCRITSEC DROP ;
+: COEND ( -- )     DOSEXITCRITSEC DROP ;
+
+\ ============================================================
+2048 128 TCB THREAD1
+2048 128 TCB THREAD2
+2048 128 TCB THREAD3
+2048 128 TCB THREAD4
+
+: (START) ( tcb -- )   DUP START SHOW-ID WAKE ;
+
+: START-IT ( -- )
+    COBEGIN
+        THREAD1 (START)
+        THREAD2 (START)
+        THREAD3 (START) 
+        THREAD4 (START)
+    COEND ;
+
+\ ============================================================
+\ important to not stop thread while it's holding the semaphore
+: (STOP) ( tcb -- )
+   SEM SGET
+   STOP 
+   SEM SREL ;
+
+: STOP-IT ( -- )
+    THREAD1 (STOP)
+    THREAD2 (STOP)
+    THREAD3 (STOP) 
+    THREAD4 (STOP) ;
+
+\ ============================================================
+\ get a number from input stream, put on stack
+: GETNUM ( -- n )   BL WORD NUMBER? 2DROP ;
+
+\ ============================================================
+\ UR/F tasks are OS/2 threads, so we can manipulate a task
+\ using OS/2 calls
+
+\ important to claim semaphore, so we don't suspend a thread
+\ while it's holding on to the semaphore !
+: SUSPEND ( -- )   GETNUM SEM SGET DOSSUSPENDTHREAD SEM SREL DROP ;
+: RESUME ( -- )    GETNUM DOSRESUMETHREAD DROP ;
+
+\ if entered from keyboard, suspend/resume all background
+\ tasks
+: CRIT ( -- )      DOSENTERCRITSEC DROP ;
+: XCRIT ( -- )     DOSEXITCRITSEC DROP ;
+
+\ if entered from keyboard, also suspend/resume all
+\ background tasks
+: GETSEM ( -- )    SEM SGET ;
+: RELSEM ( -- )    SEM SREL ;
+
+\ ============================================================
+VARIABLE PRTY
+
+: GET-PRTY ( -- )   2 DS0 PRTY GETNUM DOSGETPRTY DROP PRTY @ . ;
+
+: SET-IDLE ( -- )  2 1 0 GETNUM DOSSETPRTY DROP ;
+: SET-REG ( -- )   2 2 0 GETNUM DOSSETPRTY DROP ;
+
+\ warning:  if you set a background thread to time-critical
+\ from the keyboard, you never get the keyboard back!
+
+\ ============================================================
+: HELP ( -- )
+    CR ." Commands:" CR
+    ." HELP" CR
+    ." CRIT" CR
+    ." XCRIT" CR
+    ." GETSEM" CR
+    ." RELSEM" CR
+    ." SUSPEND <thread #>" CR
+    ." RESUME <thread #>" CR
+    ." GET-PRTY <thread #>" CR
+    ." SET-IDLE <thread #>" CR
+    ." SET-REG <thread #>" CR 
+    ." STOP-IT" CR ;
+
+\ ============================================================
+CLS
+START-IT
+THREAD1 (STOP)        \ leave room for typing in commands
+PAUSE
+CLS
+HELP
+
+
+
+
+Figure 4
+
+Code listing for xy.4th
+
+\ xy.4th for UR/Forth
+\ get current cursor location, by programming the 6845 CRTC
+
+80 CONSTANT COLUMNS
+
+HEX
+: CUR-LOC  ( -- reg14 reg15 )  E 3D4 PC!  3D5 PC@  F 3D4 PC!  3D5 PC@ ;
+: MK-WORD  ( w1 w2 -- w )  SWAP FF * + ;
+: COL-ROW  ( w -- x y )    DUP  COLUMNS MOD 1+  SWAP  COLUMNS / 1+ ;
+: CURS  CUR-LOC  MK-WORD  COL-ROW ;
+DECIMAL
+
+
+
+
+Figure 5
+
+Dynamically linking to a DLL from OS2XLISP
+
+; chat.lsp
+; Run-time dynamic linking to CHATLIB.DLL from OS2XLISP
+
+(define chatlib (loadmodule "CHATLIB"))
+(define login (getprocaddr chatlib "LOGIN"))
+(define get-msg-cnt (getprocaddr chatlib "GET_MSG_CNT"))
+(define my-id (call login))
+(define msg-cnt (call get-msg-cnt (word my-id)))
+
+
+
+
+Figure 6
+
+Code listing for makecall.lsp
+
+; makecall.lsp
+; use Lisp symbolic manipulation 
+; to create OS/2 API functions
+; "I would rather write code to write code, than write code"
+; Andrew Schulman 2-August-1988
+
+; filter sets up formal argument list to be passed to (define)
+(define (filter list &aux (lst (list nil)) elem)
+    (dotimes
+        ; for each element in list
+        (i (length list))
+        (setf elem (nth i list))
+        ; if it's a list, like (word freq)
+        (if (listp elem)
+            ; if it's not a retval directive, like 'word
+            (if (not (eq 'QUOTE (car elem)))
+                (nconc lst (list (cadr elem))))
+        ;else
+            (nconc lst (list elem))))
+    (cdr lst))
+
+(defmacro make-call (module func &rest args)
+    `(define ,(append (list func) (filter args))
+        (call
+            ,(getprocaddr
+                (eval module)
+                (if (eq module 'CRTLIB)
+                    (strcat "_" (string-downcase (symbol-name func)))
+                    (symbol-name func)))
+            ,@args)))
+
+; e.g.:
+;       (make-call doscalls dosbeep (word freq) (word dur))
+; produces:
+;       (define (dosbeep freq dur)
+;           (call <procaddr> (word freq) (word dur)))
+; can then be called:
+;       (dosbeep 880 100)
+
+
+
+
+Figure 7
+
+Source code listing for segs.lsp
+
+; SEGS.LSP
+; for OS2XLISP
+; to examine OS/2 memory segments
+; Andrew Schulman 2-August 1988
+
+; requested protection level of seg
+(defmacro rpl (x) `(logand ,x 3))
+        
+; in LDT or GDT?
+(defmacro global? (x) `(zerop (logand ,x 4)))
+        
+; does LAR represent accessed segment?
+(defmacro accessed? (x) `(= 1 (logand ,x 1)))
+
+; does LAR represent present segment?
+(defmacro present? (x) `(= 128 (logand ,x 128)))
+                
+; does LAR represent code segment?
+(defmacro code? (x) `(= 8 (logand ,x 8)))
+        
+; does LAR represent call gate?
+(defmacro call-gate? (x) `(= #xE4 ,x))
+
+; does LAR represent readable code?
+(defmacro read? (x)
+    `(and
+        (code? ,x)
+        (= 2 (logand ,x 2))))
+                    
+; does LAR represent writable data?
+(defmacro write? (x)
+    `(and
+        (not (code? ,x))
+        (= 2 (logand ,x 2))))
+
+(define (enumsegs func)
+    (dotimes
+        ; for each possible segment....
+        (i #xFFFF)
+        ; if there's really a segment there....
+        (if (not (zerop (lar i)))
+            ; call the callback function,
+            ; passing it the segment number,
+            ; its access rights (LAR), and 
+            ; its size (LSL, remembering to
+            ; add 1 because LSL is zero-based)
+            (apply func (list i (lar i) (1+ (lsl i)))))))
+
+; this is a callback function, passed to (enumsegs) by (print-segs) below
+(define (show-seg seg seglar segsize)
+    (if (< (rpl seg) 3)
+        (format stdout "~A\n" seg)
+    ; only show details for one of the 
+    ; four identical segments
+        (progn
+            (format stdout "~A\t~A\t~A\t"
+                ; print segment/selector number
+                seg
+                ; print whether global (GDT) or local (LDT)
+                (if (global? seg)
+                    "GDT"
+                    "LDT")
+                ; print what it is:  data, code, 
+                ; or call gate
+                (cond
+                    ((call-gate? seglar)
+                        "CALL GATE")
+                    ((code? seglar)
+                        (if (read? seglar)
+                            "READABLE CODE"
+                            "EXECUTE-ONLY CODE"))
+                    (t
+                        (if (write? seglar)
+                            "WRITABLE DATA"
+                            "READ-ONLY DATA"))))
+            ; if not a call gate, print its size
+            (if (not (call-gate? seglar))
+                (format stdout "~A ~A"
+                    segsize
+                    (if (= 1 segsize) "byte" "bytes")))
+            ; if segment not present in memory, say so
+            (if (not (present? seglar))
+                (format stdout " (not present)"))
+            ; print ruler at the bottom
+            (format stdout "\n~A\n" (make-string #\. 70)))))
+                
+(define (print-segs)
+    (enumsegs #'show-seg))
+        
+; non-transparent popup, invoke func inside popup, 
+; wait for keystroke
+(define (popup func)
+    (call (getprocaddr viocalls "VIOPOPUP") ^(word 1) 
+			(word 0))
+    (apply func nil)
+    (read-char)
+    (call (getprocaddr viocalls "VIOENDPOPUP") (word 0)))
+                
+; takes optional keyword position-independent parameters, 
+; e.g., (total-segs :bkgr t) ; 
+; or (total-segs :bkgr t :pflag nil)
+(define (total-segs
+        &key (pflag t) (bkgr nil)
+        &aux (numsegs 0) (numbytes 0) (gnum 0) 
+             (lnum 0) (gbytes 0) (lbytes 0))
+    ; if running in background, make idle priority class
+    (if bkgr
+        (call
+            (getprocaddr doscalls "DOSSETPRTY")
+            (word 0) (word 1) (word 0) (word (getpid))))
+    (enumsegs
+        ; pass enumsegs a "nameless" function, 
+        ; created with (lambda)
+        (lambda (seg seglar segsize)
+            ; only do something for one out of the 
+            ; four identical segments 
+            (if (zerop (rpl seg))
+                (progn
+                    (setf
+                        numsegs (1+ numsegs)
+                        numbytes (+ numbytes segsize))
+                    (if (global? seg)
+                        (setf
+                            gnum (1+ gnum)
+                            gbytes (+ gbytes segsize))
+                    ; else if local
+                        (setf
+                            lnum (1+ lnum)
+                            lbytes (+ lbytes segsize)))))))
+    ; since the operation takes a long time, 
+    ; they'll get popup notification when it's done.
+    (if bkgr
+        (popup 
+            (lambda ()
+                (call
+                    (getprocaddr doscalls "DOSSETPRTY")
+                    (word 0) (word 2) (word 0) 
+                    (word (getpid)))
+                (format stdout "OS2XLISP finished computing
+                                TOTAL-SEGS!\n\n")
+                (format stdout "SEGS: ~A\tBYTES: ~A\n\n"
+                  numsegs numbytes)
+                (format stdout "Press any key to
+                                continue\n\n"))))
+    ; either print out the results, or return them as a list
+    (if pflag
+        (not
+            (format stdout "Segs:  ~A (GDT ~A, LDT
+                            ~A)\tBytes: ~A (GDT ~A, LDT
+                            ~A)\n"
+                numsegs gnum lnum numbytes gbytes lbytes))
+    ; else          
+        (list numsegs numbytes gnum gbytes lnum lbytes)))
+
+
+
+
+
+Figure 10
+
+Source Code listing for the Dining Philosphers
+
+MODULE Dining;
+
+(*
+The Five Dining Philosophers in Modula-2
+adapted from M. Ben-Ari, PRINCIPLES OF CONCURRENT PROGRAMMING 
+(Prentice-Hall, 1982), p.113
+
+This module has no operating system dependencies, but depends 
+upon Sem, which has only been implemented for OS/2
+*)
+
+FROM Processes IMPORT StartProcess;
+
+FROM InOut IMPORT WriteString, WriteInt, WriteLn;
+
+FROM Sem IMPORT
+    CountingSemaphore, P, V, CSInit,
+    BinarySemaphore, Request, Clear, BinInit,
+    cobegin, coend, self;
+
+CONST
+    NUM_PHILOSOPHERS = 5;
+    NUM_FORKS = NUM_PHILOSOPHERS;
+VAR
+    fork : ARRAY [1..NUM_FORKS] OF BinarySemaphore;
+    room : CountingSemaphore;
+    fini : CountingSemaphore;
+    i : CARDINAL;
+
+MODULE io;
+IMPORT
+    BinarySemaphore, Request, Clear, BinInit, WriteString, WriteInt, WriteLn;
+EXPORT think, eat;
+VAR
+    (* iosem has no bearing on problem itself; just for
+       printing strings *)
+    iosem : BinarySemaphore;    
+
+PROCEDURE think (p : CARDINAL) ;
+    BEGIN
+        Request(iosem);
+        WriteString('thinking: '); WriteInt(p,1); WriteLn;
+        Clear(iosem);
+    END think;
+
+PROCEDURE eat (p : CARDINAL) ;
+    BEGIN
+        Request(iosem);
+        WriteString('eating: '); WriteInt(p,1); WriteLn;
+        Clear(iosem);
+    END eat;
+
+BEGIN
+    (* initialization for internal module *)
+    BinInit(iosem);
+END io;
+
+PROCEDURE philosopher () ;
+    VAR
+        i : CARDINAL;
+        left, right : CARDINAL;
+    BEGIN
+        (*
+            these don't have to be done each time through
+            loop, since each philosopher/process has its own
+            stack
+        *)
+        i := self() - 1;
+        left := i;
+        right := (i MOD NUM_FORKS) + 1;
+
+        P(fini);
+
+        LOOP
+            think(i);
+            P(room);
+            Request(fork[left]);
+            Request(fork[right]);
+            eat(i);
+            Clear(fork[left]);
+            Clear(fork[right]);
+            V(room);
+        END;
+    END philosopher;
+
+BEGIN
+    CSInit(room, NUM_FORKS - 1);
+    CSInit(fini, NUM_PHILOSOPHERS);
+
+    FOR i := 1 TO NUM_FORKS DO
+        BinInit(fork[i]);
+    END;
+
+    cobegin();
+        FOR i := 1 TO NUM_PHILOSOPHERS DO
+            StartProcess(philosopher, 2048);
+        END;
+    coend();
+
+    P(fini);    (* never cleared! *)
+END Dining.
+
+
+DEFINITION MODULE Sem;
+
+TYPE CountingSemaphore;
+PROCEDURE P ['P'] (VAR cs : CountingSemaphore);
+PROCEDURE V ['V'] (VAR cs : CountingSemaphore);
+PROCEDURE CSInit ['CSINIT'] (VAR cs : CountingSemaphore; count : CARDINAL);
+
+TYPE BinarySemaphore;
+PROCEDURE Request ['REQUEST'] (VAR s : BinarySemaphore);
+PROCEDURE Clear ['CLEAR'] (VAR s : BinarySemaphore);
+PROCEDURE BinInit ['BININIT'] (VAR s : BinarySemaphore);
+
+PROCEDURE cobegin ['COBEGIN'] () ;
+PROCEDURE coend ['COEND'] () ;
+
+PROCEDURE self ['SELF'] () : CARDINAL ;
+    
+END Sem.
+
+
+IMPLEMENTATION MODULE Sem;
+
+(*
+contains:
+    Counting Semaphores
+    Binary Semaphores
+    assorted thread-related procedures
+*)
+
+FROM SYSTEM IMPORT ADDRESS, ADR;
+
+FROM Storage IMPORT ALLOCATE;
+
+FROM DosCalls IMPORT
+    DosSemClear, DosSemSet, DosSemRequest, DosSemWait,
+    DosEnterCritSec, DosExitCritSec, DosGetInfoSeg;
+
+TYPE CountingSemaphore = POINTER TO
+    RECORD
+        cs : LONGINT;
+        ms : LONGINT;
+        count : CARDINAL;
+        countsem : ADDRESS;
+        mutexsem : ADDRESS;
+    END;
+
+(*
+  note:  P() and V() adapted from Kevin Ruddell, "Using OS/2
+  Semaphores to Coordinate Concurrent Threads of Execution,"
+  MICROSOFT SYSTEMS JOURNAL, May 1988, Figure 9: "Simulating
+  a Counting Semaphore under OS/2," p.26 
+*)
+
+PROCEDURE P ['P'] (VAR cs : CountingSemaphore);
+    VAR blocked : BOOLEAN;
+    BEGIN
+        blocked := TRUE;
+        WHILE blocked DO
+            DosSemWait(cs^.countsem, -1);
+            DosSemRequest(cs^.mutexsem, -1);
+            IF (cs^.count = 0) THEN
+                DosSemSet(cs^.countsem);
+            ELSE
+                DEC(cs^.count);
+                blocked := FALSE;
+            END;
+            DosSemClear(cs^.mutexsem);
+        END;
+    END P;
+
+PROCEDURE V ['V'] (VAR cs : CountingSemaphore);
+    BEGIN
+        DosSemRequest(cs^.mutexsem, -1);
+        INC(cs^.count);
+        DosSemClear(cs^.countsem);
+        DosSemClear(cs^.mutexsem);
+    END V;
+
+PROCEDURE CSInit ['CSINIT'] (VAR cs : CountingSemaphore; count : CARDINAL);
+    BEGIN
+        NEW(cs);
+        cs^.cs := 0;
+        cs^.ms := 0;
+        cs^.count := count;
+        cs^.countsem := ADR(cs^.cs);
+        cs^.mutexsem := ADR(cs^.ms);
+    END CSInit;
+
+TYPE BinarySemaphore = POINTER TO
+    RECORD
+        s : LONGINT;
+        sem : ADDRESS;
+    END;
+
+PROCEDURE Request ['REQUEST'] (VAR s : BinarySemaphore);
+    BEGIN
+        DosSemRequest(s^.sem, -1);
+    END Request;
+
+PROCEDURE Clear ['CLEAR'] (VAR s : BinarySemaphore);
+    BEGIN
+        DosSemClear(s^.sem);
+    END Clear;
+
+PROCEDURE BinInit ['BININIT'] (VAR s : BinarySemaphore);
+    BEGIN
+        NEW(s);
+        s^.s := 0;
+        s^.sem := ADR(s^.s);
+    END BinInit;
+
+(* simulate the cobegin-coend construct *)
+PROCEDURE cobegin ['COBEGIN'] ();
+    BEGIN
+        DosEnterCritSec();
+    END cobegin;
+
+PROCEDURE coend ['COEND'] ();
+    BEGIN
+        DosExitCritSec();
+    END coend;
+
+MODULE Self;
+IMPORT ADDRESS, DosGetInfoSeg;
+EXPORT self;
+VAR
+    A : ADDRESS;
+    LocalInfo : POINTER TO ARRAY [0..6] OF CARDINAL;
+
+(* return a thread's ID number *)
+PROCEDURE self ['SELF'] () : CARDINAL;
+    BEGIN
+        RETURN LocalInfo^[3];
+    END self;
+
+BEGIN
+    (* module initialization code *)
+    DosGetInfoSeg(A.OFFSET, A.SEGMENT);
+    A.OFFSET := 0;
+    LocalInfo := A;
+END Self;
+
+END Sem.
+
+
+; SEMAPH.DEF
+
+LIBRARY SEM INITINSTANCE
+DESCRIPTION 'Counting and Binary Semaphores'
+DATA MULTIPLE
+EXPORTS
+    SEM         ; init
+    P
+    V
+    CSINIT
+    REQUEST
+    CLEAR
+    BININIT
+    COBEGIN
+    COEND
+    SELF
+
+
+; START.ASM -- auto-init entry point
+
+EXTRN   SEM:FAR
+
+        DOSSEG
+        .MODEL large
+        .CODE
+
+START   PROC FAR
+        call SEM
+        mov ax,1    ; return success
+        ret
+START   ENDP
+
+END     START
+
+
+set m2lib=\os2\mod2\lib
+
+m2 sem.def/data:l/thread && m2 sem/data:l/thread
+m2 dining/thread
+
+' to make DLL version:
+masm start.asm;
+link /dosseg start sem junk,sem.dll,,,semaph.def && imblib sem.lib semaph.def
+copy sem.dll \os2\dll       'copy to LIBPATH
+link dining,dining,,sem;
+
+' to make non-DLL version:
+link dining sem,dining;
+
+
+
+
+
+
+Figure 12
+
+
+ENUMPROC.BAS, a BASIC program that prints out a list of all 
+functions exported from a DLL.
+
+
+' enumproc.bas
+' bc /e enumproc; && link enumproc; && enumproc brun60ep
+
+if command$ = "" then
+    dll$ = "BRUN60EP.DLL"
+elseif instr(command$, ".") then
+    dll$ = command$
+else
+    dll$ = command$ + ".DLL"
+endif
+
+pipe = freefile
+
+' makes it easy to detect end of pipe's output
+on error goto closefile
+
+foundit = 0
+
+open "pipe:exehdr " + dll$ + " 2>nul" as pipe
+
+foundfile = 1       ' found EXEHDR
+
+' get rid of initial EXEHDR output
+do while instr(buf$, "Exports:") = 0
+    line input #pipe, buf$
+loop
+line input #pipe, buf$
+
+foundfile = 2       ' found named DLL
+
+print "Routines exported by "; dll$
+
+do while 1
+    line input #pipe, buf$
+    buf$ = mid$(buf$,16)
+    procname$ = left$(buf$, instr(buf$, " ") - 1)
+    print procname$
+loop
+
+closefile:
+    if foundfile = 0 then
+        print "Can't find EXEHDR"
+    elseif foundfile = 1 then
+        print "Can't find "; dll$
+    endif
+    close pipe
+    system
+
+
+
+
+
+
+
+Figure 13
+
+Code Listing for PEEKER.BAS
+
+
+' peeker.bas
+' compile with bc peeker.bas /d/e/x; && link peeker;
+
+on error goto errorhandler
+
+do while 1
+	input; "seg"; sgm%
+	print chr$(9);
+	input; "offset"; ofs%
+	print chr$(9);
+
+	def seg = sgm%
+	print peek(ofs%)
+loop
+
+errorhandler:
+	if err = 70 then
+		print "Permission denied"
+		resume next
+	else
+		print "Unknown error #"; err
+		system
+	endif
+
+
+
+
+
+
+Figure 14
+
+Code Listing For  SMSW.BAS
+
+
+' smsw.bas
+' compile with bc smsw.bas; && link smsw;
+
+declare sub DosCreateCSAlias (byval p1%, seg p2%)
+
+code$ = _
+	chr$(&hc8) + chr$(0) + _
+	chr$(0) + chr$(0) + _		' enter 0,0
+	chr$(&h8b) + chr$(&h5e) + _
+	chr$(&h06) + _				' mov bx,word ptr [bp+6]
+	chr$(&h0f) + chr$(&h01) + _
+	chr$(&h27) + _      		' smsw word ptr [bx]
+	chr$(&hc9) + _				' leave
+	chr$(&hca) + chr$(&h02) + chr$(&h00)	' retf 2
+
+DosCreateCSAlias varseg(code$), csalias%
+def seg = csalias%
+call absolute(x%, sadd(code$))
+
+if x% and 2 then
+    print "Coprocessor present"
+elseif x% and 4 then
+    print "No coprocessor -- emulate"
+else
+    print "Something is very wrong"
+endif
+
+
+
+
+
+
+
+Figure 15
+
+Source Code For SMSW2.BAS and PROTMODE.ASM
+
+
+' smsw2.bas
+'
+' To compile and link (all on the same line):
+' bc smsw2.bas; && masm protmode.asm; && link smsw2 
+'  protmode, smsw2;
+
+declare sub SMSW alias "_SMSW" (x%)
+
+smsw x%
+if x% and 2 then
+    print "Coprocessor present"
+elseif x% and 4 then
+    print "Using emulator"
+else
+    print "Something is wrong!"
+endif
+
+
+
+; protmode.asm
+; requires MASM 5.1
+
+.model medium,basic
+.286p
+.code
+
+_smsw   proc far    arg1:near ptr word
+        mov bx,arg1
+        smsw word ptr [bx]
+        ret
+_smsw   endp
+
+_lsl    proc far    segm:word
+        sub dx,dx
+        sub ax,ax
+        lsl ax,segm
+        ret
+_lsl    endp
+
+end
+
+
+
+
+
+
+

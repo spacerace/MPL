@@ -1,0 +1,10 @@
+#include  <windows.h>
+#include  "GetBitSM.h"
+
+BitmapHelp  BITMAP  GetBitSM.bmp
+
+GetBitSM MENU
+    BEGIN
+        MENUITEM "&GetStretchBltMode",                      IDM_GETMODE
+        MENUITEM "\a&Help",                                 IDM_HELP  HELP
+    END

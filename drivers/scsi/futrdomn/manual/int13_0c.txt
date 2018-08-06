@@ -1,0 +1,20 @@
+Code OC                                 -Disk Seek
+
+Input registers - As defined under general usage with the exception 
+that there is no use of the buffer pointer ES:BX.
+
+Special output registers - none.
+
+Operation:
+
+    The caller's parameters are converted to a logical sector address 
+    in the same manner as is done in the Disk Read command. A SCSI 
+    Seek command is issued. All SCSI read and writes have implied 
+    seeks.
+
+    WARNING:  There are some "performance" tests on the market that 
+              use this BIOS call to check for seek times. With SCSI 
+              drives, invalid results are obtained because   the 
+              parameters returned (See Code 19) are not the actual 
+              physical parameters of the drive.
+

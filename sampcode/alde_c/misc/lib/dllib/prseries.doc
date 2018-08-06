@@ -1,0 +1,45 @@
+
+
+        NAME
+                pr_nl -- print a carriage return/line feed to printer
+                pr_puts -- print a string to the printer
+                pr_putline -- print a string, and a cr/lf to the printer
+                pr_eject -- send a formfeed to the printer
+                pr_carret -- send a carriage return to the printer
+                pr_set -- set the number of the current printer
+                pr_putc -- send a character to the printer
+
+        SYNOPSIS
+               all routines except pr_putc are type void
+               unless noted, no parameters are needed:
+               pr_putline(str);  char *str;
+               pr_puts(str);     char *str;
+               pr_set(num);      int num 0, 1, or 2
+               r = pr_putc(ch);  char ch;  int r; (returned status)
+
+
+        DESCRIPTION
+        This series of routines use the low level functions
+        blpr() and blprstat() to access the LPT? ROM-BIOS drivers
+        directly.  pr_putc() returns the same status that is returned
+        by blprstat().  Be sure to use pr_set() to set which LPT is
+        to be accessed.  Note that the library defaults to LPT1:,
+        and pr_set() may be ignored if that printer is to be used.
+
+
+        EXAMPLE
+
+           pr_set(LP1);        /* LP1, LP2, LP3 defined in smdefs.h */
+           pr_putline("Hello World");
+           pr_eject();
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

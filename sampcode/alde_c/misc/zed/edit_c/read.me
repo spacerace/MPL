@@ -1,0 +1,136 @@
+           EXPLANATION FOR IBM PC VERSION OF C EDITOR
+	
+	This  is a significantly enhanced version of the C editor 
+published in Dr. Dobb's Journal (Jan. 1982, No. 63 and May, 1983, 
+No.  79),  originally written by Edward K.  Ream and modified  by 
+and  adapted  for the IBM PC and compatable computers by Alan  D. 
+Howard.   This is primarily a program editor as opposed to a word 
+processor.  The program consists of several modules:
+
+     ED0.C  ED1.CCC  (INCLUDE FILES)
+
+     ED2.C  ED3.C ED4.C ED5.C ED6.C ED7.C ED8.C ED9.C ED10.C 
+          (SOURCE FILES)
+
+     ED11.A  (ASSEMBLER SOURCE FILE FOR SCREEN INPUT AND OUTPUT)
+
+     ED.DOC  (DOCUMENTATION OF COMMANDS)     
+
+     The source files are not heavily documented except for 
+modifications  to the original editor.   The user should  consult 
+the  original  Dr.  Dobb's issues for background  information  if 
+modification  of  the  editor is to  be  undertaken.   The  major 
+enhancements  to the editor since the two articles were published 
+include the following:
+
+     1.  A macro buffer is now implemented for repetitive editing 
+tasks.   Its  use is initiated by pressing the minus key  at  the 
+right  end  of the keyboard.   All keystrokes (commands)  entered 
+will  be recorded in the buffer (as well as being directly  acted 
+upon)  until the minus key is again  pressed.   The  command-mode 
+command  COUNT  sets  the  number of times the  macro  is  to  be 
+repeated  (default is once).   The right-hand plus key is pressed 
+to  cause replay of the macro.   Replay is terminated by  any  of 
+several  events,  including:   any keystroke being entered during 
+replay;  reaching  the  end or beginning  of  the  buffer,  error 
+conditions,   or   attempts  to  replay  file-oriented  commands.  
+Conditions  causing  termination  can be modified  by  adding  or 
+deleting the function call sysabort() at appropriate locations.
+
+     2.  Editing now is more felicitous when tabs are involved in 
+the  source line.   The left and right arrows space  one  literal 
+character  (tabs  at cursor position cause movement to  next  tab 
+stop),  whereas the Alt- and Alt+ keystrokes cause virtual cursor 
+movement (by column).   Editing when at a virtual column position 
+now  produces less unexpected results.   This portion of the code 
+in edins() and edchng() is new and may still contain hidden bugs.
+
+     3.  Prompts for commands are indicated by a blinking ">".
+
+     4.   Scrolling can either be continuous (Pg Up and Pg Dn) or 
+in 20-line units (Ctl Pg Up and Ctl Pg Dn).
+
+     5.   A  copy buffer is now provided to permit easy  and,  if 
+desired,  repetitive  copying of text lines to elsewhere  in  the 
+file.   The  beginning line for copy is marked (invisibly) by F7, 
+the end line by F8,  and the block is moved to the copy buffer by 
+F9.   The copy buffer is copied to before the current cursor line 
+by F10.   The F7 and F8 keys and the current cursor line can also 
+be used with commands like DELETE and COPY to mark beginning  and 
+ending lines for the commands.   The copy buffer is also used  by 
+the  DELETE  command to store the deleted lines (if they fit)  to 
+allow  recovery in case of unexpected  results.  The  single-line 
+delete command (Del key) does not store the deleted line.
+
+     6.   Insert  and  Edit modes are now nearly  symmetrical  in 
+their   operation  (many  editing  commands  formerly  were   not 
+available during Insert Mode).
+
+     Edward Ream has subsequently modified his original editor by 
+making the main buffer virtual (like Wordstar, for example).  See 
+Dr.  Dobbs, #81 & #82.    The virtual buffer was purposefully not 
+added to this version because of its main use as a program editor 
+and  to retain the complete user control over the file  read  and 
+write names and actions.   
+
+     The  editor  has been assembled using  the  C-Ware  (DeSmet) 
+compiler.   Use  with other compilers may require modification or 
+substitution  for  library routine  calls.   In  particular,  the 
+function _move(length,  source offset,  destination offset) moves 
+length  bytes  from source to destination;  _memory()  returns  a 
+pointer  to the first available memory in the data  segment  (the 
+start of the main buffer);  and _os(routine,  argument) calls the 
+operating  system.   The screen interface module,  ED11.A,  is  a 
+modified  version of the routines PCIO.A supplied with the Desmet 
+(C  ware)  C  compiler.   The  inclusion of  this  module  is  by 
+permission of C ware and Mark Desmet. 
+
+     Have  fun  adding  your own special  features  or  modifying 
+existing  features.   Even if you currently have a more  powerful 
+editor,  the  editing and buffer routines may be useful for other 
+applications, such as support for a digitizer.
+
+     This  program is provided to the public domain as a  service 
+to programmers.  It may be freely copied and distributed with the 
+following restrictions:
+
+     1.   Charges  for reproduced copies should be  limited  to 
+cost (disks, postage and handling).
+
+     2.   Any   modifications to the program from the  originally 
+distributed  version  should be clearly indicated,  both  in  the 
+source code and the documentation.  Any such modifications should 
+retain  the  genealogy of the program,  both in the source  code, 
+sign-on message, and documentation.
+
+     3.  No commercial resale of the editor, in whole or in part, 
+in  source code or in compiled versions of the  source  code,  is 
+permitted   without  the  written  permission  of  the   authors, 
+including E.K. Ream, Alan D. Howard, and Mark Desmet.
+
+     4.   All  documentation and notices supplied with the editor 
+should be included in reproduced versions.
+
+     5.    In  view of the fact that this editor  is  distributed 
+entirely  without  charge,  all warranties  are  disclaimed.   In 
+particular, the authors assume no responsibility that the program 
+will  operate  as  documented.   The program  authors  cannot  be 
+responsible  in any way for direct,  indirect,  or  consequential 
+damages.   Any and all risk associated with using the program, in 
+whole or in part, is the user's. 
+
+                         PROGRAM AUTHORS
+
+     Edward K. Ream
+     1850 Summit Ave.
+     Madison, WI 53705
+
+     Alan D. Howard
+     Rt. 3, Box 680
+     Crozet, VA 22932
+
+     Mark Desmet
+     C Ware Corporation
+     P.O. Box 710097
+     San Jose, CA 95171-0097
+

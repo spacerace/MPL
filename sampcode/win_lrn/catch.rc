@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "Catch.h"
+
+Catch MENU
+    BEGIN
+        POPUP "Menu"
+           BEGIN
+              MENUITEM "&Catch and Throw",                  IDM_CATCH
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

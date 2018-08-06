@@ -1,0 +1,541 @@
+
+                            TCXL Revision History
+
+
+Version 3.3:
+            New features.
+                Full pull-down menu capability for windows.
+                "Smart" text line drawing for windows.
+                Ability to give windows a title.
+
+            New functions.
+                lprintsb    - prints a bold-faced string on the printer.
+                waitkeyt    - halts execution until a key is pressed or until a
+                              specified amount of time has elapsed.
+                wcclear     - clears window with specified attribute.
+                whline      - draws a horizontal text line in active window.
+                wtitle      - gives active window a title.
+                wvline      - draws a vertical text line in active window.
+
+            Modified functions.
+                cvaltype    - tabs and linefeeds were being allowed for alpha
+                              types.  Fixed.
+                filld       - optimized for performance
+                wchgattr    - optimized for performance
+                wclear      - is now a macro defined in TCXLWIN.H
+                werrmsg     - added new error messages.
+                winpread    - optimized for size and performance.  No longer
+                              wraps back around when in column 1 of 1st field
+                wmbardef    - optimized for size and performance.
+                wmbarget    - new parameters taginit and pulldown.  The taginit
+                              parameter specifies initial position of the
+                              selection bar and the pulldown parameter allows
+                              the DownArrow key to act like the Enter key for
+                              pull-down menus.  Fixed a bug which caused the
+                              editing keys to not work right on some occasions.
+                wopen       - now checks for valid box type.
+                wrestore    - optimized for performance
+                wsave       - optimized for performance
+                wscanf      - no longer checks for Escape keypress.
+                wsetesc     - is now a macro defined in TCXLWIN.H, no longer
+                              checks for active window.
+
+                New info added to the window record structure _wrecord.  See
+                TCXLWIN.H for full definition.
+
+
+Version 3.2:
+            New features.
+                Bar selection menus.
+                No limit to number of open windows.
+                Mouse functions for Microsoft compatible mice.
+                TCXL is now available in all of Turbo C's memory models:
+                    TCXL.LIB    - tiny & small memory models (included)
+                    TCXLM.LIB   - medium memory model (with registration)
+                    TCXLC.LIB   - compact memory model (with registration)
+                    TCXLL.LIB   - large memory model (with registration)
+                    TCXLH.LIB   - huge memory model (with registration)
+
+
+                                      1    
+
+            New header file for mouse functions:  TCXLMOU.H
+
+            New functions.
+                lprintf   - sends formatted output to the printer
+                msbpress  - gets info about specific button presses of mouse
+                msbreles  - gets info about specific button releases of mouse
+                mscursor  - sets the mouse cursor mode
+                msgotoxy  - sets the mouse coordinates
+                mshbounds - sets the mouse horizontal bounds
+                mshidecur - hides the mouse cursor
+                msinit    - initializes mouse/determines if present
+                msmotion  - gets info about movement of mouse
+                msshowcur - reveals the mouse cursor
+                msspeed   - adjusts the mouse sensitivity
+                msstatus  - gets the mouse status
+                msvbounds - sets the mouse vertical bounds
+                strltrim  - trims leading spaces off of a string
+                strtrim   - trims trailing spaces off of a string
+                wmbardef  - defines a window bar menu option
+                wmbarget  - gets a window bar menu option from the keyboard
+                wmbarxcel - cancels all defined window bar menu options
+                wsetesc   - sets the Escape key checking for window keyboard
+                            input functions
+
+            Modified functions.
+                box       - added another box type
+                boxd      - added another box type
+                emsread   - now returns a zero if no error, non-zero if error
+                emswrite  - now returns a zero if no error, non-zero if error
+                kbstat    - is now a macro defined in TCXLKEY.H
+                setlines  - doesn't clear the screen on return from 43 and 50
+                            line modes
+                strchg    - now returns a char *
+                strcode   - now returns a char *
+                strdel    - now returns a char *
+                strichg   - now returns a char *
+                stridel   - now returns a char *
+                strins    - now returns a char *
+                strrol    - now returns a char *
+                strror    - now returns a char *
+                strshl    - now returns a char *
+                strshr    - now returns a char *
+                struplow  - now returns a char *
+                vidtype   - was incorrectly detecting Hercules adapters
+                wgetchf   - Escape checking is now controlled by wsetesc()
+                wgetns    - Escape checking is now controlled by wsetesc()
+                winpdef   - field attribute argument added
+                winpread  - editing keys are now more intuitive.  Now processes
+                            fields by screen order rather than by definition
+                            order.  Also new editing keys, Ctrl-Enter and Ins
+                            have been added.  The Del key now shifts text left
+                            as it deletes.
+                wopen     - added another box type, allows as many open windows
+                            as memory permits
+
+            New global variables.
+
+
+                                      2    
+                _wesc      - Escape key checking flag.  This is set by the
+                             wsetesc() function.
+                _wmbarlast - contains the array subscript of the highest
+                             defined bar-menu option.
+                _wmbarrec  - a pointer to the array of defined bar-menu options
+
+            Added new fields to the _wrecord structure.  See TCXLWIN.H for
+            description.
+
+
+Version 3.1:
+            Bug fix.
+                A bug was detected in the wchgattr(), wrestore(), wsave(), and
+                wscroll() functions which may have caused problems in the
+                Small memory model.  Fixed.
+
+
+Version 3.0:
+            New features.
+                Support for EGA 43-line and VGA 50-line modes.
+                Support for the DESQview windowing environment.
+                Better support for monochrome adapters.
+                More windowing functions.
+                Better error handling in windowing functions.
+                Formatted window input and output.
+                Multi-field window input.
+                Save/restore screens/windows from disk files.
+                String pattern matching.
+
+            The TCXL.H header file has now been broken up into several header
+            files to conserve compile time and memory.  TCXL.H still exists for
+            compatibility, however, you should only use the header files that
+            you need.
+                TCXL.H      - all functions (for pre-3.0 compatibility)
+                TCXLDEF.H   - miscellaneous functions
+                TCXLDSK.H   - disk functions
+                TCXLEMS.H   - EMS functions
+                TCXLKEY.H   - keyboard functions
+                TCXLPRN.H   - printer functions
+                TCXLSTR.H   - string functions
+                TCXLVID.H   - video functions
+                TCXLWIN.H   - windowing functions
+
+            New functions.  See TCXL.DOC for descriptions.
+                cvaltype    - tests given character with given character type
+                              code for validity.
+                disktoscrn  - copies a saved screen disk file to screen.
+                disktowin   - copies a saved window disk file to screen.
+                fexist      - determines if a disk file exists.
+                getxch      - gets a key (ASCII code/extended ASCII code) from
+                              the keyboard.
+                inputsf     - inputs a formatted string from the keyboard.
+                lprintsu    - prints an underlined string to the printer
+                scrntodisk  - copies the current screen to a disk file
+                setlines    - sets the number of lines on the display, up
+                              to 43 lines for EGA, and 50 lines for VGA
+                              adapters
+
+
+                                      3    
+                strbmatch   - returns the best match of a string in an array of
+                              strings
+                strmatch    - compares 2 strings, returns a match score
+                struplow    - converts a string to mixed upper & lower case
+                touplow     - converts a character to upper or lower case
+                              depending on previous character
+                videoinit   - initializes TCXL's video system to the present
+                              video adapter (MDA, HGC, CGA, EGA, VGA) or to
+                              DESQview, if it is active
+                wchgattr    - changes attribute of active window
+                werrmsg     - returns an error message from the last windowing
+                              function
+                winpdef     - defines an area of active window for keyboard
+                              input
+                winpread    - processes keyboard input of all defined areas of
+                              active window
+                winputsf    - inputs a formatted string from the keyboard
+                              within a window
+                winpxcel    - cancels keyboard input of all defined active
+                              window areas
+                wintodisk   - copies a window of the screen to a disk file
+                wisactiv    - determines if specified window handle is active
+                wnopen      - returns the number of open windows
+                wpgotoxy    - sets pseudo window cursor coordinates by wrapping
+                              around
+                wprintf     - outputs a formatted string to active window
+                wreadcur    - reads active window's current cursor coordinates
+                wscanf      - inputs a formatted string from active window
+
+            New global variables.  See TCXL.DOC for descriptions.
+                _videoseg  - contains the address of the current video RAM
+                             segment.  This value initially contains 0xb800
+                             (segment address of CGA) but may be changed upon
+                             calling the videoinit() function.
+                _werrno    - contains the error code from the most recently
+                             performed windowing function.  All of the
+                             windowing functions were modified to set this
+                             variable upon exit.  See TCXLWIN.H for a list of
+                             error codes.
+                _winpcurr  - current window input record array subscript
+                _winprec   - an array of defined window input records, see
+                             TCXLWIN.H for definition.
+
+            Modified functions.  See TCXL.DOC for full descriptions.
+                clrscrn  - now clears screens of up to 50 lines
+                lcrlf    - this macro now calls lprintc() with a line feed
+                           character only
+                lprintc  - now translates the linefeed character into a
+                           carriage return - line feed sequence
+                lprintns - now translates the linefeed character into a
+                           carriage return - line feed sequence
+                lprints  - now translates the linefeed character into a
+                           carriage return - line feed sequence
+                vidtype  - checks for more types of video adapters.  See
+                           TCXLVID.H for a complete list
+                wclear   - wasn't homing the cursor after clear, fixed
+                wmove    - wasn't keeping cursor coordinates properly, fixed
+
+
+                                      4    
+                wopen    - was only allowing 9 open windows at a time, now
+                           allows 10 at a time.
+                wprints  - didn't return an error when string was too long for
+                           window, fixed
+                wputc    - backspace character now wraps back around if at the
+                           first window column
+
+            To provide compatibility with C naming conventions, the following
+            functions were renamed.
+                getsf       ->      getns
+                lprintsf    ->      lprintns
+                wgetsf      ->      wgetns
+                wputsf      ->      wputns
+
+            Added box type 4 for the box(), boxd(), and wopen() functions.
+
+            Optimized several functions for better performance.
+
+
+Version 2.5:
+            Added new functions for EMS memory management, string manipulation,
+            and windowing.  See TCXL.DOC for full descriptions and examples.
+                emsalloc   - allocates pages of EMS memory
+                emsdealloc - deallocates previously allocated pages of EMS
+                             memory
+                emsexist   - determines if the EMS device driver is loaded
+                emsframe   - returns the EMS page frame address
+                emsfree    - returns the number of free EMS pages
+                emsmap     - maps a logical EMS page onto a physical page
+                             address
+                emsread    - reads bytes from an EMS page(s)
+                emstotal   - returns the total number of EMS pages on the
+                             system
+                emsver     - returns the current EMS version
+                emswrite   - writes bytes to an EMS page(s)
+                expmem     - determines the amount of expanded memory on the
+                             system in kilobytes
+                strcode    - encodes/decodes a string
+                strins     - inserts one string into another
+                strrol     - rotates string x characters left, characters wrap
+                             around
+                strror     - rotates string x characters right, characters wrap
+                             around
+                strshl     - shifts string x characters left, characters 'drop
+                             off' of the string and spaces are added
+                strshr     - shifts string x characters right, characters 'drop
+                             off' of the string and spaces are added
+                wcloseall  - closes all open windows
+                wcopy      - creates a new window by copying the active window
+
+            The following functions were changed to check for the existence of
+            any active windows.
+                wclear   - now returns a return code (see TCXL.H)
+                wclose   - now returns a return code (see TCXL.H)
+                wclreol  - now returns a return code (see TCXL.H)
+                wgetc    - now returns a 0 if error
+                wgetchf  - now returns a 0 if error
+
+
+                                      5    
+                wgets    - now returns a return code (see TCXL.H)
+                wgetsf   - added an additional possible error code (see TCXL.H)
+                wgotoxy  - added an additional possible error code (see TCXL.H)
+                wmove    - added an additional possible error code (see TCXL.H)
+                wprintc  - added an additional possible error code (see TCXL.H)
+                wprints  - added an additional possible error code (see TCXL.H)
+                wputc    - now returns a return code (see TCXL.H)
+                wputs    - now returns a return code (see TCXL.H)
+                wputsf   - now returns a return code (see TCXL.H)
+                wscroll  - now returns a return code (see TCXL.H)
+                wsize    - added an additional possible error code (see TCXL.H)
+                wtextattr - now returns a return code (see TCXL.H)
+
+            The following functions were changed to recognize the '\r', '\7',
+            and the '\t' control characters.
+                wputc
+                wputs
+                wputsf
+
+            wprints() was changed so it will not recognize the '\n' control
+            character and it will no longer scroll the window when at the end
+            of it.  For these purposes, use the wputs() function instead.
+
+            ssave() and srestore() were converted to assembly language for
+            optimized performance.
+
+
+Version 2.1:
+            Added new functions.  See TCXL.DOC for full descriptions and
+            examples.
+                wclreol  - clears to the end of the active window's line
+                wgetc    - gets a character from the keyboard within active
+                           window
+                wgetchf  - gets a character from the keyboard within active
+                           window, only allows characters from a given list
+                wgets    - gets a string from the keyboard within active window
+                wgetsf   - gets a string from the keyboard within active
+                           window, limits input to specified length
+                wputsf   - prints a string in active window, formatting width
+                           of output
+                wsize    - adjusts the size of the active window
+
+            Expanded the window record structure (_wrecord) to include more
+            information useful for window management.  See TCXL.H for the
+            layout of the _wrecord structure.
+
+            Modifed some of the existing functions.
+                getchf  - optimized for better performance
+                wactiv  - modified to work with new window record
+                wclear  - modified to work with new window record
+                wgotoxy - modified to work with new window record
+                wmove   - modified to work with new window record, now returns
+                          a zero for no error or one of the return codes in
+                          the TCXL.H file
+                wopen   - modified to work with new window record
+                wprintc - modified to work with new window record
+                wprints - modified to work with new window record
+
+
+                                      6    
+                wputc   - modified to work with new window record, now returns
+                          type void, fixed a bug which caused it not to work
+                          sometimes
+                wputs   - changed return type to void and optimized for better
+                          performance, also now recognized the backspace '\b'
+                          character
+                wscroll - modified to work with new window record
+
+
+Version 2.0:
+            Added a new window task manager which simpilfies use of windowing.
+            Several of the windowing functions' syntax have been changed and
+            some have been added.  See TCXL.DOC for full descriptions and
+            examples.
+                wopen     - now returns a window handle instead of a pointer
+                wclose    - closes the currently active window
+                wactiv    - new function, activates a currently open window
+                            using the window handle returned by wopen()
+                wclear    - clears the currently active window
+                wgotoxy   - plots cursor coordinates in currently active window
+                wmove     - moves currently active window to a new location
+                wprintc   - prints a character in the active window, now
+                            returns a 1 if cursor placement error occurred
+                wprints   - prints a string in the active window, now returns a
+                            1 if cursor placement error occurred, now provides
+                            wrap-around and scrolling, now also will recognize
+                            line feed ('\n') characters in string
+                wputc     - prints a character in currently active window at
+                            current cursor location, uses attribute set by the
+                            wtextattr() function
+                wputs     - prints a string in currently active window at the
+                            current cursor location, uses attribute set by the
+                            wtextattr() function
+                wscroll   - scrolls text in the currently active window
+                wtextattr - sets the default text attribute for several of the
+                            windowing functions
+
+            Deleted the wswap() and wswapx() functions as wactiv() takes their
+            place.
+
+            Added global variables to assist in managing the windows.
+                _wrecord   - an array of structures that contain window handles
+                             and window buffer pointers.  See TCXL.H
+                _wcurrent  - contains the array subscript of the window that is
+                             currently active
+                _wtextattr - contains the default window text attribute
+
+            Added several new functions.  See TCXL.DOC for full descriptions
+            and examples.
+                clockcal - checks for presence of clock/calendar card in XT
+                extmem   - determines the amount of AT extended memory
+                getktot  - gets total size of a disk drive in kilobytes
+                machid   - returns the ROM signature byte
+                scrndump - sends contents of text screen to printer
+                timer    - returns the value of the BIOS timer
+
+            Revised/changed several functions.
+
+
+                                      7    
+                biosver  - now returns pointer to static string instead of
+                           allocated string, so DON'T use free() on the
+                           string.  Also now independent of Turbo C library.
+                box      - fixed a bug that caused this function to misbehave
+                           when using the small memory model
+                boxd     - fixed a bug that caused this function to misbehave
+                           when using the small memory model
+                spc      - optimized performance
+                strleft  - fixed a minor bug occurring on allocation error
+                strmid   - fixed a minor bug occurring on allocation error
+                strright - fixed a minor bug occurring on allocation error
+                waitkey  - now returns the key pressed
+
+            Borland recently released Turbo C Version 1.5.  Included in their
+            standard library now are the functions clreol(), delay(), gotoxy(),
+            and sound().  These functions are similar but not identical to
+            the TCXL functions of the same name.  To provide compatibility
+            with the new Turbo C 1.5 library, I have renamed the affected TCXL
+            functions.
+                clreol  ->  clreol_
+                delay   ->  delay_
+                gotoxy  ->  gotoxy_
+                sound   ->  sound_
+
+            Also in Turbo C 1.5, Borland included macros for the text mode
+            colors in GRAPHICS.H.  To provide compatibility with Turbo C 1.5,
+            many of the macros for colors in the TCXL.H file have been renamed.
+                YELLOW      ->  BROWN
+                WHITE       ->  LGREY
+                IBLACK      ->  DGREY
+                IBLUE       ->  LBLUE
+                IGREEN      ->  LGREEN
+                ICYAN       ->  LCYAN
+                IRED        ->  LRED
+                IMAGENTA    ->  LMAGENTA
+                IYELLOW     ->  YELLOW
+                IWHITE      ->  WHITE
+                _YELLOW     ->  _BROWN
+                _WHITE      ->  _LGREY
+
+
+Version 1.6:
+            Added a new function.  See TCXL.DOC for description.
+                tabstop - calculates the next tab stop from current cursor
+                          location
+
+            Fixed a problem in the sound() function that caused it not to work
+            to work in some machines.
+
+            Optimized performance of several functions.
+                boxd
+                delay
+                filld
+                getchf
+                printcd
+                printsd
+                sound
+
+
+                                      8    
+                strsetsz
+                wclear
+                whide
+                wmove
+                wscroll
+
+
+Version 1.5:
+            Added several new functions.  See TCXL.DOC for full descriptions
+            and examples.
+                clrwin  - clears a window of the CGA screen
+                setattr - sets the attribute of character under cursor
+                wclear  - clears an open window
+                whide   - hides an open window
+                wgotoxy - plots cursor coordinates within an open window
+                wprintc - prints a character within an open window
+                wprints - prints a string within an open window
+                wscroll - scrolls text within an open window
+                wswap   - swaps 2 windows, the back becomes the front
+                wswapx  - swaps 3 windows, the back becomes the front
+                wunhide - reveals a previously hidden open window
+
+            Revised/changed several functions.  See TCXL.DOC for full
+            descriptions and examples.
+                getchf  - now returns character typed but still provides
+                          automatic checking for the Escape key
+                lprintc - changed 'ch' parameter in prototype to type 'int'
+                revattr - added a 'count' parameter
+                striocc - changed 'ch' parameter in prototype to type 'int'
+                strocc  - changed 'ch' parameter in prototype to type 'int'
+                wprintc - changed 'ch' parameter in prototype to type 'int'
+
+             Optimized performance of several functions.
+                box
+                boxd
+                fill
+                getchf
+                gotoxy
+                printc
+                prints
+                prompts
+                ssave
+                strdel
+                stridel
+                wmove
+                wopen
+
+
+Version 1.0:
+            Initial release.
+
+
+
+
+
+
+
+
+
+                                      9    
+

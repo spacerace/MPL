@@ -1,0 +1,22 @@
+Lst=-FsNUL -Fa
+Dbg=-Od -G2sc
+StandardOpts=-c -W3 -Zi
+MemoryOpts=-Alfw
+ 
+Lnk=/NOD /MAP /FAR /COD
+ 
+CompileOpts=$(StandardOpts) $(MemoryOpts) $(Dbg)
+ 
+# Compilation Commands
+
+jigsaw.res: jigsaw.rc jigsaw.h jigsaw jigsaw.ico
+  rc -r $*.rc $*.res
+ 
+jigsaw.obj: jigsaw.c jigsaw.h jigsaw
+  cl $(CompileOpts) $*.c
+ 
+jigsaw.exe: jigsaw.l jigsaw.res jigsaw.obj jigsaw.def
+  link $(Lnk) @$*.l
+  mapsym jigsaw
+  rc jigsaw.res jigsaw.exe
+ 

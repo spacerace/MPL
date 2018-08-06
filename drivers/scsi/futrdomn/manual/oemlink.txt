@@ -1,0 +1,14 @@
+The OEM Interface uses a single segment as follows:
+
+_TEXT SEGMENT BYTE PUBLIC 'CODE'
+
+If the user interface is in assembly language the assembly language module 
+should have the same code segment name. The small model uses a near pointer
+to the data structure and a near return, the medium model uses a far pointer 
+to the data structure and a near return, while the large model uses a far 
+pointer to the data structure and a far return.
+
+In C, the OEMSCSI, OEMSCSIM, or OEMSCSIL object module must be specified as 
+part of the link process. The /Zp option of the Microsoft Compiler should be
+used.
+

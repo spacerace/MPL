@@ -1,0 +1,4 @@
+#include "client.h"
+
+POINTER CLIENTICON   client.ico
+

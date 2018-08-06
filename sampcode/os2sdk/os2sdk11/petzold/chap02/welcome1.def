@@ -1,0 +1,11 @@
+;-------------------------------------
+; WELCOME1.DEF module definition file
+;-------------------------------------
+
+NAME           WELCOME1  WINDOWAPI
+
+DESCRIPTION    'Welcome to PM -- Program No. 8 (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

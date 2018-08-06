@@ -1,0 +1,15 @@
+NAME	anypopup
+
+DESCRIPTION 'Simple Microsoft Windows Application'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  16596
+STACKSIZE 4096
+
+EXPORTS
+    HelloWndProc @1
+    PopupProc	 @2

@@ -1,0 +1,6 @@
+clipvg.obj: clipvg.c
+    cl -c -d -AS -Gsw -Os -Zpe clipvg.c
+
+clipvg.exe: clipvg.obj clipvg.def
+    link4 clipvg,/align:16,/map, slibw/NOE, clipvg.def
+    mapsym clipvg

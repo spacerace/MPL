@@ -1,0 +1,1196 @@
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        INTRODUCTION: 
+
+        The  software contained in this distribution is copyright (C)  by 
+        George   Hageman   1985   and  is  released   into   the   public               
+        domain with the following restrictions:                         
+
+             (1)   This  software  is intended  for  non-commertial usage.                                              
+             (2)    I   am   held  save  from  damages   resulting   from               
+             its use, and
+             (3)   The following concepts and legal jargon are agreed  to 
+             by the user of this software.
+
+             User-supported software concept:
+
+                  IF          you find use for this software
+                  ANDIF       it saves you some development time
+                  THEN            send me $10.00
+                  ANDTHENHYP      you will feel good!
+
+        This source code is provided on an "as is" basis without warranty 
+        of any kind,  expressed or implied,  including but not limited to 
+        the  implied  warranties  of merchantability and  fitness  for  a 
+        particular   purpose.    The  entire  risk  as  to  quality   and 
+        performance  of this software is with you.   Should the  software 
+        prove  defective,  you  assume the entire cost of  all  necessary 
+        repair, servicing, or correction.  In no event will the author be 
+        liable to you for any damages,  including any lost profits,  lost 
+        savings, or other incidental or consequential damages arising out 
+        of  the   use  of inability to use this software.   In  short  my 
+        friends,  I  have done  a reasonable amount of work in  debugging 
+        this  software and I think it is pretty good but,  as  you  know, 
+        there  is always some chance that a bug is still lurking  around. 
+        If you should happen to be lucky enough to  find one,  please let 
+        me know so I    can make an attempt to fix it.          
+
+             The  following  is  a short description of how  to  use  the 
+        inference  engine  and rule-compiler contained in  this  software 
+        release.    The source and object files for the rule compiler and 
+        the inference engine are contained in the rcomp.lbr and infer.lbr 
+        respectively.   There are common files contained in each library.  
+        These  common  files  are header files which are used  to  define 
+        common terms between the different sources.    The most important 
+        header file is the file named "expert.h" which not only  contains 
+        common  definitions  used  between  the  rule  compiler  and  the 
+        inference  engine,  but has a short description of their usage as 
+        well.    This inference engine, and its associated rule compiler, 
+        represents  a  significant  time investment for  me,  so  if  you 
+        believe in the  shareware concept please remember my address.
+
+                            George W. Hageman
+                            P.O. Box 11234
+                            Boulder, Colorado  80301
+
+
+
+
+
+        George W. Hageman            --1--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+             This  software compiles using the Microsoft C  Compiler  Rev 
+        3.0  using the make function which comes with the Microsoft Macro 
+        Assembler Rev.  4.0.  I have nothing but good things to say about 
+        these  two products and suggest that you consider their  purchase 
+        if  you are into serious software development for the  PC.   This 
+        software  also compiles and runs under UNIX system  V.   Use  the 
+        UNIXSV  flag  in the makefile or use a -DUNIXSV when you  compile 
+        it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        George W. Hageman            --2--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        INFERENCE ENGINES:
+
+             An  inference engine is merely a program which  attempts  to 
+        prove consequents given a certain set of antecedents and a set of 
+        rules  which define the TRUTH or FALSEness of each consequent  in 
+        terms  of the antecedents.     The consequents,  antecedents  and 
+        rules  for  this  inference engine are contained in a  text  file 
+        which is compiled by the rule-compiler into a form the  inference 
+        engine  can understand.   Often these two functions are contained 
+        in the same executeable,  but I have decided to split them up  to 
+        make the inference engine as small as possible.
+
+             Rules  are collections of ANTECEDENTS and CONSEQUENTS formed 
+        into  TRUTH statements.   Each rule is an attempt state that  "If 
+        all of the antecedents for this particular RULE are  TRUE,   then 
+        all  of the consequents connected to this rule are TRUE.   If one 
+        or  more  of the antecedents for a RULE are  FALSE,  then  it  is 
+        assumed that this rule cannot prove the TRUTH of the consequents, 
+        but  this does not necessarily prove the consequents FALSE  since 
+        some  other rule may prove them TRUE."  Rules must have at  least 
+        one  ANTECEDENT  and  at least one CONSEQUENT  to  be  considered 
+        valid. 
+
+             Each   ANTECEDENT  and  CONSEQUENT  is  a  simple  statement 
+        consisting  of  a  leading  KEYWORD,   and  a  FOLLOWING  STRING.  
+        KEYWORDS tell the inference engine what the FOLLOWING STRING will 
+        mean or what is to be done with it.  The FOLLOWING STRINGs may be 
+        either  in upper or lower case and are either statements such  as 
+        "THE  ANIMAL IS A BAT",  or,  a pathname to an executeable  which 
+        will  be loaded and executed depending on what is defined by  the 
+        KEYWORD. Strings, except for the number of leading blanks, can be 
+        considered equal only if they are identical.  The reason for this 
+        rule  will  become  apparent later.   An example  of  a  pathname 
+        FOLLOWING STRING is "/b1/hageman/expert/storm/gt_3200  data.fil".  
+        Note  that  the strings denoting pathnames should be  exactly  as 
+        they  would  be if the pathname were to be given at  a  terminal, 
+        also,  you  may  include  parameters with  any  pathname.   These 
+        parameters  are no different than the parameters that  you  would 
+        use  if  you  were initiating the executeable from  the  terminal 
+        rather than via the inference engine.    Under MS_DOS these  path 
+        names  can  either  be  upper or lower case,  and  for  the  UNIX 
+        operating system, they must correspond to the exact path name.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        George W. Hageman            --3--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        QUICK AND DIRTY:
+
+             Impatient?   Well  here  are some quick ways to get  started 
+        with the inference engine,  leave all that reading till later!
+
+        ONE:
+
+             Use  your  text  editor (WS in the  Non-document  mode  only 
+        Please) to create a quick rule file,  or use the animals  example 
+        contained in this release.   Skip to the next page if you want to 
+        find out what the KEYWORDS are and how to use them.
+
+        TWO:
+
+             Compile the rules with the rule-compiler by typing..
+
+             rulecomp inputfile outputfile 
+
+             where  the inputfile is the filename of the file  containing 
+        your  rules,  and the outputfile is the file inwhich you want the 
+        compiled rules to be written to.  Caution, the rule compiler does 
+        not  check  for the equivalence of the inputfile  and  outputfile 
+        filenames,   if they are identical you will probably have to type 
+        in your rules again.
+
+        THREE:
+
+             Run the inference engine by typing ..
+
+             inference outputfile
+
+             answer the questions and go back to step ONE if you found an 
+        error with your rules or you want to expand them.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        George W. Hageman            --4--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        KEYWORDS:
+
+             The  following are the KEYWORDS which the rule compiler  can 
+        recognize,  and  a short description of what each means  and  how 
+        each  would be used.    Note that the members of each group  have 
+        identical meaning and can therefore be substituted for each other 
+        without  effecting the sense of the rule.   Latter examples  will 
+        attempt to demonstrate this fact.
+
+
+
+        IF, AND, ANDIF:
+
+             These KEYWORDS define the FOLLOWING STRING as an ANTECEDENT, 
+             and  the TRUTH sense of the string is TRUE if the string  is 
+             TRUE.    These  KEYWORDS can be used interchangeable without 
+             effecting the sense of the rule being expressed.
+
+                  Example:
+
+                       IF the animal is a mammal
+                       ANDIF the animal has hooves
+                       AND the animal has horns         
+
+                  This is equivalent to:
+
+                       AND the animal is a mammal
+                       IF the animal has hooves
+                       ANDIF the animal has horns
+
+             Note that since the antecedent part of a rule is essentially 
+             a  large AND statement,  the order in which  the  individual 
+             statements  are  arranged  is a matter  of  esthetics  only.  
+             However,  it may be more readable to the human, if a certain 
+             order is maintained.
+
+        IFNOT, ANDNOT
+
+             These  KEYWORDS  are  essentially  identical  to  the  above 
+             KEYWORDS except that the sense of the statement is reversed.   
+             That is to say that if the following string is TRUE then the 
+             truth   value   of   the  statement  is  FALSE.              
+
+                  Example:
+
+                       IFNOT the animal is a mammal
+                       ANDNOT the animal has smooth skin
+                       ANDNOT the animal breaths air
+                       THEN animal is a fish 
+
+
+
+
+
+
+
+
+        George W. Hageman            --5--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        IFRUN, ANDRUN, ANDIFRUN
+
+             These KEYWORDS tell the inference engine that the  FOLLOWING 
+             STRING is to be used as a pathname to an executeable.   This 
+             executeable  is to be loaded and run and the resultant TRUTH 
+             value returned when the routine exits is the TRUTH value  of 
+             the ANTECEDENT statement.   Like the AND, IF, ANDIF KEYWORDS 
+             above,  each  of  these  may be substituted for any  of  the 
+             others  without effecting the sense of the  rule  statement.   
+             Note  that  the  full path name of the  executeable  is  not 
+             needed  if  the  executeable  file resides  in  the  working 
+             directory from which the inference engine was initiated.
+
+                  Example:
+
+                       IFRUN /b1/hageman/expert/gt3000
+                       ANDRUN /b1/hageman/expert/sedir direction.dat
+                       ANDIFRUN falling barompress
+                       THEN sorry about the picnic
+               
+        IFNOTRUN, ANDNOTRUN     
+
+             These are used as the KEYWORDS above are used -- to initiate 
+             the execution of an ANTECEDENT executeable file, except that 
+             the truth value of the result is reversed as with the IFNOT, 
+             ANDNOT and the ANDIFNOT KEYWORDS.
+
+                  Example:
+                       
+                       IFNOTRUN gt3000
+                       ANDNOTRUN sedir direction.dat
+                       ANDNOTRUN falling barompress
+                       THEN how about a picnic?
+         
+        THEN, ANDTHEN, THENHYP, ANDTHENHYP    
+
+             These KEYWORDS tell the inference engine that the  FOLLOWING 
+             STRING  is  a  CONSEQUENT.     If  all  of  the  immediately 
+             proceeding ANTECEDENTS have a truth value of TRUE,  then the 
+             inference  engine INFERS that the CONSEQUENT is  TRUE.   The 
+             THEN KEYWORDS ending in "HYP" tell the inference engine that 
+             the  FOLLOWING STRING is an ending CONCLUSION and no further 
+             processing  or inferencing is required.   The  routine  will 
+             exit  when one of the THENHYP or ANDTHENHYP CONSEQUENTS  are 
+             proven   TRUE.     Therefore,   one  should  use  the  "HYP" 
+             CONSEQUENT KEYWORDS with care. 
+
+                  Examples:
+
+                       IF you have an aunt
+                       ANDIF your aunt has a child
+                       THEN you have a cousin
+
+                       IF you have a cousin
+                       THENHYP you have at least two relatives
+
+
+        George W. Hageman            --6--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        THENRUN, ANDTHENRUN, THENRUNHYP, ANDTHENRUNHYP 
+
+             These are similar to the THEN,  ANDTHEN etc. KEYWORDS except 
+             they  perform  the  loading and execution of  the  FOLLOWING 
+             STRING  path  name  if they  are  proven  TRUE.   The  value 
+             returned  by  the executeable file loaded becomes the  value 
+             remembered  for  the  CONSEQUENT.   The truth  value  for  a 
+             CONSEQUENT proceeded with the KEYWORDS of THEN or ANDTHEN is 
+             only remembered if it is proven TRUE.  However, with the RUN 
+             type of CONSEQUENT since it is initiated only when found  to 
+             be proven, the predicate value it returns is remembered even 
+             if  it is FALSE.  This prevents the rerunning of  CONSEQUENT 
+             routines.  
+
+             In this manner one can use rules to determine weather or not 
+             a particular routine should be executed,  then use the truth 
+             value  returned  by the routine upon its exit in other  rule 
+             statements.   An obvious use for such a function would be in 
+             the field of diagnostics.   Through a set of rules it  could 
+             be  determined  that a particular diagnostic should be  run,  
+             once  the diagnostic has been run,  further rules could  use 
+             the  fact  of whether the diagnostic test passed  (TRUE)  or 
+             failed (FALSE) to make decisions about the further isolation 
+             of the hardware failure.
+
+                  Example:
+                       
+                       !
+                       IFNOTRUN isdev1
+                       IFNOTRUN isdev2
+                       IFNOTRUN isdev3
+                       THENHYP there are no devices to run diagnostics on
+                       !     
+                       ! see note below for the following rule
+                       !
+                       IF isdev1
+                       ANDIFRUN dev1diag
+                       THENHYP device one is faulty
+                       !
+                       IFRUN isdev2
+                       ANDIFRUN dev2diag
+                       THENHYP device two is faulty
+                       !
+                       IFRUN isdev3
+                       ANDIFRUN dev3diag
+                       THENHYP device three is faulty
+                       !
+                       IFNOTRUN dev1diag
+                       IFNOTRUN dev2diag
+                       IFNOTRUN dev3diag
+                       IFRUN isdev1
+                       ANDRUN isdev2
+                       THENRUN diag12
+                       !
+                       !
+
+
+        George W. Hageman            --7--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+                       !
+                       IFRUN diag12
+                       THENHYP device two is suspect remove and re-run test
+                       !
+                       IFNOTRUN diag12
+                       THENHYP device one is suspect, remove and re-run test 
+                       !
+
+             Note:
+
+             You   have  probably  noticed  that  the  FOLLOWING  STRINGS 
+             associated  with  the  RUN KEYWORDS and  the  IF,  AND  etc. 
+             KEYWORDS are interchangeable.   This is due to fact that the 
+             TRUTH  of  a  string is kept as a pointer  into  the  string 
+             buffer,  and therefore have no information concerning  their 
+             nature and only have meaning when used in conjunction with a 
+             KEYWORD.  If you are sure that the string "isdev1" will have 
+             its   truth  determined  earlier  by  running  the   routine 
+             "isdev1",   Then you may use it as a regular string in later 
+             rules,  however,  if its truth has not been determined  then 
+             the  inference  engine  will ask you for the  truth  of  the 
+             statement  "isdev1" rather than running the routine.   To be 
+             sure  use  the "RUN" form for the strings  which  relate  to 
+             executeables,   they will only be run once as it is,  so you 
+             don't really have to keep them straight.
+
+                  Notice also that if the first rule is not proved by the 
+             fact  that  isdev1  turns up being TRUE  and  therefore  the 
+             antecedent  statement  is FALSE due to the reverse sense  of 
+             the IFNOTRUN KEYWORD,  then the others will not be run until 
+             they are encountered in other rules containing them.   So be 
+             safe and use the RUN forms of the KEYWORDS if you intend the 
+             execution of an object.
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        George W. Hageman            --8--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        USAGE:
+
+             Ok,  now  that we know what all the key words are,  how does 
+        one go about using an inference engine, and more specifically how 
+        does one use this inference engine and what for?  
+             
+             People  usually use inference engines  as part of  what  are 
+        known  as expert systems.   Expert systems are a study associated 
+        with  a  branch  of  software  engineering  known  as  Artificial 
+        Intelligence (AI).    (I am probably going to get some heat  from 
+        that  statement).    Expert systems are supposed to mimic the way 
+        in which human experts deal with a particular physical or  mental 
+        problem.    A  clear  example  is an expert  system  which  could 
+        isolate  a  fault within a complex computer system as well as  or 
+        almost  as well as its human counterpart.    It is apparent  that 
+        the  computer  expert  system  would lack  much  of  the  tactile 
+        resources  the human expert would have,  but the computer  expert 
+        could still be of great value when coupled with a novice computer 
+        user.    In  this way the computer expert would rely on the human 
+        to  perform  actions  and observations  the  computer  expert  is 
+        incapable  of  doing.   The computer expert and the  novice  then 
+        could form a team which might perform as well as the human expert 
+        alone and at a probably much lower per/hour labor rate.
+
+             Unfortunately,  in  order to develop an expert  system,  one 
+        must  either  be  an expert in the area one wants to  develop  an 
+        expert system for or have a ready access to one.   Assuming  that 
+        you are or have found one,  the following is a description of how 
+        one  would  use  the inference engine and the  rule  compiler  to 
+        produce an expert system.    Fortunately one of the sticker tasks 
+        of  developing  the inference engine has been done,  and all  you 
+        have  to do is develop the rule base,  compile it with  the  rule 
+        compiler  and  use  the resultant compiled rule-base  file  as  a 
+        parameter  when  you initiate the inference engine.   In  reality 
+        this is a much tougher job than developing the inference engine.
+
+             Expert   systems  generally  consist  of  three  parts,    a 
+        KNOWLEDGE BASE,  HUMAN INTERFACE,  and an INFERENCE ENGINE.   The 
+        following is a short description of each:
+
+        THE RULE or KNOWLEDGE BASE:
+
+             The  rules  consisting of ANTECEDENTS  and  CONSEQUENTS  are 
+        known  as  the  "KNOWLEDGE  BASE"  of  the  expert  system.    An 
+        additional part of the KNOWLEDGE BASE consists of the executeable 
+        files  and  their  shared data files.   The  way  the  "knowledge 
+        engineer"  puts  these rules together determines how good  and/or 
+        effective  the resultant expert system becomes.    The  KNOWLEDGE 
+        BASE  is the smarts of the expert system,  and the basic data  on 
+        which the inference engine is to operate upon.
+
+
+
+
+
+
+
+        George W. Hageman            --9--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        THE HUMAN INTERFACE:
+
+             The  expert system needs a way to ask the human  user  about 
+        the  TRUTH or FALSENESS of the antecedents contained in the  rule 
+        base.   This  is  contained  as a part of  the  inference  engine 
+        associated with this release.    These routines will ask the user 
+        whether or not FOLLOWING STRINGS are TRUE or FALSE.    Additional 
+        human interfaces may be contained in the executeable files.
+
+        THE INFERENCE ENGINE:
+
+             The inference engine released with this software is known as 
+        a backwards chaining inference engine.    It works by identifying 
+        consequents  and  attempting  to find rules to  prove  that  each 
+        consequent  is TRUE.   Once a consequent is proved  TRUE,  it  is 
+        remembered  as being TRUE.    Each antecedent which is determined 
+        either TRUE or FALSE is remembered so that the user does not have 
+        to  be  asked more than once to verify  a  particular  statement.  
+        Remember  that if a consequent is not proved TRUE,  then it  does 
+        not  necessarily  mean that it is FALSE.    For more  information 
+        consult  the "inference.str" file which is a  preliminary  pseudo 
+        code  description  of the inference engine.   It is  not  correct 
+        because   I  have  not  gone  back  and  up  dated  it  from  the 
+        implementation effort (Tom De Marco please forgive me) but, it is 
+        close  enough to provide a basis for understanding the  code.   I 
+        suggest  looking  at the code to understand  how  this  inference 
+        engine  works.    I have also left in all of the debug statements 
+        which I found helpful so by modifying the makefile to include the 
+        DEBUG FLAGS, you can observe the inference engine working.
+
+             This   inference  engine  attempts  to  prove  all  of   the 
+        consequents  from the top of the rule base through to the  bottom 
+        in a linear way if possible.  If however, an antecedent is really 
+        a  consequent  of a rule,  the inference engine will  attempt  to 
+        prove  that consequent even if it occurs later in the rule  base.  
+        In  this sense,  the inference engine will exhibit  some  forward 
+        chaining characteristics.
+
+             There  are  several good books on the development of  expert 
+        systems,  inference  engines  and the like.   I have  included  a 
+        bibliography  which contain the books I consulted to  build  this 
+        one.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        George W. Hageman            --10--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        BUILDING EXPERT SYSTEMS:
+
+             The  builders  of  expert systems  are  sometimes  known  as 
+        "knowledge engineers".    As the name implies, they deal with the 
+        manipulation  and  representation  of knowledge  leading  to  the 
+        development  of the Knowledge base the inference engine  operates 
+        upon.    In  order  to develop the knowledge base  the  knowledge 
+        engineer  needs either to be an expert in the area for which  the 
+        expert system is to be developed or, have ready access to a human 
+        expert in the field.   
+
+             The  inference engine in this distribution accepts knowledge 
+        in  many  ways.   The first of which are the rules  as  discussed 
+        above which are relatively simple logical or predicate statements 
+        about the TRUTH of well defined consequents.    The other is  the 
+        somewhat  complex  knowledge representation as contained  in  the 
+        executeable files which may be initiated by the inference engine.  
+        In  fact,  the inference engine and the rule_compiler each can be 
+        one  of these executeable files so you can have recursive  expert 
+        systems  if  you  have a mind to!    You  can  even  use  another 
+        executeable  to produce a text file of rules,  which then can  be 
+        operated  on  by  the  rule-compiler  and  then  fed  to  another 
+        inference  engine  producing  self-modifying or  learning  expert 
+        system.   So even though the inference engine is only 12K and the 
+        rule  compiler 10K these are sufficient enough to produce  rather 
+        powerful expert systems.
+
+             To  develop the knowledge base the knowledge engineer  first 
+        must  under  stand  the limitations which are acceptable  to  the 
+        expert  system  user.   For example,  if the user  of  an  animal 
+        identification  expert  system is not concerned with whether  the 
+        expert  can  differentiate  between a snake and a  lizard  or  is 
+        not interested in reptiles at all,  then the expert system can be 
+        simplified  by leaving out this knowledge.    Once the boundaries 
+        of  an expert system are well known,  the expert system  designer 
+        can concentrate on how to define the particulars.   This software 
+        release  contains  two examples of simple  expert  systems.   The 
+        first is the more or less classical animal identification expert, 
+        and  the second is a weather predictor expert which  demonstrates 
+        the usage of the IFRUN, ANDTHENRUN, etc. KEYWORDS.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        George W. Hageman            --11--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        ANIMALS:
+
+             This is a simple expert which can differentiate between only 
+        certain  types of animals -- Mammals and Birds.   And among these 
+        two groups it can only tell you that the animal you are  thinking 
+        about  is  either  a  Giraffe,  Zebra,  Cheeta,  Tiger,  Penguin, 
+        albatross,  Duck,  and  so on.   The example has been limited  to 
+        these  few  identifications  in  order to  greatly  simplify  the 
+        development  effort  and  to help  demonstrate  the  strategy  of 
+        developing the rules associated with this simple expert system.
+
+             The strategy associated with the development of a consistent 
+        set  of  rules  which  will identify a  particular  animal  given 
+        certain  physical  characteristics  to work with  is  DIVIDE  AND 
+        CONQUER.    The  idea being to use rules which build  a  decision 
+        tree  where each branch of the tree is formed by a rule which can 
+        decide  which direction to go at that junction.    Since  we  are 
+        obviously  dealing  with birds and mammals then we can build  our 
+        root  branch  or  the  grossest division  as  a  rule  which  can 
+        differentiate between birds and mammals.   Like:
+                  
+                  !
+                  IF animal gives milk
+                  ANDIF animal has hair
+                  THEN animal is mammal
+                  !
+                  IFNOT animal is mammal
+                  THEN animal is bird
+                  !
+                  .
+                  .
+
+             Notice  that if the animal is not a mammal we  automatically 
+        assume  that it is a bird since this is the domain of our  expert 
+        system  -- it  does not consider any other type of  animal  as  a 
+        possibility.   If  we  were to include perhaps reptiles then  the 
+        following might be used instead:
+
+                  !
+                  IF animal gives milk
+                  ANDIF animal has hair
+                  THEN animal is mammal
+                  !
+                  IFNOT animal is mammal
+                  AND animal has feathers
+                  AND animal lays eggs
+                  THEN animal is bird
+                  !
+                  IFNOT animal is mammal
+                  IFNOT animal is bird
+                  THEN animal is reptile
+                  !
+
+
+
+
+
+        George W. Hageman            --12--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+             Again  the last category is the default and needs no further 
+        definitions  because it is within the limitations of  the  expert 
+        system.
+
+
+             Further  refinement of the decision tree associated with the 
+        animals  expert should build on the knowledge gained  by  earlier 
+        branching.   So  one should use the knowledge that the animal has 
+        been  identified  as a bird to further  define  the  animal.   An 
+        example of the further definition of the type of mammal follows:
+
+                  !
+                  IF animal is mammal
+                  ANDIF animal eats meat
+                  ANDIF animal eats little vegetation
+                  THEN animal is carnivore
+                  !
+                  IFNOT animal is carnivore
+                  ANDNOT animal eats little vegetation
+                  THEN animal is vegetarian
+                  !
+
+             Finer  and  finer branching is achieved by this  divide  and 
+        conquer strategy until the leaves of the tree are reached,  These 
+        leaves  are  the  actual hypothesis which end the  search  for  a 
+        particular animal.  
+
+                  .
+                  .
+                  !
+                  IF animal is cat
+                  AND animal has tan color
+                  AND animal has stripes
+                  THENHYP animal is tiger
+                  !
+                  IF animal is cat
+                  AND animal has tan color
+                  AND animal has spots
+                  THENHYP animal is cheeta
+                  !
+                  .
+                  .
+
+             Notice  that  "animal  is cat" should be a  THEN  Consequent 
+        somewhere or else the inference engine will simply ask you if the 
+        "animal  is  cat" statement is TRUE or not -- which  may  not  be 
+        construed  as  a  particularly intelligent thing  for  an  expert 
+        system to do.   The intelligence represented by the expert system 
+        is directly related to the intelligence you give it.  However, it 
+        is possible to get very confused when there are a large number of 
+        rules for a particular expert system and mistakes in logic or the 
+        development  of  circular  logic occurs.   The first  will  cause 
+        incorrect  conclusions to be drawn and the second will cause  the 
+        inference engine to crash.   Circular logic causes the  inference 
+        engine to run out of stack space.  
+
+
+        George W. Hageman            --13--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+             A  circular argument is an argument which cannot be resolved 
+        because  its proof relies on another rule which in turn relies on 
+        proving the first statement before it can be proved such as in:
+
+                       !
+                       IF the second one is true
+                       THEN the first one is true
+                       !
+                       IF the first one is true
+                       THEN the second one is true
+                       !
+
+             Or to expand the concept:
+
+                       !
+                       IF the third one is true
+                       THEN the first one is true
+                       !
+                       IF the first one is true
+                       THEN the second one is true
+                       !
+                       IF the second one is true
+                       THEN the third on is true
+                       !
+
+             Usually,   when  the inference engine tells you that  "Stack 
+        overflow" has occurred -- this will be the problem.
+
+             Look at the animal file contained in this release,  see  how 
+        the  rules are built and as an exercise add another animal to  be 
+        differentiated  like a platypus,  and later add a whole class  of 
+        animals such as domestic farm animals, or even a division such as 
+        reptiles or insects.
+
+             You  will soon notice that your knowledge base will increase 
+        very  quickly  with each set of animals you want your  expert  to 
+        differentiate.   With this growth of the knowledge base come real 
+        difficulty  in keeping the rules correct  and  non-circular.    A 
+        strategy  for limiting the complexity for these rules is  to  use 
+        the IFRUN or THENRUN capability of this inference engine to fire-
+        up  a whole new inference engine which is an expert in one of the 
+        major branches of animals.   In this manner one only has to  make 
+        the  major decisions associated with a class of animals and  then 
+        run  the  expert system which knows how to  handle  the  specific 
+        class of animals.  
+
+
+
+
+
+
+
+
+
+
+
+
+        George W. Hageman            --14--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        For example:
+
+                  !
+                  IF animal has feathers
+                  AND animal lays eggs
+                  THEN animal is bird
+                  THENRUNHYP  inference.exe birds.cmp
+                  !
+                  IFNOT animal is bird
+                  AND  animal has hair
+                  AND  animal gives milk
+                  THEN animal is mammal
+                  THENRUNHYP inference.exe mammals.cmp
+                  !
+
+             The  files  "birds.cmp" and "mammals.cmp" are the  resultant 
+        compiled  files  from  the  text  knowledge  bases  "birds"   and 
+        "mammals"  which  the knowledge engineer would need  to  produce.   
+        But,  as stated above, these files would represent expert systems 
+        knowing  only the limited area of birds or mammals and  therefore 
+        can be greatly simplified.    NOTE:  inference.exe returns a TRUE 
+        value  if  it has proved anything while it ran,  and FALSE if  it 
+        could  not  prove anything.   With an IBM AT with 512  KBYTES  of 
+        memory  I  was able to load four copies of  an  inference  engine 
+        simultaneously.   A good way to see how many your system can deal 
+        with at the same time compile the following test:
+
+                       !
+                       IFRUN INFERENCE.EXE TEST.CMP
+                       THENHYP I am done
+                       ! 
+
+
+        If this file is named TEST, then compile it using the following:
+
+                  rulecomp test test.cmp
+
+        Then, run the inference engine with the test.cmp file as follows:
+
+                  inference test.cmp
+
+
+             Notice  that when any routine cannot be run for some  reason 
+        or another, an attempt is made to tell you what went wrong -- out 
+        of memory,  can't find it,  or some other reason, and the routine 
+        will  be assumed to have returned normally with a TRUE  predicate 
+        value.   This  is done so that the inference engine won't  simply 
+        die at some mysterious point.   The "I infer that : I am done" at 
+        the top was the last inference engine which could be loaded which 
+        could run but could not spawn a new process, the next one down is 
+        the  last one which could spawn one,  and any others  below  this 
+        line  plus  this  one will tell you the number of levels  of  the 
+        inference engine you can run on your system.  
+
+
+
+
+        George W. Hageman            --15--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        THE WEATHER EXPERT:
+
+             The  other  expert system knowledge base included with  this 
+        release  is  a weather predicting  expert.   This  expert  system 
+        demonstrates   the   use  of  executeable  files  to  expand  the 
+        abilities  of  the inference engine to deal with other  forms  of 
+        knowledge.   Look  a  the source files for  the  weather  expert, 
+        notice how each member of this set of routines uses a common file 
+        for  the  transfer of needed data.   The need of a file for  this 
+        transfer of data is done because it was the only standard form of 
+        data  transmission  which was not machine dependent according  to 
+        MS-DOS and UNIX operating systems.   Specific methods for dealing 
+        with this problem can be found for your machine which can greatly 
+        speed up this cumbersome data transfer method -- but it works.   
+
+             UNIX  and the Microsoft C compiler allows a routine to  exit 
+        with a value which will be returned to the parent process.   This 
+        method  is  used to allow each executeable to return  its  TRUTH-
+        VALUE  or  PREDICATE-VALUE back to  the  inference  engine.   The 
+        routine  runRoutine(consequent) performs this task.   If you look 
+        at  the  file runrouti.c you can see that this is done  with  the 
+        "exit(value) ;" statement.  The values used to indicate the TRUTH 
+        and  FALSEness  of  the  routine  are  "RETURN_ROUTINE_TRUE"  and 
+        "RETURN_ROUTINE_FALSE"   as   contained  in   the   header   file 
+        "routine.h".   This header file should be included in any routine 
+        which returns a TRUE/FALSE value to the inference engine.
+
+             The   strategy  for  using  this  method  of  expanding  the 
+        knowledge  base  is essentially the same as that for  the  animal 
+        type  expert  system,  except that it is noticed that the  simple 
+        form  of  the  knowledge base does not  have  the  capability  to 
+        perform  some  of  the functions  needed.   Cases  where  complex 
+        questions  or the manipulation of data are necessary must  resort 
+        to  the use of executeable files which can deal with them.   Such 
+        is the case for the weather predicting expert system.
+
+             The  weather expert must deal with such data  as  barometric 
+        pressure,  wind direction,  and the current rate of change of the 
+        barometric  pressure.    Additional data such as cloud conditions 
+        can  be  handled  by the predicate  functions  of  the  inference 
+        engine.     Again  the  strategy  is  to divide  and  conquer  by 
+        determining  which  information  needs  to  be  gathered  by  the 
+        executeable portion of the expert system,  what routines must  be 
+        used  to  convert  this data into a form which is usable  by  the 
+        inference engine i.e.  TRUE or FALSE,  and,  what information can 
+        be  gathered  directly  by the  inference  engine.    Once  these 
+        decisions are made then a decision tree can be built in a similar 
+        manner  to  the  one  built  for  the  animal  expert  but   also 
+        incorporating the executeable files where appropriate.    Look at 
+        the  file  "weather"  and  at each of the source  files  for  the 
+        executeable portion of the weather expert.  
+
+
+
+
+
+
+        George W. Hageman            --16--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+             Notice  that there is a "main" routine (even though  all  of 
+        the  programs  are  stand-a-lone programs and are have  the  name 
+        "main").   This routine is in the file "MESSAGE1.C", and provides 
+        the  data entry for all of the data needed by the expert  system.  
+        The  routine  explains to the user what  is  needed,  checks  for 
+        reasonable  responses,  and  writes the data to a disk  file  for 
+        later  use  by  the other routines associated with  this  system.  
+        These other routines,  when initiated,  have the task of  reading 
+        the  disk file produced by the "MESSAGE1.EXE" executeable,  check 
+        for  some conditions,  and return "ROUTINE_RETURN_TRUE",  if  the 
+        conditions are met and "ROUTINE_RETURN_FALSE" if they are not.
+
+             In  this  manner  the knowledge  engineer  can  make  expert 
+        systems   of  a  higher  complexity  and  usefulness  than  would 
+        otherwise be possible.
+
+        CONCLUSION:
+
+             I hope that this short definition of the inference engine is 
+        enough  to  get  you started into the fascinating  field  of  AI.   
+        There are some useful additions the enthusiastic programmer could 
+        make  to the inference engine to both enhance its usefulness  and 
+        its  ability to assist in the debugging of knowledge  basses.   A 
+        "Why"  function which shows the complete logical path which  lead 
+        to  the  question being asked,  showing each statement  as  being 
+        known or unknown and if known what its predicate value is,  would 
+        be very helpful.    Further,  the addition of different  KEYWORDS 
+        such  as  an  OR function,  might expand the  usefulness  of  the 
+        inference engine.  I may include these in my next release of this 
+        software  but If you have made such an addition -- I will include 
+        them in the next release and refund your $10.00 if you have  been 
+        so good as to send it to me.
+
+             Good  luck  and if you have any questions or would  like  to 
+        discuss this concept please drop me a line.
+
+                                 Thanks,
+
+                                      George W. Hageman
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        George W. Hageman            --17--
+
+
+
+
+
+        INFERENCE          -- SOFTMAN ENTERPRIZES --        Dec. 30, 1985
+
+
+        BIBLIOGRAPHY:
+
+             The  following  books  and articles  were  helpful  in  the 
+        development of this inference engine.  
+
+             MVP-FORTH EXPERT SYSTEM TOOLKIT,  Jack Park,   Mountain View 
+        Press,  Inc.  P.O. Box 4656 Mountain View, CA 94040 Phone: (415)-
+        961-4130.
+
+             MVP-FORTH EXPERT-2 TUTORIAL,  Mitch Derick and Linda Derick, 
+        Mountain View Press.
+
+             INSIDE F83, C. H. Ting,  OFFETE ENTERPRISES, INC.  Available 
+        from Moutain View Press. 
+
+             Expert  Systems  and the Weather,  Jack  Park,   Dr.  Dobb's 
+        Journal, April 1984, pp. 24-28.
+
+             Programming in Prolog,  William F.  Clocksin and Christopher 
+        S. Mellish, Springer-Verlag 
+
+             LISP,  Patrick H.  Winston and Berthold Klaus and Paul Horn, 
+        Addison Weseley.
+
+             A  special  thankyou to Jack Park and the  MVP-FORTH  EXPERT 
+        SYSTEM  TOOLKIT.   Many  of  the ideas in this document  and  the 
+        development environment afforded by FORTH were the starting point 
+        for many of the ideas developed in this inference engine.  If you 
+        are into FORTH this is an excellent source of information on  the 
+        subject.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        George W. Hageman            --18--
+
+
+
+
+----------------------  Cut Here --------------------------------
+
+George Hageman  ( ...bmcg!asgb!benish!hageman )
+
+Happy New Year!
+
+
+ssc-a: 

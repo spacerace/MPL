@@ -1,0 +1,12 @@
+#include "style.h"
+#include "acsresrc.h"
+
+ResMenu MENU
+  BEGIN
+    MENUITEM "&Execute", IDM_EXECUTE
+  END
+
+HotStuff RCDATA LOADONCALL 
+BEGIN
+    "It worked!"0
+END

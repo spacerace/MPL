@@ -1,0 +1,6 @@
+movewind.obj:	movewind.c
+     cl  -d  -c  -Asnw	-Gsw  -Os  -Zdpe  movewind.c
+
+movewind.exe:  movewind.obj movewind.def
+     link4 movewind,movewind/align:16,movewind/map,slibw,movewind.def
+     mapsym movewind

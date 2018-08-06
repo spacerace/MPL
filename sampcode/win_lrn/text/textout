@@ -1,0 +1,7 @@
+textout.obj: textout.c
+  cl -c -Fs -W2 -AS -Gsw -Od -Zped textout.c
+
+textout.exe: textout.obj textout.def
+    link4 textout,/align:16,,slibw,textout.def
+    del textout.obj
+    del textout.map

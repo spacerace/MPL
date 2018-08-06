@@ -1,0 +1,39 @@
+
+
+       NAME
+               monthis -- return a string pointer to name of month
+
+       SYNOPSIS
+               char *monthis(month);
+               int month;      number of month 0-11
+
+
+
+       DESCRIPTION
+       This function returns a pointer to a character string naming
+       the specified month.  The string is null terminated and may be
+       used directly or copied to another string.  Month 0 is January.
+
+
+
+       EXAMPLE
+
+
+               printf("This is %s", monthis(7));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

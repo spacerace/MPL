@@ -1,0 +1,9 @@
+NAME		getstock
+DESCRIPTION	'Demonstration of the GetStockObject function'
+STUB		'WINSTUB.EXE'
+CODE		MOVEABLE
+DATA		MOVEABLE MULTIPLE
+HEAPSIZE	1024
+STACKSIZE	4096
+EXPORTS
+    GetStockObjectWindowProc	  @1

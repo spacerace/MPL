@@ -1,0 +1,16 @@
+Code 17                             Return Inquiry Information
+
+Input registers - AL=00-Subfunction.
+        ES:BX - pointer to buffer where Inquiry  string to be placed. 
+        Ch- Number of bytes to return. (Not to exceed but could return less.)
+
+Special output registers - none.
+
+Operation:
+
+    A SCSI Inquiry (12h) command is issued to the specified disk. The 
+    resultant status of the command is returned in AH/AL.
+
+    If an error is detected during the Status/Message phase, a SCSI request 
+    sense command is issued and the results returned in AH/AL.
+

@@ -1,0 +1,14 @@
+NAME	setwinex
+
+DESCRIPTION 'Demonstration of the SetWindowExt function'
+
+STUB  'WINSTUB.EXE'
+
+CODE	MOVEABLE
+DATA	MOVEABLE MULTIPLE
+
+HEAPSIZE    1024
+STACKSIZE   4096
+
+EXPORTS
+    SetWindowExtWindowProc	@1

@@ -1,0 +1,48 @@
+/*----------------------------
+   HEXCALC.RC resource script
+  ----------------------------*/
+
+#include <os2.h>
+#include "hexcalc.h"
+
+POINTER ID_ICON hexcalc.ico
+
+WINDOWTEMPLATE ID_HEXCALC
+   {
+   FRAME NULL, 0, 100, 40, 132, 122, WS_VISIBLE,
+         FCF_TITLEBAR | FCF_SYSMENU | FCF_MINBUTTON | FCF_BORDER | FCF_TASKLIST
+      {
+      WINDOW "", FID_CLIENT, 0, 0, 140, 122, CLIENTCLASS, WS_VISIBLE
+         {
+         PUSHBUTTON "D",         68,   8,  84, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "A",         65,   8,  68, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "7",         55,   8,  52, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "4",         52,   8,  36, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "1",         49,   8,  20, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "0",         48,   8,   4, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "0",     ESCAPE,  32, 104, 68, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "E",         69,  32,  84, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "B",         66,  32,  68, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "8",         56,  32,  52, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "5",         53,  32,  36, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "2",         50,  32,  20, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "Back",       8,  32,   4, 44, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "F",         70,  56,  84, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "C",         67,  56,  68, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "9",         57,  56,  52, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "6",         54,  56,  36, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "3",         51,  56,  20, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "+",         43,  80,  84, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "-",         45,  80,  68, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "*",         42,  80,  52, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "/",         47,  80,  36, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "%",         37,  80,  20, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "Equals",    61,  80,   4, 44, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "&",         38, 104,  84, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "|",        124, 104,  68, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "^",         94, 104,  52, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON "<",         60, 104,  36, 20, 14, BS_NOPOINTERFOCUS
+         PUSHBUTTON ">",         62, 104,  20, 20, 14, BS_NOPOINTERFOCUS
+         }
+      }
+   }

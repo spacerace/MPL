@@ -1,0 +1,6 @@
+
+decaret.obj: decaret.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 decaret.c
+
+decaret.exe: decaret.obj decaret.def
+    link4 /align:16 decaret,,nul,slibw/NOE,decaret.def

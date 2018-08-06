@@ -1,0 +1,9 @@
+NAME    Quit       
+DESCRIPTION 'Example Application for Quit'
+STUB    'WINSTUB.EXE' 
+CODE    MOVEABLE      
+DATA    MOVEABLE MULTIPLE
+HEAPSIZE  1024
+STACKSIZE 4096  
+EXPORTS
+    QuitWndProc      @1  

@@ -1,0 +1,11 @@
+;----------------------------------
+; CLOCK.DEF module definition file
+;----------------------------------
+
+NAME           CLOCK     WINDOWAPI
+
+DESCRIPTION    'Analog Clock (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

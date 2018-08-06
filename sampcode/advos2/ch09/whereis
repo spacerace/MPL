@@ -1,0 +1,11 @@
+argc.obj : argc.asm
+	masm /T argc.asm;
+
+argv.obj : argv.asm
+	masm /T argv.asm;
+
+whereis.obj : whereis.asm
+	masm /T whereis.asm;
+
+whereis.exe : whereis.obj whereis.def argv.obj argc.obj
+	link whereis+argv+argc,,,os2,whereis

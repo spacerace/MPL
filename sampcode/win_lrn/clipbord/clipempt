@@ -1,0 +1,6 @@
+clipempt.obj: clipempt.c
+    cl -d -c -AS -Gsw -Os -Zpe clipempt.c
+
+clipempt.exe: clipempt.obj clipempt.def
+    link4 clipempt,/align:16,/map,slibw/NOE,clipempt.def
+    mapsym clipempt

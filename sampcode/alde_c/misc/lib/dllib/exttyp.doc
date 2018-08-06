@@ -1,0 +1,39 @@
+
+
+        NAME
+                exttyp -- check a filename for a particular extension
+
+        SYNOPSIS
+                r = exttyp(filename, extn);
+                BOOL r;         returns TRUE if match, else FALSE
+                char *filename  filename to test
+                char *extn      extension string for match
+
+        DESCRIPTION
+        This function makes no changes to either entry parameter,
+        but simply returns TRUE if the specified extension is found in
+        the filename, or FALSE (0) if it is not.  Case of the characters is
+        ignored.  The function is most useful to insure that a particular
+        program will only use an extension of a specified type.
+
+        EXAMPLE
+             (assume argv[1] is string "foobar.com")
+
+             if(exttyp(argv[1], "COM")) printf("File is executable");
+             else printf("File is not executable");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

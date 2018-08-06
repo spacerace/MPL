@@ -1,0 +1,326 @@
+#include <pmwin.h>
+#include "mdi.h"
+#include "app.h"
+
+POINTER  IDR_MDI       app.ico
+POINTER  IDR_MDIDOC    mdi.ico
+
+/******** Main Menu ********/
+
+MENU    IDR_MDI PRELOAD
+BEGIN
+    SUBMENU    "", IDM_AABDOCSYSMENU, MIS_BITMAP | MIS_SUBMENU
+    BEGIN
+        MENUITEM   "~Restore\tCtrl+F5",     CMD_DOCRESTORE
+        MENUITEM   "~Move\tCtrl+F7",        CMD_DOCMOVE,        MIS_TEXT, MIA_DISABLED
+        MENUITEM   "~Size\tCtrl+F8",        CMD_DOCSIZE,        MIS_TEXT, MIA_DISABLED
+        MENUITEM   "Mi~nimize\tCtrl+F9",    CMD_DOCMINIMIZE
+        MENUITEM   "Ma~ximize\tCtrl+F10",   CMD_DOCMAXIMIZE,    MIS_TEXT, MIA_DISABLED
+        MENUITEM   SEPARATOR
+        MENUITEM   "~Close\tCtrl+F4",       CMD_DOCCLOSE
+        MENUITEM   SEPARATOR
+        MENUITEM   "S~plit",                CMD_DOCSPLIT
+    END
+
+    SUBMENU     "~File", IDM_FILE
+    BEGIN
+        MENUITEM    "~New",                 CMD_NEW
+        MENUITEM    "~Open...",             CMD_OPEN,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "E~xit",                CMD_EXIT
+	MENUITEM    "A~bout...",	    CMD_ABOUT
+    END
+
+    MENUITEM  "~Help", IDM_HELP, MIS_BUTTONSEPARATOR | MIS_HELP, MIA_DISABLED
+END
+
+
+MENU    IDR_DOC1MENU PRELOAD
+BEGIN
+    SUBMENU     "~File 1", IDM_FILE
+    BEGIN
+        MENUITEM    "~New",                 CMD_NEW
+        MENUITEM    "~Open...",             CMD_OPEN,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Close",               CMD_CLOSE
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Save",                CMD_SAVE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~As...",          CMD_SAVEAS,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~Environment...", CMD_SAVEENV,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Page Se~tup...",       CMD_PAGESETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Print...",            CMD_PRINT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "P~rinter Setup...",    CMD_PRINTSETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "E~xit",                CMD_EXIT
+	MENUITEM    "A~bout...",	    CMD_ABOUT
+    END
+    SUBMENU     "~Edit 1", IDM_EDIT
+    BEGIN
+        MENUITEM    "~Undo",                CMD_UNDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Redo",                CMD_REDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Cu~t\tDel ",           CMD_CUT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Copy\tF2 ",           CMD_COPY,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Paste\tIns ",         CMD_PASTE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "C~lear",               CMD_CLEAR,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Select...",           CMD_SELECT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Select ~All",          CMD_SELECTALL,	MIS_TEXT, MIA_DISABLED
+    END
+    SUBMENU     "~Window 1", IDM_WINDOW
+    BEGIN
+        MENUITEM    "Arrange ~Tiled",       CMD_ARRANGETILED
+        MENUITEM    "Arrange ~Cascaded",    CMD_ARRANGECASCADED
+        MENUITEM    "",                     CMD_WINDOWITEMS,    MIS_SEPARATOR
+    END
+
+    MENUITEM  "~Help", IDM_HELP, MIS_BUTTONSEPARATOR | MIS_HELP, MIA_DISABLED
+END
+
+
+MENU    IDR_DOC2MENU PRELOAD
+BEGIN
+    SUBMENU     "~File 2", IDM_FILE
+    BEGIN
+        MENUITEM    "~New",                 CMD_NEW
+        MENUITEM    "~Open...",             CMD_OPEN,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Close",               CMD_CLOSE
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Save",                CMD_SAVE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~As...",          CMD_SAVEAS,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~Environment...", CMD_SAVEENV,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Page Se~tup...",       CMD_PAGESETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Print...",            CMD_PRINT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "P~rinter Setup...",    CMD_PRINTSETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "E~xit",                CMD_EXIT
+	MENUITEM    "A~bout...",	    CMD_ABOUT
+    END
+    SUBMENU     "~Edit 2", IDM_EDIT
+    BEGIN
+        MENUITEM    "~Undo",                CMD_UNDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Redo",                CMD_REDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Cu~t\tDel ",           CMD_CUT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Copy\tF2 ",           CMD_COPY,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Paste\tIns ",         CMD_PASTE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "C~lear",               CMD_CLEAR,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Select...",           CMD_SELECT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Select ~All",          CMD_SELECTALL,	MIS_TEXT, MIA_DISABLED
+    END
+    SUBMENU     "~Window 2", IDM_WINDOW
+    BEGIN
+        MENUITEM    "Arrange ~Tiled",       CMD_ARRANGETILED
+        MENUITEM    "Arrange ~Cascaded",    CMD_ARRANGECASCADED
+        MENUITEM    "",                     CMD_WINDOWITEMS,    MIS_SEPARATOR
+    END
+
+    MENUITEM  "~Help", IDM_HELP, MIS_BUTTONSEPARATOR | MIS_HELP, MIA_DISABLED
+END
+
+
+
+MENU    IDR_DOC3MENU PRELOAD
+BEGIN
+    SUBMENU     "~File 3", IDM_FILE
+    BEGIN
+        MENUITEM    "~New",                 CMD_NEW
+        MENUITEM    "~Open...",             CMD_OPEN,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Close",               CMD_CLOSE
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Save",                CMD_SAVE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~As...",          CMD_SAVEAS,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~Environment...", CMD_SAVEENV,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Page Se~tup...",       CMD_PAGESETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Print...",            CMD_PRINT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "P~rinter Setup...",    CMD_PRINTSETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "E~xit",                CMD_EXIT
+	MENUITEM    "A~bout...",	    CMD_ABOUT
+    END
+    SUBMENU     "~Edit 3", IDM_EDIT
+    BEGIN
+        MENUITEM    "~Undo",                CMD_UNDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Redo",                CMD_REDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Cu~t\tDel ",           CMD_CUT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Copy\tF2 ",           CMD_COPY,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Paste\tIns ",         CMD_PASTE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "C~lear",               CMD_CLEAR,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Select...",           CMD_SELECT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Select ~All",          CMD_SELECTALL,	MIS_TEXT, MIA_DISABLED
+    END
+    SUBMENU     "~Window 3", IDM_WINDOW
+    BEGIN
+        MENUITEM    "Arrange ~Tiled",       CMD_ARRANGETILED
+        MENUITEM    "Arrange ~Cascaded",    CMD_ARRANGECASCADED
+        MENUITEM    "",                     CMD_WINDOWITEMS,    MIS_SEPARATOR
+    END
+
+    MENUITEM  "~Help", IDM_HELP, MIS_BUTTONSEPARATOR | MIS_HELP, MIA_DISABLED
+END
+
+
+MENU    IDR_DOC4MENU PRELOAD
+BEGIN
+    SUBMENU     "~File 4", IDM_FILE
+    BEGIN
+        MENUITEM    "~New",                 CMD_NEW
+        MENUITEM    "~Open...",             CMD_OPEN,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Close",               CMD_CLOSE
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Save",                CMD_SAVE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~As...",          CMD_SAVEAS,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~Environment...", CMD_SAVEENV,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Page Se~tup...",       CMD_PAGESETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Print...",            CMD_PRINT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "P~rinter Setup...",    CMD_PRINTSETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "E~xit",                CMD_EXIT
+	MENUITEM    "A~bout...",	    CMD_ABOUT
+    END
+    SUBMENU     "~Edit 4", IDM_EDIT
+    BEGIN
+        MENUITEM    "~Undo",                CMD_UNDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Redo",                CMD_REDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Cu~t\tDel ",           CMD_CUT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Copy\tF2 ",           CMD_COPY,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Paste\tIns ",         CMD_PASTE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "C~lear",               CMD_CLEAR,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Select...",           CMD_SELECT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Select ~All",          CMD_SELECTALL,	MIS_TEXT, MIA_DISABLED
+    END
+    SUBMENU     "~Window 4", IDM_WINDOW
+    BEGIN
+        MENUITEM    "Arrange ~Tiled",       CMD_ARRANGETILED
+        MENUITEM    "Arrange ~Cascaded",    CMD_ARRANGECASCADED
+        MENUITEM    "",                     CMD_WINDOWITEMS,    MIS_SEPARATOR
+    END
+
+    MENUITEM  "~Help", IDM_HELP, MIS_BUTTONSEPARATOR | MIS_HELP, MIA_DISABLED
+END
+
+MENU    IDR_DOC5MENU PRELOAD
+BEGIN
+    SUBMENU     "~File 5", IDM_FILE
+    BEGIN
+        MENUITEM    "~New",                 CMD_NEW
+        MENUITEM    "~Open...",             CMD_OPEN,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Close",               CMD_CLOSE
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Save",                CMD_SAVE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~As...",          CMD_SAVEAS,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~Environment...", CMD_SAVEENV,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Page Se~tup...",       CMD_PAGESETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Print...",            CMD_PRINT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "P~rinter Setup...",    CMD_PRINTSETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "E~xit",                CMD_EXIT
+	MENUITEM    "A~bout...",	    CMD_ABOUT
+    END
+    SUBMENU     "~Edit 5", IDM_EDIT
+    BEGIN
+        MENUITEM    "~Undo",                CMD_UNDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Redo",                CMD_REDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Cu~t\tDel ",           CMD_CUT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Copy\tF2 ",           CMD_COPY,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Paste\tIns ",         CMD_PASTE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "C~lear",               CMD_CLEAR,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Select...",           CMD_SELECT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Select ~All",          CMD_SELECTALL,	MIS_TEXT, MIA_DISABLED
+    END
+    SUBMENU     "~Window 5", IDM_WINDOW
+    BEGIN
+        MENUITEM    "Arrange ~Tiled",       CMD_ARRANGETILED
+        MENUITEM    "Arrange ~Cascaded",    CMD_ARRANGECASCADED
+        MENUITEM    "",                     CMD_WINDOWITEMS,    MIS_SEPARATOR
+    END
+
+    MENUITEM  "~Help", IDM_HELP, MIS_BUTTONSEPARATOR | MIS_HELP, MIA_DISABLED
+END
+
+
+
+
+MENU    IDR_DOCXMENU PRELOAD
+BEGIN
+    SUBMENU     "~File X", IDM_FILE
+    BEGIN
+        MENUITEM    "~New",                 CMD_NEW
+        MENUITEM    "~Open...",             CMD_OPEN,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Close",               CMD_CLOSE
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Save",                CMD_SAVE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~As...",          CMD_SAVEAS,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Save ~Environment...", CMD_SAVEENV,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Page Se~tup...",       CMD_PAGESETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Print...",            CMD_PRINT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "P~rinter Setup...",    CMD_PRINTSETUP,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "E~xit",                CMD_EXIT
+	MENUITEM    "A~bout...",	    CMD_ABOUT
+    END
+    SUBMENU     "~Edit X", IDM_EDIT
+    BEGIN
+        MENUITEM    "~Undo",                CMD_UNDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Redo",                CMD_REDO,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "Cu~t\tDel ",           CMD_CUT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Copy\tF2 ",           CMD_COPY,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "~Paste\tIns ",         CMD_PASTE,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "C~lear",               CMD_CLEAR,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "",                     ID_DUMMY,           MIS_SEPARATOR
+        MENUITEM    "~Select...",           CMD_SELECT,	MIS_TEXT, MIA_DISABLED
+        MENUITEM    "Select ~All",          CMD_SELECTALL,	MIS_TEXT, MIA_DISABLED
+    END
+    SUBMENU     "~Window X", IDM_WINDOW
+    BEGIN
+        MENUITEM    "Arrange ~Tiled",       CMD_ARRANGETILED
+        MENUITEM    "Arrange ~Cascaded",    CMD_ARRANGECASCADED
+        MENUITEM    "",                     CMD_WINDOWITEMS,    MIS_SEPARATOR
+    END
+
+    MENUITEM  "~Help", IDM_HELP, MIS_BUTTONSEPARATOR | MIS_HELP, MIA_DISABLED
+END
+
+
+
+
+
+ACCELTABLE      IDR_MDIDOC PRELOAD
+BEGIN
+    VK_DELETE,  CMD_CUT,        VIRTUALKEY
+    VK_F2,      CMD_COPY,       VIRTUALKEY
+    VK_INSERT,  CMD_PASTE,      VIRTUALKEY
+    VK_F4,      SC_CLOSE,       VIRTUALKEY, CONTROL, SYSCOMMAND
+    VK_F5,      SC_RESTORE,     VIRTUALKEY, CONTROL, SYSCOMMAND
+    VK_F6,      SC_NEXT,        VIRTUALKEY, CONTROL, SYSCOMMAND
+    VK_F7,      SC_MOVE,        VIRTUALKEY, CONTROL, SYSCOMMAND
+    VK_F8,      SC_SIZE,        VIRTUALKEY, CONTROL, SYSCOMMAND
+    VK_F9,      SC_MINIMIZE,    VIRTUALKEY, CONTROL, SYSCOMMAND
+    VK_F10,     SC_MAXIMIZE,    VIRTUALKEY, CONTROL, SYSCOMMAND
+    "-",        SC_DOCSYSMENU,  CHAR,       ALT,     SYSCOMMAND
+END
+
+RCINCLUDE mdi.rc
+
+DLGTEMPLATE IDD_ABOUT {
+    DIALOG "", 0, 10, 60, 160, 75, WS_SAVEBITS | FS_DLGBORDER {
+	CTEXT	"OS/2 Presentation Manager"	   -1, 10, 60, 140, 10
+	CTEXT	"MDI Sample Application"	   -1, 10, 50, 140, 10
+	ICON	IDR_MDI			 	   -1,  8, 30,   0,  0
+	CTEXT	"Version 1.0"			   -1, 50, 30,  60, 10
+	CTEXT	"Created by Microsoft Corp., 1989" -1, 10, 20, 140, 10
+	DEFPUSHBUTTON "Ok"		   DID_OK, 64,  4, 32,  14, WS_GROUP
+    }
+}

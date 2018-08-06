@@ -1,0 +1,6 @@
+shell.obj : shell.asm
+  masm shell;
+
+shell.exe : shell.obj
+  link shell;
+

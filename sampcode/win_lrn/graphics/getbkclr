@@ -1,0 +1,7 @@
+
+getbkclr.obj: getbkclr.c
+   cl -c -W2 -AS -Gsw -Od -Zped getbkclr.c
+
+getbkclr.exe: getbkclr.obj getbkclr.def
+   link4 getbkclr,/align:16,/map/li,slibw/NOE,getbkclr.def
+   mapsym getbkclr

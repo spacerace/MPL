@@ -1,0 +1,74 @@
+# WNKTERM - A Simple Windows Terminal Program with Kermit
+#
+# Copyright (c) 1989, 1990 by
+# William S. Hall
+# 3665  Benton Street, #66
+# Santa Clara, CA 95051
+#
+
+# This program should be created using the Windows 3.0 SDK and
+# libraries.  Use the overlay linker, version 5.x supplied with the C
+# compiler.
+
+## Macros
+# location of tty window code
+TTYDIR=.
+# location of this source
+TERMDIR=.
+# location of Kermit stuff
+KERMDIR=.
+
+# This program should be made using the Windows 3.0 SDK and
+# Microsoft C version 5.1 or 6.0.
+# Use the overlay linker, version 5.x supplied with the Microsoft C
+# 5.1 or 6.0 compiler.
+
+# compile macro for C 6.0
+cp=cl -c -AM -Ghsw -Osler -Zpe -W3 -I$(TTYDIR) -DWINDOWS
+
+# compile macro for Microsoft C 5.1
+# cp=cl -c -AM -Gsw -Os -Zpe -W3 -I$(TTYDIR) -DWINDOWS
+
+all : wnkterm.exe
+
+#
+# make the terminal .RES file
+#
+
+wnkterm.res : wnkterm.rc wntmnu.rc wnterm.h wntdlg.dlg wntdlg.h kermit.ico \
+	      $(KERMDIR)\wnkerm.h $(KERMDIR)\wnkdlg.h \
+	      $(KERMDIR)\wnkmnu.rc $(KERMDIR)\wnkerm.dlg
+    rc -r -I $(KERMDIR) wnkterm.rc
+
+#
+# make the terminal .OBJ files
+#
+wnkterm.obj : wnterm.c wnterm.h $(KERMDIR)\wnkerm.h $(TTYDIR)\ttycls.h
+    $(cp) -I$(KERMDIR) -DKERMIT -NT _TERMRES -Fownkterm.obj wnterm.c
+
+wntfns.obj : wntfns.c wnterm.h wntdlg.h $(TTYDIR)\ttycls.h
+    $(cp) -NT _TERMRES wntfns.c
+
+wntint.obj : wntint.c wnterm.h $(TTYDIR)\ttycls.h
+    $(cp) -NT _TERMINT wntint.c
+
+wntmsc.obj : wntmsc.c wnterm.h wntdlg.h $(TTYDIR)\ttycls.h
+    $(cp) -NT _TERMMSC wntmsc.c
+
+ttycls.obj : $(TTYDIR)\ttycls.c $(TTYDIR)\ttycls.h
+    $(cp) -NT _TERMRES $(TTYDIR)\ttycls.c
+
+#
+# make the .DEF file
+#
+wnkterm.def : wnterm.def $(KERMDIR)\wnkerm.def
+    copy wnterm.def + $(KERMDIR)\wnkerm.def wnkterm.def
+
+#
+# create the .EXE file, add resources, and make a map file
+#
+wnkterm.exe : wnkterm.def wnkterm.lnk $(KERMDIR)\wnkerm.lib wnkterm.res \
+              wnkterm.obj wntfns.obj wntint.obj wntmsc.obj ttycls.obj \
+	      $(KERMDIR)\wnkerm.lib
+    link @wnkterm.lnk
+    rc wnkterm.res wnkterm.exe

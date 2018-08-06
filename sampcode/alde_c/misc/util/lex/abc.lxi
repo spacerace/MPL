@@ -1,0 +1,26 @@
+/*
+ * An example lex input file to show the effects of quotes,
+ * apostrophes, and upper and lower case letters.
+ */
+
+c = [C];
+
+%{
+main()
+{
+	int token_number;
+	while(token_number = yylex())
+		printf("\nyylex returns %d\n", token_number);
+	printf("\nyylex returns NULL\n");
+}
+%}
+
+%%
+'a'			{printf("yylex: a\n");   return(1);}
+'A'			{printf("yylex: A\n");   return(2);}
+"b"			{printf("yylex: b\n");   return(3);}
+"B"			{printf("yylex: B\n");   return(4);}
+C			{printf("yylex: c\n");   return(5);}
+c			{printf("yylex: C\n");   return(6);}
+[\n\r\t ]	{printf("yylex: white space\n"); return(LEXSKIP);}
+%%

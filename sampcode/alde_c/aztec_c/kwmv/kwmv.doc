@@ -1,0 +1,28 @@
+This is the source of some tools I developed using the Aztec C system
+on the IBM-PC.  You will need the Aztec compiler to compile them as is,
+but they can probably be modified to suit another compiler.
+
+The programs mv.com and rm.com both use a different version of the
+'pre-main' startup routine Croot than the one in the standard library.
+The new Croot expands all ambiguous file names into all matching file names.
+so a program like
+
+main(argc,argv)
+	char *argv[];
+{
+	while (--argc)
+		puts(*(++argv));
+}
+
+will behave like this:
+
+echo *.*
+foo
+bar
+joe
+
+rather than:
+echo *.*
+*.*
+
+Clever, No?

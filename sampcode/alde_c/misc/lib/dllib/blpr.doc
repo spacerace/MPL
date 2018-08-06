@@ -1,0 +1,54 @@
+
+
+        NAME
+                blpr -- write a character to LPT? through BIOS 17H
+                blprstat -- get LPT? status through BIOS 17H
+
+        SYNOPSIS
+                r = blpr(chr, num);
+                int r;    returns status in low 8 bits
+                char chr; character to write
+                int num;  printer number 0-2
+                r = blprstat(num);
+                int r;    returns status in low 8 bits
+                int num;  printer number 0-2
+
+
+        DESCRIPTION
+        These two assembly language routines provide very low-level
+        access to the LPT1 - LPT3 drivers in the ROM-BIOS.  Because
+        of this dependency upon the ROM-BIOS Interrupt 17H, these
+        routines may not work on all compatibles.  The normal DOS
+        channel PRN: is bypassed, as is any re-assignment of LPT?.
+        Normally, these routines are not used directly; rather, they
+        are accessed through the "pr" series subroutine calls.
+
+        Status bits are returned as follows:  (meaning is with bit set)
+           bit 0 = time out
+           bit 1,2 are unused and should be ignored
+           bit 3 = I/O error
+           bit 4 = Printer Selected
+           bit 5 = Out of Paper
+           bit 6 = Acknowledged
+           bit 7 = Not Busy
+
+
+        EXAMPLE
+
+           int i;
+           i = blprstat(0);     /* LPT1: is 0 */
+           if(!(i & 0x80)) puts("Printer is busy");
+           else blpr('A', 0);
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

@@ -1,0 +1,25 @@
+Æè                                 COMMAND SUMMARY
+
+Æ  F1 Æ- Repeats the last search or replace.
+Æ     Alt F1 Æ- Switches between windows.
+Æ  F2 Æ- Takes you to the Files option.
+Æ     Alt F2 Æ- Allows you to open or close a help window.
+Æ  F3 Æ- Search option.
+Æ  F4 Æ- Replace option.
+Æ  F5 Æ- Attributes option.
+Æ  F6 Æ- Starts/stops defining of block.
+Æ  F7 Æ- ** reserved for future use **
+Æ  F8 Æ- Print option.
+Æ  F9 Æ- Goto option.
+Æ  F10 Æ- Tag option.
+
+Æ  Alt E Æ- Deletes the line that the cursor is on.
+Æ  Alt O Æ- Inserts a line below the cursor and positions the cursor under the first
+          non-space line.
+Æ  Alt X Æ- Allows you to enter any ASCII code.  (can not enter code 254!)
+Æ  Alt R Æ- Places remarks around a block or a line.
+Æ  Alt C Æ- Copies the block to the cursor position.
+Æ  Alt D Æ- Deletes the block.
+Æ  Alt M Æ- Moves the block to the cursor position.
+Æ  Alt L Æ- Deletes the line the cursor is on and inserts the block.
+Æ  Alt B Æ- Deletes everything inside the nearest braces and inserts the block.

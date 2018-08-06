@@ -1,0 +1,88 @@
+/***************************************************************************
+
+    Teddlg.dlg
+
+    Created by Microsoft Corporation, IBM Corporation 1989
+
+----------------------------------------------------------------------------
+
+        This resource file contains the definitions of the dialog boxes
+        for the Find and About boxes in the Ted application.
+
+****************************************************************************/
+
+
+/* Find dialog template */
+
+
+DLGTEMPLATE DLG_FIND LOADONCALL MOVEABLE DISCARDABLE
+{
+
+    DIALOG "Find", DLG_FIND, 58, 44, 196, 80, FS_NOBYTEALIGN |
+                FS_DLGBORDER | WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS,
+                FCF_SYSMENU | FCF_TITLEBAR
+    {
+        CONTROL "Find:             ",    -1,     2,  68,  54,  8, WC_STATIC,
+                SS_TEXT | DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+
+        CONTROL "",           DID_FIND_TEXT,    53,  68, 134,  8, WC_ENTRYFIELD,
+                ES_LEFT | ES_AUTOSCROLL | ES_MARGIN | WS_TABSTOP | WS_VISIBLE
+
+        CONTROL "Change to:  ",          -1,     2,  52,  54,  8, WC_STATIC,
+                SS_TEXT | DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+
+        CONTROL "",         DID_CHANGE_TEXT,    53,  52, 134,  8, WC_ENTRYFIELD,
+                ES_LEFT | ES_AUTOSCROLL | ES_MARGIN | WS_TABSTOP | WS_VISIBLE
+
+        CONTROL "Case ~sensitive", DID_SENSITIVE, 26, 38, 80, 10, WC_BUTTON,
+                BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+
+        CONTROL "~Find",           DID_FIND,     6,  22,  40, 14, WC_BUTTON,
+                BS_PUSHBUTTON | BS_DEFAULT | WS_VISIBLE | WS_GROUP | WS_TABSTOP
+
+        CONTROL "Change ~all", DID_FIND_CHANGE_ALL,57, 22,56, 14, WC_BUTTON,
+                BS_PUSHBUTTON | WS_VISIBLE
+
+        CONTROL "OK",     MBID_CANCEL,  6, 4, 40, 14, WC_BUTTON, BS_PUSHBUTTON |
+                WS_VISIBLE
+
+        CONTROL "Cancel", MBID_CANCEL, 57, 4, 40, 14, WC_BUTTON, BS_PUSHBUTTON |
+                WS_VISIBLE
+
+        CONTROL "Help",     MBID_HELP,108, 4, 40, 14, WC_BUTTON, BS_PUSHBUTTON |
+                BS_HELP | WS_VISIBLE | BS_NOPOINTERFOCUS
+    }
+}
+
+
+
+/* About dialog template */
+
+DLGTEMPLATE DLG_ABOUT LOADONCALL MOVEABLE DISCARDABLE
+{
+    DIALOG "About",                  DLG_ABOUT, 25,-81, 201, 84,
+                                            FS_NOBYTEALIGN | FS_DLGBORDER |
+                                              FS_MOUSEALIGN | WS_VISIBLE |
+                                              WS_CLIPSIBLINGS | WS_SAVEBITS,
+                                            FCF_SYSMENU | FCF_TITLEBAR
+    {
+
+        CTEXT "Operating System/2"                         -1,  0, 60, 200, 10
+        CTEXT "Tiny Editor"                                -1,  0, 50, 200, 10
+        ICON  ID_RESOURCE                                  -1,  8, 40,   0,  0
+        CTEXT "Version 1.0"                                -1,  0, 30, 200, 10
+        CTEXT "Created by Microsoft Corp., IBM Corp. 1989" -1,  0, 20, 200, 10
+
+        CONTROL "~OK",                                 DID_OK, 6,  4, 40,  14,
+                                                    WC_BUTTON,
+                                                       BS_PUSHBUTTON | BS_DEFAULT |
+                                                         WS_GROUP | WS_TABSTOP |
+                                                         WS_VISIBLE
+
+        CONTROL "~Help",                             MBID_HELP,57,  4, 40,  14,
+                                                    WC_BUTTON,
+                                                       BS_PUSHBUTTON | BS_HELP |
+                                                         BS_NOPOINTERFOCUS |
+                                                         WS_VISIBLE
+    }
+}

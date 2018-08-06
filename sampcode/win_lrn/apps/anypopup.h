@@ -1,0 +1,2 @@
+#define IDM_ANYPOPUP	33
+#define IDM_CREATEPOPUP 34

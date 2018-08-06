@@ -1,0 +1,9 @@
+diaboxin.obj: diaboxin.c  diaboxin.h
+     cl  -d  -c  -Asnw  -Gsw  -Os  -Zdpe  diaboxin.c
+
+diaboxin.res: diaboxin.rc diaboxin.h
+     rc -r diaboxin.rc
+
+diaboxin.exe:  diaboxin.obj diaboxin.def diaboxin.res
+     link4 diaboxin,diaboxin/align:16,diaboxin,slibw/noe,diaboxin.def
+     rc diaboxin.res

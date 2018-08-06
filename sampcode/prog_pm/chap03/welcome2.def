@@ -1,0 +1,12 @@
+;-------------------------------------
+; WELCOME2.DEF module definition file
+;-------------------------------------
+
+NAME           WELCOME2  WINDOWAPI
+
+DESCRIPTION    'Creates Two Top-Level Windows (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        Client1WndProc
+               Client2WndProc

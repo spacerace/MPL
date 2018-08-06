@@ -1,0 +1,11 @@
+;------------------------------------
+; POEPOEM.DEF module definition file
+;------------------------------------
+
+NAME           POEPOEM   WINDOWAPI
+
+DESCRIPTION    'Programmer-Defined Resource (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

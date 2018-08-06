@@ -1,0 +1,197 @@
+
+
+
+
+
+
+
+                                  Graph.lib
+
+                     Copyright 1987 by Natural Software
+                            19 South 5th. Street
+                         St. Charles Illinois 60174
+                               (312) 377-7320
+                             All Rights Reserved
+                         (see shareware note below)
+
+
+                                June 10, 1987
+
+
+
+The graph.lib  library contains  some graphics primitives that may be useful-
+especially to Turbo Pascal  programmers converting  to Turbo  C and  who have
+used some of the built-in Turbo Pascal graphic functions.
+
+These routines  are for  the IBM  Color Graphic Adapter only! They are highly
+optimized for speed by  writing  directly  to  the  screen  buffer  in memory
+(location 0xB8000). They are for the high resolution graphics mode only - 640
+by 200 pixels (black background, one color foreground).
+
+This library is being  offered as  shareware. You  can use  these routines in
+your programs  as long  as they are for your personal use. If you want to use
+them in a program for sale  to others,  see the  legal status  section below.
+Look below also if you would like to purchase the source code for graph.lib.
+
+This package: GRAPH.ARC includes the following files:
+
+     GRAPH.LIB      -    The library of graphics primitives described below.
+
+     GRAPH.H        -    The function prototype header to be included in your
+                         programs that use graph.lib
+
+     GRDEMO.C       -    An example program showing how to used graph.lib.
+
+     GRDEMO.PRJ     -    The Turbo C project file for GRDEMO.C.
+
+     GLOBAL.H       -    Declarations  of  global  vars  used  by  graph.lib.
+                         Include this in your program.
+
+     GLOB_EXT.H     -    The  same  global  vars  declared as externals to be
+                         included in your sub-modules (if any).
+
+     GLOB_DEF.H     -    Some useful macros and definitions. Include  this in
+                         your programs that use graph.lib
+
+     GRAPH.DOC      -    What you are reading.
+
+
+
+
+
+
+
+
+
+                           Functions in Graph.lib
+                           ----------------------
+
+In the  following functions  (except for  gotoxy), the values of x must be in
+the range from 0 to 639, and the values of  y must  be in  the range  of 0 to
+199.
+
+The global variable: draw_option controls what happens when a pixel is drawn.
+If draw_option = NORMAL (its initialized state), the pixel will be set  to on
+regardless of  its current setting. If draw_option = XOR_MODE, the pixel will
+be xor'd with its current setting.  This lets  you draw  over existing images
+with a transparent effect.
+
+Please refer to the example program GRDEMO.C for example usage.
+
+
+               int    baseaddress(int y);  
+
+baseaddress  returns  the  line  offset  in  the screen buffer for Y. You can
+directly access the graphics screen  by  referring  to  the  global variable:
+screen. For example to set eight dots a location x and y:
+
+               screen[baseaddress(y) + (x >> 3)] = 0xff;
+
+Note that x is divided by 8 to offset to the byte on the selected line.
+
+
+               BYTE   hardwarepresent();
+
+returns true  (1) if  the CGA is present, otherwise returns false (0). A call
+to hardwarepresent should be made before any other  graphics calls  to ensure
+that your program has the correct environment. (Note that BYTE is an unsigned
+char as defined in GLOB_DEF.H)
+
+
+               void   init_graphics(int mode);
+
+This sets the graphics mode. Since these graphics functions support  high res
+mode only,  the mode value must be 6 (for 640 by 200 graphics mode) and 3 (to
+return to 80 by 25 text  mode). The  defined constants:  HIGHRES and TEXTMODE
+are declared in GLOB_DEF.H for this purpose.
+
+Also, the  macros: textmode() and hires() are included for compatibility with
+the Turbo Pascal calls.
+
+
+               void   hirescolor(int color);
+
+This sets foreground color. The value of color should be in the  range from 0
+to 16. The valid colors are defined as constants in glob_def.h
+
+Note, that  in high res mode the background is always black, and changing the
+foreground color means changing the full screen to that color.
+
+
+
+
+
+
+
+               void   gotoxy(int x, int y);
+
+This does what its counterpart in Turbo Pascal does -  moves the  cursor to x
+(from 0 to 70) and y (from 0 to 24).
+
+
+               void   clearscreen();
+
+This clears the full screen.
+
+
+               void   plot(int x, int y);
+
+This draws one pixel at x, y using current drawing mode: NORMAL or XOR_MODE. 
+
+
+               void   draw_line(int x, int y, int newx, int newy);
+
+This draws a line from x, y to newx, newy using the current drawing mode.
+
+
+               void   draw_box(int x1, int y1, int x2, int y2);
+
+this draws a rectangular box given the opposing corners x1,y1 and x2,y2.
+
+
+               void   draw_circle(int bx, int by, int tox, int toy);
+
+This draws  a circle  with bx,by as its center. tox and toy define a point on
+its circumference. The draw_circle function calculates the radius.
+
+
+               void   lips(int bx, int by, int tx, int ty);
+
+This draws an ellipse with bx,by as its center. tx and ty  specify the corner
+of a box within which the ellipse is drawn.
+
+
+
+
+
+
+
+
+
+                          Legal Status of Graph.lib
+                          -------------------------
+
+The Graphics  functions in graph.lib are protected by copyright. They are not
+to be resold or used for any commercial  purpose or  included with  any other
+commercial product or software collection without our permission. It is being
+distributed as shareware. This means that you are granted the right to freely
+use Graph.lib  in your  own programs  for personal use and to make copies for
+your personal use and the personal use of your friends.
+
+If you want to use Graph.lib in a commercial environment  (not for  your non-
+business personal  use) you  can obtain  a license to do so (with full source
+code):
+
+               Send: $20.00 to:
+
+                         Natural Software
+                         19 South 5th. Street
+                         St. Charles, Illinois 60174
+
+If you would like  information on  our other  products, specifically PC-Draft
+II, or would like to order with your VISA or Master Card, call:
+
+                         (312) 377-7320
+
+
+

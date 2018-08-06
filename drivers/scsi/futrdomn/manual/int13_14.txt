@@ -1,0 +1,12 @@
+Code 14                                  -Adapter Diagnostic
+
+Input registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    A complete wrap around test is run on the SCSI data path. 256 data 
+    patterns are placed on the SCSI data bus and read back for comparison.
+    If there is any difference, an error is returned in AH/AL.
+

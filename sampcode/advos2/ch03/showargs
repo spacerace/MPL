@@ -1,0 +1,13 @@
+
+showargs.obj : showargs.asm
+  masm /T showargs;
+
+argv.obj : argv.asm
+  masm /T argv;
+
+argc.obj : argc.asm
+  masm /T argc;
+
+showargs.exe : showargs.obj argv.obj argc.obj showargs.def
+  link showargs+argv+argc,,,os2,showargs    
+

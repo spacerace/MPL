@@ -1,0 +1,9 @@
+#-------------------
+# FREEMEM make file 
+#-------------------
+
+freemem.obj : freemem.c
+     cl -c -G2sw -W3 freemem.c
+
+freemem.exe : freemem.obj freemem.def
+     link freemem, /align:16, NUL, os2, freemem

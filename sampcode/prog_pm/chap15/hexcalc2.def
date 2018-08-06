@@ -1,0 +1,11 @@
+;---------------------------------
+; HEXCALC2 module definition file
+;---------------------------------
+
+NAME           HEXCALC2  WINDOWAPI
+
+DESCRIPTION    'Hexadecimal Calculator With Clipboard (C) Charles Petzold 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

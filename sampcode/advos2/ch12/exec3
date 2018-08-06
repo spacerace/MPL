@@ -1,0 +1,5 @@
+exec3.obj : exec3.asm
+ masm exec3;
+
+exec3.exe : exec3.obj exec3.def
+ link exec3,,,os2,exec3

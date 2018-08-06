@@ -1,0 +1,9 @@
+#------------------
+# WELCOM make file
+#------------------
+
+welcom.obj : welcom.c
+     cl -c -G2s -W3 welcom.c
+
+welcom.exe : welcom.obj welcom.def
+     link welcom, /align:16, NUL, os2, welcom

@@ -1,0 +1,980 @@
+#D argc                                             K&R pp. 110-114
+#P Commonly used name to represent the count of the number of arguments
+   on the command line
+#E main(argc, argv)
+   int argc;           /* Number of arguments including program name */
+   char *argv[];       /* Array of pointers to char to each item entered */
+       { if ( argc < 2 )
+           { printf("You need at least 2 arguments to use this program\n");
+             printf("Example:   sample infil.txt  ");
+           } ....
+#T argv
+#N Invoking a program named "test" with the command line: "test fil1 fil2"
+   sets argc to 3.  "Argc" is a descriptive name for argument count, but
+   any valid name could be used in its place.  If you don't use the command
+   line, there are ways to make your executable code smaller by circumventing
+   this setup.
+#D strcmp                                                    K & R p. 101
+#P Standard library function used to compare strings.  If called with
+   character arguments s1 and s2, returns -1 if s1 < s2; 0 if s1 == s2;
+   1 if s1 > s2.
+#E static char password[10] = "mouse";
+   char user[10];
+   gets(user);
+   if ( strcmp( password, user) == 0 )
+      printf("Welcome to the system.........");
+#D function                                          KR everywhere
+#P Functions are the heart and soul of the C language.  Used to
+   modularize routines, and to enable the programmer to reuse code
+   as needed.
+#E /* Syntax of a function:
+   (return type) name_of_function ( argument list, if any )
+                 argument declarations, if any;
+                   { body of the function }                    */
+   /* Examples:   */
+   float aver_3(x,y,z)   /* function returns a float value, expects 3 ints */
+   int x,y,z;            /* Note how the arguments are OUTSIDE the '{'     */
+       { int sum = 0;               /* local variable set to zero          */
+         sum = x + y + z;
+         return ( sum / 3.0 );      /* return calculated value to caller   */
+       }
+#D pointers                                          KR Chap. 5 pp 89-117
+#P A pointer is a variable which contains the address of another variable.
+   Enables the programmer to access information efficiently without
+   requiring assembly language routines.
+#E int x;
+   int *y;            /* y is a pointer that points to an integer  */
+   char name[10];
+   char *q = name;    /* q is a pointer to character, initially pointing
+                         at the address of "name" */
+   char *days[] =     { "Mon", "Tues", "Wed" }
+                      /* days is an array of pointers to character   */
+   struct typ a1;     /* a1 is a structure of type "typ"              */
+   struct typ *s1;    /* s1 is a pointer that points to a structure whose
+                         size and makeup is like "typ"                */
+   int graph();       /* graph is a function returning an int */
+   int (*spec)();     /* spec is a pointer to a function      */
+#D strlen                                            KR  p. 36,95,98
+#P Returns the length of a character string, excluding the closing
+   '\0'
+#E char name[]    = "hello";
+   char first[10] = "Bob";
+   char *last     = "pointer";
+         printf(" %d  %d  %d", strlen(name), strlen(first), strlen(last)  );
+   /* prints:      5  3  7   */
+#N The argument to the strlen() function should be a null terminated
+   string.
+#D malloc                                Not really in KR, but see pp. 96-99
+#P Memory allocate function used to set aside blocks of memory at run
+   time.  Returns a pointer to the first byte of newly allocated memory
+#E  unsigned ptr, no_of_bytes;
+    ptr = (int *) malloc ( no_of_bytes );
+          /* Note: malloc returns a pointer to char.  To use to point */
+          /* to anything else, you should cast the return value to    */
+          /* the proper type                                          */
+#T ()
+#N Malloc does not initialize the allocated bytes.  Its sister function
+   calloc allocates memory and sets allocated memory to zero.
+#D getc                                                     KR p. 152
+#P get the next character from a file.
+#E    int c;
+      FILE *in;
+      /* open a file named on the command line and set file pointer "in" */
+      if ( (in = fopen( argv[1], "r" )) != NULL )
+         while ( (c = getc(in)) != EOF )   /* get character from that file */
+           ....
+#T getchar
+#N Getchar is often written as a preprocessor macro in which
+   the file associated with getc is stdin.
+#D calloc                                                       KR p. 157
+#P Allocate space to associate with a character pointer, and initialize
+   the area to zero.
+#E char *calloc();
+              /* Takes two arguments, number of bytes and size of object */
+   double *xyz;
+   xyz = (double *) calloc ( 10, sizeof(double) );
+              /* sets aside space for 10 doubles, all set to zero */
+#T sizeof
+#N The second argument to calloc is very often used with the sizeof operator
+   as shown here.  Compare to malloc().
+#D strcpy                                                   KR pp. 100-101
+#P String copy function, copies the contents of one string to another
+   string.
+#E static char name[10] = "Whitney";
+   char first[20];
+   char *s = "alpha";
+     strcpy(first, name);  /* Copies contents of name (Whitney) to first */
+     strcpy(name, s);      /* Copies string at s (alpha) to name         */
+#T strlen
+#N strcpy assumes that the destination string is long enough to contain the
+   string being copied to it.  No checking is performed.  Standard library
+   version of strcpy returns a pointer to char, pointing to the newly copied
+   destination.
+#D fscanf                                                   KR p. 152
+#P File access version of scanf
+#T scanf
+#E   FILE *data;      /*  if file named DATAIN.TXT is successfully opened  */
+     if ( ( data = fopen("DATAIN.TXT", "r")) != NULL )
+          fscanf( data, "%4d %4d %s ", &x, &y, str );
+                    /* read first values from file associated with file    */
+                    /* pointer named "data", using scanf input formatting  */
+#D argv                                                     KR pp. 110-114
+#P Used as a pointer to an array of pointers, enabling access to command
+   line arguments as strings
+#E main(argc,argv)
+   int argc; char *argv[];     /* Also written:   **argv   */
+   { int i = 1;
+     while ( argc-- > 0 )   {  printf("\nYou entered: ");
+        printf("\n %s = argv[%d] ", argv[i], i++ );
+     }
+   }
+#T argc
+#N On UNIX systems, argv[0] is the name of the program.  Most MS-DOS versions
+   of C do not support this use of argv[0].
+#D union                                                   K&R pp. 138-140
+#P enables program to use objects of different types and sizes under
+   the same general name
+#E union { int   x;
+           float y;
+         } combo;
+   combo.x = 5;
+   combo.y = 3.14; /*  Now, int contents of combo are overwritten */
+#N The C syntax for declaring unions is similar to that of structures.
+   In fact, some compiler error messages generated by faulty union
+   usage read as if the error were a struct syntax error.
+   The compiler will reserve enough space for the largest type required.
+   The responsibility for keeping track of the current contents of the
+   union variable is the programmer's.
+#D * (indirection)                                      K & R. pp. 89, 187
+#T pointers
+#P Used to access the contents of an address in memory.  Typically,
+   the address is a pointer variable.
+#E char *name = "Stella";    /* name is a pointer, initialized to point
+                                at the start of string "Stella"  */
+   int *x, y = 5, z; /* x is a pointer to int, y is ordinary int set to 5 */
+   x = &y;           /* x is set to address of y; */
+   z = *x + 2;   /* z is set to value held at address pointed to by x + 2 */
+#N Indirection operator can only be used with variables that are declared
+   as type pointer or arrays.
+#D = (assignment)                                         K & R p. 41, 191
+#P Replaces the object on the left (an lvalue) with the value of
+   the expression on the right.
+#T ==
+#E int x, y, z;
+   x = y = z = 5;      /* Sets z to 5, then y to z, then x to y. */
+   x = (y + 3) * z;
+#N One of the most common errors in C is using an assignment operator where
+   a logical comparison is intended.  A statement such as:
+          if ( x = 5 )
+   means: "set x to 5" and is always TRUE.  This will not generate a
+   compiler error since it is valid syntax.
+#D #endif                                                  K&R p. 208
+#P Preprocessor command which ends a block of source code
+   initiated by either an #ifdef or an #else
+#E #define DEBUG 1
+   #ifdef DEBUG
+     printf("\n Debugging print statements ....");
+   #endif
+#D #include                                               K&R p.86,143,207
+#P Preprocessor statement which causes the contents of the named
+   file to replace the #include statement
+#E #include "stdio.h"     /* Include source lines from file stdio.h     */
+   #include "B:MYDEFS.H"  /* Includes file called MYDEFS.H from B drive */
+   #include <ctype.h>     /* Include source from ctype.h, which should  */
+                          /*   be located in default directory          */
+#N Some MS-DOS compilers may not support the notation <file.c>.  Also,
+   some compilers may require the '#' to be located in column one.
+#D +=  (addition and assignment)                                K&R p.20
+#P Adds the value on the right to the current value on the left.
+#E sum += x;                      is the same as: sum = sum + x;
+   for (i=0; i < 100; i += 10 )   Increments counter variable i by
+                                  10 each time through the loop
+#N There is no =+ operator... The '=' sign comes last.
+   Precedence level 14, only ahead of the comma.
+#D escape                                                  K&R p. 181,7,17
+#P Representation of special characters that cannot be entered from
+   the keyboard or have special meaning within strings
+#E     \a    ANSI alarm character        \'   Single quote
+       \n    Newline                     \"   Double quote
+       \f    Formfeed                    \0   Null
+       \b    Backspace                   \xxx Octal value xxx
+       \t    Tab                         \v   Vertical tab
+       \r    Return
+       \\    Backslash
+#N You could also use the decimal, octal, or hexadecimal value for
+   each of these; that is, Backspace = 8 or 0x8 (hex) or 10 (octal)
+#D --  (decrement)                            K&R p. 16,42,102,187
+#P Unary operator that decrements its operand by 1
+#E int x = 5, b = 7, c;
+   x--;              /* x now equals 4 */
+   c = --b;          /* Decrement b, then set c equal to b  */
+   printf("\n x = %d, b = %d, c = %d", x, b, c );
+                     /* prints: x = 4, b = 6, c = 6    */
+#N Can be used either as a prefix operator or postfix.  Only applies to
+   variables, that is, (x+b)-- is illegal and will cause an error message
+   "lvalue required" meaning that (x+b) is not an object in memory
+#D >  (greater than)                                       K & R p. 38
+#P Greater than logical operator
+#E if ( x > 10)
+     printf( "\n x is greater than 10");
+#N Precedence level 10, just ahead of == and !=
+#D & (address operator)                                    K & R p. 89-91
+#P Obtain the address in memory where the object is stored
+#E int x, *y;           /* x an int, y a pointer to int      */
+   scanf("%d", &x);     /* Use address operator with scanf   */
+   y = &x;              /* Use in assignment to a pointer    */
+   func(&x);            /* Enables func to change value of x */
+#N Precedence level 2, along with other unary ops.  The symbol & is
+   also used for bitwise AND.  C determines which & through the context
+   in which it appears.  Can't use & with expressions, i.e. no &(x+y),
+   constants, i.e. no &6, and register variables.
+#D & (bitwise AND)                                         K&R pp. 44-45
+#P Bitwise AND of operands
+#E unsigned int y = 0x4422, z;
+   z  = y & 0x00FF;    /* Mask off lower byte  */
+                       /* y =0x4422= 0100 0100 0010 0010  in binary */
+                       /*    0x00FF= 0000 0000 1111 1111  in binary */
+                       /*    bit &   0000 0000 0010 0010  = z       */
+#T &&
+#N Don't confuse with & used as operator, or && used as logical AND.
+#D /=  (division and assignment)                            K&R 46, 191
+#P division equals.  Equivalent to: oper_a = oper_a / oper_b
+#E int x = 4321;
+   int y, i = 0;
+      while ( x != 0 ) {
+         x /= 10;
+         y[i++] = x;   /* y[0] = 432, y[1] = 43, y[2] = 4, y[3] = 0 */
+      }
+#D .  (member)                                            K&R 120, 196-8
+#P member operator for structures and unions
+#E struct hello {             /* hello is the struct tag  */
+          int id;
+          char address[20];
+          } helpme;           /* helpme is struct name to use w/ . opr. */
+   ...
+   printf("\n %d %s", helpme.id, helpme.address );
+#D ^  (XOR)                                                 K & R p. 44-45
+#P Exclusive OR : Bitwise XOR of values, equals one when one and
+   only one of its operands' bits is set to 1.
+#E                 8421
+   int z;      ------------
+   int x = 9;  /*  1001  binary representation */
+   int y = 5;  /*  0101                        */
+   z = x ^ y;  /*  1100  or 12 in decimal      */
+#D scanf                                                    K&R p. 147
+#P Reads from the standard input, providing formatted input according
+   to its control string.
+#E int x, y[5];
+   static char str[10] = "hello";
+   char c;
+   scanf(" %d %d ", &x, &y[0] );    /* Note the (&) address operators */
+   scanf(" %s %c ", str, &c   );    /* No (&) for char strings        */
+#N scanf control string is similar that of printf.  Scanf is a function and
+   should return the number of items successfully matched to the control
+   string.  Scanf will return EOF if it attempts to read through it.
+   Try to use gets() instead of scanf() wherever possible, as input
+   to scanf which doesn't match the control string will cause havoc.
+#T printf
+#D atoi                                                   K & R p.39, 58
+#P Convert character strings to integer (ascii to integer)
+#E char user[10];
+   int x;
+   gets(user);
+   x = atoi(user);
+#N atoi takes character strings as arguments, not single characters.
+   This is a standard library function.
+#D ()     (Cast operator)                                  K&R p. 48
+#P Changes the internal representation of the data object's type for
+   use in an expression
+#E int i = 1, *p;            /* p is a pointer to int */
+   double z;
+   char *malloc();           /* Malloc returns a pointer to char */
+   p = (int *) malloc(100);  /* So 'cast' malloc return to type int */
+   ....
+   z = (double) i / 2 ;      /* Coerces i to double, sets z to .5   */
+#N Parens are also used to override the order of operations in expressions.
+#D []  (array element)                           K&R p. 49, 93, 103-110
+#P Array element specifier
+#E int a[10];         /* Defines an array of size 10 with individual  */
+                      /* elements a[0], a[1], ...., a[9]              */
+   float taxes[2][4] = {  { .10,  .15,  .20, .25 },  /* Multi-dimension */
+                          { .08,  .13,  .18, .23 }  };
+                      /* An array of pointers */
+   char *days[7] = { "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat" };
+#N C provides a rich variety of arrays.  They can also be used with
+   structures and unions.  Even arrays of pointers to functions may
+   be created.  In the taxes example above, one dimension could be left
+   out of the declaration: float taxes[][4] = ... would also work.
+#D !  (logical not)                                        K&R p. 38
+#P "Not" operator.  Negates the truth value of its operand.  An operand
+   is "true" if it is not equal to zero.
+#E if ( ! inword )
+       count_word();
+#T !=
+#N While the "not" operator can be handy in some situations, it can
+   create some very confusing logic in others.
+#D %  (modulus)                                        K&R p. 37, 188
+#P Modulus operator - takes remainder of integer division
+#E int a = 7, b = 3, c;
+   c = a % b;           /* c equals 1, remainder of 7/3 */
+#N Can only be used on integers.  Not defined for floats.
+#D |  (bitwise OR)                                    K&R p.44,190
+#P Bit level OR operation.
+#E int x, mask = 1 ;
+   x = x | mask;         /* Turns the rightmost bit of x on */
+                         /* without affecting any other bits */
+#N Used to turn bits on.  Precedence level 6 of 15.  Do not confuse this
+   with the || logical connective.
+#D -= (subtract and assign)                                      K&R p.20
+#P Subtracts the value on the right from the current value on the left, and
+   stores the result as the name on the left.
+#E balance -= check;    /* is the same as: balance = balance - check; */
+   for (i=100; i > 0; i -= 10 )   Decrements counter variable i by
+                                  10 each time through the loop
+#N There is no =- operator... The '=' sign comes last.
+   Precedence level 14, only ahead of comma.
+#D *=  (Multiply and assign)                                    K&R p.20
+#P Multiplies the value on the right by the value on the left, and stores
+   the result as the variable name on the left.
+#E product *= i;            /*   is the same as: product = product * i; */
+#N There is no =* operator... The '=' sign comes last.
+   Precedence level 14, only ahead of comma.  Don't confuse with
+   pointer expressions.
+#D ?: (Conditional operator)                           K&R p. 47-48, 191
+#P An if-then-else or conditional operator
+#E    int maxx,x,y;
+      maxx = ( x > y) ? x : y ;  /* If x is greater than y, set maxx =x */
+#N C's unique ternary operator is very powerful.  The advantage over setting
+   up an if (  ) statement is SPEED.  Very often used in preprocessor
+   macros.
+#D ==   (test for equality)                             K&R p. 38,190
+#P Tests for equality of two expressions
+#E if ( x == y)
+      printf("\n x and y are equal");
+   if ( (c=getchar()) == EOF)   /* parens supercede =='s higher precedence */
+      exit();                   /* than the assignment =   */
+#N The test for equality is not the same as assignment operator!  One of
+   the most common mistakes in c is to write an if statement such as:
+   if ( x = 4 )  -- which means "set x equal to 4" and is always evaluated
+   as "true"!
+#D double                                                   K&R p. 2
+#P Defines data attribute as double precision floating point
+#E double x,y;                    Declares variables x and y as double
+   double z = 3.141;              Declares variable z and initializes it
+   y = (func((double)i);          Used as a cast operator to coerce attribute
+                                     of i to double precision.
+   printf(" %f", x);              Prints double variables using float
+                                  format; there is no % format item for
+                                  double itself.
+#N All floating point arithmetic in C is done in double precision.
+   Some small versions of C compilers will not support double as an
+   attribute of variables. Size of storage used for double variables
+   varies with hardware.  Scanf() escape sequence for input of doubles
+   can be unorthodox: some use %lf, some %D.
+#D sqr                                                Not in KR
+#P sqr(value) obtains the square of the value.
+#E y = sqr(x):                     if x is 3, y will be assigned 9
+   y = sqr(x+1):                   if x is 3, y will be assigned 16
+#N This is not a C keyword, but is frequently provided in the standard
+   library.  It can be easily implemented as either a function or as
+   a preprocessor macro, as in:
+               #define sqr(x) (x)*(x)
+   If defined as a macro without ()'s around argument, can cause problems.
+   For example,  #define sqr(x)  x * x
+   returns 11 if x = 5 and the source code uses sqr(x+1)
+#D char                                                       K&R p. 9
+#P Used when 'declaring' a variable of character type.  It is referred
+   to as a type-specifier.
+#E char alpha;               /* alpha is a variable of char type     */
+   char BEEP     = '\007';   /* initialized to octal value 007       */
+   char TAB      = '\t' ;
+   char *item    = "pointer version";
+   char name[6]  = "Lynda";  /* an array of chars, with space for the
+                               ending '\0' (NULL)  */
+   char name[]   = "enough space automatically";
+#N When initialized, character values can be expressed in three
+   ways: using character constants, special escape sequences, or
+   using an ASCII code expressed in octal notation.
+   Chars on most compilers are unsigned.  This can create problems if
+   you attempt to compare a char against EOF (-1).
+#D do                                                        K&R p. 59
+#P Part of a do ... while program control statement.  Used
+   when the body of a loop must be executed at least once.
+#E do
+      printf( "\n %d", i++) ;
+   while ( i < 10);
+#N The body of the statement appears between the do and the while,
+   and may be a compound or simple statement.  The condition which
+   is tested appears at the end of the control structure.
+#D &&  (Logical AND )                                         K&R p.38
+#P Creates a logical expression which is true only when the expressions
+   on both sides of the operator are true.
+#E if (j > 0 && j <100)   /* for the expression to be true, j must be */
+                          /* both greater than 0 AND less than 100 */
+#N Expressions using && are evaluated left to right, and if the lefthand
+   side of the expression is false (a zero value), than the righthand
+   side of the expression is not evaluated at all.
+#D getchar                                                 K&R p.13
+#P Reads a single character from the standard input device
+   (normally the keyboard).  No arguments appear within the parentheses.
+#E c = getchar();  /* where c is a variable of type int */
+   while ( (c=getchar()) != EOF )  /* get the character, assign it to c,
+                                      then check c against EOF    */
+#N This is a standard function available as part of the input/output
+   library provided with any C compiler. Getchar() may be implemented as a
+   macro or a function. Getchar is often used with redirection of input
+   and output.  Getchar returns a value of (-1) on many compilers when
+   it reaches the end of a file.  To allow the receiving variable to
+   hold -1, the data type is usually declared as int rather than char.
+#D struct                                                     K&R p.119-142
+#P Used to show a relationship between groups of variables.
+   Used to form a skeleton or template housing a set of logically related
+   variables which can then be referenced as part of that set.
+#E      struct facts {                      /* facts is the "tag" name  */
+                      char last_name[20];
+                      char ssn[12];
+                      int age;
+                      } employee;  /* employee is a struct of type facts */
+        employee.age = 34;
+#N There are several ways to define and reference structures. In particular,
+   pointers to structures may access elements via the notation ->.
+#T .
+#D for                                                        K&R p. 11,56
+#P Used to execute statements more than once.
+   The reserved word "for" creates a loop which allows a set of instructions
+   to be executed until a certain condition is met.
+#E      int q;
+        for (q=1; q <= 100; ++q)
+            printf("TESTING");
+#N The example above will print the string TESTING 100 times.
+   The for loop will not execute if the second condition is already true.
+   Two  semicolons are required between the parens.  THERE IS NO ; AFTER
+   THE CLOSING RIGHT PAREN!!!
+#D >>  (SHIFT RIGHT OPERATOR)                                     K&R p.45
+#P Used to move bits to the right in a variable.
+   The operator ">>" can be used for multiplication and division of integers.
+   The operator is more often used in decoding input from external devices.
+#E                  VARIABLE        BINARY         VALUE
+                    --------        ------         -----
+                     x = 5;        00000101          5
+                     x >> 1;       00000010          2
+#T >>=
+#N When bits are shifted off one end; they are lost and are replaced by
+   zeros on the other end.
+#D printf                                                       K&R p.10-11
+#P Standard library function for formated print to standard output.
+   Allows for the a variety of formats such as decimal, floating point,
+   hexadecimal, characters, strings, etc.
+#E printf("\n The value of x is %d", x);
+   printf("\n Minimum of four places, right adjusted is %4d", x);
+   printf("\n PI = %f", PI);
+   printf("\n Hexidecimal = %x, Octal = %o, Int = %d", x, x, x );
+   printf("\n %s", string );
+#N Printf determines the number of arguments it receives through the
+   number of escape arguments (%d, %s, etc) it receives.
+   The next screen contains more detail on printf.
+#D printf  (continued)                                         K&R p. 10
+#P Sample printf format items
+#E int x = 300; float pi = 3.14; static char str[] = "alphabet";
+    Statement                    |     Prints
+   printf("\n|%d|", x);          |     |300|
+   printf("\n|%2d|",x);          |     |300|
+   printf("\n|%6d|",x);          |     |   300|
+   printf("\n|%-6d|",x);         |     |300   |
+   printf("\n|%f|", pi);         |     |3.140000|
+   printf("\n|%3.1f|",pi);       |     |3.1|
+   printf("\n|%8.3f|",pi);       |     |   3.140|
+   printf("\n|%s|", str);        |     |alphabet|
+   printf("\n|%4s|",str);        |     |alphabet|
+   printf("\n|%4.2s|",str);      |     |  al|
+   printf("\n|%-20s|",str);      |     |alphabet           |
+#D int                                                          K&R p. 9
+#P Declares a variable to be of type integer.
+#E int number;                      /* integer with no initialized value */
+   long int million    = 1000000;
+   short int sh_num    = 077;       /* short octal                       */
+   unsigned int hexnum = 0xF;       /* unsigned hexadecimal              */
+   printf(" %d", number);
+#N The range of numbers allowed by int will vary from machine to machine.
+   Check the specifications of your compiler.  Commas are not to be used when
+   defining constants.  Neither decimal points nor exponent notation can be
+   used when defining int constants.
+#T unsigned
+#D return                                                     K&R p. 23
+#P Used to terminate the execution of the current function. Returns control
+   to the calling function, and sends a value back if one is needed.
+#E return;              /* Returns control without a value.          */
+   return x ;           /* Returns control with value named "x"      */
+   return (x);          /* Returns the value "x"                     */
+   return (x+y);        /* returns the sum of x and y                */
+   return ():           /* ERROR -- Not a valid statement            */
+#N The return type is set when the function is defined.  "void" is
+   recommended when no value is to be returned.
+#D <   (less than)                                            K&R p. 38
+#P Relational test for "less than."
+#E if (a < b)
+        printf("a is less than b");
+   else printf("a is not less than b");
+#N Associativity (evaluation) is left to right.
+#D fgetc                                                         K&R p. 152
+#T getchar
+#P Does a single "file GET Character" from the file indicated by the file
+   pointer within the parentheses.
+#E int c;
+   FILE *in;
+   in = fopen("INFILE.DAT","r");
+   c = fgetc(in);     /* Gets a character from file named INFILE.DAT
+                         pointed at by "in". */
+#N fgetc is a genuine function and so is more predictable in results than getc
+   on many C compilers.  A valid fopen statement must return the file pointer
+   used within the parentheses of the fgetc function.
+#D - (unary minus)                                          K&R p. 187
+#P Changes sign of an operand.
+#E -(expression)
+#N -x;           Changes the sign of the variable x.
+   -(x+y)       The operand or expression upon which the unary minus
+                operates does not have to be an lvalue.
+   Old versions of C had no unary '+', but newer versions will have one.
+#D -> (pointer structure member)                                K&R p. 122
+#P Accesses members of a structure (or group of
+   related variables) that are indicated by a pointer.
+#E resp = ptr->age;  /* resp takes the value of the "age" filed within
+                        the structure pointed to by "ptr" */
+#N p -> month   If p is a pointer to the first address of a
+                structure, and month is one of the elements
+                of the structure, then it is obtained by
+                p -> month.
+   The -> has the highest precedence of any C operator.
+#D <= (less than or equal to)                                  K&R p. 189
+#P Logical test of whether the first operand is less than or equal
+   to the second operand.
+#E if ( x <= y)
+      printf("\n x is less than or equal to y");
+#N Fortran programmers might emulate their roots with something like
+             #define LE <=
+#D >= (greater than or equal to)                               K&R p. 189
+#P Logical test of whether the first operand is greater than
+   or equal to the second operand.
+#E if ( x >= y)
+      printf(" x is greater than or equal to y");
+#D isalpha                                                     K&R p. 156
+#P A preprocessor macro that tests if a character is alphabetic.
+#E if ( isalpha(char_var) )
+      puts( "char_var is alphabetic");
+#N isalpha(c) The macro evaluates to 1 if the character is alphabetic and
+   0 if it is not.
+#D continue                                                     K&R p. 62
+#P Control of a loop sequence.  Cause program flow to skip to the
+   next iteration of the loop.
+#E for ( i = 0; string[i] != '\0'; i++ ) {
+       if (string[i] == '-' ) continue;   /* Don't process if it's a '-' */
+       else process(string[i]);
+   }
+#N Try to avoid the continue statement wherever possible, as it's use may
+   encourage broken and confusing logic.
+#D #undef                                                      K&R p. 207
+#P Preprocessor command which causes the compiler to remove, or
+   "forget" subsequent uses of the identifier.  Opposite of #define
+#E #if defined(VALUE)       /* Checks to see if VALUE is already   */
+   #undef VALUE             /* defined. Undefines it if necessary, */
+   #endif                   /* then replaces new VALUE with 100    */
+   #define VALUE 100
+#D %=  (mod assignment)                                       K&R p. 191
+#P Perform modulus operation and assignment
+#E int x = 7, y = 3;
+   x %= y;     /* Equivalent to x = x % y;                            */
+               /* 7 % 3 is 1, the remainder of the integer division   */
+   printf("\n x is equal to %d", x);   /* prints:  x is equal to 1    */
+#N Performs the modulus operation, then assigns the results of that operation
+   to the value on the left.   Only works on integers.
+#D float                                                           K&R 9
+#P To declare a variable as a floating-point decimal value
+   to allow a variable to be used in floating-point arithmetic;
+#E float tempf, tempc; /* converts Celsius to Fahrenheit */
+   tempf = 1.8 * tempc + 32.0;
+#N For greater precision, you may use type "double".  Pre-ANSI C performed
+   all arithmetic in double even if variables were declared float.
+#D -  (subtraction operator)                                    K&R p. 37
+#P  Subtracts one operand from another
+#E  int x = 5, y = 3, z;
+    z = x - y;
+#N Just as in most other computer languages.
+#D !=  (Not equal to)                                 K&R p. 38, 190
+#P to test for inequality in logic statements
+#E while ( (c=getchar() ) != EOF)
+       /*   Gets characters from standard input file into c
+            as long as getchar() does not return EOF         */
+#N Associativity is left to right.
+#D pow                                                         K&R p. 23
+#P to raise a number to a specified power
+#E double x = 2.0, n= 3.0 ;
+   z = pow(x,n) /* raises x to the power n:  */
+                /* z = 8.0                   */
+#N Domain errors abound here.  Check your compiler's documentation.
+#D #ifdef                                                    K&R   p. 208
+#P A preprocessor command which tests for a definition of a preprocessor
+   value
+#E #ifdef DEBUG                               /* if there was a statement */
+   printf("Value of x in line 200 = %d", x);  /* #define DEBUG, the print */
+   printf("Value of y in line 201 = %d", y);  /* lines will be included   */
+   #endif
+#D while                                                    K&R 3,9,56,202
+#P Evaluates a loop control expression, and, if true, executes the
+   desired loop body statement. It repeatedly evaluates, then executes, until
+   the control expression is false.
+#E int c, i = 0;
+   while ((c=getchar()) != EOF)
+         putchar(c);             /* Copies an entire input stream  */
+   while ( ++i < 4 )
+         printf("%2d", i);       /* Writes: 1 2 3                  */
+#N If the loop is more than one statement, enclose it in '{ }'.
+   There is no semi-colon following the closing parenthesis of the control
+   expression unless the loop body statement is a null one.
+#D default                                                  K&R p. 55, 203
+#P The optional case of a SWITCH control statement.  The default case is
+   executed when the other specified cases are not satisfied by the control
+   statement of a SWITCH.
+#E switch (x) {
+      case 4  :  special();   break;
+      default :  normal();    break;
+   }
+#N default is optional.  It need not appear as the last case of a switch
+   statement.  There can be only one default in a switch.
+   See also: switch
+#D register  (class of storage)                           K & R 81, 192
+#P provides rapid access to high-usage int and char variables
+#E               register  int i;
+                 for (i=0; i < 10001; i++)
+                 ;   /* A high speed loop because i is register */
+#N Often used with int variables or text pointers when
+   they are accessed frequently as subscripts.  Some compilers claim to
+   support register variables, but in fact, only implement them as ints.
+   In addition, there may be compiler restrictions on the number of "true"
+   register vars available.
+#D >>=  (logical right shift and assign)                   K&R p. 38, 189
+#P Shifts bits to the right and assign a value
+#E int j =8;
+   j >>= 1;    /* Shifts the bits of j to the right one position          */
+          /*     0000 1000     Binary representation of j before          */
+          /*  -> 0000 0100     Binary after, effectively dividing by two  */
+#N High order position(s) are zero filled.  Handy for moving values between
+   internal registers like AH, AL.
+#D <<  (logical left shift)                                K & R p.44,189
+#P Used to shift bits to the left, similar to ASM instruction SHL
+#E int j = 4; j = j << 1;    /* shift all bits left one place --   */
+                             /*  same as multiply j by  2          */
+#N Fills on the right with zero.  Use with char and int variables only.
+#D auto                                                     K&R 23,28,72
+#T static
+#P Declares a variable type auto, which stands for automatic.
+   All variables declared auto are "local" to a function.
+#E auto int answer;
+#N Benefit: same variable name can be utilized in other functions
+   without conflict. The default type of all variables is auto.
+#D ++  (increment)                                      K&R 16,42,102,187
+#P Increment operator - adds one to its operand
+#E int a = 6;
+   int b = 0;
+   b++;      /* b nows equals 1 */
+   b = ++a;  /* Increment a to 7, then set b equal to 7 */
+#N The ++ operator can be written before the variable which is called
+   prefix notation or after which is called postfix notation.  Can be used
+   only on variables; that is (a+b)++ is illegal.
+   In the expression:  for ( x=0; x< 10; x++)  using x++ or ++x is a
+   matter of taste.
+#D ,  (Comma)                                               K&R p. 58,192
+#P The comma operator is used to specify left to evaluation of
+   expressions in a statement.
+#E int x, y = 2;                   /* Only y is initialized       */
+   int gap, i, j, temp;
+   for (i=0, j=0; i < 10; i++, j += 2)
+       foo(i,j);
+#N The comma has the lowest precedence of all C operators and most
+   often finds use in declarations and for statements.
+#D abs                                                     K&R
+#P Takes the absolute value of its argument
+#U As an absolute value, this can be used in a macro or preprocessor
+   statement to reverse a negative value to a positive value.
+#E int result, number;
+   number = abs(result);
+#N This is not a standard C function but can be easily implemented as either
+   a function or a preprocessor macro.
+#D short                                                   K&R p.9,34
+#P an integer type variable, used for relatively small integers
+#E short int i;
+   short i;
+#N the capacity of short is machine dependent and can be determined
+   by use of the sizeof operator:  printf("%d", sizeof(short) );
+#D ||  (OR)                                                     K&R 19, 191
+#T |
+#P the symbol for the logical OR operator
+#E if (day == 6 || day == 7)
+      printf ("\nWeekend!");
+   if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
+      printf("\n %c is a vowel", c);
+#N Curiously, the || operator has lower precedence than the logical
+   AND operator (&&).
+#D putchar                                                  K&R p. 13,144
+#P Puts a single character out to the standard output.
+#E putchar(c);
+#N the function can be used to write an escape character, the
+   contents of a variable, or a character to the standard output file
+#D entry                                                    K&R p. 180
+#P A reserved keyword that was never implemented on any C compiler.
+#N ANSI standard has dropped entry as a C keyword.
+#D switch                                                   K&R p. 55
+#P Selects from multiple alternatives
+#E switch  ( number )  {       The switch evaluates the integer expression
+     case 1  : func1();        in parentheses and compares its value to all
+               break;          the cases. Each case must be labeled by an
+     case 2  : func2();        integer or a character expression. If a case
+               break;          matches the expression value, execution starts
+     default : puts("Other");  at that case. If none of the cases matches,
+     }                         then the default is executed if it is there,
+                               or no action takes place.
+#N Cases must be different.  The cases must evaluate to constants.
+#T case
+#D *  (multiply)                                            K&R p.37
+#P Multiplication operator
+#E atimesb = a * b;
+   xtimes3 = x * 3;
+#N * has a precedence lower than the unary operators (-,++,--) but
+   higher than the addition and the subtraction operators (+,-).
+#D exp                                        Omitted K & R, but see p. 20
+#P exponential function returning the power of e
+#E double x,exp(),exp_of_e;
+   exp_of_e = exp(x);      exp() returns the value of e raised to xth power
+#N Function exp() and its argument x must be both declared double.
+   exp() is not a standard C function and may not be present for some
+   compiler libraries.
+#D &=  (bitwise and with assignment)                       K&R p. 191
+#P The "&" is a bitwise "and" operator, combined with assignment.
+#E int x   =  7;        /* In binary x =  000111     */
+   int res = 18;        /*         res =  010010     */
+   res  &=  x;          /* AND (&) yields 010111   = 23 in decimal */
+                        /* then assign that value to res          */
+#N Very low precedence, level 2 of 15.  See the & operator for more
+   detail on binary AND.
+#D fopen                                              K&R p. 151,167
+#P The "fopen" is used to open a file (disk file, printer file, etc.)
+   for three possible operations : reading, writing, or appending.
+#E FILE *infile, *outfile, *logfile; /* File pointers         */
+   infile  = fopen("data.inp", "r"); /* File data.inp opened for read,   */
+   outfile = fopen("data.out", "w"); /* data.out opened for writing, and */
+   logfile = fopen("data.log", "a"); /* data.log opened for appedning    */
+   /* fopen returns NULL if it can't open the file as requested  */
+   /* The return value of fopen should always be checked!        */
+#N The data type returned by the call to the "fopen" function,
+   depends upon the operating system being used. The datatype of
+   FILE is usually presented in the stdio.h header.  Some compilers permit
+   open modes "r+", "w+", and "a+" which allow both reads and writes.
+#D unsigned                                                K&R p.34,45,183
+#P Declares an integer type variable that will not take on negative values
+#E unsigned int month;
+   unsigned address;
+   printf( " %u", address);
+#N Unsigned integers on a 16-bit machine typically take on values from
+   0 to 65,535.  The compiler uses the sign bit of the variable to store values
+   rather than the negative sign.  Some compilers will also support the
+   declaration unsigned char or unsigned long.  The new ANSI standard
+   specifies that unsigned may be used with chars.
+#D long                                                     K&R p.35,180
+#P Declares an integer type variable as long, which allows variable more
+   than the usual (typically twice) amount of storage space
+#E long deficit;
+   long int address = 130000L;
+   printf("\nThe deficit is %ld", deficit);
+#N A constant long value can be created be adding the letter "L" to the
+   end of an integer constant.  Be careful adding regular integers to long
+   integers -- some compilers have trouble.
+#D typedef                                            K&R p.140,173,192,200
+#P Allows you to create your own names for new data types, or storage classes
+#E typedef int COUNTERS;
+   typedef struct { int month;           /* Creates a structure with */
+                    int day;             /*  three members           */
+                    int year; } DATE;
+   DATE anniversary, birthday;
+   COUNTERS i,j,k;
+#N typedef is a portability aide.  By using it, you create your own
+   names for data types, and then make changes to the data type definitions
+   rather than throughout the program.  Also, the use of typedef can make
+   the uses of the variables more obvious.  In the above example, integers
+   i,j and k are clearly labeled as COUNTERS.
+#D enum                                          Not mentioned in K&R
+#P Declares a variable to be of type enumerated data
+#E enum val { true, false};
+   enum direct {east, west, north, south};
+#N The only values which can be assigned to the data type are given in
+   the accompanying list upon declaration.  This feature is not mentioned
+   in Kernighan and Ritchie and not supported by many compilers.
+   It is part of the new ANSI X3J11 C standard.
+#D extern                                                   K&R p. 30
+#P Used to define the storage class of the object as external.
+   External variables may be defined later on in the source file, or in
+   another file altogether.
+#E void func()
+     { extern x; ---
+       auto y;      |
+       ....         |____\  Same x referred to.
+     }              |    /
+   int x;  ---------
+#N Extern variables are global in scope.  It's common practice to place
+   all the external variable at the beginning of the source file, outside
+   the declaration of any function or main.  This practice makes them
+   external by default, and the extern declaration within the function is
+   commonly omitted. It's better to always explicitly declare them.
+#D static                                                 K&R p. 28,80,192
+#P Used to define the storage class of the object as static.  Static
+   variables retain their values when a function is completed.
+#E static int x;
+   extern static y;
+   static char msg[] = "This will provide 28 spaces"; /* 27 chars + NULL */
+                    /* To initialize a string within a function this way,
+                       you must use static */
+#N Unlike other C variables, static variables, if they are not initialized,
+   are set to zero. All static variables have memory allocated to them as
+   long as the program is runnning.  Static variables are initialized once
+   and only once.  In a multi-file context, static makes objects "private"
+   to that file, in the sense that static names are not "known" to
+   other files.
+#D if                                                K&R p. 17, 51-53, 201
+#T else
+#P Used to test a condition, and then execute a statement or block of
+   statements depending on the outcome of the test.
+#E if ( a > 10 )
+        printf("\n a is greater than 10");
+   if ( b > 10 ) {                         /* Enclose multiple statements */
+        printf("\n b is greater than 10"); /* in braces                   */
+        printf("\n Line #2 ");
+   }
+#N It's a good idea to indent statements after an if statement to better
+   display the underlying logic.  C does not use the keyword "then".
+#D else                                                     K&R p. 21,53
+#P An optional part of an if statement used to execute a statement or
+   block of statements if a condition is not true.
+#E if (x > 10)
+       funct1();
+   else          /* Use { } if more than one statement in body of loop */
+       funct2();
+#N Else may be nested with its own if, as in:
+     if (a<10)  do_b();
+       else if (a< 5) do_c();  In which case, the else applies to the
+   most previous 'if' without an else.  You can use {} to change this
+   if necessary.
+#D goto                                                     K&R  p. 62
+#P To create hopelessly tangled program logic.
+#E if ( (in = fopen("data.fil", "r") == NULL)
+      goto finish;
+   .....
+   .....
+   finish : exit();
+#N Kernighan and Ritchie describe goto's as "infinitely-abusable" and
+   "never necessary".  If you insist on using the goto statement, maybe
+   you should avoid the C language.
+#D case                                                     K&R   55,202
+#T default
+#P Used as part of the "switch" control statement, case itemizes the
+   constant expressions which, if true, will cause execution of a
+   section of code.
+#E switch (val) {
+       case 1  : printf("val is equal to 1");  break;
+       case 2  : yourfunc();                   break;
+       default : printf("\n I'm confused if other than 1 or 2");
+                 break;
+       }
+#N The value following the case statment must be either an integer
+   or a char constant.  (That is, it can be:  case 'a' :   etc.)
+   The case statement continues until it hits a "break"; if none
+   exists, it "flows" into the next condition.
+   Cases need be in no particular order.
+#D break                                                  K&R p. 56,61,203
+#P Used to cause immediate exit from a for, while, do, or switch
+   statement.
+#E switch (val) {
+        case 1  : printf("\n Value is 1");    break;
+        case 2  : printf("\n Value is 2");    break;
+        default : break;
+        }
+#N Use of the break statement should be avoided where possible in
+   all constructs except the switch statement.  Control passes to the
+   statement following the while, do, for or switch statement.
+#D ~  (Complement)                                       K & R 45, 187
+#P One's complement bit operator
+   Toggles all the bits of a data item to the opposite value
+#E unsigned int x = 7;           /* Binary = 0000 0000 0000 0111   */
+      ~x;              /* Would be: 65528  = 1111 1111 1111 1000   */
+#N A unary operator.  Requires an integer type operand.
+#D void                                                  Not mentioned K&R
+#T return
+#P Used to declare that a function does not return a value.
+#E void yourfunc(a1,a2)
+   int a1, a2;
+      {
+       printf("\n The value of a1 is %d, and a2 is %d ", a1, a2);
+      }
+#N The new ANSI standard C requires that all functions which do not return
+   a value have a void type. If your compiler doesn't recognize the word, you
+   can use the preprocessor statement:
+             #define void int
+#D sizeof                                                K&R p. 126,187
+#P Used to obtain the memory size of the operand item in bytes.
+#E struct date { int month;
+                 int day;
+                 int year;
+               };
+   int s;
+   s = sizeof(struct date);
+   printf("The size of a double on your machine is %d", sizeof(double) );
+#N This is formally a C operator, not a function and has a precedence level.
+   The size of an object in bytes is useful knowledge when trying to
+   port code to another machine or environment.  You can also obtain the
+   sizeof an array or structure.
+#D #define                                               K & R p. 86-87
+#P Preprocessor definition of a value or macro
+#E #define PI 3.1428
+   #define max(x,y) (x > y) ? (x) : (y)
+    /* Note:  ^-- No space allowed between the name of the macro
+                  and the parameters used.  That is, #define mac (c) ...
+                  will substitute (c)... for mac wherever it appears   */
+#N Do NOT use a ';' after define statements.  Convention is to use capital
+   letters for defined constant values.  Some compilers permit you to extend
+   a #define statement by  using a '\' as the "continuation" character.
+   A #define statement may use other values that have been previously
+   defined in other #define statements.
+#D +  (add)                                              K&R p. 37, 188
+#P Adds two operands
+#T ++
+#E int a = 10, b = 20, c;
+   double x = 32.4, y = 98.7 ;
+   c = a + b;
+   printf("\n c equals %d, and x + y = %lf",  c, x + y);
+#N Standard operation as in most other languages.  Don't confuse with ++.
+#D /  (divide)                                           K&R  p. 37, 188
+#P Divides two operands
+#E int x = 30, y =5, q;
+   double a = 36, z = 18, d;
+   q = x/y;
+   d = z/a;
+   printf("\n x/y = %d, z/a = %lf", q, d );
+#N Integer division yields no decimal portion.
+#D precedence                                            K & R p. 49
+#P Rules of precedence for C operators define the order of evaluation
+   in the absence of parentheses.
+                   Operator                       Associativity
+             1     () [] ->  .                    left to right
+             2     ! ~ ++ -- - (type) * & sizeof  right to left
+             3     *  /  %                        left to right
+             4     +  -                           left to right
+             5     << >>                          left to right
+             6     < <= > >=                      left to right
+             7     ==  !=                         left to right
+             8     &                              left to right
+             9     ^                              left to right
+            10     |                              left to right
+            11     &&                             left to right
+            12     ||                             left to right
+            13     ?:                             right to left
+            14     =  +=  -=  etc.                right to left
+            15     ,                              left to right
+#D
+

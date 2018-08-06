@@ -1,0 +1,6 @@
+
+crrecrin.obj: crrecrin.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 crrecrin.c
+
+crrecrin.exe: crrecrin.obj crrecrin.def
+    link4 /align:16 crrecrin,,nul,slibw/NOE,crrecrin.def

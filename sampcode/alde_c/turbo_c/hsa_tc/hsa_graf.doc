@@ -1,0 +1,1386 @@
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+                                  H S A _ G R A F                                  H S A _ G R A F
+                         Multi-Adapter Graphics Library for C
+     
+                                         by
+     
+                            Hardwood Software Associates
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 1
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                            Hardwood Software Associates                            ____________________________
+     
+     HSA_GRAF is copyrighted by Hardwood Software Associates.  You are granted
+     a limited license to use HSA_GRAF. You may also copy and distribute it,
+     provided that the following conditions are met:
+     
+          1. No fee may be charged for such copying and distribution.
+          2. HSA_GRAF may ONLY be distributed in its original, unmodified state.
+     
+     Any voluntary contributions for the use of this program will be
+     appreciated, and should be sent to:
+     
+                     Hardwood Software Associates
+                     364 Benson Road
+                     Northbridge, Ma 01534
+     
+     A contribution of at least $15 will require that you accept a floppy disk
+     containing the source code for HSA_GRAF. Remember only you can support
+     shareware.  Your support encourages growth.  If you use it you should
+     support it.
+     
+     The author, Richard "Spike" Evans may be reached on CompuServe at
+     [75026,3604].
+     
+     All comments and suggestions are welcome.  We love to get mail.
+     
+     Please be advised that all the usual non-warranty warranties apply to
+     HSA_GRAF.  Hardwood Software Associates does not guarantee that HSA_GRAF
+     will do any thing useful  at all;  although it has for us.  Nor does
+     Hardwood Software Associates warrant that HSA_GRAF will not do anything
+     harmful; although it has not for us.
+     
+     
+                                     Trademarks                                     __________
+     
+     
+           Hercules Graphics Crad is a trademark of Hercules Computer Technology
+           IBM P.C. is a trademark of International Business Machines
+           Lattice is a trademark of Lattice, Inc.
+           Microsoft C is a trademark of Microsoft Corporation
+           Turbo C is a trademark of Borland International
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 2
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                                       INTRODUCTION                                       ____________
+     
+     HSA_GRAF is a library of C functions that provide direct, fast ability to
+     create graphics on any one of the three major graphics boards available
+     for the IBM P.C. (Color Graphics Adapter (CGA), Enhanced Graphics Adapter
+     (EGA), and the Hercules Graphics Board).  A single setup call establishes
+     the board in use, all functions used to create the actual graphics are
+     device independent. The functions have been developed and  tested  for
+     the  Microsoft  versions  3.00  and 4.00, Turbo C version 1.00, and
+     Lattice version 3.10 compilers.  This library has two divisions.  All
+     basic graphics functions begin with the prefix "gr_".  The other
+     division, prefixed with "gs_" allows for creating scaled graphics. These
+     modules are:
+     
+             GR_STAT  - Status functions
+             GR_STR   - String display functions
+             GR_FILL  - Area fill functions
+             GR_MISC  - Miscellaneous functions
+             GR_ATTR  - Functions to control screen attributes
+             GR_DRAW  - Functions to draw points and lines
+             GR_SCALE - Function to perform screen scaling
+             GR_ARC   - Functions to draw arcs and circles
+             GR_EGA   - EGA support functions
+             GR_HERC  - Hercules support functions
+             GR_GETS  - Graphics get a string function
+     
+     
+     This distribution contains two object library files:
+     
+             S_MS_HSA.LIB - Small memory model library (Microsoft)
+             S_LC_HSA.LIB - Small memory model library (Lattice)
+             S_TC_HSA.LIB - Small memory model library (Turbo)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 3
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                                         GENERAL                                         _______
+     
+     The "gr" functions are a set of low level functions that get you fast
+     efficient control of the text screen.  These functions keep track of two
+     next sequential screen locations (x and  y); one for lines and points,
+     the other for string display. These locations are referred  to as the
+     current location.
+     
+     The X axis is the horizontal axis, with 0 at the left, positive direction
+     to the right.  The Y axis is the vertical axis with 0 optionally at the
+     top or the bottom, positive direction down or up. The X and Y coordinates
+     passed to all functions are 0 based. If the X or Y coordinate passed to
+     any function is equal to -1 the current X or Y location coordinate is
+     used.
+     
+     The header file hsa_gr.h defines all functions included in the HSA_GRAF
+     function  library.  Also  included  in  hsa_gr.h  are several useful
+     constants, macros, and structures.
+     
+     The current implementation supports the following graphics modes:
+              Hercules Monochrome  (720x348)
+              CGA - two color      (640x200)
+              EGA - 16 color       (640x350)
+              AT&T - two color     (640x400)
+     
+     Refer to MSC_GR.BAT, TCC_GR.BAT and LC_GR.BAT for information on how to
+     compile and link for the Microsoft and Lattice compilers.
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 4
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                                GR_STAT - Status Functions                                __________________________
+     
+     
+     NAME:                G_STATE - Returns current video state                          G_STATE                              
+     SYNOPSIS:            g_state ();
+     DESCRIPTION:         Calls BIOS INT 10 with function code 15 to get
+                          current video state.
+     RETURNS:             Text modes:
+                            0 = 40x25 Black and white
+                            1 = 40x25 Color
+                            2 = 80x25 Black and white
+                            3 = 80x25 Color
+                          Graphics modes:
+                            4 = 320x200 Color
+                            5 = 320x200 Black and white
+                            6 = 640x200 Black and white
+                            7 = Monochrome
+                            D = 320x200 on color monitor        (EGA)
+                            E = 640x200                         (EGA)
+                            F = 640x350 on monochrome           (EGA)
+                           10 = 640x350 on EGA monitor          (EGA)
+                           64 = 640x400 Black and white         (AT&T)
+     
+     CAUTIONS:            Mode must be 7 for Hercules graphics routines
+     
+     NAME:                G_HERC - Use Hercules monochrome graphics board                          G_HERC                                         
+     SYNOPSIS:            g_herc ();
+     DESCRIPTION:         Use the Hercules monochrome graphics board.  This is
+                          the default mode.
+     
+     NAME:                G_CGA_HR - Use IBM CGA in high resolution (640x200)                          G_CGA_HR                                           
+                                       mode
+     SYNOPSIS:            g_cga_hr ();
+     DESCRIPTION:         Use the IBM color graphics adapter in high
+                          resolution mode.
+     
+     
+     NAME:                G_EGA_HR_CO - Use IBM EGA in high resolution                          G_EGA_HR_CO                                 
+                                          (640x350) mode
+     SYNOPSIS:            g_ega_hr_co ();
+     DESCRIPTION:         Use the IBM EGA in high resolution (640x350) color
+                          mode.
+     
+     NAME:                G_OTHER - Use another variety of graphics adapter                          G_OTHER                                          
+     SYNOPSIS:            g_other (x,y,interlace,segment,mode);
+                          int x,y;               Number of pixels in each
+                                                 direction
+                          int interlace;         Interlace factor
+                                                 (always a power of 2)
+                                                 For example:
+                                                 2 - IBM color (non interlaces
+     
+     10-Sep-87                                                          Page 5
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+                                                     200 rows)
+                                                 4 - 400 rows interlaced (AT&T 64)
+                          unsigned int segment;  Segment for graphics memory
+                          int mode;              BIOS graphics mode to use
+     DESCRIPTION:         CRT controller is another type.  All mode switching
+                          is done via BIOS calls.
+     
+     NAME:                G_DELAY - Set delay for screen switching                          G_DELAY                                 
+     SYNOPSIS:            g_delay(delay);
+                          int delay;
+     DESCRIPTION:         Set the delay before turning screen on when
+                          switching between graphics and text modes on
+                          Hercules boards. In order to prevent screen jump,
+                          and sometimes garbage appearing on the screen, it is
+                          necessary to delay for a while before turning on the
+                          screen.  The delay loop count is set by this
+                          routine.  The default delay loop is 7000.
+     CAUTIONS:            Delays <=0 are ignored.
+     
+     NAME:                DISP_GRAPH - Set the display to graphics mode                          DISP_GRAPH                                   
+     SYNOPSIS:            disp_graph ();
+     DESCRIPTION:         The board is set to the graphics mode, displaying
+                          the currently active graphics page.  Before turning
+                          on the screen a delay loop controlled by "g_delay"
+                          is executed to prevent screen bounce. If not in the
+                          Hercules mode the BIOS equipment flag is retrieved
+                          and saved before switching it to the color crt mode.
+     RETURNS:             0 - All OK
+                          1 - Error (not in video mode 7 for Hercules)
+     
+     NAME:                DISP_TEXT - Set the board to the text mode                          DISP_TEXT                                 
+     SYNOPSIS:            disp_text(mode);
+                          int mode;              Text mode to use (non
+                                                 Hercules only)
+                                                 For IBM: 0 thru 3 OK
+     DESCRIPTION:         The board is set to the text mode.  Before turning
+                          on the screen a delay loop controlled by "g_delay"
+                          is executed to prevent screen bounce.  If in the
+                          BIOS mode the old equipment flag is restored.
+     
+     NAME:                G_LOC - Return current location                          G_LOC                          
+     SYNOPSIS:            g_loc (x,y);
+                          int *x;                     X coordinate
+                                                        (0 <= x <= max X)
+                          int *y;                     Y coordinate
+                                                        (0 <= y <= max Y)
+     DESCRIPTION:         Return the location of the current pixel unscaled.
+     
+     NAME:                G_R_ORIGIN - Return the current origin location                          G_R_ORIGIN                                     
+     SYNOPSIS:            g_r_origin();
+     DESCRIPTION:         Return the current origin location.
+     RETURNS:             0 - Upper left corner of screen
+     
+     10-Sep-87                                                          Page 6
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+                          1 - Lower left corner of screen
+     
+     NAME:                G_R_POINT - Return the color of the specified pixel                          G_R_POINT                                          
+     SYNOPSIS:            g_r_point(x,y);
+                          int x;                      X coordinate
+                                                        (0 <= x <= max X)
+                          int y;                      Y coordinate
+                                                        (0 <= y <= max Y)
+     DESCRIPTION:         Return the color of the specified pixel.
+     RETURNS:             The color of the specified pixel.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 7
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                            GR_STR - String Display Functions                            _________________________________
+     
+     NAME:                G_STR_H - Display a horizontal message on screen                          G_STR_H                                         
+     SYNOPSIS:            g_str_h (x,y,msg);
+                          int x;                      pixel address of x
+                          int y;                      pixel address of y.
+                          char *msg;                  Message to display.
+     DESCRIPTION:         Display a horizontal message on the screen at the
+                          specified X,Y coordinates. (X = -1 - use last ones
+                          specified)
+     CAUTIONS:            Uses ROM character table.
+                          Last coordinates for characters are different than
+                          last point/line coordinates.
+     
+                              GR_FILL - Area Fill Function                              ____________________________
+     
+     NAME:                G_FILL - Fill an area from a seed                          G_FILL                           
+     SYNOPSIS:            g_fill (x,y,new_color);
+                          int x;                      Seed x pixel address
+                          int y;                      Seed y pixel address
+                          int new_color;              Color to fill with
+     DESCRIPTION:         Starting at the seed location fill the screen with
+                          the specified color until a boundary is reached.  A
+                          boundary pixel is one that has a color different
+                          than the original seed pixel color.
+     CAUTIONS:            Because this routine calls itself recursively, it
+                          can use a great deal of stack space.  Approximately
+                          26 bytes per horizontal line of fill should be
+                          allowed.  This means that to fill a Hercules screen
+                          would require a stack size of at least 8352 bytes.
+     NOTE:                This routine is adapted from a Pascal routine
+                          published in the May, 1986 issue of Computer
+                          Language Magazine by William F. Polik
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 8
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                            GR_MISC - Miscellaneous Functions                            _________________________________
+     
+     NAME:                G_SAVE - Save the current graphics screen image in                          G_SAVE                                            
+                                     the buffer
+     SYNOPSIS:            g_save (buffer,number);
+                          int buffer[number];        Buffer to receive screen
+                                                     image
+                          int number;                Number of words to save
+     CAUTIONS:            This routine saves the entire graphics screen, it is
+                          not a window save,  No checking is done to insure
+                          that the buffer is large enough.  For the Hercules
+                          board the array should be 16384.  For the EGA
+                          board only the last bit plane is saved, therefore
+                          it might not be as useful.
+     
+     NAME:                G_RESTORE - Restore the graphics screen image from                          G_RESTORE                                         
+                                        the buffer
+     SYNOPSIS:            g_restore (buffer,number);
+                          int buffer[number];        Buffer containing screen
+                                                     image
+                          int number;                Number of words to save
+     CAUTIONS:            This routine restore the entire graphics screen, it
+                          is not a window restore.
+     
+     NAME:                G_ORIGIN - Set screen origin location                          G_ORIGIN                             
+     SYNOPSIS:            g_origin (loc);
+                          int loc;                   Origin location:
+                                                       0 - Upper left corner
+                                                       1 - Lower left corner
+     DESCRIPTION:         Set screen origin location.  If the origin is
+                          upper left (default) then positive Y is down.
+                          If the origin is lower left then positive Y
+                          is up.
+     RETURNS:             0  - successful
+                          -1 - Invalid location
+     
+     NAME:                G_BS_H - Back space one character position                          G_BS_H                                    
+     SYNOPSIS:            g_bs_h ();
+     DESCRIPTION:         Back space the current character position one place.
+     
+     NAME:                G_CLR - Clear the current graphics page                          G_CLR                                  
+     SYNOPSIS:            g_clr ();
+     DESCRIPTION:         Clears the current graphics page and the current
+                          coordinate values for lines and characters.
+                          If EGA, then background color fills screen.
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 9
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                    GR_ATTR - Functions to Control Screen Attributes                    ________________________________________________
+     
+     
+     NAME:                G_SOLID - Set line type to solid                          G_SOLID                         
+     SYNOPSIS:            g_solid ();
+     DESCRIPTION:         Set line type to solid lines.
+     
+     NAME:                G_DOT - Set line type to dotted                          G_DOT                          
+     SYNOPSIS:            g_dot ();
+     DESCRIPTION:         Set line type to dotted lines.
+     
+     NAME:                G_DASH - Set line type to dashed                          G_DASH                          
+     SYNOPSIS:            g_dash ();
+     DESCRIPTION:         Set line type to dashed lines.
+     
+     NAME:                G_SET_LINE - Set line type mask                          G_SET_LINE                     
+     SYNOPSIS:            g_set_line (type);
+                          unsigned int type;         Line type mask
+     DESCRIPTION:         Set line type.  The line type is a word that defines
+                          if the next pel will be set.  If the bit is 1 the
+                          the element is set.  For example:
+                            type = 0x3333;  /* Set two pel then skip two */
+     
+     NAME:                G_FORE_COLOR - Set foreground color                          G_FORE_COLOR                       
+     SYNOPSIS:            g_fore_color (color);
+                          int color;                 Foreground color
+     DESCRIPTION:         Sets the foreground color.  The foreground color is
+                          used to draw lines and display strings.
+     
+     NAME:                G_BACK_COLOR - Set background color                          G_BACK_COLOR                       
+     SYNOPSIS:            g_back_color (color);
+                          int color;                 Background color
+     DESCRIPTION:         Sets the background color.  The background color is
+                          used to clear the screen and behind display strings.
+     
+     NAME:                G_REVERSE_COLOR - Swap foreground and background                          G_REVERSE_COLOR                                 
+                                              colors
+     SYNOPSIS:            g_reverse_color ();
+     DESCRIPTION:         Swaps the current foreground color with the current
+                          background color.
+     
+     NAME:                G_MODE - Set mode for screen drawing                          G_MODE                              
+     SYNOPSIS:            g_mode(mode);
+                          int mode;                  pixel set mode for all
+                                                     graphics commands.
+                                                     Graphics (lines/points):
+                                                       0 = clear bit
+                                                       1 = set bit
+                                                       2 = exclusive OR bit
+                                                     Graphics text:
+                                                       0 = reverse video
+     
+     10-Sep-87                                                          Page 10
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+                                                       1 = normal video
+                                                       2 = exclusive OR
+     DESCRIPTION:         Set up the mode for setting pixels for all other
+                          commands.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 11
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                      GR_DRAW - Functions to Draw Lines and Points                      ____________________________________________
+     
+     
+     NAME:                G_POINT - Set the specified pixel in the current                          G_POINT                                         
+                                      graphics page
+     SYNOPSIS:            g_point (x,y);
+                          int x;                      X coordinate of pixel
+                                                       (0 <= x <= max X)
+                          int y;                      Y coordinate of pixel
+                                                       (0 <= y <= max Y)
+     DESCRIPTION:         Sets the pixel at the specified coordinate according
+                          to the current mode (see g_mode). Saves the
+                          coordinates for future calls.
+     
+     NAME:                G_LINE - Draw a line                          G_LINE              
+     SYNOPSIS:            g_line (x1,y1,x2,y2);
+                          int x1;                    X coordinate of start of line
+                                                       (0 <= x1 <= max X)
+                          int y1                     Y coordinate of start of line
+                                                       (0 <= y1 <= max Y)
+                          int x2;                    X coordinate of end of line
+                                                       (0 <= x2 <= max X)
+                          int y2                     Y coordinate of end of line
+                                                       (0 <= y2 <= max Y)
+     DESCRIPTION:         Draw a line between the specified coordinates.
+                          If any coordinate value is equal to -1 then the
+                          coordinate value set by previous graphics call
+                          is used.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 12
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                  GR_SCALE - Functions to Perform Screen Scaled Actions                  _____________________________________________________
+     
+     
+     NAME:                G_SCALE - Set screen scale factors                          G_SCALE                           
+     SYNOPSIS:            g_scale (xdots,ydots);
+                          int xdots;                 pixels per inch horizontal
+                                                       (default = 90)
+                          int ydots;                 pixels per inch vertical
+                                                       (default = 63)
+     DESCRIPTION:         Set the scale factors for x and y axes (in pixels per
+                          inch). These scale factors are used by all "gs"
+                          routines.
+     CAUTIONS:            Both values must be <= 255.
+                          If scale factors set incorrectly, circles will not
+                          be round and squares will be rectangles.
+     
+     NAME:                GS_LOC - Return current location (scaled)                          GS_LOC                                   
+     SYNOPSIS:            gs_loc (x,y);
+                          int *x;                    X coordinate of pixel
+                                                     (0 <= x <= max X*xdots*1000)
+                          int *y;                    Y coordinate of pixel
+                                                     (0 <= y <= max Y*ydots*1000)
+     DESCRIPTION:         Return the location of the current pixel scaled.
+     
+     NAME:                GS_POINT - Set a pixel (scaled)                          GS_POINT                       
+     SYNOPSIS:            gs_point (x,y);
+                          int x;                     X coordinate of pixel
+                                                     (0 <= x <= max X*xdots*1000)
+                          int y;                     Y coordinate of pixel
+                                                     (0 <= y <= max Y*ydots*1000)
+     DESCRIPTION:         Set the pixel at the specified scaled coordinate
+                          according to the current mode (see g_mode).
+                          Save the coordinates for future calls, arguments in
+                          screen inches * 1000.
+     
+     NAME:                GS_R_POINT - Return the color of the specified pixel                          GS_R_POINT                                          
+     SYNOPSIS:            g_r_point(x,y);
+                          int x;                     X coordinate
+                                                     (0 <= x <= max X*xdots*1000)
+                          int y;                     Y coordinate
+                                                     (0 <= y <= max Y*ydots*1000)
+     DESCRIPTION:         Return the color of the specified pixel.
+     RETURNS:             The color of the specified pixel.
+     
+     NAME:                GS_LINE - Draw a line (scaled)                          GS_LINE                       
+     SYNOPSIS:            gs_line (x1,y1,x2,y2);
+                          int x1;                    X coordinate of start of line
+                                                     (0 <= x1 <= max X*xdots*1000)
+                          int y1;                    Y coordinate of start of line
+                                                     (0 <= y1 <= max Y*ydots*1000)
+                          int x2;                    X coordinate of end of line
+     
+     10-Sep-87                                                          Page 13
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+                                                     (0 <= x2 <= max X*xdots*1000)
+                          int y2;                    Y coordinate of end of line
+                                                     (0 <= y2 <= max Y*ydots*1000)
+     DESCRIPTION:         Draw a line between the specified coordinates according
+                          to current mode (see g_mode) and line type.  If any
+                          coordinate value is equal to -1 then the coorniate
+                          value of the current location is used.
+     
+     NAME:                GS_STR_H - Display a horizontal message on screen                          GS_STR_H                                         
+                                       (scaled)
+     SYNOPSIS:            gs_str_h (x,y,msg);
+                          int x;                     X coordinate of start of message
+                          int y;                     Y coordinate of start of message
+                          char *msg;                 Message to display.
+     DESCRIPTION:         Display a horizontal message on the screen at the
+                          specified X,Y coordinates. (X = -1 - use last ones
+                          specified)
+     CAUTIONS:            Uses ROM character table.
+                          Last coordinates for characters are different than
+                          last point/line coordinates.
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 14
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                               GR_ARC - Draw Circular Arcs                               ___________________________
+     
+     NAME:                GS_ARC - Draw a circular arc (scaled)                          GS_ARC                               
+                          gs_arc (x1,y1,x2,y2,xc,yc,cw);
+                          int x1;                    X coordinate of start of arc
+                                                     (0 <= x1 <= max X*xdots*1000)
+                          int y1;                    Y coordinate of start of arc
+                                                     (0 <= y1 <= max Y*ydots*1000)
+                          int x2;                    X coordinate of end of arc
+                                                     (0 <= x2 <= max X*xdots*1000)
+                          int y2;                    Y coordinate of end of arc
+                                                     (0 <= y2 <= max Y*ydots*1000)
+                          int xc;                    X coordinate of center of arc
+                                                     (0 <= x2 <= max X*xdots*1000)
+                          int yc;                    Y coordinate of center of arc
+                                                     (0 <= y2 <= max Y*ydots*1000)
+                          int cw;                    Direction of arc:
+                                                       1 = Clockwise
+                                                       0 = Counterclockwise
+     DESCRIPTION:         Draw a circular arc using scaled coordinates from
+                          (x1,y1) to (x2,y2) centered at (xc,yc).
+     RETRUNS:             1 = Bad circle defined by parameters
+                          0 = All OK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 15
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                           GR_HERC - Hercules Graphics Support                           ___________________________________
+     
+     NAME:                G_PAGE - Set graphics page for Hercules                          G_PAGE                                 
+     SYNOPSIS:            g_page (page);
+                          int page;                  Page to use for all
+                                                     subsequent calls
+     DESCRIPTION:         Set the current graphics page that will be used for
+                          all subsequent graphics calls.
+     RETURNS:             0  - successful
+                          -1 - Invalid page
+     
+                   GR_GETS - Get a String from User in Graphics Screen                   ___________________________________________________
+     
+     NAME:                G_GETS - Get a string from console in graphics mode                          G_GETS                                             
+     SYNOPSIS:            char *g_gets (buffer);
+                          char *buffer;               Buffer for input string
+     DESCRIPTION:         Operates just like "gets".  Reads a string from the
+                          keyboard, echoing to the graphics screen.  The
+                          terminating newline is replaced with a null byte.
+     RETURNS:             Pointer to string
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 16
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                           Alphabetical List of HSA_GRAF Functions                           _______________________________________
+     
+     
+     DISP_GRAPH      Set the display to graphics mode
+     DISP_TEXT       Set the board to the text mode
+     GS_ARC          Draw a circular arc (scaled)
+     GS_LINE         Draw a line (scaled)
+     GS_LOC          Return current location (scaled)
+     GS_POINT        Set a point (scaled)
+     GS_R_POINT      Return the color of the specified point
+     GS_STR_H        Display a horizontal message on screen
+     G_BACK_COLOR    Set background color
+     G_BS_H          Back space one character position
+     G_CGA_HR        Use IBM CGA in high resolution (640x200)
+     G_CLR           Clear the current graphics page
+     G_DASH          Set line type to dashed
+     G_DELAY         Set delay for screen switching
+     G_DOT           Set line type to dotted
+     G_EGA_HR_CO     Use IBM EGA in high resolution
+     G_FILL          Fill an area from a seed
+     G_FORE_COLOR    Set foreground color
+     G_GETS          Get a string from console in graphics mode
+     G_HERC          Use Hercules monochrome graphics board
+     G_LINE          Draw a line
+     G_LOC           Return current location
+     G_MODE          Set mode for screen drawing
+     G_ORIGIN        Set screen origin location
+     G_OTHER         Use another variety of graphics adapter
+     G_PAGE          Set graphics page for Hercules
+     G_POINT         Set the specified pixel in the current
+     G_RESTORE       Restore the graphics screen image from buffer
+     G_REVERSE_COLOR Swap foreground and background
+     G_R_ORIGIN      Return the current origin location
+     G_R_POINT       Return the color of the specified point
+     G_SAVE          Save the current graphics screen image in buffer
+     G_SCALE         Set screen scale factors
+     G_SET_LINE      Set line type mask
+     G_SOLID         Set line type to solid
+     G_STATE         Returns current video state
+     G_STR_H         Display a horizontal message on screen
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 17
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                                 Companion Library                                 _________________
+     
+     Hardwood Software Associates has developed companion library to the
+     HSA_GRAF library.
+     
+     HSA_TEXT is a library of C functions that provide direct, fast control
+     over the IBM PC screen in text mode.  The functions have been developed
+     and  tested  for the  Microsoft  versions  3.00  and 4.00, Turbo C
+     version 1.00, and Lattice version 3.10 C compilers.  This library has two
+     divisions.  All basic screen control functions begin with the prefix
+     "tx_".  The window control functions all begin with "w_". The library is
+     contained in several modules, grouped by function.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 18
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                              HSA_GRAF Change History                              _______________________
+     
+     Version         Date       Functions            Modifications                  __________________________________________________________________________
+     
+      1.01        24-Jul-87     All                  Released to the public
+     
+     
+      1.02        22-Aug-87     gs_arc               Add function templates
+                                                     to hsa_gr.h
+                                hsa_graf.doc         Correct a few
+                                                     documentation errors
+                                gr_str               g_str_h was incorrectly
+                                                     named g_msg_h
+      1.03        10-Sep-87                          Turbo C support
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 19
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     
+                      Alphabetical List of HSA_TEXT Functions                      _______________________________________
+     
+     
+     TX_ATTR         Read the current screen attribute
+     TX_ATTR_SET     Set the current screen attribute
+     TX_BIOS         Use BIOS for all I/O
+     TX_BLINK        Set to blinking white on black
+     TX_BOLD         Set to intense white on black
+     TX_B_B          Set to intense blinking white on black
+     TX_CHR          Display a character at a specified location
+     TX_CHR_A        Display character using specified location and attribute
+     TX_CHR_A_C      Continue display of character with specified attribute
+     TX_CHR_C        Continue display of character
+     TX_CHR_O        Display a character only at specified location
+     TX_CHR_O_C      Display a character only, continued from current location
+     TX_CLR          Clear the entire screen
+     TX_CLR_EOL      Clear to the end of the line
+     TX_CLR_ROWS     Clear a block of lines on the screen
+     TX_COL          Read the current cursor column
+     TX_CONF         Set crt screen memory address and 6845 address
+     TX_CUR_HIDE     Hide the cursor
+     TX_CUR_SET      Set the cursor start / stop scan lines
+     TX_CUR_SHOW     Show the cursor
+     TX_DIRECT       Access screen hardware directly
+     TX_DOWN         Move the current location one row down
+     TX_FILL         Fill a line with the specified number of a character
+     TX_FILL_A       Fill a line with the specified number of a character
+     TX_FILL_A_C     Fill a line with the specified number of a character
+     TX_FILL_C       Fill a line with the specified number of a character
+     TX_GET_STATUS   CRT status save
+     TX_LEFT         Move the current location one column left
+     TX_LOC          Set the current location
+     TX_NL           Move the current location to the start of the next line
+     TX_NORM         Set to white on black
+     TX_NO_COL       Read the number of columns in screen
+     TX_NO_SNOW      Don't wait for retrace to prevent snow
+     TX_PUT_STATUS   CRT status restore
+     TX_RD_BLK       Read a block of screen data
+     TX_RD_BLK_C     Read a block of screen data, at current location
+     TX_RD_STR       Read string from screen
+     TX_RD_STR_C     Read string from screen at current location
+     TX_REVERSE      Set to black on white
+     TX_RIGHT        Move the current location one column right
+     TX_ROW          Read the current cursor row
+     TX_SCDN         Scroll window down one line
+     TX_SCUP         Scroll window up one line
+     TX_SNOW         Wait for retrace to prevent snow
+     TX_STATE        Returns current video state
+     TX_STR          Display string at specified location
+     TX_STR_A        Display string using specified location and attribute
+     TX_STR_A_C      Display a string, continued from current location
+     
+     10-Sep-87                                                          Page 20
+
+
+
+
+
+
+
+
+     Hardwood Software Associates
+     
+             HSA_GRAF - Screen Graphics Library (V1.03)               HSA_GRAF - Screen Graphics Library (V1.03)  
+     
+     TX_STR_C        Display a string, continued from current location
+     TX_UNDER        Set to underlined
+     TX_UP           Move the current location one row up
+     TX_WR_BLK       Write a block of screen data
+     TX_WR_BLK_C     Write a block of screen data, at current location
+     W_BOT_MSG       Display a message in the bottom border line
+     W_CLOSE         Close a window
+     W_CLR           Clear a window
+     W_CUR_LOC       Display the screen cursor in the window
+     W_MENU1_FILL    Fill a style 1 menu with data
+     W_MENU1_OPEN    Open a menu style 1 window
+     W_MOVE          Move a window
+     W_OPEN          Open a window
+     W_SCDN          Scroll data in window down
+     W_SCUP          Scroll data in window up
+     W_STR           Display a string in a window
+     W_STR_C         Display a string in a window, at current location
+     W_STR_A         Display a string in a window, with attribute
+     W_STR_C_A       Display a string in a window, at current location
+     W_STR_COL       Display a string in a window column
+     W_TOP_MSG       Display a message in the top border line
+     W_USER_BORDER   Set characters for user border
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+     10-Sep-87                                                          Page 21
+
+
+
+
+
+

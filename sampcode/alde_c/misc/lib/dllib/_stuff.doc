@@ -1,0 +1,39 @@
+
+
+
+        NAME
+                _stuff -- get equipment report (low level)
+
+        SYNOPSIS
+                r = _stuff();
+                int r;
+
+
+        DESCRIPTION
+        Returns an integer from DOS int 11H, indicating the
+        available equipment and initial video mode.  This
+        is a low level function.  For a higher level function,
+        refer to stuff().
+             bits 15, 14 = # of printers installed
+             bit 12      = joystick installed if 1
+             bits 11-9   = # of serial ports installed
+             bits 7-6    = # of disk drives, 1-4 if bit 0 = 1
+             bits 5-4    = Initial video mode:
+                           01  40 x 25 b/w CGA
+                           10  80 x 25 b/w CGA
+                           11  80 x 25 Mono card
+             bit 0       = no disk drives if 0
+
+
+        EXAMPLE
+
+                 int r;
+                 r = _stuff();
+                 /* test bit 12 (game port) */
+                 if((r & 0x1000) != 0) printf("Game port installed");
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

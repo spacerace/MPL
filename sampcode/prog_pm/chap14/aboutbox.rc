@@ -1,0 +1,33 @@
+/*----------------------------------
+   ABOUTBOX.RC resource script file
+  ----------------------------------*/
+
+#include <os2.h>
+#include "aboutbox.h"
+
+POINTER ID_RESOURCE aboutbox.ico
+
+MENU ID_RESOURCE
+     {
+     SUBMENU "~File",         IDM_FILE
+          {
+          MENUITEM "~New",               IDM_NEW
+          MENUITEM "~Open...",           IDM_OPEN
+          MENUITEM "~Save",              IDM_SAVE
+          MENUITEM "Save ~As...",        IDM_SAVEAS
+          MENUITEM SEPARATOR
+          MENUITEM "A~bout AboutBox...", IDM_ABOUT
+          }
+     }
+
+DLGTEMPLATE IDD_ABOUT
+  {
+  DIALOG "", 0, 32, 32, 200, 88,, FCF_DLGBORDER
+    {
+    CTEXT "AboutBox"                            -1, 10, 64, 180,  8
+    ICON  ID_RESOURCE                           -1,  8, 56,   0,  0
+    CTEXT "Sample ""About"" Dialog Box"         -1, 10, 40, 180,  8
+    CTEXT "Copyright (C) Charles Petzold, 1988" -1, 10, 32, 180,  8
+    DEFPUSHBUTTON "OK"                      DID_OK, 80,  8,  40, 16, WS_GROUP
+    }
+  }

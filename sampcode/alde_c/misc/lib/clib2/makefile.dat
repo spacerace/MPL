@@ -1,0 +1,8 @@
+touch.com touch.obj
+	link.exe touch;
+	exe2bin.exe touch.exe touch.com
+
+touch.obj touch.asm
+	masm.exe touch,touch,touch,touch
+
+

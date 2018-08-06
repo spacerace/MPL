@@ -1,0 +1,5 @@
+locsize.obj: locsize.c
+    cl -c -W2 -AS -Gsw -Od -Zped locsize.c
+
+locsize.exe: locsize.obj locsize.def
+    link4 locsize,/align:16,/map/li, slibw, locsize.def

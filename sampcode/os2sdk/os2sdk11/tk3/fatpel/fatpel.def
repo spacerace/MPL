@@ -1,0 +1,11 @@
+NAME	FatPel	WINDOWAPI
+
+DESCRIPTION 'OS/2 Presentation Manager FatPel Application'
+
+STUB    'OS2STUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+STACKSIZE   4096        ; Must be non-zero for SS == DS
+                        ; suggest 4k as minimum stacksize

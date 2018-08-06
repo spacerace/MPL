@@ -1,0 +1,69 @@
+/*---------------------------
+   POPPAD.RC resource script
+  ---------------------------*/
+
+#include <windows.h>
+#include "poppad.h"
+#include "filedlg.h"
+
+PopPad ICON "poppad.ico"
+
+PopPad MENU
+     {
+     POPUP "&File"
+          {
+          MENUITEM "&New",              IDM_NEW
+          MENUITEM "&Open...",          IDM_OPEN
+          MENUITEM "&Save",             IDM_SAVE
+          MENUITEM "Save &As...",       IDM_SAVEAS
+          MENUITEM SEPARATOR
+          MENUITEM "&Print...",         IDM_PRINT
+          MENUITEM SEPARATOR
+          MENUITEM "E&xit",             IDM_EXIT
+          }
+     POPUP "&Edit"
+          {
+          MENUITEM "&Undo\tAlt+BkSp",   IDM_UNDO
+          MENUITEM SEPARATOR
+          MENUITEM "Cu&t\tShift+Del",   IDM_CUT
+          MENUITEM "&Copy\tCtrl+Ins",   IDM_COPY
+          MENUITEM "&Paste\tShift+Ins", IDM_PASTE
+          MENUITEM "C&lear\tDel",       IDM_CLEAR
+          MENUITEM SEPARATOR
+          MENUITEM "&Select All",       IDM_SELALL
+          }
+     POPUP "&Help"
+          {
+          MENUITEM "&About PopPad...",  IDM_ABOUT
+          }
+     }
+
+PopPad ACCELERATORS
+     {
+     VK_DELETE, IDM_CUT,   VIRTKEY, SHIFT
+     VK_INSERT, IDM_COPY,  VIRTKEY, CONTROL
+     VK_INSERT, IDM_PASTE, VIRTKEY, SHIFT
+     VK_DELETE, IDM_CLEAR, VIRTKEY
+     }
+
+AboutBox DIALOG  20, 20, 160, 80
+     STYLE WS_POPUP | WS_DLGFRAME
+     {
+     CTEXT "PopPad"                              -1,   0, 12, 160,  8
+     ICON  "PopPad"                              -1,   8,  8,   0,  0
+     CTEXT "Popup Editor for Microsoft Windows"  -1,   0, 36, 160,  8
+     CTEXT "Copyright (c) Charles Petzold, 1990" -1,   0, 48, 160,  8
+     DEFPUSHBUTTON "OK"                   IDOK, 64, 60, 32, 14, WS_GROUP
+     } 
+
+PrintDlgBox DIALOG 20, 20, 100, 76
+     STYLE WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE
+     CAPTION "PopPad"
+     {
+     CTEXT "Sending",                  -1,  0, 10, 100,  8
+     CTEXT "",                  IDD_FNAME,  0, 20, 100,  8
+     CTEXT "to print spooler.",        -1,  0, 30, 100,  8
+     DEFPUSHBUTTON  "Cancel",    IDCANCEL, 34, 50,  32, 14, WS_GROUP
+     }
+
+rcinclude filedlg.dlg

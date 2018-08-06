@@ -1,0 +1,34 @@
+Implemented
+-----------
+Save clipboard to file
+Owner-display support (untested)
+Modifications to EDPLINE for writing a metafile to the clipboard
+Allows > 64K bitmaps (from Linefrac code)
+Allows the user to select which format to render
+Scroll bar processing
+Should check error return codes, add more comments
+
+Bugs
+----
+GpiPlayMetafile() occasionally RIPs on the Debug terminal.  This may be
+because of an invalid Metafile; but there are no errors returned by Gpi.
+
+Should allow saving of > 64K text selectors, sharing the code which saves
+large BITMAPs.
+
+The scroll bars should be redone so that they appear/disappear as needed.
+
+Features that haven't made it (yet)
+-----------------------------------
+Should pop up a dialog box (depending on format rendered) which
+    gives viewing options.  In the metafile case, this would allow
+    the user to set the alOptions[] matrix.  In the text case, this
+    might allow the user to select a font to view.  In the case of
+    an unknown format, this would allow the user to try to view the
+    format as Text, Bitmap, or Metafile.
+Should disable menu items when they aren't applicable
+Should allow saving of owner draw formats and such (just write the bitmap)
+Should allow usage of MLE features like string search, font changing
+Should use multiple threads
+Should have the SB_SLIDERPOSITION message use Scroll & paint invalid region
+    instead of invalidating the entire client area.

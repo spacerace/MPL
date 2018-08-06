@@ -1,0 +1,477 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,32
+[1mPonzoTUTOR
+.WNT
+    FILES FILES FILES   
+.R4C1
+    Whereas ~b~Igetchar()~N and ~b~Iprintf()~N will get characters from the 
+    keyboard and print to the screen (the 'standard' input/output), we can
+    ask other functions available in the C-library (and ones we write 
+    ourselves) to communicate with a ~Ifile on disk~N. Consider the excerpt:
+
+1  ~b~Imain(number,name)                                    ~N
+2  ~b~Iint number;                                          ~N
+3  ~b~Ichar *name[];                                        ~N
+4  ~b~I{                                                    ~N
+5  ~b~I    FILE *fp, *fopen();                              ~N
+6  ~b~I    fp=fopen(name[1],"r");                           ~N
+7  ~b~I    if (fp == NULL) {                                ~N
+8  ~b~I        printf("\nSorry, can't open %s",name[1]);    ~N
+9  ~b~I        exit(0);                                     ~N
+10 ~b~I    }                                                ~N
+11 ~b~I    /*  rest of program goes here */                 ~N
+.w
+    The above program is expected to read a file on disk. We compile/link
+    the program, giving it the name ~Iread~N. Then we type: ~Iread letter~N.
+    The arguments to ~b~Imain()~N are the ~b~Inumber~N ~I2~N and the ARRAY
+    of POINTERS ( ~b~Iname[]~N ) pointing to the strings: ~Iread~N and ~Iletter~N.
+.WR10C1
+~V2  int number;                                          ~N
+~V3  char *name[];                                        ~N
+.R20C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R20C1
+    We declare the two arguments of ~b~Imain()~N to be ~b~Iint~N and ~b~Ichar *~N.
+    In our example, ~b~Inumber~N will have the value ~I2~N and ~b~Iname[0]~N will
+    be a pointer to the string ~Iread~N and ~b~Iname[1]~N will point to ~Iletter~N.
+    Now we are ready to begin ~b~I{~N our ~b~Imain()~N program ....
+.WR10C1
+2  ~b~Iint number;                                          ~N
+3  ~b~Ichar *name[];                                        ~N
+4  ~b~I{                                                    ~N
+~V5      FILE *fp, *fopen();                              ~N
+.R20C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R20C1
+    To ~Iopen~N a disk file, we use ~b~IFILE~N which calls upon the C-library
+    to look after the mechanics of communicating with the operating system in
+    order to access the disk. After ~b~IFILE~N come two ~r~Ipointers~N (we
+    know they're pointers because of the ~b~I*~N ..right?).
+.WR20C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R20C1
+  Of course, if we intend to use the C-library, we had better ~V#include~N it!
+.WK10,60
+ stdio.h!
+.R8C1
+~V0  #include <stdio.h>                                   ~N
+.WR20C1
+    ~b~Ifp~N is a ~r~Ipointer~N variable which points to a FILE.                       
+    ~b~Ifopen()~N is a function which ~Ireturns~N a ~r~Ipointer~N to a FILE.
+.WR13C1
+5  ~b~I    FILE *fp, *fopen();                              ~N
+~V6      fp=fopen(name[1],"r");                           ~N
+.R20C1
+                                                                              
+                                                                              
+.R20C1
+    This calls upon the ~b~Ifopen()~N function to ~Iopen~N a file. The pointer
+    to the file ( which is ~Ireturn~Ned by ~b~Ifopen()~N ) is assigned to ~b~Ifp~N.
+    The ~b~I"r"~N means that access to the file is for ~I"r"~Neading ( as
+    opposed to "w"riting or "a"ppending ).
+.WR20C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R20C1
+    How do we tell ~b~Ifopen()~N the name of the file which we want to open...?
+    ~b~Iname[]~N is an ARRAY of pointers, each pointing to a string.
+.WR20C1
+                                                                              
+                                                                              
+.R20C1
+    When we typed ~Iread letter~N, we passed to our ~b~Imain()~N program the
+    two strings ~Iread~N and ~Iletter~N. Now the pointer ~b~Iname[0]~N points to
+    ~Iread~N and ~b~Iname[1]~N will point to the string ~Iletter~N ...
+.WR20C1
+                                                                              
+                                                                              
+                                                                              
+.R20C1
+    ...so we give the name of the file to ~b~Ifopen()~N, namely ~b~Iname[1]~N.
+.K10,60
+of course
+.WR14C1
+6  ~b~I    fp=fopen(name[1],"r");                           ~N
+~V7      if (fp == NULL) {                                ~N
+~V8          printf("\nSorry, can't open %s",name[1]);    ~N
+~V9          exit(0);                                     ~N
+.R20C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R20C1
+    The function ~b~Ifopen()~N is clever. If it can't open the file for some
+    reason (beer-on-the-disk) it ~Ireturn~Ns a NULL pointer.
+    We check, in Line 7, IF ~b~Ifp~N is EQUAL ( ~b~I==~N ) to ~b~INULL~N.
+    If so, we apologize ( Line 8 ) and ~b~Iexit~N the program ( Line 9 ).
+.WR15C1
+7  ~b~I    if (fp == NULL) {                                ~N
+8  ~b~I        printf("\nSorry, can't open %s",~Vname[1]~N~b~I);    ~N
+9  ~b~I        ~Vexit(0)~N~b~I;                                     ~N
+.R20C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R20C1
+    In Line 8 we ~b~Iprintf~N ~b~Iname[1]~N as a ~b~I%s~Ntring (of course).
+    The ~b~Iexit(0)~N (in Line 9 ) is new. It will exit our ~b~Imain()~N 
+    and return you to the operating system (e.g. DOS ). ( It also ~Icloses~N
+    any open files ).
+.WR20C1
+                                                                               
+                                                                              
+                                                                              
+                                                                              
+.R20C1
+    NOTE: We gave to ~b~Ifopen()~N the string which ~b~Iname[1]~N points to,
+          and we also give it to ~b~Iprintf()~N (namely ~Iletter~N, in this
+          example).
+.WNK10,32
+  phew!!  
+.WN
+1  ~b~Imain(number,name)                                    ~N
+2  ~b~Iint number;                                          ~N
+3  ~b~Ichar *name[]                                         ~N
+4  ~b~I{                                                    ~N
+5  ~b~I    FILE *fp, *fopen();                              ~N
+6  ~b~I    fp=fopen(*name[1],"r");                          ~N
+7  ~b~I    if (fp == NULL) {                                ~N
+8  ~b~I        printf("\nSorry, can't open %f",name[1]);    ~N
+9  ~b~I        exit(0);                                     ~N
+10 ~b~I    }                                                ~N
+11 ~b~I    /*  now we read from the file */                 ~N
+~V12     char c;                                          ~N
+~V13     while ( (c=getc(fp)) != EOF  )                   ~N
+~V14         printf("%c",c);                              ~N
+~V15 }                                                    ~N
+.w
+
+    Now we declare a ~b~Ichar c~N ( Line 12 ) and continually ~b~Igetc()~N
+    ~Ifrom the file which we opened~N ( in Line 6 ). Reference to this open
+    file is via its ~Ifile pointer~N ~b~Ifp~N ... hence we used ~b~Igetc(~Ffp~N~b~I)~N
+    to tell the ~b~Igetc()~N function which file to ~b~Iget~N the next
+    ~b~Ic~Nhar from. ( ~b~Igetc()~N is in ~b~Istdio.h~N ).
+.WR17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    We (in this example) ~b~Iprintf()~N the ~%c~Nhar to the screen, ~b~Iwhile~N
+    ~b~Ic~N is NOT EQUAL ( ~b~I!=~N ) to the ~b~IEOF~N  character (which ~Ishould~N
+    indicate ~IE~Nnd ~IO~Nf ~IF~Nile ..if all goes well ..).
+.WR17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+.Q
+How many errors in the above program ? 
+4
+.R21C1
+    Line 3 needs a ~Isemi-colon~N!
+.R3C1
+3  ~b~Ichar *name[] ~Ftch! tch!~N~b~I~N
+.WR21C1
+    Line 6 should give ~b~Iname[1]~N to ~b~Ifopen()~N, NOT ~b~I*name[1]~N
+.R6C1
+6  ~b~I    fp=fopen(~F*~N~b~Iname[1],"r");                          ~N
+.WR21C1
+    Line 8 needs a ~b~I%s~Ntring format, NOT a ~b~I%f~Nloat !                 
+.R8C1
+8  ~b~I        printf("\nSorry, can't open %~Ff~N~b~I",name[1]);    ~N
+.WR21C1
+    ....and we need to ~b~I#include <stdio.h>~N                                      
+.K10,60
+as Line 0
+.WNK10,32
+funtastic!
+.WN
+0  ~b~i#include <stdio.h>                                   ~N
+1  ~b~Imain(number,name)                                    ~N
+2  ~b~Iint number;                                          ~N
+3  ~b~Ichar *name[];                                        ~N
+4  ~b~I{                                                    ~N
+5  ~b~I    FILE *fp, *fopen();                              ~N
+6  ~b~I    fp=fopen(name[1],"r");                           ~N
+7  ~b~I    if (fp == NULL) {                                ~N
+8  ~b~I        printf("\nSorry, can't open %s",name[1]);    ~N
+9  ~b~I        exit(0);                                     ~N
+10 ~b~I    }                                                ~N
+
+    Let's begin with this introduction ( ...same as before, but with ~Cbugs~N
+    removed!) and continue with a program which will read a file on disk
+    and count the number of times the letters 'a' through 'z' occur.
+
+    We'll compile/link the program under the name ~Icount~N and we will
+    type ~Icount sam~N to count the letters 'a'-'z' in a file called ~Isam~N.
+.K19,32
+how nice!
+.WN
+
+
+
+
+.T
+    counting from 'a to 'z'  
+.WN
+~Vchar c;                                         /* characters from file */~N
+~Vint n[26], i;                                   /* count for each letter*/~N
+~b~Ifor (i=0;i<26;i++) n[i]=0;                      /* counts set to zero   */~N
+~b~Ifor (i=0;i<1000;i++)  {                         /* go thru 1000 chars   */~N
+~b~I    c=getc(fp);                                 /* get a char from file */~N
+~b~I    if (c>='a'&& c<='z')  {                     /* is it between a & z? */~N
+~b~I         n[c-'a']++;                            /* yes? increment count */~N 
+~b~I    }                                           /* end of if            */~N
+~b~I}                                               /* end of for           */~N
+~b~Iprintf("\nIn the file %s : ",name[1]);          /* print file name      */~N
+~b~Ifor (i=0;i<=24;i+=2)                            /* go thru alphabet     */~N
+~b~I     printf("\n%c%s%3d%s : %c%s%3d%s",          /* a format string      */~N
+~b~I            'a'+i,  " occurs ",n[i],  " times", /* print letter and     */~N
+~b~I            'a'+i+1," occurs ",n[i+1]," times");/* count for each letter*/~N
+~b~I}                                               /* end of main()        */~N
+.R17C1
+    Here we declare some stuff, notably the ARRAY ~b~In[26]~N which will hold
+    the number of times each of the 26 letters from 'a' to 'z' occur ...hence
+    it's an ~b~Iint~Neger ARRAY.
+.WR1C1
+~b~Ichar c;                                         /* characters from file */~N
+~b~Iint n[26], i;                                   /* count for each letter*/~N
+~Vfor (i=0;i<26;i++) n[i]=0;                      /* counts set to zero   */~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    Here we set all the integers in the ARRAY to 0  ..you can never tell what
+    garbage might be in those memory locations!
+.WR3C1
+~b~Ifor (i=0;i<26;i++) n[i]=0;                      /* counts set to zero   */~N
+~Vfor (i=0;i<1000;i++)  {                         /* go thru 1000 chars   */~N
+~V    c=getc(fp);                                 /* get a char from file */~N
+~V    if (c>='a'&& c<='z')  {                     /* is it between a & z? */~N
+.R17C1
+                                                                              
+                                                                              
+.R17C1
+    Now we go through 1000 characters in the file and ~b~Igetc(fp)~N each one,
+    giving the file ~r~Ipointer~N ~b~Ifp~N to the library function ~b~Igetc()~N
+    and getting in ~Ireturn~N a ~b~Ichar~Nacter ~b~Ic~N which we check to see
+    if it's GREATER or EQUAL to the character ~b~I'a'~N  AND  ( ~b~I&&~N )
+    if it's LESS or EQUAL to the character ~b~I'z'~N.
+.WR4C1
+~b~Ifor (i=0;i<1000;i++)  {                         /* go thru 1000 chars   */~N
+~b~I    c=getc(fp);                                 /* get a char from file */~N
+~b~I    if (c>='a'&& c<='z')  {                     /* is it between a & z? */~N
+~V         n[c-'a']++;                            /* yes? increment count */~N 
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    ~Iif~N we get a character between 'a' and 'z' we increment the appropriate
+    member of our ARRAY ~b~In[]~N ....but how ??
+.WR17C1
+                                                                              
+                                                                              
+.R17C1
+    Now ~b~Ic~N is a (single) byte in memory, containing the 'value' of the
+    ~b~Ic~Nharacter. This 'value' would be ~I65~N for an 'a' and ~I66~N
+    for a 'b', etc. (in ASCII). If the 'value' of the ~b~Ic~Nharacter returned
+    by ~b~Igetc()~N were ~I69~N (for example) then we must have an 'e' and we
+    would increment ~b~In[4]~N (which holds the number of times an 'e' occurs).
+    BUT, the 'value' of ~b~Ic~N minus the 'value' of 'a' is ~I69-65=4~N ...
+    ...that is, ~b~Ic-'a'~N has the 'value' ~I4~N ...
+    SO we increment ~b~In[c-'a']~N ( which WILL increment n[4] ).
+.WR7C1
+~b~I         n[c-'a']++;                            /* yes? increment count */~N 
+~V    }                                           /* end of if            */~N
+~V}                                               /* end of for           */~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    Now we end the ~Iif~N and the ~Ifor~N.
+    The numbers in the ARRAY ~b~In[]~N will give us what we want.
+.WR8C1
+~b~I    }                                           /* end of if            */~N
+~b~I}                                               /* end of for           */~N
+~Vprintf("\nIn the file %s : ",name[1]);          /* print file name      */~N
+.R17C1
+                                                                              
+                                                                              
+.R17C1
+    Now (just for kicks) we print the ~b~Iname[1]~N of the file we opened...
+.WR10C1
+~b~Iprintf("\nIn the file %s : ",name[1]);          /* print file name      */~N
+~Vfor (i=0;i<=24;i+=2)                            /* go thru alphabet     */~N
+.R17C1
+                                                                              
+.R17C1
+    Now we go through all 26 letters ( and all 26 'counts' stored in the
+    ARRAY ~b~In[]~N ) but two-at-a-time ( which is why we used ~b~Ii+=2~N
+    which adds ~I2~N to ~b~Ii~N each time through the ~Ifor~N loop.
+.WR11C1
+~b~Ifor (i=0;i<=24;i+=2)                            /* go thru alphabet     */~N
+~V     printf("\n%c%s%3d%s : %c%s%3d%s",          /* a format string      */~N
+~V            'a'+i,  " occurs ",n[i],  " times", /* print letter and     */~N
+~V            'a'+i+1," occurs ",n[i+1]," times");/* count for each letter*/~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    Now we print each letter as a ~n~I%c~Nharacter, giving to ~b~Iprintf()~N
+    the numbers 'a'+0, then 'a'+1, then 'a'+2, etc. (meaning, the ASCII
+    'values' ~I65~N then ~I66~N then ~I67~N etc.).
+    We also print ~b~In[0]~N, ~b~In[1]~N, ~b~In[2]~N etc. which are the
+    various 'counts' (for an 'a', 'b', 'c', etc.)
+.WR12C1
+~V     printf("\n~N~b~I%c%s%3d%s~N~V:%c%s%3d%s",            /* a format string      */~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    Note that we choose (for variety) to specify a format which says to print:
+    First a ~b~I%c~Nharacter then a ~b~I%s~Ntring~N then a ~b~I%d~Necimal (field width ~I3~N)
+    then another ~b~I%s~Ntring~N.
+.WR12C1
+~V     printf("\n~F%c%s%3d%s~N~V:~F%c%s%3d%s~N~V",            /* a format string      */~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    ...and we do this TWICE (before we go to a ~b~I\n~Newline) which is why
+    we increased ~b~Ii~N by ~I2~N each time through the loop (as in ~b~Ii+=2~N).
+.WR12C1
+~b~I     printf("\n%c%s%3d%s : %c%s%3d%s",          /* a format string      */~N
+~V            'a'+i,  " occurs ",n[i],  " times", /* print letter and     */~N
+~b~I            'a'+i+1," occurs ",n[i+1]," times");/* count for each letter*/~N
+.R17C1
+                                                                              
+                                                                              
+.R17C1
+    This is one of the TWO printouts on each line of the screen:
+    First the ~b~I%c~Nharacter (as ~b~I'a'+i~N) then the ~b~I%s~Ntring (" occurs ")
+    then the ~b~I%d~Necimal ( ~b~In[i]~N ) with field width ~I3~N, then the ~b~I%s~Ntring
+    " times".
+.WR13C1
+~b~I            'a'+i,  " occurs ",n[i],  " times", /* print letter and     */~N
+~b~I            'a'+i+1," occurs ",n[i+1]," times");/* count for each letter*/~N
+~V}                                               /* end of main()        */~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    ..and this (would you believe) is the end of ~b~Imain()~N !
+
+    (We really ~Ishould~N provide that 4-space indent!)
+.WK2,32
+printout??
+.WN
+    For the program we just wrote (called ~Icount.c~N, before it was compiled
+    and linked) we get:
+
+~IA>count count.c~N
+
+~r~IIn the file count.c : ~N
+~r~Ia occurs  18 times : b occurs   3 times~N
+~r~Ic occurs  19 times : d occurs   4 times~N
+~r~Ie occurs  32 times : f occurs  22 times~N
+~r~Ig occurs   3 times : h occurs   9 times~N
+~r~Ii occurs  25 times : j occurs   0 times~N
+~r~Ik occurs   0 times : l occurs   5 times~N
+~r~Im occurs  11 times : n occurs  31 times~N
+~r~Io occurs  19 times : p occurs   9 times~N
+~r~Iq occurs   0 times : r occurs  23 times~N
+~r~Is occurs   9 times : t occurs  22 times~N
+~r~Iu occurs   7 times : v occurs   0 times~N
+~r~Iw occurs   1 times : x occurs   1 times~N
+~r~Iy occurs   2 times : z occurs   3 times~N
+.K10,60
+ pretty!
+.WN
+~b~Ifor (i=0;i<=24;i+=2)                            /* go thru alphabet     */~N
+~b~I     printf("\n%c%s%3d%s : %c%s%3d%s",          /* a format string      */~N
+~b~I            'a'+i,  " occurs ",n[i],  " times", /* print letter and     */~N
+~b~I            'a'+i+1," occurs ",n[i+1]," times");/* count for each letter*/~N
+
+    The mechanism for printing two-to-a-line is awkward (!)
+    We really want to let ~b~Ii~N go from ~b~I0~N to ~b~I25~N and, each time ~b~Ii~N
+    is exactly divisible by ~I2~N, printf a ~b~I\n~Newline.
+
+    This 'exact divisibility' can be tested by dividing ~b~I~N by ~I2~N and checking
+    if the remainder is zero.
+
+    To get the remainder, when ~b~Ii~N is divided by ~I2~N, we use: ~b~Ii%2~N
+    (which gives this remainder!).
+
+.W
+~b~Ifor (i=0;~Vi<26;i++~N~b~I)                              /* go thru alphabet     */~N
+~V     if (i%~F2~N~V==0)   printf("\n");                /* newline if i%2==0    */~N
+~b~I     printf("%c%s%3d%s",                        /* a format string      */~N
+~b~I            'a'+i, " occurs ",n[i], " times");  /* print letter count   */~N
+.R22C1
+    ...much nicer code, since we can easily print 3 or 4 to a line by changing
+    the number ~V~F2~N.
+.WN
+
+
+.T
+   That's all folks!   
+.K16,32
+au revoir!
+
+
+.q
+

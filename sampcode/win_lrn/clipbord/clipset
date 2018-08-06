@@ -1,0 +1,6 @@
+clipset.obj: clipset.c
+    cl -c -d -AS -Gsw -Os -Zpe clipset.c
+
+clipset.exe: clipset.obj clipset.def
+    link4 clipset,/align:16,/map, slibw/NOE, clipset.def
+    mapsym clipset

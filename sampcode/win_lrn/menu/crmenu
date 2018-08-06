@@ -1,0 +1,6 @@
+
+crmenu.obj: crmenu.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 crmenu.c
+
+crmenu.exe: crmenu.obj crmenu.def
+    link4 /align:16 crmenu,,nul,slibw/NOE,crmenu.def

@@ -1,0 +1,14 @@
+
+		Problems with the DlgSamp Sample
+
+ ** The dialog layout should be adjusted to match that of Excel.
+
+ ** Can't we do better?
+
+     -- Pop-up Menus like those on the Mac would be nice.
+	That would make for a much more compact dialog.
+
+     -- How about adding some common actions (Rename, Mode, Search, ...)
+
+ ** How about a dynamic hierarchical menu for walking the directory
+    tree?

@@ -1,0 +1,30 @@
+O- General Description
+
+These routines allow the user to build their own set of specialized utility 
+or driver programs and to communicate directly with specific devices. This 
+eliminates worry about the low level hardware interface commands, SCSI bus 
+phase issues, hardware timeouts, and differences between host adapters models.
+The routines can be executed from either "C" language or assembly language 
+programs.
+
+O- Tool Kit Routines
+
+There are two routines available. The two routines are contained in the same 
+object file, OEMSCSI.OBJ. They are as follows:
+
+    oemreset ();
+    oemscsi (&oemtable);
+
+The first routine, oemreset(), is used to assert and deassert the hard SCSI 
+Reset line on the SCSI bus. This function should only be used in a condition 
+where there is a timeout on the SCSI bus as indicated in the returned status 
+from a call. Using this routine can cause initial error returned status from
+your device. Consult your device manual for further information on clearing
+out this status. This operation also required a recovery period on the part 
+of all devices on the SCSI bus.
+
+The second routine, oemscsi (&oemtable), is the routine used to send commands
+to devices over the SCSI bus. It handles the data phase, the status phase, and
+the message phase of the request. This interface does not support the 
+arbitration reselection features of the host adapters.
+

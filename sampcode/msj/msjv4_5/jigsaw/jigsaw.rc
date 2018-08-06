@@ -1,0 +1,35 @@
+#define INCL_PM
+ 
+#include <os2.h>
+#include "jigsaw.h"
+ 
+POINTER  APPICON  jigsaw.ico
+ 
+ACCELTABLE APPTABLE PRELOAD
+BEGIN
+    VK_F3, MENU_EXIT, VIRTUALKEY
+END
+ 
+/* application menu bar */
+ 
+MENU APPMENU PRELOAD
+BEGIN
+    SUBMENU	"~Options",	SM_OPTIONS, 0
+    BEGIN
+	MENUITEM	"Zoom ~In",	MENU_ZOOMIN, 0
+	MENUITEM	"Zoom ~Out",	MENU_ZOOMOUT, 0
+    END
+    MENUITEM	"~Load!",	MENU_LOAD, 0
+    MENUITEM	"~Jumble!",	MENU_JUMBLE, 0
+    SUBMENU	"E~xit",	SM_EXIT, 0
+    BEGIN
+	MENUITEM	"E~xit Jigsaw...   F3",        MENU_EXIT, 0
+	MENUITEM	"~Resume",	MENU_RESUME, 0
+    END
+END
+ 
+STRINGTABLE PRELOAD
+BEGIN
+    TITLEBAR		"Jigsaw"
+    TERMINATE           "OK to terminate this program ?"
+END

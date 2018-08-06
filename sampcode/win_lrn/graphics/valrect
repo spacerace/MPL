@@ -1,0 +1,9 @@
+valrect.obj: valrect.c
+   cl -c -W2 -AS -Gsw -Od -Zped valrect.c
+
+valrect.exe: valrect.obj valrect.def
+   link4 valrect,/align:16,/map/li,slibw/NOE,valrect.def
+   mapsym valrect
+   del *.obj
+   del *.map
+   del *.sym

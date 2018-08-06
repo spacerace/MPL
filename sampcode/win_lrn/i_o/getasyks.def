@@ -1,0 +1,14 @@
+NAME           getasyks
+
+DESCRIPTION    'GetAsyncKeyState sample application'
+
+STUB           'WINSTUB.EXE'
+
+CODE           MOVEABLE
+DATA           MOVEABLE MULTIPLE
+
+HEAPSIZE       4096
+STACKSIZE      4096
+
+EXPORTS
+    AsyncWndProc @1

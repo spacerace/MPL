@@ -1,0 +1,18 @@
+/* grafchar.h -- definitions for savescrn.c and       */
+/*               recall.c   Version 2                 */
+#define NUMCHARS 48
+#define SPACE '\040'
+#define BOTLINE 19  /* line # for end of drawing space */
+#define PAGE 0
+#define GCSTART 0xB0 /* ascii for first graphics char */
+#define BEEP '\a'
+#define ESC '\033'
+#define TRUE 1
+#define FALSE 0
+
+#define CHARS (BOTLINE + 1) * 80  /*    number of     */
+                               /* character positions */
+typedef unsigned short (far * VIDMEM);
+#define MONMEM ((VIDMEM) (0xB000L << 16)) /* mono */
+#define CGAMEM ((VIDMEM) (0xB800L << 16)) /* cga */
+

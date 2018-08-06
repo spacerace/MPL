@@ -1,0 +1,95 @@
+;       SAMPLE Microsoft Mouse 'DROP' MENU
+;
+; Note: Please review the comments below before you compile
+;       and use this source file as a mouse menu.
+
+; The DROP mouse menu demonstrates how to create 'drop-
+; down' menus.
+;
+; Clicking a mouse button when the cursor is on the main
+; menu (drop1) will display a drop-down menu (except in the
+; case of the 'CLR SCRN' field, which will cause a screen-
+; clear command to be executed).
+;
+; Clicking a mouse button when the cursor is on the top
+; entry of a drop-down menu will redisplay the main menu. 
+;
+; Since the entire area underneath the main menu will be
+; written over by each drop-down menu, you should use a
+; BLACK background for this type of mouse menu.
+;
+; When you choose a drop-down menu, the initial position of
+; the cursor is always the upper-left corner of the area
+; defined by the set of SELECT statements associated with
+; the menu.
+;
+;
+BEGIN lb
+;
+lb:     execute drop1
+rb:     execute drop2
+bb:     execute drop3
+nul:    nothing
+;
+drop1:  POPUP 1,40,NORMAL
+        text "ษออออออออออัออออออออออัออออออออออป"
+        text "บ CLR SCRN ณ LIST DIR ณ CH DRIVE บ"
+        text "ศออออออออออฯออออออออออฯออออออออออผ"
+        select 2,2,10,cls
+        select 2,13,10,rb
+        select 2,24,10,bb
+        PEND
+;
+cls:    type "cls",enter
+;
+drop2:  POPUP 1,40,NORMAL
+        text "ษออออออออออหออออออออออหออออออออออป"
+        text "บ CLR SCRN บ LIST DIR บ CH DRIVE บ"
+        text "ศออออออออออฮออออออออออฮออออออออออผ"
+        text "           บ   dir    บ"
+        text "           บ  *.bat   บ"
+        text "           บ  *.com   บ"
+        text "           บ  *.doc   บ"
+        text "           บ  *.exe   บ"
+        text "           บ  *.sys   บ"
+        text "           บ  CANCEL  บ"
+        text "           ศออออออออออผ"
+      select 2,13,10,lb
+      select 3,13,10,rb
+      select 4,13,10,dir
+      select 5,13,10,dirb
+      select 6,13,10,dirc
+      select 7,13,10,dird
+      select 8,13,10,dire
+      select 9,13,10,dirs
+      select 10,13,10,nul
+      PEND
+;
+dir:        type "dir",enter
+dirb:       type "dir *.bat",enter
+dirc:       type "dir *.com",enter
+dird:       type "dir *.doc",enter
+dire:       type "dir *.exe",enter
+dirs:       type "dir *.sys",enter
+;
+drop3:  POPUP 1,40,NORMAL
+        text "ษออออออออออัออออออออออหออออออออออป"
+        text "บ CLR SCRN ณ LIST DIR บ CH DRIVE บ"
+        text "ศออออออออออฯออออออออออฮออออออออออน"
+        text "                      บ    A:    บ"
+        text "                      บ    B:    บ"
+        text "                      บ    C:    บ"
+        text "                      บ  CANCEL  บ"
+        text "                      ศออออออออออผ"
+        select 2,24,10,lb
+        select 3,24,10,bb
+        select 4,24,10,a
+        select 5,24,10,b
+        select 6,24,10,c
+        select 7,24,10,nul
+        PEND
+;
+a:      type "A:",enter,"cls",enter,enter
+b:      type "B:",enter,"cls",enter,enter
+c:      type "C:",enter,"cls",enter,enter
+;

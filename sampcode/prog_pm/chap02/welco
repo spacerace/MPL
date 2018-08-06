@@ -1,0 +1,9 @@
+#-----------------
+# WELCO make file
+#-----------------
+
+welco.obj : welco.c
+     cl -c -G2s -W3 welco.c
+
+welco.exe : welco.obj welco.def
+     link welco, /align:16, NUL, os2, welco

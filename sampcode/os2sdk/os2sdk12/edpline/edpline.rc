@@ -1,0 +1,44 @@
+/*
+    EDPLINE Resource File
+    Created by Microsoft Corporation, 1989
+*/
+#include <os2.h>
+#include "edpline.h"
+
+#define TABGRP  WS_TABSTOP|WS_GROUP
+
+MENU IDR_EDPLINE PRELOAD
+BEGIN
+    SUBMENU  "~Primitive",    IDM_PRIM
+	BEGIN
+	    MENUITEM "~None",		IDM_NOPRIM,	MIS_TEXT
+	    MENUITEM "GpiPoly~Line",	IDM_POLYLINE,	MIS_TEXT
+	    MENUITEM "GpiPoly~Fillet",	IDM_POLYFILLET,	MIS_TEXT
+	    MENUITEM "GpiPoly~Spline",	IDM_POLYSPLINE,	MIS_TEXT
+	    MENUITEM "GpiPoint~Arc",	IDM_POINTARC,	MIS_TEXT
+	    MENUITEM SEPARATOR
+	    MENUITEM "E~xit",		SC_CLOSE,	MIS_SYSCOMMAND
+	    MENUITEM "A~bout...",	IDM_ABOUT,	MIS_TEXT
+	END
+    SUBMENU  "P~oints", IDM_POINTS
+	BEGIN
+	    MENUITEM "Display control points", IDM_CTLPOINTS,   MIS_TEXT
+	    MENUITEM "Clear all",	       IDM_CLEARALL,    MIS_TEXT
+	END
+END
+
+
+STRINGTABLE
+BEGIN
+    IDS_TITLE,	    "PolyLine Editor"
+END
+
+DLGTEMPLATE IDD_ABOUT {
+    DIALOG "", 0, 10, 60, 160, 75, WS_SAVEBITS | FS_DLGBORDER {
+	CTEXT	"Microsoft OS/2"		   -1, 10, 60, 140, 10
+	CTEXT	"PolyLine Editor"		   -1, 10, 50, 140, 10
+	CTEXT	"Version 1.0"			   -1, 10, 30, 140, 10
+	CTEXT	"Created by Microsoft Corp., 1989" -1, 10, 20, 140, 10
+	DEFPUSHBUTTON "Ok"		   DID_OK, 64,  4, 32,  14, WS_GROUP
+    }
+}

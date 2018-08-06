@@ -1,0 +1,59 @@
+                XC  -  A 'C' Concordance (Crossref) Utility
+                ===========================================
+
+
+
+Version 1.0   January, 1982
+
+Copyright (c) 1982 by Philip N. Hisley
+
+        Philip N. Hisley
+        548H Jamestown Court
+        Edgewood, Maryland 21040
+        (301) 679-4606
+
+Released for non-commercial distribution only
+
+
+Converted to IBM/PC CI/C86 by David N. Smith, May/June 1983
+
+        David N. Smith
+        44 Ole Musket Lane
+        Danbury, CT 06810
+        (203) 748-5934
+
+Changes Copyright (c) 1983 by David N. Smith
+
+PC Enhancements include:
+
+     1)  Nested #INCLUDE statements
+     2)  Single spaced cross-reference list
+     3)  Removal of tabbing on output device
+         (Since many printers don't support it)
+     4)  #INCLUDE statements with both "xx" and <xx>
+         syntax and with a full fileid in the quotes.
+
+
+
+Abstract:
+
+'XC' is a cross-reference utility for 'C' programs.
+Its has the ability to handle nested include files
+to a depth of 8 levels and properly processes nested
+comments as supported by BDS C. Option flags support
+the following features:
+
+- Routing of list output to disk
+- Cross-referencing of reserved words
+- Processing of nested include files
+- Generation of listing only
+
+Usage: xc <filename> <flag(s)>
+
+Flags: -i            = Enable file inclusion
+       -l            = Generate listing only
+       -r            = Cross-ref reserved words
+       -o <filename> = Write output to named file
+
+
+

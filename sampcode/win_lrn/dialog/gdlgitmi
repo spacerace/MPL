@@ -1,0 +1,13 @@
+
+gdlgitmi.res: gdlgitmi.rc gdlgitmi.h
+    rc -r gdlgitmi.rc
+
+gdlgitmi.obj: gdlgitmi.c
+   cl -c -W2 -AS -Gsw -Od -Zped gdlgitmi.c
+
+gdlgitmi.exe: gdlgitmi.obj gdlgitmi.def
+   link4 gdlgitmi,/align:16,/map/li,slibw/NOE,gdlgitmi.def
+   rc gdlgitmi.res
+
+gdlgitmi.exe: gdlgitmi.res
+    rc gdlgitmi.res

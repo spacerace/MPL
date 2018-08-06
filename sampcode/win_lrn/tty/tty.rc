@@ -1,0 +1,38 @@
+#include "style.h"
+#include "TTY.h"
+
+TTYICON  ICON	 TTY.ico
+
+STRINGTABLE
+BEGIN
+    IDSNAME,	"TTY"
+    IDSABOUT,   "About..."
+    IDSTITLE,	"TTY"
+END
+
+ABOUTBOX DIALOG LOADONCALL MOVEABLE DISCARDABLE 20, 14, 157, 96
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+	   ICON  TTYICON -1,  4, 6, 16, 26
+	   CONTROL "Sample Terminal Application", -1, "static", SS_CENTER | WS_GROUP | WS_CHILD, 16, 32, 124, 8
+	   CONTROL "Provided by Microsoft Product Support", -1, "static", SS_CENTER | WS_GROUP | WS_CHILD, 0, 46, 154, 8
+	   CONTROL "Microsoft Windows", 104, "static", SS_CENTER | WS_GROUP | WS_CHILD, 44, 24, 72, 8
+	   CONTROL "a", 105, "static", SS_CENTER | WS_GROUP | WS_CHILD, 44, 16, 72, 8
+	   CONTROL "TTY", 106, "static", SS_CENTER | WS_GROUP | WS_CHILD, 44, 4, 72, 8
+	   CONTROL "A demonstration of the basics of using the Windows communications functions.", 108, "static", SS_LEFT | WS_GROUP | WS_CHILD, 12, 64, 132, 26
+END
+
+TTYMENU MENU
+BEGIN
+    POPUP   "&File"
+    BEGIN
+	MENUITEM    "E&xit" TTYEXIT
+	MENUITEM    "A&bout" IDSABOUT
+    END
+    POPUP   "&TTY"
+    BEGIN
+	MENUITEM    "&Connect"	TTYCONNECT
+	MENUITEM    "&Settings - does nothing" TTYSETTINGS
+    END
+
+END

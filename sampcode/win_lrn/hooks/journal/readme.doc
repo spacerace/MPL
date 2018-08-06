@@ -1,0 +1,268 @@
+   The sample code provided with this Application Note demonstrates the
+use of Journal Hooks, WH_JOURNALRECORD and WH_JOURNALPLAYBACK.  The
+application, APP, serves only one purpose; it illustrates how to call
+the dynamic link library which does all of the journalling work.  The
+DLL calls, to record and playback messages are made from the application
+module, WNDPROC.C.  The DLL file, JOURNAL.C, contains all of the code
+necessary for creating a file of event messages for later playback.
+The code should allow quick creation of "hands off" demos for any
+application simply having the application call the DLL high-level
+functions.
+   As an example a file, DIARY.BIN, has been included which demos the
+application included with this Apnote.  After running APP.EXE, select
+Play from the menu.  Each time Record On is selected from the menu,
+DIARY.BIN is overwritten.  Save copies of DIARY.BIN which you do not
+want to be destroyed.
+   Listed below are general notes on programming all hooks including
+journal record and playback.  This memo was prepared after the
+Windows 2.03 SDK documentation was printed and better reflects the
+hook functions and their use.  The Windows 2.03 SDK Update Document also
+has useful hook function information.
+
+==========================================================================
+
+Setting A Hook
+
+==========================================================================
+
+    /*
+     * Make proc instance for the hook, and install, saving the old
+     *      hook (which may be NULL)
+     */
+
+    qprcOurs    = (FARPROC)MakeProcInstance((FARPROC)Hook, hins);
+    qprcOld     = (FARPROC)SetWindowsHook(WH_ANY, qprcOurs);
+
+    /*
+     * Notes:
+     *
+     *  (1) hins is a handle to our module instance
+     *
+     *  (2) Hook is our call-back function called by Windows
+     *      It should be declared as:
+     *          DWORD far pascal Hook (int, WORD, DWORD)
+     *      The semantics specific to each hook are below.
+     *
+     *  (3) qprcOurs and qprcOld are declared FARPROC, and are
+     *      likely to be global variables
+     *
+     *  (4) WH_ANY is any of the Windows Hook codes:
+     *          WH_MSGFILTER
+     *          WH_JOURNALRECORD
+     *          WH_JOURNALPLAYBACK
+     *          WH_KEYBOARD
+     *          WH_GETMESSAGE
+     *          WH_CALLWNDPROC
+     *          WH_SYSMSGFILTER
+     */
+
+
+
+==========================================================================
+
+Removing A Hook
+
+==========================================================================
+
+    /*
+     * Unhook our hook, and free the proc instance
+     */
+
+    fSuccess = (BOOL)UnhookWindowsHook(WH_ANY, qprcOurs);
+    FreeProcInstance(qprcOurs);
+
+    /*
+     * Notes:
+     *
+     *  (1) fSuccess is TRUE is the hook was successfully removed
+     *      from the hook chain.  Otherwise it is FALSE.
+     *
+     *  (2) Obviously, WH_ANY and qprcOurs must correspond to
+     *      those arguments used in SetWindowsHook.
+
+
+
+==========================================================================
+
+General Notes on Hook Callback Functions
+
+==========================================================================
+
+    /*
+     *  ALL hooks in Win 2.0 have the same syntactic definition:
+     *          DWORD far pascal Hook (int, WORD, DWORD)
+     *  (Note that this is different from the current edition
+     *  of the documentation, which describes the varying interfaces
+     *  of current retail Windows.
+     *
+     *  All hooks have the following general layout:
+     */
+
+    DWORD far pascal Hook (hc, wParam, lParam)
+    int hc;
+    WORD wParam;
+    DWORD lParam;
+    {
+        switch (hc) {
+        case ...
+
+            break;
+        case ...
+
+            break;
+        default:
+            return(DefHookProc(hc, wParam, lParam,
+                               (FARPROC far *)&qprcOld);
+        }
+    return(0L);
+    }
+
+    /*
+     *  The only variation in the hooks are what they do, and the
+     *  particular values of hc, the hook code, that are sent to them.
+     *
+     *  NOTE that all hc's you don't deal with MUST be passed
+     *  through the DefHookProc as shown above.
+     *
+     *  The return value, unless otherwise noted, (and excluding the
+     *  stuff returned by DefHookProc), takes either of two values:
+     *  FALSE   Windows performs normal handling on the event.
+     *  TRUE    Windows discards the event as if it never happened.
+     */
+
+
+
+==========================================================================
+
+Definitions Of Particular Hook Callback Functions
+
+==========================================================================
+
+    /*
+     * WH_MSGFILTER
+     *
+     *  The hook codes (hc) here are the various MSGF constants:
+     *      MSGF_DIALOGBOX
+     *      MSGF_MESSAGEBOX
+     *      MSGF_MENU
+     *      MSGF_MOVE
+     *      MSGF_SIZE
+     *      MSGF_SCROLLBAR
+     *      MSGF_NEXTWINDOW
+     *  wParam is unused.
+     *  lParam contains a long pointer to the message (LPMSG)
+     *
+     *  NOTE that this hook will only provide you with messages that
+     *  are destined for the task which sets the hook.  Use the
+     *  WH_SYSMSGFILTER to intercept messages destined for any task.
+     */
+
+
+
+    /*
+     * WH_KEYBOARD
+     *
+     *  The only hc of interest in HC_ACTION.
+     *  wParam has the virtual keycode (VK_*)
+     *  lParam has the same contents as lParam in a WM_KEYDOWN message.
+     *
+     */
+
+
+
+    /*
+     * WH_JOURNALPLAYBACK
+     *
+     *  There are two hook codes of interest:
+     *
+     *  HC_GETNEXT
+     *  wParam is unused.
+     *  lParam is a long pointer to a SQE structure (LPSQE)
+     *      where the hook is to put the current messsage to playback.
+     *
+     *  HC_SKIP
+     *  wParam is unused.
+     *  lParam is unused.
+     *
+     *  The SQE (System Queue Event) is like a MSG structure:
+     *  typedef struct {
+     *      unsigned message;
+     *      WORD wParam1;
+     *      WORD wParam2;
+     *      long lParam;
+     *  } SQE;
+     *  I can't really tell you much about the second word paramter,
+     *  since I make these things from the WH_JOURNALRECORD hook,
+     *  which fills it in.  The message is a regular Window
+     *  message (WM_*), the wParam1 is pretty much the same as
+     *  the wParam for a regular window message, (e.g. a VK_*
+     *  for a message of WM_KEYDOWN), and the lParam is the current time
+     *  (expressed as the number of timer ticks since system
+     *  generation--see GetTickCount()).
+     *
+     *  The hook is used as follows.  Windows, after this hook
+     *  is installed, disables hardware input.  It will call this
+     *  hook in lieu of using the system queue until the hook is removed
+     *  via UnhookWindowsHook.  Whenever the hook gets a HC_GETNEXT,
+     *  it should poke a SQE through the long pointer given in the
+     *  lParam and return the time in timer ticks that needs to
+     *  elapse before the event is ready to be played.  The lParam
+     *  field of the SQE should also contain the time (not delta
+     *  time) to play the event.  If the time to play the event is
+     *  now, or has passed, this hook should return 0L.  Whenever
+     *  the hook gets a HC_SKIP, it should fetch the next event to
+     *  poke through the lParam when it next gets a HC_GETNEXT,
+     *  i.e. it should prepare, but not do it.
+     *
+     *  NOTES:
+     *  - The hook may be called mutiple times with HC_GETNEXT
+     *      before getting a HC_SKIP.  The hook should keep returning
+     *      the same event through the lParam (with the same
+     *      time-to-be-played in the lParam of the SQE), and a
+     *      decreasing elpased-time-until-event until it becomes
+     *      0L, whereafter it returns 0L.
+     *  - The first message the hook gets (of these two) can be either
+     *      HC_SKIP or HC_GETNEXT.  This is different from Win 1.0.
+     *      Your initialization code should be invariant.  (I do my
+     *      initialization when I set the hook.)
+     *  - If you want to turn the hook off from within the hook, call
+     *      UnhookWindowsHook from the HC_SKIP case only.  Anything
+     *      else will cause execution to waltz off into the ether.
+     *  - If you want to play events as fast as possible, you'll find
+     *      that simply returning 0L for every HC_GETNEXT and setting
+     *      the play time to the current time won't work.  (You hang).
+     *      I've had success using the mouse double-click speed +1 as
+     *      the minimum time delay between events (except where the
+     *      actual event times are less).
+     */
+
+
+
+    /*
+     * WH_JOURNALRECORD
+     *
+     *  The hook code of interest is HC_ACTION.
+     *  wParam is unused.
+     *  lParam is a long pointer to a SQE structure (LPSQE)
+     *      with the current message.
+     *
+     *  The SQE structure is identical to that used by the
+     *  WH_JOURNALPLAYBACK structure.  (see above).
+     *
+     *  I use this hook to record a sequence of user-initiated
+     *  events which I later playback, but there are other
+     *  uses I imagine.  Since the system time when one records
+     *  and when one plays back the recording will, in general,
+     *  be different, I keep a global variable around containing
+     *  the time at the start of the sequence, and store elapsed
+     *  times in the lParam of the SQE.  When I playback the
+     *  sequence, I convert those elapsed times into current
+     *  times by the inverse operation.
+     *
+     *  You'll probably wnat to signal your program to turn this
+     *  hook off with some special keystroke.  Be sure to turn
+     *  it off after the WM_KEYUP.  Turning it off after the
+     *  WM_KEYDOWN can have unpredictable results.
+     *
+     *  The return value from HC_ACTION is ignored.  Return 0L.
+     */

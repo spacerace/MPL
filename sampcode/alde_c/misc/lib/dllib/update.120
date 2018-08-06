@@ -1,0 +1,39 @@
+Steve's Library, Version 1.20, 3-29-87
+
+This wasn't supposed to be a real release at this time, but
+Datalight has just brought out Version 3.01 and the Optimum C
+optimizer, and I did have some new functions I've been using
+which I wanted to add.  So, here is the next release, but only
+the function description documentation has been updated, not the
+manual.  (Note: There WAS a release 1.10, but 1.20 was ready before
+anyone registered 1.10, so these are all changes from 1.00 to 1.20.)
+
+New Functions Added:
+    pr_*       Printer Functions
+    blpr       BIOS Printer Write
+    blprstat   BIOS Printer Status
+    dup        Duplicate File Handle
+    async      5 primitive (i.e., low level) async port functions
+    enter*     Several routines to enter strings from keyboard,
+               with editing and syntax checking.
+
+Deleted:
+    getvec     Datalight now supplies this as "int_getvector"
+    isatty     Datalight now supplies this as "isatty"
+    getver     Version number is now in globals "_osmajor" and "_osminor"
+
+Bugs Fixed:
+    mkbox
+    disp_box   Fixed error which occurs if coordinates weren't 0,0
+    criterr    Allows passing of DS register now
+
+Docs Corrected:
+    getdata.doc  Parameters for segment and offset were reversed
+
+Headers Expanded:
+    smdefs.h
+    screen.h
+
+All libraries have been recompiled with the Optimum C optimizer.
+
+

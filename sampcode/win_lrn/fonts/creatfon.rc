@@ -1,0 +1,22 @@
+#include "CreatFon.h"
+
+
+BitmapAbout   BITMAP create1.bmp
+BitmapScottie BITMAP create2.bmp
+
+CreatFon MENU
+    BEGIN
+        POPUP "&Menu"
+           BEGIN
+              MENUITEM "&CreateFont",                 IDM_CREATEFONT
+              MENUITEM "Create&FontIndirict",         IDM_CREATEFONTINDIRECT
+              MENUITEM "Create&BitmapIndirect",       IDM_CREATEBMPINDIRECT
+              MENUITEM "C&reateCompatibleBitmap",     IDM_CREATECOMPATIBLEBMP
+              MENUITEM "&GetBitmapBits",              IDM_GETBITMAPBITS
+              MENUITEM "SetBitmapBits",               IDM_SETBITMAPBITS
+           END
+        MENUITEM "\a&Help"                            IDM_HELP  HELP
+    END
+
+
+

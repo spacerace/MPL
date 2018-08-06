@@ -1,0 +1,18 @@
+#include <style.h>
+#include "checkdlg.h"
+
+min MENU
+BEGIN
+    MENUITEM "DIALOG", 80
+END
+
+2 DIALOG LOADONCALL MOVEABLE DISCARDABLE 76, 26, 126, 94
+STYLE WS_DLGFRAME | WS_POPUP
+    BEGIN
+	   CONTROL "OKAY" ID_OK, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 45, 74, 32, 18
+	   CONTROL "This is the top checkbox" ID_BUTTON1, "button", BS_3STATE | WS_TABSTOP | WS_CHILD, 12, 4,113, 14
+	   CONTROL "Check the top checkbox" ID_BUTTON4, "button", BS_CHECKBOX | WS_TABSTOP | WS_CHILD,6, 28,98, 12
+	   CONTROL "Uncheck the top checkbox" ID_BUTTON3, "button", BS_CHECKBOX | WS_TABSTOP | WS_CHILD, 6, 41,106, 13
+	   CONTROL "Gray the top checkbox" ID_BUTTON2, "button", BS_CHECKBOX | WS_TABSTOP | WS_CHILD,6, 54, 102, 12
+	   CONTROL "" 5, "button", BS_GROUPBOX | WS_TABSTOP | WS_CHILD, 3, 20,117, 50
+    END

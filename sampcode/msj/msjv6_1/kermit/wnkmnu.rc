@@ -1,0 +1,78 @@
+/*
+ * WNKERM.H
+ *
+ * Windows Kermit resource file
+ *
+ * Copyright (c) 1990 by
+ * William S. Hall
+ * 3665 Benton Street, #66
+ * Santa Clara, CA 95051
+ *
+ * This file contains the resources needed by the Kermit
+ * module.  It must be included along with the necessary
+ * header files in the resource file for the terminal
+ * program
+ *
+ */
+
+/* icon */
+Kermit ICON	Kermit.ico
+
+/* Menu for Kermit.  This item is attached to the main window at init time */
+KRMMENU MENU
+BEGIN
+    MENUITEM "&Receive", IDM_KRM_RECEIVE
+    MENUITEM "&Send...", IDM_KRM_SEND
+    MENUITEM SEPARATOR
+    MENUITEM "Cancel &File", IDM_KRM_FILEABORT, GRAYED
+    MENUITEM "Cancel &Batch", IDM_KRM_BATCHABORT, GRAYED
+    MENUITEM "Cancel &Nicely", IDM_KRM_ERRORABORT, GRAYED
+    MENUITEM SEPARATOR
+    MENUITEM "Cancel &Abruptly", IDM_KRM_CANCEL, GRAYED
+    MENUITEM SEPARATOR
+    MENUITEM "Set &Protocol...", IDM_KRM_PROTOCOL
+    MENUITEM "Set Pac&kets...", IDM_KRM_PACKETS
+END
+
+/* Strings used by Kermit */
+STRINGTABLE
+BEGIN
+  /* Messages */
+    IDS_KRM_TRANSACTION_DONE	"Transaction Done"
+    IDS_KRM_QUIT		"Abort the current file transfer"
+    IDS_KRM_UNKNOWN_PACKET	"Unrecognized Packet Type"
+    IDS_KRM_CANCELLED		"Transaction Cancelled"
+    IDS_KRM_TOOMANYRETRIES	"Retry Limit Exceeded"
+    IDS_KRM_FILE_OPEN_ERROR	"File Open Error"
+    IDS_KRM_FILE_READ_ERROR	"File Read Error"
+    IDS_KRM_FILE_WRITE_ERROR	"File Write Error"
+    IDS_KRM_FILE_CLOSE_ERROR	"File Close Error"
+    IDS_KRM_SENDING		"Sending file:"
+    IDS_KRM_CANNOTINIT		"Kermit initialization failed"
+  /* Menu title */
+    IDS_KRM_KERMITMENU		"&Kermit"
+  /* WIN.INI strings */
+    IDS_KRM_KERMIT		"Kermit"
+    IDS_KRM_TIMER		"Timer"
+    IDS_KRM_VERBOSE		"Verbose"
+    IDS_KRM_DISCARD		"Discard"
+    IDS_KRM_BELL		"Bell"
+    IDS_KRM_FILEWARN		"Filewarn"
+    IDS_KRM_BLOCKCHECKTYPE	"BlockCheck"
+    IDS_KRM_SENDDELAY		"SendDelay"
+    IDS_KRM_RETRYLIMIT		"RetryLimit"
+    IDS_KRM_SENDMARK		"sMark"
+    IDS_KRM_RCVMARK		"rMark"
+    IDS_KRM_SENDMAXLEN		"sMaxpktlen"
+    IDS_KRM_RCVMAXLEN		"rMaxpktlen"
+    IDS_KRM_SENDTIMEOUT		"sTimeOut"
+    IDS_KRM_RCVTIMEOUT		"rTimeOut"
+    IDS_KRM_SENDPADCOUNT	"sPadCount"
+    IDS_KRM_RCVPADCOUNT		"rPadCount"
+    IDS_KRM_SENDPADCHAR		"sPadChar"
+    IDS_KRM_RCVPADCHAR		"rPadChar"
+    IDS_KRM_SENDEOL		"sEol"
+    IDS_KRM_RCVEOL		"rEol"
+    IDS_KRM_SENDQUOTE		"sQuote"
+    IDS_KRM_RCVQUOTE		"rQuote"
+END

@@ -1,0 +1,9 @@
+vectfont.obj +
+vf00.obj + vf01.obj + vf02.obj + vf03.obj +
+vf04.obj + vf05.obj + vf06.obj + vf07.obj +
+vf08.obj + vf09.obj + vf10.obj + vf11.obj +
+vf12.obj + vf13.obj + vf14.obj + vf15.obj
+vectfont.exe /align:16
+NUL
+os2.lib
+vectfont.def

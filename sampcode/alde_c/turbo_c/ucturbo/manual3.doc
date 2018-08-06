@@ -1,0 +1,2940 @@
+Unicorn 1 Documentation  3.1                                      page 112
+
+__________________________________________________________________________
+
+
+                              prtbs
+
+
+Sends a backspace character to the printer.
+
+
+
+
+Call:         prtbs();
+
+
+
+
+
+Example:      main()
+              {
+                 prtbs();  /* send a back space to the printer */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 113
+
+__________________________________________________________________________
+
+
+                              prtbuzz
+
+
+Sounds the printers alarm buzzer.
+
+
+
+Call:         prtbuzz();
+
+
+
+
+Example:      main()
+              {
+                 prtbuzz();  /* sound the printer buzzer */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 114
+
+__________________________________________________________________________
+
+
+                              prtcan
+
+
+Sends a cancel character to the printer and stops the print.
+
+
+
+
+Call:         prtcan();
+
+
+
+
+
+Example:      main()
+              {
+                 prtcan();   /* send a cancel to the printer */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 115
+
+__________________________________________________________________________
+
+
+                              prtcomof
+
+
+
+Turns off the printers compressed print mode.
+
+
+
+
+Call:         prtcomof();
+
+
+
+
+
+Example:      main()
+              {
+                 prtcomof();  /* Turn off compressed print */
+
+
+
+Unicorn 1 Documentation  3.1                                      page 116
+
+__________________________________________________________________________
+
+
+                              prtcomon
+
+
+
+Turns on the printers compressed print mode.
+
+
+
+
+Call:         prtcomon();
+
+
+
+
+Example:      main()
+              {
+                 prtcomon();  /*  turn on the compressed mode */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 117
+
+__________________________________________________________________________
+
+
+                              prtcr
+
+
+
+Sends a carriage return character to the printer.
+
+
+
+
+Call:         prtcr();
+
+
+
+
+
+Example:      main()
+              {
+                 prtcr();   /* send a carriage return to the printer */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 118
+
+__________________________________________________________________________
+
+
+                              prtduboff
+
+
+This function turns off the double strike character mode.  Each character is
+struck twice by the print head.
+
+
+
+
+Call:         prtduboff();
+
+
+
+
+Example:      main()
+              {
+                 prtduboff();   /* turn off the double struck characters */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 119
+
+__________________________________________________________________________
+
+
+                              prtdubon
+
+
+
+This function turns on the double strike character mode.  Each character is
+struck twice by the print head.
+
+
+
+
+Call:         prtdubon();
+
+
+
+
+Example:      main()
+              {
+                 prtdubon();   /* turn on the double struck characters */
+              }
+
+
+
+
+Unicorn 1 Documentation  3.1                                      page 120
+
+__________________________________________________________________________
+
+
+                              prtempof
+
+
+This function turns off the emphasized print mode.
+
+
+
+
+
+Call:         prtempof();
+
+
+
+
+Example:      main()
+              {
+                 prtempof();  /* turn off the emphasized print mode */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 121
+
+__________________________________________________________________________
+
+
+                              prtempon
+
+
+Turns on the emphasized print mode.
+
+
+
+
+Call:         prtempon();
+
+
+
+
+Example:      main()
+              {
+                 prtempon();  /* Turn on the emphasized print mode */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 122
+
+__________________________________________________________________________
+
+
+                              prtesc
+
+
+Sends an escape character to the printer.
+
+
+
+
+Call:         prtesc();
+
+
+
+
+
+Example:      main()
+              {
+                 prtesc();  /* send an escape to the printer */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 123
+
+__________________________________________________________________________
+
+
+                              prtff
+
+
+Sends a form feed character to the printer.
+
+
+
+
+Call:         prtff();
+
+
+
+
+
+Example:      main()
+              {
+                 prtff();   /* send a form feed to the printer */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 124
+
+__________________________________________________________________________
+
+
+                              prtlf
+
+
+Sends a line feed character to the printer.
+
+
+
+
+Call:         prtlf();
+
+
+
+
+
+Example:      main()
+              {
+                 prtlf();   /* send a line feed to the printer */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 125
+
+__________________________________________________________________________
+
+
+                              prttab
+
+
+Sends a tab character to the printer.
+
+
+
+
+Call:         prttab();
+
+
+
+
+
+Example:      main()
+              {
+                 prttab();   /* send a tab to the printer */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 126
+
+__________________________________________________________________________
+
+
+                              prtwidoff
+
+
+This function turns of the wide or double width character mode.
+
+
+
+Call:         prtwidoff();
+
+
+
+Example:      main()
+              {
+                 prtwidoff();   /* turn off the double width characters */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 127
+
+__________________________________________________________________________
+
+
+                              prtwidon
+
+
+Turns on the printer wide or double width character mode.  This mode is
+automatically canceled at the next new line sent to the printer.
+
+
+
+Call:         prtwidon();
+
+
+
+
+Example:      main()
+              {
+                 prtwidon();    /* turn on the wide mode */
+              }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 128
+
+     __________________________________________________________________
+
+                              RAD_DEG
+F
+     Converts angles expressed in radians to the equivalent angle
+     expressed in degrees.   Both the angle and the return are
+     doubles.
+
+
+
+
+
+     Call:   RAD_DEG(angle);
+
+             angle  =  angle expressed in radians
+
+
+
+
+
+
+     Example:    main()
+                 {
+                    double a, RAD_DEG();
+
+                    a = RAD_DEG(3.45);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 129
+
+     __________________________________________________________________
+
+                               raschar
+
+F     Prints a single large character on the graphics screen using the
+     internal ROM character descriptions.
+
+
+
+
+     Call:   raschar(char, ulc, ulr, hmag, vmag, color);
+
+             char   =  character to print
+             ulc    =  upper left corner column
+             ulr    =  upper left corner row
+             hmag   =  horizontal magnification factor
+             vmag   =  vertical magnification factor
+             color  =  color of the character
+
+
+     Example:   main()
+                {
+                   sm(4);  /* set graphics mode */
+                   /* print a large 'A' in color 3 */
+                   raschar('A', 50, 50, 4, 4, 3);
+                }
+
+
+
+
+Unicorn 1 Documentation  3.1                                      page 130
+__________________________________________________________________________
+
+
+                              rdhcount
+
+
+     Reads the horizontal motion counter value in clicks.
+
+
+
+Call:         rdhcount();
+
+
+
+
+
+
+Example:      main()
+              {
+                 rdhcount();
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 131
+
+__________________________________________________________________________
+
+
+                              rdvcount
+
+
+     Reads the vertical motion counter value in clicks.
+
+
+
+Call:         rdvcount();
+
+
+
+
+
+
+Example:      main()
+              {
+                 rdvcount();
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 133
+
+__________________________________________________________________________
+
+
+                              readkey
+
+
+Returns a key for both ascii and scan codes.  Scan code is in high byte of
+integer return and ascii code is in low byte.  This is a destructive read.
+
+
+
+
+Call:         readkey();
+
+
+
+
+
+
+Example:      main()
+              {
+                 int a;
+                 a = readkey(); /* get a key */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 134
+
+__________________________________________________________________________
+
+
+                              redalert
+
+
+Sounds a series of 4 rapid upward glissandos forming a red alert signal.
+
+
+
+
+
+Call:         redalert();
+
+
+
+
+
+Example:      main()
+              {
+                 redalert();   /* Sound the red alert */
+              }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 135
+
+     __________________________________________________________________
+
+                              replacech
+
+F     Replaces all occurances of a character in a string with a new
+     character.
+
+
+
+
+
+
+     Call:   replacech(str, old, new);
+
+             str  =  string to be searched
+             old  =  original character to be replaced
+             new  =  the new replacement character for string
+
+
+
+
+     Example:     main()
+                  {
+                     char *a = "This is a test";
+                     /* replace all lower case t's with upper case T's */
+                     replacech(a, 't', 'T');
+                  }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 136
+
+__________________________________________________________________________
+
+
+                              rhjoystk
+
+
+      Returns the right joystick's current horizontal position.
+
+
+Call:         rhjoystk();
+
+
+
+
+
+
+Example:      main()
+              {
+                 printf("The joystick is at %d", rhjoystk());
+              }
+
+
+
+
+Unicorn 1 Documentation  3.1                                      page 137
+
+__________________________________________________________________________
+
+
+                              rvjoystk
+
+
+      Returns the right joystick's current vertical position.
+
+
+Call:         rvjoystk();
+
+
+
+
+
+
+Example:      main()
+              {
+                 printf("The joystick is at %d", rvjoystk());
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 138
+
+__________________________________________________________________________
+
+
+                              scankey
+
+
+This function returns 0 if no key is avialable.  If the return is non 0
+then the key is read non-destructively and the scan code is returned in
+the high byte of an integer and the ascii code is returned in the low byte.
+
+
+
+
+
+Call:         scankey();
+
+
+
+
+
+Example:      main()
+              {
+                 int a;
+                 a = scankey(); /* get values if a key is available */
+              }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 139
+
+     __________________________________________________________________
+
+                               setatten
+
+F                            Tandy 1000 only
+
+     Sound primative function to allow setting the attenuation of any
+     of the 3 sound channels.
+
+
+
+
+     Call:  setatten(voice, level);
+
+            voice  =  1, 2, or 3
+            level  =  1 to 15 with 15 being the maximum attenuation or
+                      soundoff.
+
+
+
+     Example:   main()
+                {
+                   /*  set the sound level in voice 1 to very loud and
+                       voice 2 to off                                 */
+                   setatten(1, 1);
+                   setatten(2, 15);
+                }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 140
+
+__________________________________________________________________________
+
+
+                             script
+
+    Writes to the screen using a large script style font.
+
+
+    Call:   script(character, row, col, color);
+
+
+
+
+Example:      main()
+              {
+                  script('A', 20, 30, 1);
+                      /* writes a script A on the screen, the upper left
+                         corner will be at row 20, column 30 and it will
+                         be written in color 1. */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 141
+
+__________________________________________________________________________
+
+
+                              setcallm
+
+
+    Set a user defined subroutine mask.  The mouse software interrupts
+    automatically stop execution of your program and call the specified
+    routine whenever 1 or more of the conditions defined in the mask are
+    met.  On completion of the subroutine your program continues
+    execution at the point of interruption.
+
+    Call:  setcallm(mask, address);
+
+    Where:
+           mask = the call mask with mask bits as follows.
+                  0 - cursor postion changes
+                  1 - left button pressed
+                  2 - left button released
+                  3 - right button pressed
+                  4 - right button released
+                  5 to 15 not used.
+            address = address offset to the subroutine.
+
+
+
+Example:      main()
+              {
+                 setcallm(2, 0x40); /* calls the subroutine if left
+                                       button is pressed            */
+              }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 142
+
+     __________________________________________________________________
+
+                               setcur
+
+F
+      Passes a graphics cursor to the mouse driver allowing the user to
+      define the cursor shape and hot spot.
+
+
+     Call:   setcur(h_hot_spot, v_hot_spot, cursor);
+
+     Where:
+           h_hot_spot = horizontal hot spot for cursor
+           v_hot_spot = vertical hot spot for cursor
+           cursor     = pointer the the cursor screen and shape arrays
+
+
+
+     Example:   main()
+                {
+		   /*  see the mouse manual for examples on cursor arrays */
+                }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 143
+
+     __________________________________________________________________
+
+                               setcurp
+
+F     Sets the cursor position to a specified row an column.
+
+
+
+
+     Call:   setcurp(row, column);
+
+             row     =  row to set cursor in
+             column  =  column to set cursor in
+
+
+
+
+     Example:   main()
+                {
+                  sm(4);   /* set graphics mode  */
+                  /* move cursor to row 10, column 43 */
+                  setcurp(10, 43);
+                }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 144
+
+     __________________________________________________________________
+
+                               setcurt
+
+F     Sets the cursor type. (start and stop lines.)
+
+
+
+
+
+
+     Call:  setcurt(start, stop);
+
+            start  =  the line in character cell where cursor starts
+            stop   =  the line in character cell where cursor stops
+
+
+
+
+     Example:    main()
+                 {
+                    /*  set the normal 2 line high cursor  */
+
+                    setcurt(0,1);
+                 }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 145
+
+     __________________________________________________________________
+
+                               sethor
+
+F
+     Allows the user to set the maximum and minimum horizontal positions
+     for the mouse.  These values are defined by the virtual screen.  If
+     the cursor is outside the defined area when called, it moves to just
+     inside the area.  If the minimum is graeter the values are swapped.
+
+
+     Call:  sethor(min, max);
+
+     Where:
+            min  =  the minimum position
+            max  =  the maximum position
+
+
+
+     Example:   main()
+                {
+		   /*  see the mouse manual for examples */
+                }
+
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 146
+
+     __________________________________________________________________
+
+                               setmode
+
+F
+    Set the video mode.  Uses a C interrupt call.  The video mode is
+    defined from the following table.
+
+  IBM Modes
+    0  -   40x25    Monochrome text
+    1  -   40x25    Color text
+    2  -   80x25    Mono text
+    3  -   80x25    Color text
+    4  -   320x200  Color graphics
+    5  -   320x200  Mono graphics
+    6  -   640x200  2 color graphics
+    7  -   80x25    Monochrome adapter text
+
+  Tandy & PCjr modes
+    8  -   160x200  16 color graphics
+    9  -   320x200  16 color graphics
+   10  -   640x200  4 color graphics
+
+  EGA Modes
+   13  -   320x200  16 color graphics
+   14  -   640x200  16 color graphics
+   15  -   640x350  Mono graphics
+   16  -   640x350  4 or 16 color graphics
+
+     Call:  setmode(mode);
+
+     Where:
+            mode =  the desired video mode
+
+     Example:   main()
+                {
+		   setmode(4); /*  set 4 color graphics mode */
+                }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 147
+
+     __________________________________________________________________
+
+                               setpage
+
+F
+    Set the visual page or page being viewed as opposed to the active
+    page being written to.
+
+
+     Call:  setpage(page);
+
+     Where:
+            page =  the desired video page
+
+     Example:   main()
+                {
+		   setpage(0); /*  set page 0 */
+                }
+
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 148
+
+     __________________________________________________________________
+
+                               setfreq
+
+F                         Tandy 1000 only
+
+     Sound function to set a value into a sound register for a specified
+     voice.  The value to set is calculated by the formula:
+
+                        value = 111843 / frequency
+
+
+
+
+
+     Call:   setfreq(voice, frequency);
+
+             voice      =  voice ( 0-3)
+             frequency  =  frequency to set into voice register
+
+
+
+
+
+     Example:   main()
+                {
+                   /*  set a 1000 hz tone into voice 2 */
+
+                   setfreq(2, 1000);
+                }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 149
+
+     __________________________________________________________________
+
+                               setpal
+
+F                         Tandy 1000 only
+
+     Allows the user to set any color into a plalette register.
+
+
+
+
+
+
+     Call:   setpal(pal_reg, color);
+
+             pal_reg  =  the number of the palette register to change
+             color    =  color to set into palette register
+
+
+
+     Example:     main()
+                  {
+                     sm(4);  /*  set graphics mode */
+                     /*  set palette register 14 to color 4 (red);
+                     setpal(14, 4);
+                     /*  any reference to color 14 (yellow) will now
+                         display color 4 (red) instead.              */
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 150
+
+     __________________________________________________________________
+
+                               setpos
+
+F
+    Allows the user to set the current mouse cursor position.
+
+     Call:  setpos(hor, ver);
+
+     Where:
+            hor =  desired horizontal position, Must be inside the
+                   virtual screen limits
+            ver =  desired vertical position, Must be within the
+                   virtual screen limits
+
+     Example:   main()
+                {
+                    setpos(30, 20);
+                }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 151
+
+     __________________________________________________________________
+
+                               settxtc
+
+F
+     Select either a software of a hardware text cursor.  For the software
+     cursor this function defines the character attribute of the cursor
+     when in the text mode.  If a hardware cursor is selected this function
+     defines the first and last scan lines for the text cursor.
+
+
+
+     Call:  settxtc(type, first, second);
+
+     Where:
+            type   = 0 for software cursor
+                     1 for hardware cursor
+            first  = screen mask value if software cursor, number of first
+                     scan line if hardware cursor.
+            second = cursor mask value if software cursor, number of last
+                     scam line if hardware cursor.
+
+     Example:   main()
+                {
+                    setpos(0, 2, 5);
+                }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 152
+
+     __________________________________________________________________
+
+                               setver
+
+F
+     Allows the user to set the maximum and minimum vertical positions
+     for the mouse.   These values aredefined by the virtual screen.  If
+     the cursor is outside the defined area when called, it moves to just
+     inside the area.  If the minimum is greater the valuse are swapped.
+
+
+     Call:  setver(min, max);
+
+     Where:
+              min = the minimum position
+              max = the maximum position
+
+
+     Example:   main()
+                {
+                   /* see the mouse manual */
+                }
+
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 153
+
+     __________________________________________________________________
+
+                              siren
+F
+
+
+This function sounds a series of up and down glissandos simulating a siren
+sound.
+
+
+
+
+
+Call:         siren(number);
+
+              number = the number of up/down glissandos to sound */
+
+
+
+
+
+Example:      main()
+              {
+                 siren(5);  /* sound 5 up/down siren sounds */
+              }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 154
+
+     __________________________________________________________________
+
+                               sm
+
+F
+     Sets the video mode.  For this library to work properly all
+     graphics must be done in mode 4 for the IBM-PC version and in mode
+     9 for the tandy version.  The mode 4 version may be used on a
+     Tandy 1000 to create fully compatible IBM-PC programs.
+     In addition upon exiting a tandy version (mode 9) program the mode
+     must be reset back to mode 3.  Failure to do so will probably cause
+     the machine to crash.
+
+
+
+
+     Call:   sm(mode);
+
+             mode  =  video mode desired according to below table
+
+             Mode Table
+
+             0  -  40x25 balck and white
+             1  -  40x25 color
+             2  -  80x25 black and white
+             3  -  80x25 color
+             4  -  320x200 4 color graphics
+             5  -  320x200 black and white graphics
+             6  -  640x200 black and white graphics
+             7  -  EDo NOT Use!F
+             8  -  160x200 color graphics with 16 colors
+             9  -  320x200 color graphics with 16 colors
+             10 -  640x200 color graphics with 4 colors
+
+
+     Example:   main()
+                {
+                  sm(9);  /* set graphics mode 9 for Tandy 1000 */
+                }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 155
+
+     __________________________________________________________________
+
+                              spratio
+F
+
+     Sets the ratio of clicks to pixels.  The horizontal and vertical
+     ratios specify a number of clicks per 8 pixels.  Must be in the
+     range of 0 to 32767.
+
+
+
+     Call:   spratio(hor, ver);
+
+     Where:
+            hor = horizontal click/pixel ratio, default 8/8
+            ver = vertical click/pixel ratio, default 16/8
+
+
+Example:      main()
+              {
+                 spratio( 2, 3);
+              }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 156
+
+     __________________________________________________________________
+
+                              sscrcurp
+F
+
+     Set the screen cursor to the specified row and column.  The home
+     position is 0,0.   Used with window functions.
+
+
+     Call:   sscrcurp(row, col);
+
+     Where:
+            row = desired row;
+            col = desired column;
+
+Example:      main()
+              {
+                 sscrcurp(5, 8);
+              }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 157
+
+     __________________________________________________________________
+
+                               soundoff
+
+F                          Tandy 1000 only
+
+     Turns off the complex sound generator chip.
+
+
+
+
+
+
+
+
+     Call:   soundoff();
+
+
+
+
+     Example:    main()
+                 {
+                    /*  Turn off the complex sound generator chip */
+
+                    soundoff();
+                 }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 158
+
+     __________________________________________________________________
+
+                               soundon
+
+F                        Tandy 1000 only
+
+     Turns on the complex sound generator chip.  Must be called prior to
+     any call to other sound functions.
+
+
+
+
+
+     Call:   soundon();
+
+
+
+
+     Example:    main()
+                 {
+                    /* turn on the sound chip */
+                    soundon();
+                 }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 159
+
+     __________________________________________________________________
+
+                               spalreg
+
+F                          Tandy 1000 only
+
+     Changes the defined color of any palette register from 0 to 15.
+
+
+
+
+
+
+
+     Call:    spalreg(reg_num, color);
+
+              reg_num  =  register to change
+              color    =  new color fro the register
+
+
+
+
+
+
+     Example:     main()
+                  {
+                     sm(4);  /*  set graphics mode */
+                     /*  set palette register 14 to color 4 (red);
+                     spalreg(14, 4);
+                     /*  any reference to color 14 (yellow) will now
+                         display color 4 (red) instead.              */
+                  }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 160
+
+     __________________________________________________________________
+
+                               sstring
+
+F     Print a stroke character string on the graphics screen.
+
+
+
+
+
+
+     Call:   sstring(string, ulc, ulr, hmag, vmag, colorb, colorf);
+
+             string  =  string to be printed
+             ulc     =  upper left corner column
+             ulr     =  upper left corner row
+             hmag    =  horizontal magnification
+             vmag    =  vertical magnification
+             colorb  =  border outline color
+             colorf  =  color to use in filling characters
+
+
+
+
+
+     Example:     main()
+                  {
+                     sm(4);  /* set graphics mode */
+                     /* print the string "test" using stroke characters
+                        with a red outline and filled with yellow      */
+                     sstring("test", 10, 20, 2, 2, 4, 14);
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 161
+
+     __________________________________________________________________
+
+                               stchar
+
+F     Prints a single stroke character on the graphics screen
+
+
+
+
+
+     Call:   stchar(char, ulc, ulr, hmag, vmag, colorb, colorf);
+
+             char    =  character to be printed
+             ulc     =  upper left corner column
+             ulr     =  upper left corner row
+             hmag    =  horizontal magnification
+             vmag    =  vertical magnification
+             colorb  =  border outline color
+             colorf  =  color to use in filling characters
+
+
+
+
+
+     Example:     main()
+                  {
+                     sm(4);  /* set graphics mode */
+                     /* print the character 't' using stroke characters
+                        with a red outline and filled with yellow      */
+                      stchar('t', 10, 20, 2, 2, 4, 14);
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 162
+
+     __________________________________________________________________
+
+                               strclr
+
+F     Prints a string on the screen in one of 16 colors.
+
+
+
+
+
+     Call:    strclr(color, string);
+
+              color   =  color to use in printing string
+              string  =  string to print
+
+
+
+
+     Example:    main()
+                 {
+                    /*  print the string "test" in red */
+                    strclr(4, "test");
+                 }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 163
+
+     __________________________________________________________________
+
+                              strdel
+
+F     Deletes a substring from a given string starting at the character
+     numbered 'first' and continuing for 'number' of characters.
+
+
+
+
+     Call:   strdel(str, first, number);
+
+             str     =  string to be operated upon
+             first   =  character to start the delete operation
+             number  =  number of characters to delete
+
+
+
+     Example:     main()
+                  {
+                     /*  delete the word is */
+                     strdel("This is a test", 5,2);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 164
+
+     __________________________________________________________________
+
+                              strpad
+
+F     Pad a string with blanks on the left.
+
+
+
+
+
+
+
+     Call:   strpad(str, number);
+
+             str     =  string to be padded
+             number  =  number of spaces to be added to the left
+
+
+
+     Example:    main();
+                 {
+                    /* add 5 spaces to left of "This is a test" */
+                    strpad("This is a test", 5);
+                 }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 165
+
+     __________________________________________________________________
+
+                              strtolow
+
+F     Converts all characters in a string to lower case.
+
+
+
+
+
+
+
+     Call:   strtolow(str);
+
+             str  = string to be changed to all lower case.
+
+
+
+
+
+
+     Example:      main()
+                   {
+                      char *a = "Testing";
+                      strtolow(a);
+                   }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 166
+
+     __________________________________________________________________
+
+                              strtoup
+
+F     Converts all characters in a string to upper case.
+
+
+
+
+
+
+
+     Call:   strtoup(str);
+
+             str  = string to be changed to all upper case.
+
+
+
+
+
+
+     Example:      main()
+                   {
+                      char *a = "Testing";
+                      strtoup(a);
+                   }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 167
+
+     __________________________________________________________________
+
+                               turnleft
+
+F     Turns the turtle's current heading left by a specified number of
+     degrees.
+
+
+
+
+
+
+     Call:    turnleft(angle);
+
+              angle  =  angle to turn through
+
+
+
+
+
+     Example:    main()
+                 {
+                    sm(4);   /*  set graphics mode  */
+
+                    /*  turn the turtle's heading left 50 degrees */
+
+                    turnleft(50);
+                 }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 168
+
+     __________________________________________________________________
+
+                               turnright
+
+F     Turns the turtle's current heading right by a specified number of
+     degrees.
+
+
+
+
+
+
+     Call:    turnright(angle);
+
+              angle  =  angle to turn through
+
+
+
+
+
+     Example:    main()
+                 {
+                    sm(4);   /*  set graphics mode  */
+
+                    /*  turn the turtle's heading right 50 degrees */
+
+                    turnright(50);
+                 }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 169
+
+     __________________________________________________________________
+
+                               usrfont
+
+F
+     Select and print characters in various fonts on the graphics screen.
+
+
+
+
+
+
+
+     Call:   usrfont(char, ulc, ulr, hmag, vmag, color, font);
+
+             char   =  character to be printed
+             ulc    =  upper left corner column
+             ulr    =  upper left corner row
+             hmag   =  horizontal magnification
+             vmag   =  vertical magnification
+             color  =  color to use in printing character
+             font   =  an integer used to select which font.
+
+             Font Table:
+
+             0  -  Thin block all capital letters
+             1  -  small characters for sub/superscripts.  Generally
+                   defined in upper 4 columns and 4 rows of character cell.
+             2  -  NOT YET DEFINED
+             3  -  NOT YET DEFINED
+             4  -  NOT YET DEFINED
+
+
+     Example:     main()
+                  {
+                     sm(4);  /*  set graphics mode  */
+
+                     /*  print an 'A' from the sub/superscript font at
+                         twice normal size in color 3                 */
+                     usrfont('A', 10, 20, 2, 2, 3, 1);
+                  }
+
+
+
+     Unicorn 1 Documentation  3.1                                page 170
+     ____________________________________________________________________
+
+
+                                 wsm
+
+     Sets the video mode.  For this library to work properly all
+     graphics must be done in mode 4 for the IBM-PC version and in mode
+     9 for the tandy version.  The mode 4 version may be used on a
+     Tandy 1000 to create fully compatible IBM-PC programs.
+     In addition upon exiting a tandy version (mode 9) program the mode
+     must be reset back to mode 3.  Failure to do so will probably cause
+     the machine to crash.
+
+
+
+
+     Call:   sm(mode);
+
+             mode  =  video mode desired according to below table
+
+             Mode Table
+
+             0  -  40x25 balck and white
+             1  -  40x25 color
+             2  -  80x25 black and white
+             3  -  80x25 color
+             4  -  320x200 4 color graphics
+             5  -  320x200 black and white graphics
+             6  -  640x200 black and white graphics
+             7  -  EDo NOT Use!F
+             8  -  160x200 color graphics with 16 colors
+             9  -  320x200 color graphics with 16 colors
+             10 -  640x200 color graphics with 4 colors
+
+
+     Example:   main()
+                {
+                  sm(9);  /* set graphics mode 9 for Tandy 1000 */
+                }
+
+E
+     Unicorn Library Documentation  3.1                         page 171
+
+     __________________________________________________________________
+
+                                  wac
+
+F     Prints a character on the screen using an attribute byte.
+
+
+
+
+
+     Call:   wac(attribute, char);
+
+             attribute  =  attribute to use in printing character
+             char       =  character to be printed
+
+             attribute byte is formed according to below bit definitions
+
+             foreground;
+                        bit 0 = blue
+                        bit 1 = green
+                        bit 2 = red
+                        bit 3 = intensity
+             background;
+                        bit 4 = blue
+                        bit 5 = green
+                        bit 6 = red
+                        bit 7 = blink
+
+
+
+     Example:   main()
+                {
+                   /*  print the character 't' with a blue background
+                       using bright red character color.             */
+                   wac(28, 't');
+                }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 172
+
+     __________________________________________________________________
+
+                                waitkey
+
+F     Pauses the computer until a key is pressed.  It does NOT return
+     the key scan code or ascii value.
+
+
+
+
+
+
+     Call:   waitkey();
+
+
+
+
+
+     Example:   main()
+                {
+                   /* wait until a key is pressed */
+                   waitkey();
+                }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 173
+
+     __________________________________________________________________
+
+                               wbackclr
+
+F
+     Sets the background color / pallet / border color.  Used with
+     windows.
+
+
+
+
+
+
+     Call:  wbackclr(color, tag);
+
+     Where:
+               color = color desired
+               tag   = 0 for background color
+                       1 - palette for graphics modes
+                       1 - border color for text modes
+
+
+     Example:     main()
+                  {
+                     wbackclr(1, 0); /* set the background to blue */
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 174
+
+     __________________________________________________________________
+
+                               wbdot
+
+F
+     Window BIOS call to set a dot on the graphics screen.
+
+
+
+
+     Call:  wbdot(color, row, col);
+
+     Where:
+               color = color desired
+ 	       row   = row for desired dot
+               col   = col for desired dot
+
+
+     Example:     main()
+                  {
+                     wbdot(3, 30, 50);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 175
+
+     __________________________________________________________________
+
+                                  wco
+
+F     Prints a character only on the screen.  In the graphics modes a
+     color may be specified.
+
+
+
+
+     Call:    wco(char, color);
+
+              char   =  character to print
+              color  =  color to use, ignored in text modes
+
+
+
+
+     Example:     main()
+                  {
+                     /* prints the character 'W' */
+                     wco('W', 4);
+                     waitkey();  /* wait until a key is pressed */
+                     sm(4);     /*  set the graphics mode */
+                     /* print a 'W' in red on the graphics screen */
+                     wco('W', 4);
+                   }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 176
+
+     __________________________________________________________________
+
+                               wgbdot
+
+F
+     Window BIOS call to get the dot color on the graphics screen.
+
+
+
+
+     Call:  wgbdot(dummy, row, col);
+
+     Where:
+               dummy = unused parameter
+ 	       row   = row for desired dot
+               col   = col for desired dot
+
+
+     Example:     main()
+                  {
+                     int a;
+                     a = wgbdot(3, 30, 50);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 177
+
+     __________________________________________________________________
+
+                               wgetca
+
+F
+     Window call to read a character and attribute from the screen
+
+
+     Call:  wgetca(page);
+
+     Where:
+            page = the desired page to be read
+
+     Example:     main()
+                  {
+                     int a;
+                     a = wgetca(0);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 178
+
+     __________________________________________________________________
+
+                               wgetcurp
+
+F
+     Window call to get the current cursor postion.  Returns
+     (256*row + column).
+
+
+
+     Call:  wgetcurp(page);
+
+     Where:
+            page = the desired page to be read
+
+     Example:     main()
+                  {
+                     int a;
+                     a = wgetcurp(0);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 179
+
+     __________________________________________________________________
+
+                               wgetpen
+
+F
+     Returns the lightpen status.  Used as a part of windowing functions.
+
+
+
+     Call:  wgetpen(buffer);
+
+     Where:
+            buffer = a 4 bit integer.  Row and column positions are
+                     stored in buffer.
+
+     Return:
+            0 if pen not triggered or 1 if it was.
+
+     Example:     main()
+                  {
+                     int a;
+                     int buffer[4];
+
+                     a = wgetpen(buffer);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 180
+
+     __________________________________________________________________
+
+                               wnaddrow
+
+F
+     Inserts a row of blanks by scrolling the lower portion of a window
+     DOWN.  The current cursor row is inserted.
+
+
+     Call:  wnaddrow();
+
+
+
+     Example:     main()
+                  {
+                    wnaddrow();
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 181
+
+     __________________________________________________________________
+
+                               wnbndry
+
+F
+     Checks to see if the cursor is within the defined area of a window.
+     Returns a code indicating the cursor position status.
+
+     Call:  wnbndry(wn);
+
+
+
+     Example:     main()
+                  {
+                    wnbndry(wn);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 182
+
+     __________________________________________________________________
+
+                               wnceol
+
+F
+    Clear the window to the end of the current line.
+
+
+
+     Call:  wnceol(wn);
+
+
+
+     Example:     main()
+                  {
+                    wnceol();
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 183
+
+     __________________________________________________________________
+
+                               wnclose
+
+F
+     Erase the window at the current window control block.  If overlapping
+     windows are used then this must be the top window.
+
+
+     Call:  wnclose(wn);
+
+
+
+     Example:     main()
+                  {
+                    wnclose(wn);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 184
+
+     __________________________________________________________________
+
+                               wncls
+
+F
+     Clear the current window and home the cursor for the window.
+`
+
+     Call:  wncls(wn);
+
+
+
+     Example:     main()
+                  {
+                    wncls(wn);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 185
+
+     __________________________________________________________________
+
+                               wncur
+
+F
+     Provides cursor movement controls for the windows.  Primarily for
+     internal use but may be user accessed to provide for the building
+     of additional window functions.
+
+
+     Call:  wncur(wn, c);
+
+     Where:
+           wn  = the current window pointer
+           c   = the cursor control keystroke
+
+
+     Example:     main()
+                  {
+                    wncur(wn, c);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 186
+
+     __________________________________________________________________
+
+                               wndelch
+
+F
+     Deletes the character at the current window cursor position.
+
+     Call:  wndelch(wn);
+
+
+
+     Example:     main()
+                  {
+                    wndelch(wn);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 187
+
+     __________________________________________________________________
+
+                               wndelrow
+
+F
+     Deletes a row by scrolling the lower portion of a window UP and
+     inserting a row of blanks at the bottom of the window.	
+
+
+
+     Call:  wndelrow(wn);
+
+
+
+     Example:     main()
+                  {
+                    wndelrow(wn);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 188
+
+     __________________________________________________________________
+
+                               wngcurp
+
+F
+     Returns the relative window cursor position.  Row = wngcurp() & 0xFF
+     and Col = wngcurp >> 8.  The home position for a window cursor is
+     1, 1.
+
+
+
+     Call:  wngcurp(wn);
+
+
+
+     Example:     main()
+                  {
+                    wngcurp(wn);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 189
+
+     __________________________________________________________________
+
+                               wngetca
+
+F
+    Returns the character and attribute at row, column.
+
+
+     Call:  wngetca(row, col);
+
+
+
+     Example:     main()
+                  {
+                    int a.;
+                    a = wngetca(5, 10);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 190
+
+     __________________________________________________________________
+
+                               wngetch
+
+F
+    Returns the character at the window cursor location or a boundry
+    code if the cursor is outside the window.
+
+     Call:  wngetch(wn);
+
+
+
+     Example:     main()
+                  {
+                    int a.;
+                    a = wngetch(5, 10);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 191
+
+     __________________________________________________________________
+
+                               wngets
+
+F
+     Get the string at the current window cursor location.  The number
+     of characters to place in the string may be specified.  Reaching
+     this number or the end of the window terminates the function.  The
+     number of characters placed in the string is returned.
+
+
+
+     Call:  wngets(wn, string, count);
+
+     Where:
+           wn     = a pointer to the window
+           string = the string to stuff with window characters
+           count  = max length to be returned
+
+
+
+     Example:     main()
+                  {
+                    int a.;
+                    char b[11];
+                    a = wngets(wn, b, 10);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 192
+
+     __________________________________________________________________
+
+                               wngetstr
+
+F
+     This is very similar to the previous function except that it stuffs
+     a user typed string rather than one pre-existing in the window
+
+
+     Call:  wngetstr(wn, string, count);
+
+     Where:
+           wn     = a pointer to the window
+           string = the string to stuff with window characters
+           count  = max length to be returned
+
+
+
+     Example:     main()
+                  {
+                    int a.;
+                    char b[11];
+                    a = wngetstr(wn, b, 10);
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 193
+
+     __________________________________________________________________
+
+                               wninsch
+
+F
+     Inserts a character at the current widow cursor position.
+
+     Call:  wninsch(wn, ch);
+
+
+     Where:
+           wn     = a pointer to the window
+           ch     = the character to be inserted
+
+
+     Example:     main()
+                  {
+                    int a.;
+                    char b;
+                    b = 'a';
+                    a = wngetstr(wn, b);
+                  }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 194
+
+__________________________________________________________________________
+
+
+                              wnoise
+
+
+
+Sounds a white noise signal that is between two user selected frequencies.
+
+
+
+
+
+Call:         wnoise(low, high, duration);
+
+              low      = lowest frequency to use
+              high     = highest frequency to use
+              duration = time factor, larger number is longer time
+
+
+
+
+Example:      main()
+              {
+                 wnoise(100, 1000, 100); /* white noise between 100 & 1000 */
+              }
+
+
+
+
+
+Unicorn 1 Documentation  3.1                                      page 195
+
+__________________________________________________________________________
+
+
+                              wnopen
+
+
+    Open a window and store the underlying screen data.  The border is in
+    a separate structure.
+
+
+
+
+     Call:         wnopen(wbd, row, col, width, height, attribute);
+
+     Where:
+            wbd        = a border pointer
+            row        = upper left row for corner
+            col        = upper left col for corner
+            width      = width of window
+            height     = height of window
+            attribute  = attribute for window
+
+
+
+
+Example:      main()
+              {
+                 WINDOW *wnopen(wbd, row, col, width, height, attribute);
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 196
+     ____________________________________________________________________
+
+
+                                 wnpchar
+
+     Print a character as is at the current cursor window location.  Uses
+     cx and cy in the widow control structure block.
+
+
+
+     Call:    wnpchar(wn, ch);
+
+     Where:
+             wn  = window pointer
+             ch  = character to print
+
+
+
+
+Example:      main()
+              {
+                 wnpchar(wn, ch);
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 197
+     ____________________________________________________________________
+
+
+                                 wnprinta
+
+     Very similar to wnprintf except that this function allows the user
+     to specify a row an column position for the print.
+
+
+     Call:    wnprinta(row, col, wn, format_string, parameter_list);
+
+
+     Where:
+             row            =  row to start at
+             col            =  col to start at
+             wn             =  window pointer
+             format_string  =  similar to printf
+             parameter list =  maximum of 14
+
+
+
+
+Example:      main()
+              {
+                  wnprinta(row, col, wn, format_string, parameter_list);
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 198
+     ____________________________________________________________________
+
+
+                                 wnprintf
+
+    Similar to printf but works inside a window.
+
+
+     Call:    wnprintf(wn, format_string, parameter_list);
+
+
+     Where:
+             wn             =  window pointer
+             format_string  =  similar to printf
+             parameter list =  maximum of 14
+
+
+
+
+Example:      main()
+              {
+                  wnprintf(wn, format_string, parameter_list);
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 199
+     ____________________________________________________________________
+
+
+                                 wnputch
+
+    Print a character inside a window using the cursor position stored
+    in the window structure.  Processes CR, LF, BS, TAB and DEL keys.
+
+     Call:  wnputch(wn, ch);
+
+
+     Where:
+             wn  =  window pointer
+             ch  =  character to print
+
+
+
+Example:      main()
+              {
+                  wnputch(wn, 'a');
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 200
+     ____________________________________________________________________
+
+
+                                 wnputs
+
+    Print a string inside a window using the cursor position stored
+    in the window structure.  Processes CR, LF, BS, TAB and DEL keys.
+
+     Call:  wnputs(wn, string);
+
+
+     Where:
+             wn      =  window pointer
+             string  =  string to print
+
+
+
+Example:      main()
+              {
+                  wnputs(wn, "Testing");
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 201
+     ____________________________________________________________________
+
+
+                                 wnscroll
+
+     Scrolls the window up one line.
+
+
+     Call:  wnscroll(wn);
+
+
+     Where:
+             wn      =  window pointer
+
+
+
+Example:      main()
+              {
+                  wnscroll(wn);
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 202
+     ____________________________________________________________________
+
+
+                                 wnscurp
+
+
+     Sets the relative window cursor to the specified row and column.  If
+     either is zero the cursor is moved in the given axis the number of
+     spaces specified.  Positive is right or down.  Home position is 1, 1.
+
+
+     Call:  wnscurp(wn, row, col);
+
+
+     Where:
+             wn      =  window pointer
+             row     =  new cursor row
+             col     =  new cursor column
+
+
+
+Example:      main()
+              {
+                  wnscurp(wn, 3, 7);
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 203
+     ____________________________________________________________________
+
+
+                                 wnstrptr
+
+
+    Prints a string inside a window using the stored cursor position in
+    the window structure control block.
+
+     Call:  wnstrptr(wn, string);
+
+
+     Where:
+             wn      =  window pointer
+             string  =  string to be printed
+
+
+Example:      main()
+              {
+                  wnstrptr(wn, string);
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 204
+     ____________________________________________________________________
+
+
+                                 wnwac
+
+
+     Write a character and attribute to a specific row and column on the
+     screen.  The attribute must be located in the high byte of the
+     character.
+
+     Call:  wnwac(row, col, ch);
+
+
+     Where:
+            row = desired row
+            col = desired column
+            ch  = character to print
+
+
+Example:      main()
+              {
+                  wnwac(rowm col, ch);
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 205
+     ____________________________________________________________________
+
+
+                                 wscrldn
+
+
+      Scroll a window down.
+
+
+     Call:  wscrldn(wn, count, attribute);
+
+
+     Where:
+            wn        = pointer to window
+            count     = number of rows to scroll
+            attribute = attribute to place on new rows
+
+
+Example:      main()
+              {
+                  wscrldn(wn, count, attribute);
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 206
+     ____________________________________________________________________
+
+
+                                 wscrlup
+
+
+      Scroll a window up.
+
+
+     Call:  wscrlup(wn, count, attribute);
+
+
+     Where:
+            wn        = pointer to window
+            count     = number of rows to scroll
+            attribute = attribute to place on new rows
+
+
+Example:      main()
+              {
+                  wscrlup(wn, count, attribute);
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 207
+     ____________________________________________________________________
+
+
+                                 wsetcurp
+
+
+     Set the cursor position to a specified row, col.
+
+     Call:  wsetcurp(row, col, page);
+
+
+     Where:
+           row   = desired row
+           col   = desired col
+           page  = desired page
+
+
+     Example:      main()
+                   {
+                      wsetcurp(4, 7);
+                   }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 208
+     ____________________________________________________________________
+
+
+                                 wsetcurt
+
+
+     Set the cursor type by defining a start and end row for the cursor.
+
+     Call:  wsetcurt(start, end);
+
+
+     Where:
+            start = starting line for cursor.
+            end   = ending line for cursor.
+
+Example:      main()
+              {
+                  wsetcurt(4, 7);
+              }
+
+
+
+
+
+     Unicorn 1 Documentation  3.1                                page 209
+     ____________________________________________________________________
+
+
+                                 wsetpage
+
+
+     Set the page.
+
+     Call:  wsetpage(page);
+
+
+     Where:
+            page = desired video page
+
+
+
+
+Example:      main()
+              {
+                  wsetpage(0);
+              }
+
+
+
+
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 210
+
+     __________________________________________________________________
+
+                                wtty
+
+F     Prints a character and attribute on the screen.  It advances the
+     cursor and responds to control characters.
+
+
+
+
+
+
+     Call:   wtty(attribute, character);
+
+             attribute  =  attribute to use in printing character
+             char       =  character to be printed
+
+             attribute byte is formed according to below bit definitions
+
+             foreground;
+                        bit 0 = blue
+                        bit 1 = green
+                        bit 2 = red
+                        bit 3 = intensity
+             background;
+                        bit 4 = blue
+                        bit 5 = green
+                        bit 6 = red
+                        bit 7 = blink
+
+
+
+     Example:   main()
+                {
+                   /*  print the character 't' with a blue background
+                       using bright red character color.             */
+                   wtty(28, 't');
+                }
+
+
+
+     Unicorn 1 Documentation  3.1                                page 211
+     ____________________________________________________________________
+
+
+                                 wwac
+
+    Write the character and attribute at the current window cursor location.
+
+
+
+    Call:   wwac(ch, page, count);
+
+    Where:  ch    = character to write
+            page  = video page
+            count = number of times to write the character
+
+
+
+     Example:   main()
+                {
+                  wwac(ch, page, count);
+                }
+
+     Unicorn 1 Documentation  3.1                                page 212
+     ____________________________________________________________________
+
+
+                                 wwco
+
+    Write the character only at the current window cursor location.
+
+
+
+    Call:   wwco(ch, page, count);
+
+    Where:  ch    = character to write
+            page  = video page
+            count = number of times to write the character
+
+
+
+     Example:   main()
+                {
+                  wwac(ch, page, count);
+                }
+
+

@@ -1,0 +1,7 @@
+setwntxt.obj: setwntxt.c
+  cl -c -Fs -W2 -AS -Gsw -Od -Zped setwntxt.c
+
+setwntxt.exe: setwntxt.obj setwntxt.def
+    link4 setwntxt,/align:16,,slibw,setwntxt.def
+    del setwntxt.obj
+    del setwntxt.map

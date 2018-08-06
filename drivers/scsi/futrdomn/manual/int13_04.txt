@@ -1,0 +1,17 @@
+Code 04                                  -Disk Verify
+
+Input registers - As defined under general assignment except for the ES:BX. 
+There is no buffer associated with this command.
+
+Special output registers - none.
+
+Operation:
+
+    This command is executed in the same manner as the Disk Read with the 
+    exception that the data read from disk is not stored anywhere. The 
+    purpose of this command is to verify that there are no read errors 
+    detected.
+
+    If there is an error reported, the SCSI Request Sense command is issued 
+    and the results of the Sense command returned in AH/AL.
+

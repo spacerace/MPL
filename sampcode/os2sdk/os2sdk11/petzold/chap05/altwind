@@ -1,0 +1,9 @@
+#-------------------
+# ALTWIND make file
+#-------------------
+
+altwind.obj : altwind.c
+     cl -c -G2sw -W3 altwind.c
+
+altwind.exe : altwind.obj altwind.def
+     link altwind, /align:16, NUL, os2, altwind

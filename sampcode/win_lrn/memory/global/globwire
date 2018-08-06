@@ -1,0 +1,7 @@
+
+globwire.obj: globwire.c
+   cl -c -W2 -AS -Gsw -Od -Zped globwire.c
+
+globwire.exe: globwire.obj globwire.def
+   link4 globwire,/align:16,/map/li,slibw/NOE,globwire.def
+   mapsym globwire

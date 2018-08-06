@@ -1,0 +1,16 @@
+NAME    Tiler
+
+DESCRIPTION 'Windows Tiler by Michael Geary'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE    1024
+
+STACKSIZE   4096
+
+EXPORTS
+    TilerWndProc    @1
+

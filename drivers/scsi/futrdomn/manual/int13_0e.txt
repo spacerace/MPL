@@ -1,0 +1,18 @@
+Code 0E                                  -Read Local Buffer
+
+Input registers - ES:BS points to the caller's 512 byte buffer.
+
+Special output registers - none.
+
+Operation (For Host adapters using BIOS 4.0):
+
+    The contents of a local 512 byte buffer are returned to the 
+    caller. This is the same data written out by the Write Local 
+    Buffer command. The command is one of the diagnostic tests 
+    for the adapter.
+
+Operation (for Host adapters using BIOS 1.0-1.2, 5.0-5.2 or 6.0):
+
+    This command is not implemented. There is insufficient RAM on the
+    adapter to store the required information.
+

@@ -1,0 +1,40 @@
+Future Domain's OEM Developer Tool Kit is designed to provide the writer of
+device drivers and utilities with the information needed to effectively
+utilize the complete line of SCSI host adapter products produced by Future
+Domain. The Tool Kit consists of this manual and a DOS compatible diskette
+that contains example routines for both the ROM BIOS interface and the OEM
+interface. This code (written in "C" language and assembly language) is 
+provided on a license basis, but may be included in your driver with no 
+royalty cost to you.
+
+Future Domain's product line currently consists of the following host
+adapters:
+        TMC-850              TMC-1660
+        TMC-860              TMC-1680
+        TMC-875              MCS-700
+        TMC-885              MCS-350
+                     
+The following host adapters are old product lines and are not currently sold
+through regular channels, but are supported through this version of the
+OEM Developers Tool Kit :
+
+        TMC-820              TMC-870
+        TMC-830              TMC-880
+        TMC-840
+
+Two levels of support are provided. One level is the interface to Future
+Domain's proprietary ROM BIOS, and the other is the OEM Interface Routines, a 
+general purpose interface direct to Future Domain's SCSI adapter I/O ports.
+
+Although the hardware design of these products is different, they all share a
+similar ROM BIOS interface and a common set of OEM Interface Routines. The
+ROM BIOS and the OEM Interface routines allow writing code that does not need
+to communicate with the SCSI interface directly and is therefore immune to
+hardware differences.  All low level I/O is handled by these routines to allow
+portability of user code among different Future Domain products, current and
+future.
+      
+
+      
+      
+

@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "GethDC.h"
+
+GethDC MENU
+    BEGIN
+        POPUP "Menu"
+           BEGIN
+              MENUITEM "&GetDC",                            IDM_GETHDC
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

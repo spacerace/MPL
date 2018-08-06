@@ -1,0 +1,8 @@
+; COMTALK definition file
+; Created by Microsoft Corporation, 1989
+;
+NAME		ComTalk		WINDOWAPI
+DESCRIPTION	'PM Communications Program'
+PROTMODE
+HEAPSIZE	1024
+STACKSIZE	8192

@@ -1,0 +1,233 @@
+ 
+
+                                                                       PAGE   1
+                                                                       08-01-88
+                                                                       10:24:03
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+      1  /*
+      2   *  TranslateAccelerator
+      3   *  transacc.c
+      4   *
+      5   * This program demonstrates the use of the function TranslateAccelera
+         tor.
+      6   * When the function keys F9 or F10 are pressed then a message box app
+         ears
+      7   * which notifies the user that the TranslateAccelerator function has
+      8   * successfully converted and dispatched an accelerator message.
+      9   *
+     10   * All messages to this application are first passed to the
+     11   * TranslateAccelerator function.  TranslateAccelerator will compare
+     12   * the message to a predefined accelerator to see if they match.  If
+     13   * the message doesn't match then TranslateAccelerator returns a 0,
+     14   * and the message will be processed normally using TranslateMessage
+     15   * and DispatchMessage.  If they do match, the message is an accelerat
+         or,
+     16   * and the routine translates the message into a WM_COMMAND or
+     17   * WM_SYSCOMMAND message.
+     18   */
+     19  
+     20  #include <windows.h>
+     21  #include "transacc.h"
+     22  
+     23  static HANDLE hInst;
+     24  
+     25  int     PASCAL WinMain (hInstance, hPrevInstance, lpszCmdLine, cmdShow
+         )
+     26  HANDLE    hInstance, hPrevInstance;
+     27  LPSTR     lpszCmdLine;
+     28  int       cmdShow;
+     29    {
+     30    MSG       msg;
+     31    HWND      hWnd;
+     32    BOOL      bDecrementDisplayCount = 0;
+     33    BOOL      bIncrementDisplayCount = 1;
+     34    short     nResult;
+     35    WNDCLASS  Class;
+     36  
+     37    Class.lpfnWndProc    = TransAccelWindowProc;
+     38    Class.hCursor        = LoadCursor (NULL, IDC_ARROW);
+     39    Class.lpszMenuName   = MAKEINTRESOURCE (TRANSACCELMENU1);
+     40    Class.lpszClassName  = (LPSTR)"Window";
+     41    Class.hbrBackground  = (HBRUSH)GetStockObject (WHITE_BRUSH);
+     42    Class.hInstance      = hInstance;
+     43    Class.style          = CS_HREDRAW | CS_VREDRAW;
+     44  
+     45    if (!RegisterClass ( (LPWNDCLASS)&Class))
+     46      return FALSE;
+     47  
+     48    hInst = hInstance;
+     49  
+     50    hWnd = CreateWindow ( (LPSTR)"Window",
+     51                       (LPSTR)"ShowCaret",
+     52                       WS_OVERLAPPEDWINDOW,
+ 
+
+                                                                       PAGE   2
+                                                                       08-01-88
+                                                                       10:24:03
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+     53                       CW_USEDEFAULT,          /* x         */
+     54                       CW_USEDEFAULT,          /* y         */
+     55                       CW_USEDEFAULT,          /* width     */
+     56                       CW_USEDEFAULT,          /* height    */
+     57                       (HWND)NULL,             /* no parent */
+     58                       (HMENU)NULL,            /* use class menu */
+     59                       (HANDLE)hInstance,      /* handle to window insta
+         nce */
+     60                       (LPSTR)NULL);           /* no params to pass on *
+         /
+     61  
+     62    ShowWindow (hWnd, cmdShow);
+     63    UpdateWindow (hWnd);
+     64  
+     65    while (GetMessage ( (LPMSG) & msg, NULL, 0, 0))
+     66      if (TranslateAccelerator (msg.hwnd, LoadAccelerators (hInstance,
+     67          MAKEINTRESOURCE (TRANSACCELMENU1)), (LPMSG) & msg) == 1)
+     68        MessageBox (hWnd, (LPSTR)"TranslateAccelerator processed a messa
+         ge",
+     69            (LPSTR)"Done", MB_OK);
+     70      else
+     71        {
+     72        TranslateMessage ( (LPMSG) & msg);
+     73        DispatchMessage ( (LPMSG) & msg);
+     74        }
+     75  
+     76    return TRUE;
+     77    }
+
+
+WinMain  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+nResult . . . . . . . . . auto                             -0034 
+bDecrementDisplayCount. . auto                             -0032 
+msg . . . . . . . . . . . auto                             -0030 
+bIncrementDisplayCount. . auto                             -001e 
+Class . . . . . . . . . . auto                             -001c 
+hWnd. . . . . . . . . . . auto                             -0002 
+cmdShow . . . . . . . . . param                             0004
+lpszCmdLine . . . . . . . param                             0006
+hPrevInstance . . . . . . param                             000a
+hInstance . . . . . . . . param                             000c
+
+     78  
+     79  long    FAR PASCAL TransAccelWindowProc (hWnd, message, wParam, lParam
+         )
+     80  HWND     hWnd;
+     81  unsigned message;
+     82  WORD     wParam;
+     83  LONG     lParam;
+     84    {
+     85    switch (message)
+     86      {
+     87      case WM_COMMAND:
+ 
+
+                                                                       PAGE   3
+                                                                       08-01-88
+                                                                       10:24:03
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+     88        TransAccelMenuProc (hWnd, wParam);
+     89        break;
+     90  
+     91      default:
+     92        return (DefWindowProc (hWnd, message, wParam, lParam));
+     93        break;
+     94      }
+     95    return (0L);
+     96    }
+
+
+TransAccelWindowProc  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+lParam. . . . . . . . . . param                             0006
+wParam. . . . . . . . . . param                             000a
+message . . . . . . . . . param                             000c
+hWnd. . . . . . . . . . . param                             000e
+
+     97  
+     98  void TransAccelMenuProc (hWnd, wId)
+     99  HWND hWnd;
+    100  WORD wId;
+    101    {
+    102    HMENU hMenu;
+    103  
+    104    switch (wId)
+    105      {
+    106      case ID_NEXT:
+    107        hMenu = GetMenu (hWnd);  /*  Get the old menu  */
+    108        DestroyMenu (hMenu);     /*  Get rid of it  */
+    109        hMenu = LoadMenu (hInst, MAKEINTRESOURCE (TRANSACCELMENU2));
+    110        SetMenu (hWnd, hMenu);
+    111        DrawMenuBar (hWnd);
+    112        break;
+    113  
+    114      case ID_PREV:
+    115        hMenu = GetMenu (hWnd);  /*  Get the old menu  */
+    116        DestroyMenu (hMenu);     /*  Get rid of it  */
+    117        hMenu = LoadMenu (hInst, MAKEINTRESOURCE (TRANSACCELMENU1));
+    118        SetMenu (hWnd, hMenu);
+    119        DrawMenuBar (hWnd);
+    120        break;
+    121      }
+    122    }
+
+
+TransAccelMenuProc  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hMenu . . . . . . . . . . auto                             -0002 
+hWnd. . . . . . . . . . . param                             0004
+wId . . . . . . . . . . . param                             0006
+
+ 
+
+                                                                       PAGE   4
+                                                                       08-01-88
+                                                                       10:24:03
+
+                                              Microsoft C Compiler Version 5.10
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+CreateWindow. . . . . . . extern  far function       ***     ***
+DefWindowProc . . . . . . extern  far function       ***     ***
+DestroyMenu . . . . . . . extern  far function       ***     ***
+DispatchMessage . . . . . extern  far function       ***     ***
+DrawMenuBar . . . . . . . extern  far function       ***     ***
+GetMenu . . . . . . . . . extern  far function       ***     ***
+GetMessage. . . . . . . . extern  far function       ***     ***
+GetStockObject. . . . . . extern  far function       ***     ***
+LoadAccelerators. . . . . extern  far function       ***     ***
+LoadCursor. . . . . . . . extern  far function       ***     ***
+LoadMenu. . . . . . . . . extern  far function       ***     ***
+MessageBox. . . . . . . . extern  far function       ***     ***
+RegisterClass . . . . . . extern  far function       ***     ***
+SetMenu . . . . . . . . . extern  far function       ***     ***
+ShowWindow. . . . . . . . extern  far function       ***     ***
+TransAccelMenuProc. . . . global  near function      ***    01aa
+TransAccelWindowProc. . . global  far function       ***    0147
+TranslateAccelerator. . . extern  far function       ***     ***
+TranslateMessage. . . . . extern  far function       ***     ***
+UpdateWindow. . . . . . . extern  far function       ***     ***
+WinMain . . . . . . . . . global  near function      ***    0000
+hInst . . . . . . . . . . static  unsigned int         2    0000
+pLocalHeap. . . . . . . . common  near pointer         2     ***
+
+Code size = 0250 (592)
+Data size = 0046 (70)
+Bss size  = 0002 (2)
+
+No errors detected

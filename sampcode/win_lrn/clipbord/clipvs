@@ -1,0 +1,6 @@
+clipvs.obj: clipvs.c
+    cl -c -d -AS -Gsw -Os -Zpe clipvs.c
+
+clipvs.exe: clipvs.obj clipvs.def
+    link4 clipvs,/align:16,/map, slibw/NOE, clipvs.def
+    mapsym clipvs

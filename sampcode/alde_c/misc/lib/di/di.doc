@@ -1,0 +1,302 @@
+	 Documentation for DI: Directory Listing Utility  v 1.1
+
+			by  John H. DuBois III
+
+     DI is a directory listing program, similar to to the DOS command DIR.
+However, it has several extensions beyond the capabilities offered by DIR.
+These extensions are:
+   * More than one file specification can be given on the command line.
+   * Filespecs can have wildcards in the directories of a path as well
+as the file name, so that one filespec can specify mulitiple directories
+to be searched.
+   * Implicit wildcards in the path are converted to explicit wildcards.
+   * A recursive search of directories can be specified.
+   * The attributes of directory entries to search for can be specified.
+   * Hidden, system, and volume label entries can be listed.
+   * The files found in each directory can be sorted according to various
+criteria; groups of entries that are not differentiated by the selected
+criteria are then sorted by filename.
+   * The total space used by the files listed in each dir can be printed.
+   * The printing of the free space on the device can be toggled off.  Most
+hard drives take several seconds to determine the amount of free space; this
+option can avoid the delay.
+   * The printing of headers can be toggled off.  In this case only the file
+listing will be printed.  This is often used when the output of DI is being
+piped to some other program.
+   * In addition to "wide" and "long" listings, entries can be listed
+with their full path, without a header for each directory listed.
+   * When dirs are listed in "long" form, file attributes are listed along
+with the usual information.  When dirs are listed in "wide" form, the number
+of names printed on each line can be specified.  When dirs are listed in
+"wide" or "full path" form, a backslash is appended to entries that are
+subdirectories to indicate this.
+   * Unless printing of subdirectory entries is specifically requested (rather
+than by default) the "." and ".." entries in subdirectories are not printed.
+   * Defaults for file attributes to search for and listing specifications
+can be given by setting an environment variable.
+   * If the listing is paused, pressing any key except <space> or 'q' will
+cause only one line to be printed (and one line scrolled off) before pausing
+again.  If 'q' is pressed, the listing is aborted.
+   * The pause message and all error messages are sent to the screen even if
+output is redirected.
+
+     File Specifications
+
+     Multiple Filespecs:
+     If more than one filespec is given on the command line, each filespec
+will be acted on in turn, from left to right.
+     Directory names with wildcards:
+     If a component of a path other than the trailing name contains wildcards,
+the path is expanded to multiple paths, where the wildcard-containing dir
+name has been replaced with all matching dirs.  For example, if TEMP, TEXT,
+and TURBOC are children of the root directory, the filespec  \t*\*.*  would be
+expanded to  \TEMP\*.* \TEXT\*.* \TURBOC\*.* .  The contents of all three dirs
+would be printed in turn, just as though you had given all of them on the
+command line.  This filespec would NOT have caused ordinary entries in the root
+directory that started with t to be listed.
+     Similarly, the filespec  \*.*\*.*\*.c (or, as the next section
+demonstrates, simply  \\\.c ) will cause the entries of all third-level dirs
+with the file extension ".c" to be printed.
+     Implicit Wildcards:
+     A file or directory name given in a path contains implicit wildcards
+if a file name or file extension is not given.  A directory name is assumed
+to exist between every pair of backslashes, and a directory or file name
+after the trailing backslash.  If the path has no backslashes it is assumed
+to be a single name.
+     Implicit wildcards will be replaced with explicit wildcards.  For
+example,  c:\t*\\.exe  is expanded to  c:\t*.*\*.*\*.exe .  To specify a
+name that does not have an extension without having it expanded to include
+a wildcard extension, end it with a dot.  "NAME." will not be expanded to
+"NAME.*".  If  \temp  is a directory, it will be expanded to  \temp\*.* ;
+otherwise it will be expanded to  \temp.* .
+     Recursive search:
+     If the recursive search flag (/c) is given, each filespec will be
+split into target directory and file name.  For example,  \turboc\progs\*.c
+is split into  \turboc\progs\  and  *.c .  All descendant directories of the
+target dir are then found, and are added to the list of dirs to search with
+the orignal file name as filename.  For example,  \turboc\progs\*.c  might
+be expanded to
+ \turboc\progs\*.c  \turboc\progs\emulator\*.c  \turboc\progs\ustop\*.c .
+If  \turboc\progs\emulator  or  \turboc\progs\ustop  had had child dirs, they
+would have been added to the list as well.  Thus,  the arguments  \.com /c
+specify a recursive search starting at the root for all .com files.  All
+.com files on the disk (except hidden ones) will be listed.  Similarly,  \ /c
+will produce a complete listing of all non-hidden files on the disk.
+     Each time the flag is given, it toggles recursive search.  If it was off,
+it is turned on; if on, off.  The final value determines whether a recursive
+search of the filespecs is done.
+     Order of expansion:
+     Paths containing wildcards in directories are first expanded to multiple
+paths.  Then, if recursive search has been specified, the descendant dirs of
+all target dirs are added.
+
+     All of the above path expansions cause each new paths to be added to the
+list of directories to search, just as though they were given on the command
+line.  Thus,  \.com /c  will cause a listing all directories, even if they
+do not have any .com files.  Directories with no .com files will simply report
+"0 matching files.".  If only a few dirs contain .com files, most of the
+printout will be reports of "0 matching files".  In this case, the "full path"
+type listing (described later) can be useful.
+
+     The following describes flags that are used to specify the type of search
+and listing.  Flag groups are preceded by one of the flag specifiers '/' and
+'-'.  The particular flag specifier used does not have any significance. All
+command line arguments that do not begin with one of those characters are
+assumed to be filespecs.  DOS does not recognize '-' as a flag specifier, so it
+must be preceded by a space.  For example, DI/c is legal, but DI-c is not. The
+latter must be entered as DI -c .
+     All flags in one command line argument are considered to be part of a
+group.  The positioning of flag groups on the command line relative to file
+specs has no significance.  Flags can preceed filespecs, succeed them, or be
+interspersed with them.  The specific group that a flag is put in has
+significance only for attribute flags.  For example, h, s, and v  are attribute
+flags;  w, p, and 6 are not.  Therefore,  DI /wp /6  will have the same
+effect as  DI /w /p6 , but DI /hs /v will not have the same effect as DI /hsv .
+Attribute flags can be given in the same group as non-attribute flags; the
+attribute term that is produced from the group will be the same as if only
+attribute flags were given and the other flags will be interpreted the same as
+if they had been given by themselves.
+     The order of flags within groups, and the order of groups on the command
+line, has significance only when mutually exclusive flags are given.  In this
+case, the last flag given will hold and the previous (conflicting) flag will
+be cancelled.  For example, /x and /t are mutually exclusive because they
+specify different sorts.  DI /xt will have the same effect as DI /t .  All
+flags that are given on the command line affect all filespecs that are given
+on the command line.
+
+     Attributes:
+     Files have six attributes: Hidden, system, read-only, volume, directory,
+and archive.  Hidden files are not listed by DIR and are not acted on by most
+DOS commands.  System files have the same characteristics as hidden files and
+are part of DOS.  Read-only files can not be erased or overwritten, but can
+be renamed.  The volume attribute specifies that the entry is the volume label.
+The directory attribute specifies subdirectories and the entries that give the
+name of the current and parent dirs ("." and "..").  The archive attribute
+indicates files that have been added or altered since the last backup.  The
+archive attribute is set on all floppy files.
+     Files that have or do not have specific attributes can be searched for
+with the first letter of the attribute.  The letter, in lower case ('h', 's',
+'r', 'v', 'd', or 'a'), specifies that files must have the attribute to match.
+In upper case ('H', 'S', 'R', 'V', 'D', or 'A'), it specifies that that files
+must not have the attribute to match.  For example,  /hsR specifies that only
+files that are hidden and system and are not read-only should be listed. The
+'e' flag specifies that Everything should be printed, including hidden, system,
+and volume entries.
+     Flags that specify a number of attributes that an entry must have all of
+in order to be listed must be given in a single group.  More than one group of
+attribute flags can be given.  In this case, an entry will be listed if it
+matches any of the groups.  For example,  /hsR /dA  will cause a listing of
+all entries that are hidden, system, and not read-only, OR that are directories
+without the archive bit set.
+     If hidden files, system files, and the volume label are not specifically
+requested, they will not be listed.  If directory entries are not specifically
+requested, the "." and ".." entries in subdirectories are not printed.  Also,
+the "." and ".." entries will not be printed if a recursive listing is done,
+even if directories are specified (to make a recursive listing of directories
+cleaner).
+
+     Sorting:
+     Directory entries can be sorted by directory attribute, file extension,
+time and date, or size.  Groups of entries that are not differentiated by
+this first sort are then sorted in alphabetical order by file name.
+     The 'i' flag specifies sort by dIrectory attribute.  When a directory is
+listed, entries that are subdirectories will be printed first, then ordinary
+files.
+     The 'x' flag specifies sort by file eXtension.  Entries without a file
+extension will be listed first.  Then, files will be listed in alphabetical
+order of their extensions.
+     The 't' flag specifies sort by Time and date.  Entries are listed in order
+of those with the earliest time and date to those with the latest.
+     The 'z' flag specifies sort by siZe.  Entries are listed in order of
+smallest to largest.  If subdirectory entries or the volume label are found in
+the directory, they will be listed first since they have a size of 0.
+     The 'n' flag specifies that no preliminary sort is to be done; the dir
+will thus be sorted by file Name only.
+
+     Listing types:
+     Directories can be listed in long, wide, or full path form.
+     The 'l' flag specifies Long listing.  Entries will be listed in this form:
+NAME   EXT   SIZE   DATE   TIME    ATTRIBUTES
+Subdirectory entries and the volume label always have a size of 0, so a label
+will be printed instead of size.  The ATTRIBUTES column gives the first letter
+of all of the attributes that the entry has.  For example, the IBMBIO.COM
+file has the attribues RHSA : read-only, hidden, system, and attribute.
+     The 'w' flag specifies a Wide listing.  Only the file name of the entry
+is printed.  If the entry is a subdirectory, a '\' is appended to the file
+name to indicate this.  Several names are normally printed on each line.  The
+number of entries printed per line is controlled by the flags '1', '2', ...
+'6', which specify that that many entries/line will be printed when listing in
+wide mode.  The names will be evenly spaced on the line.  If six entries/line
+is specified, there will be only one space between a file name with a full 12
+characters and the file name that follows it.  If the file name has 12 char-
+acters and the entry is a subdirectory (and thus has a '\' appended to it)
+there will not be any spaces at all.
+     The 'f' flag specifies a Full path listing.  In this case, the directory
+header (which normally gives the name of the directory and the number of
+matching files) is not printed.  Instead, the size, date, time, and attributes
+of each matching file are printed, followed by the full path of the file.  If
+the entry is a subdirectory, a '\' is appended to indicate this.  One
+entry/line is printed; if the full path is more than 44 characters long it will
+wrap around to the next line.  This type of listing is useful when a path
+expansion (as a result of wildcards in the directories of the path name, or
+the recursive search option) is done.  For example,  DI \.com /cf  will print
+all .com files on the disk.  No indication of the directories searched is given
+except as they appear in the paths of the files listed.  This prevents numerous
+directory headers with "0 matching files" from being printed.
+
+     Pause:
+
+     The 'p' flag specifies to pause after listing each screenful of entries.
+The internal default is no pause.  Each time the flag is found, pause is
+toggled.  Its final value after the environment var and command line arguments
+have been read determines whether pausing is done.
+     When output has been paused, if <space> is pressed, another screenful of
+listing will be displayed.  If 'q' or 'Q' is pressed, listing is aborted.  If
+any other key is pressed, one more line is printed and then output is paused
+again.
+
+     Setting default flags:
+
+     Default listing specifications can be given by setting the environment
+variable DI.  When DI is run, it first checks to determine if this variable
+exists.  If so, the string that it is set to is interpreted almost exactly
+like arguments on the command line.
+     If filespecs are given, they will replace the internal default of "*.*",
+though there would seem to be little call for any other default.
+     If attribute groups are given, they will replace the internal default of
+HSV (list everything except hidden, system, and volume label entries).
+     If the /c flag is  given, it toggles the initial setting of no recursive
+search.  The value that the recursive search flag has when interpretation of
+the variable is completed determines whether any filespecs given in the
+variable are searched recursively.  Recursive expansion of the filespecs
+given in the variable is done before the command line arguments are read, so
+a /c flag given on the command line can not toggle off recursive search of
+filespecs given in the variable, if recursive search is also specified in the
+variable.  Note that neither filespecs nor recursive search flag would normally
+be given in the variable...
+     Replacement of defaults set by the variable by command line arguments:
+     If any filespecs are given on the command line, the internal default or
+the default list produced from the variable is replaced.
+     If any attribute groups are given on the command line, the internal
+default or the default groups produced from the variable are replaced.
+     The /c (recursive search) flag will start out 'off' regardless of what was
+given in the variable.
+     The other flags act as though they had preceded the command line arguments
+(if any) on the command line.  Anything they set can be changed by arguments
+given on the command line.  For example, setting DI to  "/pf6nu /HSVD"  will
+change the defaults to pause; full path  listing; 6 entries/line when listing
+wide; sort by name only; do not print free space; and list everything that is
+not a hidden, system, volume label, or dir entry.  If the command
+DI /pw5zu /d  is given, pause will be toggled back off; a wide listing with 5
+entries/line will be printed; dir entries will be sorted by size; free space
+will be printed; and only subdirectory entries will be listed.
+     Environment variables are set with the SET command in DOS.  For example,
+to set the defaults to pause, and print wide with 6 entries/line, issue the
+command:  SET DI=/pw6
+
+     Headers:
+
+     Before any directories are printed, the volume labels and, depending on
+the -u flag, the free space are normally printed for all drives that were
+specified in any filespec, including the default drive if appropriate.  The
+-k flag can be used to suppress printing of this header as well as the headers
+for each directory.
+     The header printed for each directory normally includes the total space
+used by the files listed for that directory.  If the free space listing has
+been toggled off, printing of the total space used is also turned off because
+the same sometimes time-consuming operations are performed when determining
+the space used.  The space used is the sum of the space used by all of the
+sectors allocated to the files; files do not usually exactly fill the space
+allocated to them so the total space used will generally be larger than the
+sum of all of the file sizes.  The space used is rounded up to the nearest
+1k; most disk formats except single-sided floppies allocate storage in
+multiples of 1k so this will not normally have any effect.
+
+     Defaults:
+
+     The internal defaults are:
+     Filespec : "*.*".  Pause after each page: No.  Listing type: Long.
+Number of entries/line to print if listing wide: 5.  Recursive search: No.
+First sort: By dir attribute.  Print free space on device in heading: Yes.
+File attributes to search for: List all files that are not hidden, system, or
+volume label entries.  Print headers: Yes.
+
+     Flag summary:
+     Pause during listing;  list Long, Wide, or with Full path;
+print 1-6 entries / line if listing wide;  search directories reCursively;
+sort first by dIr attrib, eXtension, Time and date, siZe, or Name only;
+Kill headers;  print Unused (free) space on device in heading;
+print files with attribs: Everything (print all files), or
+Read only, Hidden, System, Directory, Volume label, Archive.
+
+     Revision history:
+     v 1.0    8/87
+     v 1.1 11/8/87:
+        Changed format of full path listing;
+        Added -u option;
+        Added printout of total space used by files.
+     v 1.11 11/13/87:
+        Added -k option.
+
+	Send bug reports, comments and suggestions to
+	John DuBois, spcecdt@ucscb.ucsc.edu

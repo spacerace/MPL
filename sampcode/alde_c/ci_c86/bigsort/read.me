@@ -1,0 +1,90 @@
+			  BIGSORT.C
+
+
+Reverse Engineered UNIX (tm) inspired sort
+Copyright (c) Jim Gast, Naperville, IL    April, 1986
+
+The fundamental difference between this sort and all the other sorts I have
+seen is that THIS one will sort any reasonable size file that will fit in
+the amount of free memory you have. I have used it to sort a 200K file.
+
+SYNTAX:   bigsort [ -tx ] [+dd.dd[n][r]] [-dd.dd] . . .
+		[infile] . . . [-o outfile]
+	"-t;" specifies a new tab (delimeter) character (default is tab).
+		 In this example, the delimeter is semicolon.
+	"+5.6 -6.0" means that a key starts at the 5th delimeter plus
+	         six more characters, and ends at the sixth delimeter
+"n" appended to any key specifier makes it a numeric comparison
+"r" appended to any key specifier makes it sort into reverse order.
+
+The fields in each record can be variable length or fixed length. If they
+are fixed length use character number (e.g. 0.234). If they are variable
+length either use the TAB character to separate fields (exactly one TAB per
+field) or substitute any other character for the delimeter and use the "-t"
+option to tell BIGSORT which character.
+
+MAXIMUMS:	5000 records
+		20 Keys per record
+		512 bytes per record
+		50 input files per merge
+
+If you don't like those maximums, change the defines and recompile!
+
+You can specify multiple keys. Each key consists of a starting location
+prefixed by a "+" and an optional ending location prefixed by a "-".
+The later keys are used only if all earlier keys matched. For example,
+"+2 -3 +0" means the primary key is from the 2nd tab to the 3rd tab,
+and ties are broken by starting at the 0th tab.
+
+If you specify more than one infile, the files are merged.
+
+If no input files are specified, input is read from standard input.
+
+If no output file is specified, output is written to standard output.
+
+ Assuming a file that contained:
+	accountname;name;address;balance;phone number
+
+ Example record:
+	0023Flint;Flintstone, Fred;43 Quarry Lane;120.00;355-9881
+
+ SAMPLE sorts:
+	sort people -o acctsort
+		sorts by accountname and puts the output in file "namesort".
+	sort -t; +3n -4 +0 people
+		sorts by balance (numerically), and accountname if the
+		balance is the same. outputs to stdout.
+		The "-t;" changes the tab (field delimeter) to semicolon.
+		Note that "+3n" skips to the field after the 3rd delimeter,
+		you might think of it as the 4th field.
+	sort +0.4 people
+		sortkey starts with the 5th character (skips 4).
+
+If your database has fixed length records and you want to sort based
+on the characters from the 83rd character to the 93rd in descending
+alphabetical order:
+	sort +0.82r -0.92 frecords -o forder
+
+HINT: using infile and -o outfile executes much faster than using "<" and ">"
+for standard input and standard output, especially on large files.
+
+This program was compiled under CI-86, and depends on the CI-86 routine
+qsort(). To sort any decent size file it was compiled with BIG model.
+
+I tried to include the crucial features of the UNIX(tm) sort command. A
+logical enhancement would be to have an option that treats all upper case
+letters as lower case, but I haven't yet needed it.
+
+If someone out there is ambitious, you could modify it to allow star
+convention in input file names.
+
+Have fun, and write me if you have any questions, enhancements, or
+suggestions.
+
+This program is SHAREWARE, an $8.00 donation puts you on my mailing
+list to receive the next version of this and my screen utilities.
+
+		Jim Gast
+		16 N. Columbia
+		Naperville, IL 60540
+

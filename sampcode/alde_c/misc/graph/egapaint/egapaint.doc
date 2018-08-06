@@ -1,0 +1,58 @@
+EGA PAINT --- by
+
+
+Jim Hudson
+4600 Hillsboro Ave No
+New Hope, MN    55428
+
+612-533-4450 (evenings)
+
+
+I could not find a reasonable screen oriented graphics draw program, as well
+as needing practice in the 'art' of "C" programming.  So, undaunted, I set out
+to write my own. -------
+
+
+
+AND HERE IT IS
+
+
+There are alot of negatives - it's not complete (but what is??)
+							  it's not well commented (but what is??)
+							  it doesn't zoom
+							  etc.
+							  etc.
+
+It was compiled in large memory model with Borland's Turbo C v1.5, which
+	I fell in love with (Well maybe romantically involved with, after all
+	the nights I spent with it).
+
+Tab spacing is set at 4.  I included a program to expand tabs to 4 spaces
+so the files can be converted and printed without alot of fuss.
+
+
+It was originally intended to use alot of graphics modes, but, it got to be
+too many variables.  You may see some indications of it now and again.
+
+Any improvements would be greatly appreciated.  If you want to contact me,
+call or leave a message on this BBS.  I will be second to admit the code
+get alittle obscure at times and I may have to drink a bunch of scotch to
+get in the same mood as I wrote most of it in in order to figure it out.
+
+The main improvements would be:
+
+	Saving a file of drawing functions - this could then be re-read to
+	zoom, refresh the screen, interface with other stuff, or ???
+
+	Color dithering to create more shades and patterns.  This would require
+	light sources, focal points, textures, or ???
+
+	commenting the source -- some of the flags are not consistent
+
+In either case here it is --- enjoy, improve, learn, complain, use
+
+
+P.S. I redesigned my kitchen with this,  I'll include some samples
+
+
+

@@ -1,0 +1,7 @@
+setsndns.obj: setsndns.c
+  cl -c -Fs -W2 -AS -Gsw -Od -Zped setsndns.c
+
+setsndns.exe: setsndns.obj setsndns.def
+    link4 setsndns,/align:16,,slibw,setsndns.def
+    del setsndns.obj
+    del setsndns.map

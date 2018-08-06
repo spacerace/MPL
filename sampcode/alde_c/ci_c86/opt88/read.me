@@ -1,0 +1,152 @@
+		C88 Optimizer program instructions, notes, etc.
+
+			(c) 1985, Harley H. Puthuff, Jr.
+
+	The optimizer program (OPT88) is designed to process the
+	assembler output of your C88 compiler.  This can be done
+	either during the compilation process or as a separate
+	stand-alone procedure.
+
+	The optimizer program works with PC/MS-DOS versions 2.0
+	or later and requires a minimum of RAM.  It will process
+	approximately 65 assembly lines per second on a standard
+	8088 PC.
+
+	What the optimizer does is to scan the generated program
+	for redundant instructions, unnecessary instructions, and
+	instructions which can be changed to use less RAM or ex-
+	ecute more efficiently.  For those familiar with 8086
+	assembly language, some of the types of optimization
+	performed are:
+
+		- Elimination of redundant register loads where
+		  the value loaded already exists in the register
+
+		- Replacement of 'MOV reg,xxx..x' with the
+		  instruction 'MOV reg,areg' where the xxx..x
+		  value exists in another (areg) register
+
+		- Elimination of a 'CMP xxx..x,0' where it
+		  follows an arithmetic or logical instruction
+		  referencing the same datum
+
+		- Replacement of a 'CMP reg,0' instruction with
+		  a 'OR reg,reg'
+
+		- Replacement of a 'MOV reg,0' instruction with
+		  a 'XOR reg,reg'
+
+		- Replacement of a 'ADD xxx..x,1' instruction
+		  with a 'INC xxx..x' instruction
+
+		- Replacement of a 'SUB xxx..x,1' instruction
+		  with a 'DEC xxx..x' instruction
+
+	The degree of optimization which can be performed for a
+	particular application or program is, of course, dependent
+	on the application and style of programming.  Typically,
+	however, a code segment reduction of at least five percent
+	is a reasonable expectation, along with an increase in the
+	program's speed of execution.
+
+	INSTALLATION:
+
+	Simply copy the OPT88.EXE program to the disk directory
+	(or diskette) where the C88 compiler and ASM88 assembler
+	reside.
+
+	STAND-ALONE OPERATION:
+
+	The optimizer can be executed as a stand-alone process by
+	entering the program command at the MS-DOS prompt.  Prior
+	to execution, you should have generated the assembler 
+	input file by running the C88 compiler with the '-A'
+	option.  Then type the following command:
+
+	OPT88 filename [options]
+
+	Where:
+
+		filename	is an input file name which may
+				include a drive and path as well
+				as an extension.  The optimizer
+				will supply the '.A' extension if
+				missing, and replace any specified
+				with '.A' if present.
+
+		[options]	are one character program options
+				which may or may not be preceeded
+				by a minus [-] sign and are separ-
+				ated by spaces.
+
+	PROGRAM OPTIONS:
+
+	The optimizer program supports the following options
+	specifications using either upper or lower case:
+
+	[-]S	Suppress all message output.  Normally the optim-
+		izer produces a start message and a completion
+		message which gives the number of lines processed
+		and the approximate number of bytes saved in the
+		output.
+
+	[-]X	Diagnostic operation.  This results in more screen
+		information about the optimizer run.  A period is
+		displayed on the screen as each input statement is
+		read, and additional statistics are displayed along
+		with the ending message.
+
+	[-]F	Create a separate output file.  Normally the optim-
+		izer creates a new '.A' file and deletes the old
+		one.  If you use the 'F' option, an output file
+		with the same name as the input and an extension
+		of '.OPT' is created and the input '.A' file is
+		preserved.
+
+	[-]N	Note the optimizer modifications.  This option
+		results in the generation of assembly comments
+		in the output file which indicate what changes
+		were made.  These comments have no effect on
+		your subsequent assembly.
+
+
+	IN-LINE OPERATION:
+
+	The optimizer may be incorporated into the compilation
+	procedure by renaming a couple of programs.  Normally
+	when the C88 compiler is executed (without the -A option)
+	three separate programs are used:
+
+		C88	-pre-compiler (#define & #include expan-
+			 sion).
+
+		GEN	-generate assembly source code.
+
+		ASM88	-assemble the final object code.
+
+	In order to use the optimizer in-line, it needs to be run
+	between the GEN and ASM88 programs.  This can be accomplished
+	by selecting the directory where these programs (and OPT88)
+	are present and entering the following commands:
+
+		REN ASM88.EXE ASM88X.EXE
+		REN OPT88.EXE ASM88.EXE
+
+	The optimizer will then execute as part of the compilation
+	and will not accept any options nor produce any messages.  In
+	order to run the optimizer by itself, the command name is
+	'ASM88' and in order to run the real assembler use 'ASM88X'.
+
+	PROBLEMS, QUESTIONS, ETC.:
+
+	The optimizer has been thoroughly tested against a variety of
+	applications and should pose no problems.  If you do have a
+	problem with it, first try your compilation and test the output
+	without using the optimizer.  If the problem persists, it is
+	probably a source program error.  If not, technical assist-
+	ance is available from:
+
+		Harley H. Puthuff, Jr.
+		636 Santa Alicia Drive
+		Rohnert Park, CA  94928
+		(707) 792-2138

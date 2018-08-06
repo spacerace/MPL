@@ -1,0 +1,5 @@
+dumbterm.obj : dumbterm.asm
+	masm /T dumbterm.asm;
+
+dumbterm.exe : dumbterm.obj dumbterm.def
+	link dumbterm,,,os2,dumbterm

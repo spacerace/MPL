@@ -1,0 +1,11 @@
+;-------------------------------------
+; SYSVALS2.DEF module definition file
+;-------------------------------------
+
+NAME           SYSVALS2  WINDOWAPI
+
+DESCRIPTION    'System Values Display No. 2 (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

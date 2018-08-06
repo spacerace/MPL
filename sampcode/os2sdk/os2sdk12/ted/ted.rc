@@ -1,0 +1,133 @@
+/****************************************************************************
+
+    Ted.rc
+
+    Created by Microsoft Corporation, IBM Corporation 1989
+
+****************************************************************************/
+
+#define INCL_WINHELP
+
+#include <os2.h>
+#include "ted.h"
+#include "tedhelp.h"
+#include "teddlg.h"
+
+POINTER ID_RESOURCE ted.ico
+
+
+
+
+ACCELTABLE	ID_RESOURCE
+BEGIN
+    VK_DELETE,	  IDM_CUT,	 VIRTUALKEY, SHIFT
+    VK_INSERT,	  IDM_COPY,	 VIRTUALKEY, CONTROL
+    VK_INSERT,	  IDM_PASTE,	 VIRTUALKEY, SHIFT
+    VK_BACKSPACE, IDM_UNDO,	 VIRTUALKEY, ALT
+    VK_F3,	  SC_CLOSE,	 VIRTUALKEY, SYSCOMMAND
+END
+
+
+
+
+
+
+MENU ID_RESOURCE
+{
+   SUBMENU "~File",                    IDM_FILE
+   {
+      MENUITEM "~New",                 IDM_NEWFILE
+      MENUITEM "~Open...",             IDM_OPENFILE
+      MENUITEM SEPARATOR
+      MENUITEM "~Save",                IDM_SAVE
+      MENUITEM "Save ~as...",          IDM_SAVEAS
+      MENUITEM SEPARATOR
+      MENUITEM "E~xit\tF3",            SC_CLOSE, MIS_SYSCOMMAND
+   }
+
+   SUBMENU "~Edit",                    IDM_EDIT
+   {
+      MENUITEM "~Undo\tAlt+Backspace", IDM_UNDO
+      MENUITEM SEPARATOR
+      MENUITEM "Cu~t\tShift+Del",      IDM_CUT
+      MENUITEM "~Copy\tCtrl+Ins",      IDM_COPY
+      MENUITEM "~Paste\tShift+Ins",    IDM_PASTE
+      MENUITEM SEPARATOR
+      MENUITEM "~Find...",             IDM_FIND
+      MENUITEM "Select ~all"	 ,     IDM_SELECT_ALL
+   }
+
+   SUBMENU "~Options",                 IDM_OPT
+   {
+      MENUITEM "~Query lines",	       IDM_QUERYLINES
+      MENUITEM SEPARATOR
+      MENUITEM "~Word wrap",	       IDM_SETWRAP
+   }
+
+   SUBMENU "~Help",                    MIS_HELP
+   {
+      MENUITEM "~Help for help...",    IDM_DISPLAY_HELP
+      MENUITEM "~Extended help...",    IDM_EXT_HELP
+      MENUITEM "~Keys help...",        IDM_KEYS_HELP
+      MENUITEM "Help ~index...",       IDM_INDEX_HELP
+      MENUITEM SEPARATOR
+      MENUITEM "~About...",            IDM_ABOUT
+   }
+
+}
+
+
+STRINGTABLE
+BEGIN
+
+    SID_UNABLE_TO_CREATE_FRAME     "Unable to create frame window"
+    SID_UNABLE_TO_SUB_FRAME        "Unable to sub-class frame"
+    SID_UNABLE_TO_SUB_CLIENT       "Unable to sub-class client"
+    SID_UNABLE_TO_SET_FRAME_OWNER  "Unable to set frame owner"
+    SID_MLEMSG_TEXTOVERFLOW        "MLE text-overflow"
+    SID_MLEMSG_MLN_OVERFLOW        "MLE non text-overflow"
+    SID_DLG_CANT_LOAD_FIND         "Unable to load find dialog"
+    SID_DLG_CANT_LOAD_ABOUT        "Unable to load about dlg"
+    SID_DLG_FIND_CANT_DISMISS      "Unable to dismiss find dialog"
+    SID_HELP_CANT_CREATE_INST      "Unable to create help instance"
+    SID_HELP_CANT_ASSOC_INST       "Unable to associate help instance"
+    SID_HELP_HLP_ERROR             "Help manager error"
+    SID_TED_UNTITLED               "Untitled"
+    SID_UNABLE_TO_EXPORT           "Unable to export mle data to buffer"
+    SID_CANT_FIND                  "String not found"
+
+
+    SID_HERR_NO_LIBRARY            "Cannot find TEDHP.HLP or the HM .HLP files. Help is not available."
+    SID_HERR_TITLE                 "Help Manager error"
+    SID_HERR_UNKNOWN               "An unknown error occurred"
+    SID_HERR_MEMORY                "A Help Manager memory error occurred."
+    SID_HERR_LIB_ERROR             "Help Manager encountered a problem with a required help library."
+    SID_HERR_NO_INIT               "Cannot initialize Help Manager"
+
+
+    SID_UNABLE_TO_SET_NEWSIZE      "Unable to reset file size"
+    SID_DOSWRITE_FAILED            "Unable to save file"
+    SID_WRONG_BYTE_COUNT           "Byte count mismatch"
+    SID_DOSQFILEINFO_FAILED        "Unable to get file size"
+    SID_FILE_TOO_LARGE             "File too large -- truncating"
+    SID_CANT_ALLOCATE_MEMORY       "Unable to allocate memory for export/import"
+    SID_DOS_READ_FAILED            "Unable to read in file"
+    SID_CANT_SET_WRAP              "Unable to set wrap state in MLE"
+    SID_CANT_OPEN_EX_FILE          "Unable to open existing file for Save"
+
+
+END
+
+
+/* Include's */
+
+
+
+/* help tables */
+
+rcinclude tedhelp.rc
+
+
+/* find and about dialog boxex */
+
+rcinclude teddlg.dlg

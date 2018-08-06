@@ -1,0 +1,107 @@
+/*-------------------------------------------
+   CHECKERS.RC resource script, Version 0.40
+  -------------------------------------------*/
+
+#include <os2.h>
+#include "checkers.h"
+
+POINTER IDP_UPHAND ckruhand.ptr
+POINTER IDP_DNHAND ckrdhand.ptr
+
+MENU ID_RESOURCE
+     {
+     SUBMENU "~Game",                   -1
+          {
+          MENUITEM "~New Game...",           IDM_NEWGAME
+          MENUITEM SEPARATOR
+          MENUITEM "~About Checkers...",     IDM_ABOUT
+          }
+     SUBMENU "~Colors",                 -1
+          {
+          MENUITEM "Wi~ndow Background...",  IDM_COLOR_BACKGROUND
+          MENUITEM "~Black Square...",       IDM_COLOR_BLACK_SQUARE
+          MENUITEM "~White Square...",       IDM_COLOR_WHITE_SQUARE
+          MENUITEM "B~lack Piece...",        IDM_COLOR_BLACK_PIECE
+          MENUITEM "W~hite Piece...",        IDM_COLOR_WHITE_PIECE
+          MENUITEM SEPARATOR
+          MENUITEM "~Standard colors",       IDM_COLOR_STANDARD
+          }
+     }
+
+#define GRP WS_GROUP
+
+DLGTEMPLATE IDD_ABOUT_DLG
+     {
+     DIALOG "", 0, 32, 32, 200, 100,, FCF_DLGBORDER
+          {
+          CTEXT "Checkers Version 0.40"            -1,     10, 76, 180,  8
+          CTEXT "(Play a Game With the Program)"   -1,     10  62, 180,  8
+          CTEXT "Microsoft Systems Journal, 9/90"  -1,     10, 48, 180,  8
+          CTEXT "(c) 1990, Charles Petzold"        -1,     10, 34, 180,  8
+          DEFPUSHBUTTON "OK"                       DID_OK, 80,  8,  40, 16, GRP
+          }
+     }
+
+DLGTEMPLATE IDD_NEWGAME_DLG
+ {
+ DIALOG "", 0, 32, 32, 180, 124,, FCF_DLGBORDER
+  {
+  CTEXT             "Start New Game"  -1,               10, 110, 160,   8
+  GROUPBOX          "Color"           -1,               16,  32,  54,  74
+  AUTORADIOBUTTON   "Black"           IDD_BLACK,        20,  80,  46,  12, GRP
+  AUTORADIOBUTTON   "White"           IDD_WHITE,        20,  66,  46,  12
+  GROUPBOX          "Level"           -1,               80,  32,  82,  74
+  AUTORADIOBUTTON   "Simple"          IDD_SIMPLE,       84,  80,  74,  12, GRP
+  AUTORADIOBUTTON   "Beginner"        IDD_BEGINNER,     84,  66,  74,  12
+  AUTORADIOBUTTON   "Intermediate"    IDD_INTERMEDIATE, 84,  52,  74,  12
+  AUTORADIOBUTTON   "Adv (BUGGY!)"    IDD_ADVANCED,     84,  38,  74,  12
+  DEFPUSHBUTTON     "OK"              DID_OK,            6,   8,  52,  16, GRP
+  PUSHBUTTON        "Cancel"          DID_CANCEL,       64,   8,  52,  16
+  PUSHBUTTON        "Setup..."        IDD_SETUP,       122,   8,  52,  16
+  }
+ }
+
+DLGTEMPLATE IDD_SETUP_DLG
+ {
+ DIALOG "", 0, 32, 32, 180, 200,, FCF_DLGBORDER
+  {
+  CTEXT   "Setup Board"            -1,          10, 186, 160,  8
+  CTEXT   "Left button for Black"  -1,          10, 170, 160,  8
+  CTEXT   "Right button for White" -1,          10, 160, 160,  8
+  CTEXT   "Second click for King"  -1,          10, 150, 160,  8
+  CTEXT   "Third click to delete"  -1,          10, 140, 160,  8
+  CTEXT   ""                       IDD_TOP,     10, 124, 160,  8
+  CONTROL ""                       IDD_SETUP,   10,  34, 160, 90,
+          "Checkers.Setup", WS_VISIBLE
+  CTEXT   ""                       IDD_BOTTOM,  10,  28, 160,  8
+  DEFPUSHBUTTON "OK"               DID_OK,      16,   8,  52, 16, GRP
+  PUSHBUTTON    "Cancel"           DID_CANCEL, 112,   8,  52, 16
+  }
+ }
+
+DLGTEMPLATE IDD_COLOR_DLG
+ {
+ DIALOG "", 0, 32, 32, 180, 180,, FCF_DLGBORDER
+  {
+  CTEXT           ""           IDD_HEADING,               10, 166, 160,   8
+  GROUPBOX        "Color"      -1,                        16,  32, 148, 130
+  AUTORADIOBUTTON "Black"      IDD_COLOR + CLR_BLACK,     20, 136,  64,  12, GRP
+  AUTORADIOBUTTON "Blue"       IDD_COLOR + CLR_BLUE,      20, 122,  64,  12
+  AUTORADIOBUTTON "Red"        IDD_COLOR + CLR_RED,       20, 108,  64,  12
+  AUTORADIOBUTTON "Pink"       IDD_COLOR + CLR_PINK,      20,  94,  64,  12
+  AUTORADIOBUTTON "Green"      IDD_COLOR + CLR_GREEN,     20,  80,  64,  12
+  AUTORADIOBUTTON "Cyan"       IDD_COLOR + CLR_CYAN,      20,  66,  64,  12
+  AUTORADIOBUTTON "Yellow"     IDD_COLOR + CLR_YELLOW,    20,  52,  64,  12
+  AUTORADIOBUTTON "Pale Gray"  IDD_COLOR + CLR_PALEGRAY,  94,  38,  64,  12
+  AUTORADIOBUTTON "Dark Gray"  IDD_COLOR + CLR_DARKGRAY,  94, 136,  64,  12
+  AUTORADIOBUTTON "Dark Blue"  IDD_COLOR + CLR_DARKBLUE,  94, 122,  64,  12
+  AUTORADIOBUTTON "Dark Red"   IDD_COLOR + CLR_DARKRED,   94, 108,  64,  12
+  AUTORADIOBUTTON "Dark Pink"  IDD_COLOR + CLR_DARKPINK,  94,  94,  64,  12
+  AUTORADIOBUTTON "Dark Green" IDD_COLOR + CLR_DARKGREEN, 94,  80,  64,  12
+  AUTORADIOBUTTON "Dark Cyan"  IDD_COLOR + CLR_DARKCYAN,  94,  66,  64,  12
+  AUTORADIOBUTTON "Brown"      IDD_COLOR + CLR_BROWN,     94,  52,  64,  12
+  AUTORADIOBUTTON "White"      IDD_COLOR + CLR_WHITE,     20,  38,  64,  12
+  DEFPUSHBUTTON   "OK"         DID_OK,                    16,   8,  52,  16, GRP
+  PUSHBUTTON      "Cancel"     DID_CANCEL,               112,   8,  52,  16
+  }
+ }

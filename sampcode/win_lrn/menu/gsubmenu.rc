@@ -1,0 +1,10 @@
+
+#include "style.h"
+
+TestSubMenu MENU
+ BEGIN
+   POPUP "GetSubMenu"
+      BEGIN
+         MENUITEM "Test", 100
+      END
+ END

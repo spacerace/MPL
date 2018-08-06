@@ -1,0 +1,391 @@
+Comments about LINEFRAC
+
+
+Notes:
+------
+
+You must run "make opendlg" and include the ..\dll directory in your
+libpath before attempting to make or execute this application.
+
+Two of the modules generate the following warning when they compile:
+    warning C4058: address of frame variable taken, DS != SS
+This is the result of a fairly obscure compiler warning message bug,
+which will be fixed in a future release.  The emitted code is correct.
+
+
+
+General Description:
+--------------------
+
+This program draws self-similar fractals defined by transformations
+of the unit interval.  By recursively applying the transformation,
+neat drawings result.
+
+Currently you can only choose the built-in transforms.	Click on one
+to get that fractal at the current level of recursion.	Choose level
+one (from the miscellaneous attributes dialog box), and one side to the
+frame polygon (same dialog box), to see the transformation itself.
+Some fractals are shown graphically in the menu.
+
+Clicking on the left mouse button causes the fractal to go deeper
+into recursion, while clicking on the right causes it to come back
+out.
+
+In the misc. attributes dialog box you can specify "# sides of polygon",
+which is the number of initial segments to which your transform
+will be applied.  You always get a regular polygon of the number
+of sides you choose.
+
+With the current limited set of transforms, you can still get some
+interesting effects by drawing a new fractal on top of old ones
+with varying attributes.  You can also draw several independent
+fractals and automatically switch between them, simulating animation.
+
+Note that at recursion level n, an m-segment transform will be
+	      n
+composed of  m	 line segments.  Keep this in mind when playing with
+the 5-segment transforms, namely StovePipe and SquareWave.
+
+The names are, except for Koch (mathematician who proved, I think,
+that the Koch curve has infinite arc length when the level of recursion
+goes to infinity), weak attempts to describe the basic shape.  The
+Fractal menu uses pictures, anyway.
+
+
+Description of commands:
+------------------------
+
+File
+
+    Load ...
+	Load a bitmap from a BMP file. The top thread must have a
+	memory DC.
+	(Currently requires AutoResize option to be enabled).
+    Save ...
+	Save bitmap to a BMP file.  The top thread must have a memory DC.
+    About ...
+	Show the credits.
+
+
+Edit
+
+    Select
+	Drag a rectangle (from lower left to upper right) to highlight
+	it for cutting or copying.  If you don't like what you selected,
+	then do it again.  Nothing's permanent until you choose cut or
+	copy.  Hitting the space bar will throw away the selection
+	rectangle.
+
+    Cut
+	Copy the selected rectangle of bits into the "clipboard", and
+	fill with the current background color.
+
+    Copy
+	Copy the selected rectangle of bits into the "clipboard".
+
+    Paste
+	Copy the cut or copied bits back into the bitmap with the current
+	rop.  The selected rectangle is highlighted in its original
+	location.  Grab somewhere in the window (in the highlighted
+	rectangle is suggested) and move it to the desired location.
+
+    Use Clipboard
+	Not implemented yet.  This will instruct linefrac to use the
+	shell's clipboard feature for saving bits, rather than an
+	internal second bitmap.
+
+    ----------------------------------------------------------------
+
+    Paste w/ S
+	     DSa
+	     DSo
+	     DSx
+	     Sn
+	     DSan
+	     DSon
+	     DSxn
+
+	Various rops for use when pasting bits back into the bitmap.
+
+
+Thread
+
+    New
+	Direct
+	    Creates a new thread which draws directly to the screen.
+	    The WM_PAINT message does nothing for this thread.	To
+	    see the image after the bits have been destroyed, you
+	    have to cause a redraw (try Control Redraw).  Only one
+	    thread may have a direct DC (temporary restriction).
+	Memory ...
+	    Creates a new thread which draws into a bitmap.  If
+	    thread inheritance is enabled (see below) the bitmap
+	    parameters are taken from the top thread.  Otherwise a
+	    dialog box appears with the bitmap parameters set to the
+	    window dimensions with 0 planes and 0 bits per pixel (the
+	    latter two cause the device to select its favored format).
+	    The user can alter any of these values as desired.	When the
+	    dialog box is closed, a bitmap is created and a thread
+	    is created to draw into it.
+	PostScript
+	    not implemented yet
+	ProPrinter
+	    not implemented yet
+
+    Bring to top
+	Select the number of the thread to bring to the foreground.
+	To switch between threads quickly via the keyboard, type a
+	digit between 0 and 9.	The thread started at that position
+	in the overall order will be brought to the front, e.g. its
+	bitmap will be visible, in the case of a memory DC thread.
+	For a direct DC thread, nothing will happen to the image
+	until a redraw is caused.
+
+    Edit DC Parameters ...
+	View or edit the bitmap extents and color format.
+
+    Kill top thread
+	Kills the top thread.  Brings the next lower (lesser id)
+	thread to the top.  If there's only one thread,  a new
+	thread is created with the program defaults.
+
+    Kill all threads
+	Kills all the threads and leaves the program with one thread
+	with the program defaults.
+
+    ----------------------------------------------------------------
+
+    Automatic cyclic switch
+	"Animates" by automatically switching between each thread in
+	turn.  The delay between switches is set by the next command.
+
+    Switch delay ...
+	Set the delay in microseconds between switches between threads.
+
+    Update menus on thread switch
+	This controls the checking or unchecking of the various menu
+	items that vary per thread.  If disabled, there is less overhead
+	in a thread-switch, therefore a faster possible switch time.
+
+    ----------------------------------------------------------------
+
+    New thread inherits from top
+	If enabled, new threads will be copies of the thread which
+	was on top when the new thread was started.  If disabled,
+	the program will select default values for all thread variables.
+
+
+Control
+
+    Redraw
+	Forces the fractal to be redrawn.
+
+    Abort drawing
+	Causes drawing of current fractal, if any, to cease.
+
+    Clear surface
+	Clear the drawing surface to the background color.
+
+    Copy bitmap to screen.
+	Copies the entire bitmap to the screen.  Does nothing for
+	a direct DC.
+
+    Square up window
+	Force the window to be nearly square for aspect ratio-corrected
+	drawing.
+
+    Resize surface to window
+	Resizes the drawing surface to the window dimensions.
+
+    ----------------------------------------------------------------
+
+    Mouse click changes recursion
+	If enabled, clicking in the client area changes the level of
+	recursion:  left button --> go deeper (higher level);
+		   right button --> go shallower (lower level)
+
+    Animate mouse pointer
+	This causes the mouse pointer to change shape as it is moved.
+	It represents the koch curve going from recursive level 0 to 3
+	and back to 0 again repeatedly.
+
+    Mouse pointer preferences ...
+	Let's you select the pointer shape to use when the pointer is
+	not animated.  Let's you determine the speed of animation by
+	setting the number of WM_MOUSEMOVE messages tallied before
+	switching pointer shapes.
+
+    Cyclic redraw timer delay ...
+	Sets the delay in microseconds between automatic redraws.  Note
+	that the timer proceeds independently of the drawing.  A long
+	fractal will probably end up redrawing immediately, since its
+	semaphore will have been cleared before the current drawing is
+	finished, that is unless the delay is corresponding long.
+
+
+Fractal
+
+    SharkTooth		(2 segments)
+    SawTooth		(3 segments)
+    Koch		(4 segments)
+    StovePipe		(5 segments)
+    SquareWave		(5 segments)
+
+    Space filling curve (4 segments) (reflections on first and fourth segs)
+	(Note: the space filling curve was originally intended to be drawn
+	       with the custom primitive "Peano curvelet").
+
+    Hourglass		(3 segments, crosses itself)
+
+	Click on one of these to select a similarity transform for your
+	fractal.
+
+    ----------------------------------------------------------------
+
+    Redraw after change
+	If enabled, causes an automatic redraw to occur after any
+	selection on this menu.
+
+
+Primitive
+
+    PolyLine
+    PolyFillet
+    PolySpline
+    PolyMarker
+    Peano curvelet
+
+	These determine the primitive used to display the points
+	accumulated during recursion on the fractal.
+
+	The Peano curvelet is a "custom primitive".  It draws two lines
+	between each point instead of one.  The lines meet at a right
+	angle.	If the straight line between the two points is x major
+	(the difference in x is greater than the difference in y),
+	then the new middle point is on the left side, otherwise it's
+	on the right side.  In other words,
+
+
+		  *	  *   *
+		 * *	   * *	    ^  *      |    *
+		*   *	    *	    |	*     |   *
+				    |	 *    |  *
+		---->	  <----     |	*     |   *
+				    |  *      V    *
+
+	With this primitive, the existing algorithm and data structures
+	can be used to draw the Peano space-filling curve.  Note that
+	the directions of these arrows are relative to the canonical
+	unit line segment in world coordinate space on which the
+	fractal is really drawn.  If the fractal is rotated (to put
+	it on the side of a polygon, for instance), the arrows all
+	rotate accordingly.
+
+    ----------------------------------------------------------------
+
+    Redraw after change
+	If enabled, causes an automatic redraw to occur after any
+	selection on this menu.
+
+
+Attributes
+
+    Line attributes ...
+    Marker attributes ...
+    Area attributes ...
+    Image attributes ...
+	Set the various attributes.
+
+    Miscellaneous attributes ...
+	Calls up a dialog box in which you can select the following
+	values:
+
+	    # sides to initial polygon
+
+	    number of points sent to GpiPolyLine at a time
+
+	    level of recursion at which to draw
+
+	    angle of rotation (radians, CCW positive) applied to initial
+		segments of fractal
+
+    Fractal dimensions ...
+	x offset and scale, as a percentage of the width of the window
+	same for y, too;  the offsets determine where in the window
+	the fractal occurs, whereas the scale factors determine
+	roughly how big the image is
+
+
+    Drag fractal dimensions
+	Lets user drag a rectangle in the client window to determine
+	the approximate bounding box of the next fractal.  "Approximate"
+	because fractals might flow out of the box given enough depth
+	of recursion.  This call alters the values of the scale factors
+	and offsets.  The fractal attributes dialog box will show the
+	new values the next time it is called up.
+
+    ----------------------------------------------------------------
+
+    Redraw after change
+	If enabled, causes an automatic redraw to occur after any
+	selection on this menu.
+
+
+Environment
+
+    AutoResize bitmap
+	If checked, the bitmap will be resized every time you change
+	the window size (even if you iconize).
+
+	If not checked, the bitmap will stay the same size and won't
+	be redrawn when the window size changes.
+
+	When the window is resized, each thread will react according to
+	this flag.
+
+    AutoSelect fractal dimensions
+	If this is checked, the default x,y offsets and scale factors
+	will be used as soon as the transform is selected.  This positions
+	the fractal so as to center it in the window, with room to grow
+	so that it won't be clipped as the level of recursion increases.
+	Note that the space filling curve grows up, not sideways, so it
+	is not centered like the others.
+
+    Clear surface on redraw
+	If enabled, the surface will be filled with the current area
+	attributes on the next redraw.
+
+    Automatic cyclic redraw
+	Sets a timer which after a random delay causes a redraw.
+	The upper and lower limits on the random delay are set with
+	the "Control Timer delay ..." command.
+
+    Collect bounds on fractals
+	When this is checked, the minimal rectangle of bits will be
+	copied to the screen after a fractal is drawn into the bitmap.
+	This speeds up the drawing slightly, and the mouse pointer won't
+	flash unless it's right on top of where the drawing is happening.
+
+
+
+
+Bugs to fix:
+------------
+    sometimes the animation timer seems to stop -- moving the mouse over
+       the window is enough to get it started again
+    occasionally the redraw seems to not work -- selecting it again
+       works though
+    occasionally a fractal is not drawn to completion
+    parts of the window sometimes get erased with the WM_ERASEBACKGROUND
+       message, but don't get updated by WM_PAINT. Why?  Should
+       LfEraseBackground invalidate what it paints for the benefit
+       of LfPaint?
+    sometimes the upper left of a fractal is displayed in the window
+       instead of the lower left, depending on the window dimensions
+       (I saw this with a bitmap much larger than the screen) --
+       slowly resizing the window reveals a point at which the switch
+       occurs
+    the "cancel" buttons don't work as expected on various dialog
+       boxes -- looking at attributes can cause the fractal to redraw
+       even though nothing changes;  cancelling the new thread dialog
+       box doesn't stop it from being created

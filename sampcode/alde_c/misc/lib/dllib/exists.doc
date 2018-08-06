@@ -1,0 +1,39 @@
+
+
+        NAME
+                exists -- see if a file exists
+
+        SYNOPSIS
+                r = exists(name);
+                int r;          returns FALSE if not found, else TRUE
+                char *name;     filename to check
+
+
+        DESCRIPTION
+        If the specified filename, which may include drive and
+        directory, is not found, then a value of zero (FALSE)
+        is returned.  Else, one (TRUE) is returned.  This
+        test does not take into consideration any attributes on
+        the file, so that an fopen() call may still fail later.
+
+
+        EXAMPLE
+    
+               if(exists("a:foo.bar")) puts("File exists!");
+               else puts("File does not exist");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

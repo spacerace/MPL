@@ -1,0 +1,39 @@
+
+
+       NAME
+               weekday -- Determine the day of the week form the date
+
+       SYNOPSIS
+               value = weekday(month, day, year);
+               int value;      returns 0-6
+               int month;      number of month 1-12
+               int day;        number of date 1-31
+               int year;       year starting with 1980
+
+       DESCRIPTION
+       This function returns the number of the day in the week for any
+       date from January 1, 1980.  Sunday is day 0, and Saturday is day 6.
+
+
+
+       EXAMPLE
+
+             for July 2, 1986:
+             int value;
+             value = weekday(7, 2, 1986);
+
+             value for this date will be 3 (Wednesday)
+
+
+
+
+
+
+
+
+
+
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

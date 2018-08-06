@@ -1,0 +1,14 @@
+# makefile for share
+
+INC=..\..\..\include
+OPT=-AL -G2 -Zi -I$(INC) -c
+
+all: share.exe shrchild.exe
+
+share.exe: share.c share.h share
+	cl $(OPT) share.c
+        link share,,,/nod:llibce llibcep;
+
+shrchild.exe: shrchild.c share.h share
+	cl $(OPT) shrchild.c
+        link shrchild,,,/nod:llibce llibcep;

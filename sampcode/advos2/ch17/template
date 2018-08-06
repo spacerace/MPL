@@ -1,0 +1,5 @@
+template.obj : template.asm
+	masm /T template.asm;
+
+template.sys : template.obj template.def
+        link template,template.sys,,os2,template

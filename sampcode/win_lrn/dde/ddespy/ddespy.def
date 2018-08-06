@@ -1,0 +1,24 @@
+NAME    DDESPY
+
+DESCRIPTION 'Windows Spy Application'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  8192
+STACKSIZE 4096
+
+EXPORTS
+    MyWndProc    @1
+    DlgAbout     @2
+    DlgSpySet    @3
+    SpyProc      @4
+
+IMPORTS
+    InitHook       = DSPYDLL.3
+    KillHook       = DSPYDLL.4
+    PassFileToDLL  = DSPYDLL.5
+    DebugWndProc   = DSPYDLL.6
+    CreateDebugWin = DSPYDLL.7

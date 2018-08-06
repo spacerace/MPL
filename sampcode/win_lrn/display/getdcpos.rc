@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "GetDCPos.h"
+
+GetDCPos MENU
+    BEGIN
+        POPUP "&Get Current Position"
+            BEGIN
+                MENUITEM  "&GetCurrentPosition",            IDM_GETPOSITION
+            END					            
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

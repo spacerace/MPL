@@ -1,0 +1,6 @@
+NAME	    Stock   WINDOWAPI
+
+DESCRIPTION 'Chart a stock'
+
+HEAPSIZE    16384
+STACKSIZE   8192

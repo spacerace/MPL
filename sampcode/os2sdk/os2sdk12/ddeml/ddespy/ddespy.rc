@@ -1,0 +1,23 @@
+#include "ddespy.h"
+
+rcinclude ddespy.dlg
+
+ICON  IDR_MAIN ddespy.ico
+
+
+MENU    IDR_MAIN  PRELOAD
+BEGIN
+    MENUITEM     "~Refresh", IDM_REFRESH
+    SUBMENU      "~Options", IDM_OPTIONS
+        BEGIN
+            MENUITEM    "~Set Timeout...", IDM_SETTIMEOUT
+        END
+    MENUITEM     "~Execute...", IDM_EXEC
+END
+
+ACCELTABLE IDR_MAIN   PRELOAD
+BEGIN
+    "e",    IDM_EXEC,           CONTROL
+    "r",    IDM_REFRESH,        CONTROL
+    "t",    IDM_SETTIMEOUT,     CONTROL
+END

@@ -1,0 +1,465 @@
+ 
+ 
+ 
+ 
+                               OPERATOR'S MANUAL
+ 
+                      11:11 C and Assembler Library  V1.0
+ 
+                                 by Jon Wesener
+ 
+                   (C)Copyright- Beyond System Control, 1985
+ 
+ 
+           This Software was written as a quick access to System
+        Resources and often needed routines.
+
+                                                                        0- 1
+                               Table of Contents
+ 
+        Sect 1: FILE I/O
+ 
+        fcreate .............................................   1- 1
+        fopen ...............................................   1- 1
+        fclose ..............................................   1- 2
+        fread ...............................................   1- 2
+        fwrite ..............................................   1- 2
+        fmove ...............................................   1- 3
+        fdel ................................................   1- 3
+        fren ................................................   1- 3
+ 
+        Sect 2: STRING MANIPULATION
+ 
+        strlen ..............................................   2- 1
+        strcmp ..............................................   2- 1
+        strcopy .............................................   2- 1
+        strcat ..............................................   2- 1
+ 
+        Sect 3: SCREEN I/O
+ 
+        atputs ..............................................   3- 1
+        atputc ..............................................   3- 1
+        cls .................................................   3- 2
+        cur_on ..............................................   3- 2
+        cur_off .............................................   3- 2
+        set_cur .............................................   3- 2
+        set_mode ............................................   3- 3
+        set_page ............................................   3- 3
+        scrl_up .............................................   3- 3
+        scrl_dwn ............................................   3- 3
+ 
+        Sect 4: KEYBOARD I/O
+ 
+        getc ................................................   4- 1
+        getcwt ..............................................   4- 1
+        getcraw .............................................   4- 1
+ 
+        Sect 5: CONVERSIONS
+ 
+        atoi ...............................................    5- 1
+        itoa ...............................................    5- 1
+ 
+        Sect 6: SOUND
+ 
+        sound ..............................................    6- 1
+ 
+        Sect 7: EDINPUT
+ 
+        keygets ............................................    7- 1
+
+        FILE I/O                                                1- 1
+ 
+ 
+       FCREATE creates a file of specified name and attribute
+                or truncates an existing file for write operations.
+ 
+        USAGE:  channel= fcreate(name, att);
+ 
+        RETURN:         0= error       !0= channel
+ 
+        ATTRIBUTE:      Note that there are defined symbols for the
+                attribute of the file.  These are
+ 
+                FC$NORM  = normal file
+                FC$RD_O  = read only
+                FC$HID   = hidden
+                FC$SYS   = system
+ 
+                F$NORM must be used alone, the others can be combined.
+ 
+ 
+       FOPEN opens an existing file for read, write or both I/O
+              operations.
+ 
+        USAGE:  channel= fopen(name, access)
+ 
+        RETURN:         0= error        !0= channel
+ 
+        ACCES:          Note that there are defined symbols for the
+                acces of the file.  These are
+ 
+                FO$READ  = read from file only
+                FO$WRTE  = write to file only
+                FO$UPDT  = allow both reading from and writing to file
+ 
+                These must be used seperately.
+
+        FILE I/O                                                        1- 2
+ 
+ 
+       FCLOSE closes the file which was fopen'd or fcreate'd.
+ 
+        USAGE:  status=  fclose(channel);
+ 
+        RETURN:         0= Success      !0= Error
+ 
+ 
+       FREAD reads a number of bytes from a fopen'd file.
+ 
+        USAGE:  bytesread= fread(channel, buffer, count);
+ 
+        RETURN:         number of bytes read.
+ 
+        NOTE:   If the number of bytes read = 0, you have EOF.
+                If the number of bytes read != count, there may be an error.
+ 
+ 
+       FWRITE write a number of bytes to a fopen'd or fcreate'd file.
+ 
+        USAGE:  byteswritten= fwrite(channel, buffer, count);
+ 
+        RETURN:         number of bytes read.
+ 
+        NOTE:   If the number of bytes written != count, you probably
+                have run out of disk space and should be considered
+                an error.
+ 
+ 
+    **  NOTE:   There are 3 file channels which are defined and do not need
+                to be opened before read or written to.  These are
+ 
+                STDIN           standard input
+                STDOUT          standard output
+                STDERR          standard error
+
+        FILE I/O                                                        1- 3
+ 
+ 
+       FMOVE changes the position of the file pointer within a file.
+ 
+        USAGE:  status= fmove(channel, long displacement, baserel);
+ 
+        RETURN:         0= Successful   !0= Error
+ 
+        DISPLACEMENT:   Note the displacement is a 32 bit unsigned integer.
+ 
+        BASEREL:        Note, The move is relative to a base.  There are
+                        three defined symbols for the base which are
+ 
+                FM$BOF   Beginning of file + displacement
+                FM$CUR   Current position in file + displacement
+                FM$EOF   End of file + displacement
+ 
+                None of these can be used together.
+ 
+ 
+       FDEL deletes a named file from secondary storage, disk drives.
+ 
+        USAGE:  status= fdel(name);
+ 
+        RETURN:         0= Success      !0= Error
+ 
+ 
+       FREN renames a file across directories but not across devices.
+ 
+        USAGE:  status= fren(to, from);
+ 
+        RETURN:         0= Success      !0= Error
+
+        STRING MANIPULATION                                             2- 1
+ 
+ 
+       STRLEN returns the length of a string, not counting 0 terminater.
+ 
+        USAGE:  length= strlen(string);
+ 
+        RETURN:         length of string.
+ 
+ 
+       STRCPY copies one string into another.
+ 
+        USAGE:  strcpy(to, from);
+ 
+        RETURN:         nothing
+ 
+ 
+       STRCAT concatenates one string to the end of another.
+ 
+        USAGE:  strcat(to, from);
+ 
+        RETURN:         nothing
+ 
+ 
+       STRCMP compares one string with another.
+ 
+        USAGE:  flag= strcmp(string1, string2);
+ 
+        RETURN:         -?=     string1 < string2
+                         0=     string1 = string2
+                         ?=     string1 > string2
+
+        SCREEN I/O                                                      3- 1
+ 
+ 
+       ATPUTS puts a line to the screen with specified attribute and page.
+ 
+        USAGE:  atputs(string, page, row, col, attr);
+ 
+        RETURN:         nothing
+ 
+        PAGE:   This is for screen modes 2 & 3, BW or COLOR 80X25.
+                Valid values are 0 - 3.
+ 
+        ROW & COLUMN:   Where to place the string on the screen.
+ 
+        ATTRIBUTE:      The attribute of the characters on the screen.
+ 
+                ---------------------------------
+                : 7 : 6 : 5 : 4 : 3 : 2 : 1 : 0 :
+                ---------------------------------    Foreground Color
+                  |   |   |   |   |   |   |   +--->     BLUE
+                  |   |   |   |   |   |   +------->     GREEN
+                  |   |   |   |   |   +----------->     RED
+                  |   |   |   |   +--------------->     INTENSITY
+                  |   |   |   +------------------->     BLUE
+                  |   |   +----------------------->     GREEN
+                  |   +--------------------------->     RED
+                  +------------------------------->     BLINKING
+ 
+ 
+       ATPUTC puts a character to the screen with attribute and page.
+ 
+        USAGE:  atputc('a', page, row, col, attr);
+ 
+        RETURN:         nothing
+ 
+    **  SEE ATPUTS for more information.
+
+        SCREEN I/O                                                      3- 2
+ 
+ 
+       CLS clears the screen and homes the cursor of the given screen page
+            if not in graphics mode.
+ 
+        USAGE:  CLS(page)
+ 
+        RETURN:         nothing
+ 
+ 
+ 
+       CUR_ON causes the cursor to be seen.
+ 
+        USAGE:  CUR_ON()
+ 
+        RETURN:         nothing
+ 
+ 
+ 
+       CUR_OFF causes the video controller to stop displaying the cursor.
+ 
+        USAGE:  CUR_OFF()
+ 
+        RETURN:         nothing
+ 
+        NOTE:   CLS will turn the cursor back on as might other screen I/O.
+ 
+ 
+ 
+       SET_CUR sets the position of the cursor on the screen.
+ 
+        USAGE:  set_cur(row, col, page);
+ 
+        RETURN:         nothing
+
+        SCREEN I/O                                                      3- 3
+ 
+ 
+ 
+ 
+       SET_MODE sets the mode of the video controller.
+ 
+        USAGE:  set_mode(mode);
+ 
+        RETURN:         nothing
+ 
+   ***  NOTE:   There are 7 symbols defined in SCREEN.H for C programs
+                to be used with this function.  The 7 modes are
+ 
+        SYMBOL          MODE                            PAGES
+        ------          ----                            -----
+        SM$40BW         40X25 Black and White           0 - 7
+        SM$40CL         40X25 Color                     0 - 7
+        SM$80BW         80X25 Black and White           0 - 3
+        SM$80CL         80X25 Color                     0 - 3
+        SM$320CL        320X200 Color                     0
+        SM$320BW        320X200 Black and White           0
+        SM$640BW        640X200 Black and White           0
+ 
+                The graphics modes have only one page.
+ 
+ 
+ 
+       SET_PAGE sets the currently displayed screen page.
+ 
+        USAGE:  set_page(page);
+ 
+        RETURN:         nothing
+ 
+    **  NOTE:   See SET_MODE for more information about pages.
+ 
+ 
+       SCRL_UP scrolls the window mapped by an upper left point
+                and a lower right point a specified number of lines.
+ 
+        USAGE:  scrl_up(no_lines, urow, ucol, lrow, lcol, attr);
+ 
+        RETURN:         nothing
+ 
+    **  NOTE:   If the number of lines specified is zero (0), The whole
+                window is cleared.  This is how CLS works.  The attribute
+                is the attribute of the blanks of the erased lines
+ 
+ 
+ 
+       SCRL_DWN scrolls the window mapped by an upper left point
+                and a lower right point a specified number of lines.
+ 
+        USAGE   scrl_dwn(no_lines, urow, ucol, lrow, lcol, attr);
+ 
+        RETURN:         nothing
+ 
+        NOTE:   See SCRL_UP for more information.
+
+        KEYBOARD I/O                                                    4- 1
+ 
+ 
+ 
+       GETC gets a character from the keyboard if available.
+ 
+        USAGE:  char= getc();
+ 
+        RETURN:         0= character available  ?= character from keyboard.
+ 
+        NOTE:   These functions convert special characters to predefined
+                symbols which can be used by including KEYBOARD.H.
+ 
+ 
+ 
+ 
+       GETCW waits for a character to be typed before returning.
+ 
+        USAGE:  char= getcw();
+ 
+        RETURN:         a character
+ 
+        NOTE:   See GETC note for more information.
+ 
+ 
+ 
+       GETCRAW waits for a character to be typed before returning
+                the unconverted character in integer form.
+ 
+        USAGE:  int     rawchr;
+                rawchr= getcraw();
+ 
+        NOTE:   The high 8 bits is the scan code and the low 8 bits is
+                the character
+ 
+ 
+   **   NOTE:   The following are symbols defined by key.h .
+ 
+                LFTCH   RGTCH   INS     DEL     F1      F2      F3
+                F4      F5      F6      F7      F8      F9      F10
+                BOL     EOL     PGUP    PGDWN   PRVWRD  NEXWRD
+
+        CONVERSIONS                                                     5- 1
+ 
+ 
+       ATOI converts an ASCII string of specified base to an integer.
+ 
+        USAGE:  err= atoi(string, &integer, base);
+ 
+        RETURN:         0= Error        1= Success
+ 
+        NOTE:   This function is limited by INTEGER size.  If a string
+                has a value more than 65535, your result is meaningless.
+                Also, an error signifies an invalid digit for the specified
+                base was found.
+ 
+ 
+ 
+ 
+       ITOA converts an integer to a string of the specified base.
+ 
+        USAGE:  itoa(string, integer, base);
+ 
+        RETURN:         nothing
+ 
+        NOTE:   This command will treat the integer as unsigned.
+
+        SOUND                                                           6- 1
+ 
+ 
+       SOUND will generate a frequency for a specified duration
+ 
+        USAGE:  sound(freq, dur);
+ 
+        RETURNS:        nothing but sound
+ 
+        NOTE:   The duration is in hundredths (.01) of a second.
+ 
+        FREQUENCY CHART
+ 
+                       NOTE              FREQUENCY
+                        C               130.8   131
+                        C#              138.6   139
+                        D               146.8   147
+                        D#              155.6   156
+                        E               164.9   165
+                        F               174.6   175
+                        F#              185.0   185
+                        G               196.0   196
+                        G#              207.7   208
+                        A               220.0   220
+                        A#              233.1   233
+                        B               246.9   247
+                 MIDDLE C               261.7   262
+                        C#              277.2   277
+                        D               293.7   294
+                        D#              311.1   311
+                        E               329.6   330
+                        F               349.2   349
+                        F#              370.0   370
+                        G               392.0   392
+                        G#              415.3   415
+                        A               440.0   440
+                        B               493.9   494
+                        C               523.3   523
+
+        EDINPUT                                                         7- 1
+ 
+ 
+ 
+ 
+       KEYGETS will get edited input from the keyboard.
+ 
+        USAGE:  keygets(string, length, row, col, page, upper);
+ 
+        RETURNS:        nothing
+ 
+        NOTE(S):        The passed in string should either be set
+                to all spaces or some predefined value before calling.
+ 
+                        The variable upper is a boolean on whether
+                the input should be converted to upper case.
+

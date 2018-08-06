@@ -1,0 +1,5 @@
+; Definition file for VIO BROWSE utility
+; Created by Microsoft Corporation, 1989
+;
+NAME	Browse	WINDOWCOMPAT
+DESCRIPTION 'VIO File Browsing Utility'

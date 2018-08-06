@@ -1,0 +1,35 @@
+LOCAL BOOL MpmMenuLoad( hwndFrame, idResources )
+    HWND        hwndFrame;
+    USHORT      idResources;
+{
+    MbarHandle  hmbar;
+    MbarPtr     pmbar;
+    SHORT       sMenuCount;
+    MenuHandle  hmenu;
+
+    hmbar = (MbarHandle)GetNewMBar( idResources );
+    if( ! hmbar )
+      return FALSE;
+
+    sMenuCount = MENUCOUNTOFHMBAR( hmbar );
+    ASSERT( sMenuCount > 0,
+            "MpmMenuLoad: null menu bar?" );
+
+    SetMenuBar( hmbar );
+    DisposHandle( (Handle)hmbar );
+
+    hmbar = (MbarHandle)MenuList;
+
+    hmenu = (**hmbar).mlist[0].hmenu;
+
+    ASSERT( hmenu,
+            "MpmMenuLoad: no apple menu?" );
+
+    _sAppleCount = CountMItems( hmenu );
+
+    AddResMenu( hmenu, 'DRVR' );
+
+    DrawMenuBar();
+
+    return TRUE;
+}

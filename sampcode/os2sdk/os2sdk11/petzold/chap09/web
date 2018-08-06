@@ -1,0 +1,9 @@
+#---------------
+# WEB make file
+#---------------
+
+web.obj : web.c
+     cl -c -G2sw -W3 web.c
+
+web.exe : web.obj web.def
+     link web, /align:16, NUL, os2, web

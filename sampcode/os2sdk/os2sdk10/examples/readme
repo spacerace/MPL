@@ -1,0 +1,56 @@
+
+		ISV demo kit ...\demo\examples
+
+
+
+  This is a collection of small routines that demonstrate some of the
+  capabilities of the OS  2 operating system.  Many routines are "bound"
+  to demonstrate compatability between DOS 3.X and OS/2.
+
+  Below is a list of the programs available under this directory and 
+  whether they run both Real and Protected mode.
+
+Exec		Modes	Description
+--------	-----	---------------------
+ALLOC		Real	- Allocates slabs of memory
+ARGUMENT		- A technique for passing prameters to threads
+ASMEXMPL		- ASM version of Threads
+ASYNCIO			- Prints 10240 'x' to the screen
+BEEPC		Real	- Beeps the speaker
+CONFIG		Real	- Displays machine configuration
+COUNTRY		Real	- Displays the current country (code page) info.
+CRITSEC			- Two threads use critical section with printf().
+CSALIAS 		- Aliases a code segment with a Data segment.
+CWAIT			- Tasking example - wait for a child to exit.
+DATETIME	Real	- Prints Date and time information
+DOSEXIT			- Example of the DOSEXIT call with threads
+DYNLINK 		- Example of C and ASM Dynamic link libraries
+EXITLIST		- Sets up an exit routine and then exits.
+FSINFO		Real	- Gets and sets A: volume information
+GETENV		Real	- Prints out first element of environment
+HELLO		Real	- Your standard "Hello, world" program.
+HUGE		Real	- Allocates a "huge" slab of memory
+INFOSEG			- Prints out information about the process
+IOPL			- Gets and displays current cursor position
+KEYS		Real	- Prints out keycodes using KBDCHARIN
+KILL			- Example of the DOSKILL call with threads
+MACHMODE	Real	- Displays machine mode (Real/Protected)
+MONITORS		- Example of registering and terminating monitors
+MOVE		Real	- Move files about
+PIPES			- Two different examples of using pipes.
+QHTYPE		Real	- Opens some files and prints out handle information
+QUEUES			- Two processes: a consumer and a server.
+REALLOC 		- Grows and shrinks a segment
+SESSION 		- Example of Session Manager API usage.
+SETMAXFH		- Sets Maximum file handles to 30
+SETVEC		Real	- Modifies the interrupt vector table
+SHARE			- Two processes pass keystrokes through shared memory
+SIGNAL		Real	- Sets up a signal handler to catch ^C
+SLEEP		Real	- Snoozes for a while
+SUBALLOC	Real	- Demonstrates the SUBALLOC call.
+SUSPEND			- One thread suspending and resuming another thread
+THREADS			- C threads demo
+TIMER			- Sleeps and beeps three times.
+VERSION		Real	- Prints DOS version
+
+MAKEALL			- .BAT file to build all of the above

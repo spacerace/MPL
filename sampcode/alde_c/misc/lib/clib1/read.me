@@ -1,0 +1,60 @@
+          Files in DISPIO.LBR, a Lattice C interface to IBM_PC BIOS video
+          routines:
+               DISPIO   AQM     BIOS video IO
+               DISPIO   HQ      Constants and macros for DISPIO.ASM
+               DISPIOF  CQ      Functions which use DISPIO.ASM
+               DISP_PAR HQ      extern declarations for window parameters
+               D_PRINTF CQ      Fast printf which uses DISPIO.ASM
+               PRINTF   CQ      Fast printf which uses DOS calls
+               FRAME    CQ      Single and double line boxes which uses
+                                DISPIOF
+               DISPIO   DQC     Documentation for all functions except
+                                printf
+               READ     ME      This file
+
+               This library is based on the file DISPIO.ASM, which Brian
+          H. Burger published in the article, "C to Assembly Interface", on
+          pages 49-59 of the February, 1985 issue of "Computer Language". 
+               DISPIO.ASM is the original program, with a few corrections
+          and some modifications.  It contains Lattice C calls for all the
+          BIOS video procedures, plus procedures to switch monitors.  Some
+          of the procedures have two calls, one near assembly language and
+          the other with more arguments but clearer.  I added calls only
+          when the Greenleaf Functions did not have the second form.  The
+          documentation for DISPIO also gives the Greenleaf Functions
+          references.
+               DISPIO.ASM is designed to work with Lattice C, which has its
+          own method of interfacing to functions.  You may need to change
+          or even rewrite it for a different compiler.
+               The include file DISPIO.H contains constants which may help
+          you use DISPIO.ASM and two macros which use it.
+               DISPIOF.C contains many small functions which use
+          DISPIO.ASM.  As I wrote them, I realized that they were also low
+          level window functions, so I added some global variables to give
+          window specifications.  DISP_PAR.H is an include file which will
+          declare these variables extern in other modules.  Several of the
+          functions in DISPIOF.C call major BIOS functions like change
+          monitors and then reset these global variables.  Incidentally,
+          the default window is the whole screen.  If you want others, you
+          must write your own functions to save and restore the parameters
+          and set the new ones.
+               Since these are BIOS functions, they are quite fast.  Since
+          they are not DOS functions, they do not support redirection.  I
+          would expect you to use them only in those cases where you know
+          that you are dealing with the screen.
+               Two of the three remaining program files are addaptations of
+          existing public domain functions to DISPIO.  I added a choice
+          between a single and double line box to L. Cutherberson's
+          FRAME.C.  I merely changed the name and call to the anonymous
+          author's PRINTF.C.  In this case, use the original file for
+          redirectible speed and the new D_PRINTF.C if you don't want to
+          allow redirection.
+               Finally, DISPIO.DOC contains documentation sheets for the
+          functions.
+               * * * * * * * * * * * * * * * * * * * *
+               These functions are free for your use, as is, with no
+          warantees of any kind.
+
+          Lew Paper
+
+

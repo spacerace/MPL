@@ -1,0 +1,5 @@
+execsort.obj : execsort.asm
+  masm /T execsort.asm;
+
+execsort.exe : execsort.obj execsort.def
+  link execsort,,,os2,execsort

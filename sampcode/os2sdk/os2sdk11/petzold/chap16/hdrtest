@@ -1,0 +1,9 @@
+#-------------------
+# HDRTEST make file
+#-------------------
+
+hdrtest.obj : hdrtest.c hdrlib.h
+     cl -c -G2sw -W3 hdrtest.c
+
+hdrtest.exe : hdrtest.obj hdrtest.def
+     link hdrtest, /align:16, NUL, os2, hdrtest

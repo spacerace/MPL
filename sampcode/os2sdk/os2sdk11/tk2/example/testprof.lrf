@@ -1,0 +1,8 @@
+testprof.obj
+testprof.exe
+testprof.map /map /stack:8192
+..\profile.lib+
+doscalls.lib +
+slibcp.lib
+testprof.def
+

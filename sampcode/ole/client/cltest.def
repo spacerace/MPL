@@ -1,0 +1,24 @@
+NAME          cltest
+
+DESCRIPTION  'Simple Microsoft L&E client app'
+
+EXETYPE       WINDOWS
+
+
+CODE	     PRELOAD MOVEABLE DISCARDABLE
+DATA	     PRELOAD MOVEABLE MULTIPLE
+
+HEAPSIZE     8000
+STACKSIZE    16000
+
+EXPORTS
+	 MainWndProc	            @1
+         ItemWndProc                @2
+         CallBack                   @3
+	 EditWndProc		    @4
+
+         AboutDlgProc               @5
+         SaveAsDlgProc              @6
+         OpenDlgProc                @7
+         PropertiesDlgProc          @8
+	 InsFileProc		    @9

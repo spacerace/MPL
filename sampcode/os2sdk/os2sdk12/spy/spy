@@ -1,0 +1,58 @@
+# Makefile for SPY Message Hooking utility
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+ASM	= masm
+CC	= cl -c -u -Asnd -G2cs -Od -W3 -Zpei
+LF	= /align:16 /codeview /map /NOD
+OBJS	= spy.obj message.obj options.obj queues.obj \
+	  spytbls.obj symbol.obj window.obj spyutil.obj
+
+# Default Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.asm.obj:
+    $(ASM) $*.asm;
+
+.rc.res:
+    rc -r $*.rc
+
+all:spy.exe 
+# Dependencies
+#
+..\dll\spyhook.dll:	spyhook spyhook.def spyhook.h spyhook.c spyhstrt.asm
+    nmake spyhook
+
+spy.res:	spy spy.rc spy.ico spy.h spydlgs.dlg
+
+spy.obj:	spy spy.c spyhook.h
+
+message.obj:	spy message.c
+
+options.obj:	spy options.c
+
+queues.obj:	spy queues.c
+
+spytbls.obj:	spy spytbls.c
+
+spyutil.obj:	spy spyutil.asm
+
+symbol.obj:	spy symbol.c symbol.h
+
+window.obj:	spy window.c
+
+spy.lnk:	spy
+    echo $(OBJS)		>  spy.lnk
+    echo spy.exe		>> spy.lnk
+    echo spy.map		>> spy.lnk
+    echo os2 slibcep spyhook	>> spy.lnk
+    echo spy.def		>> spy.lnk
+
+spy.exe:	spy $(OBJS) spy.res spy.def spy.lnk ..\dll\spyhook.dll
+    link $(LF) @spy.lnk
+    rc spy.res
+    del spy.lnk

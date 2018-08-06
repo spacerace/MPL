@@ -1,0 +1,109 @@
+
+	 DOCUMENTATION FOR "C" EDITOR - FEBRUARY 3, 1984
+	              (IBM PC VERSION)
+		(Written by Edward K. Ream)
+	       (Modified by Alan D. Howard)
+       (Dr. Dobb's Journal, Jan. 1982, v. 7 Issue 1)
+       (Dr. Dobb's Journal, May  1983, v. 8 Issue 5)
+
+COMMAND MODE COMMANDS:	(May be entered in upper or lower case.  Arguments
+			surrounded by [ ] may be replaced by buffer mark
+				commands:  F7, F8, & cursor)
+
+Command 	Arguments	Function
+
+append		<filename>	Insert the named file into buffer at cursor
+change		[<from to>]	Make indicted changes in
+					lines in range <from to>
+clear				Erase the buffer
+closeread			Close the read file
+closewrite			Close the write file
+copy		[<from to n>]	Copy <n> lines from <from> to before <to>
+count		<n>		Number of times to repeat buffer macro
+delete		[<from to>]	Delete all lines in the range <from to>
+					If room exists, lines are copied to
+					the pick buffer.
+delname 	<filename>	Make the indicated file the write file;
+					no error if file already exists
+dos				Exit from editor to operating system
+extract 	[<from to>]	Write the designated lines to the write file;
+find				Search for a pattern; enter edit mode
+g		<n>		Go to line <n> and enter edit mode
+help				List the command mode commands to the screen
+hidetab 			Do not show tabs in reverse video (default)
+list		[<from to>]	List the indicated lines to printer
+load		<filename>	Open the indicated file as the read file;
+					clear the buffer;
+					load the buffer from the file;
+					close the read file if entire file read
+move		[<from to n>]	Move <n> lines from <from> to before <to>
+name		<filename>	Make the indicated file the write file;
+					error if file already exists
+open		<filename>	Open the indicated file as the read file
+read		<n>		Read <n> lines from read file to end of
+					buffer; close the read file if
+					entire file read;
+rename		<filename>	Close the write file; open new write file
+rest				Clear the buffer if requested;
+					load the buffer from the read file;
+					close the read file if entire file read
+save				Save the buffer into the write file;
+					buffer is unchanged;
+search		[<from to>]	Print all lines that match a pattern
+showtab 			Show tabs in reverse video 
+tabs		<n>		Set tab stops at every <n> columns
+write		<n>		Write <n> lines from front of buffer to the
+					write file; the lines are deleted from
+					the buffer
+(F2)				Enter edit mode
+(F4)				Enter insert mode
+
+
+EDIT AND INSERT MODE KEY COMMANDS:
+
+Key		Action
+
+(Pg Dn)       	Scroll down until any key pressed
+(Ctl Pg Dn)	Move screen down 20 lines
+(Ctl Right Arrow)      	Move to end of line
+(F3)<n> CR    	Go to line <n>
+(Ctl Left Arrow)       	Move to beginning of line
+(Pg Up)       	Scroll up until any key pressed
+(Ctl Pg Up)	Move screen up 20 lines
+(F5)          	Erase from cursor to end of line
+(F2)		Enter edit mode
+(F6)		Abort changes to current line
+(F1 or Esc) 	Enter command mode
+(END)		Delete character before cursor
+(BACKSPACE)	Delete character at cursor; same as (END) at end of line
+(RETURN)	Insert mode:  Add line below current line, move to the new line
+		Edit mode:  Move to next line
+(Ins)		Insert line at cursor: move current line down, 
+			enter insert mode
+(F4)		Enter insert mode
+(Del)		Delete current line
+(Alt-4)<char>   Search for character and move cursor to character
+(Alt-3)<char>   Delete characters from cursor up to but not including <char>
+(HOME)	      	Move cursor alternately to top and bottom of screen
+(Alt-1)		Split line at cursor.
+(Alt-2)		Join current line with line above (if room)
+(Up-arrow)	Up one line
+(Down-arrow)	Down one line
+(Left-arrow)	Left one literal character (Tabs move to next tab stop)
+(Alt -)         Left one column position (this is the top-row -_ key)
+(Right-arrow)	Right one literal character (Tabs move to next tab stop)
+(Alt +)		Right one column position (This is the top-row =+ key)
+(F7)		Mark beginning of line range
+(F8)		Mark end of line range
+(F9)		Move line range to pick buffer (if room)
+(F10)		Move pick buffer to before current cursor line
+(-)		Start/end recording toggle of keystrokes to playback 
+			buffer macro (This is - on Auxiliary Keypad)
+(+)		Playback of key buffer macro - Playback repeated number
+			of times set by Count command (This is + on
+			Auxiliary Keypad)
+
+(All others)	Any other printing key (and TAB key) act as follows:
+			Edit mode:	Replace cursor with character
+			Insert mode:	Insert character
+

@@ -1,0 +1,9 @@
+valrgn.obj: valrgn.c
+   cl -c -W2 -AS -Gsw -Od -Zped valrgn.c
+
+valrgn.exe: valrgn.obj valrgn.def
+   link4 valrgn,/align:16,/map/li,slibw/NOE,valrgn.def
+   mapsym valrgn
+   del *.obj
+   del *.map
+   del *.sym

@@ -1,0 +1,26 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+gmnustat.obj: gmnustat.c
+
+gmnustat.res: gmnustat.rc 
+    rc -r gmnustat.rc
+
+gmnustat.exe: gmnustat.obj gmnustat.res gmnustat.def
+    link4 gmnustat,/align:16,/map,slibw/NOE,gmnustat.def
+    mapsym gmnustat
+    rc gmnustat.res

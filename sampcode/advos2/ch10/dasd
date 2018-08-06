@@ -1,0 +1,6 @@
+dasd.obj : dasd.asm
+ masm dasd;
+
+dasd.exe : dasd.obj dasd.def
+ link dasd,,,os2,dasd;
+

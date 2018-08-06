@@ -1,0 +1,11 @@
+;------------------------------------
+; KEYLOOK.DEF module definition file
+;------------------------------------
+
+NAME           KEYLOOK   WINDOWAPI
+
+DESCRIPTION    'Key Look Program (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

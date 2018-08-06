@@ -1,0 +1,35 @@
+/*-----------------------------------------------------------------*/
+/* Sleuth.rc - resource file for SLEUTH.EXE                        */
+/*-----------------------------------------------------------------*/
+
+#include <os2.h>
+#include "Sleuth.h"
+
+/*-----------------------------------------------------------------*/
+
+POINTER ID_SLEUTH       sleuth.ico
+
+/*-----------------------------------------------------------------*/
+
+STRINGTABLE
+{
+    IDS_CLASS,      "Sleuth!"
+    IDS_TITLE,      "Presentation Manager Sleuth"
+}
+
+/*-----------------------------------------------------------------*/
+
+MENU ID_SLEUTH
+{
+    SUBMENU "~Sleuth",                          CMD_SLEUTH
+    {    
+        MENUITEM "~New case",                   CMD_LOOK
+        MENUITEM SEPARATOR
+        MENUITEM "~Show Detail",                CMD_EXPAND
+        MENUITEM SEPARATOR
+        MENUITEM "E~xit",                       CMD_EXIT
+        MENUITEM "A~bout Sleuth...",            CMD_ABOUT
+    }
+}
+
+/*-----------------------------------------------------------------*/

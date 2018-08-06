@@ -1,0 +1,43 @@
+#
+# FORM LIBRARY - MAKE FILE
+#
+# LANGUAGE      : Microsoft C 5.1
+# MODEL         : medium
+# ENVIRONMENT   : Microsoft Windows 3.0 SDK
+# STATUS        : operational
+#
+#    Eikon Systems, Inc.
+#    989 East Hillsdale Blvd, Suite 260
+#    Foster City, California 94404
+#    415-349-4664
+#
+# 07/12/90 1.00 - Kevin P. Welch - initial creation.
+#
+
+# compilation flags
+DLLFLAGS=-c -u -Alnw -Gsw -Os -W3 -Zp -D_WINDOWS -D_WINDLL
+
+form.res: form.rc form.h
+   rc -r form.rc
+
+form0.obj: form0.asm
+   masm /MX form0.asm;
+
+form1.obj: form1.c form.h form.d
+   cl $(DLLFLAGS) form1.c
+
+form2.obj: form2.c form.h form.d
+   cl $(DLLFLAGS) form2.c
+
+form3.obj: form3.c form.h form.d
+   cl $(DLLFLAGS) form3.c
+
+form4.obj: form4.c form.h form.d
+   cl $(DLLFLAGS) form4.c
+
+form.dll: form0.obj form1.obj form2.obj form3.obj form4.obj form.def
+   link4 form0+form1+form2+form3+form4, form.dll /AL:16 /CO, , mdllcaw libw /NOD, form
+   rc form.res form.dll
+
+form.dll: form.res
+   rc form.res form.dll

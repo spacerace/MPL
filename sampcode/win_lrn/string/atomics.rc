@@ -1,0 +1,7 @@
+#include <style.h>
+#include "atomics.h"
+
+MainMenu MENU
+ BEGIN
+  MENUITEM "&Execute", IDM_EXECUTE
+ END

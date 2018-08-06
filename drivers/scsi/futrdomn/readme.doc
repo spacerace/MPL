@@ -1,0 +1,20 @@
+The OEM TOOL KIT object files are in the TOOLKIT subdirectory.
+
+
+TOOLKIT\OEMSCSI.OBJ  - Microsoft C, small model.
+TOOLKIT\OEMSCSIL.OBJ - Microsoft C, large model.
+TOOLKIT\OEMSCSIM.OBJ - Microsoft C, medium model.
+
+
+The Sample Programs are in the SAMPLES subdirectory. And sample batch files
+are in the TOOLS subdirectory. 
+
+
+Use the MANUAL.EXE program to read the OEM TOOL KIT Manual.
+
+Type "MANUAL" at the DOS prompt.
+e.g.
+
+C> MANUAL 
+
+

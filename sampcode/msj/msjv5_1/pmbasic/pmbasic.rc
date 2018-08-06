@@ -1,0 +1,43 @@
+
+/*----------------------------------------------------------
+--------------
+| Program Name: PMBasic.RC
+|
+| Description:  This is the resource script file for
+PMBasic.BAS.  A menu
+|               containing nested submenus is created to
+allow the user to
+|               select the number of points to be used in
+the figure in
+|               PMBasic.BAS.
+|
+| NOTE: Because the "Exit" item has the MIS_SYSCOMMAND,
+there is no
+|       command message to be processed in PMBasic.BAS.
+This item will
+|       automatically close the window.
++-----------------------------------------------------------
+------------*/
+#include <os2.h>
+MENU 1
+ {
+ SUBMENU  "~PM Basic Demo", 1
+  {
+  SUBMENU "~Points", 2
+  {
+   MENUITEM "~10", 10
+   MENUITEM "~20", 20
+   MENUITEM "~30", 30
+   MENUITEM "~40", 40
+   MENUITEM "~50", 50
+   MENUITEM "~60", 60
+   MENUITEM "~70", 70
+   MENUITEM "~80", 80
+   MENUITEM "~90", 90
+  }
+  MENUITEM SEPARATOR
+  MENUITEM "E~xit", SC_CLOSE, MIS_SYSCOMMAND
+  }
+ }
+
+

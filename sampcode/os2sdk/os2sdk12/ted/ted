@@ -1,0 +1,63 @@
+#--------------------------------------------------------
+#
+#   TED - Sample PM MLE/Help Manager application MakeFile
+#
+#   Created by Microsoft Corporation, IBM Corporation 1989
+#
+#   The sample is compiled with Codeview support
+#
+#--------------------------------------------------------
+#  Compiler Flags
+#--------------------------------------------------------
+
+CFLAGS= -AL -G2sw -W3 -Zpei -Od -c
+
+#--------------------------------------------------------
+#   Linker Flags
+#--------------------------------------------------------
+
+LFLAGS= /CO /NOD
+
+#--------------------------------------------------------
+#   Compiler name
+#--------------------------------------------------------
+
+CC = cl $(CFLAGS)
+
+#--------------------------------------------------------
+#  Default inference rules
+#--------------------------------------------------------
+
+.c.obj:
+        $(CC) $*.c
+
+.rc.res:
+        rc -r $*.rc
+
+all: tedhp.hlp ted.exe
+
+ted.obj : ted.c ted.h tedhelp.h
+
+tedmem.obj : tedmem.c tedmem.h
+
+tedhelp.obj : tedhelp.c tedhelp.h ted.h tedhp.h
+
+ted.res : ted.rc ted.h ted.ico tedhelp.h teddlg.dlg tedhelp.rc tedhp.h
+
+#---------------------------------------------------------
+# Here we use the C pre-processor to convert panel names
+# to panel id's, since IPFC wont accept names.
+#---------------------------------------------------------
+
+tedhp.hlp : tedhp.itl tedhp.h
+    cl   -P tedhp.itl
+    ..\..\binp\ipf\ipfc    tedhp.i
+
+#---------------------------------------------------------
+# build the exe
+#---------------------------------------------------------
+
+ted.exe : ted.obj tedhelp.obj ted.def ted.res tedmem.obj
+    link $(LFLAGS) ted+tedhelp+tedmem,,,llibcep os2 opendlg,ted
+    rc ted.res ted.exe
+    markexe lfns ted.exe

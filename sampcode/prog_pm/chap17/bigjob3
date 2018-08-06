@@ -1,0 +1,19 @@
+#-------------------
+# BIGJOB3 make file
+#-------------------
+
+bigjob3.obj : bigjob3.c bigjob.h
+     cl -c -G2sw -W3 bigjob3.c
+
+bigjob.obj : bigjob.c
+     cl -c -G2sw -W3 bigjob.c
+
+bigjob.res : bigjob.rc bigjob.h
+     rc -r bigjob
+
+bigjob3.exe : bigjob3.obj bigjob.obj bigjob3.def
+     link bigjob3 bigjob, /align:16, NUL, os2, bigjob3
+     rc bigjob.res bigjob3.exe
+
+bigjob3.exe : bigjob.res
+     rc bigjob.res bigjob3.exe

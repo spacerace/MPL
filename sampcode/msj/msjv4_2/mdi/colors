@@ -1,0 +1,16 @@
+# compilation flags
+CFLAGS=-AM -c -Gsw -Osal -W2 -Zp
+
+# COLORS
+colors.res: colors.rc colors.ico colors.h mdi.h
+   rc -r colors.rc
+
+colors.obj: colors.c colors.h mdi.h
+   cl $(CFLAGS) colors.c
+
+colors.exe: colors.obj colors.def mdi.lib
+   link4 colors,colors/ALIGN:16,colors,mdi+mlibw+mlibcew/NOE,colors
+   rc colors.res
+
+colors.exe: colors.res
+   rc colors.res

@@ -1,0 +1,21 @@
+lwindow is a package that I pulled down off a board out east.  It really
+does work - at least with Aztec.  
+
+The file window.doc is the original documentation.
+
+The file window.mem is just the declaration of all the functions in
+window.c.  It is as close to a reference guide as I have.
+
+The file vlib.azt is the aztec version of the assembly language interface
+to the ROM BIOS.  vlib.asm is set up for lattice C.
+
+The only changes I made to window.c is to make some variables 
+register variables.  Lattice will just ignore those declarations.
+
+I wrote wtest.c - a simple demo.  The wndemo.c program came in the ARC file,
+and seems to behave in wierd and confusing ways.  I think the fault lies in
+wndemo.c, not in the windowing routines themselves.
+
+ENJOY:
+
+Kent Williams

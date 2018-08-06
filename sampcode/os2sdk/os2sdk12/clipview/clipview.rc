@@ -1,0 +1,65 @@
+/*
+    Resource file for Clipboard viewing application
+    Created by Microsoft Corporation, 1989
+*/
+#define INCL_WINCLIPBOARD
+#include <os2.h>
+#include "clipview.h"
+
+POINTER ID_RESOURCE	clipview.ico
+
+DLGTEMPLATE IDD_ABOUT {
+    DIALOG "", 0, 10, 30, 160, 75, WS_SAVEBITS | FS_DLGBORDER {
+	CTEXT	"OS/2 Presentation Manager"	   -1, 10, 60, 140, 10
+	CTEXT	"Clipboard Viewer"		   -1, 10, 50, 140, 10
+	ICON	ID_RESOURCE		 	   -1,  8, 40,   0,  0
+	CTEXT	"Version 1.0"			   -1, 10, 30, 140, 10
+	CTEXT	"Created by Microsoft Corp., 1989" -1, 10, 20, 140, 10
+	DEFPUSHBUTTON "~Ok"		   DID_OK, 64,  4, 32,  14, WS_GROUP
+    }
+}
+
+DLGTEMPLATE IDD_RENDER {
+    DIALOG "Render Format", 0, 10, 30, 160, 90,
+		WS_SAVEBITS | FS_DLGBORDER, FCF_TITLEBAR {
+	LTEXT	"Available Formats: "	   	-1, 10, 78,140, 10
+	LISTBOX				IDL_RENDER, 10, 20,140, 60
+	DEFPUSHBUTTON "~Ok"		    DID_OK, 25,  4, 45, 14, WS_GROUP
+	PUSHBUTTON    "~Cancel"		DID_CANCEL, 95,  4, 45, 14
+    }
+}
+
+MENU ID_RESOURCE {
+    SUBMENU "~File", IDM_FILE {
+	MENUITEM "~Render...",		IDM_RENDER,	MIS_TEXT
+	MENUITEM "~Save...",		IDM_SAVE,	MIS_TEXT
+	MENUITEM SEPARATOR
+	MENUITEM "E~xit",		SC_CLOSE,	MIS_SYSCOMMAND
+	MENUITEM "A~bout ClipView...",	IDM_ABOUT,	MIS_TEXT
+    }
+}
+
+STRINGTABLE ID_RESOURCE {
+    CF_BITMAP		"BITMAP"
+    CF_DSPBITMAP	"Display BITMAP"
+    CF_DSPMETAFILE	"Display Metafile"
+    CF_DSPTEXT		"Display Text"
+    CF_METAFILE		"Metafile"
+    CF_TEXT		"Text"
+/*
+    I've defined two clipboard formats for use in this application only.
+*/
+    CF_EMPTY		"empty"
+    CF_UNKNOWN		"unknown"
+
+    IDS_ABOUTMENU	"A~bout Clipboard..."
+    IDS_ALREADY		"Viewer already installed."
+    IDS_APPNAME		"Clipboard "
+    IDS_CLIPCLASS	"Clipboard Viewer Class"
+    IDS_INST		"Enter the save file name."
+    IDS_NODISPLAY	"Format not rendered."
+    IDS_NOTPRES		"Clipboard format not present."
+    IDS_NOTSAVED	"Data not saved."
+    IDS_OPENFAIL	"Couldn't open clipboard."
+    IDS_SAVETITLE	"Save Format:  "
+}

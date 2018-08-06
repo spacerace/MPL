@@ -1,0 +1,463 @@
+
+
+
+
+
+
+                     C-SM  ANALYZE and MAINTENANCE PACKAGE
+
+                    Copyright (C) Parvenu Systems  1986, 1987
+
+
+
+
+
+        The ANALYZE package is a set of procedures and utilities which
+        simplify the development, documentation and maintenance of
+        'C' source code.
+
+        Maintenance personnel needing to make changes or additions to an
+        existing package MUST have a way to find what functions are in
+        the package.
+
+        Development personnel MUST be able to keep track of what functions
+        are done and in what file. A major desire of development personnel
+        is to avoid duplication of effort along the way, and to avoid
+        having to maintain 3 or 4 separate documents in parallel.
+
+        The ANALYZE and HEADER utilities provide for these needs and
+        become particularly important as the number of files making up
+        the product grows larger.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                ANALYZE.EXE
+
+
+        analyze         synopsis:
+
+         Description  : analyzes one or a list of files for the following:
+           1) function definitions
+           2) function calls
+           3) statistics of file[s] - chars, lines, comment percentage etc.
+           4) balance of 'fences' {}[]() .
+
+           Will resolve references to called functions or macros whose
+           definitions appear in any of the analyzed files.  These may
+           include both .c and .asm source files and .h include files.
+           Procs from .asm files are assumed to conform to the leading
+           underscore ('_') naming convention required by MicroSoft 'C'
+           for linking.
+
+           Output is to stdout. Usually redirected to file or printer
+
+           Usage:
+
+           Command options allow modified uses of the program for specific
+           uses.  Also allow user to analyze a list of files in convenient
+           ways. Option flags may appear in any order or in any place on
+           the command line and may be combined ie: -dsb  specifies 3 flags.
+
+              -d                 prints only the [d]efined functions along
+                                 with the file name in which efined.  This
+                                 listing may then be sorted to make a
+                                 "function directory"
+
+              -s                 Prints the statistical analysis of file[s].
+                                 Shows total files, lines, chars, and comment
+                                 to code percentage.
+
+              -b                 Prints out any unbalances found.  Handles
+                                 braces, brackets, parenthesis, and both
+                                 single and double quotes.
+
+               -f<filename>      Analyze each of the files found in a
+                                 'list file' where each file is named on a
+                                 separate line. Note no space following -f
+
+               -m<make filename> Analyze each of the "dependant source files"
+                                 from the 'makefile' of the form required
+                                 by MicroSoft Make v. 4.x
+                                 Note no space following -m
+
+               ?                 Lists the available options.
+
+           Single or multiple filenames may be specified on the command line.
+                  wildcards are acceptable ie: *.c or a??.c
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                HEADERS.EXE
+
+
+        headers         synopsis:
+
+        description  :  Extract and print function headers.
+
+        Headers and/or revision histories may be extracted from files
+        containing source code with function headers and revision
+        history info blocked out in a manner similar to the example
+        shown in appendix a.
+
+        Output is to stdout - may be redirected to file or prn
+
+        Format of the function headers is not critical.  The style may
+        be varied to suit individual taste.  The only requirements
+        are the 'trigger chars' which mark the start and end of each
+        block:
+           The first line of the function header must contain "*@H**"
+           The last line of the function header must contain "**@H*"
+           The first line of the revision history must contain "*@R**"
+           The last line of the revision history must contain "**@R*"
+
+        Options available are:
+
+         -f<filename>        Extract headers from the files found in a
+                             'list file' where each file is named on a
+                             separate line. Note no space following -f
+
+         -m<make filename>   Extract headers from all the
+                             "dependant source files" from the 'makefile'
+                             of the form required by MicroSoft Make v. 4.x
+                             Note no space following -m
+
+         -h                  Extract headers only - (default)
+         -r                  Extract revision history only
+         -b                  Extract headers & revision histories
+
+          ?                  Lists the available options.
+
+        Usage: headers [-fmhrb] [file1.c] [. . fileN.c]
+               wildcards are acceptable ie: *.c or a??.c
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                     PROJECT DEVELOPMENT SUGGESTIONS
+
+
+        The analyze procedures may help with project development when
+        adopting some standards and using these procedures throughout
+        the project from start to finish as follows:
+
+        1) During the design phase the module descriptions start the steps
+           which will carry through the entire project.
+
+        2) During the initial coding phase each module is marked out by
+           using the standard module header shown below combined with
+           the module description from the design documentation.
+           When block marked and moved into the module header it becomes
+           the code module description.  This should not change if the
+           design was well thought out.
+
+        3) The Standard Module Header includes a Revision History block
+           which should be maintained as a development history during
+           the coding and testing phase, and then following release may
+           become a true revision history for the module.
+
+        4) Once the coding and debugging phase is underway and the number
+           of files is growing, the use of MAKE (tm) MicroSoft and
+           ANALYZE will begin to show its worth:
+
+            a)  A list of the files (.c and .asm) source is made up.
+                This file will contain 'target' and 'dependant' files
+                and be your 'makefile'.
+
+            b)  The ANALYZE utility is run using the 'defined' option:
+                   analyze -d -mmakefile > map.lst
+
+            c)  The result ( map.lst ) will be a complete list of
+                functions (and macros) defined, showing the filename
+                in which they are defined.
+
+            d)  The map output may then be sorted with DOS 'sort' command
+                to make 'roadmaps' any way you want.
+                    sort < map.lst > fmap.lst   ( alphabetical by function )
+
+           The resulting 'roadmaps' make it infinitely easier for development
+           team members to find any functions in the growing number of files.
+
+           Perhaps more importantly this helps avoid duplication of effort
+           since it is no longer easier to 'write it yourself' than to find
+           out if it already exists!  It also eliminates most tendency to
+           make the source files into incredible monsters.
+
+        5) ANALYZE has another capability which can be quite useful during
+           design work where an error in coding can not be spotted.
+           Although analyze should generally be run on source which has
+           been successfully compiled, running it with the -b (balance)
+           option can tell you if a problem stems from an unmatched brace
+           or parenthesis.  The compiler will also complain about these
+           things but not always specifically.
+
+
+
+
+
+
+
+
+
+
+                        PROJECT DOCUMENTATION SUGGESTIONS
+
+
+           Finally the coding is done and tested!  Now the real work of
+           documentation and maintenance manuals begins.
+
+           ANALYZE and HEADERS are used to produce the real meat of the
+           maintenance manual.
+
+            a)  A final fmap.lst is made as in step 4 above.
+
+            b)  The ANALYZE utility is run using the 'statistics' option:
+                   analyze -smmakefile > call.lst
+
+            The results are the "function directory" as used during
+            development and a complete cross reference of defined and
+            called functions ( and the filename where the called
+            function resides ).
+
+           And finally the Standard Module Header proves its mettle by
+           running the HEADER utility (using the same 'make' file).
+                   headers -mmakefile > prn
+
+           This will extract the Standard Module Header from each function
+           definition giving valuable information about each function
+           such as:
+               calling sequence
+               description
+               warnings (if any)
+
+           If desired the HEADER utility will extract the revision history
+           block separately or along with the Standard Module Header.
+
+           All three of the outputs produced above correspond in structure
+           so personnel desiring to follow or find something have a very
+           desirable tool to do so.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              APPENDIX  a.
+
+
+
+        An example of some Standard Module Header layouts:
+
+        For 'c' source code:
+
+        /*@H**********************************************************
+         * DECLARATION.... new_function
+         * PARAMETERS..... parameter name and type
+         * RETURNS........ Type & values
+         * Entry
+         *   Conditions...
+         * EXTERNALS
+         *  -referenced...
+         *
+         *  -modified.....
+         *
+         * WARNINGS....... None
+         *
+         * SOURCE FILE.... Same
+         *
+         * DESCRIPTION....
+         *
+         *********************************************************@H*/
+
+        /*@R**********************************************************
+         * Revision History - new_function
+         *
+         * Date       Engineer       Description
+         *                          Original release
+         *
+         *********************************************************@R*/
+
+
+         For assembly source code:
+
+
+         ;-*@H**-------------------------------------------------
+         ;    Name:   ... _new_funct
+         ;
+         ;    Entry:  ...
+         ;
+         ;    Exit:   ...
+         ;
+         ;    Notes:  ...
+         ;
+         ;    Desc:   ...
+         ;---------------------------------------------**@H*-----
+         ;-*@R**-------------------------------------------------
+         ;    Created:
+         ;
+         ;    Last update: ..
+         ;------------------------------**@R*---------------------
+
+
+
+
+
+
+
+
+
+
+
+                                APPENDIX b
+
+
+        Files on the diskette:
+           1) read.me           This file
+           2) analyze.exe       Executable analyze program
+           3) headers.exe       Executable header program
+           4) analyze.doc       Instructions and suggestions for use
+           5) fmap.bat          Batch file to make a "function directory"
+
+        Files included if your package is registered:
+
+          Source code to analyze:
+           1) analyze           Makefile for the analyze program
+           2) alz.c             Main source code file for analyze
+           3) anc.h             Include file for analyze
+           4) tokens.c          Tokenizer source code
+           5) tokens.h          Include file for tokenizer
+           6) type_t.def        Include file for tokenizer
+           7) statchar.c        Character reading and counting source
+           8) alzout.c          Reference resolution and printing source
+
+          Source code to headers:
+           1) headers.c         Main source code file for headers
+
+          Other files necessary to make executable files:
+           1) getargs.h         Include file for argument definitions
+                    Must reside in your INCLUDE directory for compiling.
+           2) getargs.obj       Argument processing code to link
+                    Must reside in your \obj directory for linking.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

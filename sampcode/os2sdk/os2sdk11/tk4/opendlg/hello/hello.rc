@@ -1,0 +1,29 @@
+/*
+    Resource file for OpenDlg demonstrator
+    Created by Microsoft Corporation, 1989
+*/
+#include <os2.h>
+#include "hello.h"
+
+POINTER ID_RESOURCE	hello.ico
+
+MENU ID_RESOURCE {
+	SUBMENU	"~File", IDM_FILE {
+		MENUITEM "~Open...",	IDM_OPEN,	MIS_TEXT
+		MENUITEM "~Save As...", IDM_SAVE,	MIS_TEXT
+		MENUITEM SEPARATOR
+		MENUITEM "E~xit",	SC_CLOSE,	MIS_SYSCOMMAND
+		MENUITEM "A~bout...",	IDM_ABOUT,	MIS_TEXT
+	}
+}
+
+DLGTEMPLATE IDD_ABOUT {
+    DIALOG "", 0, 10, 60, 160, 75, WS_SAVEBITS | FS_DLGBORDER {
+	CTEXT	"OS/2 Presentation Manager"	   -1, 10, 60, 140, 10
+	CTEXT	"OpenDlg Demonstrator"		   -1, 10, 50, 140, 10
+	ICON	ID_RESOURCE		 	   -1,  8, 40,   0,  0
+	CTEXT	"Version 1.0"			   -1, 10, 30, 140, 10
+	CTEXT	"Created by Microsoft Corp., 1989" -1, 10, 20, 140, 10
+	DEFPUSHBUTTON "Ok"		   DID_OK, 64,  4, 32,  14, WS_GROUP
+    }
+}

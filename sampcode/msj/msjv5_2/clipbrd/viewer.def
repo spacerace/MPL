@@ -1,0 +1,26 @@
+NAME             VIEWER
+
+DESCRIPTION      'Extensible Clipboard Viewer'
+
+STUB             'WINSTUB.EXE'
+
+DATA             MOVEABLE MULTIPLE
+CODE             MOVEABLE DISCARDABLE
+
+SEGMENTS
+    _VIEWER      MOVEABLE DISCARDABLE LOADONCALL
+    _DISPLAY     MOVEABLE DISCARDABLE LOADONCALL
+    _DIALOG      MOVEABLE DISCARDABLE LOADONCALL
+    _UTILITY     MOVEABLE DISCARDABLE LOADONCALL
+
+HEAPSIZE         2048
+STACKSIZE        2048
+
+EXPORTS
+  AboutDlgFn        @1
+  StatusWndFn       @2
+  ClientWndFn       @3
+  ViewerWndFn       @4
+  AddFormatDlgFn    @5
+  RemFormatDlgFn    @6
+

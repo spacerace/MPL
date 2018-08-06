@@ -1,0 +1,6 @@
+
+enmenuit.obj: enmenuit.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 enmenuit.c
+
+enmenuit.exe: enmenuit.obj enmenuit.def
+    link4 /align:16 enmenuit,,nul,slibw/NOE,enmenuit.def

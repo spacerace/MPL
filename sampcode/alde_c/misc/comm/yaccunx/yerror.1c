@@ -1,0 +1,19 @@
+#include "y1.h"
+
+/*
+ * 12-Apr-83 (RBD) Add symbolic exit status
+ */
+/* VARARGS1 */
+error(s,a1) char *s;
+
+   {
+   /* write out error comment */
+
+   ++nerrors;
+   fprintf( stderr, "\n fatal error: ");
+   fprintf( stderr, s,a1);
+   fprintf( stderr, ", line %d\n", lineno );
+   if( !fatfl ) return;
+   summary();
+   exit(EX_ERR);
+   }

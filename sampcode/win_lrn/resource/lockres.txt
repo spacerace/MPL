@@ -1,0 +1,1 @@
+FindResource locates this text in the resource file and returns handle to this text.  With the handle from FindResource, LoadResource moves this text into memory. Then LockResource finds the absolute memory address of this text and locks the text in memory so it cannot be moved or discarded.~

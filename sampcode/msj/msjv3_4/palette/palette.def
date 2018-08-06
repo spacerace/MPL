@@ -1,0 +1,14 @@
+NAME					Palette
+DESCRIPTION			'Color Palete Utility - (C) Kevin P. Welch 1988'
+STUB					'\BIN\WINSTUB.EXE'
+
+CODE					MOVEABLE 
+DATA					MOVEABLE MULTIPLE
+
+HEAPSIZE				2048
+STACKSIZE			2048
+
+EXPORTS			
+	PaletteDlgFn			@1
+	SpectrumWndFn			@2
+

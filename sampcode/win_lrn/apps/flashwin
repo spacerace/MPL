@@ -1,0 +1,6 @@
+flashwin.obj: flashwin.c
+    cl -c -d -AS -Gsw -Os -Zpe flashwin.c
+
+flashwin.exe: flashwin.obj flashwin.def
+    link4 flashwin,/align:16,/map, slibw/NOE, flashwin.def
+    mapsym flashwin

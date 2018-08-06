@@ -1,0 +1,10 @@
+;----------------------------------
+; PMCAP.DEF module definition file
+;----------------------------------
+
+NAME           PMCAP     WINDOWAPI
+
+DESCRIPTION    'Captures PM Screen to File (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192

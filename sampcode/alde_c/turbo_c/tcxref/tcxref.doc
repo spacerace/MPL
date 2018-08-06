@@ -1,0 +1,77 @@
+                             TCXREF V1.0
+
+
+TCXREF is a Turbo-C listing / cross reference utility .
+
+Usage: TCXREF <filename> <flag(s)>
+
+Flags: -L or /L             = Generate listing only
+       -C or /C             = Compressed print option
+       -R or /R             = Cross-reference reserved words
+       -F or /F <filename>  = Write output to named file
+
+Flags can be mixed and in either case.
+
+Since this is a first try at a xref utility there are a few short commings
+
+1) It will not handle include files :
+      This will change if there is enough interest for an upgrade
+
+2) It only handles EpsonMX printer controls for compressed mode :
+      A way around this to send the output file to a file and add
+      your own controls to the file header and trailer.
+      In noncompressed mode the only characters used are formfeed ^L
+      and carriage return.
+
+3) In noncompressed mode output defaults to the screen :
+      this can be over come by the command
+           TCXREF <filename> -f prn
+      The listing will now be sent to the printer.
+
+These are the major faults that I am working on.
+
+Now, this is what it can do :
+
+1) It can generate a listing and/or a cross reference of your program
+
+2) It defaults to not xrefing turbo reserved words, but this can be overridden.
+      By reserved words I mean the list on page 199 of the users guide.
+
+3) It will send your output to the screen, printer, or file
+
+4) It does not reformat your code and it assumes the code is correctly written
+      ie. curly braces are correct.
+
+5) It will correctly handle immbedded comments
+
+6) It can handle up to 1000 seperate variables
+                       ----------------------------------
+
+
+I would like to thank Philip Hisley , Dorn Stickler, and Tim Tegtmeier for
+Ideas, Directly or Indirectly, that brought about this Utility.
+
+
+Now for the usual:
+
+ This Executable is shareware so pass it on if you think it's useful.
+ If you have used it and think it is a good addition to your library then
+ send cash $20 or whatever. This will not only help me but it will provide
+ an incentive to update and improve on it thereby indirectly helping you.
+
+ If you have remarks, enhancements or bugs tell me.
+ Also *CODE* is appreciated and I will try to give credit where it is due.
+
+ If the response is good enough I will provide updates.
+
+Thank you
+
+
+                                                     Send To :
+                                                     Robert Innes
+                                                     2537 So. 15th Street #31
+                                                     Fargo, ND.  58103
+
+
+
+

@@ -1,0 +1,42 @@
+/*
+ * WINDOWS COLOR PALETTE UTILITY - RESOURCE FILE
+ *
+ * LANGUAGE : Microsoft C 5.0
+ * TOOLKIT  : Windows 2.03 SDK
+ * MODEL    : Small or Medium
+ * STATUS   : Operational
+ *
+ * 03/20/88 - Kevin P. Welch - initial creation.
+ *
+ */
+
+#include <windows.h>
+#include "palette.h"
+
+PaletteIcon	ICON		Palette.ico
+
+Palette DIALOG LOADONCALL MOVEABLE DISCARDABLE 32, 32, 248, 120
+CAPTION "Windows Color Palette"
+STYLE WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX
+BEGIN
+   CONTROL "Color Mixing Model", -1, "button", BS_GROUPBOX | WS_CHILD, 4, 2, 130, 52
+   CONTROL "&Red, Green, Blue.", ID_RGB, "button", BS_RADIOBUTTON | WS_TABSTOP | WS_CHILD, 8, 14, 124, 12
+   CONTROL "&Cyan, Magenta, Yellow.", ID_CMY, "button", BS_RADIOBUTTON | WS_TABSTOP | WS_CHILD, 8, 26, 124, 12
+   CONTROL "&Hue, Saturation, Value.", ID_HSV, "button", BS_RADIOBUTTON | WS_TABSTOP | WS_CHILD, 8, 38, 124, 12
+   CONTROL "Sample", -1, "button", BS_GROUPBOX | WS_CHILD, 138, 2, 106, 52
+   CONTROL "", ID_RED, "static", SS_LEFT | WS_CHILD, 142, 16, 38, 8
+   CONTROL "", ID_GREEN, "static", SS_LEFT | WS_CHILD, 142, 28, 38, 8
+   CONTROL "", ID_BLUE, "static", SS_LEFT | WS_CHILD, 142, 40, 38, 8
+   CONTROL "", ID_SAMPLE, "button", BS_USERBUTTON | WS_DISABLED | WS_CHILD, 182, 14, 58, 36
+   CONTROL "Color Mixture", -1, "button", BS_GROUPBOX | WS_CHILD, 4, 56, 240, 58
+   CONTROL "", ID_TITLE1, "static", SS_LEFT | WS_CHILD, 8, 72, 44, 8
+   CONTROL "", ID_TITLE2, "static", SS_LEFT | WS_CHILD, 8, 86, 44, 8
+   CONTROL "", ID_TITLE3, "static", SS_LEFT | WS_CHILD, 8, 100, 44, 8
+   CONTROL "", ID_SPECTRUM1, "Spectrum", WS_BORDER | WS_CHILD | WS_TABSTOP | WS_GROUP, 54, 70, 161, 12
+   CONTROL "", ID_SPECTRUM2, "Spectrum", WS_BORDER | WS_CHILD | WS_TABSTOP | WS_GROUP, 54, 84, 161, 12
+   CONTROL "", ID_SPECTRUM3, "Spectrum", WS_BORDER | WS_CHILD | WS_TABSTOP | WS_GROUP, 54, 98, 161, 12
+   CONTROL "", ID_VALUE1, "static", SS_RIGHT | WS_CHILD, 216, 72, 24, 8
+   CONTROL "", ID_VALUE2, "static", SS_RIGHT | WS_CHILD, 216, 86, 24, 8
+   CONTROL "", ID_VALUE3, "static", SS_RIGHT | WS_CHILD, 216, 100, 24, 8
+END
+

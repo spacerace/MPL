@@ -1,0 +1,9 @@
+#--------------------
+# HELLOBIT make file
+#--------------------
+
+hellobit.obj : hellobit.c
+     cl -c -G2sw -W3 hellobit.c
+
+hellobit.exe : hellobit.obj hellobit.def
+     link hellobit, /align:16, NUL, os2, hellobit

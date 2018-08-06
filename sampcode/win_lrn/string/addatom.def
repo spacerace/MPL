@@ -1,0 +1,9 @@
+NAME           AddAtom
+DESCRIPTION    'Windows 2.03 Function demonstration - AddAtom'
+STUB           'WINSTUB.EXE'
+CODE           MOVEABLE
+DATA           MOVEABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        WndProc
+

@@ -1,0 +1,6 @@
+#include "style.h"
+
+min MENU
+BEGIN
+    MENUITEM "SYSMODAL", 80
+END

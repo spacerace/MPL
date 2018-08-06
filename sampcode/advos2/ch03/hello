@@ -1,0 +1,6 @@
+hello.obj : hello.asm
+	masm /T hello,,hello,hello
+
+hello.exe : hello.obj hello.def
+	link hello,,hello,os2,hello
+        bind hello.exe \lib\api.lib \lib\os2.lib

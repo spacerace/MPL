@@ -1,0 +1,31 @@
+LIBRARY SPYHOOK
+
+DESCRIPTION 'Global input hook interface library'
+
+STUB    'OS2STUB.EXE'
+
+CODE    MOVEABLE DISCARDABLE
+DATA    MOVEABLE SINGLE PRELOAD
+
+HEAPSIZE    1024
+
+EXPORTS
+
+    SpyInstallHook      @1
+    SpyReleaseHook      @2
+    SpyHookOnOrOff      @3
+    SpySetWindowList    @4
+    SpyFWindowInList    @5
+    SpyGetNextMessage   @6
+    SpySetMessageList   @7
+    SpyGetWindowList    @8
+    SpySetAllFrameOpt   @9
+    SpySetAllWindowOpt  @10
+    SpyInputHook        @11
+    SpySendMsgHook      @12
+    SpySetLNSymbolPID   @13
+    SpyGetLNSymbolSelector @14
+    SpySetQueueList     @15
+    SpyGetQueueList     @16
+
+

@@ -1,0 +1,44 @@
+
+
+        NAME
+                fopenp -- fopen a file in the PATH
+                fopend -- fopen a file in an environment variable
+                fopeng -- fopend/fopenp combination
+
+        SYNOPSIS
+                fd = fopenp(name, mode);
+                fd = fopend(name, mode, envar);
+                fd = fopeng(name, mode, envar);
+                FILE *fd;
+                char *name;        filename
+                char *mode;        mode
+                char *envar;       name of environment variable
+
+        DESCRIPTION
+        These three functions allow the opening of a file in other than just
+        the current directory.  All functions will attempt the open in the
+        current directory first, and if that fails, will then expand to search:
+             fopenp -- searchs PATH environment variable
+             fopend -- searches a specified environment variable,
+                       with directories specified in the same syntax as for PATH
+             fopeng -- performs an fopend() first, and upon failure an fopenp()
+        These functions will return NULL pointers upon failure.  The file MUST
+        EXIST in order for a pointer to be returned.  Therefore, these
+        functions cannot be used to create new files.
+
+        EXAMPLE
+
+             FILE *fd;
+
+             if((fd = fopenp("foo.bar", "r")) == NULL) cant("foo.bar");
+             else puts("File is now opened!");
+
+             if((fd = fopend("stdio.h", "r", "INCLUDE")) == NULL)
+                  cant("stdio.h");
+             else puts("stdio.h is open for reading");
+
+             /* fopeng works the same as fopend */
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

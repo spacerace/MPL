@@ -1,0 +1,6 @@
+
+crsobrus.obj: crsobrus.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 crsobrus.c
+
+crsobrus.exe: crsobrus.obj crsobrus.def
+    link4 /align:16 crsobrus,,nul,slibw/NOE,crsobrus.def

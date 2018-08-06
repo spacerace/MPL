@@ -1,0 +1,10 @@
+sbitdim.obj: sbitdim.c
+    cl -d -c -AS -Gsw -Os -Zpe sbitdim.c
+
+sbitdim.res: sbitdim.rc
+     rc -r sbitdim.rc
+
+sbitdim.exe: sbitdim.obj sbitdim.def
+    link4 sbitdim,/align:16,/map,slibw/NOE,sbitdim.def
+    mapsym sbitdim
+    rc sbitdim.res

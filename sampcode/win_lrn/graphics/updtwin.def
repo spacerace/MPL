@@ -1,0 +1,14 @@
+NAME	updtwin
+
+DESCRIPTION 'Simple Microsoft Windows Application demonstrating UpdateWindow'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  4096
+STACKSIZE 5000
+
+EXPORTS
+    SampleWndProc @1

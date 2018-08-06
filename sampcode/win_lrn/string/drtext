@@ -1,0 +1,6 @@
+
+drtext.obj: drtext.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 drtext.c
+
+drtext.exe: drtext.obj drtext.def
+    link4 /align:16 drtext,,nul,slibw/NOE,drtext.def

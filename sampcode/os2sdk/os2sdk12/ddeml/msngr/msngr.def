@@ -1,0 +1,33 @@
+NAME    msngr WINDOWAPI
+
+DESCRIPTION 'Messenger Application'
+
+STUB    'OS2STUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  4096
+STACKSIZE 4096
+
+EXPORTS
+        MainWndProc             @1
+        GetNameDlgProc          @2
+        EnhancedEFWndProc       @3
+        SendTextDlgProc         @4
+        SendBitmapDlgProc       @5
+        SendSongDlgProc         @6
+        LinkDlgProc             @7
+        Callback                @8
+        MyTextInWndProc         @9
+        BmpDlgProc              @10
+
+
+IMPORTS
+    WIN16QUERYTASKSIZEPOS=OS2SM.14
+    WIN16ADDSWITCHENTRY=OS2SM.9
+    WIN16CHANGESWITCHENTRY=OS2SM.10
+    WIN16REMOVESWITCHENTRY=OS2SM.16
+    WINCREATEHELPINSTANCE=HELPMGR.1
+    WINASSOCIATEHELPINSTANCE=HELPMGR.4
+    WINDESTROYHELPINSTANCE=HELPMGR.2

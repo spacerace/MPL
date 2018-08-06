@@ -1,0 +1,11 @@
+;-------------------------------------
+; DRAWLINE.DEF module definition file
+;-------------------------------------
+
+NAME           DRAWLINE  WINDOWAPI
+
+DESCRIPTION    'Draw Line from Radio Buttons (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

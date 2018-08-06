@@ -1,0 +1,32 @@
+; Definitions file for WNTERM
+;
+; Copyright (c) 1980, 1990 by
+; William S. Hall
+; 3665 Benton Street, #66
+; Santa Clara, CA 95051
+
+NAME
+
+DESCRIPTION 'Simple Windows Terminal Program'
+
+STUB 'Winstub.exe'
+
+EXETYPE		WINDOWS
+
+HEAPSIZE	1024
+STACKSIZE	4096
+
+CODE	MOVEABLE
+DATA	MOVEABLE MULTIPLE
+
+SEGMENTS
+    _TERMRES PRELOAD MOVEABLE
+    _TERMINT PRELOAD MOVEABLE DISCARDABLE
+    _TERMMSC LOADONCALL MOVEABLE DISCARDABLE
+
+EXPORTS
+    MainWndProc		@1
+    MainWndSubProc	@2
+    AboutBoxProc	@3
+    SetCommParams	@4
+    FindSmallFont	@5

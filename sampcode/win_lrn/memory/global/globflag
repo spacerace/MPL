@@ -1,0 +1,6 @@
+globflag.obj: globflag.c
+   cl -c -W2 -AS -Gsw -Od -Zped globflag.c
+
+globflag.exe: globflag.obj globflag.def
+   link4 globflag,/align:16,/map/li,slibw,globflag.def
+   mapsym globflag

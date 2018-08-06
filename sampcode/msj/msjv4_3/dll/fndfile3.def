@@ -1,0 +1,8 @@
+
+
+
+LIBRARY FNDFILE3
+EXPORTS	do_find
+EXPORTS	debug
+IMPORTS	FNDFILE2.do_list
+

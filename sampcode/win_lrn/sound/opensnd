@@ -1,0 +1,7 @@
+opensnd.obj: opensnd.c
+  cl -c -Fs -W2 -AS -Gsw -Od -Zped opensnd.c
+
+opensnd.exe: opensnd.obj opensnd.def
+    link4 opensnd,/align:16,,slibw,opensnd.def
+    del opensnd.obj
+    del opensnd.map

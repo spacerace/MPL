@@ -1,0 +1,18 @@
+LIBRARY     Journal
+
+DESCRIPTION 'Windows 2.0 Hook DLL'
+
+STUB    'WINSTUB.EXE'
+
+CODE    FIXED
+DATA    MOVEABLE SINGLE
+
+HEAPSIZE  128
+
+EXPORTS
+    StartRecord  @1
+    StopRecord   @2
+    StartPlay    @3
+    StopPlay     @4
+    Record       @5
+    Play         @6

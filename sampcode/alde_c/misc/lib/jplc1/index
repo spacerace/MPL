@@ -1,0 +1,414 @@
+
+.cp5
+abs, 4-2
+ABS(x), 2-4
+absolute value, 4-2
+  double, 4-15
+acos, 4-48
+ALIGN, 2-17
+alloc, 4-3
+allocate memory, 4-5
+allot, 4-5
+altscrn, 4-43
+ALTSCRN[7], 2-11
+AND, 2-4
+asin, 4-48
+astof, 4-6
+astoi, 4-6
+astol, 4-6
+atan, 4-48
+atan2, 4-48
+atof, 4-6
+atoi, 4-6
+atol, 4-6
+
+.cp5
+BIG10X, 2-8
+BIGX, 2-8
+binary i/o, 4-17
+bitcount, 4-9
+BITS, 2-17
+BOOL, 2-17
+BUFFER, 2-17
+  assign, 4-45
+  get, 4-20
+
+.cp5
+calloc, 4-3
+CB4R, 2-11
+cbrt, 4-12
+CBRTFOUR, 2-8
+CBRTTWO, 2-8
+ceil, 4-15
+chrstc, 4-15
+clearerr, 4-10
+CLEARSCREEN, 2-11
+close, 3-2
+clrscrn, 4-43
+COFFSET, 2-11
+convert from ASCII, 4-6
+cos, 4-48
+cosh, 4-50
+cotan, 4-48
+count argument bits, 4-9
+creat, 3-2, 3-3, 3-7, 3-11
+ctype.h, 2-2, 4-53
+cube root, 4-12
+cursor, 4-43
+Š.cp5
+defs.h, 2-4, 4-2, 4-29, 4-46
+DPRECISION, 2-8
+
+.cp5
+E2BIG, 2-6
+EACCES, 2-6
+EBADF, 2-6
+EDOM, 2-6
+EEXIST, 2-6
+EFAULT, 2-6
+EFBIG, 2-6
+EINVAL, 2-6
+EIO, 2-6
+EMFILE, 2-6
+EMLINK, 2-6
+ENFILE, 2-6
+ENODEV, 2-6
+ENOENT, 2-6
+ENOMEM, 2-6
+ENOSPC, 2-6
+ENOTTY, 2-6
+ENXIO, 2-6
+EOF, 2-4
+EPERM, 2-6
+eprintf, 4-31
+eputc, 4-34
+eputs, 4-35
+eraeol, 4-43
+ERAEOLN, 2-11
+eraeop, 4-43
+ERAEOPG, 2-11
+ERANGE, 2-6
+erf, 4-11
+erfc, 4-11
+EROFS, 2-6
+errno.h, 2-6
+error function, 4-11
+euclidian distance, 4-24
+EXDEV, 2-6
+exit, 3-2, 3-4, 4-14
+exp, 4-12
+exponential, 4-12
+
+.cp5
+fabs, 4-2
+FADEOUT, 2-8
+FAIL, 2-4
+FALSE, 2-4
+FAST, 2-16
+fclose, 4-14
+feof, 4-10
+ferror, 4-10
+fflush, 4-14
+fgets, 4-23
+FILE, 2-13
+fileno, 4-10
+fint, 4-15Šfloor, 4-15
+flush, 4-14
+fmax, 4-29
+fmin, 4-29
+fopen, 4-16
+FOREVER, 2-4
+format, 4-31
+FOURTHLOG2, 2-8
+fprintf, 4-31
+fputs, 4-35
+frac, 4-15
+fraction part, 4-15
+fread, 4-17
+free, 4-3
+frexp, 4-18
+fscanf, 4-39
+fseek, 4-19
+ftell, 4-19
+ftoa, 4-6
+fwrite, 4-17
+
+.cp5
+getbuf, 4-20
+getc, 4-21
+getca, 4-21
+getchar, 4-21
+getf, 4-21
+geti, 4-21
+getl, 4-21
+getns, 4-23
+gets, 4-23
+GLOBAL, 2-16
+global.h, 2-7
+GZ(x), 2-5
+
+.cp5
+HALFLOG2e, 2-8
+HEADER, 2-17
+.cp3
+header files
+  ctype.h, 2-2
+  defs.h, 2-4
+  errno.h, 2-6
+  global.h, 2-7
+  mathcons.h, 2-8
+  mathtyp.h, 2-10
+  scrnio.h, 2-11
+  stdio.h, 2-13
+  stdtyp.h, 2-16
+HEIGHT, 2-11
+home, 4-43
+  HOME, 2-11
+hypot, 4-24
+
+.cp5Šindex, 4-25
+INFINITY, 2-8
+INFINLEG, 2-8
+iniscrn, 4-43
+input, 4-39
+integer characteristic, 4-15
+integer part, 4-15
+inverf, 4-11
+inverfc, 4-11
+INVPI, 2-8
+IS, 2-4
+isalnum, 4-27
+ISALNUM(c), 2-2
+isalpha, 4-27
+ISALPHA(c), 2-2
+isascii, 4-27
+ISASCII(c), 2-2
+iscntrl, 4-27
+ISCNTRL(c), 2-2
+isdigit, 4-27
+ISDIGIT(c), 2-2
+ishex, 4-27
+islower, 4-27
+ISLOWER(c), 2-2
+ISNT, 2-4
+isoctal, 4-27
+ISOCTAL(c), 2-2
+isok, 4-28
+isprint, 4-27
+ISPRINT(c), 2-2
+ispunct, 4-27
+ISPUNCT(c), 2-2
+isspace, 4-27
+ISSPACE(c), 2-2
+isupper, 4-27
+ISUPPER(c), 2-2
+itoa, 4-6
+itoab, 4-6
+
+.cp5
+labs, 4-2
+LBITS, 2-17
+ldexp, 4-18
+LEADIN, 2-11
+LEAST, 2-8
+liberate, 4-5
+LINDELETE, 2-11
+LININSERT, 2-11
+lmax, 4-29
+lmin, 4-29
+lmod, 4-6
+LOCAL, 2-16
+log, 4-12
+log10, 4-12
+LOG10e, 2-8
+LOG10two, 2-8ŠLOG2, 2-8, 4-12
+LOG2e, 2-8
+LOGe1, 2-8
+LOGINFINITY, 2-8
+LOGLEAST, 2-8
+lseek, 3-5
+ltoa, 4-6
+ltoab, 4-6
+LURSHIFT, 2-5
+
+.cp5
+math.h, 4-50
+mathcons.h, 2-8, 4-48
+mathtyp.h, 2-10
+max, 4-29
+MAX(x¬ y), 2-5
+MAXANGLE, 2-8
+MAXEXP, 2-8
+MAXEXPG, 2-8
+maximum, 4-29
+memory allocator, 4-3
+METACHAR, 2-17
+min, 4-29
+MIN(x¬ y), 2-5
+MINEXP, 2-8
+MINEXPG, 2-8
+minimum, 4-29
+modf, 4-18
+
+.cp5
+NO, 2-4
+normscrn, 4-43
+NORMSCRN[7], 2-11
+NOT, 2-4
+nprob, 4-30
+nprobc, 4-30
+NULL, 2-4
+
+.cp5
+open, 3-2, 3-6, 3-7, 3-11
+OR, 2-4
+outcol, 2-7
+outrow, 2-7
+
+.cp5
+PI, 2-8
+PIover2, 2-8
+PIover3, 2-8
+PIover4, 2-8
+PIover6, 2-8
+pow, 4-12
+power function, 4-12
+PRECISION, 2-8
+printf, 4-31
+probability, 4-30
+progname, 2-7
+putc, 4-34
+putca, 4-34
+putchar, 4-34Šputs, 4-35
+putscrn, 4-43
+
+.cp5
+qsort, 4-51
+
+.cp5
+randexp, 4-36
+randize, 4-36
+randnorm, 4-36
+random, 4-36
+ratfun, 4-37
+RCENDER, 2-11
+RCSEPARATOR, 2-11
+read, 3-7
+realloc, 4-3
+rename, 3-8
+rewind, 4-19
+rindex, 4-25
+rknstep, 4-38
+rkstep, 4-38
+ROFFSET, 2-11
+ROOTHALF, 2-8
+ROOTTWO, 2-8
+round, 4-15
+RTHLFINF, 2-8
+Runga-Kutta, 4-38
+
+.cp5
+sbrk, 3-9
+scanf, 4-39
+screen control, 4-43
+SCRNINI, 2-11
+scrnio.h, 2-11, 4-43
+SCRNUNI, 2-11
+SCRNWRAP, 2-11
+setbuf, 4-45
+sgn, 4-46
+SGN(x), 2-5
+simpson, 4-47
+sin, 4-48
+sinh, 4-50
+SMALLX, 2-8
+sortB, 4-51
+sortH, 4-51
+sortQ, 4-51
+sortS, 4-51
+sprintf, 4-31
+sqrt, 4-12
+SQRT3, 2-9
+SQRT3m1, 2-9
+square root, 4-12
+sscanf, 4-39
+stdio.h, 2-13, 4-10, 4-14, 
+     4-16, 4-17, 4-19, 4-21, 
+     4-23, 4-31, 4-34, 4-35, 
+     4-39, 4-54
+stdtyp.h, 2-16Šstradd, 4-25
+strcat, 4-25
+strcmp, 4-25
+strcpy, 2-7, 4-25
+.cp3
+stream
+  close, 4-14
+  flush, 4-14
+  get a string, 4-23
+  get char or word, 4-21
+  open, 4-16
+  push character back into input, 
+     4-54
+  put char or word, 4-34
+  put string, 4-35
+  reposition, 4-19
+  status inquiries, 4-10
+streql, 4-25
+strindex, 4-25
+STRING, 2-17
+string operations, 4-25
+strlen, 4-25
+strncat, 4-25
+strncmp, 4-25
+strncpy, 4-25
+strsave, 4-25
+SUCCESS, 2-4
+SYMLEAST, 2-8
+
+.cp5
+tan, 4-48
+tanh, 4-50
+TANHXBIG, 2-8
+TBITS, 2-17
+TBOOL, 2-17
+TERMINAL, 2-11
+TEXT, 2-17
+tiny, 2-16
+TINY(n), 2-16
+tolower, 4-53
+TOLOWER(c), 2-2
+toupper, 4-53
+TOUPPER(c), 2-2
+TRUE, 2-4
+TWOLOG2e, 2-9
+TWOmSQRT3, 2-9
+TWOoverPI, 2-9
+
+.cp5
+unformat, 4-39
+ungetc, 4-19, 4-54
+uniscrn, 4-43
+unlink, 3-10
+urandom, 4-36
+URSHIFT, 2-5
+USELAST, 2-11
+utiny, 2-16
+UTINY(n), 2-16Šutoa, 4-6
+
+.cp5
+VOID, 2-17
+
+.cp5
+WASHOUT, 2-8
+WIDTH, 2-12
+write, 3-11
+
+.cp5
+XLT2ASCII, 2-12
+
+.cp5
+YES, 2-4
+
+.cp5
+_exit, 3-4
+

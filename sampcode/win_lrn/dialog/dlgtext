@@ -1,0 +1,11 @@
+dlgtext.obj: dlgtext.c dlgtext.h
+  cl -c -W2 -AS -Gsw -Od -Zped dlgtext.c
+
+dlgtext.res: dlgtext.rc dlgtext.ico dlgtext.h dlgtext.dlg
+  rc -r dlgtext.rc
+
+dlgtext.exe: dlgtext.obj dlgtext.def dlgtext.res 
+    link4 dlgtext,/align:16,,slibw,dlgtext.def
+    rc dlgtext.res
+    del dlgtext.map
+

@@ -1,0 +1,793 @@
+
+
+
+        Volume 1, Number 2                               January 10, 1987
+        +---------------------------------------------------------------+
+        |                                                               |
+        |   The Official Newsletter            CCCC                     |
+        |                                     CC  CC                    |
+        |           of the                   CC                         |
+        |                                    CC   S P O T   R U N       |
+        |         C Spot Run                 CC                         |
+        |                                     CC  CC                    |
+        |      C Add-On Library                CCCC                     |
+        |                                                               |
+        +---------------------------------------------------------------+
+
+                                                    Editor: Bob Pritchett
+                                                  Publisher: Fido 107/414
+
+        This  newsletter is published irregularly when enough information 
+        warrants  it.   The latest newsletter is always available at  The 
+        Pinelands BBS,  (609) 354-9259, FidoNet (107/414), and registered 
+        users of the C Spot Run Library will recieve new issues by  modem 
+        or US Mail.
+
+        This newsletter is protected by United States Copyright law.   It 
+        may  be  reproduced  and freely distributed provided  no  fee  is 
+        charged and the newsletter is not modified in any manner.
+
+
+                              - Table of Contents -
+
+
+             1. Introduction....................................2
+
+             2. New release.....................................3
+
+             3. Support for more compilers......................4
+
+             4. Sample programs.................................5
+
+             5. Graphics........................................6
+
+             6. Books...........................................7
+
+             7. Looking at the future...........................8
+
+             8. Sample program sources..........................10
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   C Spot Run Newsletter - January 10, 1986
+
+
+                               == Introduction ==
+
+                                  Bob Pritchett
+
+
+             Hello  again.   This is the second newsletter,  and  if  you 
+        don't  yet have the first,  I recommend you get and read  it,  it 
+        might prove interesting.
+             Finally,   thanks  to  Microsoft's  technical  support,  the 
+        problem I was having with the windows has been removed,  allowing 
+        development to continue, the end result being this newsletter and 
+        the  accompanying  version  of the library.   (For  the  curious: 
+        Although I did the needed moves of BP at the start and finish  of 
+        a  small ASM routine,  I neglected to include the PUSH BP and and 
+        POP BP statements, resulting in a software hangup.) 
+             I've  gotten quite a few calls to the BBS,  and a few  voice 
+        phone calls,  and I'd like to thank those of you who've responded 
+        for  your comments and suggestions.   However,  even if  only  to 
+        satisfy  my curiosity,  I'd really like to see at least a copy of 
+        the  user response form (at the end of the manual) from  as  many 
+        people as possible.  (I haven't received even one.)  Comments and 
+        suggestions  are  valuable  to  me,   as  I  am  running  out  of 
+        creativity.   Also, although I can't guarantee it, the chances of 
+        you receiving an update notification or something are 100% better 
+        if I have your name and address.
+             The library is currently released only to CompuServe, GEnie, 
+        and  a  couple  of  BBS's  local to  me.   I'd  love  to  see  it 
+        distributed as far and wide as possible,  but outside of my small 
+        calling range, I don't know any good BBSes.  If you have, or know 
+        of,  a  BBS  that would like to be a distribution point  for  the 
+        library,  please contact me.  (The only request I have is that if 
+        I  list you as a distribution point,  meaning I'll make sure  you 
+        always have the latest version, you keep it up on the system.)
+             The  Pinelands BBS,  as those of you who've connected  know, 
+        has  experienced  a  disk  crash and a  pile  of  other  assorted 
+        problems.   It went down for almost a month,  and my apologies to 
+        those  of you who tried unsuccessfully to call.   From now on  it 
+        will either be up,  or the call will be call-forwarded to another 
+        BBS  whose SYSOP was kind enough to have us.   Apologies for  the 
+        inconvenience, it is now ready to go.
+             Once  again  I extend an invitation (or rather I plead)  for 
+        you to contribute routines,  programs, utilities, or articles for 
+        the newsletter.
+             There  is no Bug Notices section in this newsletter,  as the 
+        release of the newsletter coincides with that of the new  library 
+        version.
+             Enjoy the library,  share it with your friends,  and let  me 
+        know if you have questions or comments.  Thanks!
+
+
+
+
+
+
+
+
+
+                                                       Page 2
+
+
+
+
+
+                   C Spot Run Newsletter - January 10, 1986
+
+
+                                == New Release ==
+
+             The new release of the library, version 2.0, has several 
+        advantages.  Bugs have been fixed, and new routines cover things 
+        such as field and normal input and sound.
+
+             There  is  a temptation for me to continue  adding  routines 
+        until  I have 'the perfect' library.   The only problem with that 
+        is that I will never release it,  because I always have something 
+        else  I want added.   So if what you are looking for isn't  here, 
+        tell me what it is, and you should find it in the next version of 
+        the library.   (Also note that some types of routines involve  so 
+        many  variables  that  I can never have exactly the  routine  you 
+        want.   (The input routines for example.)  That is why the source 
+        code is available....)
+
+             Future versions are dependant mainly on the contributions of 
+        users by means of source and ideas, keep them coming!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                       Page 3
+
+
+
+
+
+                   C Spot Run Newsletter - January 10, 1986
+
+
+                        == Support for More Compilers ==
+
+             The  library,  powerful  as it is,  is currently limited  to 
+        Microsoft C 3/4.0.  To make it more globally useful, it should be 
+        able  to work with all major compilers,  and I hope this  support 
+        can come about in the very near future.   Of course this requires 
+        a  few things,  such as someone with a knowledge of the  compiler 
+        and its library, and, of course, a copy of the compiler.
+             The hardest part of the conversion will be the 'grunt' work. 
+        I went ahead and used Microsoft's REGS union for interrupt calls, 
+        making  use of the ability to access the ?h and ?l registers,  in 
+        addition  to the ?x registers supported by the interrupt  calling 
+        functions  of many compilers.   This will obviously be a  tedious 
+        conversion  task  for  those  who can  not  directly  access  the 
+        individual registers.  (?h and ?l.)
+             Additionaly  there  is the job of  converting  the  assembly 
+        headers in the .ASM files.
+             This  is  just  about all there is  to  it.   (Sounds  easy, 
+        right?)   However,  I do not have the time or manuals to do  this 
+        conversion  job.   If anyone out there would like to take on  the 
+        job  of  converting  the source to work  with  another  compiler, 
+        testing  it,  etc.  they may do so,  and will get the source  for 
+        free,  in  addition to a possible percentage of revenue generated 
+        by  that version.   I don't claim that it is an easy  job  (well, 
+        maybe easy,  but surely tedious), so please only volunteer if you 
+        have the time and desire to do it.   If you do, please contact me 
+        so we can discuss it.
+             Note:   So  far  the support plan includes support  for  the 
+        Microsoft,   Lattice,   Eco-C88,   and   Computer  Innovations  C 
+        compilers.   If you wish to work on another brand,  that's great, 
+        we need all the support we can get.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                       Page 4
+
+
+
+
+
+                   C Spot Run Newsletter - January 10, 1986
+
+
+                              == Sample Programs ==
+
+             At  the  end  of the newsletter are  a  few  sample  program 
+        sources, (.EXE is in the archive).  These are just small programs 
+        that  demonstrate  the  use of library functions  in  a  somewhat 
+        practical manner.
+             In  addition to the sources included here I have a couple of 
+        non graphic animated games.   (ASCII characters are used  instead 
+        of graphic lines and figures.)  For the most part they use just a 
+        few library functions (windowing,  screen manipulation, and a few 
+        other  odd routines) but they do show some techniques for  psuedo 
+        artificial  intelligence  in moving the computer's  players  etc.  
+        (Besides,  I  think  some  of them will keep you  playing  for  a 
+        while.)   If  you'd like a copy of the sources and EXE,  you  may 
+        find them around on BBSes, or write/call me and I'll send them to 
+        you.
+             Once  again,  I invite contribution of any programs you  may 
+        have written using the library.  Even if you don't have source to 
+        publicly  distribute,  I'm curious to see what people  have  done 
+        with the functions available.  Thanks....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                       Page 5
+
+
+
+
+
+                   C Spot Run Newsletter - January 10, 1986
+
+
+                                 == Graphics ==
+
+             Graphics  are an exciting and useful part of an application, 
+        and thus an important part of any function library.  However I am 
+        far from an expert at PC graphics,  and I don't have the time  or 
+        desire  to become one.   I've seen dozens of graphics routines in 
+        all languages.  The problem is that I can't get what are probably 
+        the  fastest  routines  (the  assembly  ones)  to  work  properly 
+        consistently.  
+             I've  even  been sent a set of graphics routines in  C,  but 
+        they  are  for high resolution mode only,  and I  don't  want  to 
+        modify them to work in all modes and handle palletes etc. 
+
+             The  problem:   I don't want to do ANY debugging of graphics 
+        routines,  and I don't have any good,  fast,  and universal  ones 
+        already done.
+
+             My  solution:   Whoever  will  send  me a  complete  set  of 
+        graphics  routines,   similar  (or  easily  modifiable  to)   the 
+        following format will get registration status and library source. 
+        (The  $50 option on the order form.)  As many routines as you can 
+        put  together  would be nice,  and as long as the  code  is  semi 
+        readable I'll even write the documentation.
+
+             What I'd like to see:
+
+             gdot(row,col,color);
+                  Graphic dot plotting routine.  No checks on parameters, 
+        and useable in all graphics modes.
+
+             gline(x,y,x2,y2,color);
+                  Graphic  line.   My limited knowledge of line  plotting 
+        routines  suggests  speed would be improved with the addition  of 
+        two  routines,  gvline()  and  ghline(),  to  plot  vertical  and 
+        horizontal  lines and save time by not checking for diagonals  on 
+        all lines.
+
+             gbox(x,y,x2,y2,color);  gfbox(x,y,x2,y2,color);
+                  A simple open box drawing routine, and a filled box.
+
+             goval(...);
+                  I don't know how to do it, you might.
+
+             gcircle(x,y,radius,color);  gfcircle(x,y,radius,color);
+                  Circle routine, and filled circle routine.
+
+             I  believe I have some sample routines that would help  with 
+        the circle and oval routines, contact me.
+             If  I can get these primitives I'll even look  into  graphic 
+        windows, as has been requested.
+
+
+
+
+
+
+
+                                                       Page 6
+
+
+
+
+
+                   C Spot Run Newsletter - January 10, 1986
+
+
+                                   == Books ==
+
+             Seeing as I have nothing better to write about,  I'd like to 
+        take this space to talk about a few C/PC books.
+
+             The   Peter  Norton  Programmer's  Guide  to  the  IBM   PC.  
+        (Bellevue:  Microsoft Press.  1985).  $19.95
+             This  book is billed as "The ultimate regerence guide to the 
+        entire  family  of IBM personal computers."  In  my  opinion,  it 
+        fully  lives up to this statement.   Without this book,  I  would 
+        never have written C Spot Run.  Although it leaves a few subjects 
+        with  only minimal explanation,  it covers just about  everything 
+        you would ever want to know about your PC.  Examples are provided 
+        in  a  variety  of  languages,  and  the  entire  book  is  cross 
+        referenced.   An absolute must for anyone developing applications 
+        which  make  low  level  use of the IBM  PC's  bios  or  MS-DOS's 
+        functions.
+
+             Data  Handling  Utilities in C.   Robert  A.  Radcliffe  and 
+        Thomas J. Raab.  (Berkley:  Sybex. 1986).  $19.95
+             This  book contains hundreds of well documented routines  to 
+        perform data entry,  manipulation, and output.  The source is all 
+        Lattice,  but it is easily ported to any other compiler.   If you 
+        are  writing a data based application that is intensive  in  data 
+        manipulation,  this  book  is  a  great  tool.   The  variety  of 
+        specialized  routines  goes far beyond the scope of C Spot  Run's 
+        limited set of data tools.  A nice set of apendices are included, 
+        with things such as a list of vendors of C products,  a  modified 
+        _main() function,  and a chart of the powers of two.   Overall it 
+        is a very complete set of tools for applications development.
+
+             Advanced C:   Techniques & Applications.  Gerald E. Sobelman 
+        and David E. Krekelberg.  (Indianapolis:  Que Corporation. 1985). 
+        $19.95
+             This  book  is for those with a basic knowledge of  C.   The 
+        subjects  covered  range  from  device  independant  graphics  to 
+        btrees,  linked lists,  and coding style.  After several chapters 
+        on  different  areas  of programming,  the book  jumps  into  the 
+        development  of  a  large graphics system with  a  powerful  user 
+        interface.   (Something like implementing a Macintosh environment 
+        on a PC.   However it is put together in a way to make it  rather 
+        independant of your machine.   Developing device independant code 
+        is  one of the issues the book stresses.)  If you need to write a 
+        graphic (/icon) oriented system that is user friendly,  this book 
+        is for you.   It also serves to teach good techniques in  general 
+        applications   development,   and  stresses  many  other   issues 
+        applicable to non graphic systems.
+
+             I  hope  you find some of the above useful,  and I  hope  it 
+        stimulates  some of you to contribute some book reviews,  whether 
+        it's just a paragraph or a complete analysis.
+
+
+
+
+
+
+                                                       Page 7
+
+
+
+
+
+                   C Spot Run Newsletter - January 10, 1986
+
+
+                           == Looking at the Future == 
+
+             Wow, another newsletter done.  (Yes, I know this is only the 
+        second one, but you didn't write both of them, not to mention the 
+        manual.....)
+             I'd  like to discuss some issues related to the library  and 
+        support of it.  First of all, my goals for the library:
+
+             o  To provide a user-supported library of routines and tools 
+        for C programmers.
+
+             o  To make sure the library is of use to programmers in many 
+        areas, and to keep it up to date and well supported.
+
+             o   To  make  enough  money to justify the  long  hours  and 
+        financial outlay needed to develop and support the library.
+
+             I  enjoy working on the library,  however there is  a  large 
+        investment  of  time and expense on my part.   For  that  reason, 
+        while  I will do my best to help everyone,  registered users will 
+        get  first  priority  in support,  and  their  requests  will  be 
+        fufilled first. 
+
+             The library is user-supported for several reasons.  First of 
+        all,  public  domain  C  source was invaluable to me  while  (and 
+        after)  I learned the language.   I am also an extensive user  of 
+        public  domain programs,  and I owe all those gracious  people  a 
+        large  debt.   I don't have the money to compete with  commercial 
+        packages, and I don't want to have extensive legal obligations to 
+        customers.  
+             Now,  while  the library is user-supported,  I still plan to 
+        offer  full support,  the result of which is this newsletter  and 
+        the  Pinelands  BBS.   The  bottom line of  this  entire  lengthy 
+        discussion is that while I plan to offer all the support I can, I 
+        am  just  as  lazy  (or more so) than  the  next  guy,  and  thus 
+        seemingly simple routines may be absent.   (A bad habit of  mine, 
+        if  it  isn't  something  I know how to do,  and  it  isn't  that 
+        important  to me,  I won't go to the trouble of looking  it  up.)  
+        However, if you need something done, and can't write it yourself, 
+        let  me  know and I'll give it a shot,  or find someone  who  can 
+        handle it.  (If you can write it, how about sending me a copy?)
+
+             A  nice  addition to the library,  and something that  would 
+        complement  the input routines,  would be some sort of data  base 
+        engine, btree or something.  Anyone who will send a nice complete 
+        set of data management routines of this type will get a free copy 
+        of  the library source.   (I don't have time to learn  all  that.  
+        Note:   What  I  need  is contribution by the  author(s)  of  the 
+        routines,  there are a few sets in the PD, but I have been unable 
+        to  contact  the  authors for permission to use  them,  which  is 
+        something I need.)
+
+             I  understand that there are a lot of poor design choices in 
+        the library,  especially the windows.   However,  as I can't very 
+        well  design  a set-up that will fit  everyone's  needs,  I  have 
+
+
+                                                       Page 8
+
+
+
+
+
+                   C Spot Run Newsletter - January 10, 1986
+
+
+        chosen to do it as you see it implemented, and I haven't thrown a 
+        lot of time into insignificant, yet useful, additions, other then 
+        what  is already there.   Hopefully (for me) this will  encourage 
+        you  to  purchase the source code,  which you can then modify  to 
+        your  heart's  content.    In  any  case,  there  are  two  other 
+        solutions.   I  can  set up a totally independant second  set  of 
+        windowing routines that are more efficient and flexible then  the 
+        ones  currently  implemented.    Things  such  as  multiple  page 
+        support,  borderless  windows,  windows with virtual  sizes,  not 
+        physical,  etc.   Or  you can contact me about a custom job for a 
+        specific application.  Let me know your opinions.
+
+             Finally, if I can help in any way, I'll be glad to give it a 
+        shot.   Don't  be  afraid  to  contact me with  anything  from  a 
+        criticism to a suggestion or question.  I'd love to hear from you 
+        (it's inspiring) and I'm running out of new ideas.   (Or  rather, 
+        out of new ideas I'll implement without prodding from users.)
+             (Remember,  routines  and utilities are appreciated,  and  a 
+        good  (or  even poor) article for the newsletter would put me  in 
+        shock.  (Joyous shock....))
+
+                            Bob Pritchett
+                            New Dimension Software
+                            23 Pawtucket Dr.
+                            Cherry Hill, NJ  08003
+                            Voice: (609) 424-2595
+                             Data: (609) 354-9259  300-2400B 24hrs.
+                          FidoNet: (107/414)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                       Page 9
+
+
+
+
+
+                   C Spot Run Newsletter - January 10, 1986
+
+
+                          == Sample Program Sources ==
+
+             DateDiff  is  a  small  program  invoked  with  one  or  two 
+        arguments, both dates.  It returns, for two arguments, the number 
+        of days between the two dates.   For one argument,  the number of 
+        days between the given date and the current date.
+
+        DATEDIFF.C
+        ----------
+
+        /*
+        **  D A T E D I F F . C
+        **
+        **  Calculates the difference of two dates, specified on command
+        **  line.  Uses the C Spot Run C Add-On Library.
+        **
+        **  Copyright 1986 Bob Pritchett
+        **
+        **  Created: 08/17/86   Last Updated: 08/20/86
+        **
+        */
+
+        main(argc,argv)
+         int argc;
+         char *argv[];
+         {
+          int x;
+          int m;
+          int d;
+          int y;
+          int mn;
+          int dy;
+          int yr;
+          printf("\n               -- DateDiff  Version 1.0 --\n\n");
+          if ( argc < 2 || argc > 3 )
+           {
+            printf("   DateDiff will return the difference between two dates\n");
+            printf("in days.  If only one date is specified the current date\n");
+            printf("will be used for the second.\n\n");
+            printf("     DATEDIFF <xx>/<xx>/<xxxx> [<xx>/<xx>/<xxxx>]\n\n");
+            exit(1);
+           }
+          if ( argc == 2 )
+             get_date(&d,&m,&y);
+          else
+             sscanf(argv[2],"%d/%d/%d",&m,&d,&y);
+          sscanf(argv[1],"%d/%d/%d",&mn,&dy,&yr);
+          if ( y < 100 )
+             y += 1900;
+          if ( yr < 100 )
+             yr += 1900;
+          x = dt_diff(m,d,y,mn,dy,yr);
+          printf("  The difference is %d days.\n",x);
+          exit(0);
+         }
+
+
+                                                       Page 10
+
+
+
+
+
+                   C Spot Run Newsletter - January 10, 1986
+
+
+             SoundEff  is  a small program to demonstrate the use of  the 
+        sound()  function to produce sound effects.   It does just  three 
+        simple sounds,  but the structure is applicable to other  sounds.  
+        The  data  for  these  sounds was obtained  from  a  file  called 
+        SOUNDEFF.BAS.  Note:  The sounds were tested on an AT.  Depending 
+        on your processor speed and the type of speaker you have you  may 
+        find  the  sound  very slow,  very fast,  or  off  tune.   Simple 
+        modifications to the numberic constants should be all it takes to 
+        fix  them for your setup,  but trial and error is the  only  sure 
+        fire method.
+
+        SOUNDEFF.C
+        ----------
+
+        /*
+        **  S O U N D E F F . C
+        **
+        **  Soundeffects in C.  Some data from SOUNDEFF.BAS.
+        **
+        **  Copyright 1986 Bob Pritchett
+        **
+        **  History:
+        **
+        **  08/27/86  RDP  Work on improving sounds. 
+        **
+        **  08/25/86  RDP  Coding begun, some effects added.
+        **
+        */
+
+        int x;
+
+        siren()
+         {
+          while ( ! kbhit() )
+           {
+            for ( x = 200; x < 901; ++x )
+                sound(x,30);
+            sound(901,900);
+            for ( x = 900; x > 199; --x )
+                sound(x,30);
+           }
+         }
+
+        red_alert()
+         {
+          while ( ! kbhit() )
+           {
+            for ( x = 800; x < 901; ++x )
+                sound(x,40);
+           }
+         }
+
+        phone()
+         {
+          while ( ! kbhit() )
+
+
+                                                       Page 11
+
+
+
+
+
+                   C Spot Run Newsletter - January 10, 1986
+
+
+           {
+            for ( x = 0; x < 25; ++x )
+             {
+              sound(523,70);
+              sound(659,70);
+             }
+            for ( x = 0; x < 25000; ++x )
+                ;
+           }
+         }
+
+        main()
+         {
+          printf("Testing sounds....\n");
+          getch();
+          siren();
+          getch();
+          red_alert();
+          getch();
+          phone();
+          getch();
+         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                       Page 12
+
+
+
+
+
+

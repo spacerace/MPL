@@ -1,0 +1,12 @@
+#include "style.h"
+#include "mapdlgr.h"
+
+ABOUTBOX DIALOG LOADONCALL MOVEABLE DISCARDABLE 21, 14, 148, 82
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+	   CONTROL "Microsoft Windows", -1, "static", SS_CENTER | WS_GROUP | WS_CHILD, 0, 5, 144, 8
+	   CONTROL "Generic Application", -1, "static", SS_CENTER | WS_GROUP | WS_CHILD, 0, 14, 144, 8
+	   CONTROL "Version 1.0", -1, "static", SS_CENTER | WS_GROUP | WS_CHILD, 0, 34, 144, 8
+	   CONTROL "OK", 1, "button", BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP | WS_CHILD, 53, 59, 32, 14
+	   CONTROL "Draw", ID_DRAW, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 98, 58, 24, 14
+END

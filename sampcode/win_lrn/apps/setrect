@@ -1,0 +1,15 @@
+# setrect makefile
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+.c.obj:
+    $(cp)  $*.c
+
+setrect.obj: setrect.c
+
+setrect.exe: setrect.obj setrect.def
+    link4 setrect,/align:16,/map,slibw/NOE,setrect.def
+    del setrect.obj
+    del setrect.map
+
+

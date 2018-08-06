@@ -1,0 +1,6 @@
+globdisc.obj: globdisc.c
+   cl -c -W2 -AS -Gsw -Od -Zped globdisc.c
+
+globdisc.exe: globdisc.obj globdisc.def
+   link4 globdisc,/align:16,/map/li,slibw/NOE,globdisc.def
+   mapsym globdisc

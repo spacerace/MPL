@@ -1,0 +1,16 @@
+#--------------------
+# ABOUTBOX make file
+#--------------------
+
+aboutbox.obj : aboutbox.c aboutbox.h
+     cl -c -G2sw -W3 aboutbox.c
+
+aboutbox.res : aboutbox.rc aboutbox.h aboutbox.ico
+     rc -r aboutbox
+
+aboutbox.exe : aboutbox.obj aboutbox.def
+     link aboutbox, /align:16, NUL, os2, aboutbox
+     rc aboutbox.res
+
+aboutbox.exe : aboutbox.res
+     rc aboutbox.res

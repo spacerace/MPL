@@ -1,0 +1,6 @@
+
+crelirin.obj: crelirin.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 crelirin.c
+
+crelirin.exe: crelirin.obj crelirin.def
+    link4 /align:16 crelirin,,nul,slibw/NOE,crelirin.def

@@ -1,0 +1,22 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+gmesspos.obj: gmesspos.c
+
+gmesspos.exe: gmesspos.obj gmesspos.def
+    link4 gmesspos,/align:16,/map,slibw,gmesspos.def
+    mapsym gmesspos

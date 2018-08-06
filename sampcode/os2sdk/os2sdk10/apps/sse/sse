@@ -1,0 +1,33 @@
+# Makefile for sse
+
+LIB=..\..\..\lib
+INC=..\..\..\include
+CFLAGS=-G2 -Ox -Zp -I$(INC)
+OBJS=sse.obj ssefile.obj sseline.obj ssemem.obj dispatch.obj \
+	keyfuncs.obj  keyfunc1.obj
+
+sse.obj:      sse.c  ssedefs.h
+		cl -c $(CFLAGS) sse.c
+
+ssefile.obj:  ssefile.c ssedefs.h
+		cl -c $(CFLAGS) ssefile.c
+
+sseline.obj:  sseline.c  ssedefs.h
+		cl -c $(CFLAGS) sseline.c
+
+ssemem.obj:   ssemem.c	ssedefs.h
+		cl -c $(CFLAGS) ssemem.c
+
+dispatch.obj: dispatch.c  ssedefs.h
+		cl -c $(CFLAGS) dispatch.c
+
+keyfuncs.obj: keyfuncs.c  ssedefs.h
+		cl -c $(CFLAGS) keyfuncs.c
+
+keyfunc1.obj: keyfunc1.c  ssedefs.h
+		cl -c $(CFLAGS) keyfunc1.c
+
+
+sse.exe:	$(OBJS)
+		cl -Lp $(OBJS)
+		bind sse $(LIB)\api.lib $(LIB)\doscalls.lib

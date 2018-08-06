@@ -1,0 +1,43 @@
+/*
+ * SCREEN CAPTURE UTILITY - RESOURCE FILE
+ *
+ * LANGUAGE : Microsoft C 5.0
+ * TOOLKIT  : Windows 2.03 SDK
+ * MODEL    : Small
+ * STATUS   : Operational
+ *
+ * This file contains the resources used by the screen capture program.
+ * It must be compiled using RC (resource compile) and linked into the
+ * executable file.
+ *
+ * 06/13/88 1.00 - Kevin P. Welch - initial creation.
+ *
+ */
+
+#include <style.h>
+#include "prtsc.h"
+
+/**/
+
+/*
+ * SCREENCAPTURE DIALOG BOX
+ *
+ * This dialog box allows the user to control various options for
+ * screen capture.
+ *
+ */
+
+PrtSc DIALOG LOADONCALL MOVEABLE DISCARDABLE 28, 24, 192, 74
+CAPTION "Screen Capture Utility"
+STYLE WS_POPUP | WS_DLGFRAME
+BEGIN
+   CONTROL "<Alt><PrtSc> Status", -1, "button", BS_GROUPBOX|WS_GROUP|WS_CHILD, 4, 2, 144, 56
+   CONTROL "&Inactive (Off)", DLGSC_OFF, "button", BS_AUTORADIOBUTTON|WS_TABSTOP|WS_GROUP|WS_CHILD, 8, 14, 128, 10
+   CONTROL "&Client area of active window.", DLGSC_CLIENT, "button", BS_AUTORADIOBUTTON|WS_TABSTOP|WS_CHILD, 8, 24, 128, 10
+   CONTROL "Currently active &window.", DLGSC_WINDOW, "button", BS_AUTORADIOBUTTON|WS_TABSTOP|WS_CHILD, 8, 34, 128, 10
+   CONTROL "Entire &display.", DLGSC_SCREEN, "button", BS_AUTORADIOBUTTON|WS_TABSTOP|WS_CHILD, 8, 44, 128, 10
+   CONTROL "Convert image to &monochrome.", DLGSC_MONOCHROME, "button", BS_AUTOCHECKBOX|WS_TABSTOP|WS_GROUP|WS_CHILD, 4, 60, 128, 12
+   CONTROL "", -1, "static", SS_BLACKFRAME|WS_CHILD, 152, 0, 1, 74
+   CONTROL "&Ok", IDOK, "button", BS_PUSHBUTTON|WS_TABSTOP|WS_GROUP|WS_CHILD, 156, 6, 32, 14
+END
+

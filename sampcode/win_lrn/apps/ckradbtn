@@ -1,0 +1,13 @@
+
+ckradbtn.res: ckradbtn.rc ckradbtn.h
+    rc -r ckradbtn.rc
+
+ckradbtn.obj: ckradbtn.c
+   cl -c -W2 -AS -Gsw -Od -Zped ckradbtn.c
+
+ckradbtn.exe: ckradbtn.obj ckradbtn.def
+   link4 ckradbtn,/align:16,/map/li,slibw/NOE,ckradbtn.def
+   rc ckradbtn.res
+
+ckradbtn.exe: ckradbtn.res
+    rc ckradbtn.res

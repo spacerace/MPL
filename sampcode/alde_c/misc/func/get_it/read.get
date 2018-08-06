@@ -1,0 +1,18 @@
+
+   I had to change a few things to get the program to work and also added a 
+few things. First, the author's path seems to be incorrect. His path is 
+E:;C:\bin;C:\;  I think it should be E:\;C:\bin\;C:\;  I modeled this after my 
+path on my computer which is C:\;B:\;A:\  The GET program works with my setup 
+and I couldn't get it to work if I modeled my path after his. Second, I added 
+2 error check routines in the do_switch function, one after the system(drive) 
+call and the other after the chdir(path) call. Third, I commented out 2 
+strcat() calls, one in the search_file() function, the other in the 
+*open_data_file() function. They added a (:) and a (\) which turned out to be 
+one too many of each when copied to their arrays. Fourth, I added another call 
+to system(). My call was: system("DIR");  It lists the directory of the 
+subdirectory GET takes you to. 
+   The file GET.DAT is the sample file I used to feed the get.exe program.
+I created the subdirectories on drive C and, as an example, I typed
+A>get text  or   A>get c_source    In each case GET took me to those subdir-
+ectories; I ended up in C: in that subdirectory.
+

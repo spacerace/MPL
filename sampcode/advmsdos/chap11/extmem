@@ -1,0 +1,6 @@
+extmem.obj : extmem.asm
+  masm extmem;
+
+extmem.exe : extmem.obj
+  link extmem;
+

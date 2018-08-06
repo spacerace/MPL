@@ -1,0 +1,21 @@
+#include <style.h>
+#include "soundx.h"
+
+
+SoundMenu    MENU
+    BEGIN
+	MENUITEM "&Notes", ID_NOTES
+	MENUITEM "&Sound", ID_SOUND
+	MENUITEM "N&oise", ID_NOISE
+	MENUITEM "&Ludwig", LUDWIG
+
+	POPUP "O&ther"
+	    BEGIN
+		MENUITEM "&CountVoiceNotes",	ID_COUNT
+		MENUITEM "&SyncAllVoices",	ID_SYNC
+		MENUITEM "SetVoice&Envelope",	ID_ENV
+		MENUITEM "&GetThresholdEvent",	ID_EVENT
+		MENUITEM "GetThreshold&Status", ID_STATUS
+		MENUITEM "&SetVoiceThreshold",	ID_SETVT
+	    END
+    END

@@ -1,0 +1,50 @@
+#include "style.h"
+#include "ddespy.h"
+
+AppIcon  ICON   ddespy.ico
+
+ABOUTBOX DIALOG 22, 17, 144, 75
+STYLE WS_POPUP | WS_DLGFRAME
+BEGIN
+    CTEXT "Microsoft Windows"                   -1, 37,  5, 68, 8
+    ICON  "AppIcon"                             -1,  9, 23,  0, 0
+    CTEXT "DDE SPY Application"                 -1,  0, 14, 144, 8
+    CTEXT "Version 2.10"                        -1, 38, 34, 64, 8
+    DEFPUSHBUTTON "Ok"                        IDOK, 53, 59, 32, 14, WS_GROUP
+END
+
+DLGSPY DIALOG LOADONCALL MOVEABLE DISCARDABLE 25, 9, 170, 119
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+    CONTROL "Ok"                  ID_OK,      "button", BS_DEFPUSHBUTTON | WS_TABSTOP | WS_CHILD, 130, 64, 30, 14
+    CONTROL "Cancel"              ID_CANCEL,  "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 130, 83, 30, 14
+    CONTROL "Mouse Messages"      ID_MOUSE,   "button", BS_CHECKBOX | WS_TABSTOP | WS_CHILD, 25, 87, 89, 12
+    CONTROL "NC Messages"         ID_NC,      "button", BS_CHECKBOX | WS_TABSTOP | WS_CHILD, 25, 101, 89, 12
+    CONTROL "Exclude"             ID_NULL,    "button", BS_GROUPBOX | WS_CHILD, 15, 73, 103, 44
+    CONTROL ""                    ID_CAPTION, "static", SS_LEFT | WS_CHILD, 50, 15, 116, 10
+    CONTROL ""                    ID_MODULE,  "static", SS_LEFT | WS_CHILD, 50, 27, 117, 10
+    CONTROL "Caption:"            ID_NULL,    "static", SS_LEFT | WS_CHILD, 16, 15, 34, 9
+    CONTROL "Module:"             ID_NULL,    "static", SS_LEFT | WS_CHILD, 16, 27, 34, 8
+    CONTROL ""                    ID_NULL,    "static", SS_BLACKFRAME | WS_CHILD, 15, 13, 153, 38
+    CONTROL "Parent:"             ID_NULL,    "static", SS_LEFT | WS_CHILD, 16, 39, 29, 8
+    CONTROL ""                    ID_PARENT,  "static", SS_LEFT | WS_CHILD, 50, 39, 117, 11
+    CONTROL "Spy on ALL windows." ID_ALL,     "button", BS_CHECKBOX | WS_TABSTOP | WS_CHILD, 15, 55, 86, 12
+    CONTROL "Window to SPY on (Point at...)" ID_NULL, "static", SS_LEFT | WS_CHILD, 16, 1, 153, 10
+END
+
+MyMenu menu
+begin
+    POPUP "SPY"
+        begin
+            MENUITEM "Spy On"    ,SPYON
+            MENUITEM "Spy Set"   ,SPYSET, GRAYED
+        end
+    MENUITEM "  "     ,150
+    MENUITEM "wParam" ,151, Grayed
+    MENUITEM "hWnd"   ,152, Grayed
+    POPUP " "
+        begin    
+          MENUITEM " "  ,153, GRAYED
+        end
+    MENUITEM "low  hi" ,154, GRAYED
+end

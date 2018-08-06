@@ -1,0 +1,46 @@
+
+
+
+        NAME
+                ticker -- timer interrupt service routine package
+
+        SYNOPSIS
+                void installtick(&counter);
+                void removetick();
+                unsigned int counter;     integer to decrement
+
+
+        DESCRIPTION
+        "ticker" is not actually a C function, but a routine which
+        is installed on interrupt 1CH.  At each interrupt (18.21
+        times per second) this routine decrements an integer (16 bits)
+        whose address was passed during installation.  The C program
+        can load and test this integer at any time to perform time-based
+        operations.  When the variable is decremented to zero, it
+        is not decremented any further; i.e., no underflow occurs.
+        Therefore, the integer is actually an unsigned integer with
+        a maximum count of 65535, or (65535/18.2) seconds.
+        installtick() installs the ticker on interrupt 1CH and
+        saves the address of the passed variable. removetick()
+        restores the interrupt 1CH vector to its original state.
+        Any other routines already installed on this vector are
+        executed after ticker, since the ticker chains to the
+        original vector after execution.
+
+
+        EXAMPLE
+
+                 int  counter;
+
+                 main() {
+                     installtick(&counter);
+                     removetick();
+                     }
+
+        CAVEAT
+             It is imperative to call removetick() BEFORE terminating
+             the program,  Otherwise, the system will crash!
+             See also ctlbrk() and criterr().
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

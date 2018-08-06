@@ -1,0 +1,120 @@
+#include <windows.h>
+#include "ddeapp.h"
+
+#define TABLBOX (WS_VSCROLL|WS_BORDER|WS_TABSTOP|WS_GROUP)
+
+mbDde MENU
+        BEGIN
+        POPUP "&DDE"
+                BEGIN
+                MENUITEM "&Initiate...", idmInitiate
+                MENUITEM "&Terminate...", idmTerminate
+                MENUITEM "&Request...", idmRequest
+                MENUITEM "&Poke...", idmPoke
+                MENUITEM "&Advise...", idmAdvise
+                MENUITEM "&Unadvise...", idmUnadvise
+                MENUITEM "&Execute...", idmExecute
+                MENUITEM "&Message Bench...", idmBench
+                MENUITEM "&Call Bench...", idmCBench
+                MENUITEM "Paste &Link", idmPasteLink
+                END
+        END
+
+
+iddInitiate DIALOG 12, 12, 164, 44
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+    LTEXT       "Initiate",     NULL, 2, 2, 40, 8
+    LTEXT       "&Application:", NULL, 2, 14, 48, 8
+    EDITTEXT                    idtxtApp, 52, 12, 64, 12
+    LTEXT       "&Topic:",       NULL, 2, 28, 40, 8
+    EDITTEXT                    idtxtDoc, 52, 26, 64, 12
+    DEFPUSHBUTTON "OK",         IDOK, 128, 2, 32, 14
+    PUSHBUTTON  "Cancel",       IDCANCEL, 128, 18, 32, 14
+END
+
+
+iddRequest DIALOG 12, 12, 164, 96
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+    LTEXT       "Request",      NULL, 2, 2, 40, 8
+    LTEXT       "&Channel Name:",NULL, 2, 14, 58, 8
+    CONTROL     "",             idlboxChnl, "listbox", TABLBOX, 2, 24, 64, 48
+    LTEXT       "&Format:",      NULL, 72, 14, 32, 8
+    CONTROL     "",             idlboxFmt, "listbox", TABLBOX, 72, 24, 48, 48
+    LTEXT       "&Reference:",   NULL, 2, 80, 52, 8
+    EDITTEXT                    idtxtRef, 48, 78, 75, 12
+    DEFPUSHBUTTON "OK",         IDOK, 128, 2, 32, 14
+    PUSHBUTTON  "Cancel",       IDCANCEL, 128, 18, 32, 14
+END
+
+
+iddAdvise DIALOG 12, 12, 164, 96
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+    LTEXT       "Advise",       NULL, 2, 2, 40, 8
+    LTEXT       "&Channel Name:",NULL, 2, 14, 58, 8
+    CONTROL     "",             idlboxChnl, "listbox", TABLBOX, 2, 24, 64, 48
+    LTEXT       "&Format:",      NULL, 72, 14, 32, 8
+    CONTROL     "",             idlboxFmt, "listbox", TABLBOX, 72, 24, 48, 48
+    LTEXT       "&Reference:",   NULL, 2, 80, 52, 8
+    EDITTEXT                    idtxtRef, 48, 78, 75, 12
+    DEFPUSHBUTTON "OK",         IDOK, 128, 2, 32, 14
+    PUSHBUTTON  "Cancel",       IDCANCEL, 128, 18, 32, 14
+END
+
+
+iddUnadvise DIALOG 12, 12, 164, 80
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+    LTEXT       "Unadvise",     NULL, 2, 2, 40, 8
+    LTEXT       "&Channel Name:",NULL, 2, 14, 58, 8
+    CONTROL     "",             idlboxChnl, "listbox", TABLBOX|LBS_NOTIFY, 2, 24, 64, 48
+    LTEXT       "&Reference:",   NULL, 72, 14, 40, 8
+    CONTROL     "",             idlboxRef, "listbox", TABLBOX, 72, 24, 48, 48
+    DEFPUSHBUTTON "OK",         IDOK, 128, 2, 32, 14
+    PUSHBUTTON  "Cancel",       IDCANCEL, 128, 18, 32, 14
+END
+
+iddExecute DIALOG 12, 12, 116, 96
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+    LTEXT       "Execute",      NULL, 2, 2, 40, 8
+    LTEXT       "&Channel Name:",NULL, 2, 14, 58, 8
+    CONTROL     "",             idlboxChnl, "listbox", TABLBOX, 2, 24, 64, 48
+    LTEXT       "&String:",      NULL, 2, 80, 32, 8
+    EDITTEXT                    idtxtRef, 36, 78, 72, 12, ES_AUTOHSCROLL
+    DEFPUSHBUTTON "OK",         IDOK, 80, 2, 32, 14
+    PUSHBUTTON  "Cancel",       IDCANCEL, 80, 18, 32, 14
+END
+
+
+iddTerminate DIALOG 12, 12, 116, 80
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+    LTEXT       "Terminate",    NULL, 2, 2, 40, 8
+    LTEXT       "&Channel Name:",NULL, 2, 14, 58, 8
+    CONTROL     "",             idlboxChnl, "listbox", TABLBOX, 2, 24, 64, 48
+    DEFPUSHBUTTON "OK",         IDOK, 80, 2, 32, 14
+    PUSHBUTTON  "Cancel",       IDCANCEL, 80, 18, 32, 14
+END
+
+iddPoke DIALOG 12, 12, 116, 112
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+    LTEXT       "Poke", NULL, 2, 2, 40, 8
+    LTEXT       "&Channel Name:",NULL, 2, 14, 58, 8
+    LISTBOX                     idlboxChnl, 2, 24, 64, 48, TABLBOX
+    LTEXT       "&Reference:",   NULL, 2, 80, 32, 8
+    EDITTEXT                    idtxtRef, 48, 78, 60, 12
+    LTEXT       "&Data:",        NULL, 2, 96, 32, 8
+    EDITTEXT                    idtxtData, 48, 94, 60, 12, ES_AUTOHSCROLL
+
+    GROUPBOX    "",                NULL,     72, 30, 38, 42, WS_GROUP
+    RADIOBUTTON "Text",         idradioText, 76, 34, 28, 12, WS_TABSTOP | WS_GROUP
+    RADIOBUTTON "Csv", ,        idradioCsv,  76, 46, 28, 12
+    RADIOBUTTON "File",         idradioFile, 76, 58, 28, 12
+
+    DEFPUSHBUTTON "OK",         IDOK, 80, 2, 32, 14
+    PUSHBUTTON  "Cancel",       IDCANCEL, 80, 18, 32, 14
+END

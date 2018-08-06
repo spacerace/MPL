@@ -1,0 +1,12 @@
+trncomch.obj: trncomch.c 
+  cl -c -W2 -AS -Gsw -Od -Zped trncomch.c
+
+trncomch.res: trncomch.rc trncomch.ico
+  rc -r trncomch.rc
+
+trncomch.exe: trncomch.obj trncomch.def trncomch.res 
+    link4 trncomch,/align:16,,slibw,trncomch.def
+    rc trncomch.res
+    del trncomch.obj
+    del trncomch.map
+

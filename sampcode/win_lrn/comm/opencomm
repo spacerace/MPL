@@ -1,0 +1,12 @@
+opencomm.obj: opencomm.c 
+  cl -c -W2 -AS -Gsw -Od -Zped opencomm.c
+
+opencomm.res: opencomm.rc opencomm.ico
+  rc -r opencomm.rc
+
+opencomm.exe: opencomm.obj opencomm.def opencomm.res 
+    link4 opencomm,/align:16,,slibw,opencomm.def
+    rc opencomm.res
+    del opencomm.obj
+    del opencomm.map
+

@@ -1,0 +1,6 @@
+clipenum.obj: clipenum.c
+    cl -c -d -AS -Gsw -Os -Zpe clipenum.c
+
+clipenum.exe: clipenum.obj clipenum.def
+    link4 clipenum,/align:16,/map, slibw/NOE, clipenum.def
+    mapsym clipenum

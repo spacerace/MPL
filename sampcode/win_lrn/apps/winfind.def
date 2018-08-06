@@ -1,0 +1,12 @@
+NAME    Winfind
+
+DESCRIPTION 'Find where module was started from.'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  1024
+STACKSIZE 4096
+

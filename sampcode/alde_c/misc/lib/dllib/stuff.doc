@@ -1,0 +1,39 @@
+
+
+
+
+        NAME
+                stuff -- get equipment report (high level)
+
+        SYNOPSIS
+                r = _stuff(kind);
+                int r;     result of test
+                int kind;  kind of equipment to test for
+
+
+        DESCRIPTION
+        This function calls _stuff() and checks the appropriate
+        bits returned depending upon the kind of information
+        requested.  Kind is one of the following:
+               0 = initial video mode
+                    mode 0, 2, or 7 returned
+               1 = number of disk drives
+               2 = number of printers
+               3 = number of serial ports
+               4 = joystick installed
+
+
+        EXAMPLE
+
+                 int r;
+                 r = stuff(0);
+                 if(r == 7) printf("Monochrome card installed");
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

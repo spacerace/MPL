@@ -1,0 +1,206 @@
+/*
+** Revision History in reverse order:
+**
+**  The following changes were incorporated in the 03.15.87 release:
+**
+**  03.01.87  - wn_activate was incorrectly computing the coordinates of
+**              unbordered windows.  Thanks to Peter Fletcher for reporting
+**              the problem and supplying a solution.
+**
+**  01.22.87  - wn_dborder() was using the wrong attribute (wn-style,
+**              instead of wn->bstyle). Thanks to Peter Partch for
+**              reporting the problem and supplying a solution.
+**
+**  01.06.87  - wn_activate was not walking through the current linked 
+**              list of windows. In rare cases this would cause two
+**              windows to be considered non-overlapping when in fact
+**              they were.  Thanks to Robert Klotz for reporting the
+**              problem.
+**
+**  The following changes were incorporated in the 01.01.87 release:
+**
+**  12.19.86  - Removed a needless call to wn_err(wn,"wn_printf") in
+**              wn_title().
+**
+**  12.16.86  - Improved centering logic for window titles.
+**              Thanks to Steve Liberty for suggesting the change.
+**
+**  12.14.86  - Incorporated compiler specific equates in windows.h.
+**
+**  12.13.86  - wns_mtype() returns 0 for mode 3, 2 for mode 0 or 2,
+**              and 7 for mode 7. (Internal Use - This change allowed
+**              for the prevention of blue on black characters when
+**              the video mode is 2 and a color monitor is in use.
+**              (wns_fixc & wns_mtype).
+**
+**            - BASIC support for Mark Williams "Lets C".
+**
+**            - Tightend free() checks in wn_activate, wn_close, and
+**              wn_restore.
+**
+**  12.12.86  - wn_puts() was not adding the original physical cursor
+**              location to the logical cursor location. 
+**              Thanks to Marek Glowacki for reporting the problem.
+**
+**  12.10.86  - Allow v_locate() to position the cursor slightly off
+**              the screen.  Previous limit was (24,79) current limit
+**              is (25,80) which is just beyond the edge of the screen.
+**              This was done to insure that hidden cursors remain out
+**              of view.
+**
+**            - Improved cursor handling when wn_dmaflg = FALSE.
+**
+**  12.09.86  - Taught wn_activate to honor cursor position of window
+**              being activated. This will insure the cursor is always
+**              in the right logical and physical position. 
+**              More cosmetic enhancement than logic error correction.
+**
+**  The following changes were incorporated in the 12.01.86 release:
+**
+**  11.28.86  - Reverse video attribute was not being set correctly
+**              on MGAs - corrected.
+**
+**  11.19.86  - wn_dborder was incorrectly computing the row offset.
+**              Thanks to Steve Thatcher for reporting the problem.
+**              
+**  11.16.86  - Added ".smeth" member to window control block. This 
+**              member defines the scrolling method to be used in
+**              the window. It can be set to BIOS or DMAS, the default
+**              is DMAS.  
+**
+**            - All routines that reference wn_activate will return
+**              NULL if the window could not be activated.  This is 
+**              usually due to a lack of free memory.
+**
+**  The following changes were incorporated in the 11.14.86 release:
+**
+**  11.13.86  - Closing windows in random order when exiting "sometimes"
+**              produced null pointer assignment error messages or 
+**              incorrect screen images - corrected.
+**
+**            - wn_natrib() was not storing the newly defined window
+**              attribute in the window control block - corrected.
+**
+**  11.09.86  - Support for Datalight C added.
+**
+**  11.02.86  - v_border() added.  Allows color of border area to be
+**              set on CGAs with color monitors.
+**
+**  11.01.86  - wn_fixcsr was not adding the original physical cursor
+**              location to the logical cursor location. 
+**              Thanks to Bill Harts for reporting the problem.
+**
+**            - wn_puts was computing the virtual cursor location
+**              incorrectly. Thanks to Eric Lundstrom!
+**
+**            - Logic to dectect null strings was incorporated into
+**              _vidblt.  This will prevent 64k worth of trash from
+**              being blitted to the video ram.
+**
+**  10.30.86  - All references to MSC in "windows.h" were changed
+**              to M_I86.  This forces "windows.fns" to be included
+**              under Microsoft C.  This change was also applied to
+**              "windows.c".
+**
+**  10.26.86  - Full float, long, etc. support for wn_printf in
+**              all Lattice versions.  Microsoft 3.XX is the only
+**              one in the dark ages.
+**
+**  10.23.86  - Tip of the hat to Russ Thackson for the improved
+**              overlaping window detection technique incorporated
+**              in wn_activate().
+**
+**  The following changes were incorporated in the 10.22.86 release:
+**
+**  10.22.86  - wn_activate() was causing unnecessary window 
+**              thrashing on non-overlapping windows. Corrected.
+**
+**  The following changes were incorporated in the 10.10.86 release:
+**
+**  09.27.86  - Tiled windows are now supported! wn_activate() added.
+**
+**            - wn_gets() was not calling wns_err - corrected.  This
+**              was not a bug, just continued support for wild pointer
+**              checks.
+**
+**  09.25.86  - New logic for vidblt(). Fast mode now works on color
+**              without causing snow or flicker!!  Video updates now 
+**              occur at the fastest possible speed!  The effect of
+**              wn_sbit now conforms exactly to the description in the
+**              manual.
+**
+**            - wn_printf (CI86) now has full float support. Thanks
+**              to Rob Sullivan for reporting the CI86 problem. Lattice
+**              and MSC Version 3.0 are the only hold outs for full
+**              wn_print support.  MSC Version 3.0 support will never
+**              be incorporated. If you are using MSC Version 3.00 
+**              you will have to upgrade to Version 4.XX.  The price
+**              of the update is well worth it. Version 4.00 is a
+**              work of art! Lattice support will be delayed until
+**              Lattice gets around to supporting vsprintf() as
+**              defined by the evolving ANSI standard.
+**
+**  09.17.86  - seperate modules to decrease memory overhead.
+**
+**            - link list support (wn_open,wn_close,WINDOWPTR struct)
+**              This is the ground work for tiled window support.
+**
+**  09.02.86  - use registers in wns_savres() for speed (MSC).
+**
+**  The following changes were incorporated in the 08.30.86 release:
+**
+**  08.28.86  - wn_gets was delclared as (char *) but returning
+**              (void).  Corrected to return (char *).
+**
+**  08.27.86  - wns_wtext() was not correctly handling borderless
+**              windows. Corrected.
+**
+**            - wn_printf() was not correctly handing cases such as:
+**              wn_printf(wn,"%s %d %f %d\n", "text", 2, 2.2, 5);
+**              The window boss now supports a complete implementation
+**              of printf formatting under Microsoft C Version 4.00.
+**              All other compilers and versions support an INTEGER only
+**              wn_printf.  This will be corrected in a future release.
+**
+**  08.16.86  - Added wn_gets(). Get string in window with validation.
+**
+**  The following chages were incorporated in the 06.02.86 release.
+**
+**  06.02.86  - v_smode was using bh instead of ah. Corrected.
+**              Thanks to Rob Rainwater!!
+**
+**  05.26.86  - Added wn_natrib. Set new window attribute NOW!
+**
+**  05.25.86  - Corrected a potential problem with a couple of the routies
+**              in MSVLIB.ASM. Registers SI & DI were being used but not
+**              being saved. This "may" cause spurious probles with "C"
+**              programs that use register variables.  Microsoft C 3.0 only.
+**
+**            - wn_titla was not calling wns_fixc. Corrected.
+**
+**  05.24.86  - Added wn_titla. write window title with attributes.
+**
+**  05.10.86  - wn_putsa was not calling wns_fixc.  This caused problems
+**              when CGA was in mode bw80 but putsa was called with a
+**              valid color atrib.
+**
+**  The following changes were incororated in the 05.08.86 release.
+**
+**  05.07.86  - Additions for Microsoft "C" version 3.0
+**
+**  05.05.86  - wn_printf fix for lattice version 3.0.
+**
+**  04.25.86  - Added support for handling backspace, delete, & BELL 
+**              characters correctly (wns_wtext).
+**
+**              Incorporated v_wtty in vlib.asm.
+**
+**  Initial Release..
+**
+**  01.24.86  - Initial release with a bit of a false start thanks to
+**              Microsoft's Lib.
+**
+*/
+
+/* End */
+

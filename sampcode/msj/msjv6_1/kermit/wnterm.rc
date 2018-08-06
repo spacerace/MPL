@@ -1,0 +1,15 @@
+/* 
+ * WNTERM resource file
+ *
+ * Copyright (c) 1989, 1990
+ * William S. Hall
+ * 3665 Benton Street, #66
+ * Santa Clara, CA 95051
+ */
+
+#include <windows.h>
+#include "wnterm.h"
+#include "wntdlg.h"
+
+#include "wntmnu.rc"
+#include "wntdlg.dlg"

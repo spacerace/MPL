@@ -1,0 +1,468 @@
+                                MSC TOOLS LIBRARY 
+
+
+MSCTOOLS is a collection of rountines that I have been using on other compilers
+for quite some time and have ported over to the Microsoft C Compiler.  They are
+completely written in C and should port to other machines with little modifica-
+tion.  I could probably add more speed to them by rewriting them in assembler
+but somehow to me that defeats the purpose of the C language.  You should have
+received the following on the diskette.
+
+              MSCTOOLS.LIB..................Link library
+              MSCTOOLS.DOC..................This Documentation
+       
+Possible you will have received a file called "README" which lists the known
+bugs and any other pertinent information.  I am constantly adding new func-
+tions to the library and this file will contain the current release and new
+functions added since the last release.
+
+The source code is available for $25 from
+
+                      PC-SYSTEMS
+                      PO BOX 471114
+                      TULSA, OK 74147-1114 
+
+You will receive a diskette containing the latest version of the functions.  
+If you encounter problems you can write me at the above address or leave a
+comment on my BBS at:
+
+                      918-749-0718
+
+And now to the fucntions!
+Thanks, have fun and good luck!  Lynn Long
+
+			 
+
+--------------------------------------------------------------------------
+
+aputc(char,attr,page,number) 
+
+This function puts a character one or more times to the specified page with
+the specified attribute.  If you are using text modes then the page must be
+specified.  It need not be given for graphics modes.  The following  would
+display upon a monochrome monitor twenty x's in reverse video and blinking,
+at the current cursor location.
+
+	aputc('x',0x0f0,0,20);
+
+Other valid display modes in text (not graphic) are:
+	Result		value	comment
+        -----------	----	--------------
+	Non-Display	0x00 	non-display as passwords on screen
+	Underline	0x01	underlines the characters displayed
+	Normal		0x07	Normal mode-white on black
+	Intense		0x08	Intensifies the characters
+	Reverse vidio	0x70	black on white
+	Blinking	0x80	blinking
+
+The modes may be combined for added effects although common sense 
+should dictate that some should not be combined.
+
+			0xf0	Reverse black on white blinking	
+			0x0f	White on Black, intense
+			0x70	Reverse black on white
+
+Play around with the differnt modes and you will be surprised at some
+of the combinations that you can come up with.
+
+-------------------------------------------------------------------------
+
+cls()
+
+This function clears the console and positions the cursor at row zero 
+and column zero.
+
+	main()
+	{
+		cls();
+	}
+
+
+
+-------------------------------------------------------------------------
+
+curdrive()
+
+This function returns the current default data drive.  It is called as
+follows.   Since it returns character it must be declared before you 
+call it which is always good practice in C. (I preach it but don't always
+practice it);
+
+	main()
+	{    
+		char curdrive();
+		printf("Default drive is %c\n",curdrive);
+	}
+				
+				
+-------------------------------------------------------------------------
+
+cursoff()
+
+Sometimes the cursor can be annoying sitting there blinking on the screen.
+This function will turn it off and you can turn it back on again with
+curson().
+
+	main()
+	{
+		cursoff();
+	}
+
+
+-------------------------------------------------------------------------
+
+curson()
+
+This function turns the cursor back on.  It resets it back to its initial
+boot up size for both color and monochrome.  This function calls "montyp"
+to determine how to reset the cursor.
+
+
+	main()
+	{
+		curson();
+	}
+
+
+-------------------------------------------------------------------------
+
+
+disk()
+
+This function returns the number of logical disk drives attached to the
+system.  It is called as follows.
+
+	main()
+	{
+		printf("Number of disk drives attached",disk());
+	}
+
+
+
+-------------------------------------------------------------------------
+
+
+equip()
+
+This function returns 16 bits which can then be tested to determint the
+equipment attached to the system.  It is called as follows.
+
+	main()
+	{
+		int i=0;
+		i=equip();
+		j=i & 0xc000;
+		j >>=14;
+		printf("the number of printers attached is %d\n",j);
+	}	       
+
+
+Other hardware attached can be dtermined as follows.
+
+	communications ports
+		      
+	j=i & 0x0e00;
+	j >> = 9;
+
+	
+
+-------------------------------------------------------------------------
+
+frame(row,col,hgt,wth)
+
+
+This function draws a box on the screen at the specified row and col for
+the specified height and width.  It is called as follows.
+
+	main()
+	{
+		frame(10,10,10,60);
+
+	}
+
+
+This would put a box on the screen at row 10, column 10 for a hight of
+10 rows and a width of 60 columns.
+
+ 
+
+-------------------------------------------------------------------------
+
+
+getmode(mode,khar,page)
+
+This function returns the current screen mode, the character width and the
+page number.  The arguments are pointers and thus must be passed to the
+function as address.  It can be called as follows.
+
+
+	main()
+	{		
+		int *mode, *khar, *page;
+
+		getmode(mode, khar, page);
+		printf("The current mode is %d character width is %d and
+			page number is %d\n",*mode,*khar,*page);
+
+	}
+or
+	 
+
+	main()
+	{
+		int mode,khar,page;
+		getmode(&mode,&khar,%page);
+		printf("mode is %d, char is %d and page is %d",
+			mode, khar, page);
+							       
+	}
+
+
+
+-------------------------------------------------------------------------
+
+inchar(port)
+
+This function returns a character from the specified communications port.
+The port first has to be initialized with the correct baud rate, parity,
+data bits, and stop bits with the function "setport" before it will work
+correctly.  It returns the character if it was returned ok else it returns
+the NULL character if an error condition resulted.  If an error was
+returned then you can use the "portstat" function to determine what happened.
+The function is called as follows.
+
+	main()
+	{	    
+		char buffer[128];
+		int i,stat;
+		if((buffer[i]=inchar(1)) != NULL)
+			break;
+		else	  
+			stat=portstat(1);
+
+	}
+
+
+-------------------------------------------------------------------------
+
+
+locate(row,col)
+
+This function positions the cursor at the row and column specifed in the
+arguments.  It is like the locate function in BASIC and is called as
+follows.
+
+
+	main()
+	{
+		locate(12,12);
+	}
+
+
+
+-------------------------------------------------------------------------
+
+lppos(row,col,pixrow,pixcol)
+
+I have never known anyone to use a lightpen on the IBM PC but I am sure
+there are those of you out there who do.  This is for you!  The arguments
+are pointers and thus have to be passed as addresses as follows.
+
+
+	main()
+	{
+
+		int row, col, pixrow, pixcol;
+
+		lppos(&row,&col,&pixrow,&pixcol);
+		printf("row = %d, col=%d pixel row =%d pixel col = %d ",
+			row,col,pixrow,pixcol);
+
+
+or
+		int *row, *col, *pixrow, *pixcol;
+
+		lppos(row,col,pixrow,pixcol);
+
+
+	}
+
+-------------------------------------------------------------------------
+	 
+
+portstat(port)
+
+This function returns the status of a serial or communications port.  It
+returns a word of bits that can be tested to determine the existing con-
+ditions.  The high-order eight bits determine the line control status and
+the low-order eight bits determine the modem status.It is called and tested
+as follows.
+
+
+	main()
+	{
+
+		int stat;
+		stat=portstat(1);
+		if(stat & 0x8000)
+			puts("Time out occurred");
+		if(stat & 0x4000)
+			puts("trans shift register empty");
+		if(stat & 0x2000)
+			puts("trans hold reg empty");
+		if(stat & 0x1000)
+			puts("Break detected");
+		if(stat & 0x0800)
+			puts("Framing error");
+		if(stat & 0x0400)
+			puts("parity error");
+		if(stat & 0x0200)
+			puts("overrun error);
+		if(stat & 0x0100)
+			puts("data ready");
+
+the modem status signals are detected as follows.		
+		
+		if(stat & 0x0080)
+			puts("line signal detect");
+		if(stat & 0x0040)
+			puts("ring indicator on");
+		if(stat & 0x0020)
+			puts("data set ready");
+		if(stat & 0x0010)
+			puts("clear to send");
+		if(stat & 0x0008)
+			puts("delta line signal detect");
+		if(stat & 0x0004)
+			puts("trailing edge ring detect");
+		if(stat & 0x0002)
+			puts("data set ready");
+		if(stat & 0x0001)
+			puts("delta clear to send);
+
+-------------------------------------------------------------------------
+
+pos(row,col)
+
+This fundtion returns the current row and column of the cursor.  The
+arguments are pointers and have to be passed to the function as 
+addresses.  The function is called as follows.
+
+
+	main()
+	{
+		int row,col;
+		pos(&row,&col);
+		printf("The cursor is at row %d and col %d\n",row,col);
+	}
+
+or can be called as
+
+		int *row,*col;
+		pos(row,col);
+		printf("cursor at row %d, and col %d\n",*row,*col);
+
+
+
+-------------------------------------------------------------------------
+
+prtscn()
+
+This function prints the screen to the line printer.  I use it a lot
+when users get into serious trouble in the program and I have a hard
+copy of what they were doing when the error occurred.  It is called
+as follows.
+
+
+	main()
+	{
+		prtscn();
+
+	}
+
+
+
+-------------------------------------------------------------------------
+
+
+reboot()
+
+This function cause the system to reboot as if pressing Ctrl-Alt-DEL keys
+do.  I sometimes use this in a program when a user has really gotten into
+trouble and the only thing to do is reboot the system.  It is called as
+follows
+
+
+	main()
+	{
+		reboot();
+	}
+
+
+-------------------------------------------------------------------------
+
+setport(port,rate,parity,bits,stop)
+
+This function sets a serial or communications port to the specified baud
+rate, parity, word length, and stop bits.  It is called as follows.
+
+
+	main()
+	{
+		setport(1,1200,'N',8,1);
+	}
+
+
+The baud rate parameter can range from 110 to 9600.
+Parity can be 'E' for even parity, 'O' for odd, or 'N' for no parity.
+the bits or wordlength can be 7 or 8 data bits.
+
+stop bits can be 1 or 2;
+
+
+-------------------------------------------------------------------------
+
+
+shift()
+
+This function returns the shift status of the keyboard.  It can be
+called and tested as follows.
+
+	main()
+	{
+		x=shift();
+		if(x & 0x80)
+			puts("Insert key locked on");
+		if(x & 0x40)
+			puts("Caps key locked on");
+		if(x and 0x20)
+			puts("Num Lock Key locked on");
+		if(x and 0x10)
+			puts("Scroll Lock key locked on");
+		if(x & 0x08)
+			puts("Alt Shift key depressed");
+		if(x & 0x04)
+			puts"Ctrl Shift Key depressed");
+		if(x & 0x02)
+			puts("Left shif key depressed");
+		if(x & 0x01)
+			puts("Right shift key depressed");
+
+
+
+-------------------------------------------------------------------------
+
+
+END OF DOCUMENTATION
+
+
+
+
+			
+
+
+
+
+
+
+     

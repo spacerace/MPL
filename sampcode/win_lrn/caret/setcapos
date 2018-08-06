@@ -1,0 +1,12 @@
+setcapos.obj: setcapos.c 
+  cl -c -W2 -AS -Gsw -Od -Zped setcapos.c
+
+setcapos.res: setcapos.rc setcapos.ico
+  rc -r setcapos.rc
+
+setcapos.exe: setcapos.obj setcapos.def setcapos.res 
+    link4 setcapos,/align:16,,slibw,setcapos.def
+    rc setcapos.res
+    del setcapos.obj
+    del setcapos.map
+

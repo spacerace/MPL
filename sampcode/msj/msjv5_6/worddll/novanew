@@ -1,0 +1,19 @@
+cx=cl -PLM -c -AM -Aw -Zipe -Gcsw -Os -FPc -W3  -u  -NT
+am=masm -Id:\tools\include -Mx -D?MLIBW $*;
+
+all: novanew.dll
+
+libentry.obj: libentry.asm
+   masm -Mx libentry,libentry;
+
+novanew.obj: novanew.c  novanew.h
+    $(cx) _ROOTRTN $*.c >$*.err
+    type $*.err
+
+novanew.dll: novanew.obj novanew.def libentry.obj novanew.rc
+   link /CO @novanew.lnk
+   rc novanew.rc novanew.dll > novatrc1.err
+   type novatrc1.err
+   copy novanew.dll e:\win30\system\*.*
+
+

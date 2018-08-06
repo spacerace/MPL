@@ -1,0 +1,11 @@
+#include <style.h>
+#include "crdiain.h"
+
+diabox MENU
+BEGIN
+  POPUP "DialogBox"
+  BEGIN
+    MENUITEM "Modeless", IDDBOX
+  END
+END
+

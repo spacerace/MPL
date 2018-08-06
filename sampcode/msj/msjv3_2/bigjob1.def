@@ -1,0 +1,9 @@
+;------------------------------------
+; BIGJOB1.DEF module definition file
+;------------------------------------
+
+NAME           BIGJOB1
+DESCRIPTION    'BIGJOB Demo Program No. 1 (C) Charles Petzold, 1988'
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

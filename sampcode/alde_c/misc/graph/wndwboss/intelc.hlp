@@ -1,0 +1,1403 @@
+                 Intellicom's HELP Function Key Response File
+                                 Partial File
+
+  Reproduced with permission from Computer Toolbox, Inc.
+
+  (Intellicom is a super communications program! - The Window BOSS)
+
+  This  file  contains  all of Intellicom's responses to help requests.  The
+  general format is quite simple, the body of the text begins with, but does
+  not include the key word descriptor.  The body of the text ends with,  but
+  does not include the help end key. All keywords, start at the beginning of
+  a line with all text between positions 3 and 76.  Feel free to modify  the
+  BODY  of the help messages to suit your needs or taste,  but do not change
+  either the keyword descriptor or the help end key.  Help messages  may  be
+  any length.  Be sure to run genindex when you finish.
+
+
+               Copyright (C) 1981, 1985 - Computer Toolbox, Inc.
+                             1325 East Main Street
+                         Waterbury, Connecticut 06705
+
+                                (203) 597-0273
+
+  ==========================================================================
+
+%ksend
+                       File Transmission/Kermit Protocol
+  
+  Transmitting a file is a two step process.  The first step is to place the 
+  remote system in receive mode.  This is accomplished on the remote  system 
+  by  running  a  program,  selecting  a  menu item,  or issuing a series of 
+  specific commands.  The second step is to instruct Intellicom to  transmit 
+  a  file.  This  is accomplished by pressing the function key corresponding 
+  to the method (protocol) that is to be used to transfer the file.  
+  
+  You  can  transfer  any  type of file using the Kermit protocol.  Use this 
+  mode of file transfer with any system that claims to  support  the  KERMIT 
+  Protocol.  Most bulletin boards and many mainframes support this protocol.  
+  
+.cp
+                       File Transmission/Kermit Protocol
+  
+  When  you enter this option,  Intellicom will respond by prompting you for
+  the file to be transmitted.  
+  
+  If you respond by pressing ESC,  without supplying a filespec,  Intellicom 
+  will  cancel  the  option  and  return  you  to  terminal  emulation mode.  
+  Responding with a valid filespec will cause that file to be transmitted.  
+  
+  During  the  actual  transmission,  Intellicom displays information on the
+  packet  being  sent  or  received.  Pressing  ESC will cause Intellicom to
+  cancel the file exchange and return terminal emulation mode.
+*END*
+
+%ksend1
+                       File Transmission/Kermit Protocol
+  
+  Use this option to transmit files to a  Information  Service,  or  system,
+  that  supports  the KERMIT file transfer protocol. 
+  
+  At the "Send (Kermit) Filename >" prompt you may:
+
+        1) Press  the  ESC  key to cancel the send request.  Doing this 
+           will return you to terminal mode.  
+
+        2) Enter the name of the file you wish to send to the system you are
+           connected to.  Intellicom assumes that the receiving system has 
+           been told to receive a file.
+
+  Once transmission has begun  you  may  request  Intellicom  to  cancel  by 
+  pressing the ESC key.  
+
+*END*
+
+%krecv
+                        File Reception/Kermit Protocol
+  
+  Receiving a file is a two step process.  The first step  is  to  tell  the 
+  remote  system  to  send  (transmit)  a file.  This is accomplished on the 
+  remote system by running a program,  selecting a menu item,  or issuing  a 
+  series of specific commands.  The second step is to instruct Intellicom to 
+  receive  a  file.  This  is  accomplished  by  pressing  the  function key 
+  corresponding to the method (protocol) that is to be used to transfer  the 
+  file.  
+  
+  You  can  transfer  any  type of file using the Kermit protocol.  Use this 
+  mode of file transfer with any system that claims to  support  the  KERMIT 
+  Protocol.  Most bulletin boards and many mainframes support this protocol.  
+
+.cp
+                        File Reception/Kermit Protocol
+  
+  When  you enter this option,  Intellicom will respond by prompting you for 
+  the disk or directory that should be used to store the files received from 
+  the remote system.  Please note that you do not specify the  name  of  the 
+  file to be received but rather the disk or directory that the file  is  to 
+  be  stored  in.  The name the file will be given is supplied by the remote 
+  system!  
+  
+  If you respond by pressing ESC, Intellicom will cancel the option and  
+  return  you  to  terminal emulation mode.  
+  
+  Once  the  actual transmission begins,  Intellicom displays information on 
+  the packet being sent or received.  Pressing ESC will cause Intellicom  to 
+  cancel the file exchange and return terminal emulation mode.  
+  
+*END*
+
+%krecv1
+                        File Reception/Kermit Protocol
+  
+  You can transfer any type of file using this protocol.  Use this  mode  of
+  file  transfer  with  any  system  that  claims its ability to support the
+  KERMIT Protocol.  
+
+  At the "Disk, directory, or * for default >" prompt you may:
+
+        1) Press  the  ESC  key to cancel the receive request.  Doing this 
+           will return you to terminal mode.  
+
+        2) Enter the disk drive, disk drive\path, path, or "*".  That is
+           to be used to store the files received from the remote system.
+           Examples:
+
+                        B:      or      A:
+                        C:\DAT  or      D:\LOTUS\ACCTS
+                        *
+.cp
+                        File Reception/Kermit Protocol
+  
+  Kermit receives the name of the file from the remote system.  This is part 
+  of  the protocol definition which Intellicom supports.  A note of caution: 
+  If the target disk or directory contains a file named the same as one that 
+  is being sent by the remote system,  the transfer will be canceled and you 
+  will be returned to terminal mode.  
+  
+  During the actual transmission,  Intellicom displays  information  on  the 
+  packet  being  sent  or  received.  Pressing  ESC will cause Intellicom to 
+  cancel the file exchange and return terminal emulation mode.  
+
+*END*
+
+%checksum xmit1
+                       File Transmission/Error Checking
+  
+  You can transfer any type of file using this protocol.  Use this  mode  of
+  file  transfer  with  any  system  that  claims its ability to support the
+  XMODEM, MODEM7, or Christensen Protocol.  Please note:  In order to effect
+  data  transfers using this protocol you must have your com port parameters
+  set to 8 data bits and no parity.  
+
+  At the "Send Filename >" prompt you may:
+
+        1) Press  the  ESC  key to cancel the send request.  Doing this will
+           return you to terminal mode.  
+
+        2) Enter the name of the file you wish to send to the system you are
+           connected to.  Intellicom assumes that the receiving system has 
+           been told to receive a file.
+  
+  During  the  actual  transmission,  Intellicom displays information on the
+  packet  being  sent  or  received.  Pressing  ESC will cause Intellicom to
+  cancel the file exchange and return terminal emulation mode.
+*END*
+
+%checksum recv1
+                         File Reception/Error Checking 
+  
+  You can transfer any type of file using this protocol.  Use this  mode  of
+  file  transfer  with  any  system  that  claims its ability to support the
+  XMODEM, MODEM7, or Christensen Protocol.  Please note:  In order to effect
+  data  transfers using this protocol you must have your com port parameters
+  set to 8 data bits and no parity.  
+
+  At the "Receive Filename >" prompt you may:
+
+        1) Press  the  ESC  key to cancel the receive request.  Doing this 
+           will return you to terminal mode.  
+
+        2) Enter the name that you want the file you are receiving to have
+           on your system.  Intellicom assumes that the sending system has 
+           been told to transmit a file.
+  
+  During  the  actual  transmission,  Intellicom displays information on the
+  packet  being  sent  or  received.  Pressing  ESC will cause Intellicom to
+  cancel the file exchange and return terminal emulation mode.
+*END*
+
+%terminal/c1
+                       Data Capture (Text file receive)
+
+  Use this option to receive files from an Information Service that does not
+  support the XMODEM,  MODEM7 or Christensen file transfer protocol.  Simply
+  "capture"  the  entire session,  which will include the file you wanted to
+  transfer, and later edit out all unwanted information.  Remember:  you can
+  not use this mode to receive binary files.  
+
+  At the "Capture Filename >" prompt you may:
+
+        1) Press  the  ESC  key to cancel the capture request.  Doing this 
+           will return you to terminal mode.  
+
+        2) Enter the name for the file you want to contain the captured 
+           text.
+
+  Once data capture is enabled,  all text that appears on your  screen  will
+  also be stored in  the  capture  file.  You  close  the  capture  file  by
+  pressing the PgUp key.
+*END*
+
+%cistty1
+                         CompuServe Executive Terminal
+  
+     In this mode your PC can emulate any one of the following terminals: 
+  
+               VT100 (subset)      VT52     Lear Seiglar ADM3A/5
+               TeleVideo 910/925   TTY      Adds 25/Viewpoint
+  
+       The following function keys can be used in CompuServe Exec Mode:
+  
+          PgUp .............. Quits CIS Exec Mode
+          F10 ............... Displays Quick Help Screen
+          F3 ................ Toggles the printer On if Off, and Off if On
+          F4 ................ Autodial/Autologon from Directory
+          F7 ................ Invokes Intellicom's Status/Setup Menus
+          Home .............. Opens DOS Window (End returns)
+
+  File transfers in this mode  are  under  the  control  of  CompuServe  and 
+  require very little effort on your  part.  CompuServe  will  automatically 
+  prompt  you  for all needed information to effect the file transfer.  Just 
+  remember to tell CompuServe that you are employing the "A" protocol.  
+.cp
+                           Sample CIS Exec Download
+
+  DL 1 - Utilities : dow list54.com             <- Instruct CIS to download
+
+  Transfer protocols available -                <- Your download protocol
+   1 XMODEM (MODEM7) protocol                      choices
+   2 CompuServe 'B' protocol 
+   3 CompuServe 'A' protocol
+   4 DC2/DC4 CAPTURE protocol
+   0 Abort transfer request
+
+  Please make a selection: 3                    <- Select "A" protocol
+
+  File name for your computer: list54.com       <- Tell CIS the MY name
+
+  ACKing Record: XXX                            <- Intellicom Response
+  
+  **** Download completed ****                  <- Download complete
+  4111 bytes transferred in 60 seconds          <- Download stats
+  64 bytes/second 
+*END*
+
+%terminal
+                              Terminal Emulation
+
+     In this mode your PC can emulate any one of the following terminals:
+
+               VT100 (subset)      VT52     Lear Seiglar ADM3A/5
+               TeleVideo 910/925   TTY      Adds 25/Viewpoint
+
+       The following function keys can be used in Terminal Emulation: 
+
+        PgUp .............. Return to DOS (Confirmation Requested)
+        F10 ............... Displays Quick Help Screen
+        F1 ................ Transmits a file using Error Checking Protocol
+        F2 ................ Receives a file using Error Checking Protocol
+        F3 ................ Toggles the printer On if Off, and Off if On
+        F4 ................ Autodial/Autologon from Directory
+        F5 ................ Transmits a file (Ascii Only)
+        F6 ................ Enables Data Capture
+        F7 ................ Invokes Intellicom's Status/Setup Menus
+        Home .............. Opens DOS Window (End returns)
+        ALT+S/ALT+R ....... Transmit/Receive a file using Kermit Protocol
+.cp
+                              Terminal Emulation
+
+  This mode can be used to access most Commercial Services (e.g.  Dow Jones,
+  The Source,  CompuServe ...  ) and public bulletin boards.  This should be
+  your most commonly used mode of Intellicom.  
+
+  The file Send and Receive functions in this mode allow you to transfer any
+  type of file, with full error detection and recovery,  provided the system 
+  you are connected to supports the XMODEM, MODEM7, or Christensen protocol.  
+
+  If you're going use Intellicom as a smart terminal  (VT100,  VT52....)  be
+  sure  to  review  Intellicom's  Reference  Manual.  The  reference  manual
+  outlines what features and functions of the various  terminals  Intellicom
+  supports.  
+
+  If  Intellicom  appears to be functioning incorrectly,  check to make sure
+  that you have correctly selected the terminal  type,  baud  rate,  parity,
+  word  size  and  stop  bits.
+*END*
+
+Terminal Emulation & Capture
+%terminal/c
+                         Terminal Emulation & Capture
+  
+  In addition to providing terminal emulation  this  option  has  the  added 
+  feature  of  being  able  to remember (record on disk) all of the activity 
+  that takes place between you and the system your are connected to.  
+
+  You can use this option to receive files from an Information Service  that 
+  does not support the XMODEM, MODEM7 or Christensen file transfer protocol.
+  Simply  "capture"  the  entire  session,  which  will include the file you 
+  wanted to receive, and later edit out all unwanted information.  Remember: 
+  you can not use this mode to receive binary files.  
+  
+  If you're going use Intellicom as a smart terminal  (VT100,  VT52....)  be
+  sure  to  review  Intellicom's  Reference  Manual.  The  reference  manual
+  outlines what features and functions of the various  terminals  Intellicom
+  supports.  
+  
+  If  Intellicom  appears to be functioning incorrectly,  check to make sure
+  that you have correctly selected the terminal  type,  baud  rate,  parity,
+  word  size  and  stop  bits.
+*END*
+
+CompuServe Exec Mode
+%cistty
+                         CompuServe Executive Terminal
+
+  The CompuServe Information Service is a low cost remote computing  service 
+  designed  for  use  by  the general public.  In many ways it is similar to 
+  other services  such  as  the  Source,  DowJones,  and  NEWSNET.  However, 
+  CompuServe  has  taken  a  leadership  role  in  the  area of Videotex and 
+  currently supports a  series  of  executive  terminal  programs  known  as 
+  VIDTEX.  Intellicom  has  incorporated  a subset of the VIDTEX standard so 
+  that users of CompuServe can transmit and receive data files to  and  from 
+  CompuServe with full error detection and recovery.  
+
+  The CompuServe  Executive  Terminal  option  provides  you  with  terminal 
+  emulation  and  the  ability to upload and download files using CompuServe 
+  "A" protocol.  File transfers can be accomplished from any of the  Special 
+  Interest Group (SIGs) or Private Message System (PMS) areas.  
+
+  Additionally, file uploads and downloads can be accomplished by using this 
+  option  in  conjunction  with  CompuServe's  XFTRAN  program.   XFTRAN  is 
+  available to all subscribers and is accessible from the personal computing 
+  area.  
+*END*
+
+%status
+                            Intellicom Status/Setup
+
+  Intellicom's  popup Status/Setup Menus provide you with total control over
+  the mode in which Intellicom functions.  Through these menus you can  set,
+  or change, any of the following operating parameters: 
+
+        . Terminal Type         . Baud Rate             . Com Port
+        . Word Size             . Parity                . Stop Bits
+        . Line Feed Handling    . Local Echo            . Graphics
+
+  Use the UP/DOWN arrow keys to position the cursor to the item of  interest
+  and press the RETURN key to select/set the submenu item.  Pressing the ESC
+  key returns you to the main Status/Setup menu when at a submenu,  or  back
+  to terminal emulation if you are already at the Status/Setup main menu.  
+
+  More detailed help can be obtained at each submenu by pressing the HELP 
+  key.
+*END*
+
+%dos window
+                                  DOS Window
+  
+  This is one of Intellicom's most powerful and impressive features.  As its
+  name implies,  this option gives  you  access  to  all  the  features  and
+  functionality  of  DOS  from  within  Intellicom!!  You can type,  rename,
+  delete and edit files. Run any program and even change default disk drives
+  and logical paths!  
+  
+  You can do just about anything you would normally do outside of Intellicom
+  from within Intellicom.  
+  
+  You can gain access to the DOS Window by pressing the  Home  key  when  in
+  Terminal  or Terminal with Capture Mode.  You close the window by pressing
+  the End key in response to the "Command>" prompt.  
+  
+  To fully utilize this feature your system should have a minimum of 256k of
+  memory.  Actual memory  requirements  are  equal  to  128k  +  the  memory
+  requirements of the program you wish to run.
+
+*END*
+
+%exit to dos
+                                  Exit to DOS
+
+  Pressing the PgUp key while in Terminal Emulation informs  Intellicom that
+  you  wish to stop running Intellicom and return to DOS.  Intellicom,  will
+  ask you to confirm your intent before it honors your request.  
+*END*
+
+%close capture
+                              Close Capture File
+
+  Pressing the PgUp key while in Terminal Emulation with  Capture  instructs
+  Intellicom  to  close the current text capture file and return to Terminal
+  Emulation mode.  
+*END*
+  
+%autodial
+                    Autodial/Autologon from Phone Directory
+  
+  If  your  system  is  equipped with a DC Hayes Smartmodem,  or equivalent,
+  Intellicom will allow you to select and autodial  a  number  from  a  disk
+  file.  This  disk file,  or phone directory,  contains single line entries
+  for each number you wish to have reside in the directory.  Each  directory
+  can contain a maximum of 22 entries.  
+  
+  The  directory  entry has two components,  the name of the service and the
+  number or autologon script filename.  The name portion can  be  up  to  46
+  characters  long  and  the number can be up to 30 digits (autologon script
+  filenames must conform to standard DOS naming conventions).  The name  and
+  number  are  always separated by a single comma.  
+.cp
+                    Autodial/Autologon from Phone Directory
+  
+  In the following example notice that a comma us used to identify where the
+  service description ends and the phone number or  name  of  the  autologon
+  script filename begins.  Intellicom always assumes that the first comma is
+  used for this purpose.
+  
+                    Connecticut Service (300 baud),1-777-8812
+                    CompuServe - Albany (300 baud),1-555-1212
+                    Office Mainframe - (Autologon),office.lgn
+                    |_____________  _____________|||____  __|
+                                  \/              |     \/
+                              Name of Service     |   Number/
+                                                  |   Script File
+                                                 \ /
+                                           Field Separator
+.cp
+                    Autodial/Autologon from Phone Directory
+  
+  When this option is selected,  Intellicom prompts you for the name of  the
+  phone directory to be used.  Pressing the ESC key at this point will cause
+  the autodial function to be canceled.  
+
+  Once a phone  directory  has  been  selected,  Intellicom  will  read  the
+  directory  file  and  automatically  display  a menu of choices for you to
+  select from.  At the "Choice >" prompt you may  respond  with  the  letter
+  corresponding  to  the  system  you  wish  to call or press the ESC key to
+  cancel the autodial function.  
+
+  If you select a number to be dialed  and  not  a  autologon  script  file,
+  Intellicom  will  continue  to dial the number until a valid connection is
+  established.  You can,  of course,  tell  Intellicom  to  stop  trying  to
+  establish a connection by using the ESC key.  
+
+*END*
+  
+%ascii xmit
+                            Ascii File Transmission
+  
+  At some point in time you will be faced with the task of having to send  a
+  file  to  a  system that does not support any form file transfer protocol.
+  In most cases you can accomplish  this  by  fooling  the  system  you  are
+  connected  to  (the  host)  into thinking that you are sending commands or
+  data to its system editor or some other utility that reads  terminal  data
+  and stores what it reads into a file.  
+  
+  Using  this option of Intellicom in conjunction with the editor/utility of
+  the host system will allow you to  effect  a  file  transfer.  Simple  but
+  risky!  Since  no  form  of  error checking is employed you can not be 100
+  percent sure that the file arrived at the host system correctly.  Noise on
+  the line,  a faulty data set,  or anyone of a hundred other outside events
+  can effect the overall success of the transmission.  
+.cp
+                            Ascii File Transmission
+  
+  When  you  enter this option you will be asked for the name of the file to
+  be sent.  If you respond by pressing ESC, Intellicom will return to normal
+  terminal emulation mode.  Once you provide Intellicom with the name of the
+  file to be sent you will be asked two more questions.  The first  will  be
+  whether or not carriage return line feed sequences should be sent as is or
+  if  the line feeds should be stripped.  Unless you are certain of what the
+  host system expects, strip the line feeds.  Next Intellicom will ask if it
+  should delay,  for a short period of time,  between  the  transmission  of
+  lines  of  text.  A  line is defined as the set of words and/or characters
+  that appear  between  carriage  return/line  feed  sequences.  Delays  are
+  rarely  required.  However,  some  HP and Tandem systems,  that operate in
+  Half Duplex, require delays.  
+  
+  Once transmission has  begun  you  may  request  Intellicom  to  cancel by
+  pressing the ESC key.
+*END*
+%checksum xmit
+                       File Transmission/Error Checking
+
+  Transmitting a file is a two step process.  The first step is to place the 
+  remote system in receive mode.  This is accomplished on the remote  system 
+  by  running  a  program,  selecting  a  menu item,  or issuing a series of 
+  specific commands.  The second step is to instruct Intellicom to  transmit 
+  a  file.  This  is accomplished by pressing the function key corresponding 
+  to the method (protocol) that is to be used to transfer the file.  
+  
+  You can transfer any type of file using this protocol.  Use this  mode  of
+  file  transfer  with  any  system  that  claims its ability to support the
+  XMODEM,  MODEM7,  or Christensen Protocol.  Most bulletin boards (and even
+  CompuServe) support the XMODEM protocol.  Please note:  In order to effect
+  data transfers using this protocol you must have your com port  parameters
+  set to 8 data bits and no parity.  
+.cp
+                       File Transmission/Error Checking
+
+  When  you enter this option,  Intellicom will respond by prompting you for
+  the file to be transmitted.  
+  
+  If you respond by pressing ESC,  without supplying a filespec,  Intellicom
+  will  cancel  the  option  and  return  you  to  terminal  emulation mode.
+  Responding with a valid filespec will cause that file to be transmitted.  
+  
+  During  the  actual  transmission,  Intellicom displays information on the
+  packet  being  sent  or  received.  Pressing  ESC will cause Intellicom to
+  cancel the file exchange and return terminal emulation mode.  
+*END*
+  
+%checksum recv
+                         File Reception/Error Checking
+  
+  Receiving a file is a two step process.  The first step  is  to  tell  the 
+  remote  system  to  send  (transmit)  a file.  This is accomplished on the 
+  remote system by running a program,  selecting a menu item,  or issuing  a 
+  series of specific commands.  The second step is to instruct Intellicom to 
+  receive  a  file.  This  is  accomplished  by  pressing  the  function key 
+  corresponding to the method (protocol) that is to be used to transfer  the 
+  file.  
+
+  You  can  transfer any type of file using this protocol.  Use this mode of
+  file transfer with any system that  claims  its  ability  to  support  the
+  XMODEM,  MODEM7,  or Christensen Protocol.  Most bulletin boards (and even
+  CompuServe) support the XMODEM protocol.  Please note:  In order to effect
+  data  transfers using this protocol you must have your com port parameters
+  set to 8 data bits and no parity.  
+.cp
+                         File Reception/Error Checking
+  
+  When you enter this option,  Intellicom will respond by prompting you  for
+  the name of the file to be received.  
+  
+  If you respond by pressing ESC,  without supplying a filespec,  Intellicom
+  will cancel  the  option  and  return  you  to  terminal  emulation  mode.
+  Responding with a valid filespec will cause that file to be received.  
+  
+  During the actual transmission,  Intellicom displays  information  on  the
+  packet being sent or received.  Pressing  ESC  will  cause  Intellicom  to
+  cancel the file exchange and return terminal emulation mode.  
+*END*
+
+%general information
+                              General Information
+  
+  Intellicom,   as  its  name  implies,  is  an  Intelligent  Communications
+  Processor designed to manage the communication sessions of  microcomputers
+  and  mainframes.  Intellicom controls all aspects of data transfer between
+  the two connected computers regardless of whether the data transfer  is  a
+  file  or  simply  the  normal  exchanges that would take place if you were
+  using  a  simple  terminal  instead  of  a microcomputer.  This version of
+  Intellicom  is  designed  to  run  on  the  IBM  Personal   Computer   and
+  compatibles.  Intellicom  takes  significant  advantage  of  the  features
+  available on your PC.  In general, any time you feel you need help, simply
+  press the HELP (F10) key, if Intellicom can help you, it will.  
+.cp
+                        General Information - Features
+  
+  Intellicom  is  fully  compatible  with all DC Hayes Smartmodems,  and the
+  Smartmodem look-a-likes.  Intellicom can automatically dial any number, up
+  to 30 digits long.  Dialing can be accomplished at the time the program is
+  invoked or via autodial phone directories.
+  
+  Intellicom's  implementation  of  Autologon Scripts provides compatibility
+  with almost  every  autodialing  modem  on  the  market  today!  Refer  to
+  Intellicom's Reference Manual for complete details.  
+  
+  Intellicom supports 20 user defined function keys that can be used to make
+  life on your favorite system a lot easier.  
+.cp
+                        General Information - Features
+  
+  Intellicom can transfer and receive files using either simple data capture
+  or you can, provided the system you are connected to supports it, send and
+  receive  files  with  full  error  detection  and  recovery.  The protocol
+  employed is the popular XMODEM, also known as Christensen, protocol.  Yes,
+  Intellicom  supports  both  the  Checksum  and CRC implementations of this
+  popular protocol.
+
+  In addition to supporting the most popular implementations of  the  XMODEM 
+  protocol,  Intellicom  has  incorporated  support  for both the Kermit and 
+  CompuServe "A" protocol!  Kermit can be used to transfer both  binary  and 
+  ascii  files with full error detection and recovery!  CompuServe users can 
+  use Intellicom's "CompuServe Executive Mode" to transfer files to and from 
+  CompuServe.  
+.cp
+                        General Information - Features
+  
+  Intellicom emulates many popular  terminals  including  the  VT100,  VT52, 
+  TeleVideo 910/925, Lear Seiglar ADM3A/5, Adds25/Viewpoint, and plain TTY.  
+  
+  At  your  request,  Intellicom  will concurrently display incoming data on
+  both your screen and printer.  A single key (F3) toggles this  feature  on
+  and off.  
+  
+  DOS  is  only a keystroke away!  Pressing the Home key,  while in terminal
+  emulation, opens Intellicom's DOS window.  There you can edit a file,  run
+  another  program,  or do just about anything you would normally do outside
+  of Intellicom from within Intellicom! (Requires a minimum of 192k).  
+  
+  Intellicom FULLY supports the hierarchical directory structure  of  PC-DOS
+  2.0!   PC-DOS   users   can  use  full-file  specifications  of  the  form
+  "d:path\filename.ext" in response to ANY filespec prompt from Intellicom. 
+.cp
+             General Information - Hardware Software Requirements 
+  
+  Besides  the  System Unit and Keyboard,  Intellicom requires the equipment
+  (hardware) and software (programs) described below.  
+  
+                             Hardware Requirements
+  
+  Monitor - Monochrome Display unit or Color/Graphics Monitor Adapter.  
+  
+  Memory  -  Memory  expansion  boards  to  create  at  least  192k RAM.  If
+  available, Intellicom uses addition RAM for the DOS Window(s).  
+  
+  Modem - DC Hayes Smartmodem or clone.  Intellicom,  will operate with  any
+  manual  dial  modem,  or  with a direct (hard wired) connection to another
+  computer. 
+  
+  Asychronous Communications Adapter or equivalent -  The  adapter  must  be 
+  configured to respond as "COM1:" or "COM2:".  
+.cp
+             General Information - Hardware Software Requirements
+  
+                             Software Requirements
+  
+               Disk  Operating  System  - Version 2.0 or later.
+  
+                                Optional Hardware
+  
+  Printer with parallel or  serial  port  -  The  peripheral  card  for  the
+  monochrome  display  unit  includes  a  parallel port.  If you use a color
+  monitor you may need to purchase either a parallel or serial port for  use
+  with the printer.
+.cp
+                         General Information - Set Up
+  
+  Proper operation of Intellicom is totally dependent upon the communication
+  line  parameters  you  choose  to operate with.  Always ask yourself,  and
+  answer, the following questions: 
+  
+          . Is the system I am about to connect to require Half or Full
+            duplex operation? (Full duplex allows two way simultaneous
+            communication. A telephone conversation is a good example of
+            full duplex information exchange. Half duplex allows the
+            communication to take place between the two computers, but
+            only one computer can talk at a time.)
+  
+          . What baud rate does it support or expect?
+  
+          . What parity (none, odd, even, mark, or space) does it expect?
+  
+          . Do I need to specify 1 or 2 stop bits. (In general 1 stop bit
+            is satisfactory for 1200 baud and greater. 2 will satisfy most
+            systems that support 300 or less).
+.cp
+                            Intellicom Status/Setup
+  
+  Intellicom's  popup Status/Setup Menus provide you with total control over
+  the mode in which Intellicom functions.  To access the Status/Setup menus,
+  simply press F7.  Through these menus you can set,  or change,  any of the
+  following operating parameters: 
+
+        . Terminal Type         . Baud Rate             . Com Port
+        . Word Size             . Parity                . Stop Bits
+        . Line Feed Handling    . Local Echo            . Graphics
+
+  Use the UP/DOWN arrow keys to position the cursor to the item of  interest
+  and press the RETURN key to select/set the submenu item.  Pressing the ESC
+  key  returns you to the main Status/Setup menu when at a submenu,  or back
+  to terminal emulation if you are already at the Status/Setup main menu.  
+.cp
+                  General Information - Beginning Intellicom
+  
+  At the operating system prompt "A>, B>, C>, or D>" type "INTELC" and press
+  return.  When  you  start Intellicom this way,  you will be operating with
+  Intellicom's default parameter settings of: 
+  
+                          Communications Port: COM1
+                          Transmission speed:  300 baud   
+                          Parity:              NONE
+                          Word Size:           8 bits
+                          Number of Stop Bits: 1
+                          Mode of Dialing:     PULSE
+                          Device type:         TTY
+  
+  All of the above  operating  parameters  can  be  redefined  at  the  time
+  Intellicom is invoked by including,  as part of the command line,  special
+  switches and values that modify the default settings.  They  can  also  be
+  defined or modified by pressing F7 when Intellicom is running.  
+.cp
+                 General Information - Command Line Parameters
+  
+  Communications port (Default COM1:) - You may specify  the  communications
+  port  to  be  used by including "-CP 1" or "-CP 2" as part of your command
+  line.  To specify "COM1:" use "-CP 1".  To specify "COM2:"  use  "-CP  2".
+  For example: 
+  
+                                A>INTELC -CP 2
+  
+  Transmission speed or baud rate (Default 300) - This can be  specified  by
+  including as part of the command line "-BR xxxx" where xxxx can be any one
+  of the following:  110,  150,  300,  600,  1200, 2400, 4800, or 9600.  For
+  example to set the baud rate to 1200 baud use the following command.  
+  
+                               A>INTELC -BR 1200
+.cp
+                 General Information - Command Line Parameters
+  
+  Parity (Default NONE) - Parity can be set to be:  none, odd, even, mark or
+  space. The following examples set the parity to the specified values.  
+  
+        (none) A>INTELC -PAR 0                  (mark)  A>INTELC -PAR 3
+        (odd)  A>INTELC -PAR 1                  (space) A>INTELC -PAR 4
+        (even) A>INTELC -PAR 2                  
+  
+  Word Size (Default 8) - This parameter sets the number of data  bits  that
+  define  the size of word,  or character,  that is transmitted or received.
+  Normally this value will be either 7 or 8. To set the word size: 
+  
+                            (7 bits) A>INTELC -WS 7
+                            (8 bits) A>INTELC -WS 8
+.cp
+                 General Information - Command Line Parameters
+  
+  Stop Bits (Default 1) - Intellicom's default setting of 1 should work with
+  just about any system operating between, and including, 1200 to 9600 baud.
+  Two stop bits are usually required at speeds LESS than 300  baud.  To  set
+  the stop bits: 
+  
+                            (1 stop) A>INTELC -SB 1
+                            (2 stop) A>INTELC -SB 2
+  
+  Dialing  mode  (Default  Pulse) - At start up Intellicom defaults to pulse
+  dialing,  to use touch tones  instead  include  "-T"  as  a  command  line
+  parameter.  For example: 
+  
+                                  A>INTELC -T
+.cp
+                 General Information - Command Line Parameters
+  
+  
+  Device  Type  (Default  TTY)  - This command line parameter specifies what
+  type  of  device  Intellicom  should  emulate.  Intellicom  emulates  many
+  popular  terminals  but  defaults to TTY at startup.  To select some other
+  device simply specify a valid device type as part  of  the  command  line.
+  For example, to emulate a VT52: 
+  
+                                A>intelc -vt52
+  
+  The default mode of TTY will work with every system you encounter.  If you
+  elect to emulate some other device type be sure to review the Intellicom's
+  Reference  Manual.  This  is  where  you  will find all the nitty gritties
+  about each specific device and device function Intellicom supports.
+.cp
+                 General Information - Command Line Parameters
+  
+  Enable Graphics (Default Off) - Normally,  Intellicom inhibits the display
+  of the special graphics characters that the PC is capable  of  displaying.
+  Including "-X" as a command line parameter will remove this restriction.  
+  
+  Enable Default Phone Directory (Default  Off)  -  Normally,  whenever  you
+  request Intellicom to autodial from a phone directory you are prompted for
+  the  name  of  the directory to be used.  If you include "-P" as a command
+  line parameter Intellicom will look for a file named "PHONE.DIR"  and  use
+  it as the directory.  
+  
+  Want  to add a little color to your life?  Include ONE of the following as
+  part of the command line (requires a color monitor): 
+  
+                       -red     -green    -blue   -cyan
+                       -yellow  -magenta  -white
+.cp
+                 General Information - Command Line Parameters
+  
+  You can,  of course,  mix and match command line parameters provided  that
+  the you do not repeat any of the options.  Let's look at a few examples: 
+  
+  300 baud, 2 stop bits, 7 data bits, odd parity, touch tone, VT52 emulation
+    
+                  INTELC -BR 300 -SB 2 -WS 7 -PAR 1 -T -VT52
+  
+               9600 baud, all other values are default settings
+  
+                                INTELC -BR 9600
+  
+                          COM2 with default settings
+  
+                                A>INTELC -CP 2
+.cp
+
+  
+
+
+
+
+
+
+
+
+                                    Enjoy!
+
+
+
+
+
+
+
+
+
+.cp
+                             Copyright Information  
+
+  This software is  protected  by  both  United  States  Copyright  Law  and
+  International Treaty provisions.  You must treat this software just like a
+  book with the following single exception.  Computer Toolbox authorizes you
+  to  make archival copies of your copy of the software for backup purposes.
+  By saying "just like a book" Computer Toolbox means that this software may
+  be  used by any number of people and may be freely moved from one computer
+  location to another so long as there is NO POSSIBILITY of it being used at
+  one location while it is being used at another.  Just like a book that you
+  purchase that can not be read by two different  people  in  two  different
+  places at the same time,  neither can your copy of the software be used by
+  two different people in two different places at the same time.  
+
+*END*
+
+%bossinfo
+
+  wn_open -- open window 
+
+  wn = (WINDOWPTR)wn_open(page, row, col, width, height, atrib, batrib)
+  int page, row, col, width, height, atrib, batrib;
+
+        page -  0 or 1000.  1000 opens a borderless window.
+        row  -  row of upper left hand corner of the window
+        col  -  column of upper left hand corner of the window
+        width - INSIDE dimension (max value is 78, 80 if page = 1000)
+        height- INSIDE dimension (max value is 23, 25 if page = 1000)
+        atrib - attribute to be used IN the window
+        batrib- attribute to be used for the border
+
+  wn_open is usually the first function called to create and use a 
+  window.  wn_open dynamically allocates memory to save the area defined 
+  by row, col, width, and height - saves the image, opens the window and 
+  homes the logical cursor to row 0, col 0 of the window.  The window is 
+  now ready to be used by the various window management routines.  
+
+  Attributes are defined in windows.h.
+.cp
+
+  wn_title -- place title on top border of window
+
+  wn_title(wn,title)
+  WINDOWPTR wn;
+  char *title;
+
+        wn    - window handle
+        title - string pointer to title
+
+  The title is displayed on the top border of the window using the 
+  currently defined border attribute.  The cursor is positioned off 
+  the screen after the title is written.  
+
+.cp
+
+  wn_close -- close window
+
+  wn_close(wn) 
+  WINDOWPTR wn; 
+
+        wn - handle of a previously opened window.
+
+  wn_close removes the window specified by wn and restores the screen 
+  area under the window to its previous contents.  The memory 
+  allocated by wn_open is returned to the free list.  The cursor is 
+  positioned to where it was located prior to the wn_open call.  
+
+.cp
+
+  wn_save -- save a screen image in memory 
+
+  wn = (WINDOWPTR)wn_save(page, row, col, width, height)
+  int page, row, col, width, height;
+
+        page -  always 0.
+        row  -  row of upper left hand corner of the window
+        col  -  column of upper left hand corner of the window
+        width - INSIDE dimension (max value is 78)
+        height- INSIDE dimension (max value is 23)
+
+  wn_save can be used to save areas of the screen for purposes other 
+  than windows.  
+
+  Memory for the screen image is dynamically allocated.
+
+.cp
+
+  wn_restore -- restore a saved screen image from memory
+
+  wn_restore(wn)
+  WINDOWPTR wn;
+
+        wn - handle of previously wn_save(ed) window.
+
+  Restores the screen image corresponding to the window handle wn,
+  allocated memory is returned to the free list.
+
+.cp
+
+  wn_move - move a window
+
+  wn = (WINDOWPTR)wn_move(wn,row,col)
+
+        wn -  handle of window to be moved
+        row - destination row
+        col - destination column
+
+  Moves the window corresponding to wn to a new location.  The cursor 
+  is positioned off the screen after the call.  
+
+.cp
+
+  wn_locate -- locate (position) cursor in window
+
+  wn_locate(wn, row, col)
+  WINDOWPTR wn;
+  int row, col;
+
+        wn  - window handle
+        row - row to position to (relative to window origin)
+        col - column to position to (relative to window origin)
+
+  Position the cursor to the row and column specified.  Row and
+  Column values are relative to the origin of the window (0,0 
+  locates the cursor in the upper left hand corner of the window
+  referenced by wn).
+
+.cp
+
+  wn_printf -- window printf
+
+  wn_printf(wn, cs, args)
+  WINDOWPTR wn;
+  char *cs;
+  ?? arg1 ... argn;
+
+        wn   - window handle
+        cs   - format control string
+        args - argument list
+
+  printf function for windows!
+
+.cp
+
+  wn_puts -- put string to window (high speed)
+
+  wn_puts(wn, row, col, string)
+  WINDOWPTR wn;
+  int row, col;
+  char *string;
+
+        wn -    window handle
+        row -   row to print the string at
+        col -   column to print the string at
+        string- the string to print
+
+  Row and Col are relative to the origin of the window.
+
+  The cursor is displayed only if wn_synflg has been called with
+  a value of TRUE.
+
+.cp
+
+  wn_putsa -- put string and attribute to window (high speed)
+
+  wn_puts(wn, row, col, string, atrib)
+  WINDOWPTR wn;
+  int row, col;
+  char *string;
+  int atrib;
+
+        wn -    window handle
+        row -   row to print the string at
+        col -   column to print the string at
+        string- the string to print
+        atrib - attribute to be used with string
+
+  Row and Col are relative to the origin of the window.
+
+  The cursor is displayed only if wn_synflg has been called with
+  a value of TRUE.
+
+.cp
+
+  wn_insrow - insert row in window
+
+  wn_insrow(wn, row)
+  WINDOWPTR wn;
+  int row;
+
+        wn -  window handle
+        row - row at which a line is to be inserted
+
+  Row is relative to the origin of the window.  All lines below the 
+  row specified are scrolled down.  The currently defined window 
+  attribute is used to clear the lines inserted.  
+
+.cp
+
+  wn_delrow - delete row from window
+
+  wn_delrow(wn, row)
+  WINDOWPTR wn;
+  int row;
+
+        wn -  window handle
+        row - row at which a line is to be deleted
+
+  Row is relative to the origin of the window.  All lines below the row 
+  specified are scrolled up. The currently defined window attribute is 
+  used to clear the lines inserted.  
+.cp
+
+  wn_clr -- clear window
+
+  wn_clr(wn)
+  WINDOWPTR wn;
+
+        wn - window handle
+
+  The window corresponding to wn is cleared (mini clear screen).  The 
+  currently defined window attribute is used to clear the interior of 
+  the window.  
+
+  The windows virtual cursor is homed.
+
+.cp
+
+  wn_color - set window & border color/attribute
+
+  wn_color(wn, atrib, batrib)
+  WINDOWPTR wn;
+  unsigned int atrib, batrib;
+
+        wn -    window handle
+        atrib - attribute to be used for the window
+        batrib- attribute to be used for the border
+
+  wn_color sets the attribute to be used for all subsequent operations in 
+  the window.  The attribute byte contains the background specific data 
+  in the upper 4 bits and the foreground specific data in the lower 4 
+  bits.  Color and bit definitions can be found in windows.h.  You can 
+  use a statement of the form "atrib = (bground << 4 | fground);" to set 
+  the attribute to the correct format.  
+
+  Attributes are defined in windows.h.
+
+.cp
+
+  wn_wrap - set/clear line wrap
+
+  wn_wrap(wn, flag) 
+  WINDOWPTR wn;     
+  int flag;
+
+        wn -   window handle
+        flag - wrap flag (TRUE or FALSE)
+
+  Sets the line wrap flag for window functions.  If line wrap is true, 
+  output that exceeds the width of a window is automatically placed on 
+  the next line.  When the line wrap flag is false, output that 
+  exceeds the width of the window is lost.  
+
+.cp
+
+  wn_sync -- set/clear cursor synchronization
+
+  wn_sync(wn, flag) 
+  WINDOWPTR wn;     
+  int flag;
+
+        wn -   window handle
+        flag - synchronization flag (TRUE or FALSE)
+
+  When wn_sync is called with a value of TRUE all subsequent text 
+  output to the window will have a flashing (normal) cursor displayed 
+  following the last character output. Calling wn_sync with a value of 
+  false inhibits the cursor from physically advancing (it is always 
+  logically advanced).  
+
+.cp
+
+  wn_dma - set/clear the write to video ram directly flag
+
+  wn_dma(flag)      
+  int flag;         
+
+        flag - write to video ram flag (TRUE or FALSE).
+
+  The windowing routines assume that your video card supports direct 
+  access to the video ram (normal for monochrome monitors).  However, if 
+  you are using a standard IBM color card or you experience snow when you 
+  write to your windows use wn_dma to set the write to video ram flag to 
+  FALSE.  
+
+.cp
+
+  wn_fixcsr - update window cursor position
+
+  wn_fixcsr(wn)     
+  WINDOWPTR wn;     
+
+        wn - window handle
+
+  wn_fixcsr is a companion routine to wn_sync.  Causes the physical 
+  cursor to be placed at the logical cursor location.  It is typically 
+  called after wn_sync has been called to disable cursor 
+  synchronization.  wn_fixcsr does not alter the state of the windows 
+  cursor synchronization flag.  
+.cp
+
+  wn_boxset -- set box drawing character set
+
+  wn_boxset(ul, ur, tb, sd, ll, lr);
+  int ul, ur, tb, sd, ll, lr;
+
+    ul - upper left corner character
+    ur - upper right corner character
+    tb - top/bottom line character
+    sd - left/right side character
+    ll - lower left corner character
+    lr - lower right corner character
+
+  wn_boxset set the characters to be used to frame all future windows.
+
+.cp
+
+  _getca -- get character and attribute
+
+  unsigned int _getca(page, row, col)
+  int page, row, col;
+
+
+        page - video page #
+        row -  row value (0-24)
+        col -  column value (0-79)
+
+  _getca fetches the character and attribute at the screen coordinates 
+  defined by row and column.  _getca is a general purpose routine and 
+  can be used outside of the window environment.
+.cp
+
+  _putca -- put character and attribute at row,column
+
+  _putca(page, atch, row, col);
+  int page, row, col;
+  unsigned atch;
+
+        page - video page #
+        atch - attribute and character
+                 attribute in high order byte
+                 character in low order byte
+        row -  row position for character (0-24)
+        col -  column position for character (0-79)
+
+  _putch is a general purpose routine that can be used outside of the 
+  window environment.
+.cp
+
+  _vidblt -- video block transfer (COLOR CARD ONLY)
+
+  _vidblt(sseg, soff, dseg, doff, n);
+  unsigned sseg, soff, dseg, doff;
+  int n;
+
+        sseg - source segment
+        soff - source offset
+        dseg - destination segment
+        doff - destination offset
+        n -    number of bytes to BLT
+
+  _vidblt is similar to the lattice movedata() function except that it 
+  waits for the video retrace signal before performing the block 
+  transfer.
+
+  _vidblt is a general purpose function that can be used outside of 
+  the window environment.
+.cp
+
+  v_spage -- set active display page
+
+  v_spage(page)
+  int page;
+
+        page - video page to switch the display to
+
+  v_spage is a general purpose routine that can be used outside of the 
+  window environment.  
+
+.cp
+
+  v_cls --  clear video screen 
+
+  v_cls(atrib)
+  int atrib;
+
+        atrib - attribute to be used 
+
+  v_cls is a general purpose routine that can be used outside of the 
+  window environment.
+
+  Attributes are defined in windows.h.
+
+.cp
+
+  v_smode -- set video mode
+
+  v_smode(mode)
+  int mode;
+
+        mode - mode to set the display to
+
+  v_smode is a general purpose routine which can be used outside of 
+  the window environment.
+
+  Modes are defined in windows.h.
+
+.cp
+
+  v_wca -- write character and attribute
+
+  v_wca(page, char, atrib, count);
+  int page, char, atrib, count;
+
+        page -  video page #
+        char -  character to write
+        atrib - attribute to use
+        count - number of times two repeat
+
+  v_wca is a general purpose routine that can be used outside of the
+  window environment. It writes the character defined by char count 
+  times starting at the current cursor location.  
+
+  Attributes are defined in windows.h.
+
+.cp
+
+  v_locate - locate (position) cursor
+
+  v_locate(page, row, col);
+  int page, row, col;
+
+        page - video page #
+        row  - row to position to
+        col  - column to position to
+
+  v_locate is a general purpose routine that can be used outside of 
+  the window environment.
+
+  Row and Col are range checked.  You can not position the cursor off 
+  the screen.
+
+.cp
+
+  v_hidec -- hide cursor
+
+  v_hidec();
+
+  The physical cursor is located off the screen.
+
+  This function does not affect any virtual cursor coordinates, it 
+  simply hides the physical cursor from view.
+
+.cp
+
+  v_sctype -- set cursor type (style)
+
+  v_sctype(type, start, end);
+  int type, start, end;
+
+        type -  cursor style code (0=hidden, 1=normal, 2=slow, 3=fast)
+        start - start scan line
+        end -   end scan line
+
+  As an example, to set a slow flashing block style cursor invoke this 
+  function with type=1, start=6, and end=12 (color card).
+
+.cp
+
+  v_sapu -- scroll active display page up
+
+  v_sapu(nl, rul, cul, rlr, clr, atrib);
+  int nl, rul, cul, rlr, clr, atrib;
+
+        nl  - number of lines to scroll
+        rul - row of upper left hand corner of scroll area
+        cul - column of upper left hand corner of scroll area
+        rlr - row of lower right corner of scroll area
+        clr - column of lower right corner of scroll area
+        atrib - attribute to be used for blanking
+
+  v_sapu is a general purpose routine that can be used outside of the 
+  window environment.  
+
+  A value of 0 for nl scrolls (blanks) the entire area.  To clear the 
+  entire video screen use v_sapu(0, 0, 0, 24, 79, NORMAL).
+
+  Attributes are defined in windows.h.
+
+.cp
+
+  v_sapd -- scroll active display page down
+
+  v_sapd(nl, rul, cul, rlr, clr, atrib);
+  int nl, rul, cul, rlr, clr, atrib;
+
+        nl  - number of lines to scroll
+        rul - row of upper left hand corner of scroll area
+        cul - column of upper left hand corner of scroll area
+        rlr - row of lower right corner of scroll area
+        clr - column of lower right corner of scroll area
+        atrib - attribute to be used for blanking
+
+  v_sapd is a general purpose routine that can be used outside of the 
+  window environment.  
+
+  A value of 0 for nl scrolls (blanks) the entire area.  To clear the 
+  entire video screen use v_sapd(0, 0, 0, 24, 79, NORMAL).
+
+  Attributes are defined in windows.h.
+
+.cp
+
+  v_rcpos -- return current cursor position
+
+  v_rcpos(page, row, col);
+  int page;
+  int *row, *col; 
+
+        page - video page #     
+        *row - pointer to int to receive row value
+        *col - pointer to int to receive column value
+
+  v_rcpos is a general purpose routine that can be used outside of the 
+  window environment.  
+
+.cp
+
+  v_rcvs - return current video state
+
+  v_rcvs(page, vm, cols);
+  int *page, *vm, *cols;
+
+        *page - pointer to int to receive current video page #
+        *vm   - pointer to int to receive current video mode
+        *cols - pointer to int to receive current screen width
+  
+  v_rcvs is a general purpose routine that can be used outside of the 
+  window environment.
+
+  Modes are defined in windows.h.
+
+.cp
+
+  v_getch -- get keyboard character and scan code
+
+  v_getch();
+
+  v_getch is a general purpose routine that can be used outside of the
+  window environment.
+
+.cp
+
+  v_kstat -- get keyboard status
+
+  v_kstat();
+
+  v_kstat is a general purpose routine that can be used outside of the
+  window environment.
+
+.cp
+
+  v_kflush() -- flush keyboard buffer
+
+  v_kflush();
+
+  v_kflush clears the keyboard buffer of any pending input.
+
+*END*
+  
+%end-of-file
+

@@ -1,0 +1,10 @@
+gbmb.obj: gbmb.c
+    cl -d -c -AS -Gsw -Os -Zpe gbmb.c
+
+gbmb.res: gbmb.rc
+     rc -r gbmb.rc
+
+gbmb.exe: gbmb.obj gbmb.def
+    link4 gbmb,/align:16,/map,slibw/NOE,gbmb.def
+    mapsym gbmb
+    rc gbmb.res

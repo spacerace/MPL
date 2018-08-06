@@ -1,0 +1,11 @@
+DLLFLAGS=-c -u -Asnw -FPa -Gsw -Os -W2 -Zep
+
+owner1.obj: owner1.asm
+   masm owner1;
+   
+owner2.obj: owner2.c
+   cl $(DLLFLAGS) owner2.c
+   
+owner.dll: owner1.obj owner2.obj owner.def
+   link4 owner1+owner2 /AL:16,owner.dll,,swinlibc+slibw,owner.def
+

@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "gFocus.h"
+
+gFocus MENU
+    BEGIN
+        POPUP "Menu"
+           BEGIN
+              MENUITEM "&GetFocus",                         IDM_GETFOCUS
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

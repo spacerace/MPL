@@ -1,0 +1,11 @@
+Code 11                                  -Recalibrate
+
+Input registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    A SCSI Recalibrate (01) command is issued to the specified disk. The 
+    resultant status of the  command is returned to AH/AL.
+

@@ -1,0 +1,11 @@
+DLLFLAGS=-c -u -Asnw -FPa -Gsw -Os -W2 -Zep
+
+bitmap1.obj: bitmap1.asm
+   masm bitmap1;
+   
+bitmap2.obj: bitmap2.c
+   cl $(DLLFLAGS) bitmap2.c
+   
+bitmap.dll: bitmap1.obj bitmap2.obj bitmap.def
+   link4 bitmap1+bitmap2 /AL:16,bitmap.dll,,swinlibc+slibw,bitmap.def
+

@@ -1,0 +1,7 @@
+
+gettext.obj: gettext.c
+   cl -c -W2 -AS -Gsw -Od -Zped gettext.c
+
+gettext.exe: gettext.obj gettext.def
+   link4 gettext,/align:16,/map/li,slibw,gettext.def
+   mapsym gettext

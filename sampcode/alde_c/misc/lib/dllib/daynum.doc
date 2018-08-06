@@ -1,0 +1,37 @@
+
+
+       NAME
+               daynum -- find the number of a date within a year
+
+       SYNOPSIS
+               value = daynum(month, day, year);
+               int value;      number 1-366
+               int month;      month number 1-12
+               int day;        date of the month 1-31
+               int year;       year, starting at 1980
+
+       DESCRIPTION
+       This function returns the day number, 1-366, for the given
+       date.  By itself, this is not very useful, but the function is
+       used as an intermediate calculation in certain other date routines.
+       Years below 1980 are ignored.  The year value is used to determine
+       status as leap year.
+
+       EXAMPLE
+
+              for July 2, 1986:
+
+              int value;
+              value = daynum(7, 2, 1986);
+
+
+
+
+
+
+
+
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

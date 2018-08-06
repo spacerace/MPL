@@ -1,0 +1,12 @@
+®                                SWITCH FORMAT
+
+®    switch(®integer expression®) {
+®    case (®...®):
+®        .  ®³
+®        .  ®ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ®integer or character constant-expression
+®        .  ®³
+®    case (®...®):
+®        statements;
+®    default:
+®        statements;
+®    }

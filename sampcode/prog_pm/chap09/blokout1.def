@@ -1,0 +1,11 @@
+;-------------------------------------
+; BLOKOUT1.DEF module definition file
+;-------------------------------------
+
+NAME           BLOKOUT1  WINDOWAPI
+
+DESCRIPTION    'Mouse Button Demo Program (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

@@ -1,0 +1,16 @@
+Code 0F                                  -Write Local Buffer
+
+Input registers - ES:BX points to the caller's 512 byte buffer.
+
+Special output registers - none.
+
+Operation (for Host adapters using BIOS 4.0)
+
+    The contents of the caller's buffer are written into the local 
+    buffer. This is part of a diagnostic test of the adapter to be 
+    used  in conjunction with the Real Local Buffer command to 
+    check operation.
+
+Operation (for Host adapters using BIOS 1.0-1.2, 5.0-5.2 or 6.0):
+
+    This command is not implemented.

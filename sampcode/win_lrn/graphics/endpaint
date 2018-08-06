@@ -1,0 +1,6 @@
+
+endpaint.obj: endpaint.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 endpaint.c
+
+endpaint.exe: endpaint.obj endpaint.def
+    link4 /align:16 endpaint,,nul,slibw/NOE,endpaint.def

@@ -1,0 +1,39 @@
+
+
+        NAME
+                argval -- convert an ASCII numerical string from an argument
+
+        SYNOPSIS
+                i = argval(string, dest, i);
+                int i;         index into the current argument string
+                               which is returned incremented to the
+                               first character after the numerical string
+                char *string;  the string containing the numerical value
+                int dest;      destination for resultant integer value
+
+
+        DESCRIPTION
+        This function is primarily intended to parse command line arguments
+        containing numerical values into an integer.  The function will
+        abort the program if the index points to a non-numeric digit
+        upon entry with an error message and the option character which
+        preceeds the index pointer.
+        Numeric values cannot exceed four characters without causing
+        potential damage to the program by overrunning the character
+        storage area.
+
+        EXAMPLE
+                assume argv[1] = "-M30C"
+
+                int i, value;
+                i = 2    /* i is incremented to '3' by other code */
+                i = argval(&argv[1], value, i);
+
+                after execution, i = 4 (pointing to 'C')
+                                 value = 30
+                                 argv[1] is unchanged
+
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

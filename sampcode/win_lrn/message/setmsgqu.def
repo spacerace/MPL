@@ -1,0 +1,8 @@
+NAME           setmsgqu
+DESCRIPTION    'This program demonstrates the function SetMessageQueue'
+STUB           'WINSTUB.EXE'
+CODE           MOVEABLE
+DATA           MOVEABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        WndProc

@@ -1,0 +1,165 @@
+;YAM89.CSM (YAM8 & YAM9 combined for BDSC v1.46)
+;
+;>>:yam8.asm 9-30-81
+;
+;CRCK is a program to read any CP/M file and print
+;a CYCLIC-REDUNDANCY-CHECK number based on the
+;CCITT standard polynominal:
+;   X^16 + X^15 + X^13 + X^7 + X^4 + X^2 + X + 1
+;
+;Useful for checking accuracy of file transfers.
+;More accurate than a simple checksum.
+;
+;**************************************************
+;
+;	unsigned crck(buffer, bufsize, oldcrc)
+;
+;	At start of packet, oldcrc is set to 0
+;
+;	crc is accumulated by:
+;		oldcrc=crck(buffer, bufsize, oldcrc);
+;
+;	crck for file is final value of oldcrc
+;
+;	A Short History of this function and crckfile() in yam7.c"
+;
+;	1.  First version used getc and called crck once per char.
+;	this took 39.2 seconds to crck all the yam C files (12357)
+;
+;	2.  Then crckfile was recoded to use read() instead of getc.
+;	Time: 19.1 seconds
+;
+;	3.  Several small changes in crckfile were unsuccessful in
+;	reducing this time.
+;
+;	4.  crck and crckfile recoded to call crck once per sector.
+;	This reduced time to 11.7 seconds, same as crck itself.
+;	That is the current version.  Note that the CRC polynomial used
+;	here is somewhat unusual; the only thing I know sure is that
+;	the answers agree with those given by the CRCK program -hence the
+;	function name.
+;
+	maclib bds
+
+	function crck
+
+	call	arghak
+	push	b
+bytlop:	lhld	arg1
+	mov	c,m
+	inx	h		;fetch (next) byte from buffer
+	shld	arg1
+	lhld	arg3		; get accumulated checksum
+;
+;---------------------------------------------
+;An 8080 routine for generating a CYCLIC-
+;REDUNDANCY-CHECK.  Character leaves that
+;character in location REM.  By Fred Gutman.
+;From 'EDN' magazine, June 5, 1979 issue, page 84.
+;
+DIVP:
+	MOV	A,H
+	ANI	128	;Q-BIT MASK
+	PUSH	PSW	;SAVE STATUS
+	DAD	H	;2 X R(X)
+	mov	a,c
+	ADD	L
+	MOV	L,A
+	POP	PSW
+	JZ	QB2	;IF Q-BIT IS ZERO
+	MOV	A,H
+	XRI	0A0H	;MS HALF OF GEN. POLY
+	MOV	H,A
+	MOV	A,L
+	XRI	97H	;LS HALF OF GEN. POLY
+	MOV	L,A
+QB2:
+	shld	arg3	;store in accumulator
+	lhld	arg2
+	dcx	h
+	shld	arg2	;count number of bytes in buffer
+	mov	a,h
+	ora	l
+	jnz	bytlop
+	lhld	arg3	;return with accumulated crck in HL
+	pop	b	;pull up ur shorts
+	RET
+
+	endfunction
+;>>:yam9.asm 9-30-81
+;************************************************************************
+;* CRCSUBS (Cyclic Redundancy Code Subroutines) version 1.20		*
+;* 8080 Mnemonics							*
+;*									*
+;*     	This subroutine will compute and check a true 16-bit		*
+;*	Cyclic Redundancy Code for a message of arbitrary length.	*
+;*									*
+;*	The  use  of this scheme will guarantee detection of all	*
+;*	single and double bit errors, all  errors  with  an  odd	*
+;*	number  of  error bits, all burst errors of length 16 or	*
+;*	less, 99.9969% of all 17-bit error bursts, and  99.9984%	*
+;*	of  all  possible  longer  error bursts.  (Ref: Computer	*
+;*	Networks, Andrew S.  Tanenbaum, Prentiss-Hall, 1981)		*
+;*									*
+;*									*
+;************************************************************************
+;*									*
+;*	From: CRCSUB12.ASM						*
+;*	Designed & coded by Paul Hansknecht, June 13, 1981		*
+;*									*
+;*									*
+;*	Copyright (c) 1981, Carpenter Associates			*
+;*			    Box 451					*
+;*			    Bloomfield Hills, MI 48013			*
+;*			    313/855-3074				*
+;*									*
+;*	This program may be freely reproduced for non-profit use.	*
+;*									*
+;************************************************************************
+;
+;	unsigned updcrc(char, oldcrc)
+;
+;	At start of packet, oldcrc is set to initial value
+;		oldcrc=0;
+;
+;	crc is accumulated by:
+;		oldcrc=updcrc(char, oldcrc);
+;
+;	at end of packet,
+;		oldcrc=updcrc(0,updcrc(0,oldcrc));
+;		send(oldcrc>>8); send(oldcrc);
+;
+;	on receive, the return value of updcrc is checked after the
+;	last call (with the second CRC byte); 0 indicates no error detected
+;
+
+	function updcrc
+
+	push	b		;save stack frame
+	call	ma2toh		;get char
+	mov	c,a
+	call	ma3toh		;and olde crc value
+	MVI	B,8
+UPDLOOP:MOV	A,C
+	RLC
+	MOV	C,A
+	MOV	A,L
+	RAL
+	MOV	L,A
+	MOV	A,H
+	RAL
+	MOV	H,A
+	JNC	SKIPIT
+	MOV	A,H		; The generator is X^16 + X^12 + X^5 + 1
+	XRI	10H		; as recommended by CCITT.
+	MOV	H,A		; An alternate generator which is often
+	MOV	A,L		; used in synchronous transmission protocols
+	XRI	21H		; is X^16 + X^15 + X^2 + 1. This may be
+	MOV	L,A		; used by substituting XOR 80H for XOR 10H
+SKIPIT:	DCR	B		; and XOR 05H for XOR 21H in the adjacent code.
+	JNZ	UPDLOOP
+	POP	B
+	RET			; return with latest crc in hl
+
+	endfunction
+

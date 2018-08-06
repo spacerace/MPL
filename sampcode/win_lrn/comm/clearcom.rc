@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "ClearCom.h"
+
+ClearCom MENU
+    BEGIN
+        POPUP "Menu"
+           BEGIN
+              MENUITEM "&Clear Comm Break",                 IDM_CLEARCOM
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

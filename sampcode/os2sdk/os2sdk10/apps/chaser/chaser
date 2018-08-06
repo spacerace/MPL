@@ -1,0 +1,11 @@
+#
+# Makefile for the Mouse demonstration chaser.
+#
+
+LIB=..\..\..\lib
+INC=..\..\..\include
+
+OPT=-Ox -G2 -Lp -Zp -I$(INC)
+
+chaser.exe:    chaser.c chaser
+	     cl $(OPT) chaser.c

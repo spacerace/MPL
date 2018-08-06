@@ -1,0 +1,16 @@
+LIBRARY        OWNER
+STUB           'WINSTUB.EXE'
+DESCRIPTION    'Owner Display Format Library'
+
+CODE           MOVEABLE DISCARDABLE SHARED
+DATA           MOVEABLE SINGLE
+
+EXPORTS
+ OwnerInit     @1
+ OwnerCreate   @2
+ OwnerSize     @3
+ OwnerHScroll  @4
+ OwnerVScroll  @5
+ OwnerPaint    @6
+ OwnerDestroy  @7
+

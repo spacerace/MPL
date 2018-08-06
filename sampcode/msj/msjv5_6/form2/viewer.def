@@ -1,0 +1,33 @@
+;
+; FORM VIEWER - MODULE DEFINITION FILE
+;
+; LANGUAGE      : Microsoft C 5.1
+; MODEL         : medium
+; ENVIRONMENT   : Microsoft Windows 3.0 SDK
+; STATUS        : operational
+;
+;    Eikon Systems, Inc.
+;    989 East Hillsdale Blvd, Suite 260
+;    Foster City, California 94404
+;    415-349-4664
+;
+; 07/12/90 1.00 - Kevin P. Welch - initial creation.
+;
+
+NAME              VIEWER
+EXETYPE           WINDOWS
+STUB              'WINSTUB.EXE'
+DESCRIPTION       'Form Viewer Application - by Kevin P. Welch'
+
+CODE              MOVEABLE DISCARDABLE SHARED PRELOAD
+DATA              MOVEABLE MULTIPLE PRELOAD
+
+HEAPSIZE          4096
+STACKSIZE         8192
+
+EXPORTS        
+   OpenDlgFn      @1
+   AboutDlgFn     @2
+   ViewerWndFn    @3
+   
+

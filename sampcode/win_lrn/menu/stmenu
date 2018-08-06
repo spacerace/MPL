@@ -1,0 +1,6 @@
+
+stmenu.obj: stmenu.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 stmenu.c
+
+stmenu.exe: stmenu.obj stmenu.def
+    link4 /align:16 stmenu,,nul,slibw/NOE,stmenu.def

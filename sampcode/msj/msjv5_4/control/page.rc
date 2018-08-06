@@ -1,0 +1,32 @@
+/*
+ * Page Selection Control - RESOURCE FILE
+ *
+ * LANGUAGE      : Microsoft C5.1
+ * MODEL         : small
+ * ENVIRONMENT   : Microsoft Windows 3.0 SDK
+ * STATUS        : operational
+ *
+ * Eikon Systems, Inc.
+ * 989 East Hillsdale Blvd, Suite 260
+ * Foster City, California 94404
+ * 415-349-4664
+ *
+ * 11/30/89 1.00 - Kevin P. Welch - initial creation.
+ *
+ */
+
+#include <windows.h>
+
+#include "page.h"
+#include "page.d"
+
+PAGESTYLE DIALOG LOADONCALL MOVEABLE DISCARDABLE 32, 32, 166, 40
+CAPTION "Page Control Style..."
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_POPUP
+BEGIN
+      CONTROL "", ID_IDENTIFIER, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 44, 6, 76, 12
+      CONTROL "OK", IDOK, "button", BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP | WS_CHILD, 130, 4, 32, 14
+      CONTROL "Cancel", IDCANCEL, "button", BS_PUSHBUTTON | WS_CHILD, 130, 20, 32, 14
+      CONTROL "&ID Value:", -1, "static", SS_LEFT | WS_CHILD, 4, 8, 38, 10
+      CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD, 125, 0, 1, 40
+END

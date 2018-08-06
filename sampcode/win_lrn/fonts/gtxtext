@@ -1,0 +1,22 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+gtxtext.obj: gtxtext.c
+
+gtxtext.exe: gtxtext.obj gtxtext.def
+    link4 gtxtext,/align:16,/map,slibw/NOE,gtxtext.def
+    mapsym gtxtext

@@ -1,0 +1,269 @@
+cmode.............ct_gibm           color.............ct_gibm
+denom.............ct_gibm           diff..............ct_gibm
+dir...............ct_gibm           font..............ct_gibm
+font1.............fonts             melody2...........bsound
+numer.............ct_gibm           pcolor............ct_gibm
+radius............ct_gibm           s_table...........sfont1
+x0................ct_gibm           x1................ct_gibm
+x2................ct_gibm           xmagn.............ct_gibm
+xp................ct_gibm           xx................ct_gibm
+y0................ct_gibm           y1................ct_gibm
+y2................ct_gibm           ymagn.............ct_gibm
+yp................ct_gibm           yy................ct_gibm
+_ang..............turtle            _angl.............turtle
+_atsay............string            _back16_4.........textback
+_back16_8.........textback          _backclr..........bios
+_backsnd..........sound             _beepsp...........ct_misca
+_blink16_4........textback          _blink16_8........textback
+_boxfill..........ct_gibm           _boxfill_.........ct_gibm
+_boxtitle.........windows           _burble...........sounds
+_button...........joy               _circle...........ct_gibm
+_cls..............ct_misca          _cls_clr..........textback
+_color............turtle            _countch..........string
+_ctinit...........windows           _ctone............sounds
+_ctposit..........ct_bios           _ct_bkclr.........ct_bios
+_ct_char..........ct_bios           _ct_color_........windows
+_ct_col_..........windows           _ct_mode_.........windows
+_ct_peek..........ct_bios           _ct_poke..........ct_bios
+_ct_sm............ct_bios           _ct_str...........ct_bios
+_ct_vstr..........ct_bios           _ct_wstr..........windows
+_ct_wvstr.........windows           _delay............ct_misca
+_dot_.............ct_gibm           _drawbox..........windows
+_dwarn2...........ct_miscc          _dwarn3...........ct_miscc
+_dx120bs..........dx                _dxback...........dx
+_dxbi.............dx                _dxboldst.........dx
+_dxbs.............dx                _dxbsend..........dx
+_dxchwide.........dx                _dxclr1tb.........dx
+_dxclrtab.........dx                _dxcr.............dx
+_dxdefwid.........dx                _dxeject..........dx
+_dxff.............dx                _dxfor............dx
+_dxhlf............dx                _dxht.............dx
+_dxinit...........dx                _dxlf.............dx
+_dxlinsp..........dx                _dxlmarg..........dx
+_dxpglen..........dx                _dxrhlf...........dx
+_dxrlf............dx                _dxsetht..........dx
+_dxshast..........dx                _dxundend.........dx
+_dxundlst.........dx                _dxuni............dx
+_ellipser.........ellipser          _ellr_cos.........ellipser
+_ellr_sin.........ellipser          _endsound.........bsound
+_eq...............ct_miscc          _equip............ct_misca
+_equipchk.........ct_miscc          _fdot_............ct_gibm
+_flag.............turtle            _flagdec..........mouse
+_forward..........turtle            _gcomtype.........ct_misca
+_gcurpos..........ct_miscc          _getatch..........ct_bios
+_getbcnt..........mouse             _getbrcnt.........mouse
+_getbstat.........mouse             _getchne..........ct_misca
+_getctype.........ct_miscc          _getcurp..........bios
+_getcurps.........ct_bios           _getdmaj..........ct_miscc
+_getdmin..........ct_miscc          _getdver..........ct_miscc
+_gethpos..........mouse             _getkey...........ct_misca
+_getkeycd.........ct_miscc          _getmode..........ct_bios
+_getpage..........ct_bios           _getscode.........ct_misca
+_getstate.........ct_miscc          _getvpos..........mouse
+_get_str..........string            _gliss............sounds
+_gothic...........gothic            _hollow...........hollow
+_indexch..........string            _indexr...........string
+_iskey............ct_miscc          _kbstat...........ct_miscc
+_keystat..........ct_misca          _lhjoystk.........joy
+_lightpen.........bios              _line.............ct_gibm
+_line_............ct_gibm           _line_gr..........graphs
+_locate...........ct_gibm           _lprintf..........grprint
+_lputch...........printer           _lrotate..........rotate_c
+_lsthpos..........mouse             _lsthrpos.........mouse
+_lstvpos..........mouse             _lstvrpos.........mouse
+_lvjoystk.........joy               _main.............graphs
+_makebdr..........windows           _makebox..........windows
+_maxcol...........ct_miscc          _maxpage..........ct_miscc
+_maxrow...........ct_miscc          _memsize..........ct_miscc
+_mgun.............sounds            _moveto...........turtle
+_mreset...........mouse             _msize............ct_misca
+_note.............ct_miscc          _paint............ct_gibm
+_paint_...........ct_g1ibm          _palette..........ct_miscc
+_pcolor...........turtle            _pcurpos..........ct_miscc
+_pencolor.........turtle            _pendown..........turtle
+_penup............turtle            _play.............sound
+_point............ct_gibm           _poppaint.........ct_gibm
+_prtbs............grprint           _prtbuzz..........grprint
+_prtcan...........grprint           _prtcomof.........grprint
+_prtcomon.........grprint           _prtcr............grprint
+_prtdubof.........grprint           _prtdubon.........grprint
+_prtempof.........grprint           _prtempon.........grprint
+_prtesc...........grprint           _prtff............grprint
+_prtlf............grprint           _prttab...........grprint
+_prtwidoff........grprint           _prtwidon.........grprint
+_pushpaint........ct_gibm           _raschar..........ct_g1ibm
+_rdhcount.........mouse             _rdvcount.........mouse
+_readkey..........ct_misca          _rect.............rect
+_rect1............rect              _rect2............rect
+_redalert.........sounds            _replacech........string
+_resbox...........windows           _rgothic..........gothic
+_rhjoystk.........joy               _rhollow..........hollow
+_rjust............string            _rotate...........rotate_c
+_rscript..........script            _rvjoystk.........joy
+_savebox..........windows           _scankey..........ct_misca
+_script...........script            _scrolldn.........ct_bios
+_scrollup.........ct_bios           _setatten.........sndtdy
+_setcallm.........mouse             _setcur...........mouse
+_setcurp..........bios              _setcurps.........ct_bios
+_setcurt..........bios              _setcurtp.........ct_bios
+_setfreq..........sndtdy            _sethor...........mouse
+_setpage..........ct_miscc          _setpal...........ct_bios
+_setpos...........mouse             _setsound.........bsound
+_settxtc..........mouse             _setver...........mouse
+_set_pal..........ct_misca          _sm...............bios
+_smode............ct_miscc          _soundoff.........sndtdy
+_soundon..........sndtdy            _spalreg..........bios
+_spratio..........mouse             _stchar...........ct_g1ibm
+_strclr...........string            _strdel...........string
+_strpad...........string            _strtolow.........string
+_strtoup..........string            _str_cent.........string
+_tc...............turtle            _tcos.............turtle
+_tone.............ct_misca          _ts...............turtle
+_tsin.............turtle            _turnleft.........turtle
+_turnright........turtle            _usrfont..........ct_g1ibm
+_vbar3d...........graphs            _vmode............ct_miscc
+_vpage............ct_miscc          _vwidth...........ct_miscc
+_v_start..........windows           _wac..............bios
+_waitkey..........ct_misca          _watch............ct_bios
+_wch..............ct_bios           _wchtty...........ct_bios
+_wco..............bios              _wgets............windows
+_wnoise...........sounds            _wputs............windows
+_wtty.............bios              _w_hline..........windows
+_w_vline..........windows           _xend.............turtle
+_xint.............turtle            _yend.............turtle
+_yint.............turtle            
+
+turtle            Offset: 00000010H  Code and data size: 866H
+  _ang              _angl             _color            _flag
+  _forward          _moveto           _pcolor           _pencolor
+  _pendown          _penup            _tc               _tcos
+  _ts               _tsin             _turnleft         _turnright
+  _xend             _xint             _yend             _yint
+
+textback          Offset: 00000c10H  Code and data size: 10eH
+  _back16_4         _back16_8         _blink16_4        _blink16_8
+  _cls_clr        
+
+dx                Offset: 00000de0H  Code and data size: 1ddH
+  _dx120bs          _dxback           _dxbi             _dxboldst
+  _dxbs             _dxbsend          _dxchwide         _dxclr1tb
+  _dxclrtab         _dxcr             _dxdefwid         _dxeject
+  _dxff             _dxfor            _dxhlf            _dxht
+  _dxinit           _dxlf             _dxlinsp          _dxlmarg
+  _dxpglen          _dxrhlf           _dxrlf            _dxsetht
+  _dxshast          _dxundend         _dxundlst         _dxuni
+
+hollow            Offset: 00001350H  Code and data size: d87H
+  _hollow           _rhollow        
+
+gothic            Offset: 000021f0H  Code and data size: 1a6bH
+  _gothic           _rgothic        
+
+script            Offset: 00003d90H  Code and data size: 1a6bH
+  _rscript          _script         
+
+graphs            Offset: 00005930H  Code and data size: 26bH
+  _line_gr          _main             _vbar3d         
+
+ellipser          Offset: 00005ce0H  Code and data size: 4d8H
+  _ellipser         _ellr_cos         _ellr_sin       
+
+sfont1            Offset: 00006680H  Code and data size: 90cH
+  s_table         
+
+sndtdy            Offset: 00007270H  Code and data size: 11cH
+  _setatten         _setfreq          _soundoff         _soundon
+
+rect              Offset: 00007430H  Code and data size: 1dbH
+  _rect             _rect1            _rect2          
+
+ct_miscc          Offset: 00007740H  Code and data size: 5a6H
+  _dwarn2           _dwarn3           _eq               _equipchk
+  _gcurpos          _getctype         _getdmaj          _getdmin
+  _getdver          _getkeycd         _getstate         _iskey
+  _kbstat           _maxcol           _maxpage          _maxrow
+  _memsize          _note             _palette          _pcurpos
+  _setpage          _smode            _vmode            _vpage
+  _vwidth         
+
+sound             Offset: 00008180H  Code and data size: 1b2H
+  _backsnd          _play           
+
+grprint           Offset: 000084e0H  Code and data size: e1H
+  _lprintf          _prtbs            _prtbuzz          _prtcan
+  _prtcomof         _prtcomon         _prtcr            _prtdubof
+  _prtdubon         _prtempof         _prtempon         _prtesc
+  _prtff            _prtlf            _prttab           _prtwidoff
+  _prtwidon       
+
+windows           Offset: 00008810H  Code and data size: 587H
+  _boxtitle         _ctinit           _ct_color_        _ct_col_
+  _ct_mode_         _ct_wstr          _ct_wvstr         _drawbox
+  _makebdr          _makebox          _resbox           _savebox
+  _v_start          _wgets            _wputs            _w_hline
+  _w_vline        
+
+rotate_c          Offset: 00009070H  Code and data size: 1d2H
+  _lrotate          _rotate         
+
+string            Offset: 000093f0H  Code and data size: 2f2H
+  _atsay            _countch          _get_str          _indexch
+  _indexr           _replacech        _rjust            _strclr
+  _strdel           _strpad           _strtolow         _strtoup
+  _str_cent       
+
+sounds            Offset: 00009930H  Code and data size: 1c8H
+  _burble           _ctone            _gliss            _mgun
+  _redalert         _wnoise         
+
+mouse             Offset: 00009cb0H  Code and data size: 18fH
+  _flagdec          _getbcnt          _getbrcnt         _getbstat
+  _gethpos          _getvpos          _lsthpos          _lsthrpos
+  _lstvpos          _lstvrpos         _mreset           _rdhcount
+  _rdvcount         _setcallm         _setcur           _sethor
+  _setpos           _settxtc          _setver           _spratio
+
+joy               Offset: 0000a010H  Code and data size: d3H
+  _button           _lhjoystk         _lvjoystk         _rhjoystk
+  _rvjoystk       
+
+printer           Offset: 0000a1b0H  Code and data size: 13H
+  _lputch         
+
+bsound            Offset: 0000a230H  Code and data size: 23dH
+  melody2           _endsound         _setsound       
+
+fonts             Offset: 0000a5a0H  Code and data size: 1800H
+  font1           
+
+ct_misca          Offset: 0000be20H  Code and data size: 107H
+  _beepsp           _cls              _delay            _equip
+  _gcomtype         _getchne          _getkey           _getscode
+  _keystat          _msize            _readkey          _scankey
+  _set_pal          _tone             _waitkey        
+
+bios              Offset: 0000c080H  Code and data size: e0H
+  _backclr          _getcurp          _lightpen         _setcurp
+  _setcurt          _sm               _spalreg          _wac
+  _wco              _wtty           
+
+ct_bios           Offset: 0000c260H  Code and data size: 2eeH
+  _ctposit          _ct_bkclr         _ct_char          _ct_peek
+  _ct_poke          _ct_sm            _ct_str           _ct_vstr
+  _getatch          _getcurps         _getmode          _getpage
+  _scrolldn         _scrollup         _setcurps         _setcurtp
+  _setpal           _watch            _wch              _wchtty
+
+ct_g1ibm          Offset: 0000c750H  Code and data size: bbdH
+  _paint_           _raschar          _stchar           _usrfont
+
+ct_gibm           Offset: 0000ced0H  Code and data size: f22H
+  cmode             color             denom             diff
+  dir               font              numer             pcolor
+  radius            x0                x1                x2
+  xmagn             xp                xx                y0
+  y1                y2                ymagn             yp
+  yy                _boxfill          _boxfill_         _circle
+  _dot_             _fdot_            _line             _line_
+  _locate           _paint            _point            _poppaint
+  _pushpaint      

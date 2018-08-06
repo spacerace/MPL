@@ -1,0 +1,46 @@
+
+
+        NAME
+                dup -- duplicate a file handle
+
+        SYNOPSIS
+                nfh = dup(fh);
+                int nfh;      new file handle
+                int fh;       existing file handle
+
+
+        DESCRIPTION
+        This function uses the DOS "dup" function to create a duplicate
+        of an existing file handle.  The new file handle returned is
+        NULL if the dup process failed for any reason.  The use of
+        a duplicate file handle is primarily for causing an open
+        file to be "updated" to disk without closing and re-opening
+        it.  This is done by first flushing any buffered data out,
+        creating a duplicate file handle, and then closing the duplicate.
+        The original file handle is left unchanged, but the disk
+        directory and FAT are properly updated.
+
+
+
+        EXAMPLE
+              (assume that fd is a previously opened FILE *fd)
+
+              update_file() {
+                 int fh, nfh;
+                 fh = fileno(fd);      /* get the file handle */
+                 nfh = dup(fh);        /* get a duplicate handle */
+                 if(nfh == 0) return;  /* duplicate failed */
+                 fflush(fd);           /* insure all data written */
+                 close(nfh);           /* close duplicate handle */
+                 }
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

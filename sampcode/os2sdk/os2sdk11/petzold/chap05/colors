@@ -1,0 +1,9 @@
+#------------------
+# COLORS make file
+#------------------
+
+colors.obj : colors.c
+     cl -c -G2sw -W3 colors.c
+
+colors.exe : colors.obj colors.def
+     link colors, /align:16, NUL, os2, colors

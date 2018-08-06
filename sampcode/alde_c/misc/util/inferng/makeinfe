@@ -1,0 +1,49 @@
+#
+# 	Makefile 
+# 
+
+# debug the file and do a 80286 model
+
+#CFLAGS = /DDEBUG /DMSDOS /G2 /Zd /Od /Fc
+
+CFLAGS = /DMSDOS 
+
+# All object modules
+
+inference.obj : inference.c expert.h 
+	msc $(CFLAGS) inference.c ;
+
+verify.obj : verify.c expert.h inference.h expert.h
+	msc $(CFLAGS) verify.c ;
+	lib inference -verify +verify ;
+
+runrouti.obj : runrouti.c inference.h expert.h routine.h
+	msc $(CFLAGS) runrouti.c ;
+	lib inference -runrouti +runrouti ;
+
+verifytr.obj : verifytr.c inference.h expert.h
+	msc $(CFLAGS) verifytr.c ;
+	lib inference -verifytr +verifytr ;
+
+weknow.obj : weknow.c inference.h expert.h
+	msc $(CFLAGS) weknow.c ;
+	lib inference -weknow +weknow ;
+
+remante.obj : remante.c inference.h expert.h routine.h
+	msc $(CFLAGS) remante.c ;
+	lib inference -remante +remante ;
+
+gettruth.obj : gettruth.c inference.h expert.h	
+	msc $(CFLAGS) gettruth.c ;
+	lib inference -gettruth +gettruth ;
+	
+
+
+# 	inference.exe -- main target
+#
+inference.exe : inference.obj inference.lib 
+#	link inference.obj ,inference.exe, inference.map, inference.lib /MAP/LINE/STACK:9000 ;
+ 	link inference.obj ,inference.exe, inference.map, inference.lib /STACK:9000 ;
+#
+#	mapsym inference
+#

@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "BuildDCB.h"
+
+BuildDCB MENU
+    BEGIN
+        POPUP "Menu"
+           BEGIN
+              MENUITEM "&BuildCommDCB",                     IDM_BUILDDCB
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

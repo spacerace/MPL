@@ -1,0 +1,6 @@
+getcword.obj: getcword.c
+    cl -d -c -AS -Gsw -Os -Zpe getcword.c
+
+getcword.exe: getcword.obj getcword.def
+    link4 getcword,/align:16,/map,slibw/NOE,getcword.def
+    mapsym getcword

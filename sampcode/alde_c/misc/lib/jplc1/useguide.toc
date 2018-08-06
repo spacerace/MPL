@@ -1,0 +1,92 @@
+.FÏ                                i
+‚                 Ô Á Â Ì Å  Ï Æ  Ã Ï Î Ô Å Î Ô S
+
+
+  1. INTRODUCTION.............................................1-1
+
+  2. HEADER LIBRARY...........................................2-1
+        Standard Character-Type Macros........................2-2
+        Standard Definitions and Selectors File...............2-4
+        Standard Error Number Definition File.................2-6
+        Standard Global Variable Header File..................2-7
+        Constant File for Math Functions......................2-8
+        Header File to Declare Math Functions................2-10
+        Screen Function Data File............................2-11
+        Standard Buffered Input/Output Definition Package....2-13
+        Standard Defined-Types File..........................2-16
+
+  3. SYSTEM CALLS.............................................3-1
+        Close a File, Operating System Interface..............3-2
+        Create a File, Operating System Interface.............3-3
+        Terminate Process.....................................3-4
+        Move Read/Write Pointer...............................3-5
+        Open for Reading or Writing...........................3-6
+        Read from File........................................3-7
+        Rename a File.........................................3-8
+        Change Core Allocation................................3-9
+        Remove Directory Entry...............................3-10
+        Write on a File......................................3-11
+
+  4. FUNCTION LIBRARY.........................................4-1
+        Absolute Values.......................................4-2
+        Memory Allocation Package.............................4-3
+        ASCII/Numeric Conversion..............................4-4
+        Count Bits in Argument................................4-7
+        Stream Status Inquiries...............................4-8
+        Gaussian Error Functions and Inverses.................4-9
+        Mathematical Functions...............................4-10
+        Close or Flush a Stream..............................4-12
+        Absolute Value, Rounding, Integer and Fractional Par.4-13
+        Open a Stream........................................4-14
+        Buffered Input/Output................................4-15
+        Mantissa and Exponent Functions......................4-16
+        Reposition a Stream..................................4-17
+        Get a Buffer.........................................4-18
+        Get Character or Word from Stream....................4-19
+        Get a String from a Stream...........................4-21
+        Euclidian Distance Function..........................4-22
+        String Operation Functions...........................4-23
+        Character Classification Functions...................4-25
+        Quesion User.........................................4-26
+        Main Memory Allocator................................4-27
+        Maximum and Mimimum Function for Integers, Doubles a.4-29
+        Normal Probability Functions.........................4-30
+        Formatted Output Conversion..........................4-31
+        Put Character or Word on a Stream....................4-34
+        Put a String on a Stream.............................4-35Š.FO                                ii
+        Random Number Generator Functions....................4-36
+        Rational Function Evaluation.........................4-37
+        Fourth Order Runga-Kutta.............................4-38
+        Formatted Input Conversion...........................4-39
+        Screen Input/Output..................................4-43
+        Assign Buffer........................................4-45
+        Sign Function........................................4-46
+        Integration by Simpson's Modified Rule...............4-47
+        Trigonometric Functions..............................4-48
+        Hyperbolic Functions.................................4-50
+        Sort Functions.......................................4-51
+        Conversion to Lower and Upper Case...................4-53
+        Push Character Back into Input Stream................4-54
+
+  5. CUSTOMIZATION NOTES......................................5-1
+        Customization Procedure..............................5-15
+        Customization Example................................5-16
+
+
+
+A P P E N D I C E S
+
+  A. REFERENCES...............................................A-1
+
+  B. INDEX....................................................B-1
+.PAŠ.FO                               iii
+                    L I S T  O F  T A B L E S
+
+ 5-1: PORTABLE C LIBRARY SYSTEM INTERFACE.....................5-1
+ 5-2: PORTABLE C LIBRARY COMPILER- & SYSTEM-DEPENDENT ELEMENT.5-2
+ 5-3: PORTABLE C LIBRARY SYSTEM-INDEPENDENT ELEMENTS..........5-4
+ 5-4: PORTABLE C LIBRARY ELEMENTS.............................5-9
+.PAŠ.FO
+.HE
+.PN 1
+

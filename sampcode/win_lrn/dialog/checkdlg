@@ -1,0 +1,13 @@
+
+checkdlg.res: checkdlg.rc checkdlg.h
+    rc -r checkdlg.rc
+
+checkdlg.obj: checkdlg.c
+   cl -c -W2 -AS -Gsw -Od -Zped checkdlg.c
+
+checkdlg.exe: checkdlg.obj checkdlg.def
+   link4 checkdlg,/align:16,/map/li,slibw/NOE,checkdlg.def
+   rc checkdlg.res
+
+checkdlg.exe: checkdlg.res
+    rc checkdlg.res

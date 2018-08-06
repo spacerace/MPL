@@ -1,0 +1,16 @@
+#-------------------
+# POEPOEM make file
+#-------------------
+
+poepoem.obj : poepoem.c poepoem.h
+     cl -c -G2sw -W3 poepoem.c
+
+poepoem.res : poepoem.rc poepoem.ico poepoem.asc poepoem.h
+     rc -r poepoem
+
+poepoem.exe : poepoem.obj poepoem.def
+     link poepoem, /align:16, NUL, os2, poepoem
+     rc poepoem.res
+
+poepoem.exe : poepoem.res
+     rc poepoem.res

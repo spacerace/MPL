@@ -1,0 +1,9 @@
+#--------------------
+# COLORSCR make file
+#--------------------
+
+colorscr.obj : colorscr.c
+     cl -c -G2sw -W3 colorscr.c
+
+colorscr.exe : colorscr.obj colorscr.def
+     link colorscr, /align:16, NUL, os2, colorscr

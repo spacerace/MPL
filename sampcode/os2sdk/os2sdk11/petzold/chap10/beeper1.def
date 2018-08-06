@@ -1,0 +1,11 @@
+;------------------------------------
+; BEEPER1.DEF module definition file
+;------------------------------------
+
+NAME           BEEPER1   WINDOWAPI
+
+DESCRIPTION    'Timer Demo Program No. 1 (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

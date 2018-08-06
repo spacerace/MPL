@@ -1,0 +1,13 @@
+crbitmap.res: crbitmap.rc crbitmap.h
+    rc -r crbitmap.rc
+    
+crbitmap.obj: crbitmap.c crbitmap.h
+    cl -c -Gw -Zp crbitmap.c
+
+crbitmap.exe: crbitmap.obj crbitmap.def
+    link4 crbitmap, , , slibw/noe, crbitmap.def
+
+crbitmap.exe: crbitmap.res
+    rc crbitmap.res
+
+

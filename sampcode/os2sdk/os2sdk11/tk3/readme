@@ -1,0 +1,59 @@
+Sample Name	Illustrates...
+
+BIO		A biorhythm chart drawing application.  Demonstrates writing
+		to the clipboard, and GPI calls.
+
+BROWSE		Drawing in an AVIO Presentation Space, with scrollbars.
+		It allows you to browse through a specified file.
+
+CALC/DCALC	Bitmaps, hit testing, drawing using GpiBox, GpiLine;
+		and some manual drawing
+
+CLOCK		Window subclassing, frame control processing, Gpi transforms
+		This application displays a clock; the title and menu bars
+		can be removed by double-clicking; and dragging any part
+		of the window results in the entire window being moved
+
+COMTALK		A PM Terminal Application.  Uses AVIO, and multiple threads.
+
+DLGSAMP		Demonstrates various types of dialog boxes
+
+EDPLINE		Demonstrates Gpi calls to draw lines and curves
+
+FATPEL		A nice drawing package which shows which pixels get lit up
+		when a line (or Fillet, Spline, Point Arc) is drawn
+
+INIEDIT		Allows browsing of OS2.INI file (WinProfile calls); also
+		loads printer options from OS2.INI properly for printing
+
+JIGSAW		A nice visual jigsaw puzzle application; demonstrates Gpi
+		calls for segment storage, clipping to regions, Bit Blts, ...
+
+LINEFRAC	Drawing with multiple threads, bitmaps as menu items, how
+		to read/write bitmaps, and Gpi calls
+
+MDI		Demonstrates the standard Multiple Document Interface
+
+MSGBOX		Allows the user to experiment with various message box styles
+
+OPENDLG		Standardized "File...Open" and "File...Save As" dialog boxes
+		Includes a sample program (HELLO) to show how to use the DLL.
+
+PMCAP		Allows screen dumps to bitmap files
+
+SNAP		Screen snapshotting utility.  Allows regions to be selected.
+
+SPY		Message hooking/debugging utility
+
+VECTFONT	Shows off OS/2 Vector Font capabilities
+
+WMCHAR		Displays the various flags set when WM_CHAR message is sent
+
+
+Make sure that the INCLUDE subdirectory here is in your INCLUDE variable,
+that LIB is in your LIB variable, and that DLL is in your LIBPATH variable
+(of your CONFIG.SYS file).  This should happen as part of the SETUP process.
+
+Many samples compile with the library slibce, which is a combined library
+which should be built when installing Microsoft C 5.10.  It MUST be a
+protect-mode library (so select Default library = OS/2 Protected Mode).

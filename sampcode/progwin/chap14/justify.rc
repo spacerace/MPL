@@ -1,0 +1,32 @@
+/*----------------------------
+   JUSTIFY.RC resource script
+  ----------------------------*/
+
+#include "justify.h"
+
+Ismael TEXT justify.asc
+
+Justify MENU     
+     {
+     MENUITEM  "&FaceName",        IDM_FACE
+     POPUP     "&PointSize"
+          {
+          MENUITEM "temp",         IDM_SIZE
+          }
+     POPUP     "&Attributes"
+          {
+          MENUITEM "&Bold",        IDM_BOLD
+          MENUITEM "&Italic",      IDM_ITALIC
+          MENUITEM "&StrikeOut",   IDM_STRIKE
+          MENUITEM "&Underline",   IDM_UNDER
+          MENUITEM SEPARATOR
+          MENUITEM "&Normal",      IDM_NORM
+          }
+     POPUP     "A&lignment"
+          {
+          MENUITEM "&Left",        IDM_LEFT, CHECKED
+          MENUITEM "&Right",       IDM_RIGHT
+          MENUITEM "&Centered",    IDM_CENTER
+          MENUITEM "&Justified",   IDM_JUST
+          }
+     }

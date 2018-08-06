@@ -1,0 +1,11 @@
+;------------------------------------
+; PMSERVER.DEF module definition file
+;------------------------------------
+
+NAME           PMSERVER  WINDOWAPI
+
+DESCRIPTION    'Clipboard Server (C) RHS, 1989'
+PROTMODE
+HEAPSIZE       10240
+STACKSIZE      8192
+EXPORTS        ClientWndProc

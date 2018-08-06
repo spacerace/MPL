@@ -1,0 +1,55 @@
+'XC' is a cross-reference printing utility for 'C' programs. It has the 
+ability to handle nested include files to a depth of 8 levels and 
+properly process nested comments. Important features of 'XC' are as
+follows:
+  							   
+- Provides the capability to set the printer to compressed print mode. 
+	
+	The program may be customized for any printer by modifying the print
+	control strings in the program.  These string are:
+ 
+              cprint_hdr sets the printer to compressed print mode       
+              cprint_trlr resets the printer to "normal" mode            
+
+	These strings can be found in the source code with a text editor and
+	modified to comform to the user's printer.
+
+- If a form feed is detected in the source file, a new page is started.  This 
+	is useful for structuring the source code by placing each major
+	section on a separate page.  You do this by embedding a form feed
+	(control L) in a comment.  The text following the form feed will be 
+	placed on the top of the new page.  The page numbering will be
+	incremented and a new header line will be placed on the	new page.                                 
+
+-  Tab characters in the file are expanded to every 8 positions.
+ 
+	This may be changed by changing the TABCNT define in the source code. 
+        
+-  The current date and time and the file latest update date and time are 
+	included in the page header line.  The file date and time are 
+	identical to that found in a DIR listing.
+
+		NOTE: This feature utilizes PC-DOS 2.0 calls and will
+		probably not operate correctly on DOS 1.1.  This feature
+		also utilizes two CI C-86 library functions (sysint and
+		segread).  If you wish to modify the program, these functions
+		or their equivalent must be used.  Segread returns the
+		4 segment registers, and sysint allows the user to 
+		issue an interrupt and set the registers prior to the 
+		interrupt as well as returns the values of the registers to
+		the caller. 
+
+-  Control characters (other than \n, \f, or \t) are stripped from the input 
+	stream (converted to blanks).  This prevents extraneous control 
+	characters in the input file from interfering with the operation of XC.
+						 
+Usage: xc <filename> <flag(s)>			   
+  							   
+      Flags: -i 	   = Enable file inclusion	   
+  	     -l 	   = Generate listing only	   
+             -c            = Compressed print listing (Prism/Microprism printer
+	     -e		   = Compressed print listing (Epson printer)
+  	     -r 	   = Cross-ref reserved words	   
+  	     -o <filename> = Write output to named file    
+  							   
+

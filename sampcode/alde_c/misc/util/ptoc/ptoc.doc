@@ -1,0 +1,1830 @@
+
+
+
+
+9
+
+
+
+
+
+
+
+
+
+
+
+
+
+9                               _P_T_C _i_m_p_l_e_m_e_n_t_a_t_i_o_n _n_o_t_e
+
+                                         by
+
+                                    Per Bergsten
+
+                               Holistic Technology AB
+                                   Grona Gatan 59
+                                  414 54 Gothenburg
+                                       Sweden
+
+
+
+
+
+
+
+
+
+
+
+
+
+          This note describes the implementation of  ptc,  a  Pascal  to  C
+          translator.   The program was developed by Per Bergsten of Holis-
+          tic Technology AB, Gothenburg, Sweden.  The paper is intended  to
+          provide  a  guide  for  those  who need to transport ptc to a new
+          environment, it describes how Pascal constructs are mapped onto C
+          constructs.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          _1.  _B_a_c_k_g_r_o_u_n_d
+
+          The aim was originally to provide a simple tool for  transporting
+          finished  applications  to systems lacking Pascal compilers.  The
+          first versions,  constructed  in  about  1984,  were  capable  of
+          translating  simple  Pascal  programs.   It was never intended to
+          become a released product, however, as time went by, programs and
+          ambitions grew to the point where nearly the full Pascal language
+          was supported.  Thus the program as it stands today  has  a  long
+          ancestry  but  it has never been redesigned (which it should have
+          been).
+
+          _2.  _P_a_s_c_a_l _v_s _C
+
+          To anyone familiar with the two languages it is obvious that they
+          are very similar in structure.  The major features may be summar-
+          ised as follows:
+
+                     Pascal                            C
+
+          Block-structured                Block-structured
+          - multiple declaration levels   - single declaration level
+          Statically scoped               Statically scoped
+          Strongly typed                  Weakly typed
+                                          - allows unbounded pointers
+          Call by value                   Mostly call by value
+          - and call by reference
+          Highly independent              Highly integrated
+          - of host system                - with system
+          Self contained                  Allows external definitions.
+
+
+          On the syntactic level the languages differ only in  minor  ways,
+          mostly  in  the  order in which keywords and other symbols occur,
+          and of course in that the languages uses  different  symbols  for
+          the  same  purposes.   The  only complication is that C prohibits
+          nested subroutine declarations.
+
+          On the semantic level the situation is worse.  C  has  the  pecu-
+          liarity  that  array variables are treated differently from other
+          variables, this forces us to adopt some  general  way  to  handle
+          array variables.  Furthermore, since Pascal offers nested subrou-
+          tine declarations it becomes necessary to simulate  part  of  the
+          activation  record  mechanism in the translated code, in one case
+          it is extremely difficult to completely  do  this.   It  is  also
+          clear  that  the  C  typedef mechanism has some shortcomings that
+          preclude an easy translation of Pascal types.
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+9                                        - 1 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          _3.  _M_a_p_p_i_n_g _P_a_s_c_a_l _t_o _C
+
+          In this part of the paper we briefly illustrate how to  translate
+          Pascal code into equivalent C code.
+
+          _3._1.  _P_r_o_g_r_a_m_s
+
+          A minimal Pascal program:
+
+                  program p;
+                  begin
+                  end.
+
+          translates to the C equivalent:
+
+                  extern void exit();
+                  main()
+                  {
+                          exit(0);
+                  }
+
+
+          It should be noted here that the  translator  does  not  actually
+          require  a  complete  Pascal  program, the implementation is such
+          that any consistent set of declarations can be translated.
+
+          _3._2.  _L_e_x_i_c_a_l _i_s_s_u_e_s
+
+          The C language uses ASCII as a carrier, almost all of the availi-
+          ble  characters  are  used.  The Pascal definition uses a smaller
+          set of characters.  Since few features of the languages depend on
+          the  underlying character set this does not introduce much diffi-
+          culties.
+
+          One serious problem does occur.  Both language definitions states
+          that  comments have no meaning and no clear place in the language
+          syntax.  Furthermore, the Pascal definition states that a comment
+          is  equivalent  to  a blank character.  This implies that if com-
+          ments are handled accurately the translator should also  be  able
+          to  collect and classify each blank character in a Pascal program
+          and to generate a C program with the same number of blank charac-
+          ters  in the corresponding positions.  This implication conflicts
+          with the fact that the languages have different syntax rules,  it
+          is not obvious what the "corresponding positions" would be.
+
+          Since comments have no defined meaning a user is free  to  inter-
+          pret  them  in any way and, in particular, to associate them with
+          the surrounding code in any way s/he  chooses.   Although  humans
+          usually are able to deduce what bearing a comment has on the sur-
+          rounding program code there are no formal rules  for  how  to  do
+          this.   Therefore  there  is no _a _p_r_i_o_r_i correct way to translate
+          comments and the translator described here ignores comments alto-
+          gether.   If/when  a  reasonable  _a_d  _h_o_c  solution is found that
+          feature may be incorporated.
+
+          _3._3.  _D_e_c_l_a_r_a_t_i_o_n_s
+
+          The program may introduce local declarations which are handled as
+          follows.
+
+
+
+
+                                        - 2 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          _3._3._1.  _L_a_b_e_l_s
+
+
+                  program p;
+
+                  label 9;
+
+                  begin
+                  9:
+                          goto 9
+                  end.
+
+          which we simply translate into:
+
+                  extern void exit();
+                  main()
+                  {
+                  L9:
+                          goto L9;
+                          exit(0);
+                  }
+
+
+          If the label is reached from an inner procedure:
+
+                  program p;
+
+                  label 100;
+
+                          procedure q;
+
+                          begin
+                                  goto 100
+                          end;
+
+                  begin
+                  100:
+                  end.
+
+          a more complicated translation must be used:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+9                                        - 3 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9
+                  # define Line __LINE__
+                  void Caseerror();
+                  # include <setjmp.h>
+                  static struct Jb { jmp_buf jb; } J[1];
+
+                   void
+                  q()
+                  {
+                          longjmp(J[0].jb, 100);
+                  }
+
+                  main()
+                  {
+                          if (setjmp(J[0].jb))
+                                  goto L100;
+                  L100:
+                          exit(0);
+                  }
+
+
+          We assume the existence of the standard  _s_e_t_j_m_p()  and  _l_o_n_g_j_m_p()
+          library  functions.   Jumpbuffers  are  statically  allocated  as
+          needed depending on the number of declarationlevels in  the  pro-
+          gram.
+
+          _3._3._2.  _C_o_n_s_t_a_n_t_s
+
+          Constant declarations are treated in two different ways.  Numbers
+          aliases  etc  are simply # _d_e_f_i_n_e'd but string constants are con-
+          verted to static character arrays in order to  avoid  unnecessary
+          duplication of string-constants in the object code, thus:
+
+                  const
+                     p  = 3.14;
+                     pie   = '3.14';
+
+          translates to:
+
+                  # define pi 3.14
+                  static char pie[] = "3.14";
+
+
+          _3._3._3.  _T_y_p_e_s _a_n_d _v_a_r_i_a_b_l_e_s
+
+          Types and variables are mostly easy to translate:
+
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+9                                        - 4 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9
+                  program p;
+
+                  const length   = 15;
+
+                  type
+                     struct      = 0 .. length;
+                     vect     = array [ struct ] of struct;
+                     color    = (red, blue, ada, yellow);
+                     pointer  = ^ recd;
+                     recd     = record
+                              r  : pointer;
+                              case b : boolean of
+                                false: (c : color);
+                                true:  (v : vect);
+                             end;
+
+                  var   SP    : pointer;
+
+                  begin
+                     new(SP, true);
+                  end.
+
+          becomes
+
+                  typedef char    boolean;
+                  # define false (boolean)0
+                  # define true (boolean)1
+                  extern char *Bools[];
+                  # define Unionoffs(p, m) (((long)(&(p)->m))-((long)(p)))
+                  extern char *malloc();
+                  # define length 15
+                  typedef unsigned char C47_struct;
+                  typedef struct { C47_struct A[length + 1]; } vect;
+                  typedef enum { red, blue, ada, yellow } color;
+                  typedef struct S57 *pointer;
+                  typedef struct S57 {
+                     pointer  r;
+                     boolean  b;
+                     union {
+                        struct {
+                           color    c;
+                        } V1;
+                        struct  {
+                           vect  v;
+                        } V2;
+                     } U;
+                  }  recd;
+                  pointer  sp;
+
+                  main()
+                  {
+                     sp = (struct S57 *)malloc((unsigned)
+                        (Unionoffs(sp, U.V2.v) + sizeof(sp->U.V2)));
+                     exit(0);
+                  }
+
+          The rationale is as follows:
+9
+
+
+
+9                                        - 5 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          Identifiers in the Pascal program which conflicts  with  reserved
+          words  in  C are renamed by adding a unique prefix Cnnn where nnn
+          is a number.
+
+          We also note here that uppercase letters in identifiers and  key-
+          words   are  translated  to  lowercase.   Pascal  specifies  that
+          upper/lower case is insignificant whereas  C  (for  the  present)
+          separates  the two.  This fact is used to advantage by the trans-
+          lator as all subroutines and macros  defined  by  the  translator
+          have an initial uppercase letter which prevents confusion.
+
+          -    The type _b_o_o_l_e_a_n is a predefined Pascal  type,  when  it  is
+               used  the  translator emits code which defines boolean to be
+               the smallest convenient type: _c_h_a_r.  The constants _f_a_l_s_e and
+               _t_r_u_e  are  defined  and  the vector _B_o_o_l_s will contain text-
+               strings for output if needed.
+
+          -    The predefined types _i_n_t_e_g_e_r and _r_e_a_l  are  likewise  mapped
+               directly  onto the standard C types _i_n_t and _d_o_u_b_l_e through a
+               typedef declaration.
+
+               Integer subranges are  mapped  onto  standard  C  arithmetic
+               types  according  to  a  short table in the translator.  The
+               table is scanned from top to bottom until an enclosing range
+               is found and the corresponding type-name is emitted.
+
+          -    C-arrays have peculiar semantix.  To unify the treatment  of
+               arrays and other datatypes we always encapsulate an array in
+               a struct, thus an array always becomes a _s_t_r_u_c_t with a  sin-
+               gle member named A.
+
+          -    Records and their variants are translated into C _s_t_r_u_c_t  and
+               _u_n_i_o_n  definitions.   Since  C requires all union members to
+               have a name we must supply artificial names for  all  record
+               variants.  A record with variants will therefore always con-
+               tain one field with the name U which have  sub-fields  named
+               Vnnn where nnn is a positive number.
+
+               When allocating dynamic storage for a record  with  variants
+               naming the desired variant
+
+                       new(sp, true)
+
+               we face the problem of  determining  the  amount  of  memory
+               needed.
+
+               _C _d_o_e_s _n_o_t _p_r_o_v_i_d_e _a _s_a_f_e _w_a_y _t_o _c_o_m_p_u_t_e _t_h_e _s_i_z_e _o_f  _a
+               _p_a_r_t_i_c_u_l_a_r _s_t_r_u_c_t _v_a_r_i_a_n_t.
+
+               The strategy adopted to cope with this problem is to attempt
+               to compute the offset of a fieldmember in the variant match-
+               ing the constant and then to add the size  of  the  variant.
+               The  offset  computation is expressed as a macro, _U_n_i_o_n_o_f_f_s,
+               which uses rather foul typecasting  to  achive  the  result.
+               The only availible alternative would be to use the same size
+               of all variants.  This  method,  while  being  safe,  wastes
+               memory  when  many  small  and few large records of the same
+               type are created dynamically.
+9
+
+
+
+9                                        - 6 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          -    Pascal enumeration types are converted directly  to  C  _e_n_u_m
+               types.
+
+          -    Pascal pointer types are translated into  C  pointer  types.
+               Pascal allows the programmer to construct recursive types as
+               pointer types need not be fully defined until the end of the
+               declaration-section  where  the  pointer  type  is used.  In
+               practice this is only used to introduce record  types  which
+               contain  pointers  to themselves.  This problem is partially
+               solved by introducing a name for the record type.  Hence
+
+                       type
+                          ptr   = ^ node;
+                          node  = record
+                                next  : ptr;
+                                info  : integer
+                               end;
+
+               becomes
+
+                       typedef struct S56 * ptr;
+                       typedef struct S56 {
+                          ptr      next;
+                          integer     info;
+                       } node;
+
+               we note in passing that the  problem  cannot  be  completely
+               solved since
+
+                       type  pureptr  = ^ pureptr;
+
+               which is valid Pascal, cannot be expressed in C.
+
+          -    A pascal set-type does not have any direct counterpart in C.
+               The C language does however have a adequate set of operators
+               for bit manipulation.  We use these to  implement  a  Pascal
+               set as an array of _s_e_t_w_o_r_d.  So:
+
+                       type
+                          s  = set of 1 .. 100;
+
+                       var
+                          ss : s;
+
+               is translated into:
+
+                       typedef unsigned short setword;
+                       typedef struct { setword S[8]; } s;
+
+                       s  ss;
+
+               The situation is slightly complicated by the fact that  Pas-
+               cal  has a set constructor which permits the construction of
+               arbitrary large sets, for example:
+
+                       s := [ 50 .. maxint ] * [ 1 .. 80 ]
+
+               for that reason the first member in the array of words gives
+               size  of  the  set  (in words).  In the example above s.S[0]
+
+
+
+
+                                        - 7 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9               would have the value 7, and s.S[1] through s.S[7] would hold
+               the  bits.   The number 7 is computed on the assumption that
+               the type _u_n_s_i_g_n_e_d _s_h_o_r_t on the target host  is  sufficiently
+               large  to  holds  16  bits.  The set operators of Pascal are
+               implemented as C functions returning pointers to  arrays  of
+               setwords, the intermediary results are held in a static area
+               of fixed size.
+
+          -    Pascal files are implemented using the standard i/o  package
+               availible  in  most C implementations.  Since Pascal has the
+               requirement that the next element of a file  is  visible  in
+               the  filebuffer  before it is read, and the requirement that
+               linemarkers in textfiles are given special treatement we are
+               forced  to  extend  the  _F_I_L_E  type  provided  in <_s_t_d_i_o._h>.
+               Hence:
+
+                       var   f  : text;
+
+               becomes
+
+                       typedef struct {
+                          FILE  *fp;
+                          unsigned short
+                                eoln:1,
+                                eof:1,
+                                init:1,
+                                out:1,
+                                :12;
+                          char  buf;
+                       }  text;
+                       text  f;
+
+               where _b_u_f is our filebuffer and _e_o_l_n, _e_o_f and _i_n_i_t are flags
+               giving the state of the file.  All Pascal i/o operations are
+               implemented using macros that maintain  the  flags  and  the
+               buffer  variable.  The actual reading and writing of data is
+               deferred to the standard i/o package.
+
+          _3._3._4.  _P_r_o_c_e_d_u_r_e_s _a_n_d _f_u_n_c_t_i_o_n_s
+
+          Pascal  procedures  and  functions  are  somewhat  difficult   to
+          translate to C.  The main problems lie in nested declarations and
+          procedural parameters.  Nested declarations are  handled  in  the
+          following manner:
+
+               -    If procedure B is declared in procedure  A,  then  pro-
+                    cedure  B is emitted before A and A is forward declared
+                    before B.
+
+               -    Any constants and types declared in A is moved  to  the
+                    global scope, this may force renaming of those objects.
+
+               -    Any variable declared in A _a_n_d _u_s_e_d _i_n _B  is  converted
+                    to  a  pointer  and  moved  to  the  global scope.  The
+                    pointer value is saved  and  re-initialized  upon  each
+                    entry of A and restored upon exit from A.
+
+
+9
+
+
+
+9                                        - 8 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          Hence:
+
+                  procedure A;
+
+                  const limit = 20;
+
+                  type  loctyp   = 0 .. limit;
+
+                  var   i, j  : loctyp;
+
+                     procedure B(k : loctyp);
+
+                     begin
+                        j := k + 2
+                     end;
+
+                  begin
+                     B(i)
+                  end;
+
+          becomes
+
+                  typedef unsigned char   loctyp;
+                  loctyp   *G56_j;
+
+                  void a();
+
+                   void
+                  b(k)
+                     loctyp  k;
+                  {
+                     (*G56_j) = k + 2;
+                  }
+
+                   void
+                  a()
+                  {
+                  # define limit 20
+                     loctyp  i, j;
+                     loctyp  *F57;
+
+                     F57 = G56_j;
+                     G56_j = &j;
+                     b(i);
+                     G56_j = F57;
+                  }
+
+          we see that references to _j inside procedure _b  are  replaced  by
+          the  pointer  _G_5_6__j  which points to the local variable _j in pro-
+          cedure _a.  In order to preserve the proper semantix in  the  face
+          of  recursion  the value of the pointer need also be saved in the
+          local variable _F_5_7 during the invocation of _a.
+
+          -    Procedure parameters offer little  problems.   We  translate
+               Pascal  value-parameters into ordinary C parameters and Pas-
+               cal var-parameters are treated as pointers.
+
+
+9
+
+
+
+9                                        - 9 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          -    Procedural parameters appear at first to be easy to  handle.
+               The ordinary program:
+
+                       program p;
+
+                       procedure pp(procedure q(i : integer));
+
+                       begin
+                          q(2)
+                       end;
+
+                       procedure qq(i : integer);
+                       begin
+                       end;
+
+                       begin
+                          pp(qq)
+                       end.
+
+               becomes
+
+                       extern void exit();
+                       typedef int integer;
+
+                        void
+                       pp(q)
+                          void  (*q)();
+                       {
+                          (*q)(2);
+                       }
+
+                        void
+                       qq(i)
+                          integer i;
+                       {
+                       }
+
+                       main()
+                       {
+                          pp(qq);
+                          exit(0);
+                       }
+
+               which looks simple enough.
+               However, Pascal requires  that  the  scope  of  a  procedure
+
+
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+9                                       - 10 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9               _r_e_m_a_i_n_s _u_n_c_h_a_n_g_e_d throughout its lifetime.  Consider:
+
+                       program demo(output);
+
+                       var   i  : integer;
+
+                          procedure p(procedure q);
+
+                          var   j  : integer;
+
+                             procedure qq;
+
+                             begin
+                                writeln(j)
+                             end;
+
+                          begin
+                             j := i;
+                             q;
+                             if i < 1 then
+                               begin
+                                i := i + 1;
+                                p(qq)
+                               end
+                          end;
+
+                          procedure dummy;
+                          begin
+                          end;
+
+                       begin
+                          i := 0;
+                          p(dummy)
+                       end.
+
+               When _p is first invoked it assigns the local variable _j  the
+               value  0.   This  variable  is  accessible  from _q_q which is
+               passed as a parameter in  the  recursive  call  of  _p.   The
+               second  invocation  of  _p then sets _i_t_s variable _j to 1, and
+               calls _q which is bound to the  first  instance  of  _q_q,  and
+               should  therefore  print the number _0.  _S_a_d_l_y, _t_h_e _c_o_d_e _p_r_o_-
+               _d_u_c_e_d _b_y _t_h_e _t_r_a_n_s_l_a_t_o_r _f_a_i_l_s _t_o _d_o  _t_h_i_s.   It  is  obvious
+               that  the  program  above calls for a complete simulation of
+               the activation record mechanism of Pascal to work correctly.
+
+               A workable but unpractical solution would be:
+
+               1)   When qq is used as parameter  we  call  a  function  q1
+                    which saves the environment for qq (i.e. the address of
+                    j) in a well known place and returns a pointer to q2.
+
+               2)   When qq is later called (under the name q)  the  actual
+                    target  will be q2 which sets up the proper environment
+                    calls qq.
+
+               The problem is that this requires a save-area for _e_a_c_h  pro-
+               cedural parameter which can hold the intresting parts of its
+               environment for _e_a_c_h of its  invocations.   In  the  example
+               above  we need one are which holds the address of i for each
+
+
+
+
+                                       - 11 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9               instance of qq (say N instances,  where  N  depends  on  the
+               run-time  behaviour  of  p).  It also requires a set of dif-
+               ferent procedures to perform the work  of  q2  (N  different
+               procedures   which   sets  up  the  environment  for  the  N
+               instances).  _T_h_i_s _r_e_q_u_i_r_e_s _m_u_c_h _t_o _m_u_c_h _w_o_r_k _t_o _i_m_p_l_e_m_e_n_t _s_o
+               _t_h_e  _p_r_o_b_l_e_m  _i_s  _l_e_f_t _u_n_s_o_l_v_e_d, this is hardly a problem in
+               practice since humans rarely write such code  but  _i_t  _c_o_u_l_d
+               _i_n_t_r_o_d_u_c_e _p_r_o_b_l_e_m_s in machine generated Pascal code.
+
+               It should be noted that the translator accepts  the  keyword
+               _e_x_t_e_r_n_a_l  in  place  of  the  Pascal  _f_o_r_w_a_r_d  directive and
+               assumes that the so declared procedure is defined elsewhere.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+9                                       - 12 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          _3._4.  _S_t_a_t_e_m_e_n_t_s.
+
+          Pascal statements are comparatively easy to translate to C.   The
+          only parts that require special care are non-local _g_o_t_o, _w_i_t_h and
+          _f_o_r statements.  The code
+
+                  program p(output);
+
+                  type
+                     msgtyp   = packed array [ 1 .. 12 ] of char;
+
+                  var
+                     a  : array [ 1 .. 10 ] of
+                           record
+                              r  : real
+                           end;
+                     i  : integer;
+                     ok : boolean;
+
+                     procedure fatal(m : msgtyp);
+
+                     begin
+                        writeln('Fatal error: ', m)
+                     end;
+
+                  begin
+                     while true do
+                       repeat
+                        ok := false;
+                        i := 1;
+                        for i := i + 1 to i + 10 do
+                           if i > 10 then
+                              fatal(' 10 exceeded')
+                           else
+                             with a[i] do
+                              if r > 9.99e+38 then
+                                 ok := true
+                              else
+                                 writeln(r)
+                       until ok
+                  end.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+9                                       - 13 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          becomes
+
+                  typedef char boolean;
+                  # define false (boolean)0
+                  # define true (boolean)1
+                  typedef int integer;
+                  typedef double real;
+
+                  typedef struct { char A[12 - 1 + 1]; } msgtyp;
+                  typedef struct { struct S57 {
+                     real  r;
+                  }  A[10 - 1 + 1]; }  T56;
+                  T56      a;
+                  integer  i;
+                  boolean  done;
+
+                   void
+                  fatal(m)
+                     msgtyp   m;
+                  {
+                     (void)fprintf(output.fp, "Fatal error: %.12s", m.A),
+                                 Putchr('\n', output);
+                  }
+
+                  main()
+                  {
+                     while (true)
+                       do {
+                        done = false;
+                        i = 1;
+                        {
+                          integer      B1 = i + 1, B2 = i + 10;
+
+                          if (B1 <= B2)
+                           for (i = B1; ; i++) {
+                              if (i > 10)
+                                 fatal(*((msgtyp *)" 10 exceeded"));
+                              else {
+                                 register struct   S57 *W3 = &a.A[i - 1];
+
+                                 if (W3->r > 9.99e+38)
+                                    done = true;
+                                 else
+                                    (void)fprintf(output.fp, "% 20e", W3->r),
+                                       Putchr('\n', output);
+                              }
+                              if (i == B2) break;
+                           }
+                        }
+                       } while (!(done));
+                     exit(0);
+                  }
+
+          for the following reasons:
+
+          _3._4._1.  _B_e_g_i_n
+
+          The compound statements are very similar in the two languages and
+          need no further explanation.
+
+
+
+
+                                       - 14 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          _3._4._2.  _I_f
+
+          Pascal if-statements have the same structure and  semantix  as  C
+          if-statments.
+
+          _3._4._3.  _C_a_s_e
+
+          Pascal case-statements have the same structure and semantix as  C
+          switch-statements  provided  that a _b_r_e_a_k is always added to each
+          entry.
+
+          The translator supports a common  Pascal  extension  in  that  it
+          recognizes  the keyword _o_t_h_e_r_w_i_s_e to signify a default entry in a
+          case-statement.
+
+          _3._4._4.  _L_a_b_e_l_s
+
+          Pascal labeled statements and labels have the same structure  and
+          semantix  as  C  labeled statements except that Pascal labels are
+          numbers where C labels are identifiers, this difference is solved
+          by simply prefixing the labels with the letter _L.
+
+          _3._4._5.  _G_o_t_o
+
+          Pascal goto-statements have the same structure as C  goto  state-
+          ments  but  the  semantix  differ in that Pascal allows a goto to
+          lead out of the current procedure.  This is implemented using the
+          _s_e_t_j_m_p/_l_o_n_g_j_m_p library functions of C as described earlier.
+
+          _3._4._6.  _W_i_t_h
+
+          The with-statement of Pascal has no  counterpart  in  C.   It  is
+          translated into nested compund statements where pointervariables,
+          referencing the corresponding records, are declared and  initial-
+          ized.   Within  the  scope  of the with-statement, the accessible
+          record fields are renamed to include the pointer.  The effect  of
+          this  is  that the record address is evaluated once as the Pascal
+          standard requires.
+
+          _3._4._7.  _F_o_r
+
+          The for-statement of Pascal has a structure that  is  similar  to
+          the  C  for-statement but the semantix differ completely.  Pascal
+          requires that a loop be exited when  the  upper  bound  has  been
+          reached,   Pascal  also  requires  that  the  loop-boundaries  be
+          evaluated exactly once.  The standard C for-loop is  exited  when
+          the  loop-condition  becomes  false.  This implies that it is not
+          always true that
+
+                  for (i = 0; i <= e; i++) ;
+
+          behaves in the same manner as
+
+                  for i := 0 to e do ;
+
+          since (in most implementations) the C version becomes an infinite
+          loop  if  _e  equals _m_a_x_i_n_t or if _e is the expression _i.  For that
+          reason Pascal for-statments are translated into  compound  state-
+          ments  where  the  upper/lower bounds of the for-loop are held in
+
+
+
+
+                                       - 15 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          local variables.  It is  also  necessary  to  add  a  conditional
+          break-statement at the end of the loop.  It is possible to obtain
+          the  more  relaxed  translation  by  configuring  the  translator
+          appropriately (see "Tuning" below).
+
+          _3._4._8.  _W_h_i_l_e
+
+          The while-statement behaves exactly the same in both languages.
+
+          _3._4._9.  _R_e_p_e_a_t
+
+          The repeat-statement of Pascal matches the do-while statement  of
+          C  except  for  the  trivial  difference  that  Pascal  permits a
+          statement-list where C permits a single statment in the loop.
+
+          _3._4._1_0.  _E_m_p_t_y
+
+          The empty statement has (of course) the same structure and seman-
+          tix in both languages.
+
+          _3._5.  _E_x_p_r_e_s_s_i_o_n_s _a_n_d _a_s_s_i_g_n_m_e_n_t_s
+
+          In most cases Pascal expressions can be literally translated into
+          equivalent C expressions.
+
+          identifiers    Except where identifiers clash with reserved words
+                         or  with  other  identifiers  declared in the same
+                         scope, they may simply be printed.  In some  cases
+                         the  translator is forced to rename identifiers or
+                         to invent new identifiers.
+
+          operators      The operators +, -, * _d_i_v and _m_o_d when applied  to
+                         real  or  integer operands have exact counterparts
+                         in C and are therefore easy to handle.  The opera-
+                         tor  for real division, /, corresponds to the same
+                         C  operator  except  that  the  operands  may   be
+                         integers.  In that case a cast is necessary.  When
+                         the operands are sets the expression is  converted
+                         into a function call.
+
+                         The operators <, <=, >, >=,  =  and  <>  all  have
+                         exact  counterparts  in  C  for  integer  and real
+                         operands.  Most C implementations  disallows  _e_n_u_m
+                         operands,  the  translator  therefore  casts  such
+                         operands to _i_n_t.  Comparisons on structures  (i.e.
+                         strings  or  sets)  are  converted  into  function
+                         calls.
+
+          assignments    Assignments are straightforward  to  handle  since
+                         arrays are encapsulated in structures.  Therefore:
+
+                                 a := b
+
+                         becomes
+
+                                 a = b
+
+                         _u_n_l_e_s_s b is a string or a set, in which  case  the
+                         assignment is converted into a function call.
+
+
+
+
+                                       - 16 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          indexing       Given  the  translation  for  array   declarations
+                         (described above) we are forced to translate
+
+                                 a[i]
+
+                         into
+
+                                 a.A[i - c]
+
+                         where _c is the lower bound for the index type.
+
+          selection      Given the translation for  records  with  variants
+                         (described above) the translation of
+
+                                 a.b
+
+                         becomes
+
+                                 a.b
+
+                         _o_r, if b is declared in a variant,
+
+                                 a.Vxxx.b
+
+                         where Vxxx is a name manufactured by the  transla-
+                         tor for the particular variant.
+
+          dereferencing  Pointer references and _v_a_r-parameters are  handled
+                         by  prefixing the expression with an asterisk, but
+                         the special case dereferencing followed by  selec-
+                         tion is also recognized, so:
+
+                                 p^ := q^.f
+
+                         becomes
+
+                                 *p = q->f
+
+
+          miscellanea    The boolean operators _a_n_d, _o_r and _n_o_t  are  simply
+                         translated  into  their  C  counterparts.  The set
+                         contructors [], and ..  and the  operator  _i_n  are
+                         converted to function calls.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+9                                       - 17 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          _4.  _I_m_p_l_e_m_e_n_t_a_t_i_o_n
+
+          The general strategy is to convert the Pascal source program into
+          a  parsetree.   The tree is then traversed by a set of procedures
+          that perform some necessary transformations.  The tree is finally
+          traversed  by  a set of procedures that print the corresponding C
+          constructs.  The translator consists of  three  major  procedures
+          that  perform these actions.  They are augmented by a set of pro-
+          cedures that maintain a symbol table that holds information about
+          identifiers found in the source, and by a procedure that initial-
+          izes all internal datastructures.
+
+          There are three major datastructures that interact in complicated
+          ways:
+
+          1)   a store for identifiers and strings
+
+          2)   a multilevel symbol table
+
+          3)   a parse-tree.
+
+          The identifier and string store, _s_t_r_s_t_o_r is in principle an array
+          of  characters  that  grow  in  increments  of  one string block.
+          Exactly one copy of each identifier  is  stored  in  that  array.
+          Whenever  an identifier is found in the input stream the array is
+          scanned to see if that identifier has been seen before.  In order
+          to  speed  up the search all identifiers are represented by nodes
+          which are chained together such that all nodes  in  a  particular
+          chain have the same hashvalue as determined by the function _h_a_s_h.
+          Each _i_d_n_o_d_e holds an index to  strstor  where  the  corresponding
+          identifier text is stored.  The start of the hashchains are found
+          in the global variable _i_d_t_a_b.
+
+          idtab
+          +----+
+          |  |  chain of idnodes with same hashvalue
+          +----+  +--------+  +--------+
+          |  |----->|     |----->|     |idnode representing
+          +----+  |     |   index=2|     |identifier "demo"
+          |  |  +--------+  +--------+
+
+             strstor
+          +------------ - --------+
+          |  |  |     |  |
+          +------------ - --------+|
+            |
+
+          +--------------------------------
+          |  |  |d |e |m |o |/ |
+          +--------------------------------   first idblock
+                 |^
+                index=2
+
+
+          So: the global representation of the identifier "demo" is a  par-
+          ticlular idnode; whenever the lexical analysis routine recognizes
+          the identifier "demo" it returns a pointer to that idnode.
+
+9
+
+
+
+9                                       - 18 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          In order to represent different identifiers with the same name we
+          need  to  be  able to distinguish between identifiers declared in
+          different scopes.  This is accomplished  by  the  _s_y_m_n_o_d_e  struc-
+          tures.   When an identifier is first encountered in a given scope
+          it is "declared", meaning that a  new  symnode  is  created  that
+          references the identifier.  Occurrences of the same identifier in
+          that scope are then represented in the  parse-tree  by  treenodes
+          referencing the same symnode.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+9                                       - 19 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          The program:
+
+                  program p;
+
+                  var   demo  : integer;
+
+                  begin
+                     demo := 3
+                  end.
+
+          yilds the following structure:
+
+             top
+
+             +----------------+treenode representing
+              npgm|           |the program
+             +----|-----|-----|-----+
+                |  | |^| |^
+                |  | || +-----------------------------+
+                |  | |+----------------------------+ |
+                |    |                     | |
+                | +-----|-------+treenode representing| |
+                |  nvar|      |the var-declaration|
+                | +---|----|-----+        +---------------|---+treenode repr.
+                |  | |^|            nassign|           |assignment
+                |  | |+-------> to type+----|---------|-----+
+          symtab|    |                 |^     |^
+          +----+  | +-----|---+treenode repr.+-------|---+ +-----|-------+
+          |  |<------+  nid|   |occurrence ofnid|     |  ninteger|      |
+                  +--|-----+id. "demo" +----|-----+ +------|-----+
+          |  |     | |^               |        | |^
+          +----+     | |+--------------------+        | |
+          |  |       |                          |
+          +----+  +-------|-------+symnode representing+-------|------+
+          |  |----->    lidentifier|        |identifier "demo" linteger|       |
+          +----+  +----|---------+in the current scopelinum=3|       |
+                   |                       +-----------+
+          idtab    +------------+
+          +----+              |
+          |  |
+          +----+  +--------+  +--------+
+          |  |----->|     |----->|     |idnode representing
+          +----+  |     |   index=2|     |identifier "demo"
+          |  |  +--------+  +--------+
+
+             strstor
+          +------------ - --------+
+          |  |  |     |  |
+          +---|----------- - --------+
+            |
+
+          +--------------------------------
+          |  |  |d |e |m |o |/ |
+          +--------------------------------   first idblock
+                 |^
+                index=2
+
+          We see that the two occurrences  of  the  identifier  "demo"  are
+          represented  by  two  _t_r_e_e_n_o_d_e_s  of  variant  _n_i_d  that both have
+
+
+
+
+                                       - 20 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          pointers to the same  _s_y_m_n_o_d_e  representing  the  declaration  of
+          "demo".   All  symnodes  at  a given declarationlevel are chained
+          together (in the same manner as the idnodes) and the  chains  are
+          attached  to the global variable _s_y_m_t_a_b.  In order to find out if
+          an identifer is declared in the current scope we scan  the  chain
+          of symnodes starting from symtab, and check if any of them refer-
+          ences the idnode we are looking  for.   A  symnode  also  have  a
+          pointer  to  the  treenode which defines the symbol.  The _s_y_m_t_a_b_s
+          themselves are also chained, the  chain  implements  a  stack  of
+          declarationlevels.  The symtab which is created when the scope of
+          a procedure is entered is also attached to that procedure.   When
+          a  procedure  is entered we create a new symtab, push it onto the
+          stack, parse the procedure and pop the stack.  The  symbols  then
+          visible are those that still can be reached from the stack.
+
+          The parse-tree consists of _t_r_e_e_n_o_d_e_s representing  each  declara-
+          tion,  statement,  expression etc.  Each node except the nprogram
+          node has a pointer to its immediate father (giving  the  defining
+          point),  to its children (if it has any) and to its right brother
+          (if it is a member of a list).  The top of the tree is  found  in
+          the global variable _t_o_p.
+
+          In order to find the defining point for  the  identifier  in  the
+          assignment,  we  follow pointers from the nassign-treenode to the
+          nid-treenode, to the lidentifier-symnode,  and  then  up  to  the
+          nid-treenode  in the declaration.  If we want to know the type of
+          the identifier we proceed up to the nvar-treenode and  then  down
+          to  the  node  giving the type in the declaration (in our example
+          that node would also be a nid-treenode  referencing  a  linteger-
+          symnode  that  represents  the identifier "integer").  There is a
+          function _t_y_p_e_o_f that performs exactly this  operation.   It  will
+          return  a  pointer  to  a  npredef-,  nsubrange-, nscalar-, nptr-
+          narray-, nrecord-, nfileof- or nsetof-treenode.  In  those  cases
+          where  the  translator  pays attention to types it uses a pointer
+          (obtained from typeof) as representation of a type.
+
+          Given the parse-tree and the layered symbol table it is not  hard
+          to see how the translations described earlier are performed.  The
+          one place where the code becomes more  than  usually  complex  is
+          when  a  _w_r_i_t_e  statement  with  format  specifications  is to be
+          translated into a call to _f_p_r_i_n_t_f.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+9                                       - 21 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          _5.  _T_u_n_i_n_g
+
+          The behaviour of the translator may be modified  for  some  cases
+          simply by changing constants.  These constants are all located at
+          the top of the program text.
+
+          output      The translator will copy the source during  input  if
+                      the  constant _e_c_h_o is true.  The copy is preceeded by
+                      the line
+
+                              # ifdef PASCAL
+
+                      and ended by the line
+
+                              # else
+
+                      and then follows the translated code and finally
+
+                              # endif
+
+                      This may be used to hold both Pascal and C source  in
+                      the  same  file.  If the Pascal part is changed the C
+                      part may be updated through:
+
+                                 cpp -P -DPASCAL < orig > tmp
+                                 ptc < tmp > new
+                                 move new orig
+
+                      assuming that _e_c_h_o is true and that _c_p_p is the  stan-
+                      dard C preprocessor.
+
+                              Default value:
+
+                                 echo     = false;
+
+
+          comments    The translator recognizes both (* and  {  as  comment
+                      delimiters.   They are treated as different, allowing
+                      1 level nested comments, if the constant  _d_i_f_f_c_o_m  is
+                      true.
+
+                              Default value:
+
+                                 diffcomm = false;
+
+
+          symbols     The  translator  accepts  default  entries  in  case-
+                      statements  provided that the keyword defined through
+                      _o_t_h_e_r_s_y_m is used in place of the constant list.
+
+                              Default value:
+
+                                 othersym = 'otherwise ';
+
+                      substitute for
+
+                                 othersym = 'otherwise%';
+
+                      if that feature is undesired.
+
+
+
+
+                                       - 22 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9                      The translator accepts externally declared procedures
+                      and  functions  provided  that  the directive defined
+                      through _e_x_t_e_r_n_s_y_m is used in  place  of  the  keyword
+                      _f_o_r_w_a_r_d.
+
+                              Default value:
+
+                                 externsym   = 'external  ';
+
+
+          sets        Sets are implemented as arrays of _w_o_r_d_t_y_p_e.  The type
+                      is assumed to hold _s_e_t_b_i_t_s + _1 bits numbered from 0.
+
+                              Default value:
+
+                                 wordtype = 'unsigned short';
+                                 setbits  = 15;
+
+
+          files       The implementation of files uses  a  flag-word  which
+                      has  the  type  given as _f_i_l_e_b_i_t_s which is assumed to
+                      hold _f_i_l_e_f_i_l_l + _4 bits.
+
+                              Default value:
+
+                                 filebits = 'unsigned short';
+                                 filefill = 12;
+
+
+          stmts       If the Pascal source is known to be "normal"  in  the
+                      sense  that for-loops always have an upper bound that
+                      is less than the maximum value of  the  type  of  the
+                      loop-variable,  and in the sense that the upper bound
+                      doesn't change by computations inside the loop,  then
+                      the  translator  may  generate  a  more natural code.
+                      I.e:
+
+                              for i := 1 to 10 do ;
+
+                      becomes
+
+                              for (i = 1; i <= 10; i++) ;
+
+                      Since the requirements cannot be  determined  by  the
+                      translator itself this kind of code is generated when
+                      the constant _l_a_z_y_f_o_r is true.
+
+                              Default value:
+
+                                 lazyfor  = false;
+
+
+
+
+
+
+
+
+9
+
+
+
+9                                       - 23 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9          new         The second and following parameters to the  procedure
+                      _n_e_w  will  be  ignored  if  the  constant _u_n_i_o_n_n_e_w is
+                      false.
+
+                              Default value:
+
+                                 unionnew = true;
+
+
+          strings     All identifiers and strings are stored in the  trans-
+                      lator  with  the special character having the ordinal
+                      value _n_u_l_l as endmarker.  Hence, that  character  can
+                      not occur in strings in the Pascal source.
+
+                              Default value:
+
+                                 null     = 0;
+
+
+          types       The names of predefined types are given by  the  con-
+                      stants: _i_n_t_t_y_p, _c_h_a_r_t_y_p, _f_l_o_a_t_t_y_p, and _d_o_u_b_l_e_t_y_p.
+
+                              Default value:
+
+                                 inttyp      = 'int';
+                                 chartyp  = 'char';
+                                 floattyp = 'float';
+                                 doubletyp   = 'double';
+
+                      The typename for real variables and functions defined
+                      by the user is given by the constant _r_e_a_l_t_y_p.
+
+                              Default value:
+
+                                 realtyp  = doubletyp;
+
+                      The typename for procedures is given by the  constant
+                      _v_o_i_d_t_y_p.
+
+                              Default value:
+
+                                 voidtyp  = 'void';
+
+
+          i/o         The default fieldwidths for integer and  real  values
+                      written  on  textfiles  are  given  by  the constants
+                      _i_n_t_l_e_n and _f_i_x_l_e_n.
+
+                              Default value:
+
+                                 intlen   = 10;
+                                 fixlen   = 20;
+
+
+          types       A table in the translator gives the mapping from Pas-
+                      cal  integer  subrange  types  to C arithmetic types.
+                      The table is initialized by code located at  the  end
+                      of  procedure _i_n_i_t_i_a_l_i_z_e giving the following default
+                      configuration:
+
+
+
+
+                                       - 24 -
+
+
+
+9
+
+          Holistic Technology AB         PTC            HD870410-1 Rev: 1.6
+
+9                      Low bound     High bound   Selected type
+
+                                0          255   unsigned char
+                             -128          127   char
+                                0        65535   unsigned short
+                           -32768        32767   short
+                      -2147483647   2147483647   long
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+9                                       - 25 -
+
+
+
+9

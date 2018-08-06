@@ -1,0 +1,14 @@
+Code 01                                  -Request Sense
+
+Input registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    A SCSI Request Sense is issued to the specified disk. The results of the 
+    command are converted to the BIOS Error Code and returned in AH/AL.
+
+    Pre 4.0L, 1.0E, 5.0C BIOS used the non-extended request sense format, and
+    the four bytes returned by the device are stored in the data table 
+    (except 5.X series).

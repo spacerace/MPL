@@ -1,0 +1,14 @@
+NAME     Crdisbit
+
+DESCRIPTION 'Sample Microsoft Windows Application'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  1024
+STACKSIZE 4096
+
+EXPORTS

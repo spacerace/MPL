@@ -1,0 +1,28 @@
+        Computer Language, Vol 2, No. 2 (February, 1985), published "C to
+Assembly Interface", by Brian H. Burger, on pages 49-59.  Listings 1 and 2 of
+that article each included a batch of garbage at their start.  File CASM.LBR
+dutifully copied these listings exactly under the titles CASM.1 and CASM.2.  In
+addition, it copied Listing 3 into CASM.3 and modified Listing 2 into CASM.4 to
+demonstrate listing 3.
+
+     The article contains two display interfaces for Lattice C.  I have
+retitled the files to reflect the names of the programs, and I have added .OBJ
+files for them.  The original test programs contained quite good #defines and
+macros to use these programs.  I have broken them into include files DSPIO.H
+and DISPIO.H and test files TDSPIO.C and TDISPIO.C.
+
+        DSPIO is a simpler and smaller.  DISPIO is faster and has a cleaner
+interface for setting the cursor position.
+  
+  DSPIO    ASM    Listing 1
+  DSPIO    OBJ    Listing 1
+  DSPIO    H      Listing 2
+  TDSPIO   C      Listing 2
+  DISPIO   ASM    Listing 3
+  DISPIO   OBJ    Listing 3
+  DISPIO   H      Listing 4
+  TDISPIO  C      Listing 4
+  READ     ME     This file
+
+  
+

@@ -1,0 +1,9 @@
+#--------------------
+# PATTERNS make file
+#--------------------
+
+patterns.obj : patterns.c
+     cl -c -G2sw -W3 patterns.c
+
+patterns.exe : patterns.obj patterns.def
+     link patterns, /align:16, NUL, os2, patterns

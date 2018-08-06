@@ -1,0 +1,19 @@
+#-------------------
+# SQABOUT make file
+#-------------------
+
+sqabout.obj : sqabout.c aboutbox.h
+     cl -c -G2sw -W3 sqabout.c
+
+sqbtn.obj : sqbtn.c
+     cl -c -G2sw -W3 sqbtn.c
+
+sqabout.res : sqabout.rc aboutbox.h aboutbox.ico
+     rc -r sqabout
+
+sqabout.exe : sqabout.obj sqbtn.obj sqabout.def
+     link sqabout sqbtn, /align:16, NUL, os2, sqabout
+     rc sqabout.res
+
+sqabout.exe : sqabout.res
+     rc sqabout.res

@@ -1,0 +1,471 @@
+
+In order to save paper, the following function descriptions are 
+"squashed" together.  You can use your favorite word processor
+to print them out, one per page, if you prefer... 
+
+
+;------------------------------------------------------------
+; name		crt_ps320sg 
+;
+; synopsis	crt_ps320sg(segment, offset, row, col, color)
+;		int	segment;	/* 0xb000=mono    0xb800=color	*/
+;		int	offset;		/* use 0 for graphics adaptor	*/
+;		int	row;		/*  row number 0 to 199		*/
+;		int	col;		/*  col number 0 to 399		*/
+;		int	color;		/*  color      0 to 3		*/
+;
+; description	This subroutine sets a point on the 320 x 200
+;		graphics screen.  Hand coded in assembly, It
+;		operates 8 - 10 times faster than the corres-
+;		ponding BIOS call.  
+;
+; notes		This routine will treat any passed segment value 
+;		like an interlaced graphics adaptor.  It could 
+;		just as well be a block of memory that has been
+;		allocated, (i.e. a graphics buffer that is to be moved
+;		to the screen after a group of points are set ),
+;		or some other segment value for a non-PC compatible
+;		display.  If you are addressing the display adaptors,
+;		use an offst of 0.  If you are handling a buffer, use
+;		the buffers segment and offset.  Large model pointers
+;		must be broken into segment and offset which are 
+;		passed separately.  
+;		
+;		This routine handles graphics interlacing 
+;		(normal IBM PC graphics).  It would not function
+;		on a machine that does not interlace graphics -
+;		i.e. the Tandy T2000.
+;
+;		If you pass the correct segment value based on the 
+;		equipment flag setting, this routine will work on
+;		both a color and mono display adaptor.
+;		 
+; bugs		row, col, and color are not validated - make sure
+;		they are in range or you could crash the system. 
+;
+;------------------------------------------------------------
+
+
+;------------------------------------------------------------
+;
+; name		crt_setborder - set border color 
+;
+; synopsis	VOID	crt_setborder(color)
+;			int	color;
+;
+; description	set border to specified color (0-15)
+;
+;------------------------------------------------------------	
+
+
+;------------------------------------------------------------
+;
+; name		crt_cls - clear screen using BIOS scroll up call
+;
+; synopsis 	VOID	crt_cls()
+;
+;
+; description	This function clears your 80 x 24 screen using the
+;		BIOS scroll up function.  For graphics uses, you
+;		should use crt_scrollu with the appropriate 
+;		background attribute - crt_cls assumes text mode.
+;
+;
+; notes		This routine works only on the currently selected 
+;		(active) page.  It uses the "normal" (07) attribute
+;		on scrolled lines.  Unlike the CI-C86 function with
+;		the same name, it does not home the cursor.   
+;
+;------------------------------------------------------------
+
+
+
+;------------------------------------------------------------
+;
+; name		crt_cls2 -- clear screen or graphics buffer
+;
+; synopsis	crt_cls2(segment,offset)
+;			int segment;	
+;			int offset;
+;
+;
+; description	this routine uses the REP MOVSW instruction for fast
+;		clearing of the screen or a graphics buffer. Use segment
+;		0xb000 and offset 0 for mono, segment 0xb800 and offset
+;		0 for color.  To clear a graphics buffer, use the appro-
+;		priate segment and offset values.  Large model pointers
+;		must be separated into segment and offset values which
+;		must be passed separately.
+;
+; notes		on some machines, this routine is significantly faster
+;		than a screen clear using the BIOS screen scroll up
+;		routine.  
+;
+;		DI register destroyed.  ES register used and
+;		then restored.
+;
+;		If used in text modes, it clears ALL text pages.
+;------------------------------------------------------------
+
+
+
+;------------------------------------------------------------
+;
+; name		crt_getca - get character and attribute at cursor position
+;
+; synopsis	VOID	crt_getca(page)
+;			int	page;
+;  
+; description	Reads character and attribute under cursor on
+;		video page number "page". On return, character
+;		in low byte ( ch = crt_getca(0) & 255), and 
+;		attribute is in high byte ( atr = crt_getca(0) >> 8).
+; 
+; notes		use crt_gotoxy to position cursor to desired row, 
+;		col, and page. 
+;
+;------------------------------------------------------------
+
+
+;------------------------------------------------------------
+;
+; name		crt_getxy - get current cursor setting
+;
+; synopsis	int	crt_getxy(page)
+;			int 	page;
+;  
+; description	returns the current cursor setting in page # "page".
+;		In text mode, it is possible to have up to 8 different 
+;		pages, all with different cursor settings. 
+;
+; example	rc = crt_getxy(0);
+;		column =  rc & 0xff;	/* col is lower byte		*/
+;		row    =  rc >> 8;	/* row is upper byte  		*/
+;					/* an interesting alternative	*/
+;					/* to the above: row=rc % 0x100	*/
+;
+;------------------------------------------------------------
+
+
+;------------------------------------------------------------
+;
+; name		crt_gotoxy - cursor set
+;
+; synopsis	VOID	crt_gotoxy(row, col, page)
+;			int row;
+;			int col;
+;			int page;
+;
+; description	This function does a cursor position set to 
+;		row, col on the specified page.  (0--7 in 40
+;		column mode; 0--3 in 80 column mode)  It does
+;		not, however actually change the current text
+;		page. (See crt_setpage function)
+;
+;------------------------------------------------------------
+
+
+;------------------------------------------------------------
+;
+; name		crt_home -- home cursor on given page
+;
+; synopsis	VOID crt_home(page)
+;			int	page;
+;
+; description	sets cursor to 0,0 on selected page.  This routine 
+;		differs slightly from the CI-C86 function with the
+;		same name - the CIC86 function always assumes page 0.
+;
+; notes		There is basically no difference between doing a
+;		crt_home and a crt_goto to row 0, col 0. 
+;
+;	 
+;------------------------------------------------------------
+
+
+
+
+/************************************************************
+ *
+ * name		crt_line -- plot lines w/ BIOS point set routine
+ *
+ * synopsis	crt_line(row1,col1,row2,col2,color);		
+ *		int row1,col2,row2,color;
+ *
+ * description	This routine uses an octantal DDA to plot 
+ *		lines on your graphics screen.  The screen 
+ *		needs to be set to graphics mode, of course...
+ *
+ * notes	This routine is still written in 'C'.  It is faster 
+ *		than many of the other line draw routines I have seen
+ *		around, but still relatively slow compared to assembler.
+ *
+ *		Since this routine uses the BIOS point set routine,
+ *		it will run on color or mono display adaptors, in
+ *		any supported graphics mode.  The disadvantage of 
+ *		using the BIOS point set routine is that it is
+ *		extremely slow.....  The speed of this routine is
+ *		entirely limited by the speed of the BIOS pset call. 
+ * 
+ * bugs		Better be sure that your x and y values are in range
+ *		no range checking is done.
+ ********************************************************************/
+
+
+
+/******************************************************************
+ *
+ * name		crt_line320 -- plot lines w/ fast 320x200 point routine
+ *
+ * synopsis	crt_line320(row1, col2, row2, col2, color)
+ *		int row1,col2,row2,col2,color;
+ *
+ * description	This routine uses a simple octantal DDA to plot 
+ *		lines on your 320 x 200 COLOR graphics screen.  The
+ *		screen needs to be set to graphics mode, of course...
+ *
+ * notes	This routine is still written in 'C'.  It is faster 
+ *		than many of the other line draw routines I have seen
+ *		around, but still relatively slow compared to assembler.
+ *		Next released version of the libraries will have this 
+ *		one written in assembler...
+ *
+ *		Works only in 320x200 color graphics mode!!
+ * 
+ * bugs		Better be sure that your x and y values are in range
+ *		no range checking is done.
+ ********************************************************************/
+
+
+
+;------------------------------------------------------------
+;
+; name		crt_setmode - set screen mode
+;
+; synopsis	VOID	crt_setmode(mode)
+;			int	mode;
+;
+; description      Set screen to graphics or text mode.
+;
+;
+;		TEXT MODES
+;		-------------------------------
+;		0	=	40 x 25  monochrome
+;		1	=	40 x 25  color		
+;		2	=	80 x 25  monochrome	
+;		3	=	80 x 25  color		
+;
+;		GRAPHICS MODES
+;		-------------------------------
+;		4	=	320 x 200 color		
+;		5	=	320 x 200 monochrome	
+;		6	=	640 x 400 monochrome	
+;		7	=	unknown
+;
+;		OTHER MODES	(some require HI-RES board)
+;		-------------------------------
+;		8	=	640 x 400 color		
+;		9	=	640 x 400 monochrome	
+;     	       10	=	160 x 200 color (16 colors)
+;
+;------------------------------------------------------------
+
+
+;------------------------------------------------------------
+;
+; name		crt_getmode -- get current video mode
+;
+; synopsis	int	crt_getmode()
+;
+; description	Returns current value of mode setting.
+;		See set_mode for further info about modes.
+;
+;------------------------------------------------------------
+
+
+
+;------------------------------------------------------------
+;
+; name		crt_pread -- return color of pixel on graphics screen 
+;
+; synopsis	int color;
+;		color = crt_pread(row, col);
+;		int  row, col;
+;
+; description	This routine reads the color of the pixel on
+;		a graphics screen.  It uses the BIOS "read-a-
+;		points-color" routine, so it functions on any
+;		type of monitor and under all graphics modes.
+;
+; notes		I  have no idea what happens if you attempt to call
+;		the BIOS routine with crazy row and column values.
+;
+;------------------------------------------------------------
+
+
+
+;------------------------------------------------------------
+; name		crt_ps320 
+;
+; synopsis	crt_ps320(row,col,color)
+;		int	row;		/*  row number 0 - 199	*/
+;		int	col;		/*  col number 0 - 399	*/
+;		int	color;		/*  color      0 - 3	*/
+;
+; description	This subroutine sets a point on the 320 x 200
+;		graphics screen.  Hand coded in assembly, It
+;		operates 8 - 10 times faster than the corres-
+;		ponding BIOS call.  
+;
+; notes		This is a COLOR ONLY routine since it assumes
+;		that a color adaptor is available in the 0xb800 
+;		segment.
+;		
+;		This routine handles graphics interlacing 
+;		(normal IBM PC graphics).  It would not function
+;		on a machine that does not interlace graphics -
+;		i.e. the Tandy T2000.
+;
+;		If you need a routine that works on both mono 
+;		and color, see crt_320s or crt_pset
+;		 
+; bugs		row, col, and color are not validated -- make sure
+;		they are in range or you could crash the system. 
+;
+; 
+;
+;------------------------------------------------------------
+
+
+
+;------------------------------------------------------------
+;
+; name		crt_pset -- use BIOS call to set point
+;
+; synopsis	crt_pset( row, col, color)
+;		int	row,col,color;
+;
+; description	this routine uses the BIOS "set a point call", so it 
+;		can be used in mono or color in any graphics mode.  The
+;		major draw--back to using the BIOS call is that it
+;		is SLOOOOW when compared to routines that set points
+;		in specific graphics modes.
+;
+; notes		legal row, col, and color values depend on the 
+;		particular graphics modes set.
+;
+;------------------------------------------------------------
+
+
+
+;------------------------------------------------------------
+;
+; name		crt_putcamult -- put multiple characters with attribute
+;
+; synopsis	VOID	crt_putcamult(ch, page, count)
+;		int ch, page, count;
+;
+;  
+; description	write character and attribute at current cursor location
+;		high byte of ch is attribute, low byte is character
+;
+;		page is page # to place text on (text modes only)
+;
+;		Count is # of times to put character (good for top
+;		and bottom of boxes).
+;
+;------------------------------------------------------------
+
+
+;------------------------------------------------------------
+;
+; name		crt_putch -- put character only at current cursor
+;
+; synopsis	VOID	crt_putch(ch, page, count)
+;			int ch, page, count;
+;
+;  
+; description	Write character only at current cursor location --
+;		existing attributes are used.
+;
+; notes		Page is page # to place text on (text modes only).
+;
+;		Count is # of times to put character.
+;
+;------------------------------------------------------------
+
+
+
+;------------------------------------------------------------
+;
+; name		crt_scrolld -- scroll screen down
+;
+; synopsis	VOID	crt_scrolld(ulrow,ulcol,lrrow,lrcol,count,attrib)
+;
+;		int	ulrow;		upper left row
+;		int	ulcol;		upper left column
+;		int	lrrow;		lower right row
+;		int	lrcol;		lower right column
+;		int	count;		# lines to scroll ( 0=whole window )
+;		int	attrib;		attribute used on blank lines
+;
+; description	scrolls the window specified by "ulcol", "ulrow",
+;		"lrcol", "lrrow" down by "count" lines using "attrib"
+;		on each blank line.  If "count" is 0, the entire
+;		screen is scrolled.
+;
+;------------------------------------------------------------	
+
+
+;------------------------------------------------------------
+;
+; name		crt_scrollu -- scroll screen up
+;
+; synopsis	VOID	crt_scrollu(ulrow,ulcol,lrrow,lrcol,count,attrib)
+;		int	ulrow;		upper left row
+;		int	ulcol;		upper left column
+;		int	lrrow;		lower right row
+;		int	lrcol;		lower right column
+;		int	count;		# lines to scroll ( 0=whole window )
+;		int	attrib;		attribute used on blank lines
+;
+; description	scrolls the window specified by "ulcol", "ulrow",
+;		"lrcol", "lrrow" up by "count" lines using "attrib"
+;		on each blank line.  If "count" is 0, the entire
+;		screen is scrolled.
+;
+;------------------------------------------------------------	
+
+
+;------------------------------------------------------------
+;
+; name		crt_setpage -- set current text page
+;
+;
+; synopsis	VOID	crt_setpage(page)
+;			int	page;
+;  
+; description	Sets current active video page number to "page".
+;		Used in text mode only.  Valid page #'s are 0--3 for
+;		80 x 25 display and 0--7 for 40 x 25 display. 
+;
+;
+;------------------------------------------------------------
+
+
+;---------------------------------------------------------------
+;
+; name		msc_getversion	- get library version
+;
+; synopsis	int vers;
+;		vers = msc_getversion();
+;
+;		printf("\nlibrary version:  %2d . %02d",vers>>8,vers&255);
+;
+; description:	returns library version which can be printed as in
+;		the synopsis above.
+;
+;--------------------------------------------------------------
+
+
+

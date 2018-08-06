@@ -1,0 +1,7 @@
+
+bgnpaint.obj: bgnpaint.c
+   cl -c -W2 -AS -Gsw -Od -Zped bgnpaint.c
+
+bgnpaint.exe: bgnpaint.obj bgnpaint.def
+   link4 bgnpaint,/align:16,/map/li,slibw/NOE,bgnpaint.def
+   mapsym bgnpaint

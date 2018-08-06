@@ -1,0 +1,39 @@
+
+
+       NAME
+               mktone -- make a tone to the speaker
+
+       SYNOPSIS
+               #include "sound.h"
+               void mktone(freq, update, delay);
+               int freq;       frequency of tone
+               int update      speaker control command
+               int delay       value to delay before returning
+
+       DESCRIPTION
+       This is a very simple function to make a tone on the IBM speaker
+       using the standard timer controller.  The frequency is an integer
+       which increases the pitch of the tone with decreasing values.
+       the delay is an integer which is used in a very simple "for" loop
+       to control duration of the tone.  A value of 0 is no delay.
+       The update integer is defined in sound.h as follows:
+              if update == UPDATE  just send frequency and delay
+              if update == TOGGLE  turn sound off after delay is complete
+              else  turn sound on and leave it on when returning
+       Any tone may be turned off by setting freq to 0.  In this case,
+       update and delay values are ignored and may be set to any value.
+
+       EXAMPLE
+             #include "sound.h"
+             mktone(1000, TOGGLE, 1000);  /* make a short beep */
+
+             mktone(1000, ON, 0);         /* turn a tone on */
+             mktone(0, 0, 0);             /* turn a tone off */
+
+             mktone(2000, ON, 0);         /* turn a tone on */
+             mktone(1000, UPDATE, 0);     /* raise the pitch */
+             mktone(0, 0, 0);             /* turn it off */
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

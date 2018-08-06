@@ -1,0 +1,7 @@
+
+gray.obj: gray.c
+   cl -c -W2 -AS -Gsw -Od -Zped gray.c
+
+gray.exe: gray.obj gray.def
+   link4 gray,/align:16,/map/li,slibw,gray.def
+   mapsym gray

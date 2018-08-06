@@ -1,0 +1,27 @@
+# Makefile for MSGBOX
+# Created by Microsoft Corp., 1988
+#
+
+# Abbreviations
+#
+CC	=	cl -c -G2s -Od -W3 -Zpei
+LF	=	/align:16 /codeview /map /NOD
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+# Dependencies
+#
+msgbox.res:	msgbox msgbox.h msgbox.rc
+
+msgbox.obj:	msgbox msgbox.c msgbox.h
+
+msgbox.exe:	msgbox msgbox.def msgbox.obj msgbox.res
+    link $(LF) msgbox, msgbox.exe, msgbox.map, os2 slibce, msgbox.def
+    rc msgbox.res msgbox.exe
+    mapsym msgbox

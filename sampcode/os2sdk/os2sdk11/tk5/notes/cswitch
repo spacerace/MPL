@@ -1,0 +1,88 @@
+When compiling a C program for PM, here are some points to note:
+----------------------------------------------------------------
+
+Segment setup
+-------------
+
+There are 3 switches which specify segment setup (note that SS never changes):
+
+-Ad	SS==DS.
+	SS and DS are loaded with the same value when the program
+	starts up and are assumed to be the same later on.
+	This is the default.
+
+-Aw	SS!=DS, DS not reloaded on function entry.
+	SS is not assumed to equal DS, so if DS must contain the same value
+	as SS for some operation, DS is pushed, loaded, used and popped.
+
+-Au	SS!=DS, DS reloaded on function entry, for all functions.
+	At the beginning of each function, DS is pushed
+	then loaded with the module's data segment (usually DGROUP).
+	At the end of each function, DS is popped.  Also, any other
+	time DS must be changed, it is pushed, loaded, used and popped.
+	The _loadds keyword has the same effect, but on a
+	function-by-function basis.
+
+If you have a thread whose stack lies outside the default data segment
+(eg. obtained by a call to DosAllocSeg, or if you compile large-model and
+use malloc()), you must specify SS!=DS.  Multi-threaded apps nearly always
+have SS!=DS.
+
+Any routine which is called by code which uses a different data segment
+(different value in DS) must use the _loadds keyword.  Your program will
+execute correctly if you use the -Au switch, but this switch generates DS
+save, load and restore code for all functions, even ones which use the same
+data segment.  Generally, only window procedures or dll entry points need
+this code.
+
+Summary:
+If your program has multiple threads
+	Use the -Aw switch
+Else
+	Use the -Ad switch
+
+Use the _loadds keyword when declaring window procedures and dll entry points.
+
+
+
+Window procedures
+-----------------
+
+The preferred method of typing window procedures is to use the
+CALLBACK keyword, defined in os2def.h:
+
+#define CALLBACK pascal far _loadds
+
+Note that window procedures need not be exported in PM (unlike Windows).
+
+The -Gw switch should not be used for PM application programs, since it
+causes unnecessary code to be emitted.	It will not cause incorrect
+execution, but it is wasteful.
+
+
+
+C switches used in the samples
+------------------------------
+
+-Zi	causes symbolic information used by CodeView to be generated
+
+-Zp	packs structure members
+
+-Gs	turns off stack checking.  Useful if SS!=DS and C runtime libraries
+	are used.
+
+-G2	causes 286 instructions to be generated
+
+-Gc	makes the Pascal calling convention the default
+
+-Od	disables optimization.	Useful when running CodeView.
+
+-NT	sets the name of the text (code) segment
+
+-c	compiles without linking
+
+-u	removes definitions of all predefined identifiers
+
+-J	changes the default type for char from signed to unsigned
+
+-W3	sets the compiler output warning level to its most sensitive

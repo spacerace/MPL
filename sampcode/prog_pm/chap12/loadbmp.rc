@@ -1,0 +1,7 @@
+/*---------------------------------
+   LOADBMP.RC resource script file
+  ---------------------------------*/
+
+#include "loadbmp.h"
+
+BITMAP IDB_HELLO loadbmp.bmp

@@ -1,0 +1,10 @@
+gmenuitc.obj: gmenuitc.c gmenuitc.h
+    cl -d -c -AS -Gsw -Os -Zpe gmenuitc.c
+
+gmenuitc.res: gmenuitc.rc
+    rc -r gmenuitc.rc
+
+gmenuitc.exe: gmenuitc.obj gmenuitc.def
+    link4 gmenuitc,/align:16,/map,slibw/NOE,gmenuitc.def
+    mapsym gmenuitc
+    rc gmenuitc.res

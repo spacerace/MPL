@@ -1,0 +1,10 @@
+getmenu.obj: getmenu.c getmenu.h
+    cl -d -c -AS -Gsw -Os -Zpe getmenu.c
+
+getmenu.res: getmenu.rc
+    rc -r getmenu.rc
+
+getmenu.exe: getmenu.obj getmenu.def
+    link4 getmenu,/align:16,/map,slibw/NOE,getmenu.def
+    mapsym getmenu
+    rc getmenu.res

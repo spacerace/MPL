@@ -1,0 +1,9 @@
+#--------------------
+# BUTTONS1 make file
+#--------------------
+
+buttons1.obj : buttons1.c
+     cl -c -G2sw -W3 buttons1.c
+
+buttons1.exe : buttons1.obj buttons1.def
+     link buttons1, /align:16, NUL, os2, buttons1

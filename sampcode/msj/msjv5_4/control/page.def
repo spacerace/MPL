@@ -1,0 +1,33 @@
+;
+; Page Selection Control - MODULE DEFINITION FILE
+;
+; LANGUAGE      : Microsoft C5.1
+; MODEL         : small
+; ENVIRONMENT   : Microsoft Windows 3.0 SDK
+; STATUS        : operational
+;
+; Eikon Systems, Inc.
+; 989 East Hillsdale Blvd, Suite 260
+; Foster City, California 94404
+; 415-349-4664
+;
+; 11/30/89 1.00 - Kevin P. Welch - initial creation.
+;
+
+LIBRARY           PAGE
+EXETYPE           WINDOWS        
+STUB              'WINSTUB.EXE'
+DESCRIPTION       'Page Selection Control - by Kevin P. Welch'
+
+CODE              MOVEABLE DISCARDABLE SHARED PRELOAD
+DATA              MOVEABLE SINGLE PRELOAD
+
+HEAPSIZE          1024
+
+EXPORTS
+   WEP            @1 RESIDENTNAME
+   PageInfo       @2
+   PageStyle      @3
+   PageFlags      @4
+   PageWndFn      @5
+   PageDlgFn      @6

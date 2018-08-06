@@ -1,0 +1,15 @@
+NAME setrect
+
+DESCRIPTION 'Simple Microsoft Windows Application'
+
+STUB 'WINSTUB.EXE'
+
+CODE MOVEABLE
+DATA MOVEABLE MULTIPLE
+
+HEAPSIZE 4096
+STACKSIZE 4096
+
+EXPORTS
+    WindowProc @1
+

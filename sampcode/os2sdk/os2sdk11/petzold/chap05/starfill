@@ -1,0 +1,9 @@
+#--------------------
+# STARFILL make file
+#--------------------
+
+starfill.obj : starfill.c
+     cl -c -G2sw -W3 starfill.c
+
+starfill.exe : starfill.obj starfill.def
+     link starfill, /align:16, NUL, os2, starfill

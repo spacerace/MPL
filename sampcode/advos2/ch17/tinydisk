@@ -1,0 +1,5 @@
+tinydisk.obj : tinydisk.asm
+	masm /T tinydisk.asm;
+
+tinydisk.sys : tinydisk.obj tinydisk.def
+	link tinydisk,tinydisk.sys,,os2,tinydisk

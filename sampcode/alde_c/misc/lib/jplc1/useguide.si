@@ -1,0 +1,4034 @@
+.cw10
+.po17
+.pn 1
+.PN 1
+.FO                                1-#
+                    1. I N T R O D U C T I O N 
+
+Thå   purposå  oæ  thió  manuaì  ió  tï  describå  thå  uså   anä 
+installatioî oæ thå Portablå Ã Subroutinå Library®   Thió librarù 
+ió  á collectioî oæ moduleó writteî iî thå Ã languagå  (Referencå 
+[2])¬  thaô  ió  capablå  oæ  equivalenô  operatioî  iî  multiplå 
+environments®   Thå  librarù  ió  availablå iî  sourcå  forí  foò 
+compilatioî  anä integratioî intï á systeí librarù tï replacå thå 
+hosô  vendoò Ã library®   Listingó oæ thå portablå Ã librarù  arå 
+containeä iî á separatå documenô (Referencå [15]).
+
+Thå  contenô oæ thå librarù consistó oæ functionó whicè  minimizå 
+thå visibilitù oæ system-specifiã I/Ï formats¬  thå uså oæ systeí 
+commands¬  anä thå reliancå oî specifiã systeí  resources®   Somå 
+customizatioî   ió  necessary¬   however¬   tï  accommodatå   thå 
+ideosyncracieó oæ eacè ne÷ host® Somå oæ theså ideosyncracieó caî 
+bå  removeä  bù propeò definitioî oæ parameteró iî  headeò  fileó 
+includeä  wheî  thå portablå librarù ió recompiled®   Otheró  maù 
+requirå  á smalì amounô oæ codå alteration®   Á lateò sectioî  oæ 
+thió  documenô containó informatioî anä procedureó  foò  adaptinç 
+thå portablå Ã librarù iî sucè cases.
+
+Thå  systeí  I/Ï interfacå ió restricteä tï thå  functionó  sbrk¬ 
+close¬  creat¬  exit¬  lseek¬  open¬  read¬  unlink¬  anä  write¬ 
+supplieä bù thå hosô Ã languagå vendor®   Theså arå assumeä tï bå 
+compatiblå witè UNIXtm” conventions®   Anotheò functioî ¬  rename¬ 
+ió  assumed¬  eitheò  addeä  bù thå Ã languagå vendoò oò  bù  thå 
+installeò oæ thió library®  Thå floatinç poinô arithmetiã  systeí 
+interfacå consistó oæ onlù á fe÷ functions¬ sucè aó chrstc¬ fint¬ 
+ldexp¬  astof¬  anä  ftoa¬  thaô  requirå somå alteratioî oæ  thå 
+sourcå code®   Thå remaindeò oæ thå librarù utilizeó thå standarä 
+Kernighaî anä Ritchiå (Referencå [2]© Ã languagå features.
+
+Aó  manù  oæ thå UNIØ librarù functionó aó werå  deemeä  portablå 
+werå  includeä iî thå portablå Ã library®   Theså beaò  thå  samå 
+nameó  herå  aó theù dï iî thå parenô library®   Otheò  functionó 
+havå beeî addeä foò greateò utility.
+
+Descriptionó  iî thió manuaì follo÷ thå UNIØ Programmer'ó  Manuaì 
+format»  iî fact¬  thå descriptionó oæ thå commoî functionó  werå 
+adapteä froí thå parenô manual®  Thå texô ió collecteä intï á seô 
+oæ subsections¬ whicè appeaò wheî applicable:
+
+     Thå  heading‚ oæ eacè entrù giveó á verù shorô descriptioî oæ 
+     thå purposå oæ thå functionó iî thaô entry.
+
+     Thå  name‚ subsectioî listó thå exacô nameó oæ thå headeò  oò 
+     subroutineó covereä undeò thå entry.
+
+
+
+
+
+*UNIX is a Trademark of Bell Laboratories.
+Š     Thå  synopsis‚  summarizeó  thå uså  oæ  thå  functioî  beinç 
+     described¬  includinç requireä include‚ statements¬  formats¬ 
+     anä passeä parameters®  Á fe÷ conventionó arå used:
+
+          Boldface‚ wordó arå considereä literals¬  anä arå  typeä 
+          jusô aó theù appear.
+
+          Squarå  bracketó  Û ]‚ arounä aî argumenô indicatå  thaô 
+          thå argumenô ió optional®  Wheî aî argumenô ió giveî aó 
+          'name'¬ iô alwayó referó tï á filå name.
+
+          Ellipseó  '...§  arå  useä tï sho÷  thaô  thå  previouó 
+          argument-prototypå maù bå repeated.
+
+          Á finaì conventioî ió useä bù thå commandó  themselves®  
+          Aî  argumenô  beginninç witè á minuó sigî '-§ ió  ofteî 
+          takeî  tï meaî somå sorô oæ option-specifyinç  argumenô 
+          eveî  iæ  iô appearó iî á positioî wherå  á  filå  namå 
+          coulä  appear®   Therefore¬  iô ió unwiså tï havå fileó 
+          whoså nameó begiî  witè '-'.
+
+     Thå  description‚ subsectioî discusseó iî detaiì thå  subjecô 
+     aô hand.
+
+     Á seå also‚ subsectioî giveó pointeró tï relateä information.
+
+     Á   diagnostics‚   subsectioî   discusseó   thå    diagnostiã 
+     indicationó  whicè  maù  bå produced®   Messageó  whicè  arå 
+     intendeä tï bå self-explanatorù arå noô listed.
+
+     Thå   bugs‚   subsectioî  giveó  knowî  bugó  anä   sometimeó 
+     deficiencies®    Occasionallù  thå  suggesteä  fiø  ió  alsï 
+     described.
+.pa oŠ.PN 1
+.FO                                2-#
+                   2. H E A D E R   L I B R A R Y 
+
+
+Thió  chapteò  describeó  eacè oæ thå portablå  librarù  standarä 
+headeò files¬  whicè contaiî definitionó oæ constantó anä  macroó 
+tï   bå  useä  wheî  compilinç  useò  programs¬   anä  alsï  wheî 
+recompilinç thå portablå librarù itself®   Iî addition¬  global.h‚ 
+anä stdio.h‚ definå globaì datá structures»  global.h‚ ió  requireä 
+foò  eacè main‚ segment¬  anä stdio.h‚ ió requireä foò alì programó 
+which use buffered i/o.
+
+Generally¬  alì macroó anä constantó defineä iî headeò fileó  arå 
+captalized¬  sï  thaô thå useò maù kno÷ thaô theù arå such®   Thå 
+exceptionó  arå  thå globaì variableó  errno‚  anä  progname¬  anä 
+definitions of stdin, stdout, stderr, tiny, and utiny.
+
+Generally¬   alì   system-dependenô  constantó  oò  switcheó  arå 
+containeä  iî theså headeò files®   Thuó customizatioî foò á  ne÷ 
+systeí   primarilù  involveó  changinç  onlù  thå  headeò   fileó 
+(stdio.h¬ mathcons.h)®  Howeveò somå subroutineó maù alsï requirå 
+modification®    Seå   thå   customizatioî  noteó   foò   furtheò 
+informatioî concerninç thió subject.
+
+The portable library standard header files are:
+
+.uj0
+     ctype.h        standard character-type macros
+
+     defs.h         standard definitions and selectors file
+
+     errno.h        standard error number definition file
+
+     global.h       standard global variable header file
+
+     mathcons.h     constant file for math functions
+
+     mathtyp.h      header file to declare math functions
+
+     scrnio.h       terminal display data file
+
+     stdio.è        standarä buffereä i/ï definition package
+
+     stdtyp.h       standard defined-types file
+.uj1
+.paŠ.hectype.è                                                   ctype.h
+
+                 Standard Character-Type Macros
+
+NAME
+     ctype.h 
+
+SYNOPSIS
+     #includå <ctype.h>
+
+     BOOL ISALPHA(c)
+     int c;
+     ® ® .
+
+DESCRIPTION
+     Theså  macroó  classifù ASCII-codeä integeò valueó bù  tablå 
+     lookup®   Eacè  ió á predicatå returninç nonzerï  foò  TRUE¬ 
+     zerï  foò FALSE®   ISASCII ió defineä oî alì integeò values» 
+     thå  resô arå defineä onlù wherå ISASCII ió TRUE anä oî  thå 
+     singlå  non-ASCIÉ valuå EOF‚ (seå stdio.h)®   Thå  conditionó 
+     foò TRUE‚ are:
+
+.uj0
+     ISALNUM(c)      c ió aî alphanumeriã character.
+
+     ISALPHA(c)      c ió á letter.
+
+     ISASCII(c)      c ió aî ASCIÉ character¬ codå lesó thaî 0x80.
+
+     ISCNTRL(c)      c ió á deletå characteò (0x7f©  oò  ordinarù 
+                       controì characteò (lesó thaî 0x20).
+
+     ISDIGIT(c)      c ió á digit.
+
+     ISLOWER(c)      c ió á loweò caså letter.
+
+     ISOCTAL(c)      c‚ ió aî octaì character.
+
+     ISPRINÔ(c)      c‚ ió  á  printinç    character¬   codå   0x2°              
+                       (space© througè 0x7å (tilde).
+
+     ISPUNCT(c)      c ió á punctuatioî characteò (neitheò controì 
+                       noò alphanumeric).
+
+     ISSPACE(c)      c ió á space¬  tab¬ carriagå return¬ newline¬ 
+                       oò formfeed.
+
+     ISUPPER(c)      c ió aî uppeò caså letter.
+.uj1
+
+     Thå followinç uså thå ISUPPER‚ anä ISLOWER‚ macros¬ anä returî 
+     á character:
+
+.uj0
+     TOLOWER(c)‚      returnó thå loweò caså oæ c¬  oò ã iæ iô  ió 
+                     lower case.
+
+     TOUPPER(c)      returns upper case of c.
+.uj1
+ŠSEE ALSO
+     correspondinç lisô oæ functions.
+
+BUGS
+     Becauså  theså arå implementeä aó macros¬  sidå effectó  maù 
+     noô  bå  handleä  correctly»  e.g®   ISALPHA(*s++©  maù  noô 
+     producå thå intendeä result®  Uså thå functioî forí oæ theså 
+     macros in such cases.
+.paŠ.hedefs.h                                                     defs.h
+
+             Standard Definitions and Selectors File
+
+NAME
+     defs.h 
+
+SYNOPSIS
+     #include <defs.h>
+
+     MAX(a, b)
+     ...
+
+DESCRIPTION
+     The following operators are defined in defs.h:
+
+.uj0
+     AND            replacemenô  foò  '&&'¬   thå  logicaì  'and§                               
+                    operatoò.
+
+     FOREVER‚        samå aó 'foò (;;)'¬  causeó aî infinitå loop®  
+
+     IS             replaceó   '=='¬   thå  logicaì   equivalencå                    
+                    operator.
+
+     ISNT           actó aó thå  non-equivalencå operator¬  '!='®  
+
+     NOT            substitutå  foò  '!'¬  thå  logicaì  negatioî                
+                    operator.
+
+     OR             replaceó  '||'¬   thå  logicaì   inclusive-oò                
+                    operator.
+
+
+     The standard constants defined in defs.h are the following:
+
+     EOF            (-1)
+
+     FAIÌ           1
+
+     FALSE          0
+
+     NO             0
+
+     NULL           0
+
+     SUCCESS        0
+
+     TRUE           1
+
+     YES            1
+
+
+     Alsï iî defs.h‚ arå severaì macros:
+
+     ABS(x)‚         returnó thå absolutå value of x.
+Š     GZ(x)‚          returnó x‚ iæ x‚ ió greateò thaî zero®  Iæ not¬      
+                    iô returnó zero.
+
+     LURSHIFT(n¬ b)‚ returnó thå valuå oæ lonç n‚ afteò aî unsigneä 
+                    right shift of b bits.
+
+     MAX(x¬ y)‚      returnó thå largeò oæ ø anä y.
+
+     MIN(x¬ y)‚      returnó thå lesseò oæ x and y.
+
+     SGN(x)‚         returnó +± iæ ø ió positive¬  -± iæ negative¬ 
+                    oò ° iæ 0.
+
+     URSHIFT(n¬ b)‚  returnó  thå valuå oæ inô n‚  bitó  afteò  aî                  
+                    unsigneä righô shifô oæ b‚ bits.
+
+   
+     Examples:
+
+           iæ (statement± ANÄ statement2© ...
+           ø ½ GZ(x);
+           FOREVEÒ ...
+           iæ (op± IÓ op2© ...
+           iæ (op± ISNÔ op2© ...
+           whilå (NOT x© ...
+           whilå (statement± OÒ statement2© ...
+           large = MAX(x, y);
+.uj1
+
+SEÅ ALSO
+     list of corresponding functions.
+
+BUGS
+     Becauså ABS¬  GZ¬  MAX¬  MIN¬ SGÎ arå implementeä aó macros¬ 
+     sidå  effectó  maù noô bå handleä  properly®   Foò  example¬ 
+     ABS(i++© maù bå incorrect®   Uså thå functioî formó oæ theså 
+     macros in such cases.
+.paŠ.heerrno.h                                                   errno.h
+
+              Standard Error Number Definition File
+
+NAME
+     errno.h 
+
+SYNOPSIS
+     #include <errno.h>
+
+DESCRIPTION
+     errno.h‚  defineó erroò numbeò values®  Thå onlù twï useä  iî 
+     thå portablå math librarù are:
+
+.uj0
+     ERANGE‚    computeä matè valuå ió ouô oæ computablå range.
+     EDOM‚      functioî argumenô ió noô iî defineä domain.
+.uj1
+
+     Otheò  valueó oæ errno‚ maù bå returneä bù systeí  calló  anä 
+     buffereä i/ï functions® Typicaì errno‚ valueó returneä bù thå 
+     systeí calló useä bù thå portablå librarù are:
+.uj0
+
+     ENOENT    file does not exist
+     E2BIG     argument list too long
+     EBADF     bad file descriptor          
+     ENOMEM    not enough memory for requested operation         
+     EEXIST    file already exists on create request
+     EINVAL    invalid argument
+     ENFILE    exceeded maximum number of disk files
+     EMFILE    exceeded maximum number of file descriptors
+     ENOTTY    not a terminal or device to which calls apply
+     EACCES    invalid access request
+     EIO       i/o error during read or write
+     ENXIO     no such device or address
+     EPERM‚     modificatioî forbiddeî excepô tï owneò, superuser
+     EFAULT    bad address
+     EXDEV     cross-device link attempted
+     ENODEV    no such device
+     EFBIG     file too large
+     ENOSPC    no space left on device
+     EROFS     read-only file system
+     EMLINK    too many links to a file
+.uj1
+
+SEÅ ALSO
+     global.h
+.paŠ.heglobal.è                                                 global.h
+
+              Standard Global Variable Header File
+
+NAME
+     global.h 
+
+SYNOPSIS
+     #include <global.h>
+
+     main(argc, argv)
+     STRING *argv;
+
+DESCRIPTION
+     Thió  headeò  declareó á globaì variablå errnï anä á  globaì 
+     variablå  strinç  progname tï bå useä iî  thoså  caseó  wheî 
+     argv[0İ  doeó noô contaiî thå prograí name®   Thå programmeò 
+     maù   uså   thió   variablå   tï   recorä   thå   name¬   aó 
+     
+          strcpù(progname¬ "<prograí name>")»  
+     
+     Iæ arg[0İ doeó contaiî thå namå oæ thå invokeä program¬ theî 
+     thå samå effecô ió obtaineä viá 
+
+          strcpy(progname, argv[0]);
+
+     Thió  filå alsï containó outrow[]‚ anä outcol[]‚ whicè contaiî 
+     thå ro÷ anä columî valueó oæ alì outpuô channels¬ indexeä bù 
+     uniô  number®    Foò  buffereä  i/o¬   theså  arå  giveî  bù 
+     fp->_unit»  foò unbuffereä i/o¬ thå uniô numberó arå STDOUT¬ 
+     STDERR¬ anä filå descriptoró returneä bù open.
+.paŠ.hemathcons.h                                             mathcons.h
+
+                Constant File for Math Functions
+
+NAME
+     mathcons.h 
+
+SYNOPSIS
+     #include <mathcons.h>
+
+DESCRIPTION
+     Thió  headeò  filå  containó  thå valueó  oæ  thå  followinç 
+     machine-dependent constants:
+
+.uj0
+           BIG10Ø            10Ş(2Ş(BIG10X-1)© ¼ INFINITY
+           BIGØ		     1¶ ª log2(INFINITY© - ±	
+           DPRECISIOÎ	     (int© PRECISIOÎ		
+           INFINITÙ	     machinå infinity¬ 2(MAXEXP-1© 
+           INFINLEÇ	     INFINITÙ ¯ sqrt(2©		
+           LEASÔ	     leasô doublå representablå	
+           LOGINFINITÙ	     largesô loç argumenô		
+           LOGLEASÔ	     smallesô loç argumenô	
+           MAXEXĞ	     largesô characteristiã	
+           MAXEXPÇ	     MAXEXĞ - ³ guarä bitó	
+           MINEXĞ	     smallesô characteristiã	
+           MINEXPÇ	     MINEXĞ « ³ guarä bitó	
+           PRECISIOÎ	     -log1° oæ WASHOUÔ		
+           RTHLFINÆ	     sqrt(INFINITÙ ¯ 2©		
+           SMALLØ  	     1¶ ª log2(LEAST© « ±		
+           SYMLEASÔ	     symmetriã leasô (haó inverse)
+           TANHXBIÇ	     (sig® bitó « 2© ª ln(2© ¯ ²	
+           WASHOUÔ	     1.° « (ø ¼ WASHOUT© ½ 1.°	
+.uj1
+
+     mathcons.h  alsï containó thå followinç  machine-independent 
+     constants:
+
+.uj0
+           CBRTFOUÒ	     cubå rooô oæ ´	
+           CBRTTWÏ	     cubå rooô oæ ²	
+           FADEOUÔ  	     Tayloò serieó fadeout term
+           FOURTHLOG²	     log(2)/´		
+           HALFLOG2å	     log2(e)/²		
+           INVPÉ	     ± ¯ pé		
+           LOG²		     loç oæ ² baså å	
+           LOG2å	     loç oæ å baså ²	
+           LOGe1	     loç oæ 1° baså å	
+           LOG10e	     loç oæ å baså 1°	
+           LOG10twï	     loç oæ ² baså 1°	
+           MAXANGLÅ	     int(pé ª 225©	
+           PÉ		     pé			
+           PIover²	     pé ¯ ²		
+           PIover³	     pé ¯ ³		
+           PIover´	     pé ¯ ´		
+           PIover¶	     pé ¯ ¶		
+           ROOTHALÆ	     squarå rooô oæ 1/²	
+           ROOTTWÏ 	     squarå rooô oæ ²	
+           SQRT³	     sqrt(3©		Š           SQRT3m±     	     sqrt(3© - ±		
+           TWOLOG2å	     ² ª log2(e©		
+           TWOmSQRT³	     ² - sqrt(3©		
+           TWOoverPÉ	     ² ¯ pé		
+.uj1
+.paŠ.hemathtyp.h                                               mathtyp.h
+
+              Header File to Declare Math Functions
+
+NAME
+     mathtyp.h 
+
+SYNOPSIS
+     #include <mathtyp.h>
+
+DESCRIPTION
+     Thió  containó  typå declarationó whicè definå thå typeó  oæ 
+     alì  double  matè functionó iî  thió  library®   Usinç  thió 
+     headeò  deleteó thå necessitù tï declarå eacè matè  functioî 
+     separatelù iî useò programs.  Included are:
+
+          acos      cotan     fmin      modf      sgn
+          asin      erf       frexp     ntail     simpson
+          atan      erfc      hypot     nprob     sin
+          atan2     exp       inverf    pow       sinh
+          atof      fabs      inverfc   randexp   sqrt
+          cbrt      fint      ldexp     randnorm  tan
+          ceil      floor     log       random    tanh
+          cos       frac      log10     ratfun
+          cosh      fmax      log2      round
+.paŠ.hescrnio.h                                                 scrnio.h
+
+                    Screen Function Data File
+
+NAME
+     scrnio.h
+
+SYNOPSIS
+     #include <scrnio.h>
+
+DESCRIPTION
+     scrnio.h‚  ió  thå datá filå whicè declareó alì  globaì  datá 
+     necessarù  foò thå uså oæ theså terminaì displaù  functions®  
+     Iô containó thå valueó oæ thå followinç constants:
+
+          ALT_SCRN[7]         alternatå intensitù on
+
+          BKCURSOR[9]         cursor back
+
+          CB4R                booleanº columî beforå row?
+
+          CLEARSCREEN[9]      cleaò screeî anä homå cursor
+
+          COFFSET             columî valuå offset
+
+          DNCURSOR[9]         cursor down
+
+          EREOLN[7]           eraså tï end-of-line
+
+          EREOPG[9]           eraså tï enä oæ page
+
+          FWCURSOR[9]         cursor forward
+
+          HEIGHT              lineó peò screen
+
+          HOMER[9]            homå thå cursor
+
+          LEADIN[9]           cursoò lead-iî sequence
+
+          LINDELETE[7]        deletå line
+
+          LININSERT[9]        inserô line
+
+          NORM_SCRN[7]        normaì intensitù on
+
+          RCSEPARATOR[5]      row-columî separator
+
+          RCENDER[5]          lead-iî termination
+
+          ROFFSET             ro÷ valuå offset
+
+          SCRNINI[9]          initializå terminal
+
+          SCRNUNI[9]          un-initializå terminal
+
+          SCRNWRAP            booleanº screeî wrap-around?Š
+          TERMINAL[20]        namå oæ terminal
+
+          UPCURSOR[9]         cursor up
+
+          USELAST             booleanº uså lasô screeî character?
+
+          WIDTH               columnó peò screen
+
+          XLT2ASCII           booleanº translatå tï ASCII?
+
+SEE ALSO
+     scrnio‚  in Section 4.
+.paŠ.hestdio.h                                                   stdio.h
+
+        Standard Buffered Input/Output Definition Package
+
+NAME
+     stdio.h 
+
+SYNOPSIS
+     #include <stdio.h>
+
+     FILE *stdin;
+     FILE *stdout;
+     FILE *stderr;
+
+DESCRIPTION
+     Iî  thå user-leveì frameworkinç scheme¬  thå functionó  getc‚ 
+     anä  putc‚ handlå characteró iî botè buffereä anä  unbuffereä 
+     modes®   Thå  higheò  leveì  routineó  gets¬  fgets¬  scanf¬ 
+     fscanf¬  fread¬ puts¬ fputs¬ printf¬ fprintf¬ fwrite‚ alì uså 
+     getc‚ anä putc» theù caî bå freelù intermixed.
+
+     Á filå witè associateä bufferinç ió calleä á stream¬  anä ió 
+     declareä  tï  bå á pointeò tï á defineä  typå  FILE®   fopen 
+     createó certaiî descriptivå datá foò á streaí anä returnó  á 
+     pointeò tï designatå thå streaí iî alì furtheò transactions®  
+     Therå arå threå normallù opeî streamó witè constanô pointeró 
+     declareä  iî  thå  includå  filå  anä  associateä  witè  thå 
+     standard open files:
+
+          stdin     standard input file
+
+          stdout    standard output file
+
+          stderr    standard error file
+
+     STDIN¬  STDOUT‚ anä STDERR‚ arå thå filå descriptoró thaô reaä 
+     and write recognize as standard preopened files.
+
+     A constant 'pointer' NULL (0) designates no stream at all.
+
+     Aî integeò constanô EOÆ (-1© ió returneä upoî enä oæ filå oò 
+     error by integer functions that deal with streams.
+
+     MAXSTREAM‚  ió  thå maximuí numbeò oæ  input/outpuô  streams, 
+     and IObuffs is the file stream table.
+
+     Anù routinå thaô useó thå standarä input/outpuô packagå musô 
+     includå   thå  headeò  filå  <stdio.h¾  oæ  pertinenô  macrï 
+     definitions®
+
+     Buffered Input/Output Definitions:
+
+           BUFSIZ        streaí buffeò size
+
+
+           CRINSUP       defineä  wheî '\r§ iî inpuô texô musô bå Š                         suppressed
+
+           CROUTADD      defineä wheî '\r§ musô accompanù '\n§ iî 
+                         text output
+
+           CURPOS        filå positioî designator (lseek)
+
+           FILEND        filå enä positioî designator (lseek)
+
+           MAXLINE       maximuí stdiï inpuô linå width
+
+           ORIGIN        beginninç oæ filå designator (lseek)
+
+           PMODE         fopen(© protectioî modå (foò UNIX)
+
+           SYS_EOF       system end-of-file character (if any)
+
+           TABSTOP       stdout tabstop width
+
+           _RDONLY       filå opeî foò reaä only
+
+           _RDWRIT       filå opeî foò read/writå access
+
+           _WRONLY       filå opeî foò writå only
+
+
+     File Stream _flags bit masks:
+
+           _ALLBUF       bit set (1© wheî buffeò ió allocated
+
+           _BUSY         bit set (1© wheî á FILÅ ió open
+
+           _DIRTY        bit set (1© wheî buffeò ió unflushed
+
+           _EOF          bit set (1© iæ streaí EOÆ ió reached
+
+           _IOERR        bit set (1© iæ i/ï streaí error
+
+     File Stream Data Structure Definition, FILE *fp:
+
+           BUFFER _bend     pointó onå chaò pasô lasô iî buffer
+
+           BUFFER _bptr     currenô pointeò iî streaí buffer
+
+           BUFFER _buff     addresó oæ streaí buffer
+
+           unsigned _buflen lengtè oæ buffer
+
+           char _bytbuf     singlå bytå foò unbuffereä streams
+
+           TBITS _flags     opeî mode¬ error¬ eof¬ busy¬ etc.
+
+           utiny _unit      filå descriptoò returneä bù open
+
+Š
+     Standard I/O Macros:
+
+           clearerr(fp)  ((fp)->_flagó &½ ~(_IOERR|_EOF)
+
+           getchar()     getca(stdin)
+
+           feof(fp)      (((fp)->_flagó &_EOF© !½ 0)
+
+           ferror(fp)    (((fp)->_flagó &_IOERR© !½ 0)
+
+           fileno(fp)    ((fp)->_unit)
+
+           putchar(c)    putca(c¬ stdout)
+
+           eputc(c)      putca(c, stderr)
+
+SEE ALSO
+     open, close, read, write
+
+DIAGNOSTICS
+     Thå valuå EOÆ ió returneä uniformlù tï indicatå thaô á  FILÅ 
+     pointeò haó noô beeî initializeä witè fopen¬  inpuô (output© 
+     haó  beeî attempteä oî aî outpuô (input© stream¬  oò á  FILÅ 
+     pointeò  designateó corrupô oò otherwiså unintelligiblå FILÅ 
+     data. 
+.paŠ.hestdtyp.h                                                 stdtyp.h
+
+                   Standard Defined-Types File
+
+NAME
+     stdtyp.h 
+
+SYNOPSIS
+     #include <stdtyp.h>
+
+DESCRIPTION
+     Severaì  bugó  iî Ã programó oæ aî earlieò  generatioî  werå 
+     founä  bù rigorouslù type-defininç anä  consistency-checkinç 
+     sucè  interfaceó aó functioî  arguments¬  functioî  returneä 
+     values¬    anä   structurå   definitions®    Thió   semantiã 
+     readability  argumenô  ió  thå onlù  justificatioî  foò  thå 
+     defined-typeó LBITS¬ BITS¬ TBITS¬ METACHAR¬ BOOL, anä TBOOL¬ 
+     becauså   thå  underlyinç  typeó  arå  noô  subjecô  tï  anù 
+     portability problems for their restricted usage.
+
+     Thå  caså  ió  differenô  foò thå  typeó  tiny¬  anä  utiny®  
+     Portabilitù problemó (botè machinå anä compiler© arå á  maiî 
+     reasoî  foò theså distinctions®   Differenô versionó oæ  thå 
+     compileò  havå  introduceä  datá typeó  foò  unsigneä  char¬ 
+     unsigneä  short,‚  anä  eveî unsigneä  long®   Anä  differenô 
+     machineó maù treaô thå typå char‚ aó signeä oò unsigned®   Iæ 
+     programó  arå writteî witè theså ra÷ Ã types¬  theù musô  bå 
+     editeä bù hanä beforå portinç tï anotheò compileò thaô  doeó 
+     noô supporô á ne÷ type®   However¬ iæ á seô oæ defined-typeó 
+     ió consistentlù used¬  theî thå defined-typå caî bå targeteä 
+     tï thå ne÷ typå wheî iô exists¬  anä bå targeteä tï aî oldeò 
+     baså  typå otherwise®   Foò truå portability¬  sucè defined-
+     typeó musô bå augmenteä witè rvaluå macros:
+
+.uj0
+          TINY(n)       produceó  á signeä valuå froí ¸ oò  morå                
+                        bitó oæ n.
+
+          UTINY(n)      produceó  aî unsigneä valuå froí ¸  bitó                
+                        (oò more© oæ n.
+
+
+     Pseudo Storage Classes:
+
+          FAST           equivalenô tï register.
+
+          GLOBAL         equivalent to extern.
+
+          LOCAL          equivalent to static.
+
+     Type definitions:
+
+          tinù           an 8 bit (or larger) signed integer.
+
+          utiny          aî ¸ biô  (oò larger©  unsigneä  integeò 
+                         useä foò á quantity.
+Š          TBITS          aî   ¸  biô  (oò larger©  useä  foò  biô 
+                         manipulation.
+
+          TBOOL          aî ¸  biô (oò larger© integer¬  buô useä 
+                         foò boolean.
+
+          TEXT           aî ¸ biô (oò larger© iteí useä onlù foò 
+                         characters.
+
+          BOOL           integer, but used for boolean.
+
+          LBITS          long, but only for bit manipulation.
+
+          BITS           á  1¶  biô (oò larger© integeò onlù  foò 
+                         biô manipulation.
+
+          METACHAR       á   1¶    biô  (oò   larger©   augmenteä 
+                         characteò (maù bå -1).
+
+          VOID           a function that returns no value.
+
+          STRING         a string of TEXT, (char *).
+
+          BUFFEÒ         á  characteò  arraù useä  aó  á  buffer¬ 
+                         (chaò *).
+
+          ALIGÎ          Storagå allocatioî worä  alignmenô  datá 
+                         structure.
+
+          HEADER         Storage allocation header.
+.uj1
+
+     Excepô   foò tiny,‚ anä utiny¬  defined-typeó arå writteî  iî 
+     uppeò caså tï emphasizå theiò definitioî iî á headeò file.
+
+     Thió  particulaò headeò filå haó beeî adapteä froí thå Plum-
+     Halì Standarä (Referencå 4)®   Thió filå musô bå  customizeä 
+     tï  thå intendeä compiler/machinå environment¬  aó describeä 
+     in the reference and Section 5 of this manual.
+.he
+.pa o
+                  (Intentionally left blank)
+.PAŠ.PN 1
+.FO                                3-#
+                    3. S Y S T E M   C A L L S 
+
+
+Thió sectioî describeó alì thå entrieó intï thå systeí assumeä bù 
+thå  portablå  Ã  library®   Mosô oæ theså calló  havå  aî  erroò 
+return®    Aî  erroò  conditioî  ió  indicateä  bù  aî  otherwiså 
+impossiblå  returneä  value®   Almosô  alwayó  thió  ió  -1»  thå 
+individuaì sectionó specifù thå details®  Aî erroò numbeò ió alsï 
+madå  availablå  iî thå externaì variablå errno®   errno‚  ió  noô 
+cleareä oî successfuì calls¬ sï iô shoulä bå testeä onlù afteò aî 
+erroò haó occurred.
+
+The system calls assumed are:
+
+                         close     read
+                         creat     rename
+                         exit      sbrk
+                         lseek     unlink
+                         open      write
+
+Sourcå codå foò theså functionó ió noô containeä iî thå  portablå 
+library»  theså  functionó  expecteä  tï bå availablå  iî  thå  Ã 
+language system interface supported by the vendor.
+.paŠ.heclose                                                       close
+
+            Closå á File¬ Operating Óystem Interface
+
+NAME
+     close
+
+SYNOPSIS
+     int close(fildes)
+     int fildes;
+
+DESCRIPTION
+     Á   filå  desciptoò  ió  aî  integeò  useä   in   subsequenô 
+     invocationó  oæ  otheò input-outpuô functionó oî  thå  file® 
+     Giveî  á  filå descriptoò sucè aó returneä froí aî  open‚  oò 
+     creat¬  close‚  closeó thå associateä file®   Á closå oæ  alì 
+     fileó  ió automatiã oî exit¬  buô sincå therå ió á limiô  oî 
+     thå numbeò oæ opeî fileó peò process¬ close‚ ió necessarù foò 
+     programó whicè deaì witè manù files.
+
+SEE ALSO
+     open, write, creat, fclose
+
+DIAGNOSTICS
+     close‚  returnó á zerï iæ á filå ió closed»  EOF ió  returneä 
+     foò aî unknowî filå descriptor.
+.paŠ.hecreat                                                       creat
+
+            Creatå á File¬ Operating Óystem Interface
+
+NAME
+     creaô 
+
+SYNOPSIS
+     int creat(name, mode)
+     STRING name;
+     int mode;
+
+DESCRIPTION
+     creat createó á ne÷ filå oò prepareó tï rewritå aî  existinç 
+     filå calleä name¬ giveî aó thå addresó oæ á null-terminatinç 
+     string®   Iæ  thå  filå  diä noô  exist¬  iô  ió  giveî  thå 
+     prescribeä mode® 
+
+     Iæ thå filå diä exist¬  itó modå anä owneò remaiî  unchangeä 
+     but it is truncated to zero length.
+
+     Thå filå ió alsï openeä foò writing¬ anä itó filå descriptoò 
+     is returned.
+
+     Thå  mode‚  giveî ió arbitrary»  iô neeä noô  allo÷  writing®  
+     Thió  featurå  ió  system-dependent¬   originallù  useä   bù 
+     programó  whicè  deaì witè temporarù fileó oæ  fixeä  names®  
+     Thå creatioî waó donå aó á modå thaô forbidó writing®   Theî 
+     iæ á seconä instancå oæ thå prograí werå tï attempô á creat¬ 
+     aî  erroò ió returneä anä thå prograí knowó thaô thå namå ió 
+     unusablå  foò  thå moment®   However¬  thió featurå  ió  noô 
+     guaranteeä iî thå portablå library¬ anä shoulä noô bå relieä 
+     upon.
+
+SEE ALSO
+     open, write, close, stdio.h
+
+DIAGNOSTICS
+     Foò creat¬  thå valuå EOF ió returneä ifº á needeä directorù 
+     ió noô searchable» thå filå doeó noô exisô anä thå directorù 
+     iî whicè iô ió tï bå createä ió noô writable»  thå filå doeó 
+     exisô anä ió unwritable»  thå filå ió á directory» therå arå 
+     alreadù toï manù fileó open.
+.paŠ.heexit                                                         exit
+
+                        Terminate Process
+
+NAME
+     exit, _exit 
+
+SYNOPSIS
+     VOID exit(status)
+     int status;
+
+     VOID _exit(status)
+     int status;
+
+DESCRIPTION
+     exit‚ ió thå normaì meanó oæ terminatinç á process®   exit‚ ió 
+     supposeä tï closå alì thå process'ó files»  however¬  iô maù 
+     noô  closå buffereä streamó oæ thå  portablå  library®   Foò 
+     thió  purpose¬  thå  portablå functioî fclose‚ ió  available® 
+     status‚ maù bå availablå tï whateveò procesó calleä thió one¬ 
+     dependinç oî thå system¬   sï thå succesó oò failurå oæ  thå 
+     prograí  caî bå testeä bù anotheò prograí thaô useó thió onå 
+     aó á sub-process.
+
+     This call can never return.
+
+     Thå  Ã  functioî exit maù causå cleanuğ actionó  beforå  thå 
+     finaì  'syó  exit'®   Thå  functioî  _exit  circumventó  alì 
+     cleanup.
+
+SEE ALSO
+     fclose, redirbuf
+.pa Š.helseek                                                       lseek
+
+                     Move Read/Write Pointer
+
+NAME
+     lseek 
+
+SYNOPSIS
+     long lseek(fildes, offset, whence)
+     int fildes;
+     long offset;
+     int whence;
+
+DESCRIPTION
+     Thå  filå  descriptoò referó tï á filå opeî foò  readinç  oò 
+     writing®  Thå reaä (resp® write© pointeò foò thå filå ió seô 
+     as follows:
+
+           Iæ whence‚ ió ORIGIÎ (0)¬  thå pointeò ió seô tï offset‚ 
+           bytes.
+
+           Iæ  whence‚ ió CURPOÓ (1)¬  thå pointeò ió seô  tï  itó 
+           currenô locatioî pluó offset.
+
+           Iæ  whence‚  ió FILENÄ (2)¬  thå pointeò ió seô tï  thå 
+           sizå oæ thå filå pluó offset.
+
+     The returned value is the resulting pointer location.
+
+     Seekinç faò beyonä thå enä oæ á file¬  theî writing¬ createó 
+     á gağ oò hole¬ whicè occupieó nï physicaì spacå anä readó aó 
+     zeros.
+
+SEE ALSO
+     open, creat, fseek, stdio.h
+
+DIAGNOSTICS
+     EOF‚ ió returneä foò aî undefineä filå descriptor¬ oò seeë tï 
+     á positioî beforå thå beginninç oæ file.
+.paŠ.heopen                                                         open
+
+                   Open for Reading or Writing
+
+NAME
+     open 
+
+SYNOPSIS
+     int open(name, flag, mode)
+     STRING name;
+     int flag, mode;
+
+DESCRIPTION
+     open‚  openó thå filå name‚ foò readinç (iæ flag‚  ió  _RDONLY¬ 
+     0)¬  writinç (iæ flag‚ ió _WRONLY¬ 1© oò foò botè readinç anä 
+     writinç (iæ flag‚ ió _RDWRIT¬  2)®   name‚ ió thå addresó oæ á 
+     strinç   oæ  ASCIÉ  characteró  representinç  thå  filename¬ 
+     terminateä bù á NULL‚ character.
+
+     Thå  filå  ió  positioneä aô thå beginninç  (bytå  0)®   Thå 
+     returneä  filå descriptoò musô bå useä foò subsequenô  calló 
+     for other input-output functions on the file.
+
+     Thå mode‚ ió arbitrary¬  anä ió unuseä foò thå flaç valueó oæ 
+     thå  portablå library®   Thå presencå oò absencå oæ thå mode‚ 
+     argumenô maù requirå moduleó callinç thå open‚ functioî tï bå 
+     modifieä  tï  conforí  witè thå  requirementó  oæ  thå  hosô 
+     computer.
+
+SEE ALSO
+     creat, read, write, close, fopen, stdio.h
+
+DIAGNOSTICS
+     Thå valuå EOF‚ ió returneä iæ thå filå doeó noô exist¬ iæ onå 
+     oæ   thå   necessarù  directorieó  doeó  noô  exisô  oò   ió 
+     unreadable¬ iæ thå filå ió noô readablå (resp® writable)¬ oò 
+     iæ toï manù fileó arå open.
+.paŠ.heread                                                         read
+
+                         Read from File
+
+NAME
+     read 
+
+SYNOPSIS
+     int read(fildes, buffer, nbytes)
+     int fildes, nbytes;
+     BUFFER buffer;
+
+DESCRIPTION
+     Á   filå  descriptoò  ió  thå  inô  valuå  returneä  froí  á 
+     successfuì open oò creat.‚  buffer‚ ió thå locatioî oæ  nbytes‚ 
+     contiguouó byteó intï whicè thå inpuô wilì bå placed®  Iô ió 
+     noô  guaranteeä  thaô  alì nbytes‚ byteó wilì  bå  read»  foò 
+     example¬ iæ thå filå referó tï á typewriteò aô mosô onå linå 
+     wilì bå returned®   Iî anù event¬  thå numbeò oæ  characteró 
+     reaä ió returned.
+
+     Iæ  thå  returneä valuå ió zero¬  theî end-of-filå haó  beeî 
+     reached.
+
+SEE ALSO
+     open, creat
+
+DIAGNOSTICS
+     Aó mentioned¬  NULÌ (0© ió returneä wheî thå enä oæ thå filå 
+     haó  beeî reached®   Iæ thå reaä waó otherwiså  unsuccessfuì 
+     thå  returî valuå ió EOF®   Manù conditionó caî generatå  aî 
+     errorº physicaì I/Ï errors¬ baä buffeò address¬ preposterouó 
+     nbytes¬ filå descriptoò noô thaô oæ aî inpuô file® 
+
+BUGS
+     Somå  systemó maù contaiî internaì bufferinç tï makå uså  oæ 
+     terminaì  linå editinç featureó oæ somå  operatinç  systems®  
+     Therefore¬  read(0¬  buffer¬ 1)‚ maù noô responä properlù foò 
+     character-by-character inputs.
+.paŠ.herename                                                     rename
+
+                          Rename a File
+
+NAME
+     rename
+
+SYNOPSIS
+     int rename(old¬ new)
+     STRINÇ old¬ new;
+
+DESCRIPTION
+     rename changes the name of a file from old to new.
+
+DIAGNOSTICS
+     rename returns the value NULL if successful, and EOF is not.
+.paŠ.hesbrk                                                         sbrk
+
+                     Change Core Allocation
+
+NAME
+     sbrk 
+
+SYNOPSIS
+     STRING sbrk(incr)
+     int incr;
+
+DESCRIPTION
+     Iî  sbrk¬  incr morå byteó arå addeä tï thå  program'ó  datá 
+     spacå  anä á pointeò tï thå starô oæ thå lowesô locatioî noô 
+     used by program (called the break) is returned.
+
+SEE ALSO
+     malloc, free
+
+DIAGNOSTICS
+     Aî  EOF‚ (-1© ió returneä iæ thå prograí requestó morå memorù 
+     thaî thå systeí limiô oò iæ otheò operatinç systeí  internaì 
+     contraints are violated.
+
+BUGS
+     Settinç  thå breaë iî thå rangå 017770± tï 017777·  (oî  thå 
+     PDP11) is the same as setting it to zero.   
+.paŠ.heunlink                                                     unlink
+
+                     Remove Directory Entry
+
+NAME
+     unlink 
+
+SYNOPSIS
+     int unlink(name)
+     STRING name;
+
+DESCRIPTION
+     name‚ pointó tï á null-terminateä string®  unlink‚ removeó thå 
+     entrù  foò  thå filå identifieä bù name‚ froí itó  directory®  
+     Iæ thió entrù waó thå lasô linë tï thå file¬ thå contentó oæ 
+     thå filå arå freeä anä thå filå ió destroyed®   If¬ however¬ 
+     thå filå waó opeî iî anù process¬  thå actuaì destructioî ió 
+     delayeä untiì iô ió closed¬  eveî thougè thå directorù entrù 
+     haó disappeared.
+
+DIAGNOSTICS
+     NULL‚  (0© ió normallù returned»  EOF‚ indicateó thaô thå filå 
+     doeó  noô exist¬  thaô itó directorù cannoô bå  written¬  oò 
+     thaô thå filå containó purå procedurå texô thaô ió currentlù 
+     iî  use®   Writå  permissioî  ió noô requireä  oî  thå  filå 
+     itself®   Iô  ió alsï illegaì tï unlinë á directorù  (excepô 
+     foò thå super-user, in UNIX).
+
+.paŠ.hewrite                                                       write
+
+                         Write on a File
+
+
+NAME
+     write 
+
+SYNOPSIS
+     int write(fildes, buffer, nbytes)
+     int fildes, nbytes;
+     BUFFER buffer;
+
+DESCRIPTION
+     Á  filå descriptoò ió aî integeò returneä froí á  successfuì 
+     opeî oò creat.
+
+     buffer‚ ió thå addresó oæ nbytes‚ contiguouó bytes¬  whicè arå 
+     writteî  oî  thå  outpuô file®   Thå  numbeò  oæ  characteró 
+     actuallù writteî ió returned®   Iô shoulä bå regardeä aó  aî 
+     erroò iæ the returned value ió noô thå samå aó nbytes.
+
+     Writeó  oæ  á  certaiî sizå maù bå morå  efficienô  oî  somå 
+     machines, depending on implementation particulars.
+
+SEE ALSO
+     creat, open
+
+DIAGNOSTICS
+     Returnó  EOF‚ oî errorº  baä descriptor¬  buffeò address¬  oò 
+     count» physicaì I/Ï errors.
+.he
+.pa o
+                  (Intentionally left blank)
+.PAŠ.PN 1
+.FO                                4-#
+                 4. F U N C T I O N   L I B R A R Y 
+
+
+Thió  chapteò  describeó  functionó containeä iî thå  portablå  Ã 
+function library.
+
+Functionó iî thå matè librarù maù returî conventionaì valueó wheî 
+thå  functioî  ió undefineä foò thå giveî argumentó oò  wheî  thå 
+valuå ió noô representable®  Iî theså caseó thå externaì variablå 
+errno‚ ió seô tï thå valuå EDOM‚ oò ERANGE®  Thå valueó oæ EDOM‚ anä 
+ERANGE are defined in the include file <errno.h>.
+
+Manù  entrieó  contaiî  morå  thaî  onå  function»  however¬  alì 
+functioî nameó (anä shorô definition¬ iæ differenô froí name© arå 
+includeä iî thå indeø foò easù access.
+
+Becauså  oæ  filå spacå limitationó iî  somå  hosô  systems¬  thå 
+conglomeratioî  oæ  functionó intï fileó ió expecteä tï bå  host-
+dependent»  and¬  therefore¬  noô covereä here®  Á lisô oæ sourcå 
+files and the functions they contain is given in Section 5.
+.paŠ.heabs                                                           abs
+
+                         Absolute Values
+
+NAME                  
+     abs, fabs, labs 
+                      
+SYNOPSIS              
+     int abs(i)           
+     int i;           
+
+     double fabs(x)
+     double x;
+                      
+     long labs(n)          
+     long n;          
+                      
+DESCRIPTION           
+     abs  ió  á  functioî  returninç thå absolutå  valuå  oæ  itó 
+     integeò operand.
+
+     ABS  ió thå macrï iî headeò filå defs.h¬  whicè performó thå 
+     samå  operatioî  aó  thå functioî abs¬  buô  maù  havå  sidå 
+     effects.  ABS works for all numeric types.
+
+     fabs returns the absolute value |x|.
+
+     labs  returnó  thå lonç integeò absolutå valuå oæ  itó  lonç 
+     operand, n.
+
+BUGS
+     Yoõ  geô  whaô  thå hardwarå giveó oî thå  largesô  negativå 
+     integer.
+.paŠallot                                                       allot
+
+                    Memory Allocation Package
+
+NAME
+     allot, liberate
+
+SYNOPSIS
+     STRING allot(nbytes)
+     unsigned nbytes;
+
+     VOID liberate(ptr, nbytes)
+     STRING ptr;
+     unsigned nbytes;
+
+DESCRIPTION
+     allot‚ anä liberate‚ providå á simple¬  general-purposå memorù 
+     allocatioî package®   allot‚ returnó á pointeò tï á blocë  oæ 
+     aô  leasô nbytes‚ bytes®   Thå argumentó oæ liberate‚ definå á 
+     blocë  tï  bå madå availablå foò  furtheò  allocation®   Thå 
+     liberated block need not have been previously allotted.
+
+     Needlesó  tï say¬  gravå disordeò wilì resulô iæ  thå  spacå 
+     assigneä  bù  allot‚  ió overruî oò iæ somå  randoí  ptr‚   oò 
+     oversizå nbytes‚ ió handeä tï liberate.
+
+     allot‚  allocateó  thå firsô big-enougè contiguouó  reacè  oæ 
+     freå  spacå  founä iî á circulaò searcè froí thå lasô  blocë 
+     allocateä  oò freed¬  coalescinç adjacenô freå blockó aó  iô 
+     searches®   Iô calló sbrk‚ tï geô morå memorù froí thå systeí 
+     when there is no suitable space already free.
+
+     allot‚  anä  liberate‚ worë mucè thå samå aó malloc‚ anä  free® 
+     Thå differenceó arå thaô malloc‚ anä free‚ operatå witè blockó 
+     thaô  contaiî aî overheaä structure¬  anä freeä blockó  musô 
+     havå  beeî  previouslù allocated¬  whereaó  allotteä  blockó 
+     contaiî nï sucè overhead¬ anä liberateä blockó maù bå freelù 
+     addeä  tï  thå availablå store®   Blockó  arå  allotteä  anä 
+     liberateä iî unitó oæ sizå sizeof(HEADER)‚ bytes.
+
+DIAGNOSTICS
+     allot‚  returnó á NULL‚ pointeò (0© iæ therå ió  nï  availablå 
+     memorù  oò  iæ thå operatinç systeí haó detecteä  corruptioî 
+     outside the allotted area.
+
+SEE ALSO
+     malloc, free
+.paŠ.heatoæ                                                         atof
+
+                    ASCII/Numeric Conversion
+
+NAME
+     astof¬  astoi¬  astol¬  atof¬ atoi¬ atol¬ ftoa¬ itoa¬ itoab¬ 
+     ltoa, ltoab, tobase, utoa
+
+SYNOPSIS
+     STRING astof(s, val)
+     STRING s;
+     double *val;
+     
+     STRING astoi(s, val)
+     STRING s;
+     int *val;
+
+     STRING astol(s, val)
+     STRING s;
+     long *val;
+
+     double atof(s)
+     STRING s;
+     
+     int atoi(s)
+     STRING s;
+
+     long atol(s)
+     STRING s;
+
+     STRING ftoa(s, x, pr, mode)
+     STRING s;
+     double x;
+     int pr;
+     char mode;
+
+     STRING itoa(s, n, w)
+     STRING s;
+     int n, w;
+
+     STRING itoab(s, n, w, b)
+     STRING s;
+     int n, w, b;
+
+     STRING ltoa(s, n, w)
+     STRING s;
+     long n;
+     int w;
+
+     STRING ltoab(s, n, w, b)
+     STRING s;
+     long n;
+     int w, b;
+
+
+Š     METACHAR tobase(ch, base)
+     char ch;
+     int base;
+
+     STRING utoa(s, n, w)
+     STRING s;
+     unsigned n;
+     int w;
+
+DESCRIPTION
+     astof¬  astoi‚  anä astol‚ converô á strinç pointeä tï bù s‚ tï 
+     floating¬  integer¬  anä  lonç  integeò  val‚  representatioî 
+     respectively®   Thå  firsô unrecognizeä characteò  endó  thå 
+     string®   Theù  operatå  iî thå samå waù aó atof¬  atoi‚  anä 
+     atol¬  excepô thaô theù storå thå valuå iî val¬ anä returî á 
+     pointeò tï thå nexô unuseä character.
+
+     atof¬  atoi¬  anä atol‚ functionó converô á strinç pointeä tï 
+     bù s‚ tï floating¬  integer¬ anä lonç integeò representation¬ 
+     respectively®   Thå  firsô unrecognizeä characteò  endó  thå 
+     conversion.
+
+     atof recognizeó aî optionaì strinç oæ tabó anä spaces¬  theî 
+     aî  optionaì  sign¬  theî  á  strinç  oæ  digitó  optionallù 
+     containinç  á  decimaì point¬  theî aî optionaì 'e§  oò  'E§ 
+     followeä bù aî optionallù signeä integer.
+
+     atoi  anä  atol  recognizå aî optionaì strinç  oæ  tabó  anä 
+     spaces¬  theî aî optionaì sign¬ theî á strinç oæ digits®  Iæ 
+     thå strinç beginó iî '0x'¬  theî thå numbeò ió assumeä tï bå 
+     hexadecimal»  otherwise¬  iæ  thå leadinç digiô ió '0'¬  thå 
+     string is interpreted as an octal.
+
+     ftoa‚  convertó x‚ tï aî ASCIÉ strinç s‚ witè precisioî  pr‚  iî 
+     mode‚  'e'¬  'f',‚ oò 'g'‚ format®   Thió functioî returnó  thå 
+     pointeò tï s®   Thå mode‚ argumenô maù alsï bå 0¬  1‚ oò 2‚  tï 
+     designate 'e', 'f', or 'g', respectively.
+
+     itoa‚ convertó aî integeò tï ASCII®   Iô returnó á pointeò tï 
+     s¬ whicè containó thå ASCIÉ valuå oæ n‚ tï minimuí widtè |w|¬ 
+     0-filleä  iæ w<0¬  elså space-filled®   Thió functioî  ió  á 
+     modifieä  versioî  oæ itoa(© founä iî Kernighaî anä  Ritchiå 
+     (seå Referencå 2¬  pp®  60)¬ witè modificationó aó suggesteä 
+     iî  exerciseó  3-³ anä 3-5¬  anä witè  returneä  pointeò  tï 
+     resulô string.
+
+     itoab‚  convertó  aî  integeò n‚ tï á  minimuí  oæ  |w|‚  ascié 
+     characters¬  baså  b®   Iô  returnó á pointeò  tï  s¬  whicè 
+     containó  thå  ASCIÉ value®   Iæ w‚ ió lesó thaî zero¬  s‚  ió 
+     zero-filled» otherwise¬ iô ió space-filled.
+
+     ltoa‚  convertó á lonç n‚ tï á minimuí oæ |w|‚ ASCIÉ characteró 
+     (0-filleä iæ w‚ ¼ 0¬  anä space-filleä otherwise)¬  anä  putó 
+     theí  iî  s¬  returninç thå pointeò tï s®   Thió ió  alsï  á 
+     modifieä  versioî oæ itoa(© froí Kernigaî anä Ritchie¬  witè Š     modificationó aó suggesteä iî exerciseó 3-³ anä 3-5¬ foò uså 
+     witè thå lonç datá type® (seå Referencå 2¬ pp® 60)
+
+     ltoab‚  convertó lonç n‚ tï á minimuí oæ w‚  ascié  characters¬ 
+     baså b¬ anä putó thå ASCIÉ iî s¬ returninç á pointeò tï s.
+
+     tobase‚  returnó thå valuå oæ characteò ch‚ tï baså  base¬  iæ 
+     valid, or EOF if not.
+
+     utoa‚ returnó á pointeò tï thå strinç s¬ whicè containó ASCIÉ 
+     valuå  oæ unsigneä n¬  baså 10¬  witè minimuí widtè |w|‚  (0-
+     filleä iæ w‚ ¼ 0¬ anä space-filleä otherwise)®  Thió functioî 
+     ió  anotheò  modifieä versioî oæ itoa(© founä iî Ë ¦ Ò  (seå 
+     Referencå 2¬  pp®  60)¬  witè modificationó aó suggesteä  iî 
+     exerciseó  3-´ anä 3-5¬  anä witè returneä pointeò tï resulô 
+     string.
+ 
+SEÅ ALSO
+     scanf
+
+BUGS
+     There are no provisions for overflow.
+.paŠ.hebitcount                                                 bitcount
+
+                     Count Bits in Argument
+
+NAME
+     bitcount 
+
+SYNOPSIS
+     int bitcount(i)
+     BITS i;
+
+DESCRIPTION
+     bitcount‚  ió á Ë ¦ Ò functioî (Referencå 2¬  pagå 47©  whicè 
+     countó anä returnó thå numbeò oæ 1-bitó iî i.
+.paŠ.heclearerr                                                 clearerr
+
+                     Stream Status Inquiries
+
+NAME
+     clearerr, feof, ferror, filenï 
+
+SYNOPSIS
+     #includå <stdio.h>
+
+     VOID clearerr(stream)
+     FILÅ *stream;
+
+     BOOL feof(stream)
+     FILÅ *stream;
+
+     BOOL ferror(stream)
+     FILE *stream;
+
+     int fileno(stream)
+     FILÅ *stream;
+
+DESCRIPTION
+     clearerr‚  resetó  (setó  tï 0© thå erroò indicatioî  oî  thå 
+     nameä stream.
+
+     feoæ returnó non-NULL wheî enä oæ filå ió reaä oî thå  nameä 
+     inpuô stream¬ otherwiså it returns NULL.
+
+     ferror‚  returnó  non-NULL‚ iæ aî erroò haó occurreä  oî  FILÅ 
+     stream; otherwise, it returns NULL.
+
+     filenï  returnó thå integeò filå descriptoò associateä  witè 
+     thå stream; seå open.
+
+     Iî  UNIX¬  theså functionó arå implementeä aó  macros»  theù 
+     cannoô  bå  redeclared®   Here¬  however¬  theù  arå  normaì 
+     functionó  anä  dï  noô havå thå possiblå  sidå  effectó  oæ 
+     macros®   
+
+     Theù  dï  havå  correspondinç  macros¬   founä  iî  stdio.h: 
+     CLEARERR¬ FEOF¬ FERROR¬ anä FILENO.
+
+SEE ALSO
+     fopen¬ open
+
+.paŠ.heerf                                                           erf
+
+              Gaussian Error Functions and Inverses
+
+NAME
+     erf, erfc, inverf, inverfc 
+
+SYNOPSIS
+     double erf(x)
+     double x;
+
+     double erfc(x)
+     double x;
+
+     double inverf(x)
+     double x;
+
+     double inverfc(x)
+     double x;
+
+DESCRIPTION
+     erf‚ returnó thå erroò functioî oæ x¬  aó defineä iî Handbooë 
+     oæ Mathematicaì Functions“ (Seå Referencå 3¬ pp® 297).
+
+     erfc‚   returnó  thå  complimentarù  erroò  functioî  oæ   x¬ 
+     1-erf(x).
+
+     Coefficientó  foò thå abovå functionó arå  froí  Schonfeldeò 
+     (see Reference 7).
+
+     inverf‚ returnó thå inverså oæ thå erroò function¬ erf®  Thió 
+     routinå useó thå approximationó giveî iî "Rationaì Chebysheö 
+     Approximationó   foò  thå  Inverså  Erroò  Function"¬   (seå 
+     Reference 8, pp. 827-830)
+
+     inverfc  returnó  thå  inverså oæ  thå  complementarù  erroò 
+     function, erfc.
+
+DIAGNOSTICS
+     Iî inverf¬  iæ |x|‚ ¾ 1.0¬ errno‚ ió seô tï EDOM®  Iî inverfc¬ 
+     iæ |x|‚ ¼ ° oò ¾ 2¬  errno‚ ió seô tï EDOM¬  anä iæ x‚ ió zero¬ 
+     iô ió seô tï ERANGE® Iî eacè  oæ  theså  cases¬ INFINITY‚  oò 
+     -INFINITY‚   ió   returneä  foò  positivå  oò   negativå   x¬ 
+     respectively;
+.paŠ.heexp                                                           exp
+
+                     Mathematical Functions
+
+NAME
+     exp¬  log¬  log10¬  log2¬  pow¬  sqrt¬  cbrô 
+
+SYNOPSIS
+     double exp(x)
+     double x;
+
+     double log(x)
+     double x;
+
+     double log10(x)
+     double x;
+
+     double log2(x)
+     double x;
+
+     double pow(x,y)
+     double x, y;
+
+     double sqrt(x)
+     double x;
+
+     double cbrt(x)
+     double x;
+
+DESCRIPTION
+     Alì  functionó abovå excepô cbrt‚ werå programmeä  usinç  thå 
+     algorithms in Coty and Waite (Reference 5).
+
+     exp‚  returnó  thå  exponentiaì  functioî  oæ  x¬   ex¬  (seå 
+     Referencå 5¬ pp® 60-83).
+
+     log‚ returnó thå naturaì logarithí oæ x‚ (seå Referencå 5¬ pp® 
+     35-59).
+
+     log10‚  returnó  thå  commoî (baså 10©  logarithm¬  anä  log2‚ 
+     returnó thå binarù logarithí (baså 2© oæ x.
+
+     pow‚ returnó x‚ raiseä tï thå poweò oæ y¬ wherå x‚ ¾ 0¬ xy‚ (seå 
+     Referencå 5¬ pp® 84-124).
+
+     sqrt‚ returnó thå squarå rooô oæ x¬ foò x > ° (seå Referencå 5¬ 
+     pp® 17-34).
+
+     cbrt‚ returnó thå cubå rooô oæ x‚  (seå Referencå 6).
+
+SEÅ ALSO
+     hypot, sinh
+
+DIAGNOSTICS
+     exp‚  anä  pow‚ returî INFINITÙ wheî thå correcô  valuå  woulä 
+     overflow»   errno‚  ió seô tï ERANGE®   pow‚ returnó zerï  anä Š     setó  errno‚ tï EDOM‚ wheî thå seconä argumenô ió negativå anä 
+     non-integral¬ anä alsï wheî botè argumentó arå zero.
+     
+     log‚ returnó zerï wheî x‚ ió zerï oò negative»   errno‚ ió  seô 
+     tï EDOM.
+
+     sqrt‚ returnó zerï wheî x‚ ió negative» errno‚ ió seô tï EDOM.
+.paŠ.hefclose                                                     fclose
+
+                     Close or Flush a Stream
+
+NAME
+     fclose, fflush, flush
+
+SYNOPSIS
+     #include <stdio.h>
+
+     int fclose(stream)
+     FILE *stream;
+
+     int fflush(stream)
+     FILE *stream;
+
+     int flush(stream, c)
+     FILE *stream;
+     int c;
+
+DESCRIPTION
+     fclose  causeó  anù  bufferó  foò thå  nameä  stream  tï  bå 
+     emptied¬  anä  thå filå tï bå closed®   Bufferó allocateä bù 
+     the standard input/output system are freed.
+
+     fclose‚ ió performeä automaticallù upoî callinç exit¬  oî alì 
+     open files.  
+
+     fflush causeó anù buffereä datá foò thå nameä outpuô  stream 
+     to be written to that file.  The stream remains open.
+
+     flush‚ writeó anù buffereä characteró ontï FILÅ stream»  theî 
+     iæ c‚ isn'ô EOF¬  iô putó iô iî thå buffer®
+
+SEÅ ALSO
+     close, fopen
+
+DIAGNOSTICS
+     Theså  routineó returî EOF‚ iæ stream ió noô associateä  witè 
+     aî outpuô file¬ oò iæ buffereä datá cannoô bå transferreä tï 
+     that file.  NULL is returned on success.
+.paŠ.hefint                                                         fint
+
+ Absolute Value, Rounding, Integer and Fractional Part Functions
+
+NAME
+     fint¬ fraã, chrstc, floor, ceil, round
+
+SYNOPSIS
+     double fint(x)
+     double x;
+
+     double frac(x)
+     double x;
+
+     int chrstc(x)
+     double x;
+
+     double floor(x)
+     double x;
+
+     double ceil(x)
+     double x;
+
+     double round(x)
+     double x;
+
+DESCRIPTION
+     fint‚ returnó thå integeò parô oæ x‚ aó á double.
+
+     frac‚ returnó thå fractionaì parô oæ x¬ i.e® ø - fint(x).
+
+     chrstã  returnó thå characteristiã (2'ó exponent© oæ  doublå 
+     x.  The mantissa is in [.5,1).
+
+     floor returns the largest integer not greater than x.
+
+     ceil returns the smallest integer not less than x.
+
+     round returnó x roundeä tï thå nearesô integeò iî magnitude.
+.paŠ.hefopen                                                       fopen
+
+                          Open a Stream
+
+NAME
+     fopeî 
+
+SYNOPSIS
+     #includå <stdio.h>
+
+     FILÅ *fopen(filename¬ type)
+     STRING filename¬ type;
+
+DESCRIPTION
+     fopen  openó  thå  filå nameä bù filename anä  associateó  á 
+     streaí  witè  it®   fopen returnó á pointeò tï  bå  useä  tï 
+     identifù thå streaí iî subsequenô operations.
+
+     type  ió  á  characteò strinç havinç onå  oæ  thå  followinç 
+     values:
+
+     "r¢   opeî foò reading
+
+     "w¢   creatå foò writing
+
+     "a¢   appendº opeî foò writinç aô enä oæ file¬ oò creatå foò 
+           writing
+
+     "r+¢  opeî  foò readinç  anä writing®   samå á "r¢  buô  thå 
+           device or file may also be written to.
+
+     "w+¢  opeî foò readinç  anä writing®   samå aó "w¢  buô  thå 
+           device or file may also be read.
+
+     "a+¢  opeî foò appenä anä read®   samå aó "a¢ buô thå devicå 
+           or file may also be read.
+
+SEE ALSO
+     open¬ fclose
+
+DIAGNOSTICS
+     fopen  returnó  thå  pointeò  NULL  iæ  filename  cannoô  bå 
+     accessed.
+
+.paŠ.hefread                                                       fread
+
+                      Buffered Input/Output
+
+NAME
+     fread, fwrite 
+
+SYNOPSIS
+     #include <stdio.h>
+
+     int fread(ptr, ptrsize, nitems, stream)
+     BUFFER ptr;
+     int ptrsize, nitems;
+     FILE *stream;
+
+     int fwrite(ptr, ptrsize, nitems, stream)
+     BUFFER ptr;
+     int ptrsize, nitems;
+     FILE *stream;
+
+DESCRIPTION
+     fread‚ reads¬  intï á blocë beginninç aô ptr¬ nitems‚ itemó oæ 
+     ptrsize‚ byteó froí thå nameä inpuô stream®   Iô returnó  thå 
+     numbeò oæ itemó actuallù read.
+
+     fwrite‚ appendó aô mosô nitems‚ itemó oæ ptrsize‚ byteó oæ typå 
+     *ptr‚  tï  thå FILÅ stream®   Iô returnó thå numbeò oæ  itemó 
+     actuallù written.
+     
+SEÅ ALSO
+     read¬ write¬ fopen¬ getc¬ putc¬ gets¬ puts¬ printf¬ scanf
+
+DIAGNOSTICS
+     fread‚ anä fwrite‚ returî NULL‚ upoî enä oæ filå oò error.
+.paŠ.hefrexp                                                       frexp
+
+                 Mantissa and Exponent Functions
+
+NAME
+     frexp, ldexp, modf 
+
+SYNOPSIS
+     double frexp(value, eptr)
+     double value;
+     int *eptr;
+
+     double ldexp(value, exp)
+     double value;
+     int exp;
+
+     double modf(value, iptr)
+     double value, *iptr;
+
+DESCRIPTION
+     frexp‚  returnó  thå mantissá oæ á doublå value‚ aó  á  doublå 
+     quantity¬  x¬  oæ  magnitudå iî thå intervaì [0.5¬  1)¬  anä 
+     storeó  aî  integeò n‚ sucè thaô valuå ½ ø  ª  2n‚  indirectlù 
+     througè eptr.
+
+     ldexp returns the quantity value*2exp.
+
+     modf‚   returnó   thå  fractionaì  parô   oæ   value¬   i.e.¬ 
+     frac(value)¬  anä storeó thå integeò parô indirectlù througè 
+     iptr¬ i.e.¬ *iptò ½ fint(value).
+
+BUGS
+     Thå definitioî oæ modf‚ appearó tï bå somewhaô differenô thaî 
+     that given in Ref. 1 for negative value arguments.
+
+SEE ALSO
+     frac, fint
+.paŠ.hefseek                                                       fseek
+
+                       Reposition a Stream
+
+NAME
+     fseek¬ ftell¬ rewinä 
+
+SYNOPSIS
+     #includå <stdio.h>
+
+     int fseek(stream¬ offset¬ whence)
+     FILÅ *stream;
+     lonç offset;
+     int whence;
+
+     lonç ftell(stream)
+     FILÅ *stream;
+
+     int rewind(stream)
+     FILE *stream;
+
+DESCRIPTION
+     fseek‚  setó  thå  positioî  oæ  thå  nexô  inpuô  oò  outpuô 
+     operatioî oî thå stream®   Thå ne÷ positioî ió aô thå signeä 
+     distancå  offset‚  byteó  froí  thå  beginning¬  thå  currenô 
+     position¬  oò  thå enä oæ thå file¬  accordinç aó whence‚ haó 
+     thå valuå ORIGIÎ (0)¬ CURPOÓ (1)¬ oò FILENÄ (2).
+
+     fseeë undoeó anù effectó oæ ungetc.
+
+     ftell‚  returnó  thå  currenô valuå oæ thå  offseô  iî  byteó 
+     relativå  tï  thå  ORIGIN‚ oæ thå FILÅ  stream¬  measureä  iî 
+     bytes.
+
+     Oî  somå  systems¬  ftell‚ maù bå thå onlù foolprooæ  waù  tï 
+     obtain an offset for fseek.
+
+     rewind(stream)‚ ió equivalenô tï fseek(stream¬  OL¬  ORIGIN)®  
+     It sets the FILE fp to the ORIGIN.
+
+SEE ALSO
+     lseek¬ fopen
+     
+DIAGNOSTICS
+     fseeë and rewind return EOF foò impropeò seeks.
+.paŠ.hegetbuf                                                     getbuf
+
+                          Get a Buffer
+
+NAME
+     getbuf
+
+SYNOPSIS
+     VOID getbuf(fp)
+     FAST FILE *fp;
+
+DESCRIPTION
+     getbuf‚  getó á buffeò eitheò froí allot‚ oò elså iô useó  thå 
+     bytbuf, attaching to the FILE fp.
+.paŠ.hegetc                                                         getc
+
+                Get Character or Word from Stream
+
+NAME
+     getc, getca, getchar, getf, geti, getl
+
+SYNOPSIS
+     #includå <stdio.h>
+
+     inô getc(stream)
+     FILÅ *stream;
+
+     int getca(stream)
+     FILE *stream;
+
+     inô getchar()
+
+     double getf(prompt, check, low, high)
+     STRING prompt;
+     BOOL check;
+     double low, high;
+
+     int geti(prompt, check, low, high)
+     STRING prompt;
+     BOOL check;
+     int low, high;
+
+     long getl(prompt, check, low, high)
+     STRING prompt;
+     BOOL check;
+     long low, high;
+
+DESCRIPTION
+     getc returnó thå nexô characteò froí thå nameä inpuô stream.
+
+     getca‚ ió thå samå aó getc¬ excepô thaô '\r§ characteró inpuô 
+     froí  thå  streaí  arå suppresseä (wheî  compileä  witè  thå 
+     CRINSUP switch in stdio.h TRUE).
+
+     getchar()‚  ió identicaì tï getca(stdin)®   stdio.h‚  containó 
+     thå macro¬ GETCHAR‚ whicè ió thå samå aó thió function.
+
+     getf‚  printó  prompt‚  oî stdout¬  theî readó  froí  stdiî  á 
+     double¬ whicè iô returns®  Iæ checë ió TRUE¬ doubleó outsidå 
+     of the low - high bounds will not be accepted.
+
+     geti‚ anä getl‚ worë thå samå aó getf¬ excepô thaô theù returî 
+     an integer and a long, respectively.
+
+     Thå standarä inpuô streaí stdin‚ ió normallù buffereä iæ  anä 
+     onlù  iæ thå inpuô referó tï á devicå otheò thaî á terminal®  
+     Wheî aî inpuô streaí ió unbuffered¬  informatioî ió returneä 
+     froí  getc‚ aó sooî aó iô ió written»   wheî iô ió  buffered¬ 
+     manù characteró arå saveä uğ anä returneä bù getc‚ onlù afteò 
+     á  newlinå  ió  encountered®    Tï  ensurå  portabilitù   oæ Š     programs¬ alwayó uså setbuf‚ tï seô thå propeò bufferinç modå 
+     at the beginning.
+
+SEE ALSO
+     fopen¬ putc¬ gets¬ scanf¬ fread¬ ungetc, setbuf
+
+DIAGNOSTICS
+     Theså  functionó  returî thå integeò constanô EOF‚ aô enä  oæ 
+     filå oò upoî reaä error.
+
+BUGS
+     Somå  systemó maù contaiî internaì bufferinç tï makå uså  oæ 
+     terminaì  linå  editinç featureó oæ somå operatinç  systems¬ 
+     eveî  wheî unbuffereä inpuô ió desired®   Thereforå  getchar‚ 
+     may not respond properly for character-by-character inputs.
+.paŠ.hegets                                                         gets
+
+                   Get a String from a Stream
+
+NAME
+     gets, getns, fgets 
+
+SYNOPSIS
+     #include <stdio.h>
+
+     STRING gets(s)
+     STRING s;
+
+     STRING getns(p, s, n)
+     STRING p, s;
+     int n;
+
+     STRING fgets(s, n, stream)
+     STRING s;
+     FILE *stream;
+     int n;
+
+DESCRIPTION
+     gets‚  readó  á  texô strinç intï s‚ froí thå  standarä  inpuô 
+     streaí stdin®   Thå strinç inpuô ió terminateä bù á  newlinå 
+     character¬ whicè ió replaceä iî s‚ bù á NULL‚ character®  gets‚ 
+     returnó itó argument.
+
+     getns‚  promptó  stdouô witè thå strinç p¬  theî readó n‚  - ± 
+     characters¬  oò uğ tï á newlinå character¬  whicheveò  comeó 
+     first¬  froí  stdin®   Thå  lasô  caracteò reaä  intï  s‚  ió 
+     followeä  bù  NULL®   getns‚ returnó s®   Characteró  entereä 
+     afteò  thå  (n‚  - 1)th¬   uğ  tï  anä  includinç  á  newlinå 
+     character¬ arå discarded.
+
+     fgets‚  readó  n-±  texô  characters¬  oò  uğ  tï  á  newlinå 
+     character¬  whicheveò comeó first¬  froí thå stream‚ intï thå 
+     strinç  s®   Thå lasô characteò reaä intï s‚ ió followeä bù á 
+     NULL‚ character®  fgets‚ returnó s.
+
+SEÅ ALSO
+     puts, getc, scanf, fread
+
+DIAGNOSTICS
+     gets anä fgets returî thå constanô pointeò NULL upoî enä  oæ 
+     file, empty s or error.
+
+BUGS
+     gets deleteó á newline¬  fgets keepó it¬  alì iî thå namå oæ 
+     backward compatibility.
+.paŠ.hehypot                                                       hypot
+
+                   Euclidian Distance Function
+
+NAME
+     hypoô 
+
+SYNOPSIS
+     double hypot(x, y)
+     double x, y;
+
+DESCRIPTION
+     hypot returns
+
+           sqrt(x*ø « y*y),
+
+     taking precautions against unwarranted overflows.
+
+SEÅ ALSO
+     sqrt
+
+DIAGNOSTICS
+     Thå INFINITY‚ valuå ió returneä oî overflow¬ anä errno‚ ió seô 
+     to ERANGE.
+.paŠ.heindex                                                       index
+
+                   String Operation Functions
+
+NAME
+     index¬  rindex¬  stradd¬  strcat¬  strncat¬ strcmp¬ strncmp¬ 
+     strcpy¬ strncpy¬ streql¬ strindex¬ strlen¬ strsave
+ 
+SYNOPSIS
+     STRING index(s¬ c)
+     STRING s;
+     char c;
+
+     STRING rindex(s¬ c)
+     STRING s;
+     chaò c;
+
+     STRING stradd(n, s, arg[, ...])
+     STRING s, arg, ...;
+
+     STRING strcat(s1¬ s2)
+     STRING s1¬ s2;
+
+     STRING strncat(s1¬ s2¬ n)
+     STRING s1¬ s2;
+     int n;
+
+     int strcmp(s1¬ s2)
+     STRING s1¬ s2;
+
+     int strncmp(s1¬ s2¬ n)
+     STRING s1¬ s2;
+     int n;
+
+     STRING strcpy(s1¬ s2)
+     STRING s1¬ s2;
+
+     STRING strncpy(s1¬ s2¬ n)
+     STRING s1¬ s2;
+     int n;
+
+     BOOL streql(s, t)
+     STRING s, t;
+
+     int strindex(s, t)
+     STRING s, t;
+     
+     int strlen(s)
+     STRING s;
+
+     STRING strsave(s)
+     STRING s;
+
+DESCRIPTION
+     Theså functionó operatå oî null-terminateä strings®  Theù dï 
+     noô checë foò overflo÷ oæ anù receivinç string.Š
+     indeø  (rindex)  returnó  á  pointeò  tï  thå  firsô  (last© 
+     occurancå oæ characteò c iî strinç s¬  oò NULL iæ c doeó noô 
+     occuò iî thå string.
+
+     strcat  appendó á copù oæ strinç s2 tï thå enä oæ strinç s1®  
+     strncat copieó aô mosô n characters®   Botè returî á pointeò 
+     tï  thå  null-terminateä  result®    stradd‚  concatenateó  n‚ 
+     strings, s and arg[, ...].
+
+     strcmp compareó itó argumentó anä returnó aî integeò greateò 
+     than¬  equaì  to¬  oò  lesó thaî zero¬  accordinç aó  s1‚  ió 
+     lexicographicallù greateò than¬  equaì to¬  oò lesó thaî s2®  
+     strncmp‚  makeó thå samå comparison¬  buô lookó aô aô mosô  n‚ 
+     characters.
+
+     strcpy‚ copieó strinç s2‚ tï s1®  strncpy‚ copieó n‚  characteró 
+     oæ s2¬ oò alì oæ s2¬ whicheveò ió less® Botè returî s1.
+
+     streql‚ returnó TRUE iæ stringó s‚ anä t‚ arå thå same.
+
+     strindex‚ locateó onå strinç iî another¬ returnó thå indeø oæ 
+     t‚  iî  s¬  oò EOF‚ iæ iô doeó noô exist®   Thió ió thå  index‚ 
+     functioî  giveî  iî  Kernighaî anä  Ritchie¬  pagå  6·  (seå 
+     Reference 2).
+
+     strlen returnó thå numbeò oæ non-NULL characteró iî s.
+
+     strsave‚  getó  enougè  stroragå foò s‚  anä  putó  iô  there¬ 
+     returnó  thå  pointeò  tï thå string¬  oò NULL‚ iæ  therå  ió 
+     insufficienô  strinç  space®   Thió ió  froí  Kernighaî  anä 
+     Ritchie (see Reference 2, pp. 103).
+.paŠ.heisalpha                                                   isalpha
+
+               Character Classification Functions
+
+NAME
+     isalnum¬ isalpha¬ isascii¬ iscntrl¬ isdigit¬ ishex¬ islower¬ 
+     isoctal¬ isprint¬ ispunct¬ isspace¬ isupper
+
+SYNOPSIS
+     BOOL isalpha(c)
+     int c;
+     ® ® .
+
+DESCRIPTION
+     Theså functionó classifù ASCII-codeä integeò valueó bù tablå 
+     lookup®   Eacè  ió  á predicatå returninç nonzerï foò  TRUE¬ 
+     zerï foò FALSE®   isascii‚ ió defineä oî alì integeò  values» 
+     thå  resô arå defineä onlù wherå isascii‚ ió TRUE anä oî  thå 
+     singlå non-ASCIÉ valuå EOF‚ (seå stdio)®   Thå conditionó foò 
+     a return of TRUE are
+
+.uj0
+     isalnuí        c ió aî alphanumeriã character.
+
+     isalphá        c ió á letter.
+
+     isascié        c ió aî ASCIÉ character¬ codå lesó thaî 0x80.
+
+     iscntrì        c ió á deletå characteò (0x7f©  oò  ordinarù 
+                      controì characteò (lesó thaî 0x20).
+
+     isdigiô        c ió á digit.
+
+     ishex          c is a hex number, 0 - 9, a - f.
+
+     isloweò        c ió á loweò-caså letter.
+
+     isoctal        c is an octal digit, 0 - 7.
+
+     isprinô        c  ió  á  printinç    character¬  codå  0x20 
+                      (space© througè 0x7e (tilde).
+
+     ispuncô        c ió á punctuatioî characteò (neitheò controì 
+                      noò alphanumeric).
+
+     isspacå        c ió á space¬  tab¬ carriagå return¬ newline¬ 
+                      oò formfeed.
+
+     isuppeò        c ió aî uppeò-caså letter.
+.uj1
+
+SEE ALSO
+     Macroó   correspondinç  tï  eacè  oæ  theså  functionó   arå 
+     availablå iî ctype.h.
+.paŠ.heisok                                                         isok
+
+                          Quesion User
+
+NAME
+     isok
+
+SYNOPSIS
+     BOOL isok(prompt)
+     STRING prompt;
+
+DESCRIPTION
+     prompt‚  outputó  tï  stdouô anä acceptó á  y/î  answer®   Iô 
+     returns TRUE for y, and FALSE for n.
+.paŠ.hemalloc                                                     malloc
+
+                      Main Memory Allocator
+
+NAME
+     malloc¬ free¬ realloc¬ calloã 
+
+SYNOPSIS
+     STRING malloc(nbytes)
+     unsigned nbytes;
+
+     VOID free(ptr)
+     STRING ptr;
+
+     STRING realloc(ptr,size)
+     STRING ptr;
+     unsigned size;
+
+     STRING calloc(nelem, elsize)
+     unsigned nelem, elsize;
+
+DESCRIPTION
+     malloc‚  anä  free‚ providå á  simplå  general-purposå  memorù 
+     allocatioî package®   malloc‚ returnó á pointeò tï á blocë oæ 
+     aô leasô nbytes‚ byteó beginninç oî á worä boundary.
+
+     Thå  argumenô  tï  free‚ ió á pointeò tï á  blocë  previouslù 
+     allocateä  bù  malloc»  thió  spacå ió  madå  availablå  foò 
+     furtheò allocation¬ buô itó contentó arå lefô undisturbed.
+
+     Needlesó  tï  say¬  gravå disordeò wilì resulô iæ thå  spacå 
+     assigneä  bù malloc‚ ió overruî oò iæ somå randoí  numbeò  ió 
+     handeä tï free.
+
+     malloc‚  allocateó  thå firsô big-enougè contiguouó reacè  oæ   
+     freå  spacå founä iî á circulaò searcè froí thå  lasô  blocë 
+     allocateä  oò freed¬  coalescinç adjacenô freå blockó aó  iô 
+     searches®   Iô calló sbrk‚ tï geô morå memorù froí thå systeí 
+     wheî therå ió nï suitablå spacå alreadù free.
+
+     realloc‚  changeó thå sizå oæ thå blocë pointeä tï bù ptr‚  tï 
+     sizå  byteó  anä returnó á pointeò tï thå  (possibly  moved© 
+     block®   Thå contentó wilì bå unchangeä uğ tï thå lesseò  oæ 
+     thå ne÷ anä olä sizes.
+
+     realloc‚ alsï workó iæ ptr‚ pointó tï á blocë freeä sincå  thå 
+     lasô calì oæ malloc¬  realloc‚ oò calloc»  thus¬ sequenceó oæ 
+     free¬  malloc‚ anä realloc‚ caî exploiô thå searcè strategù oæ 
+     malloc‚ tï dï storagå compaction®    
+
+     calloc‚  allocateó  spacå foò aî arraù oæ nelem‚  elementó  oæ 
+     sizå elsize®  Thå spacå ió initializeä tï zeros.
+
+     Eacè  oæ thå allocatioî routineó returnó á pointeò tï  spacå 
+     suitablù  aligneä  (afteò  possiblå  pointeò  coercion©  foò 
+     storage of any type of object.Š
+
+DIAGNOSTICS
+     malloc¬  realloc‚  anä  calloc‚ returî á NULL‚ pointeò  (0©  iæ 
+     therå  ió nï availablå memorù oò iæ thå operatinç systeí haó 
+     detecteä storagå corruptioî outsidå thå allocateä areas.
+
+SEE ALSO
+     allot, liberate
+
+BUGS
+     Wheî realloc‚ returnó zero¬  thå blocë pointeä tï bù ptr‚  maù 
+     bå destroyed.
+.paŠ.hemax                                                           max
+
+  Maximum and Mimimum Function for Integers, Doubles and Longs
+
+NAME
+     max¬  min¬  fmax, fmin, lmax¬  lmiî  
+
+SYNOPSIS
+     int max(a, b)
+     int a, b;
+
+     int min(a, b)
+     int a, b;
+
+     double fmax(x, y);
+     double x, y;
+
+     double fmin(x, y);
+     double x, y;
+
+     long lmax(x, y)
+     long x, y;
+
+     long lmin(x, y)
+     long x, y;
+
+DESCRIPTION
+     max‚  anä min‚ finä thå maximuí anä thå minimuí oæ integeró  a‚ 
+     anä  b®    fmax‚ anä fmin‚ dï thå samå foò doubles»  lmax‚  anä 
+     lmin‚ dï thå samå foò longs.
+
+     MAX  anä MIN arå macroó iî defs.è whicè takå thå maximuí anä 
+     minimum values of any numeric type.
+
+SEE ALSO
+     defs.h
+.paŠ.henprob                                                       nprob
+
+                  Normal Probability Functions
+
+NAME
+     nprob, nprobc
+
+SYNOPSIS
+     double nprob(x)
+     double x;
+
+     double nprobc(x)
+     double x;
+
+DESCRIPTION
+     nprob‚  ió  thå normaì cumulativå probabilitù functioî  oæ  á 
+     randoí  variablå havinç uniô variancå anä  zerï  mean¬  i.e® 
+     Pr{ú <½ x}.
+
+     nprobc‚  ió  thå complementarù cumulativå normaì  probabilitù 
+     function, i.e., nprobc(x) = 1 - nprob(x).
+
+SEE ALSO
+     erf, erfc
+.paŠ.heprintf                                                     printf
+
+                   Formatted Output Conversion
+
+NAME
+     printf¬ fprintf¬ eprintf, sprintæ, format
+
+SYNOPSIS
+     #include <stdio.h>
+
+     VOID printf(fmt [, arg ] ... )
+     STRING fmt;
+     unsigned arg;
+
+     VOID fprintf(stream, fmt [, arg ] ... )
+     FILE *stream;
+     STRING fmt;
+     unsigned arg;
+
+     VOID eprintf(fmt [, arg ] ... )
+     STRING fmt;
+     unsigned arg;
+
+     VOID sprintf(s, fmt [, arg ] ... )
+     STRING s, fmt;
+     unsigned arg;
+
+     VOID format(putsub, fmt, args)
+     int (*putsub)();
+     STRING fmt;
+     unsigned args;
+
+DESCRIPTION
+     printf‚  placeó outpuô oî thå standarä outpuô streaí  stdout.‚  
+     fprintf‚   placeó   outpuô  oî  thå  nameä   outpuô   stream® 
+     eprintf(fmô [¬  arç İ ..® )‚ placeó outpuô oî stderr® sprintf‚ 
+     placeó  outpuô  iî  thå  strinç  s¬  followeä  bù  thå  NULL‚ 
+     character®   format‚ placeó outpuô usinç thå putsub‚ oæ á lisô 
+     oæ itemó pointeä tï bù args.
+
+     Eacè oæ theså functionó converts¬  formats¬  anä printó  itó 
+     arg‚ argumentó undeò controì oæ thå fmt‚ argument®  Thå fmt‚ ió 
+     á  characteò  strinç  whicè containó twï typeó  oæ  objectsº  
+     plaiî  characters¬  whicè  arå simplù copieä tï  thå  outpuô 
+     stream¬  anä conversioî specifications¬ eacè oæ whicè causeó 
+     conversioî  anä printinç oæ thå nexô successivå arg‚  oæ  thå 
+     list.
+
+     Eacè conversioî specificatioî ió introduceä bù thå characteò 
+     %®  Followinç thå %¬ therå maù be
+
+     -     aî    optionaì   minuó  sigî  whicè   specifieó   lefô 
+           adjustmenô  oæ  thå converteä valuå iî  thå  indicateä 
+           field;
+
+     -     aî optionaì digiô strinç specifyinç á fielä width»  iæ Š           thå  converteä  valuå haó feweò  characteró  thaî  thå 
+           fielä  widtè  iô wilì bå blank-paddeä oî thå lefô  (oò 
+           right¬  iæ  thå  left-adjustmenô  indicatoò  haó  beeî 
+           given© tï makå uğ thå fielä width»  iæ thå fielä widtè 
+           beginó witè á zero¬  zero-paddinç wilì bå donå insteaä 
+           oæ blank-padding;
+
+     -     aî optionaì perioä whicè serveó tï separatå thå  fielä 
+           widtè froí thå nexô digiô string;
+
+     -     aî  optionaì digiô strinç specifyinç á precisioî whicè 
+           specifieó  thå  numbeò oæ digitó tï appeaò  afteò  thå 
+           decimaì point¬ foò e- anä f-conversion¬ oò thå maximuí 
+           numbeò oæ characteró tï bå printeä froí á string;
+
+     -     thå characteò ì specifyinç thaô á followinç d¬  o¬  x¬ 
+           oò   õ  correspondó  tï  á  lonç  integeò   arg®    (Á 
+           capitalizeä  conversioî  codå  accomplisheó  thå  samå 
+           thing.)
+
+     -     á characteò whicè indicateó thå typå oæ conversioî  tï 
+           bå applied.
+
+     Á  fielä  widtè oò precisioî maù bå '*§ insteaä oæ  á  digiô 
+     string®   Iî  thió  caså aî integeò arg supplieó  thå  fielä 
+     widtè oò precision.
+
+     The conversion characters and their meanings are
+
+     d,o,x Thå  integeò arç ió converteä tï  decimal¬  octal¬  oò 
+           hexadecimaì notatioî respectively.
+
+     f     Thå  floaô  oò  doublå arg‚  ió  converteä  tï  decimaì 
+           notatioî iî thå stylå '[-]ddd.ddd§ wherå thå numbeò oæ 
+           d'ó  afteò thå decimaì poinô ió equaì tï thå precisioî 
+           specificatioî  foò thå argument®   Iæ thå precisoî  ió 
+           missing¬  ¶  digitó  arå given»  iæ thå  precisioî  ió 
+           explicitlù  zero¬  nï digitó anä nï decimaì poinô  arå 
+           printed.
+
+     e     Thå   floaô  oò doublå arç ió converteä iî  thå  stylå  
+           '[-]d.ddde+dd§  wherå  therå ió onå digiô  beforå  thå 
+           decimaì  poinô  anä thå numbeò afteò ió equaì  tï  thå 
+           precisioî  specificatioî  foò thå argument»  wheî  thå 
+           precisioî ió missing¬ ¶ digitó arå produced.
+
+     g     Thå  floaô  oò doublå arç ió printeä iî  stylå  d¬  iî 
+           stylå f¬ oò iî stylå e¬ whicheveò giveó fulì precisioî 
+           iî minimuí space.
+
+     c     Thå  characteò arç ió printed®   NULL  characteró  arå 
+           ignored.
+
+     s     arç  ió  takeî tï bå á strinç (characteò pointer©  anä 
+           characteró  froí thå strinç arå printeä untiì  á  NULL Š           characteò  oò untiì thå numbeò oæ characteró indicateä 
+           bù thå precisioî specificatioî ió reached»  howeveò iæ 
+           thå  precisioî ió zerï oò missinç alì characteró uğ tï 
+           á NULL‚ arå printed.
+
+     u     Thå  unsigneä integeò arç ió converteä tï decimaì  anä 
+           printeä  (thå  resulô  wilì bå iî thå  rangå  zerï  tï 
+           65535).
+
+     %     Prinô á '%'» nï argumenô ió converted.
+
+     Iî  nï caså doeó á non-existenô oò smalì fielä  widtè  causå 
+     truncatioî  oæ  á  field»  paddinç takeó placå onlù  iæ  thå 
+     specifieä fielä widtè exceedó thå actuaì width®   Characteró 
+     generated by printf are printed by putchar.
+
+     Examples:
+     Tï prinô á datå anä timå iî thå forí 
+
+           Sunday¬ Julù 3¬ 10:02
+
+     wherå  weekday‚  anä month‚ arå pointeró  tï  null-terminateä 
+     strings:
+
+           printf("%s¬  %ó %d¬  %02d:%02d"¬  weekday¬ month¬ day¬ 
+           hour¬ min);
+
+     To print pi to 5 decimals:
+
+           printf("pé ½ %.5f"¬ 4*atan(1.0));
+
+SEÅ ALSO
+     putc, scanf
+
+BUGS 
+     Very wide fields (>MAXLINE characters) fail. 
+.paŠ.heputc                                                         putc
+
+                Put Character or Word on a Stream
+
+NAME                                                        
+     putc, putca, putchar, eputc
+
+SYNOPSIS
+     #include <stdio.h>
+
+     int putc(c, stream)
+     int c;
+     FILE *stream;
+
+     int putca(c, stream)
+     int c;
+     FILE *stream;
+
+     int putchar(c)
+     int c;
+
+     int eputc(c)
+     char c;
+
+DESCRIPTION
+     putc‚ appendó thå characteò c‚ tï thå nameä outpuô stream®  Iô 
+     returnó  thå characteò written®   putca‚ ió thå samå aó  putc‚ 
+     excepô  thaô  '\n§ ió accompanieä bù '\r§ wheî  CROUTADD‚  iî 
+     stdio.h‚ ió TRUE.
+
+     putchar(c)‚  ió  defineä  aó  thå  macrï  putca(c¬   stdout)¬ 
+     returninç c¬  iî stdio.h.
+
+     eputc‚ outputó c‚ tï thå standarä erroò device¬ stderr®  eputc‚ 
+     ió defineä aó thå macrï putca(c¬ stderr).
+
+     Thå standarä streaí stdout‚ ió normallù buffereä iæ anä  onlù 
+     iæ  thå outpuô doeó noô refeò tï á terminal®   Thå  standarä 
+     streaí  stderr‚ ió bù defaulô unbuffereä unconditionallù (seå 
+     fopen)®  Wheî  aî  outpuô streaí ió  unbuffereä  informatioî 
+     appearó  oî  thå  destinatioî filå oò terminaì  aó  sooî  aó 
+     written»  wheî iô ió buffered¬  manù characteró arå saveä uğ 
+     anä writteî aó á block®   fflush‚ (seå fclose© maù bå useä tï 
+     forcå thå blocë ouô early.
+
+     putc updates the outrow[] and outcol[] of its stream->_unit.
+
+SEÅ ALSO
+     fopen, fclose, getc, puts, printf, fread, stdio.h
+
+DIAGNOSTICS
+     Theså functionó returî thå constanô EOÆ upoî  error®   
+.paŠ.heputs                                                         puts
+
+                    Put a String on a Stream
+
+NAME
+     puts, fputs, eputs
+
+SYNOPSIS
+     #include <stdio.h>
+
+     int puts(s)
+     STRING s;
+
+     int fputs(s, stream)
+     STRING s;
+     FILE *stream;
+
+     int eputs(s)
+     STRING s;
+
+DESCRIPION
+     puts‚ copieó thå texô strinç s¬  followeä bù newline¬  tï thå 
+     stdio‚ device¬ anä returnó á newlinå characteò iæ successful¬ 
+     EOF‚ iæ not.
+     
+     fputs‚  copieó thå texô strinç s‚ tï thå nameä outpuô  stream®  
+     Iô returnó NULL‚ iæ successful¬ EOF‚ iæ not.
+
+     eputs‚  putó thå strinç ouô tï thå standarä erroò device®  Iô 
+     returns newline if successful, EOL if not. 
+
+     Nonå oæ thå routineó copieó thå terminatinç NULL‚ character.
+
+SEÅ ALSO
+     fopen¬ gets¬ putc¬ printf¬ ferror¬ fwrite
+
+BUGS
+     puts‚ appendó á newline¬  fputs‚ doeó not¬  alì iî thå namå oæ 
+     backwarä compatibility.
+.paŠ.herandom                                                     random
+
+                Random Number Generator Functions
+
+NAME
+     randize, random, randnorm, randexp, urandom
+
+SYNOPSIS
+     VOID randize(seed)
+     int seed;
+
+     double random()
+
+     double randnorm()
+
+     double randexp()
+
+     unsigned urandom()
+
+DESCRIPTION
+     randize‚ initializeó thå randoí numbeò generatoò accordinç tï 
+     seed®   Iæ seed‚ ió zero¬  aî internaì valuå ió useä tï starô 
+     thå generator»  iæ á positivå valuå ió used¬  thaô valuå  ió 
+     converteä  tï  á pseudorandoí startinç value»  anä iæ -±  ió 
+     used¬ aî unknowî valuå ió useä aó thå starter.
+
+     random returns a uniform random value in [0, 1].
+
+     randnorm‚  returnó  á normallù distributeä randoí valuå  witè 
+     zero mean and unit standard deviation.
+
+     randexp‚   useó   thå   functioî  random()‚   tï   returî   aî 
+     exponentiallù distributeä randoí valuå characterizeä bù uniô 
+     mean¬ i.e. -log(random()).
+
+     urandom‚  returnó á uniforí randoí unsigneä integeò valuå  iî 
+     [0, 65535].
+
+     Numberó  generateä  havå nï  seriaì  correlation®   Adjacenô 
+     sampleó   oæ  random‚  anä  urandom‚  numberó  arå   uniformlù 
+     distributeä  oveò  thå 32-cube¬  anä runs-uğ  anä  runs-dowî 
+     testó  uğ tï lengtè 1³ woulä requirå morå thaî 1011”  sampleó 
+     tï  sho÷  deviatioî  froí theoretical®   Thå perioä  oæ  thå 
+     generatoò  ió  abouô  1.³  ª 10154®   Thå  numberó  forí  aî 
+     asymptoticallù  randoí Tausworthå lineaò recurrancå  (modulï 
+     2©  sequence¬  describeä iî Ref®  12¬  usinç  thå  primitivå 
+     trinomial x521 + x32 + 1.
+.paŠ.heratfun                                                     ratfun
+
+                  Rational Function Evaluation
+
+NAME
+     ratfun 
+
+SYNOPSIS
+     double ratfun(x, P, Q, n, m)
+     double x, P[], Q[];
+     int n, m;
+
+DESCRIPTION
+     ratfun returnó thå valuå oæ thå rationaì functioî  P(x)/Q(x) 
+     wherå î ½ deg(P)¬ í ½ deg(Q).
+
+DIAGNOSTICS
+     Iæ  thå denominatoò ió zero¬  errno‚ ió seô tï  ERANGE»  theî 
+     positivå  INFINITY‚  ió  returneä iæ thå  numeratoò  ió  non-
+     negative»  otherwise¬  negativå  INFINITY‚ ió  returned®   Oî 
+     underflow¬ errno‚ ió seô tï ERANGE¬ anä zerï ió returned®  Oî 
+     overflow¬  errno‚ ió seô tï ERANGE‚ anä INFINITY‚ oæ thå propeò 
+     sigî ió returned.
+.paŠ.herkstep                                                     rkstep
+
+                    Fourth Order Runga-Kutta
+
+NAME
+     rkstep, rknstep
+
+SYNOPSIS
+     VOID rkstep(f, h, t, yp)
+     double (*d)(), h, t, *yp;
+
+     VOID rknstep(N, f, h, t, y1, y2, dy, k, ys)
+     double (*f)(), h, t, y1[], y2[], dy[], k[], ys[];
+
+DESCRIPTION
+     rkstep‚ performó aî integratioî steğ foò á first-ordeò  diff
+     erentiaì   equatioî  usinç  thå  fourtè  ordeò   Runga-Kuttá 
+     formulas®   Thå   forí  oæ  thå  equatioî  ió  y§ ½ f(t¬ y)¬ 
+     wherå  ù  ½ *yp‚ anä differenticatioî ió witè respecô tï  thå 
+     firsô variablå oæ f®   (Seå Referencå 3¬  pg®  896¬  formulá 
+     25.5.10)
+
+     rknstep‚  performó  aî  integratioî steğ foò  aî  N-tuplå  oæ 
+     first-ordeò ordinarù differentiaì equationó usinç thå fourtè 
+     ordeò  Runga-Kuttá  formulaó  referenceä above®   N‚  ió  thå 
+     dimensioî  oæ thå tuple¬  y1‚ ió thå currenô vectoò statå  aô 
+     (time© t¬ y2‚ ió thå calculateä N-tuplå statå valuå aô (time© 
+     ô « h‚ returneä bù rknstep¬  dy‚ ió á scratcè arraù needeä  tï 
+     holä intermediatå calculationó accumulatinç thå dy‚ value¬  k‚ 
+     holdó  coefficientó  k1¬  k2¬  k3,‚ anä k4¬  anä ys‚ ió foò  y‚ 
+     approximantó  foò eacè equation®   Alì oæ thå scratcè  arraù 
+     must have dimension not less than N.
+
+     Thå functioî f‚ haó ³ arguments»  f(i¬  t¬ y)¬ wherå i‚ ió thå 
+     vectoò componenô index¬  t‚ ió thå differenticatioî variable¬ 
+     anä  y‚  ió  thå  currenô  statå  valuå  vector®    Thaô  is¬ 
+     yi” ½ f(i¬ t¬ y)‚ foò é ½ 1¬ 2,...,N.‚  Iî botè functions¬ h‚ ió 
+     thå steğ size.
+.paŠ.hescanf                                                       scanf
+
+                   Formatted Input Conversion
+
+NAME
+     scanf¬ fscanf¬ sscanæ, unformat
+
+SYNOPSIS
+     #includå <stdio.h>
+
+     int scanf(formaô Û ¬ pointer İ ... )
+     STRING format;
+     unsigned *pointer;
+
+     int fscanf(stream¬ formaô Û ¬ pointer İ ... )
+     FILÅ *stream;
+     STRING format;
+     unsigned *pointer;
+
+     int sscanf(s¬ formaô Û ¬ pointer İ ... )
+     STRING s¬ format;
+     int *pointer;
+
+     int unformat(get, format [ , pointer ] ... )
+     int (*get)();
+     STRING format;
+     int *pointer;
+
+DESCRIPTION
+     scanf‚  readó froí thå standarä inpuô streaí  stdin®   fscanf‚ 
+     readó  froí thå nameä inpuô stream®   sscanf‚ readó froí  thå 
+     characteò  strinç  s®   unformat‚ utilizeó thå  get‚  functioî 
+     argumenô   tï  fetcè  characters®    Eacè   functioî   readó 
+     characters¬  interpretó theí accordinç tï format¬ anä storeó 
+     thå  resultó  iî  itó remaininç  arguments®   Eacè  functioî 
+     expectó  aó  argumentó á controì  strinç  format¬  describeä 
+     below¬  anä á seô oæ pointer‚ argumentó indicatinç wherå  thå 
+     converteä inpuô shoulä bå stored.
+
+     Thå    controì    strinç   usuallù    containó    conversioî 
+     specifications¬  whicè  arå useä tï direcô interpretatioî oæ 
+     inpuô sequences®  Thå controì strinç maù contain:
+
+     1.    Blanks¬  tabó oò newlines¬  whicè matcè optionaì whitå 
+           spacå iî thå input.
+
+     2.    Aî  ordinarù  characteò (noô %© whicè musô  matcè  thå 
+           nexô characteò oæ thå inpuô stream.
+
+     3.    Conversioî specifications¬ consistinç oæ thå characteò 
+           %¬  aî optionaì assignmenô suppressinç characteò *¬ aî 
+           optionaì   numericaì  maximuí  fielä  width¬   anä   á 
+           conversioî character.
+   
+     Á  conversioî  specificatioî directó thå conversioî  oæ  thå 
+     nexô  inpuô  field»  thå resulô ió placeä  iî  thå  variablå Š     pointeä tï bù thå correspondinç argument¬  unlesó assignmenô 
+     suppressioî  waó indicateä bù *®   Aî inpuô fielä ió defineä 
+     aó á strinç oæ non-spacå characters»  iô extendó tï thå nexô 
+     inappropriatå  characteò  oò  untiì  thå  fielä  width¬   iæ 
+     specified¬ ió exhausted.
+
+     Thå conversioî characteò indicateó thå interpretatioî oæ thå 
+     inpuô field» thå correspondinç pointeò argumenô musô usuallù 
+     bå   oæ  á  restricteä  type®    Thå  followinç   conversioî 
+     characteró arå legal:
+
+     %     á  singlå '%§ ió expecteä iî thå inpuô aô thió  point» 
+           nï assignmenô ió done.
+
+     d     á  decimaì  integeò  ió  expected»  thå  correspondinç 
+           argumenô shoulä bå aî integeò pointer.
+
+     o     aî  octaì  integeò  ió  expected»   thå  correspondinç 
+           argumenô shoulä bå aî integeò pointer.
+
+     x     á hexadecimaì integeò ió expected»  thå  correspondinç 
+           argumenô shoulä bå aî integeò pointer.
+
+     s     á  characteò  strinç ió  expected»  thå  correspondinç 
+           argumenô shoulä bå á characteò pointeò pointinç tï  aî 
+           arraù  oæ characteró largå enougè tï accepô thå strinç 
+           anä  á terminatinç NULL¬  whicè wilì  bå  added®   Thå 
+           inpuô  fielä  ió terminateä bù á spacå characteò oò  á 
+           newline.
+
+     c     á  characteò ió expected»  thå correspondinç  argumenô 
+           shoulä  bå á characteò pointer®   Thå normaì skiğ oveò 
+           spacå characteró ió suppresseä iî thió case»  tï  reaä 
+           thå nexô non-spacå character¬  trù '%1s'®   Iæ á fielä   
+           widtè  ió  given¬  thå correspondinç  argumenô  shoulä 
+           refeò tï á characteò array¬  anä thå indicateä  numbeò 
+           oæ characteró ió read.
+
+     e     á floatinç poinô numbeò ió expected» thå nexô fielä ió 
+     f     converteä   accordinglù   anä   storeä   througè   thå 
+           correspondinç argument¬ whicè shoulä bå á pointeò tï á 
+           float®  Thå inpuô formaô foò floatinç poinô numberó ió 
+           aî   optionallù  signeä  strinç  oæ  digitó   possiblù 
+           containinç  á decimaì point¬  followeä bù aî  optionaì 
+           exponenô  fielä consistinç oæ aî Å oò å followeä bù aî 
+           optionallù signeä integer.
+
+     [     indicateó  á  strinç  noô tï  bå  delimiteä  bù  spacå 
+           characters®   Thå lefô brackeô ió followeä bù á seô oæ 
+           characteró anä á righô bracket» thå characteró betweeî 
+           thå bracketó definå á seô oæ characteró makinç uğ  thå  
+           string®  Iæ thå firsô characteò ió noô circumfleø (^)¬ 
+           oò tildå (~)¬  thå inpuô fielä ió alì characteró untiì 
+           thå  firsô  characteò  noô  iî  thå  seô  betweeî  thå 
+           brackets»  iæ  thå  firsô  characteò  afteò  thå  lefô Š           brackeô ió Ş (oò ~)¬ thå inpuô fielä ió alì characteró 
+           untiì  thå  firsô characteò whicè ió iî thå  remaininç 
+           seô   oæ   characeró  betweeî   thå   brackets®    Thå 
+           correspondinç  argumenô  musô  poinô  tï  á  characteò 
+           array.
+
+     Thå conversioî characteró d¬  ï anä ø maù bå capitalizeä  oò 
+     preceedeä  bù  l‚ tï indicatå thaô á pointeò tï  long‚  ratheò 
+     thaî  tï  int‚  ió iî  thå  argumenô  list®   Similarly¬  thå 
+     conversioî  characteró e‚ oò f‚ maù bå capitalizeä oò precedeä 
+     bù  L‚  tï indicatå á pointeò tï double ratheò thaî tï float®  
+     Thå conversioî characteró d¬  o‚ anä x‚ maù bå preceedeä bù  h‚ 
+     tï  indicatå  á pointeò tï short‚ ratheò thaî  tï  int®   Thå 
+     conversioî  hd‚  maù  bå shorteneä tï onlù h‚  tï  conforí  tï 
+     Kernighan and Ritchie (Reference 2).
+
+     Thå  scanæ  functionó  returî  thå  numbeò  oæ  successfullù 
+     matcheä  anä  assigneä  inpuô items®   Thió caî bå  useä  tï 
+     decidå ho÷ manù inpuô itemó werå found®  Thå constanô EOÆ ió 
+     returneä upoî enä oæ input» notå thaô thió ió differenô froí 
+     zero¬ whicè meanó thaô nï conversioî waó done» iæ conversioî 
+     waó  intended¬   iô  waó  frustrateä  bù  aî   inappropriatå 
+     characteò iî thå input.
+
+     Foò example¬ thå call
+
+           inô i» 
+           floaô x» 
+           chaò name[50];
+           scanf¨ "%d%f%s"¬ &i¬ &x¬ name);
+
+     witè thå inpuô line
+
+           2µ  54.32E-±  synott
+
+     wilì assigî tï é thå valuå 25¬  ø thå valuå 5.432¬  anä namå 
+     wilì contaiî 'synott'®  Or,
+
+           inô i» 
+           floaô x» 
+           chaò name[50];
+           scanf("%2d%f%*d%[1234567890]"¬ &i¬ &x¬ name);
+
+     witè input
+
+           5678¹  012³  56a72
+
+     wilì assigî 5¶ tï i¬  789.° tï x¬ skiğ '0123'¬ anä placå thå 
+     strinç  '56§ iî name®   Thå nexô calì tï getchar‚ wilì returî 
+     'a'.
+
+     Thå get‚ argumenô oæ thå unformat‚ functioî itselæ useó á modå 
+     argumentº get(TRUE© ió assumeä tï perforí á characteò input¬ 
+     and get(FALSE) does an unget on the last character fetched.
+Š
+SEE ALSO
+     atof¬ getc¬ printf
+
+DIAGNOSTICS
+     Thå scanæ functionó returî EOÆ oî enä oæ input¬  anä á shorô 
+     counô foò missinç oò illegaì datá items.
+
+BUGS
+     Thå   succesó   oæ  incompatiblå  typeó  ió   noô   directlù 
+     determinable.
+.paŠ.hescreeî i/ï                                             screeî i/o
+
+                       Screen Input/Output
+
+NAME
+     altscrn¬  clrscrn¬  cursor¬  eraeol¬  eraeop¬ home¬ iniscrn¬ 
+     normscrn, putscrn, uniscrn
+
+SYNOPSIS
+     #include <scrnio.h>
+
+     BOOL altscrn()
+
+     VOID clrscrn()
+
+     BOOL cursor(r, c)
+     int r, c;
+
+     BOOL eraeol(r, c)
+     int r, c;
+
+     BOOL eraeop(r, c)
+     int r, c;
+
+     VOID home()
+
+     VOID iniscrn()
+
+     BOOL normscrn()
+
+     METACHAR putscrn(c)
+     int c;
+
+     VOID uniscrn()
+
+DESCRIPTION
+     altscrn‚  beginó thå alternate-intensitù mode®   Iæ thió ió á 
+     systeí supporteä function¬  altscrn‚ returnó TRUE» iæ not¬ iô 
+     returnó FALSE.
+
+     clrscrn‚  clearó anä eraseó thå terminaì screeî  anä  returnó 
+     the cursor to the home position.
+
+     cursor‚  positionó  thå  cursoò  aô  ro÷  r¬  columî  c®   Iæ 
+     successful¬  thió  functioî returnó TRUE®   Iæ á  coordinatå 
+     addreessinç erroò ió sensed¬ iô wilì returî FALSE.
+
+     eraeol‚  eraseó ro÷ r‚ froí columî c‚ tï thå enä oæ  thå  line®  
+     Iô wilì returî TRUE‚ iæ successful¬ oò FALSE‚ oî impropeò r‚ oò 
+     c.  The cursor is positioned at row r, column c afterward.
+
+     eraeop‚  eraseó froí ro÷ r¬  columî c‚ tï thå enä oæ thå page®  
+     TRUE‚  ió  normallù returned»   impropeò r‚ oò  c‚  wilì  causå 
+     eraeop‚ tï returî FALSE®   Thå cursoò ió positioneä aô ro÷ r¬ 
+     column c afterward.
+Š     home‚  moveó  thå  cursoò tï ro÷ zero¬  columî  zerï  oæ  thå 
+     terminal.
+
+     iniscrn‚  sendó thå initializatioî sequencå tï thå  terminal¬ 
+     if it exists.
+
+     normscrn‚ beginó thå normal-intensitù mode®   Iô returnó TRUE‚ 
+     iæ thió functioî ió supported¬ oò FALSE‚ iæ not.
+
+     putscrn‚ sendó thå characteò c‚ tï thå terminaì iî  unbuffereä 
+     mode®    outcol[STDOUT]‚  anä  outrow[STDOUT]‚  arå  correctlù 
+     updated¬ ie.¬ putscrn‚ wilì bå ignoreä iæ thå screeî sizå haó 
+     been exceeded.
+
+     uniscrn‚   sendó   thå  un-initializatioî  sequencå  tï   thå 
+     terminal, if it exits.
+
+     Globaì  variableó outrow[STDOUT]‚ anä outcol[STDOUT]‚ holä thå 
+     current position of the cursor at all times.
+
+     scrnio.h‚  ió  thå datá filå whicè declareó alì  globaì  datá 
+     necessarù  foò thå uså oæ theså terminaì displaù  functions®  
+     scrnio.h‚ shoulä bå includeä beforå stdio.h‚ iî everù  prograí 
+     using screen i/o functions.
+
+     Ro÷  °  ió  thå topmosô row¬  anä columî ° ió  thå  leftmosô 
+     column.
+
+BUGS
+     Theså functionó maù noô operatå oî systemó iî whicè terminaì 
+     output cannot be direct.
+.paŠ.hesetbuf                                                     setbuf
+
+                          Assign Buffer
+
+NAME
+     setbuf
+
+SYNOPSIS
+     VOIÄ setbuf(fp¬ buffer)
+     FASÔ FILÅ *fp;
+     BUFFEÒ buffer;
+
+DESCRIPTION
+     setbuf‚ ió useä afteò á streaí haó beeî openeä buô beforå  iô 
+     ió reaä oò written®   Iæ fp‚ alreadù haó á buffeò assigneä tï 
+     it¬  iô causeó thå characteò arraù buffer‚ tï bå useä insteaä 
+     oæ  aî  automaticallù  allocateä buffer®   Anù datá  iî  thå 
+     existinç buffeò ió lost®   Iæ buffer‚ ió thå constanô pointeò 
+     NULL, input/output will be completely unbuffered.
+
+     Uså  oæ setbuf(stdin¬  NULL)‚ aô thå beginninç oæ  á  prograí 
+     assures that terminal input will be unbuffered.
+
+BUGS
+     Unbuffereä     terminaì    inpuô    dependó    oî    whetheò 
+     read(0, buffer, 1)‚   returnó  á  bytå  immediatelù   oò   ió 
+     internallù buffereä foò linå editinç purposes.
+.paŠ.hesgn                                                           sgn
+
+                          Sign Function
+
+NAME
+     sgn 
+
+SYNOPSIS
+     double sgn(x)
+     double x;
+
+DESCRIPTION
+     sgn‚ wilì returî thå doublå sgî functioî oæ x¬  i.e.¬ +1¬ -1¬ 
+     oò  0¬  accordinglù aó x‚ ió  positive¬  negative¬  oò  zero¬ 
+     respectively.
+
+     SGN  ió  thå macrï iî headeò filå defs.è whicè performó  thå 
+     samå  function¬  excepô foò sidå effects¬  anä oî alì signeä 
+     numeric types.
+.paŠ.hesimpson                                                   simpson
+
+             Integration by Simpson's Modified Rule
+
+NAME
+     simpson 
+
+SYNOPSIS
+     double simpson(func, lowlim, uplim, n)
+     double (*func)(), lowlim, uplim;
+     int n;
+
+DESCRIPTION
+     simpson‚  integrateó  thå functioî func‚ froí lowlim‚ tï  uplim‚ 
+     usinç 2n‚ points¬  accordinç tï thå Simpsoî integratioî rule®  
+     The error value is given by
+
+          e = -(n * h5/90) * funciv(x)
+
+     wherå  h‚  ½  (uplim‚ - lowlim)/(2n© anä lowlim‚ <“ x‚  <“  uplim®  
+     (see Reference 3, formula 25.4.6)
+.paŠ.hesin                                                           sin
+
+                     Trigonometric Functions
+
+NAME
+     sin¬ cos¬ tan¬ asin¬ acos¬ atan¬ atan2¬ cotaî 
+
+SYNOPSIS
+     #include <mathcons.h>
+
+     double sin(x)
+     double x;
+
+     double cos(x)
+     double x;
+
+     double tan(x)
+     double x;
+
+     double asin(x)
+     double x;
+
+     double acos(x)
+     double x;
+
+     double atan(x)
+     double x;
+
+     double atan2(x, y)
+     double x, y;
+
+     double cotan(x)
+     double x;
+
+DESCRIPTION
+     Alì  oæ theså functionó werå programmeä usinç thå algorithmó 
+     giveî  iî Softwarå Manuaì foò thå Elementarù Functions“  (seå 
+     Reference 5).
+
+     sin¬  coó  anä taî returî trigonometriã functionó oæ  radiaî 
+     arguments®   Thå magnitudå oæ thå argumenô shoulä bå checkeä 
+     bù thå calleò tï makå surå thå resulô ió  meaningful®   (seå 
+     Reference 5, pp. 125-149 and 150-173)
+
+     asin returns the arc sin in the range -pi/2 to +pi/2.
+
+     acos‚ returnó thå arã cosinå iî thå rangå zerï tï pi.
+     
+     ataî  returnó  thå  arã tangenô oæ ø iî thå rangå  -pi/²  tï 
+     +pi/2.  (see Reference 5, pp. 194-216)
+
+     atan2 returns the arc tangent of x/y in the range -pi to +pi.
+
+     cotan returns the cotangent of x.
+
+DIAGNOSTICSŠ     Argumentó  oæ  magnitudå greateò thaî unitù causå  asin‚  anä 
+     acos‚ tï returî valuå 0»  errno‚ ió seô tï EDOM®  Thå valuå oæ 
+     tan‚ aô itó singulaò pointó ió INFINITY¬  anä errno‚ ió seô tï 
+     ERANGE.
+
+BUGS
+     Thå  valuå  oæ tan‚ foò argumentó greateò  thaî  MAXANGLÅ  ió 
+     garbage.
+.paŠ.hesinh                                                         sinh
+
+                      Hyperbolic Functions
+
+NAME
+     sinh¬ cosh¬ tanè 
+
+SYNOPSIS
+     #include <mathtyp.h>
+
+     double sinh(x)
+     double x;
+
+     double cosh(x)
+     double x;
+
+     double tanh(x)
+     double x;
+
+DESCRIPTION
+     Theså  functionó computå thå designateä hyperboliã functionó 
+     for real arguments.
+
+     Alì  werå programmeä usinç thå algorithmó giveî iî  Softwarå 
+     Manuaì  foò thå Elementarù Functions“ (seå Referencå  5¬  pp® 
+     217-238 and 239-255).
+
+DIAGNOSTICS
+     sinh‚  anä cosh‚ returî INFINITY oæ appropriatå sigî wheî  thå 
+     correcô valuå woulä overflow.
+.paŠ.hesortH                                                       sortH
+
+                         Sort Functions
+
+NAME
+     sortH¬ sortS¬ sortQ¬ sortÂ, qsort
+
+SYNOPSIS
+     VOID sortH(n, comp, exch)
+     int n, (*comp)();
+     VOID (*exch)();
+     
+     VOID sortS(n, comp, exch)
+     int n, (*comp)();
+     VOID (*exch)();
+
+     VOID sortQ(n¬ comp, exch)
+     int n, (*comp)();
+     VOID (*exch)();
+
+     VOID sortB(n, comp, exch)
+     int n, (*comp)();
+     VOID (*exch)();
+
+     VOIÄ qsort(base¬ n¬ width¬ compar)
+     STRINÇ base;
+     inô n, width, (*compar)();
+
+DESCRIPTION
+     Eacè  oæ  theså functionó wilì sorô aî arraù oæ sizå n‚  witè 
+     respecô  tï  á  comparisoî functioî  comp(i¬  j)¬  whicè  ió 
+     positive¬  iæ anä onlù iæ elementó i‚ anä j‚ oæ thå arraù  arå 
+     ouô  oæ order®    Thå exch(i¬  j)‚ functioî exchangeó thå ith“ 
+     anä jth“ elementó oæ thå array®   Thå namå anä typå oæ  arraù 
+     arå unknowî tï thå sorô routines¬  buô must¬  oæ course¬  bå 
+     knowî tï exch‚ anä comp.
+
+     sortH‚   useó  thå heapsorô algorithm¬  witè timå  complexitù 
+     O(î ª log(n))®  (Seå Referencå 10¬ pp® 87-92.)
+
+     sortS‚ useó thå Shelì sorô algorithm¬ witè timå complexitù oæ 
+     abouô O(n1.5)® (Seå Referenceó ² anä 9.)
+
+     sortQ‚   useó  thå  quicksorô algorithm¬  oæ timå  complexitù 
+     O(î ª log(n)© tï O(n2)®  (Seå Referencå 11.)
+
+     sortB‚ performó á bubble-sorô iî whicè largå valueó bubblå uğ 
+     and low values shuttle down in the array, O(n) to O(n2).
+
+     qsort‚  ió anotheò implementatioî oæ thå quicksorô algorithm®  
+     Thå base‚ ió á pointeò tï thå beginninç oæ thå data» n‚ ió thå 
+     numbeò  oæ  elements»  thirä ió thå width‚ oæ aî  elemenô  iî 
+     bytes»  lasô  ió  thå namå oæ thå comparisoî routinå  tï  bå 
+     calleä  witè twï arguments¬  pointeró tï thå elementó  beinç 
+     compared®   Thå  comparisoî musô returî aî  integeò  greateò 
+     thaî zerï iæ anä onlù iæ thå elementó beinç compareä arå ouô Š     oæ sort.
+.paŠ.hetolower                                                   tolower
+
+               Conversion to Lower and Upper Case
+
+NAME
+     tolower, toupper 
+
+SYNOPSIS
+     char tolower(c)
+     int c;
+
+     char toupper(c)
+     int c;
+
+DESCRIPTION
+     tolower returnó thå loweò caså oæ c¬  iæ c ió aî  upper-caså 
+     letter.
+
+     toupper  returnó thå uppeò caså oæ c¬  iæ c ió á  lower-caså 
+     letter.
+
+     TOLOWER  anä  TOUPPER arå thå macroó founä  iî  headeò  filå 
+     ctype.è  whicè arå identicaì tï thå functionó above¬  excepô 
+     for side-effects.
+.paŠ.heungetc                                                     ungetc
+
+              Push Character Back into Input Stream
+
+NAME
+     ungetc 
+
+SYNOPSIS
+     #include <stdio.h>
+
+     int ungetc(c, stream)
+     int c;
+     FILE *stream;
+
+DESCRIPTION
+     ungetc pusheó thå characteò c bacë oî aî inpuô stream®  Thaô 
+     characteò  wilì  bå returneä bù thå nexô getc calì  oî  thaô 
+     stream.  ungetc returns c.
+
+     Onå  characteò oæ pushbacë ió guaranteeä provideä  somethinç 
+     haó  beeî  reaä froí thå streaí anä thå streaí  ió  actuallù 
+     buffered.  
+
+     fseek erases all memory of pushed back characters.
+
+SEÅ ALSO
+     getc, fseek
+
+DIAGNOSTICS
+     ungetc returns EOF if c is EOF.
+.he
+.pa oŠ.PN 1
+.FO                                5-#
+             5. C U S T O M I Z A T I O N   N O T E S 
+
+     Therå  arå  approximatelù 16² functionó anä  16·  parameteró 
+(constants¬ macros¬ anä globaì variables© nameó iî thå portablå Ã 
+subroutinå library®  Oæ these¬ 1² arå systeí functions¬ foò whicè 
+sourcå  codå ió noô included¬  anä anotheò 14µ functionó anä  15² 
+parameteró thaô arå machine-independent®  Onå oæ thå system-leveì 
+functionó anä thå remaininç µ functionó anä 5¶ parameteró musô bå 
+customizeä  tï thå ideosyncracieó oæ thå hosô  environment®   Thå 
+systeí interfacå functionó arå listeä iî Tablå 5-1¬  thå elementó 
+thaô  musô  bå giveî attentioî arå listeä iî Tablå 5-2¬  anä  thå 
+machine-independenô  elementó  arå  giveî  iî  Tablå  5-3®    Alì 
+elements are listed in Table 5-4.
+
+     Thå  procedureó  foò effectinç thå needeä changeó  froí  thå 
+distributioî  sourcå  ió  containeä  iî  thå  remaindeò  oæ  thió 
+section.
+.po11
+
+
+
+                   Table 5-1: PORTABLE C LIBRARY SYSTEM INTERFACE
+
+Element      Type       File                    Description               
+
+close        function   csys.lib     Close file OS interface.                 
+creat        function   csys.lib     Create file function, OS interface.      
+exit         function   csys.lib     Close all files and terminate program.   
+lseek        function   csys.lib     Move file position using arg as offset.  
+open         function   csys.lib     Open file for operation, OS interface.   
+read         function   csys.lib     Read from stream into buffer: OS interfc 
+rename       function   csys.lib     Rename a file: OS interface.             
+sbrk         function   csys.lib     Set pointer to available memory: OS i/f. 
+unlink       function   csys.lib     Unlink a file name from a file (delete). 
+write        function   csys.lib     File write OS interface.                 
+_exit        function   csys.lib     Immediate termination of program.        
+
+.paŠ        Table 5-2: PORTABLE C LIBRARY COMPILER- & SYSTEM-DEPENDENT ELEMENTS
+
+Element      Type       File                    Description               
+
+ALIGN        typedef    stdtyp.h     K & R storage allocation header aligner. 
+ALTSCRN      TEXT       scrnio.h     Terminal into alternate intensity string 
+astof        function   atof.c       ASCII number to (double) float. Pointer. 
+BIG10X       constant   mathcons.h   Largest 10^(2^(BIG10X -1)) < INFINITY    
+BIGX         constant   mathcons.h   16 * log2(INFINITY) - 1                  
+BUFSIZ       constant   stdio.h      I/O stream buffer size.                  
+CB4L         TBOOL      scrnio.h     Column-before-row boolean.               
+chrstc       function   chrstc.c     Return int characteristic of double.     
+CLEARSCREEN  TEXT       scrnio.h     Terminal clear-screen string.            
+COFFSET      tiny       scrnio.c     Cursor lead-in column offset value.      
+CRINSUP      constant   stdio.h      Set TRUE to suppress CR text input.      
+CROUTADD     constant   stdio.h      Set true to echo '\n' with CR.           
+DPRECISION   constant   mathcons.h   (int) PRECISION                          
+EDOM         constant   errno.h      Function argument not in defined domain. 
+EOF          constant   defs.h       Standard End-of-File value.              
+ERAEOLN      TEXT       scrnio.c     Terminal Erase-to-End-of-Line string.    
+ERAEOPG      TEXT       scrnio.h     Terminal erase-to-end-of-page string.    
+fint         function   fint.c       Float (double) INTeger-part function.    
+ftoa         function   ftoa.c       Float (double) to ASCII conversion.      
+HEIGHT       tiny       scrnio.h     Terminal height, number of lines.        
+HOME         string     scrnio.h     Terminal cursor-to-home (0,0) string.    
+INFINITY     constant   mathcons.h   Largest double value on this machine.    
+INFINLEG     constant   math.cons    INFINITY / ROOTTWO.                      
+ldexp        function   frexp.c      Load exponent (multiply by power of 2).  
+LEADIN       TEXT       scrnio.h     Cursor lead-in sequence.                 
+LEAST        constant   mathcons.h   Least double representable in machine.   
+LINDELETE    TEXT       scrnio.c     Terminal line-delete string.             
+LININSERT    TEXT       scrnio.h     Terminal line-delete string.             
+LOGINFINITY  constant   mathcons.h   Largest argument of log function.        
+LOGLEAST     constant   mathcons.h   Log of smallest machine number           
+mathcons.h   header     mathcons.h   Constant file for math functions.        
+MAXCHANNELS  constant   global.h     Maximum number of i/o channels at once.  
+MAXEXP       constant   mathcons.h   Largest numeric characteristic.          
+MAXEXPG      constant   mathcons.h   MAXEXP - 3 guard bits.                   
+MAXLINE      constant   stdio.h      Maximum no. of chars. on input line.     
+MAXSTREAM    constant   stdio.h      Maximum number of buffered i/o streams.  
+MINEXP       constant   mathcons.h   Characteristic of least machine double.  
+MINEXPG      constant   mathcons.h   MINEXP + 3 guard bits.                   
+NALLOC       constant   stdtyp.h     No. of HEADER units for malloc().         
+NORMSCRN     TEXT       scrnio.h     Terminal string, return normal intensity 
+PMODE        constant   stdio.h      fopen() protection mode (for UNIX).      
+PRECISION    constant   mathcons.h   -log10(WASHOUT).                         
+RCENDER      TEXT       scrnio.h     Row-column lead-in terminator.           
+RCSEPARATOR  TEXT       scrnio.h     Cursor row, column separator string.     
+rename       function   csys.lib     Rename a file: OS interface.             
+ROFFSET      tiny       scrnio.h     Cursor lead-in row offset value.         
+RTHLFINF     constant   mathcons.h   sqrt(INFINITY / 2).                      
+SCRNINI      TEXT       scrnio.h     Initialize-terminal string.              
+SCRNUNI      TEXT       scrnio.h     Terminal un-initialize string.           
+SCRNWRAP     TBOOL      scrnio.h     Signal for auto terminal wrap-around.    
+SMALLX       constant   mathcons.h   16 * log2(LEAST) + 1.0                   Š
+          PORTABLÅ Ã LIBRARÙ COMPILER- ¦ SYSTEM-DEPENDENÔ  ELEMENTÓ (cont.)        
+
+Element      Type       File                    Description               
+
+SYMLEAST     constant   mathcons.h   Symmetric Least value (1/SYMLEAST) exist 
+SYS_EOF      macro      stdio.h      System end-of-file marker, if any.       
+TANHXBIG     constant   mathcons     (No. sig bits + 2) * log(2) / 2          
+TBITS        typedef    stdtyp.h     Tiny (8 char min) for bit manipulation.  
+TBOOL        typedef    stdtyp.h     Tiny (8 char min) used tor boolean.      
+TERMINAL     TEXT       scrnio.h     Terminal identification string.          
+TINY         macro      stdtyp.h     rvalue for tiny.                         
+USELAST      TBOOL      scrnio.h     Signal to use final terminal column.     
+UTINY        macro      stdtyp.h     rvalue for utiny.                        
+WASHOUT      constant   mathcons.h   1.0 + (x < WASHOUT) = 1.0 to precision.  
+WIDTH        tiny       scrnio.h     Terminal width, number of characters.    
+XLT2ASCII    TBOOL      scrnio.h     Translate-to-ASCII boolean.              
+.paŠ
+             Table 5-3: PORTABLE C LIBRARY SYSTEM-INDEPENDENT ELEMENTS
+
+Element      Type       File                    Description               
+
+ABS          macro      defs.h       Absolute value of any numeric type.      
+abs          function   abs.c        Absolute value function, int.            
+acos         function   asin.c       arc cosine, double.                      
+allot        function   malloc.c     malloc() without header overhead.         
+altscrn      function   scrnio.c     Set terminal to alternate intensity.     
+AND          macro      defs.h       Logical "and" operator, &&.              
+asin         function   asin.c       Arc sine function, double.               
+astoi        function   atoi.c       ASCII int to int. Also returns pointer.  
+astol        function   atol.c       ASCII to long. Also returns pointer.     
+atan         function   atan.c       Arc tangent, double.                     
+atan2        function   atan.c       Two-argument arc tangent, double.        
+atof         function   atof.c       ASCII to (double) float.                 
+atoi         function   atoi.c       ASCII to int.                            
+atol         function   atol.c       ASCII to long.                           
+bitcount     function   bitcount.c   K & R function counts bits in argument.  
+BITS         typedef    stdtyp.h     Short used only for bit manipulation.    
+BOOL         typedef    stdtyp.h     Int used only for boolean.               
+BUFFER       typedef    stdtyp.h     Used only for pointers to char buffers.  
+calloc       function   malloc.c     C allocation for arrays.                 
+cbrt         function   cbrt.c       Cube root function, double.              
+CBRTFOUR     constant   mathcons.h   Cube root of 4.                          
+CBRTTWO      constant   mathcons.h   Cube root of 2.                          
+ceil         function   floor.c      Ceiling function of double.              
+clearerr     macro      stdio.h      Reset error indicator on file stream.    
+clrscrn      function   scrnio.c     Clear terminal screen.                   
+cos          function   sin.c        Cosine function, double.                 
+cosh         function   cosh.c       Hyperbolic cosine, double.               
+cotan        function   tan.c        Cotangent function, double.              
+CURPOS       constant   stdio.h      Current file position seek indicator.    
+cursor       function   scrnio.c     Position terminal cursor at row, column. 
+eprintf      function   eprintf.c    Formatted print to stderr.               
+eputc        macro      stdio.c      Put character out to stderr.             
+eputs        function   eputs.c      Put string out to stderr.                
+eraeol       function   scrnio.c     Erase terminal screen to end of line.    
+eraeop       function   scrnio.c     Erase terminal screen to end of page.    
+ERANGE       constant   errno.h      Computed math value out of range.        
+erf          function   erf.c        Error function, double.                  
+erfc         function   erf.c        Complimentary error function, double.    
+errno        short      global.h     Standard error variable.                 
+exp          function   exp.c        Exponential function, double.            
+fabs         function   fabs.c       Absolute value function, double.         
+FADEOUT      constant   mathcons.h   Magnitude of washout term in Taylor ser. 
+FAIL         constant   defs.h       Standard Failure value.                  
+FALSE        constant   defs.h       Standard False value.                    
+fclosall     function   putc.c       Close all buffered i/o streams.          
+fclose       function   fopen.c      Close file using descriptor.             
+feof         macro      stdio.h      Evaluate end-of-file status, int.        
+ferror       macro      stdio.h      Boolean for file i/o error.              
+fflush       function   fopen.c      Flush file buffers to the medium.        
+fgets        function   fgets.c      Get string from file (buffered).         Š
+               PORTABLE C LIBRARY SYSTEM-INDEPENDENT ELEMENTS (cont.)             
+
+Element      Type       File                    Description               
+
+FILE         typedef    stdio.h      Standard file type declaration.          
+FILEND       constant   stdio.h      File end seek position designator.       
+fileno       macro      stdio.h      Return file descriptor of stream.        
+floor        function   floor.c      Floor function, double.                  
+flush        function   putc.c       Flush output buffer when char overflow.  
+fmax         function   fminmax.c    Maximum of a, b, double.                 
+fmin         function   fminmax.c    Minimum of a, b, double.                 
+fopen        function   fopen.c      Open file for buffered operation.        
+FOREVER      macro      defs.h       Same as "for (::)".                      
+format       function   format.c     Basic output format utility.             
+FOURTHLOG2   constant   mathcons.h   log(2) / 4                               
+fprintf      function   fprintf.c    Formatted output to file.                
+fputs        function   fputs.c      Put string out to file, unformatted.     
+frac         function   frac.c       Fractional-part function, double.        
+fread        function   fread.c      Buffered read from file.                 
+free         function   malloc.c     Free previously allocated storage.       
+frexp        function   frexp.c      Fraction (mantissa) and exponent, double 
+fscanf       function   fscanf.c     Formatted scan inputs from file.         
+fseek        function   fseek.c      Buffered file reposition function.       
+ftell        function   ftell.c      Return current file offset from origin.  
+fwrite       function   fwrite.c     Buffered write to file.                  
+getbuf       function   getbuf.c     Get an i/o buffer from allot().          
+getc         function   getc.c       Get character from file.                 
+getca        function   getc.c       Get ASCII char from buffered i/o stream. 
+getchar      macro      stdio.c      Get character from stdin.                
+getf         function   getf.c       Prompt and get double from stdin.        
+geti         function   geti.c       Prompt and get integer from stdin.       
+getl         function   getl.c       Prompt and get long from stdin.          
+getns        function   getns.c      Prompt and get string from stdin.        
+gets         function   gets.c       Get string from stdin.                   
+GLOBAL       macro      stdtyp.h     Pseudo storage class (extern) for port.  
+GZ           macro      defs.h       Greater than Zero, GZ(x) = (x>0? x : 0)  
+HALFLOG2e    constant   mathcons.h   log2(e) / 4                              
+HEADER       typedef    stdtyp.h     K & R storage allocation block type.     
+home         function   scrnio.c     Home the terminal cursor.                
+hypot        function   hypot.c      Compute hypotenuse of right triangle.    
+index        function   index.c      Find position of char in string arg.     
+iniscrn      function   scrnio.c     Initialize terminal screen output.       
+inverf       function   inverf.c     Inverse of error function, erf, double.  
+inverfc      function   inverf.c     Inverse of complementart error function. 
+INVPI        constant   mathcons.h   1.0 / pi                                 
+IObuffs      buffers    stdio.h      I/O buffers for buffered streams.        
+IS           macro      defs.h       Logical equivalence operator, ==.        
+isalnum      function   isalnum.c    True if arg is alpha or number.          
+ISALNUM      macro      ctype.h      True if arg is alpha or number.          
+isalpha      function   isalpha.c    True if arg is alpha.                    
+ISALPHA      macro      ctype.h      True if arg is alpha.                    
+isascii      function   isascii.c    True if arg is < 128.                    
+ISASCII      macro      ctype.h      True if arg < 128.                       
+iscntrl      function   iscntrl.c    True if arg is control or DEL character. Š
+             PORTABLE C LIBRARY SYSTEM-INDEPENDENT ELEMENTS (cont.)
+
+Element      Type       File                    Description               
+
+ISCNTRL      macro      ctype.h      True if arg is control or DEL character. 
+isdigit      function   isdigit.c    True if arg is decimal digit.            
+ISDIGIT      macro      ctype.h      True if arg is decimal digit.            
+ishex        function   ishex.c      Returns TRUE if argument is hex number.  
+islower      function   islower.c    True if arg is lower-case alpha.         
+ISLOWER      macro      ctype.h      True if arg is lower case alpha.         
+ISNT         macro      defs.h       Logical non-equivalence operator, !=.    
+ISOCTAL      macro      ctype.h      True if arg is octal character.          
+isoctal      function   isoctal.c    Returns TRUE if argument is octal digit. 
+isok         function   isok.c       Prompts and accepts y/n answer.          
+isprint      function   isprint.c    True if arg is printable character.      
+ISPRINT      macro      ctype.h      True if arg is printable character.      
+ispunct      function   ispunct.c    True if arg is punctuation.              
+ISPUNCT      macro      ctype.h      True if arg is not cntrl or alphanum.    
+isspace      function   isspace.c    True if arg is space, tab, or newline.   
+ISSPACE      macro      ctype.h      True if arg is space, tab, or newline.   
+isupper      function   isupper.c    True if arg is upper-case alpha.         
+ISUPPER      macro      ctype        True if arg is upper case alpha.         
+itoa         function   itoa.c       Integer-to-Ascii conversion.             
+itoab        function   itoa.c       Based int-ASCII conversion.              
+labs         function   labs.c       Absolute value function, long.           
+LBITS        typedef    stdtyp.h     Long used only for bit manipulation.     
+liberate     function   malloc.c     free() without header overhead.          
+lmax         function   lminmax.c    Maximum of a, b: long.                   
+lmin         function   lminmax.c    Minimum of a, b: long.                   
+log          function   log.c        Natural logarithm, double.               
+log10        function   log10.c      Common logarithm, double.                
+LOG10e       constant   mathcons.h   Log of e base 10.                        
+LOG10two     constant   mathcons.h   log of 2 base 10.                        
+log2         function   log2.c       Logarithm, base 2, double.               
+LOG2         constant   mathcons.h   Natural log of 2.                        
+LOG2e        constant   mathcons.h   Log of e base 2.                         
+LOGe10       constant   mathcons.h   log of 10 base e.                        
+ltoa         function   ltoa.c       Long-to-ASCII conversion.                
+ltoab        function   ltoa.c       Long to base conversion.                 
+LURSHIFT     macro      defs.h       Long Unsigned Right Shift long n, b bits 
+malloc       function   malloc.c     Storage allocator: get memory from OS.   
+max          function   max.c        Maximum of two integers.                 
+MAX          macro      defs.h       Maximum value of any two numbers.        
+MAXANGLE     constant   mathcons.h   Maximum trigonometric angle, pi * 2^25.  
+METACHAR     typedef    stdtyp.h     Augmented char to include EOF value.     
+min          function   min.c        Minimum of two integer values.           
+MIN          macro      defs.h       Minimum value of any two numeric values. 
+modf         function   modf.c       Fraction and integer parts, double.      
+NO           constant   defs.h       Standard NOt true value.                 
+normscrn     function   scrnio.c     Return terminal to normal intensity.     
+NOT          macro      defs.h       Logical negation operator, !.            
+nprob        function   nprob.c      Normal probability function.             
+nprobc       function   nprob.c      Normal probability tail function, double 
+NULL         constant   defs.h       Standard NULL pointer value.             Š
+             PORTABLE C LIBRARY SYSTEM-INDEPENDENT ELEMENTS (cont.)
+
+Element      Type       File                    Description               
+
+OR           macro      defs.h       Logical inclusive-or operator, ||.       
+ORIGIN       constant   stdio.h      Beginning of file seek designator.       
+outcol       int array  global.h     Global variable, output column for chan. 
+outrow       int array  global.h     Global variable, output row for channel. 
+PI           constant   mathcons.h   pi                                       
+PIover2      constant   mathcons.h   pi / 2                                   
+PIover3      constant   mathcons.h   pi / 3                                   
+PIover4      constant   mathcons.h   pi / 4                                   
+PIover6      constant   mathcons.h   pi / 6                                   
+pow          function   pow.c        Power: raise x to y power, double.       
+printf       function   printf.c     Formatted print to stdout.               
+progname     TEXT       global.h     Standard global string to hold prog name 
+putc         function   putc.c       Buffered char output to stream.          
+putca        function   putc.c       Buffered ASCII character output.         
+putchar      macro      stdio.h      Put car out to stdout.                   
+puts         function   puts.c       Put string out to stdout.                
+putscrn      function   scrnio.c     Put character directly to screen, unbuff 
+qsort        function   qsort.c      Quicksort an array.                      
+randexp      function   randexp.c    Random number, double, exponential dist. 
+randize      function   random.c     Seed the random number generator.        
+randnorm     function   randnorm.c   Random number, double, normal distrib.   
+random       function   random.c     Random number, double, uniform distrib.  
+ratfun       function   ratfun.c     Rational function evaluation, double.    
+realloc      function   realloc.c    Change storage allocator block size.     
+redirbuf     function   redirbuf.c   Set redirected i/o buffer size.          
+rewind       function   rewind.c     Rewind buffered i/o medium to beginning. 
+rindex       function   rindex.c     Find last occurrence of char in string.  
+rknstep      function   rknstep.c    4-th order Runge-Kutta n-th order DE.    
+rkstep       function   rkstep.c     4-th order Runge-Kutta 1-st order DE.    
+ROOTHALF     constant   mathcons.h   sqrt(0.5)                                
+ROOTTWO      constant   mathcons.h   sqrt(2.0)                                
+round        function   round.c      Round to nearest integer, double.        
+scanf        function   scanf.c      Formatted scan input from stdin.         
+setbuf       function   setbuf.c     Assign memory buffer to i/o stream.      
+SGN          macro      defs.h       Sign value: +1, 0, -1, any numeric type. 
+sgn          function   sgn.c        Sign function: +1, 0, -1, double.        
+simpson      function   simpson.c    Integration by Simpson's modified rule.  
+sin          function   sin.c        Sine function, double.                   
+sinh         function   sinh.c       Hyperbolic sine, double.                 
+sortB        function   sortB.c      Bubble-sort array in memory, in-place.   
+sortH        function   sortH.c      Heapsort an array, in-place in memory.   
+sortQ        function   sortQ.c      Quicksort memory array, in place.        
+sortS        function   sortS.c      Shell-sort memory array, in-place.       
+sprintf      function   sprintf.c    Formatted output to string buffer.       
+sqrt         function   sqrt.c       Square-root function, double.            
+SQRT3        constant   mathcons.h   sqrt(3)                                  
+SQRT3m1      constant   mathcons.h   sqrt(3.0) - 1.0                          
+sscanf       function   sscanf.c     Formated scan input from string.         
+STDERR       constant   stdio.h      Standard error output device number.     
+stderr       macro      stdio.h      Standard buffered i/o error stream.      Š
+             PORTABLE C LIBRARY SYSTEM-INDEPENDENT ELEMENTS (cont.) 
+
+Element      Type       File                    Description               
+
+STDIN        constant   stdio.h      Standard input device number.            
+stdin        macro      stdio.h      Standard buffered input stream.          
+STDOUT       constant   stdio.h      Standard output device number.           
+stdout       macro      stdio.h      Standard buffered output stream.         
+stradd       function   stradd.c     Multiple string concatenation.           
+strcat       function   strcat.c     Concatenate two strings.                 
+strcmp       function   strcmp.c     Compare two strings lexicographically.   
+strcpy       function   strcpy.c     copy one string to another.              
+streql       function   streql.c     Returns TRUE if strings are equal.       
+strindex     function   strindex.c   Locate one string in another.            
+STRING       typedef    stdtyp.h     Used only for pointers to strings.       
+strlen       function   strlen.c     Compute length of string.                
+strncat      function   strncat      Concatenate strings up to n chars.       
+strncmp      function   strncmp.c    Compare strings up to n chars.           
+strncpy      function   strncpy.c    Copy one string to another, up to n char 
+strsave      function   strsave.c    Save (copy) a string to heap storage.    
+SUCCESS      constant   defs.h       Standard non-FAIL value.                 
+TABSTOP      macro      stdio.h      Number of spaces per tab stop.           
+tan          function   tan.c        Tangent function, double.                
+tanh         function   tanh.c       Hyperbolic tangent, double.              
+TEXT         typedef    stdtyp.h     Used only for ASCII printable characters 
+tiny         typedef    stdtyp.h     A char used for signed int work.         
+tolower      function   tolower.c    Convert arg to lower-case, if upper.     
+TOLOWER      macro      ctype.h      Convert arg to lower-case, if upper.     
+toupper      function   toupper.c    Convert to upper case, if lower.         
+TOUPPER      macro      ctype.h      Convert arg to upper case, if lower.     
+TRUE         constant   defs.h       Standard truth value.                    
+TWOLOG2e     constant   mathcons.h   2 * log2(e)                              
+TWOmSQRT3    constant   mathcons.h   2 - sqrt(3)                              
+TWOoverPI    constant   mathcons.h   2.0 / pi                                 
+unformat     function   unformat.c   Basic scan function, arbitrary medium.   
+ungetc       function   ungetc.c     Put char back into input stream.         
+uniscrn      function   scrnio.c     Uninitialize terminal screen.            
+urandom      function   random.c     Random number, unsigned, uniform distrib 
+URSHIFT      macro      defs.h       Unsigned Right Shift, unsigned n, b bits 
+utiny        typedef    stdtyp.h     A char used for unsigned int work.       
+utoa         function   utoa.c       Unsigned to ASCII conversion.            
+VOID         typedef    stdtyp.h     Used for function returning no value.    
+YES          constant   defs.h       Standard truth value.                    
+_ALLBUFF     constant   stdio.h      Allocated buffer flag mask.              
+_BUSY        constant   stdio.h      File open (busy) flag mask.              
+_EOF         constant   stdio.h      Buffered  stream end-of-file flag mask.  
+_IOERR       constant   stdio.h      Buffered stream i/o error mask.          
+_RDONLY      constant   stdio.h      File open signal to read only.           
+_RDWRIT      constant   stdio.h      File open signal for read and write.     
+_WRONLY      constant   stdio.h      File open signal for write-only access.  
+.paŠ.po6
+                      Table 5-4: PORTABLE C LIBRARY ELEMENTS
+
+Element      Type       File      Portable                 Description               
+
+ABS          macro      defs.h       yes        Absolute value of any numeric type.      
+abs          function   abs.c        yes        Absolute value function, int.            
+acos         function   asin.c       yes        arc cosine, double.                      
+ALIGN        typedef    stdtyp.h     customize  K & R storage allocation header aligner. 
+allot        function   malloc.c     yes        malloc() without header overhead.         
+altscrn      function   scrnio.c     yes        Set terminal to alternate intensity.     
+ALTSCRN      TEXT       scrnio.h     customize  Terminal into alternate intensity string 
+AND          macro      defs.h       yes        Logical "and" operator, &&.              
+asin         function   asin.c       yes        Arc sine function, double.               
+astof        function   atof.c       customize  ASCII number to (double) float. Pointer. 
+astoi        function   atoi.c       yes        ASCII int to int. Also returns pointer.  
+astol        function   atol         yes        ASCII to long. Also returns pointer.     
+atan         function   atan.c       yes        Arc tangent, double.                     
+atan2        function   atan.c       yes        Two-argument arc tangent, double.        
+atof         function   atof.c       yes        ASCII to (double) float.                 
+atoi         function   atoi.c       yes        ASCII to int.                            
+atol         function   atol.c       yes        ASCII to long.                           
+BIG10X       constant   mathcons.h   customize  Largest 10^(2^(BIG10X -1)) < INFINITY    
+BIGX         constant   mathcons.h   customize  16 * log2(INFINITY) - 1                  
+bitcount     function   bitcount.c   yes        K & R function counts bits in argument.  
+BITS         typedef    stdtyp.h     yes        Short used only for bit manipulation.    
+BOOL         typedef    stdtyp.h     yes        Int used only for boolean.               
+BUFFER       typedef    stdtyp.h     yes        Used only for pointers to char buffers.  
+BUFSIZ       constant   stdio.h      customize  I/O stream buffer size.                  
+calloc       function   malloc.c     yes        C allocation for arrays.                 
+CB4L         TBOOL      scrnio.h     customize  Column-before-row boolean.               
+cbrt         function   cbrt.c       yes        Cube root function, double.              
+CBRTFOUR     constant   mathcons.h   yes        Cube root of 4.                          
+CBRTTWO      constant   mathcons.h   yes        Cube root of 2.                          
+ceil         function   floor.c      yes        Ceiling function of double.              
+chrstc       function   chrstc.c     customize  Return int characteristic of double.     
+clearerr     macro      stdio.h      yes        Reset error indicator on file stream.    
+CLEARSCREEN  TEXT       scrnio.h     customize  Terminal clear-screen string.            
+close        function   csys.lib     system     Close file OS interface.                 
+clrscrn      function   scrnio.c     yes        Clear terminal screen.                   
+COFFSET      tiny       scrnio.c     customize  Cursor lead-in column offset value.      
+cos          function   sin.c        yes        Cosine function, double.                 
+cosh         function   cosh.c       yes        Hyperbolic cosine, double.               
+cotan        function   tan.c        yes        Cotangent function, double.              
+creat        function   csys.lib     system     Create file function, OS interface.      
+CRINSUP      constant   stdio.h      customize  Set TRUE to suppress CR text input.      
+CROUTADD     constant   stdio.h      customize  Set true to echo '\n' with CR.           
+CURPOS       constant   stdio.h      yes        Current file position seek indicator.    
+cursor       function   scrnio.c     yes        Position terminal cursor at row, column. 
+DPRECISION   constant   mathcons.h   customize  (int) PRECISION                          
+EDOM         constant   errno.h      yes        Function argument not in defined domain. 
+EOF          constant   defs.h       yes        Standard End-of-File value.              
+eprintf      function   eprintf.c    yes        Formatted print to stderr.               
+eputc        macro      stdio.c      yes        Put character out to stderr.             
+eputs        function   eputs.c      yes        Put string out to stderr.                
+eraeol       function   scrnio.c     yes        Erase terminal screen to end of line.    Š
+                       PORTABLE C LIBRARY ELEMENTS (cont.)
+
+Element      Type       File      Portable                 Description
+
+ERAEOLN      TEXT       scrnio.c     customize  Terminal Erase-to-End-of-Line string.    
+eraeop       function   scrnio.c     yes        Erase terminal screen to end of page.    
+ERAEOPG      TEXT       scrnio.h     customize  Terminal erase-to-end-of-page string.    
+ERANGE       constant   errno.h      yes        Computed math value out of range.        
+erf          function   erf.c        yes        Error function, double.                  
+erfc         function   erf.c        yes        Complimentary error function, double.    
+errno        short      global.h     yes        Standard error variable.                 
+exit         function   csys.lib     system     Close all files and terminate program.   
+exp          function   exp.c        yes        Exponential function, double.            
+fabs         function   fabs.c       yes        Absolute value function, double.         
+FADEOUT      constant   mathcons.h   yes        Magnitude of washout term in Taylor ser. 
+FAIL         constant   defs.h       yes        Standard Failure value.                  
+FALSE        constant   defs.h       yes        Standard False value.                    
+FAST         macro      stdtyp.h     customize  Pseudo storage class (register).         
+fclosall     function   putc.c       yes        Close all buffered i/o streams.          
+fclose       function   fopen.c      yes        Close file using descriptor.             
+feof         macro      stdio.h      yes        Evaluate end-of-file status, int.        
+ferror       macro      stdio.h      yes        Boolean for file i/o error.              
+fflush       function   fopen.c      yes        Flush file buffers to the medium.        
+fgets        function   fgets.c      yes        Get string from file (buffered).         
+FILE         typedef    stdio.h      yes        Standard file type declaration.          
+FILEND       constant   stdio.h      yes        File end seek position designator.       
+fileno       macro      stdio.h      yes        Return file descriptor of stream.        
+fint         function   fint.c       customize  Float (double) INTeger-part function.    
+floor        function   floor.c      yes        Floor function, double.                  
+flush        function   putc.c       yes        Flush output buffer when char overflow.  
+fmax         function   fminmax.c    yes        Maximum of a, b, double.                 
+fmin         function   fminmax.c    yes        Minimum of a, b, double.                 
+fopen        function   fopen.c      yes        Open file for buffered operation.        
+FOREVER      macro      defs.h       yes        Same as "for (::)".                      
+format       function   format.c     yes        Basic output format utility.             
+FOURTHLOG2   constant   mathcons.h   yes        log(2) / 4                               
+fprintf      function   fprintf.c    yes        Formatted output to file.                
+fputs        function   fputs.c      yes        Put string out to file, unformatted.     
+frac         function   frac.c       yes        Fractional-part function, double.        
+fread        function   fread.c      yes        Buffered read from file.                 
+free         function   malloc.c     yes        Free previously allocated storage.       
+frexp        function   frexp.c      yes        Fraction (mantissa) and exponent, double 
+fscanf       function   fscanf.c     yes        Formatted scan inputs from file.         
+fseek        function   fseek.c      yes        Buffered file reposition function.       
+ftell        function   ftell.c      yes        Return current file offset from origin.  
+ftoa         function   ftoa.c       customize  Float (double) to ASCII conversion.      
+fwrite       function   fwrite.c     yes        Buffered write to file.                  
+getbuf       function   getbuf.c     yes        Get an i/o buffer from allot().          
+getc         function   getc.c       yes        Get character from file.                 
+getca        function   getc.c       yes        Get ASCII char from buffered i/o stream. 
+getchar      macro      stdio.c      yes        Get character from stdin.                
+getf         function   getf.c       yes        Prompt and get double from stdin.        
+geti         function   geti.c       yes        Prompt and get integer from stdin.       
+getl         function   getl.c       yes        Prompt and get long from stdin.          Š
+                       PORTABLE C LIBRARY ELEMENTS (cont.)
+
+Element      Type       File      Portable                 Description
+
+getns        function   getns.c      yes        Prompt and get string from stdin.        
+gets         function   gets.c       yes        Get string from stdin.                   
+GLOBAL       macro      stdtyp.h     yes        Pseudo storage class (extern) for port.  
+GZ           macro      defs.h       yes        Greater than Zero, GZ(x) = (x>0? x : 0)  
+HALFLOG2e    constant   mathcons.h   yes        log2(e) / 4                              
+HEADER       typedef    stdtyp.h     yes        K & R storage allocation block type.     
+HEIGHT       tiny       scrnio.h     customize  Terminal height, number of lines.        
+home         function   scrnio.c     yes        Home the terminal cursor.                
+HOME         string     scrnio.h     customize  Terminal cursor-to-home (0,0) string.    
+hypot        function   hypot.c      yes        Compute hypotenuse of right triangle.    
+index        function   index.c      yes        Find position of char in string arg.     
+INFINITY     constant   mathcons.h   customize  Largest double value on this machine.    
+INFINLEG     constant   math.cons    customize  INFINITY / ROOTTWO.                      
+iniscrn      function   scrnio.c     yes        Initialize terminal screen output.       
+inverf       function   inverf.c     yes        Inverse of error function, erf, double.  
+inverfc      function   inverf.c     yes        Inverse of complementart error function. 
+INVPI        constant   mathcons.h   yes        1.0 / pi                                 
+IObuffs      buffers    stdio.h      yes        I/O buffers for buffered streams.        
+IS           macro      defs.h       yes        Logical equivalence operator, ==.        
+isalnum      function   isalnum.c    yes        True if arg is alpha or number.          
+ISALNUM      macro      ctype.h      yes        True if arg is alpha or number.          
+isalpha      function   isalpha.c    yes        True if arg is alpha.                    
+ISALPHA      macro      ctype.h      yes        True if arg is alpha.                    
+isascii      function   isascii.c    yes        True if arg is < 128.                    
+ISASCII      macro      ctype.h      yes        True if arg < 128.                       
+iscntrl      function   iscntrl.c    yes        True if arg is control or DEL character. 
+ISCNTRL      macro      ctype.h      yes        True if arg is control or DEL character. 
+isdigit      function   isdigit.c    yes        True if arg is decimal digit.            
+ISDIGIT      macro      ctype.h      yes        True if arg is decimal digit.            
+ishex        function   ishex.c      yes        Returns TRUE if argument is hex number.  
+islower      function   islower.c    yes        True if arg is lower-case alpha.         
+ISLOWER      macro      ctype.h      yes        True if arg is lower case alpha.         
+ISNT         macro      defs.h       yes        Logical non-equivalence operator, !=.    
+ISOCTAL      macro      ctype.h      yes        True if arg is octal character.          
+isoctal      function   isoctal.c    yes        Returns TRUE if argument is octal digit. 
+isok         function   isok.c       yes        Prompts and accepts y/n answer.          
+isprint      function   isprint.c    yes        True if arg is printable character.      
+ISPRINT      macro      ctype.h      yes        True if arg is printable character.      
+ispunct      function   ispunct.c    yes        True if arg is punctuation.              
+ISPUNCT      macro      ctype.h      yes        True if arg is not cntrl or alphanum.    
+isspace      function   isspace.c    yes        True if arg is space, tab, or newline.   
+ISSPACE      macro      ctype.h      yes        True if arg is space, tab, or newline.   
+isupper      function   isupper.c    yes        True if arg is upper-case alpha.         
+ISUPPER      macro      ctype        yes        True if arg is upper case alpha.         
+itoa         function   itoa.c       yes        Integer-to-Ascii conversion.             
+itoab        function   itoa.c       yes        Based int-ASCII conversion.              
+labs         function   labs.c       yes        Absolute value function, long.           
+LBITS        typedef    stdtyp.h     yes        Long used only for bit manipulation.     
+ldexp        function   frexp.c      customize  Load exponent (multiply by power of 2).  
+LEADIN       TEXT       scrnio.h     customize  Cursor lead-in sequence.                 Š
+                       PORTABLE C LIBRARY ELEMENTS (cont.)
+
+Element      Type       File      Portable                 Description
+
+LEAST        constant   mathcons.h   customize  Least double representable in machine.   
+liberate     function   malloc.c     yes        free() without header overhead.          
+LINDELETE    TEXT       scrnio.c     customize  Terminal line-delete string.             
+LININSERT    TEXT       scrnio.h     customize  Terminal line-delete string.             
+lmax         function   lminmax.c    yes        Maximum of a, b: long.                   
+lmin         function   lminmax.c    yes        Minimum of a, b: long.                   
+LOCAL        macro      stdtyp.h     customize  Pseudo storage class (static) for port.  
+log          function   log.c        yes        Natural logarithm, double.               
+log10        function   log10.c      yes        Common logarithm, double.                
+LOG10e       constant   mathcons.h   yes        Log of e base 10.                        
+LOG10two     constant   mathcons.h   yes        log of 2 base 10.                        
+log2         function   log2.c       yes        Logarithm, base 2, double.               
+LOG2         constant   mathcons.h   yes        Natural log of 2.                        
+LOG2e        constant   mathcons.h   yes        Log of e base 2.                         
+LOGe10       constant   mathcons.h   yes        log of 10 base e.                        
+LOGINFINITY  constant   mathcons.h   customize  Largest argument of log function.        
+LOGLEAST     constant   mathcons.h   customize  Log of smallest machine number           
+lseek        function   csys.lib     system     Move file position using arg as offset.  
+ltoa         function   ltoa.c       yes        Long-to-ASCII conversion.                
+ltoab        function   ltoa.c       yes        Long to base conversion.                 
+LURSHIFT     macro      defs.h       yes        Long Unsigned Right Shift long n, b bits 
+malloc       function   malloc.c     yes        Storage allocator: get memory from OS.   
+max          function   max.c        yes        Maximum of two integers.                 
+MAX          macro      defs.h       yes        Maximum value of any two numbers.        
+MAXANGLE     constant   mathcons.h   yes        Maximum trigonometric angle, pi * 2^25.  
+MAXCHANNELS  constant   global.h     customize  Maximum number of i/o channels at once.  
+MAXEXP       constant   mathcons.h   customize  Largest numeric characteristic.          
+MAXEXPG      constant   mathcons.h   customize  MAXEXP - 3 guard bits.                   
+MAXLINE      constant   stdio.h      customize  Maximum no. of chars. on input line.     
+MAXSTREAM    constant   stdio.h      customize  Maximum number of buffered i/o streams.  
+METACHAR     typedef    stdtyp.h     yes        Augmented char to include EOF value.     
+min          function   min.c        yes        Minimum of two integer values.           
+MIN          macro      defs.h       yes        Minimum value of any two numeric values. 
+MINEXP       constant   mathcons.h   customize  Characteristic of least machine double.  
+MINEXPG      constant   mathcons.h   customize  MINEXP + 3 guard bits.                   
+modf         function   modf.c       yes        Fraction and integer parts, double.      
+NALLOC       constant   stdtyp.h     customize  No. of HEADER units for malloc().         
+NO           constant   defs.h       yes        Standard NOt true value.                 
+normscrn     function   scrnio.c     yes        Return terminal to normal intensity.     
+NORMSCRN     TEXT       scrnio.h     customize  Terminal string, return normal intensity 
+NOT          macro      defs.h       yes        Logical negation operator, !.            
+nprob        function   nprob.c      yes        Normal probability function.             
+nprobc       function   nprob.c      yes        Normal probability tail function, double 
+NULL         constant   defs.h       yes        Standard NULL pointer value.             
+open         function   csys.lib     system     Open file for operation, OS interface.   
+OR           macro      defs.h       yes        Logical inclusive-or operator, ||.       
+ORIGIN       constant   stdio.h      yes        Beginning of file seek designator.       
+outcol       int array  global.h     yes        Global variable, output column for chan. 
+outrow       int array  global.h     yes        Global variable, output row for channel. 
+PI           constant   mathcons.h   yes        pi                                       Š
+                       PORTABLE C LIBRARY ELEMENTS (cont.)
+
+Element      Type       File      Portable                 Description
+
+PIover2      constant   mathcons.h   yes        pi / 2                                   
+PIover3      constant   mathcons.h   yes        pi / 3                                   
+PIover4      constant   mathcons.h   yes        pi / 4                                   
+PIover6      constant   mathcons.h   yes        pi / 6                                   
+PMODE        constant   stdio.h      customize  fopen() protection mode (for UNIX).      
+pow          function   pow.c        yes        Power: raise x to y power, double.       
+PRECISION    constant   mathcons.h   customize  -log10(WASHOUT).                         
+printf       function   printf.c     yes        Formatted print to stdout.               
+progname     TEXT       global.h     yes        Standard global string to hold prog name 
+putc         function   putc.c       yes        Buffered char output to stream.          
+putca        function   putc.c       yes        Buffered ASCII character output.         
+putchar      macro      stdio.h      yes        Put car out to stdout.                   
+puts         function   puts.c       yes        Put string out to stdout.                
+putscrn      function   scrnio.c     yes        Put character directly to screen, unbuff 
+qsort        function   qsort.c      yes        Quicksort an array.                      
+randexp      function   randexp.c    yes        Random number, double, exponential dist. 
+randize      function   random.c     yes        Seed the random number generator.        
+randnorm     function   randnorm.c   yes        Random number, double, normal distrib.   
+random       function   random.c     yes        Random number, double, uniform distrib.  
+ratfun       function   ratfun.c     yes        Rational function evaluation, double.    
+RCENDER      TEXT       scrnio.h     customize  Row-column lead-in terminator.           
+RCSEPARATOR  TEXT       scrnio.h     customize  Cursor row, column separator string.     
+read         function   csys.lib     system     Read from stream into buffer: OS interfc 
+realloc      function   realloc.c    yes        Change storage allocator block size.     
+redirbuf     function   redirbuf.c   yes        Set redirected i/o buffer size.          
+rename       function   csys.lib     customize  Rename a file: OS interface.             
+rewind       function   rewind.c     yes        Rewind buffered i/o medium to beginning. 
+rindex       function   rindex.c     yes        Find last occurrence of char in string.  
+rknstep      function   rknstep.c    yes        4-th order Runge-Kutta n-th order DE.    
+rkstep       function   rkstep.c     yes        4-th order Runge-Kutta 1-st order DE.    
+ROFFSET      tiny       scrnio.h     customize  Cursor lead-in row offset value.         
+ROOTHALF     constant   mathcons.h   yes        sqrt(0.5)                                
+ROOTTWO      constant   mathcons.h   yes        sqrt(2.0)                                
+round        function   round.c      yes        Round to nearest integer, double.        
+RTHLFINF     constant   mathcons.h   customize  sqrt(INFINITY / 2).                      
+sbrk         function   csys.lib     system     Set pointer to available memory: OS i/f. 
+scanf        function   scanf.c      yes        Formatted scan input from stdin.         
+SCRNINI      TEXT       scrnio.h     customize  Initialize-terminal string.              
+SCRNUNI      TEXT       scrnio.h     customize  Terminal un-initialize string.           
+SCRNWRAP     TBOOL      scrnio.h     customize  Signal for auto terminal wrap-around.    
+setbuf       function   setbuf.c     yes        Assign memory buffer to i/o stream.      
+SGN          macro      defs.h       yes        Sign value: +1, 0, -1, any numeric type. 
+sgn          function   sgn.c        yes        Sign function: +1, 0, -1, double.        
+simpson      function   simpson.c    yes        Integration by Simpson's modified rule.  
+sin          function   sin.c        yes        Sine function, double.                   
+sinh         function   sinh.c       yes        Hyperbolic sine, double.                 
+SMALLX       constant   mathcons.h   customize  16 * log2(LEAST) + 1.0                   
+sortB        function   sortB.c      yes        Bubble-sort array in memory, in-place.   
+sortH        function   sortH.c      yes        Heapsort an array, in-place in memory.   
+sortQ        function   sortQ.c      yes        Quicksort memory array, in place.        Š
+                       PORTABLE C LIBRARY ELEMENTS (cont.)
+
+Element      Type       File      Portable                 Description
+
+sortS        function   sortS.c      yes        Shell-sort memory array, in-place.       
+sprintf      function   sprintf.c    yes        Formatted output to string buffer.       
+sqrt         function   sqrt.c       yes        Square-root function, double.            
+SQRT3        constant   mathcons.h   yes        sqrt(3)                                  
+SQRT3m1      constant   mathcons.h   yes        sqrt(3.0) - 1.0                          
+sscanf       function   sscanf.c     yes        Formated scan input from string.         
+STDERR       constant   stdio.h      yes        Standard error output device number.     
+stderr       macro      stdio.h      yes        Standard buffered i/o error stream.      
+STDIN        constant   stdio.h      yes        Standard input device number.            
+stdin        macro      stdio.h      yes        Standard buffered input stream.          
+STDOUT       constant   stdio.h      yes        Standard output device number.           
+stdout       macro      stdio.h      yes        Standard buffered output stream.         
+stradd       function   stradd.c     yes        Multiple string concatenation.           
+strcat       function   strcat.c     yes        Concatenate two strings.                 
+strcmp       function   strcmp.c     yes        Compare two strings lexicographically.   
+strcpy       function   strcpy.c     yes        copy one string to another.              
+streql       function   streql.c     yes        Returns TRUE if strings are equal.       
+strindex     function   strindex.c   yes        Locate one string in another.            
+STRING       typedef    stdtyp.h     yes        Used only for pointers to strings.       
+strlen       function   strlen.c     yes        Compute length of string.                
+strncat      function   strncat      yes        Concatenate strings up to n chars.       
+strncmp      function   strncmp.c    yes        Compare strings up to n chars.           
+strncpy      function   strncpy.c    yes        Copy one string to another, up to n char 
+strsave      function   strsave.c    yes        Save (copy) a string to heap storage.    
+SUCCESS      constant   defs.h       yes        Standard non-FAIL value.                 
+SYMLEAST     constant   mathcons.h   customize  Symmetric Least value (1/SYMLEAST) exist 
+SYS_EOF      macro      stdio.h      customize  System end-of-file marker, if any.       
+TABSTOP      macro      stdio.h      yes        Number of spaces per tab stop.           
+tan          function   tan.c        yes        Tangent function, double.                
+tanh         function   tanh.c       yes        Hyperbolic tangent, double.              
+TANHXBIG     constant   mathcons     customize  (No. sig bits + 2) * log(2) / 2          
+TBITS        typedef    stdtyp.h     customize  Tiny (8 char min) for bit manipulation.  
+TBOOL        typedef    stdtyp.h     customize  Tiny (8 char min) used tor boolean.      
+TERMINAL     TEXT       scrnio.h     customize  Terminal identification string.          
+TEXT         typedef    stdtyp.h     yes        Used only for ASCII printable characters 
+tiny         typedef    stdtyp.h     yes        A char used for signed int work.         
+TINY         macro      stdtyp.h     customize  rvalue for tiny.                         
+tolower      function   tolower.c    yes        Convert arg to lower-case, if upper.     
+TOLOWER      macro      ctype.h      yes        Convert arg to lower-case, if upper.     
+toupper      function   toupper.c    yes        Convert to upper case, if lower.         
+TOUPPER      macro      ctype.h      yes        Convert arg to upper case, if lower.     
+TRUE         constant   defs.h       yes        Standard truth value.                    
+TWOLOG2e     constant   mathcons.h   yes        2 * log2(e)                              
+TWOmSQRT3    constant   mathcons.h   yes        2 - sqrt(3)                              
+TWOoverPI    constant   mathcons.h   yes        2.0 / pi                                 
+unformat     function   unformat.c   yes        Basic scan function, arbitrary medium.   
+ungetc       function   ungetc.c     yes        Put char back into input stream.         
+uniscrn      function   scrnio.c     yes        Uninitialize terminal screen.            
+unlink       function   csys.lib     system     Unlink a file name from a file (delete). 
+urandom      function   random.c     yes        Random number, unsigned, uniform distrib Š
+                       PORTABLE C LIBRARY ELEMENTS (cont.)
+
+Element      Type       File      Portable                 Description
+
+URSHIFT      macro      defs.h       yes        Unsigned Right Shift, unsigned n, b bits 
+USELAST      TBOOL      scrnio.h     customize  Signal to use final terminal column.     
+utiny        typedef    stdtyp.h     yes        A char used for unsigned int work.       
+UTINY        macro      stdtyp.h     customize  rvalue for utiny.                        
+utoa         function   utoa.c       yes        Unsigned to ASCII conversion.            
+VOID         typedef    stdtyp.h     yes        Used for function returning no value.    
+WASHOUT      constant   mathcons.h   customize  1.0 + (x < WASHOUT) = 1.0 to precision.  
+WIDTH        tiny       scrnio.h     customize  Terminal width, number of characters.    
+write        function   csys.lib     system     File write OS interface.                 
+XLT2ASCII    TBOOL      scrnio.h     customize  Translate-to-ASCII boolean.              
+YES          constant   defs.h       yes        Standard truth value.                    
+_ALLBUFF     constant   stdio.h      yes        Allocated buffer flag mask.              
+_BUSY        constant   stdio.h      yes        File open (busy) flag mask.              
+_EOF         constant   stdio.h      yes        Buffered  stream end-of-file flag mask.  
+_exit        function   csys.lib     system     Immediate termination of program.        
+_IOERR       constant   stdio.h      yes        Buffered stream i/o error mask.          
+_RDONLY      constant   stdio.h      yes        File open signal to read only.           
+_RDWRIT      constant   stdio.h      yes        File open signal for read and write.     
+_WRONLY      constant   stdio.h      yes        File open signal for write-only access.  
+.po 17
+
+
+Customization Procedure
+
+     Tï  customizå anä instalì thå Ã languagå portablå subroutinå 
+(function©  librarù oî á ne÷ host¬  thå procedurå ió  roughlù  aó 
+follows:
+
+     1.  Determinå  thå  extenô tï whicè thå 1° systeí  functionó 
+         giveî  iî  Tablå 5-± (i.e.¬  alì buô rename©  exisô  anä 
+         satisfù  thå  interfacå specificationó iî Sectioî  ³  oæ 
+         thió  manual®   Determinå  thå  systeí  run-time-supporô 
+         interfacå  requirementó  withiî  thå  supplieä   librarù 
+         file(s).
+
+     2.  Prograí  á rename‚ functioî anä converô iô tï relocatablå 
+         forí   suitablå  foò  thå   linkinç   loader®    Modify¬ 
+         reprogram¬  oò creatå anù oæ thå 1° systeí functionó anä 
+         basiã  runtime-supporô functionó tï makå theí conforí tï 
+         thå interface¬ anä similarlù converô theí tï relocatablå 
+         form®    Iæ   redirecteä  i/ï  ió  handleä  withiî   thå 
+         accessiblå systeí functions¬  alteò theså aó appropriatå 
+         tï  calì  redirbuf‚  tï expanä  stdiî  oò  stdouô  streaí 
+         bufferó  tï  BUFSIZ»  otherwiså  redirecteä i/ï  maù  bå 
+         considerably slower.
+
+     3.  Extracô  thå remaininç (conformant© systeí functionó  iî 
+         Tablå 5-± anä alì systeí run-time-supporô functionó froí 
+         thå existinç hosô Ã functioî library¬  anä inserô alì oæ 
+         thå systeí interfacå functionó intï á librarù oò archivå 
+         filå usinç thå hosô librarù maintenancå program¬ calì iô Š         csys.liâ   (oò   csys.a¬   etc.¬   dependinç   oî   hosô 
+         restrictions)®   Observå topologicaì sortinç precedenceó 
+         imposed by the system.
+
+     4.  Customizå  thå functionó anä parameteró listeä iî  Tablå 
+         5-2¬  anä  recompilå  alì functionó iî  thå  portablå  Ã 
+         library¬  usinç  thå  hosô  Ã compiler¬  intï  thå  forí 
+         expecteä  bù  thå linkinç loader®   Combinå  theså  witè 
+         csys.liâ   functions¬    observinç   topologicaì    sorô 
+         precedences¬  intï á ne÷ librarù file¬  calì iô lib0.liâ 
+         (or other, depending on host restrictions).
+
+     Iæ  thå  originaì  hosô Ã librarù  containó  functionó  thaô 
+satisfù  thå functionaì descriptionó hereiî giveî  exactly¬  theî 
+theù  maù  bå  extracteä  froí thió  librarù  anä  includeä  intï 
+lib0.lib in lieu of the portable-source version, if desired.
+
+
+Customization Example
+
+     Thå  procedurå  outlineä  iî  thå  precedinç  paragraphó  ió 
+perhapó besô detaileä bù illustration®   Thå followinç stepó werå 
+takeî  tï  instalì thå portablå Ã librarù functionó intï  á  filå 
+acceptablå  foò  thå  AZTEC-IÉ  (Versioî  1.50¬   copyrighô  Manø 
+Softwarå Systems¬  Shrewsbury¬  NJ© Ã compileò oî á microcomputeò 
+witè CP/Í (á trademarë oæ Digitaì Research¬  Inc.¬ Pacifiã Grove¬ 
+CA©  operatinç  system®   Thå Ã librarù filå delivereä  witè  thå 
+compiler was named libc.lib.
+
+     1.  Study of existing system:
+
+         a®  Iî extractinç thå systeí interfacå froí libc.lib¬ iô 
+         waó  noteä thaô _exit‚ waó absent¬  buô alì otheò  systeí 
+         functions were present.
+
+         b®   Thå  sbrk‚ functioî (anä aî internally-useä  callcpí 
+         function) did not function properly.
+
+         c®   Thå  STDIÎ read‚ functioî alwayó buffereä characteró 
+         until a newline was received.
+
+         d®   Redirecteä outpuô waó handleä withiî thå Ã  system¬ 
+         anä iæ redirecteä tï á file¬  waó verù slow¬ onå writteî 
+         character per disk access.
+
+         e®   Thå  Ã  run-timå  systeí  invokeä  strcpy¬  strcat¬ 
+         strcmp,‚  anä  strlen‚  functionó withiî  thå  portablå  Ã 
+         library being installed.
+
+         f®   Thå systeí invokeä á functioî closall_‚ tï flusè alì 
+         opeî streamó anä closå alì files¬ anä á functioî putterr‚ 
+         to output a character to STDERR.
+
+     2.  Corrective system actions:
+Š         a®   rename‚  waó presenô anä correcô withiî thå supplieä 
+         system, thus not reprogrammed.
+
+         b®   Thå  functioî  puterr(c)‚ waó  made¬  equivalenô  tï 
+         write(STDERR, &c, 1).
+
+         c®   Thå _exit‚ functioî waó programmeä aó á direcô  jumğ 
+         to the reboot function of the CP/M operating system.
+
+         d®   Á correctlù functioninç versioî oæ sbrk‚ anä callcpí 
+         werå  availablå  iî sourcå forí oî  thå  vendor-supplieä 
+         diskettes»  theså  werå compileä anä substituteä foò thå 
+         functions extracted from libc.lib.
+
+         e®  Á closeall_‚ functioî waó programmeä tï calì fclosall‚ 
+         (á  functioî  withiî putc)»   wheneveò  buffereä  outpuô 
+         functionó  arå used¬  outpuô streamó arå  thuó  properlù 
+         flusheä  anä closeä bù exit®   Á dummù fclosall‚ functioî 
+         filå waó provideä merelù tï closå alì opeî fileó iî  thå 
+         event output is unbuffered (putc not used).
+
+         f®  Fortunately¬ thå sourcå codå waó availablå foò read¬ 
+         sï  iô  waó modifieä tï deliveò  single-characteò  inpuô 
+         immediately, without waiting for a newline.
+
+         g®   Sincå sourcå codå waó available¬ iô waó possiblå tï 
+         alteò  thå  systeí croot‚ functioî tï calì redirbuf‚  wheî 
+         inpuô oò outpuô ió redirecteä tï á file.  Notå thaô botè 
+         getc‚  anä  putc‚  contaiî  unreachablå  codå  tï   invokå 
+         redirbuf»  wheî STDIÎ oò STDOUÔ ió redirecteä tï á file¬ 
+         itó streaí buffeò ió thuó expandeä froí ± tï BUFSIZ®   Á 
+         file¬  dredir.c¬  containinç á do-nothinç dummù redirbuf‚ 
+         waó  supplieä  foò loadinç wheî stdio.è streamó arå  noô 
+         used.
+
+     3.  Create system interface library.
+
+     Alì  systeí functionó werå archiveä bù thå  librarù  manageò 
+functioî  intï  thå Ã systeí interfacå  library¬  csys.lib®   Thå 
+contents and order of functions in the file are:
+
+     supp8080  fsubs     puterr    uexit     callcpm   croot
+     closall   dfclose   open      read      write     lseek
+     blkio     rename    unlink    block     lsubs     sbrk
+     dredir    strlen    strcpy    strcmp    strcat    stradd
+
+Notå  thaô  iô waó necessarù tï includå strlen‚ anä  otheò  strinç 
+functionó  iî  thió file¬  becauså theù werå invokeä  withiî  thå 
+system functions (actually, croot).
+
+     4.  Customize, compile, and form function library.
+
+     Constants¬ floating-poinô numbeò formats¬ anä otheò elementó 
+tï bå customizeä werå madå tï conforí witè thå AZTEC-IÉ  compileò 
+specifications.  See the following files for details:Š
+     atof.c    chrstc.c  defs.h    errno.h   fint.c    frexp.c
+     ftoa.c    global.h  mathcons.h          scrnio.h  stdio.h
+     stdtyp.h
+
+     Alì  non-matè librarù functionó werå compileä anä  collecteä 
+into the file lib0.lib in the following order:
+
+     random    getf      geti      getl      isok      getns
+     sortB     sortH     sortS     bitcount  scrnio    printf
+     eprintf   fprintf   sprintf   fscanf    format    eputs
+     sscanf    scanf     fwrite    unformat  fputs     ftoa
+     fgets     puts      putc      fopen     rewind    qsort
+     fseek     fread     gets      getc      redirbuf  getbuf
+     atof      strsave   realloc   sortq     atoi      setbuf
+     isupper   islower   ispunct   isoctal   ishex     isprint
+     iscntrl   isascii   isalnum   atol      malloc    rindex
+     min       max       lminmax   labs      itoa      ftell
+     ungetc    index     ltoa      isdigit   isspace   isalpha
+     abs       utoa      tolower   toupper   strncmp   strncal
+     strindex  streql    strncpy
+
+     Á  separatå librarù file¬  mathlib¬  waó madå tï contaiî thå 
+mathematical functions:
+
+     asin      randnorm  randexp   hypot     cosh      cbrt
+     sqrt      tanh      tan       sinh      sin       nprob
+     inverf    erf       rkstep    rknstep   pow       floor
+     exp       log2      log10     log       frexp     sgn
+     ratfun    fminmax   modf      chrstc    round     frac
+     fint      fabs      atan      simpson
+
+     Duå tï thå facô thaô thå vendoò linkagå editoò waó incapablå 
+oæ workinç witè fileó largeò thaô 64K¬  iô waó necessarù tï leavå 
+the library in these three segments.
+.pa oŠ.heappendix                                                 appendix
+.PN 1
+.FO                                A-#
+                       A. R E F E R E N C E S 
+
+
+1.   UNIØ Programmer'ó Manual¬ Belì Telephonå Laboratories¬ Inc.¬ 
+     Murraù Hill¬ Ne÷ Jersey¬ 1983.
+
+2.   Kernighan¬   Briaî  W.¬   anä  Ritchie¬  Dennió  M.¬  Thå  Ã 
+     Programming“ Language¬ Prentice-Hall¬ Inc.¬ Englewooä Cliffs¬ 
+     Ne÷ Jersey¬ 1978.
+
+3.   Handbooë  oæ  Mathematicaì  Functions¬  Nationaì  Bureaõ  oæ 
+     Standardó  Applieä Mathematicó Serieó #55¬  U.S®  Governmenô 
+     Printinç Office¬ Washington¬ D.C.¬ 1964.
+
+4.   Plum¬   Thomas¬  Ã  Programminç  Standardó  anä  Guidelines¬ 
+     Versioî Õ (UNIØ anä offspring)¬  Pluí Hall¬  Inc.¬  Cardiff¬ 
+     Ne÷ Jersey¬ 1982.
+
+5.   Coty¬  Williaí J.¬  Jr.¬ anä Waite¬ William¬ Softwarå Manuaì 
+     foò  thå  Elementarù  Functions¬   Prentice-Halì  Serieó  iî 
+     Computationaì Mathematics¬  Prentice-Hall¬  Inc.¬  Inglewooä 
+     Cliffs¬ Ne÷ Jersey¬ 1980.
+
+6.   J®  F® Hart¬ E® W® Cheney¬ C® L® Lawson¬ H® J® Maehly¬ C® K® 
+     Mesztenyi¬  J® R® Rice¬ H® C® Thacher¬ Jr.¬ anä C® Witzgall¬ 
+     Computeò Approximations¬  Johî Wileù ¦ Sons¬ Inc.¬ Ne÷ York¬ 
+     Ne÷ York¬ 1968.
+
+7.   Schonfelder¬  J®  L.¬ Mathematicó oæ Computation¬ Volumå 32¬ 
+     No. 144¬ October¬ 1978, pp. 1232-1240.
+
+8.   Blair¬  J®  M.¬  et® al.¬ "Rationaì Chebysheö Approximationó 
+     foò thå Inverså Erroò Function"¬ Mathematicó oæ Computation¬ 
+     Volumå 30¬ No. 136¬ October¬ 1976.
+
+9.   Wirth¬  Nicklaus¬  Algorithmó  « Datá Structureó ½ Programs¬ 
+     Prentice-Hall¬ Inc.¬ Englewooä Cliffs¬ Ne÷ Jersey¬ 1976® 
+
+10.  Aho¬  Alfreä v.¬  Hopcroft¬ Johî E.¬ anä Ullman¬ Jeffreù D.¬ 
+     Thå  Desigî  anä Analysió oæ Computeò  Algorithms¬  Addison-
+     Wesleù Publishinç Company¬ Reading¬ Massachusetts¬ 1975¬ pp® 
+     87-92.
+
+11.  Knuth¬  Donalä  E.¬  Arô oæ Computeò  Programming¬  Vol®  2¬ 
+     Semi-Numericaì   Algorithms¬    Addison-Wesleù    Publishinç 
+     Company¬ Reading¬ Massachusetts¬ 1973.
+
+12.  Tausworthe¬  R®  C.¬  "Randoí  numberó  generateä bù  lineaò       
+     recurrencå modulï two"¬  Mathematicó oæ Computation¬  Volumå       
+     19¬ 1965¬ pp® 201-209.
+
+13.  Purdom¬   Jack¬  Thå  Ã  Programmer'ó  Library¬  Quå  Corp.¬ 
+     Indianapolis, 1984.
+
+Š14.  Thå Ã User'ó Grouğ Newsletters¬  McPhereson¬  K® S.¬ Vol® I¬ 
+     No® 1¬ June¬ 1981¬ througè Vol® II¬ No® 6¬ March¬ 1985.
+
+15.  Portablå  Ã Subroutinå  Library¬  Vol®  II¬  Jeô  Propulsioî 
+     Laboratory, 1985.
+.pá oŠ.PN 1
+.FO                                B-#
+                           B. I N D E X 
+.FI B:USEGUIDE.IDX
+

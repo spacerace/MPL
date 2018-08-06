@@ -1,0 +1,6 @@
+gmetafb.obj: gmetafb.c
+    cl -d -c -AS -Gsw -Os -Zpe gmetafb.c
+
+gmetafb.exe: gmetafb.obj gmetafb.def
+    link4 gmetafb,/align:16,/map,slibw/NOE,gmetafb.def
+    mapsym gmetafb

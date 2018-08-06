@@ -1,0 +1,418 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24
+.R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,30
+[1mPonzoTUTOR
+.WNT
+  FUNCTIONS()  
+.R4C1
+~Vmain()~b~I~W {~N
+~b~Ifloat x,y,a;~N
+~b~Iprintf("\n Enter two numbers (separated by a space) : ");~N
+~b~Iscanf("%f%f",x,y);~N
+~b~Ia=average(x,y);~N
+~b~Iprintf("\n The average of %f and %f is %f",x,y,a);~N
+~b~I}~N
+
+    When we begin our C program with ~b~Imain()~N we are defining a
+    ~Ifunction~N. Execution of our C program will ~Ibegin~N at the 
+    statements which make up this function (and it is this property
+    which makes the name ~b~Imain~N special).
+.W
+.R4C1
+~b~Imain() {~N
+~Vfloat x,y,a;~N
+~Vprintf("\n Enter two numbers (separated by a space) : ");~N
+.R12C1
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+.R12C1
+    Here we define three ~b~Ifloat~N variables called ~b~Ix~N, ~b~Iy~N and 
+    ~b~Ia~N and ~b~Iprintf~N instructions asking for ~b~Ix~N and ~b~Iy~N.
+    Note that the user must enter a ~Ispace~N to separate the two numbers.
+    (Pressing the ~Itab~N key between numbers will also 'separate' them).
+    ~b~Iprintf()~N is a function, just like ~b~Imain()~N. When we invoke
+    this function we pass to it a ~Iformat~N string (between quotes) and
+    (sometimes) a list of variables to be printed. In this example there
+    is ~Ionly~N the ~Iformat string~N (which prints a ~b~In~Newline first):
+
+           ~V"\n Enter two numbers (separated by a space) : "~N
+.W
+.R5C1
+~b~Ifloat x,y,a;~N
+~b~Iprintf("\n Enter two numbers (separated by a space) : ");~N
+~Vscanf("%f%f",x,y);~N    
+.R12C1
+                                                                           
+                                                                           
+
+
+.w                                                                           
+.R12C1
+    Now we use the ~Ifunction~N ~b~Iscanf()~N to input the two numbers    
+    ~b~Ix~N and ~b~Iy~N. Note that ~b~Iscanf()~N also requires a ~Iformat~N  
+    string (namely ~b~I"%f%f"~N) and a variable list ~b~Ix,y~N.                    
+                                                                           
+    ~ICan you pick out the ERROR in this statement?                        ~N
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+.W
+.R16C1
+    ~b~I                                                        ~N
+    ~b~I  The function scanf() requires that we pass to it the  ~N
+    ~b~I  addresses of x and y by using &x and &y...REMEMBER?   ~N
+    ~b~I                                                        ~N
+.R7C1
+~Vscanf("%f%f",x,y);~N    should be:  ~b~Iscanf("%f%f",~V&x,&y~b~I~W);~N    
+.K19,55
+REMEMBER!!
+.W
+.R7C1
+~b~Iscanf("%f%f",&x,&y);~N                                                
+~b~Ia=~Vaverage(x,y)~b~I~W;~N
+.w
+.R12C1
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+.w
+.R12C1
+    Here we see another ~Ifunction~N called ~b~Iaverage()~N. We pass to this
+    function the values of two variables, ~b~Ix~N and ~b~Iy~N.
+
+    The C language recognizes a ~Ifunction~N by the fact that it is given
+    a name (like ~b~Imain~N, ~b~Iscanf~N, ~b~Iprintf~N or ~b~Iaverage~N)
+    followed ~Iimmediately~N by parentheses ~b~I(....)~N. Within the ~b~I(~N
+    and the ~b~I)~N is information which is passed to the ~Ifunction~N.
+    Unlike ~b~Iscanf()~N and ~b~Iprintf()~N (which are included in the C
+    library of functions and are available for our use), the function
+    which we are calling ~b~Iaverage()~N is one which we must write ourself!
+.W
+.N
+~b~Imain() {~
+~b~Ifloat x,y,a;~N
+~b~Iprintf("\n Enter two numbers (separated by a space) : ");~N
+~b~Iscanf("%f%f",&x,&y);~N        (note that we've changed to ~b~I&x,&y~N)
+~Va=average(x,y);~N
+~Vprintf("\n The average of %f and %f is %f",x,y,a);~N
+~b~I}~N
+    The functions ~b~Iscanf()~N and ~b~Iprintf()~N perform their task and
+    ~Ireturn~N nothing, but our ~Ifunction~N ~b~Iaverage()~N is expected to
+    ~Ireturn the average~N of the two variable values we passed to it.
+
+    In our program above we assign this 'returned average' to the ~b~Ifloat~N
+    variable we are calling ~b~Ia~N....and pass to ~b~Iprintf()~N a ~Iformat~N
+    string ~b~I"\n The average of %f and %f is %f"~N indicating that we want
+    certain text printed (after a ~b~In~Newline) as well as 3 ~b~I%f~Nloat
+    numbers.
+.w
+
+    The variable list which we pass to ~b~Iprintf()~N (namely ~b~Ix,y,a~N)
+    tells ~b~Iprintf()~N which 3 ~b~I%f~Nloat values are to replace the 3
+    ~b~I%f~N which occur in the 'format' information.
+.K19,60
+go!go!go!
+.WNT
+   writing the function average()    
+
+    Like the function ~b~Imain()~N, we begin with the name and an opening
+    ~b~I{~N. BUT, unlike ~b~Imain()~N, the function ~b~Iaverage~N is to
+    ~Ireceive~N two variables....so, ~Ibefore our opening {~N, we write:
+
+~b~Iaverage(x,y)~N
+~b~Ifloat x,y;~N
+~b~I{~N                      the opening ~b~I{~N occurs ~Iafter~N the
+                             declaration ~b~Ifloat x,y~N !
+
+         ~V                                                       ~N
+         ~V THE FIRST STATEMENT IN A FUNCTION  even before the {  ~N
+         ~V MUST BE A DECLARATION OF THE ARGUMENT TYPES!          ~N
+         ~V                                                       ~N
+
+    ...let's continue writing our ~Iaverage()~N function:
+.K19,60
+GO!GO!GO!
+.WN
+~b~Iaverage(x,y)~N
+~b~Ifloat x,y;~N
+~b~I{~N  
+~Vfloat z;~N
+~b~Iz=(x+y)/2;~N
+~b~Ireturn(z);~N
+~b~I}~N
+
+    The ~Vfloat z;~N (within the body of our function) declares the
+    variable ~Vz~N to be a ~Vfloat~N.
+.W
+.R4C1
+~b~Ifloat z;~N
+~Vz=(x+y)/2;~N
+.R12C1
+    ~Vz=(x+y)/2~N assigns to ~Vz~N the average of ~Vx~N and ~Vy~N.
+.W
+.R5C1
+~b~Iz=(x+y)/2;~N
+~Vreturn(z);~N
+.R14C1
+    ~Vreturn(z);~N will ~Ireturn~N the value of ~Vz~N (so it can be
+    used in our ~b~Imain()~N program.
+.WN
+    The whole thing, including ~b~Imain()~N, is now:
+~b~Imain() {~N
+~b~Ifloat x,y,a;~N
+~b~Iprintf("\n Enter two numbers (separated by a space) : ");~N
+~b~Iscanf("%f%f",&x,&y);~N   
+~b~Ia=average(x,y);~N
+~b~Iprintf("\n The average of %f and %f is %f",x,y,a);~N
+~b~I}~N
+~b~Iaverage(x,y)~N
+~b~Ifloat x,y;~N
+~b~I{~N  
+~b~Ifloat z;~N
+~b~Iz=(x+y)/2;~n
+~b~Ireturn(z);~N
+~b~I}~N
+
+    ...actually, this program won't (quite) work...but let's see how to
+    get it to compile and run.
+.K19,60
+won't[0;1mwork?
+.WN
+
+
+
+
+
+.T
+   How to COMPILE   
+.WN
+    We save our program on disk and leave our word processor, giving 
+    our program a name: ~Iprogram1.c~N ( note the necessary ~I.c~N ).
+
+    Then we would ask the ~IC-compiler~N to compile it, with the command:
+
+~Icc program1~N
+
+    With this command the compiler looks for a file on the disk with the
+    name ~Iprogram1.c~N ( the extension ~I.c~N being ~IUNDERSTOOD~N! ) and
+    generates a file called ~Iprogram1.o~N ( an ~Io~Nbject file).
+
+    After the compiler has done its thing it's our turn again.
+
+    We ask to ~Ilink~N the ~Io~Nbject file by issuing the command:
+
+~Ilink program1~N
+
+    where, again, the extension ( ~I.o~N in this case ) is understood.
+
+    The linker works on the ~Iprogram1.o~N file and generates an ~Iexe~Ncutable
+    program called:  ~Iprogram1.exe~N
+
+    Finally, we may issue the command: ~Iprogram1~N to run our program.
+.WN
+
+
+
+
+
+    ~INOTE~N: The  commands  necessary  to  ~Icompile~N  and  ~Ilink~N,  and the 
+          eventual name of the executable program, may vary from one
+          C-compiler to another. On the IBM PC, the (final, compiled)
+          program will normally have the extension ~I.exe~N.
+.b5-10
+.W
+.R12C1
+    The reason for the 2-step process of ~Icompile~N then ~Ilink~N is that
+    we may write (for example) the ~b~Iaverage()~N function separately, and
+    ~Icompile~N it separately (generating an ~Io~Nbject file, say ~Iaverage.o~N)
+    then ~Ilink~N the ~b~Imain()~N function to the ~b~Iaverage~N function by
+    issuing the command: ~Ilink program1 average~N
+    (where we have called the ~b~Imain()~N function ~Iprogram1.c~N when we saved
+    it to disk before leaving the word processor/text editor).
+.K19,30
+all clear?
+.WN
+    Now suppose we have (successfully) compiled and linked ~Iprogram1~N.
+    (our program will actually compile...without any error messages!)
+    
+    We have on disk ~Iprogram1.exe~N which we execute by issuing the command:
+    ~Iprogram1~N  and the program will print:
+                                             cursor waits for 2 numbers.
+~r~I Enter two numbers (separated by a space) : ~N~IÛ~N
+
+    ..we type:  ~I21~N ~I22~N          (leaving a space between).
+    then press the Enter (or Return) key and expect to get:
+
+~r~I The average of 21.000000 and 22.000000 is 21.500000~N
+
+     Our program statement was:
+
+      ~b~Iprintf("\n The average of %f and %f is %f",x,y,a);~N
+
+      and the ~b~I%f~N gives 6 decimal places...by default ).
+
+    Alas, what we get is:
+.W
+.R23C1
+~r~I The average of 21.000000 and 22.000000 is 21.000000~N
+.K19,60
+[0;1mmamma mia!
+.WN
+    Let's look at the function ~b~Iaverage()~N again:
+
+~b~Iaverage(x,y)~N
+~b~Ifloat x,y;~N
+~b~I{~N  
+~b~Ifloat z;~N
+~b~Iz=(x+y)/2;~N
+~b~Ireturn(z);~N
+~b~I}~N
+                               ~IREMEMBER THIS:~N
+       ~V                                                                ~N
+       ~V ALL FUNCTIONS WILL RETURN AN INTEGER UNLESS YOU SAY OTHERWISE! ~N
+       ~V                                                                ~N
+
+    ...so, the value of ~b~Iz~N which ~b~Iaverage()~N returned was changed
+    from 21.5 ( the ~b~Ifloat~Ning point average of the two floating point
+    numbers 21 and 22 ) to 21. The fractional part was truncated since
+    ( unless we ~Vsay otherwise~N ) our function returns an integer!
+
+    And how do we tell the C-compiler that ~b~Iaverage()~N is to ~b~Ireturn~N
+    a ~b~Ifloat~Ning point number?
+.K3,60
+I give up!
+.WN
+    We write the ~b~Iaverage()~N function with a 
+    ~Itype declaration built into its name!~N
+
+~b~Ifloat average(x,y)~N          Note the ~b~Ifloat~N!
+~b~Ifloat x,y;~N
+~b~I{~N  
+~b~Ifloat z;~N
+~b~Iz=(x+y)/2;~n
+~b~Ireturn(z);~N                  ~INow~N ~b~Ireturn(z)~N gives a ~b~Ifloat~N!
+~b~I}~N
+.K19,60
+ finally!
+.WNT
+    FUNCTIONS HAVE A PRIVATE COPY OF THEIR ARGUMENTS    
+.R4C1
+~b~Imain() {~N
+~b~Ifloat x,y,a;~N
+~b~Iprintf("\n Enter two numbers (separated by a space) : ");~N
+~b~Iscanf("%f%f",&x,&y);~N   
+~b~Ia=average(~Vx~N~b~I,~Vy~N~I);~N
+~b~Iprintf("\n The average of %f and %f is %f",x,y,a);~N
+~b~I}~N
+~b~Iaverage(~Vx~N~b~I,~Vy~N~I);~N
+~b~Ifloat x,y;~N
+~b~I{~N  
+~b~Ifloat z;~N
+~b~Iz=(x+y)/2;~N
+~b~Ireturn(z);~N
+~b~I}~N
+.w
+   Although we called the two arguments of ~b~Iaverage()~N ~V x ~N and ~V y ~N
+   (just as ~b~Imain()~N did), this is not necessary!
+   The function ~b~Iaverage()~N only gets a ~Icopy~N of the variables which 
+   appear in its argument list and may give these copies any name it likes.
+   (they are NOT the ~Ioriginal~N ~V x ~N and ~V y ~N which ~b~Imain()~N uses!)
+   ~V The above program might be changed to read:~N
+.K12,60
+ MY copy
+.W
+.R4C1
+~b~Imain() {~N
+~b~Ifloat x,y,a;~N
+~b~Iprintf("\n Enter two numbers (separated by a space) : ");~N
+~b~Iscanf("%f%f",&x,&y);~N   
+~b~Ia=average(x,y);~N
+~b~Iprintf("\n The average of %f and %f is %f",x,y,a);~N
+~b~I}~N
+~Vfloat average(sam,sally)    ~N
+~Vfloat sam, sally;           ~N
+~V{                           ~N  
+~Vfloat george;               ~N
+~Vgeorge=(sam+sally)/2;       ~N
+~Vreturn(george);             ~N
+~V}                           ~N
+.K12,60
+sam+sally?
+.WNR2C1
+ Since ~Icopies~N of ~b~Ichar~N and ~b~Iint~N and ~b~Ifloat~N variables are passed
+ to a function, the function may manipulate these variables as it sees fit.
+ The ~Ioriginal~N values remain  unchanged.  This  mechanism  for calling
+ a function and passing variables is called : ~ICALL BY VALUE~N
+.b1-6
+.R8C1
+ The exception occurs when we pass a ~Istring~N variable to a function. In
+ this case, since a string may be arbitrarily long (!), it seems inefficient
+ to provide a ~Icopy~N of the string ... so C will pass the ~Iaddress~N in memory
+ where the string begins. This is called : ~ICALL BY REFERENCE~N
+.b7-12
+.R13
+    ~Icall by value~N is a mixed blessing. We cannot (for example) call upon
+    an ~b~Iexchange(x,y)~N function to exchange the values of the ~b~Iint~N
+    variables ~b~Ix~N and ~b~Iy~N
+
+~b~Iexchange(x,y)~N                    ~V                            ~N
+~b~Iint x, y;~N                        ~V The values of x and y are  ~N
+~b~I{~N                                ~V only exchanged within this ~N
+~b~Iint temp;~N                        ~V function, NOT in main() !  ~N
+~b~Itemp=x; x=y; y=temp; return;~N     ~V                            ~N
+~b~I}~N
+.WK10,32
+  WHAT!
+.WN
+.R10C12
+ ... but don't despair, there are ways around this !
+.b8-12
+.K18,32
+can't wait
+.WN
+
+
+.T
+   That's all folks!   
+
+.K16,32
+au revoir!
+
+
+.q
+

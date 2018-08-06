@@ -1,0 +1,94 @@
+
+                 STEVE'S DATALIGHT LIBRARY LIST OF FUNCTIONS
+
+      aabort          Abort a program with character to stdout
+      argval          Extract a numerical value from a command line argument
+      badext          Report invalid filename extension and exit
+      basename        Split a string into path and/or filename
+      blpr            Low Level Write to Printer
+      blprstat        Low Level Status from Printer
+      cant            Report inability to open a file and exit
+      cls             Clear screen and home cursor
+      common_exit     Common exit point
+      crc_clear       Clear (initialize) crc value
+      crc_finish      Finish crc calculation
+      crc_update      Update crc calculation
+      criterr         Critical error interrupt installer
+      ctlbrk          Control-Break interrupt installer
+      cursor_style    Set the cursor style
+      d_cls           Clear current screen
+      d_pos           Position the cursor on a video page
+      d_say           Display a string at a specific location on current page
+      d_saypag        Display a string at a specific location on specified page
+      daynum          Find the number of a date within a year
+      disp_box        Display a box on the screen        (Direct memory)
+      disp_char_at    Display a character at a position     "      "
+      disp_char_atr   same, with cursor return              "      "
+      disp_cls        Clear the display                     "      "
+      disp_say        Display a string at a position        "      "
+      disp_sayr       same, with cursor return              "      "
+      disp_enterdata  Like enterdata, but for direct video access
+      disp_enterfn    Like enterfn, but for direct video access
+      dstr_i          Make an ASCII decimal string into an integer
+      dup             Duplicate a file handle
+      enterdata       Collect a string from the keyboard, TTY style
+      enterfn         Collect a filename from the keyboard, TTY style
+      eraok           Ask permission to erase an existing file
+      error           Display a message and exit
+      exists          See if a file exists
+      exit2dos        Request permission to exit to DOS
+      exttyp          Check a filename for a specified extension type
+      fillch          Fill a string with a specified character
+      fopend          fopen a file in a specified environment variable
+      fopeng          fopen a file in a specified environment variable or PATH
+      fopenp          fopen a file in the PATH
+      get_code_adr    get the segment and offset of a function address
+      get_data_adr    get the segment and offset of a data item
+      _getdi          Get device information from file handle
+      getkey          Extended keyboard fetch
+      getpath         Fetch and parse the environment PATH string
+      getpos          Get current cursor position
+      gtodstr         Report time and date to a string
+      gtodsub         Report time and date to output channel
+
+      page -2-
+
+      i_dstr          Make an integer from a decimal ASCII string
+      ibmtype         Find out the type of computer
+      installtick     (see ticker)
+      iscons          Check specified file descriptor to see if CON:
+      isleap          Check if a specified year is a leap year
+      kbhit           See if the keyboard has a character waiting
+      lexcmp          Lexical comparison of two strings
+      mkbox           Make a box on the screen
+      mktone          Make a tone to the speaker
+      monthis         Get a pointer to the name of a month
+      newext          Change a filename's extension to something else
+      onexit          Set a routine to be called by common_exit
+      opend           open a file in a specified environment variable
+      openg           open a file in a specified environment variable or PATH
+      openp           open a file in the PATH
+      pr_carret       send a carriage return to printer (low level)
+      pr_eject        send a formfeed to printer (low level)
+      pr_nl           send a carriage return and line feed to printer
+      pr_putline      print a string to printer, append cr/lf (low level)
+      pr_puts         print a string to printer (low level)
+      pr_set          select printer to use for low level access
+      readchar        Read a character from a serial port
+      ready_rcv       Check serial port for an available character
+      ready_xmt       See if serial port can accept a character
+      removetick      (see ticker)
+      repchar         Repeat a character to a file descriptor
+      setport         Set the parameters for a serial port
+      soundoff        Turn off the speaker
+      soundon         Turn on the speaker
+      strip           Strip a newline character from a string
+      _stuff          Get raw equipment report
+      stuff           Get equipment report (high level)
+      ticker          Real-time hardware clock interrupt services
+      vidpage         Set a video page as active page
+      vmode           Set video mode
+      weekday         Determine the day of the week from the true date
+      wkdayname       Get a pointer to the name of the day
+      writechar       Write a character to a serial port
+

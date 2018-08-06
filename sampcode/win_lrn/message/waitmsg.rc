@@ -1,0 +1,10 @@
+#include <windows.h>
+#include  "WaitMsg.h"
+
+WaitMsg MENU
+    BEGIN
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

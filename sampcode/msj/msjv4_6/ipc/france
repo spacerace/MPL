@@ -1,0 +1,142 @@
+read      print 28
+ 
+Date:     Thu Jul 27, 1989  5:48 pm  EST 
+Subject:  FRANCE
+
+
+
+
+
+
+
+
+          (Updated 7/88, from service brochure)
+
+                                        FRANCE
+                                       TRANSPAC
+           
+           
+          CONTACT FOR SUBSCRIPTION TO PACKET SWITCHING SERVICE:
+          -----------------------------------------------------
+          Mr. C. Girerd - Tel: (33-1) 47 62 79 60
+          Mr. J.M. Chevalier - Tel: (33-1) 47 62 79 61
+          Direction des Telecomications des Reseaux Exterieurs
+          INTELCOMFRANCE
+          Tour Franklin
+          92081 Paris La Defense Cedex 11, France
+          Telex: (842) 610586  A/B: CPTI 610586F 
+                    or 610329  A/B: CPTI 610329F
+           
+           
+          DIAL-UP ACCESS VIA PSTN: (300 and 1200 bps access available)
+          ------------------------
+          All charges in French Francs (FF)
+           
+          Initial Fee:                       150.00 FF/NUI
+          Monthly Fee:                        75.00 FF/month
+          Connect Time Charge:                 0.84 FF/minute at  300 bps
+                                               1.35 FF/minute at 1200 bps
+          Volume Charge:                      38.00 FF/kilosegment
+           
+          A 18.6% VAT should be added to the above charges.
+           
+          Temporary registrations are now available for an all-inclusive
+          fee of 1000 FF per week, with no time or volume restrictions.
+           
+
+          ACCESS NUMBERS:
+          ---------------
+          All cities in France may access TRANSPAC with the national
+          numbers given below.
+
+          300 bps access:                     36 01
+          1200 bps access:                    36 00
+          1200/75 bps access (incl. Minitel): 36 13
+           
+
+          LOG-ON PROCEDURE:
+          -----------------
+          SUBSCRIBER:        Dial access number given for appropriate speed
+
+                             Listen for carrier tone and switch modem to
+                             data mode
+
+                             Receive: Transpac 1234567
+
+                             Enter: 03104004759Pxxxxxx and press RETURN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             xxxxxx = your NUI (issued by the PTT)
+
+                             Receive: COM
+                                      P3
+
+                                      HOST IS ON LINE
+                                      Port: 3.
+
+                                      Please enter your user name:
+                                      Password:
+
+          You should enter your MCI Mail user name and password at these
+          prompts and press RETURN after each line. You are now connected
+          to MCI Mail.
+
+          LOG-ON PROCEDURE FROM THE MINITEL TERMINAL (1200/75):
+
+          1. Dial 36 13.
+
+          2. Receive carrier tone and press CONNECTION/FIN.
+
+          3. When "Teletel" appears type: 03104004759 and press SUITE.
+
+          4. When you receive "Donnees Complementaires" enter your NUI and
+          press ENVOI.
+
+          5. You will receive: Communication Etabile
+                               P3
+                               HOST IS ON LINE
+
+                               Port: 3.
+                               Please enter your user name:
+                               Password:
+
+          You should enter your MCI Mail user name and password at these
+          prompts and press RETURN after each line. You are now connected
+          to MCI Mail.
+
+
+          COMMENTS:
+          ---------
+
+          It takes approximately 2 days to arrange an account. Modems are
+          available on the open market.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+View command: 

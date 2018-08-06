@@ -1,0 +1,7 @@
+
+#include "style.h"
+
+TestMenu MENU
+ BEGIN
+   MENUITEM "GetMenuString", 100
+ END

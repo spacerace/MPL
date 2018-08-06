@@ -1,0 +1,25 @@
+sq cmd.c
+del cmd.c
+sq com.c
+del com.c
+sq cre.c
+del cre.c
+sq err.c
+del err.c
+sq iex.c
+del iex.c
+sq int.c
+del int.c
+sq io.c
+del io.c
+sq mth.c
+del mth.c
+sq scn.c
+del scn.c
+sq sel.c
+del sel.c
+sq srt.c
+del srt.c
+sq tbl.c
+del tbl.c
+

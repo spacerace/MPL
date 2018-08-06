@@ -1,0 +1,6 @@
+
+demetafi.obj: demetafi.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 demetafi.c
+
+demetafi.exe: demetafi.obj demetafi.def
+    link4 /align:16 demetafi,,nul,slibw/NOE,demetafi.def

@@ -1,0 +1,11 @@
+;-------------------------------------
+; LOADBMP2.DEF module definition file
+;-------------------------------------
+
+NAME           LOADBMP2  WINDOWAPI
+
+DESCRIPTION    'Loads Bitmap Resource and Draws it (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

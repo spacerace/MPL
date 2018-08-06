@@ -1,0 +1,9 @@
+#--------------------
+# LINETYPE make file
+#--------------------
+
+linetype.obj : linetype.c
+     cl -c -G2sw -W3 linetype.c
+
+linetype.exe : linetype.obj linetype.def
+     link linetype, /align:16, NUL, os2, linetype

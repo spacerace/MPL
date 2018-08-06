@@ -1,0 +1,200 @@
+The key to the operation of the oemscsi routine is the structured data table
+which is formatted as follows:
+
+    struct oemtable
+         {
+         unsigned char (far *cmdblock)[ ];
+         unsigned char (far *datablock)[ ];
+         long expectlen;
+         long actuallen;
+         int timeout;
+         int blkfactora;
+         int blkfactorb;
+         unsigned char scsistatus;
+         unsigned char scsimsg;
+         unsigned char scsibits;
+         unsigned char scsiaddress;
+         unsigned char scsiparity;
+         int adaptererr;
+         };
+
+The following sections explain the parameters that are in the structure. It is
+assumed that any routines written in "C" are compiled with the /Zp option in 
+the MicroSoft Compiler to specify packed arrays.
+
+unsigned char (far *cmdblock)[]
+
+    Far pointer to a character array that contains the bytes that are to be 
+    sent to the device during the command phase of the SCSI bus operation. 
+    Data is sent from this array, one byte at a time, until the SCSI bus 
+    phase changes from command phase to another phase.
+
+unsigned char (far *datablock)[]
+
+    Far pointer to a character array where data from the SCSI bus data phase
+    is either to be written into, or read from. The direction of the operation
+    is determined automatically by the oemscsi routine by checking the 
+    direction specified by the SCSI I/O status line during the data phase.
+
+long expectlen
+
+    The expected length of the data phase in number of bytes transferred is 
+    specified. This is a type "long" variable. This may either be the actual 
+    expected length of the transfer, or the size of the buffer into or from 
+    which the transfer is to take place. This number should not exceed 
+    the length of the actual buffer. If the data phase is longer than the 
+    specified buffer size, the extra data is read on an input, or the data 
+    phase is filled with unknown data on an output.
+
+long actuallen
+
+    The actual length of the transfer, in number of bytes transferred, is 
+    returned to the caller. This is a type "long" variable. If this exceeds 
+    the value expectlen, the data in excess of expectlen has been discarded 
+    and is not valid or predictable. If this number is less than expectlen, 
+    then only actuallen bytes of data are valid.
+
+int timeout
+
+    There is an expected length of time that a specific operation should take
+    on the SCSI bus. If for some reason the operation exceeds this length of 
+    time, there may be a problem and some type of error correction may need to
+    take place.  This is the timeout interval in seconds to wait for an 
+    operation to complete. 
+
+    Timeout value: 1    this value is an indefinite time period.
+                   0    this value is no time period.
+                1-65534 is a time period expressed in seconds.
+
+    There are two timeouts that are built into the scsioem routine. They are
+    the timeout waiting for the device to respond to the assertion of the 
+    SCSI Select line with a SCSI Busy, and the timeout waiting for the SCSI
+    bus free phase. These timeouts are both 3 seconds.
+
+int blkfactora
+int blkfactorb
+
+    The TMC adapters use a high speed transfer technique that depends on a 
+    block of data being transferred in rapid succession with no more than an 
+    8 microsec delay between bytes of data. At the end of the block, the 
+    software will pause for a maximum of timeout seconds waiting for the 
+    device to again assert the SCSI Request line indicating that there is more
+    data available.
+
+    Two values are provided for the blocking factor. In most cases, both 
+    values will be the same. The routine first transfers a block of 
+    blkfactora bytes in length and then transfers a block of blkfactorb bytes
+    in length. For example, in doing a read from a disk system with 512 byte 
+    sectors, both values would be set to 512.
+
+    For example, some devices may have a characteristic where the block size 
+    may be 4096, but only the first 4095 bytes can be transferred in a burst 
+    mode, and the last byte needs to be transferred separately. In this 
+    example, blkfactora would be 4095, and blkfactorb would be 1.
+    
+    Some commands may not block the transfer of their information. An example
+    of this might be the Request Sense command or the Mode Select command. The
+    data for these commands is often handled in a byte by byte fashion in 
+    target controllers. In these situations, both blocking factors should be
+    set to 1. This assures that the system will wait for any hardware delays 
+    as well as check for any bus phase changes after the transfer of each 
+    byte.
+
+    Some commands check the incoming data on a byte by byte basis such as the 
+    Mode Select command. At any byte, should there be an error, the target 
+    device may abort the data phase and go directly to the status message 
+    phase. As a result, the length of the data phase in number of bytes  may
+    be unknown. If this is true, set both blocking factors to 1. This causes 
+    the routine to check the phase of the bus after each byte to see if it has
+    changed to the status phase.
+
+    There is another class of SCSI devices, normally of low performance such 
+    as some of the Optical Disk Drives that may block their data for transfer,
+    but not guarantee less than 8 usec between bytes. A blocking factor of 1 
+    would handle the device, but because there is complete checking for bus
+    phase changes between each byte, the performance is unacceptable. As an
+    alternate to this approach, an option is implemented in oemscsi that will 
+    check only for the assertion of SCSI Request in a tight loop before doing
+    the data read or write. This feature is enabled by setting bit 15 of the
+    blocking factor. For example, on a device that has 2048 byte sectors and 
+    falls into this performance category, the following code would be used.
+
+                    blkfactora= 2048 |0x8000;
+                    blkfactorb= 2048 |0x8000;
+
+    Note:This method should not be used unless the limitations of the device 
+         require it. This  operation is slower for high speed devices that the
+         standard block moves.
+
+unsigned char scsistatus
+
+    The SCSI status byte returned from the device at the conclusion of the 
+    transfer is returned here. The format of this byte will be specified in 
+    your device manual.
+
+unsigned char scsimsg
+
+    The SCSI message byte returned from the device at the conclusion of the 
+    transfer is returned here. This byte is normally zero. If it is not, 
+    refer to your device manual for a discussion of its meaning.
+
+unsigned char scsibits
+
+    If there is a timeout condition (indicated by the error return status in 
+    int adaptererr), the SCSI bus status bits are returned for examination to
+    determine what is causing the error. Note that the oemprint routine prints
+    out the bus status to indicate the condition of these bits. They are as 
+    follows:
+
+                    Bit       7-                Not used
+                    Bit       6-                Adapter Parity error status
+                    Bit       5-                SCSI Select
+                    Bit       4-                SCSI Request
+                    Bit       3-                SCSI Command/Data
+                    Bit       2-                SCSI I/O
+                    Bit       1-                SCSI Message
+                    Bit       0-                SCSI Busy
+
+unsigned char scsiaddress
+
+    This is the device's SCSI address. Valid values are 0-7. Check the 
+    configuration of your device and your device manual to determine how to 
+    set and determine this address. 
+
+unsigned char scsiparity
+
+    Should parity be checked on the SCSI bus? This is a function of your 
+    device and the specific TMC product that is being used. Do not specify 
+    parity checking for a device or adapter that does not support parity, as
+    each transfer will return an error condition. The summary of adapters in
+    section 1 lists which support parity. Set this =0 for no parity checking
+    and !=0 for parity checking.
+
+int adaptererr
+
+    Error status related to the transfer is returned. If there is no error,
+    a 0 is returned. Valid error  values are as follows:
+
+          -01       Timeout waiting for initial bus free phase
+          -02       Timeout during Selection phase
+          -03       Timeout during Command phase
+          -04       Timeout during Data phase
+          -05       Timeout during Status phase
+          -06       Timeout during Message phase
+          -07       Parity error detected during transfer
+          -16       Error locating TMC host adapter
+          +01       Buffer overflow, actuallen > expectlen
+          +02       Buffer underflow, actuallen < expectlen
+
+    Note:For assembly language users of the Tool Kit, the "adaptererr" value
+         stored in an oemtable structure by the oemscsi routine is also 
+         returned in the [AX] register, and Carry is set if this value of 
+         non-zero.
+
+In order to execute a SCSI command, full in the command bytes, set the 
+pointers to the command array and the buffer, set the expected length, set the
+blocking factor terms, set the scsiaddress character to the address of your 
+device, set the scsiparity character, and execute the command. An example of 
+the operation is included in the attached test routine, oemtest.c. A copy of 
+this routine is included on your OEM distribution diskette.
+

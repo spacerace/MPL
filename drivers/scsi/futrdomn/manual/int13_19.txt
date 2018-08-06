@@ -1,0 +1,32 @@
+Code 19                                  -Read Drive Capacity
+
+Input registers - none.
+
+Special output registers - Same as for Code 15.
+
+Note:    Future Domain ROM BIOS' write protect removable media drives until 
+         this call is made. This is designed to protect data on removable 
+         cartridges until a driver that understands removable media makes 
+         this call.
+
+Operation:
+
+    A SCSI Read Capacity (25h) command is issued to the specified disk. All 
+    of the command bytes are set to zero. The following parameters are then 
+    updated in the internal table for the disk. See Code 1Bh for a complete 
+    explanation of the internal table.
+
+    Total Capacity - This is a double work parameter. The capacity is returned
+    as the number of equivalent 512 byte sectors.
+
+    The number of heads, sectors per track, and cylinders are calculated as 
+    follows: The number of sectors per track is fixed at 17 because there are
+    some RAM BIOS systems which use that as a fixed assumption and will not 
+    work with a different number. The number of cylinders cannot exceed 1024 
+    as this is the maximum field size. Therefore, the total capacity is 
+    divided by 1024 and the result divided by 17. The result is incremented 
+    by one and becomes the number of heads. The new heads value is multiplied
+    by 17 and divided into the total capacity again with the result becoming 
+    the total number of cylinders to use. Note that these numbers will 
+    probably not match the physical characteristics of the disk.
+

@@ -1,0 +1,29 @@
+/*
+
+Figure 1  
+========
+
+*/
+
+/*--------------------------------
+   BIGJOB.RC resource script file
+  --------------------------------*/
+
+#include <os2.h>
+#include "bigjob.h"
+
+MENU ID_RESOURCE
+     {
+     SUBMENU "~Repetitions",  IDM_REPS
+          {
+          MENUITEM "     10", IDM_10,    MIA_CHECKED
+          MENUITEM "    100", IDM_100
+          MENUITEM "   1000", IDM_1000
+          MENUITEM "  10000", IDM_10000
+          }
+     SUBMENU "~Action",       IDM_ACTION
+          {
+          MENUITEM "~Start",  IDM_START
+          MENUITEM "~Abort",  IDM_ABORT, MIA_DISABLED
+          }
+     }

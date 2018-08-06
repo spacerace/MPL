@@ -1,0 +1,136 @@
+/*
+ * FORM LIBRARY - RESOURCE FILE
+ *
+ * LANGUAGE      : Microsoft C 5.1
+ * ENVIRONMENT   : Microsoft Windows 3.0 SDK
+ * STATUS        : operational
+ *
+ *    Eikon Systems, Inc.
+ *    989 East Hillsdale Blvd, Suite 260
+ *    Foster City, California 94404
+ *    415-349-4664
+ *
+ * 07/12/90 1.00 - Kevin P. Welch - initial creation.
+ *
+ */
+
+#include <windows.h>
+#include "form.h"
+
+FORM RCDATA
+BEGIN
+   3                          /* number of data pages */
+   "Product Order Form", 0    /* form name */
+END
+
+STRINGTABLE
+BEGIN
+   
+   /* 1st data entry page definitions */
+   NAME,          "NAME:Customer name {first,initial,last}."
+   COMPANY,       "COMPANY:Company name {optional}."
+   ADDRESS,       "ADDRESS:Company or customer street address."
+   CITY,          "CITY:Company or customer city."
+   STATE,         "STATE:Company or customer state."
+   ZIPCODE,       "ZIPCODE:Company or customer postal code."
+
+   PRODUCT,       "PRODUCT:Name and version of product."
+   SHIPVIA,       "SHIPVIA:Product shipment method."
+   PAYMETHOD,     "PAYMETHOD:Product payment method."
+   CARDNUM,       "CARDNUM:Credit card number {if used}."
+   EXPDATE,       "EXPDATE:Credit card expiration date {if used}."
+
+   OPTION1,       "OPTION1:5.25 inch diskette option."
+   OPTION2,       "OPTION2:3.5 inch diskette option."
+   FRIEND,        "FRIEND:Customer heard about product from a friend."
+   AD,            "AD:Customer heard about product from an advertisement."
+   SHOW,          "SHOW:Customer heard about product at a tradeshow."
+   DEALER,        "DEALER:Customer heard about product from a dealer."
+   REVIEW,        "REVIEW:Customer heard about product in a review."
+   ARTICLE,       "ARTICLE:Customer heard about product in an article."
+   COMMENT,       "COMMENT:Misc comments regarding customer order."
+
+END
+
+REPORT RCDATA
+BEGIN
+   "%HEADERPRODUCT ORDER FORM - Page #%PAGENUMBER", 0
+   " ", 0
+   "Customer Name .......: %NAME", 0
+   "Company Name ........: %COMPANY", 0         
+   "Address .............: %ADDRESS", 0
+   "City ................: %CITY", 0
+   "State ...............: %STATE", 0
+   "Zip Code ............: %ZIPCODE", 0
+   " ", 0
+   "Product Order .......: %PRODUCT", 0
+   "Shipping Method .....: %SHIPVIA", 0         
+   "Payment Method ......: %PAYMETHOD", 0    
+   "Credit Card Number ..: %CARDNUM", 0         
+   "Card Expiration Date : %EXPDATE", 0         
+   " ", 0
+   "Disk Size ...........: %1OPTION1 = 5.25    %1OPTION2 = 3.5",
+   "", 0
+   "Reference ...........: %1FRIEND = Friend  %1AD = Advertisement", 0
+   "                     : %1SHOW = Show    %1DEALER = Dealer", 0
+   "                     : %1REVIEW = Review  %1ARTICLE = Article", 0
+   " ", 0
+   "Comment .............: %-50COMMENT", 0
+   0
+END
+
+PAGE1 DIALOG LOADONCALL MOVEABLE DISCARDABLE 4, 4, 204, 96
+CAPTION "Page #1"
+STYLE WS_BORDER | WS_VISIBLE | WS_POPUP
+BEGIN
+    CONTROL "", NAME, "edit", ES_LEFT | WS_BORDER | WS_GROUP | WS_TABSTOP | WS_CHILD, 48, 10, 150, 12
+    CONTROL "", COMPANY, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 48, 24, 150, 12
+    CONTROL "", ADDRESS, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 48, 38, 150, 12
+    CONTROL "", CITY, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 48, 52, 150, 12
+    CONTROL "", STATE, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 48, 66, 100, 12
+    CONTROL "", ZIPCODE, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 48, 80, 100, 12
+    CONTROL "&Name:", -1, "static", SS_RIGHT | WS_GROUP | WS_CHILD, 4, 12, 40, 8
+    CONTROL "&Company:", -1, "static", SS_RIGHT | WS_CHILD, 4, 26, 40, 8
+    CONTROL "&Address:", -1, "static", SS_RIGHT | WS_CHILD, 4, 40, 40, 8
+    CONTROL "&City:", -1, "static", SS_RIGHT | WS_CHILD, 4, 54, 40, 8
+    CONTROL "&State:", -1, "static", SS_RIGHT | WS_CHILD, 4, 68, 40, 8
+    CONTROL "&Zip Code:", -1, "static", SS_RIGHT | WS_CHILD, 4, 82, 40, 8
+    CONTROL "Customer Address", -1, "button", BS_GROUPBOX | WS_CHILD, 0, 0, 204, 96
+END
+
+PAGE2 DIALOG LOADONCALL MOVEABLE DISCARDABLE 4, 4, 204, 96
+CAPTION "Page #2"
+STYLE WS_BORDER | WS_VISIBLE | WS_POPUP
+BEGIN
+    CONTROL "", PRODUCT, "edit", ES_LEFT | WS_BORDER | WS_GROUP | WS_TABSTOP | WS_CHILD, 48, 10, 150, 12
+    CONTROL "", SHIPVIA, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 48, 24, 150, 12
+    CONTROL "", PAYMETHOD, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 48, 52, 150, 12
+    CONTROL "", CARDNUM, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 48, 66, 100, 12
+    CONTROL "", EXPDATE, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 48, 80, 100, 12
+    CONTROL "&Product:", -1, "static", SS_RIGHT | WS_GROUP | WS_CHILD, 4, 12, 40, 8
+    CONTROL "&Ship Via:", -1, "static", SS_RIGHT | WS_CHILD, 4, 26, 40, 8
+    CONTROL "&Method:", -1, "static", SS_RIGHT | WS_CHILD, 4, 54, 40, 8
+    CONTROL "&Card #:", -1, "static", SS_RIGHT | WS_CHILD, 4, 68, 40, 8
+    CONTROL "&Expiration:", -1, "static", SS_RIGHT | WS_CHILD, 4, 82, 40, 8
+    CONTROL "Customer Order", -1, "button", BS_GROUPBOX | WS_CHILD, 0, 0, 204, 40
+    CONTROL "Payment Options", -1, "button", BS_GROUPBOX | WS_CHILD, 0, 40, 204, 56
+END
+
+PAGE3 DIALOG LOADONCALL MOVEABLE DISCARDABLE 4, 4, 204, 96
+CAPTION "Page #3"
+STYLE WS_BORDER | WS_VISIBLE | WS_POPUP
+BEGIN
+    CONTROL "&5.25\42", OPTION1, "button", BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP | WS_CHILD, 48, 10, 40, 12
+    CONTROL "&3.5\42", OPTION2, "button", BS_AUTORADIOBUTTON | WS_CHILD, 88, 10, 40, 12
+    CONTROL "&Friend", FRIEND, "button", BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP | WS_CHILD, 48, 24, 48, 12
+    CONTROL "&Ad", AD, "button", BS_AUTOCHECKBOX | WS_TABSTOP | WS_CHILD, 96, 24, 48, 12
+    CONTROL "&Show", SHOW, "button", BS_AUTOCHECKBOX | WS_TABSTOP | WS_CHILD, 144, 24, 48, 12
+    CONTROL "&Dealer", DEALER, "button", BS_AUTOCHECKBOX | WS_TABSTOP | WS_CHILD, 48, 36, 48, 12
+    CONTROL "&Review", REVIEW, "button", BS_AUTOCHECKBOX | WS_TABSTOP | WS_CHILD, 96, 36, 48, 12
+    CONTROL "Ar&ticle", ARTICLE, "button", BS_AUTOCHECKBOX | WS_TABSTOP | WS_CHILD, 144, 36, 48, 12
+    CONTROL "", COMMENT, "edit", ES_LEFT | ES_MULTILINE | WS_BORDER | WS_VSCROLL | WS_TABSTOP | WS_CHILD, 48, 52, 152, 40
+    CONTROL "Disk Size:", -1, "static", SS_RIGHT | WS_GROUP | WS_CHILD, 4, 12, 40, 8
+    CONTROL "Contact:", -1, "static", SS_RIGHT | WS_CHILD, 4, 26, 40, 8
+    CONTROL "Comments:", -1, "static", SS_RIGHT | WS_CHILD, 4, 54, 40, 8
+    CONTROL "Other Information", -1, "button", BS_GROUPBOX | WS_CHILD, 0, 0, 204, 96
+END

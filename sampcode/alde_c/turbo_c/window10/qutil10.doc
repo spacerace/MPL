@@ -1,0 +1,336 @@
+                                                        December 09, 1986
+
+                               Q SCREEN UTILITIES
+                             TURBO-C   Version 1.0
+
+        PURPOSE:
+
+        Q screen utilities permit fast screen writes on IBM compatibles
+        with MDA, CGA, and/or EGA adapters without "snow" or flicker
+        effects and is compatible with ANY column format (e.g. 40/80 or
+        variable).  Written in Microsoft macro-assembler, these C
+        functions are lightning fast.  The code has also been condensed
+        as much as possible without sacrificing speed - only 1.6k bytes
+        of compiled code for all 20 functions!
+
+
+        TEST DRIVE:
+
+        Compile and run QDEMO10.C to get a feel for features and speed.
+
+
+        IMPROVEMENTS:
+
+        The original inline Turbo Pascal code was converted to C calling
+        assembler functions using the rules.asi macro file supplied with
+        TURBO-C. The assembler code has been revised to allow
+        column formats of ANY size (e.g. 40,80, or variable) and allow
+        global access to addresses and wait-for-retrace.  This gives you
+        the power to have multiple pages (4 on CGA and 8 on EGA) in memory
+        that you already have.  The filling and transfer procedures now
+        work in block mode rather than line mode which is faster and much
+        simpler with the use of Rows-by-Columns parameters.
+
+        UTILITIES:
+
+        In this version, WIND10S.LIB contains:
+
+           qinit():  Initializing procedure required to be called
+                         before all Q utilities.  Also has a function to
+                         check for EGA cards.
+
+                     Five Quick direct screen writing functions:
+
+                         qwritelv() - referenced (var) strings, specified
+                                      length and index.
+                         qwritev()  - referenced (var) strings
+                         qwrite()   - value strings
+                         qwritec()  - value strings, self-centering
+                         qwritecv() - referenced (VAR) strings, self-
+                                      centering
+
+                      Four Quick direct screen filling procedures
+                      in Rows-by-Cols block functions:
+
+                         qfillc()   - repetitive filling with the same
+                                      character and self-centering
+                         qfill()    - repetitive filling with the same
+                                      character
+                         qattr()    - repetitive filling with the same
+                                      attribute only
+                         qattrc()   - repetitive filling with the same
+                                      attribute and self-centering
+
+                      Two Quick storing functions:
+
+                         qstore() - Saves a Rows-by-Cols block
+                                  to memory.
+                         qrestore() - Restores a Rows-by-Cols block
+                                    to any screen page.
+
+                      Two Quick direct screen changing functions:
+                         qpage()  - Changes the page to be
+                                  displayed - up to 8!
+                         qwritepage() - Sets the page on which the
+                                      Q utilities are writing.  You
+                                      don't have to write just on
+                                      the displayed page!
+
+                      Four Quick cursor functions:
+
+                         gotorc()       - go to row/col any page
+                         changecursor() - changes shape and visibility
+                                          of the cursor; saves old, too!
+                          wherex() -- returns current cursor column position
+                          wherey() -- returns cuurent cursor row position
+
+                      Miscellaneous functions:
+                          egacheck() -- returns 1 if ega monitor
+                          wiattr() -- returns attribute of fore/back color
+                          qbox() -- draws a box on screen
+
+
+        PROGRAMMING:
+
+        To use the functions, just simply include <WINDPROT.H> in any of
+        your application rograms.  <W1.h>  must be included first.
+        Only one initializing statement is necessary qinit() before the 
+        Q utilities are used (not required for cursor.inc):
+
+            Qinit();
+
+        This procedure automatically configures the procedures to your
+        machine and also makes it portable to others.
+
+
+       MODULES:
+
+        The coding has been reduced by making the display loops into an
+        assembler subroutine and programming the functions to access it.
+        via a CALL address. One such subroutine is present for QFILL, and
+        QWRITE .
+
+
+        PARAMETERS:
+
+        row/col - The functions do not check for bounds on the screen,
+        so be sure to stay in range.  The functions were designed for
+        the upper left column on the screen to be 1,1. They also wrap to
+        the next line; they do not truncate at EOL.  You of course can
+        have something like Row:=1 and Col:=255 which is equivalent to 
+        row=3 and col=15 on a screen with 80 columns.
+
+        coll/colr - In qwritec, qwritecv, qfillc, and qattrc, the left
+        and right columns are simply averaged.  To center on the full
+        width of an 80 column display, set coll:=1 and colr:=80.  To
+        center on a certain column number, set both values equal to that
+        column number.
+
+        rows/cols - They can be any positive integer to define the block
+        - Rows-by-Columns starting at row, col.  Values <=0 will simply
+        abort the function.  Please keep cols limited to one row.
+
+        attr - The attributes range from 0 to 255.  Values greater than
+        255 will be operated by modulo 256 to stay useful.  Negative
+        values suppress any changes to the screen attributes and use
+        what's currently on the screen.  For help with attribute values,
+        use Brian Foley's FWATTR.INC on Borland's Programming Forum on
+        CompuServe in Turbo Pascal Data Library for MSDOS.
+
+        length - In qwritelv, you can write partial strings by specifying
+        the Length and starting index (St[i]).  All other qwrite procedures
+        assume the string to be null terminated. Length can be any positive 
+        integer.
+
+        st - The original type was set for string length of 80 characters
+        which my be changed to any value between 1 and 255.  Be sure to
+        change all type statements to reflect it though!
+
+        source/dest - For qstore/restore this can be a pointer for the heap
+        or an array variable.  Be sure there is sufficient room.  Storage
+        requirements are: (rows * cols << 1) which is two bytes for
+        every column (one for character one for attribute):
+
+                     EXAMPLES:
+
+            char store_array[4000];
+                 --OR--
+            char *store_array;
+            store_array = (char *)malloc(((rows * cols) << 1)*(sizeof(char)));
+
+            qstore (row,col,rows,cols,store_array);
+            qrestore (row,col,rows,cols,store_array);
+
+        page - The page range depends upon your adapter as follows:
+               MDA - On Monochrome cards, there is only page 0.
+               CGA - Page 0 to 3 in modes 2 and 3 (80 column),
+                     page 0 to 7 in modes 0 and 1 (40 column).
+               EGA - Page 0 to 7 in any mode (as I understand it).
+
+        foreground/background -- can be any of the colors listed in COLOR.H
+
+        btype -- can be any border type defined in (w1.h) BORDERS.
+
+
+        PAGING:
+
+        If you have a CGA or better, you already have memory on your card
+        for more than the 80x25 display you normally see.  The two page
+        procedures allow you to use Q screen utilities on these other pages
+        and display which ever you choose.  However, Turbo-C's functions
+        such as printf,fprintf,puts,putch are dedicated to page 0 only.
+        I have included gotorc as one utility that works on all pages. 
+        Be sure to end your programs with "qpage (0);".
+
+
+        SPEED:
+
+        How fast is fast?  Well, I thought it would be good idea to have
+        some criteria to get a feeling for speed.  The units I decided
+        to use for comparison are "screens/second".  To make one screen,
+        a utility is repeated with a FOR loop to fill several 80x25
+        pages and timed.  qwriteXX use 80 character strings, and qattr
+        and qfill use rows=25 and Cols=80.  At the moment, all I have
+        are ratings on my own computer (IBM XT -- NEC-V20, HERCULES CARD).
+         Other processors will be proportional.  Monochrome (MDA)
+        speeds are identical to EGA speeds.
+
+        ------------------ S C R E E N S / S E C O N D ------------------
+                    Chng -- 80286 --    -- 8086 ---    -- 8088 ---
+        Procedure   Attr EGA     CGA    EGA     CGA    EGA     CGA
+        ---------   ---- -----------    -----------    ------------
+        qwritelv    Yes   35.5   0.0
+                    No    44.8   0.0
+        qwritev     Yes    7.1   0.0
+                    No     7.4   0.0
+        qwrite      Yes    7.1   0.0
+                    No    21.3   0.0
+        qwritec     Yes   18.8   0.0
+                    No     7.4   0.0
+        qwritecv    Yes    7.1   0.0
+                    No    21.1   0.0
+        qfillc      Yes  100.4   0.0
+                    No    80.9   0.0
+        qfill       Yes  100.4   0.0
+                    No    83.2   0.0
+        qattr       Yes   83.2   0.0
+        qattrc      Yes   83.2   0.0
+        qstore      N/A    9.8   0.0
+        qrestore    N/A   69.4   0.0
+        waitscreens= 0  (*COLOR SPECIFIC)
+        nowaitscreens= 160
+
+
+        HOW IT WAS ASSEMBLED:
+
+        Microsoft Macro-Assembler 4.0 and user.asi macro files set up
+        to simulate C calling protocol in TURBO-C. User.asi is supplied
+        on the TURBO-C disks. I plan to comment the assembler source code
+        and release it at a later date, so other users can see how to
+        use macros and call assembler functions.
+
+        TEAMWARE:
+
+        With the release of this utility, I hope to introduce the concept
+        of Teamware.  These utilities are FREE, so don't worry.  Many pro-
+        grammers have done some superior individual efforts and have
+        benefited many.  But the problem is just that - they are individual
+        efforts that as packages are not compatible with other individual
+        efforts.  And many of the programs are released as copyrighted so
+        that others cannot use them in certain contexts.  It seems that if
+        users have other expertise and discover ways to combine each others
+        utilities, the benefits can improve greatly.  This is what these
+        utilities have done.
+
+        As Teamware, users CAN and are encouraged to:
+
+           1. Use the utilities to enhance their programs and applications
+              in both private and commercial contexts.
+           2. Combine, create, and edit other utilities and re-release them
+              as Teamware by permission of the previous author(s)/editor(s).
+           3. Enhance shareware programs provided they are applications that
+              in no way represent or advertise the power of the utilities
+              themselves, but shall credit the use of Teamware.
+           4. Ask about questionable use of the utility.
+
+        As Teamware, users CANNOT:
+
+           1. Distribute the utilities for profit.
+           2. Combine, create, and edit other utilities and re-release them
+              as Shareware or for any profit as enhanced utilities.
+
+        LIABILITY:
+
+        No liabilities are assumed if the user misuses these utilities.
+
+
+        CREDITS:
+
+        Without the assistance and original ideas from Brian Foley
+        [76317,3247], these routines would not have been written.  In
+        addition.
+
+
+        Copyright (c) 1987 by Michael G. Mlachak (TURBO C)
+        Copyright (c) 1986 by Jim LeMay (TURBO PASCAL)
+
+        These procedures may be used and distributed without profit in
+        private contexts.  I must be contacted for any other use.
+
+        If there are any problems such as snow, please let me know.
+    -----------------------------------------------------------------
+                            T U R B O  --- C
+        Mike Mlachak[76327,1410] (1-219-397-8952 after  6:00 PM CST)
+        4318 Stewart Court, East Chicago, IN. 46312
+    -----------------------------------------------------------------
+                         T U R B O  -- P A S C A L
+        Jim LeMay [76011,217]  (1-817-735-4833  after 1800 CST )
+        6341 Klamath Rd., Ft. Worth, TX, 76116.
+    ----------------------------------------------------------------
+        APPENDIX:
+
+        Quick Reference List of all functions and parameters:
+        Prototypes in (windprot.h). Type definitions in (w1.h).
+
+          ** void qinit(void);
+                returns in global variables:
+                     maxpage: maximum number of video pages
+                     qwait  : if 1 wait for retrace
+                     qseg   : base address of screen memory
+                     page0seg: base address for screen 0
+                     cardwait: same as qwait
+
+          void qwritelv (int row, col, attr,length; st str80);
+          void qwritev  (int row, Col, attr; st str80);
+          void qwrite   (int row, col, attr; st str80);
+          void qwriteC  (int row, coll, colr, attr; st str80);
+          void qwritecv (int row, coll, colr, attr; st str80);
+
+          void qfillc (int row, coll, colr, rows, cols, attr; char ch);
+          void qfill  (int row, col, rows, cols, attr; char ch);
+          void qattr  (int row, col, rows, cols, attr);
+          void qattrC (int row, coll, colr, rows, cols, attr);
+
+          void qstore (row, col, rows, cols; char *dest);
+          void qrestore (row, col, rows, cols; char *source);
+
+          void qpage  (int page);
+          void qwritepage (int byte);
+
+          void gotorc (int row, col);
+          int cursorchange (int new);   ** RETURNS: old cursor value
+          int wherex(void);
+          int wherey(void);
+          int egacheck(void) -- returns 1 if ega monitor,0 otherwise
+          int wiattr(int foreground,background) -- returns attribute of
+                                                   fore/back color
+          void qbox(int row, col, row, cols, attr, type) 
+
+
+        REVISIONS:
+
+        Version 1.0 (6-1-87):
+          . Initial Routines
+          . Released under teamware concept
+
+

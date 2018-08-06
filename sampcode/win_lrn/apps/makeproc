@@ -1,0 +1,6 @@
+makeproc.obj: makeproc.c
+    cl -c -d -AS -Gsw -Os -Zpe makeproc.c
+
+makeproc.exe: makeproc.obj makeproc.def
+    link4 makeproc,/align:16,/map, slibw/NOE, makeproc.def
+    mapsym makeproc

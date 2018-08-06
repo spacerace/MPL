@@ -1,0 +1,54 @@
+        Code    Function               
+        
+        00      Initialize the System  
+        01      Request Sense          
+        02      Disk Read              
+        03      Disk Write             
+        04      Disk Verify            
+        05      Mode Select            
+        06      Format Unit with List  
+        07      Format Unit, no list   
+        08      Return Parameters      
+        09      Not Used
+        0A      Not Used
+        0B      Not Used
+        0C      Disk Seek              
+        0D      Not Used
+        0E      Read Local Buffer      
+        0F      Write Local Buffer     
+        10      Test Unit Ready        
+        11      Recalibrate            
+        12      Drive stop             
+        13      Request Sense          
+        14      Adapter Diagnostic     
+        15      Return DASD           
+        16      Not Used
+        17      Special Functions
+                             Subfunction 0: Inquiry 
+        18      Identify ROM           
+        19      Ready Drive Capacity   
+        1A      Read Cylinder Capacity  
+        1B      Locate Table           
+        1C      Locate Driver Letter Table   
+
+        
+o- Register Usage - Input to INT 13 Call
+
+The following are the general register assignments. Some assignments apply to 
+all calls, and other assignments are dependent on the specific function.
+
+All calls have the following assigned:
+
+    AH       -Function Number (i.e. 2=Disk Read)
+    DL       -Drive number (i.e. 80h for first drive)
+
+The general assignment for other registers is as follows:
+
+    ES:BX    -Pointer to caller buffer
+    AL       -Number of sectors
+    CH       -Cylinder number, lower 8 bits
+    CL       -Bits 7,6  -high 2 bits of cylinder number
+             -Bits 0-5  -Sector number
+    DH       -Head number
+
+

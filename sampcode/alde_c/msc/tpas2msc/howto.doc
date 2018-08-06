@@ -1,0 +1,468 @@
+              GLOCKENSPIEL TURBO PASCAL(TM)-TO-QUICKC(TM) TRANSLATOR
+                                  VERSION 1.0
+                                   HOWTO.DOC
+
+
+The Glockenspiel Turbo Pascal-to-QuickC Translator automatically converts Turbo
+Pascal source programs to C source programs.  Turbo Pascal routines are
+converted to equivalent C routines, which are defined in the T2C.LIB library.
+(These C routines are described in the RUNTIME.DOC file on this disk).
+
+
+System Requirements
+===================
+To run the translator, you must have the following:
+
+o    Microsoft QuickC Compiler, Version 1.0 or later, or Microsoft C Compiler,
+     Version 5.0 or later
+
+o    Microsoft Overlay Linker, Version 3.61 or later
+
+o    A syntactically correct Turbo Pascal input file (that is, a Turbo Pascal
+     file that can be compiled and run successfully)
+
+
+Installation
+============
+Before you run the Turbo-to-C Translator, the Microsoft C Compiler must be
+installed as described in the User's Guide.  The translator files must be in the
+current directory or in the path given by the appropriate environment
+variables, as shown below:
+
+     Files          Variable
+     -----          --------
+     *.EXE          PATH
+     *.BAT          PATH
+     *.H            INCLUDE
+     T2C.LIB        LIB
+
+
+The Conversion Process
+======================
+This section gives instructions for running the Turbo-Pascal-to-QuickC
+Translator and describes how the translator works.
+
+Running the Translator
+---------------------
+To run the translator make sure the T2C.BAT file is in your path.  Then type
+
+     t2c <pasorig>
+
+and press ENTER.  In this command, <pasorig> is the name of your Pascal source
+file WITHOUT THE .PAS EXTENSION.  The translator creates a C source file named
+<pasorig>.C.  It also creates several intermediate files, which are described
+under "How Conversions Are Performed" below.
+
+To compile and link the new C source file, type
+
+     qcomp <pasorig>.C
+
+and press ENTER.  Note that, to maintain pointer compatibility between
+the Turbo Pascal input and C output programs, the qcomp command compiles
+the C output program using the large memory model (4-byte data and code
+pointers).
+
+
+How Conversions Are Performed
+-----------------------------
+The conversion process is performed in two separate stages, or "passes":
+
+1.   The Pascal source file is processed.  Nested procedure are unnested, and
+     WITH statements are expanded, in the Pascal source file.  If the Pascal
+     source contains include directives, the files named in the include
+     directives are also processed.
+
+     The T2CP1.EXE program performs pass 1.  To run T2CP1.EXE separately, enter
+     a command of the following form:
+
+          T2CP1 <pasorig> [<pasmod>]
+
+     In this command, <pasorig> is the original Pascal source file, and
+     <pasmod> is the modified Pascal file.  If you do not give <pasmod>, the
+     modified code is written to standard output.
+
+     Processed include files are written to a file with the same name as the
+     original include file but with "2" appended to the extension.  For
+     example, if an include file named INCL is processed, the processed file is
+     named INCL.2; if an include file named FILE.INC is processed, the
+     processed file is named FILE.IN2.  An include directive for the processed
+     file is placed in <pasfile2>.
+
+     Other changes performed during pass 1 include:
+
+     o    Replacement of the control-character notation "^G" with the
+          equivalent "#7"
+
+     o    Conversion of multidimensional array elements from the form
+
+               array1[x,y]
+
+          to the form
+
+               array1[x][y]
+
+2.   The Pascal code generated in Pass 1 is converted to C code.
+
+     The T2CP2.EXE program performs pass 2.  You can invoke T2CP2.EXE
+     separately with a command of the following form:
+
+          T2CP2 <pasmod> [<cfile>]
+
+     In this command, <pasmod> is the output file from pass 1, and <cfile> is
+     the resulting C source file.  If you do not give <cfile>, the C code is
+     written to standard output.
+
+     As in pass 1, processed include files are written to a file with the same
+     name as the original include files but with extensions of "TI".  For
+     example, if an include file named INCL is processed, the processed file is
+     named INCL.TI; if an include file named FILE.IN2 is processed, the
+     processed file is named FILE.TI.  An include directive for the processed
+     file is placed in <cfile>.
+
+     During pass 2, nested procedures in the Pascal source program are assigned
+     unique names in the C program.  For example, if the Pascal program
+     contains
+
+          procedure proc1;
+               procedure proc2;
+                    procedure proc3
+
+     the corresponding C functions are named proc1, proc1_proc2, and
+     proc1_proc2_proc3.  This conversion prevents problems in programs where
+     the same function name is used for separate, unrelated nested functions.
+
+
+
+Problems and Work-Arounds
+=========================
+This section describes situations in which you may have to modify a Turbo
+Pascal source file or the output file from translator pass 1 to make a
+successful conversion.
+
+
+Set Declarations
+-----------------
+Every declaration of a Pascal set (variable or constant) is converted to a call
+to the C function T2CSOP_tsmake (for "Turbo set make"). Because T2CSOP_tsmake
+calls malloc, repeated creation of sets in the Pascal program will slow the
+resulting C program.  In some cases, the C program may abort with the message
+"error allocating memory when creating a set".
+
+This problem occurs most frequently in the C code generated from loops like the
+following:
+
+     for i := 1 to BIGNUM
+     do
+     begin
+          read(c);
+          if c in ['y', 'n']
+     .
+     .
+     .
+     end;
+
+To speed up the C program, move the set declaration outside the loop in the
+Pascal source program, as shown below:
+
+     CONST temp = ['y','n'];
+     .
+     .
+     .
+     for i := 1 to BIGNUM
+     do
+     begin
+          read(c);
+          if c in temp
+     .
+     .
+     .
+     end;
+
+
+Nested Procedures
+-----------------
+Nested procedures in the Pascal source program may cause forward declaration
+problems.  For example, consider the following nested procedures:
+
+     procedure A;
+     var ax:integer;
+          procedure B;
+          var bx:array[1..10] of integer;
+               procedure C;
+               begin
+               .
+               .
+               .
+               end;
+          begin
+          .
+          .
+          .
+          end;
+     begin
+     .
+     .
+     .
+     end;
+
+Because Pascal and C have different scoping rules, pass 1 of the translator
+changes the parameter list of the nested procedures to include variables from
+the enclosing scope(s). (Note that the variable's name is always preserved.)
+Pass 1 also unnests procedures by defining the innermost procedure first,
+followed by each outer procedure, as illustrated below:
+
+     procedure C (var ax:integer; var bx:array[1..10] of integer);
+     begin
+     .
+     .
+     .
+     end;
+
+     procedure B (var ax:integer);
+     var bx:array[1..10] of integer;
+     begin
+     .
+     .
+     .
+
+Because of these changes, you may need to modify the Pascal source file in the
+following cases:
+
+1.   If a structured type declaration appears in a formal parameter list.
+
+     Pass 2 does not accept structured type declarations in a formal parameter
+     list.  As a result, pass 1 generates the following error message if it
+     finds a variable of this type in the parameter list of a nested procedure
+     (for example, when if finds var bx in procedure C above):
+
+          [warning] Proc/Fn C needs a type definition for var parameter bx
+
+     In this case, insert a separate type declaration in an enclosing block and
+     modify the parameter list accordingly.  In the example above, change the
+     parameter list as follows:
+
+          type arrint = array[1..10] of integer;
+          procedure C (var ax:integer; var bx:arrint);
+
+2.   In a program (such as an expression evaluator) where a nested procedure
+     invokes one of the enclosing procedures.
+
+     In this case, you must insert a forward reference before the calling
+     procedure in the output file from pass 1.  In the example above, if
+     procedure B calls procedure A, change the output file from pass 1 from
+
+          procedure B (var ax:integer);
+          var bx:array[1..10] of integer;
+          begin
+          .
+          .
+          .
+
+     to
+
+          procedure A; forward;
+          procedure B (var ax:integer);
+          var bx:array[1..10] of integer;
+          begin
+          .
+          .
+          .
+
+3.   In a program where the parameter list of the called procedure is expanded
+     to include variables from the enclosing scope; for example, if procedure C
+     above calls procedure B.  Pass 2 reports this problem with the message
+
+          (filename) line xxx near ")": Warning  Incorrect number of parameters
+
+     at the line where the function/procedure is called.
+
+     Besides inserting the forward declaration (described in case 2) in the
+     output file from pass 1, you must change the called procedure's argument
+     list (both at the point of invocation and in the procedure definition).
+     Assuming that procedure C calls procedure B, the following code in the
+     pass 1 output file
+
+          procedure C (var ax:integer; var bx:arrint);
+          begin
+          B;
+          .
+          .
+          .
+          end;
+
+          procedure B (var ax:integer);
+          var bx:array[1..10] of integer;
+          begin
+          .
+          .
+          .
+          end;
+
+     must be changed to
+
+          procedure B (var ax:integer); forward;
+          procedure C (var ax:integer; var bx:arrint);
+          begin
+          B(ax);
+          .
+          .
+          .
+          end;
+
+          procedure B;
+          var bx:array[1..10] of integer;
+          begin
+          .
+          .
+          .
+          end;
+
+     Naturally, you must also change any forward declarations that appear in
+     the original Pascal program.
+
+
+Pascal Function and Procedure Names
+-----------------------------------
+Function and procedure names in the Pascal source program may conflict with C
+reserved words, library-function names, or macros defined in the C include
+files used by the translator.
+
+The simplest way to avoid these conflicts is to change the name used in the
+Pascal source program.  Alternatively, you may be able to insert #undef
+directives in the C output file to prevent macro conflicts.
+
+
+Forward References of Types
+---------------------------
+The translator assumes that Pascal pointers of undefined types are actually
+pointers to Pascal record types.  If this is not the case, you must modify the
+C output file accordingly.
+
+
+Pascal and C Strings
+--------------------
+Pascal and C strings have different formats.  In a Pascal string, the first
+character specifies the string length.  In a C string, the length depends on
+the position of the NULL (ASCII 0) character, which is the last character of
+the string.  The translator attempts to convert between the two formats if an
+index into a string is 0; however, the conversion can be made only if the index
+is a literal value.
+
+
+
+Features That Work Differently in C Output Programs
+===================================================
+The following Turbo Pascal constructs are translated to their closest C
+equivalents; however, they may work slightly differently in the C program
+output by the translator.
+
+
+Real Data Type
+--------------
+Real (6-byte) data types in Turbo Pascal programs are treated as double
+(8-byte) data types in the C output programs.
+
+
+Absolute Variable Type
+----------------------
+The Turbo Pascal absolute variable type, which assigns a variable to a specific
+address, is converted to its closest C equivalent in the C output file;
+however, the results may differ slightly between the Turbo Pascal input
+and the C output files.
+
+
+Argument-Passing Conventions
+----------------------------
+Note that, in Pascal, any parameter may be passed by value so that changes do
+not affect the memory location containing the value that is passed.  In C,
+array arguments are always passed by reference, and changes made to the array
+are retained on exit from the function.
+
+
+Random Function
+---------------
+The Turbo Pascal Random function is converted to a C random-number-generation
+function, but the results from the C function will vary slightly from those
+given by the Random function.
+
+
+Argument-Passing Conventions
+----------------------------
+Note that, in Pascal, any parameter may be passed by value so that changes do
+not affect the memory location containing the value that is passed.  In C,
+array arguments are always passed by reference, and changes made to the array
+are retained on exit from the function.
+
+
+
+Unsupported Turbo Pascal Features
+=================================
+The translator does not handle the following constructs in Turbo Pascal source
+files.
+
+
+Case Statements
+---------------
+The translator can convert case labels only if they are of standard types
+types such as Integer or Boolean.
+
+The translator cannot convert Case statements used to define variants in
+record structures.
+
+
+Compiler Directives
+-------------------
+Turbo Pascal compiler directives other than $C and $I have no effect.
+
+
+External Procedure and Functions
+--------------------------------
+A Pascal source program containing declarations of external procedures and
+functions can be converted to C and compiled, but the resulting object file
+cannot be linked.  The translator places a declaration for the external function
+in the C program, but you must write the function itself.
+
+
+In-Line Machine Code
+--------------------
+A program using in-line machine code can be converted to C, but the resulting C
+program cannot be run unless you create an appropriate assembly-language
+function and call it from the C program.
+
+
+Overlays
+--------
+The overlay keyword in Turbo Pascal source programs is ignored.
+
+
+Interrupt-Service Routines
+--------------------------
+User-defined interrupt service routines in Turbo Pascal source programs are not
+supported.
+
+
+Mark and Release Procedures
+---------------------------
+The Pascal Mark and Release procedures are not supported.
+
+
+Port Arrays
+-----------
+The Pascal Port and PortW arrays are ignored.
+
+
+Array and String Parameters and Return Values
+---------------------------------------------
+Pascal functions may not return local arrays or strings. Similarly, procedures
+or functions with array parameters cannot be recursive.
+
+
+Turbo-BCD
+---------
+C programs output by the translator cannot support the Turbo Pascal
+binary-coded-decimal (BCD) format for real numbers
+
+----------------------------------------------------------------------
+QuickC is a trademark of Microsoft Corporation.
+
+Turbo Pascal is a trademark of Borland International, Inc..

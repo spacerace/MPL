@@ -1,0 +1,818 @@
+;***********************************************************************;
+;                                                                       ;
+;       M8087.MAC - File of macros which provide assembly level         ;
+;                       software support for use of 8087 NDP with       ;
+;                       the IBM personal computer                       ;
+;                                                                       ;
+;       Source: BYTE, August 1983, Vol. 8, No. 8, pp.331-374            ;
+;                                                                       ;
+;       Note - The initial 'if1' and final 'endif' have been removed    ;
+;               from the original BYTE version. My Microsoft 'masm'     ;
+;               balked at the construct hence I dropped it.             ;
+;               Of course the same result is obtained by the statements ;
+;                                                                       ;
+;                       if1                                             ;
+;                               INCLUDE M8087.MAC                       ;
+;                       endif                                           ;
+;                                                                       ;
+;               in your Macro Assembler source, which seems to work.    ;
+;                                                                       ;
+;       The following has not been tested by me, hence use at your own  ;
+;       risk. I hope that this will help stimulate macro development    ;
+;       for Microsoft C in the area of 8087 applications.               ;
+;                                                                       ;
+;***********************************************************************;
+ 
+ 
+ 
+;***********************************************************************;
+;                                                                       ;
+;       ESC_REG - "REG" parameter specifies ESC value.  Issue           ;
+;               proper ESC sequence depending on REQ value.             ;
+;               PARAM is a 6-bit parameter whose upper 3-bits           ;
+;               make up the "xxx" bits in the ESC opcode (11011xxx)     ;
+;               and lower 3-bits make up "yyy" bits in source           ;
+;               byte following (using standard "mod" and "r/m"          ;
+;               designators define byte as "modyyyr/m").                ;
+;                                                                       ;
+;***********************************************************************;
+ 
+ESC_REG macro PARAM,REG
+        ;
+        ; We need to determine what "reg" field assignment corresponds with
+        ; the current value of REG.  This is used as the source for the
+        ; ESC operation.  PARAM is used directly in the ESC call
+        ;
+        ife REG ; Decrement until REG = 0, then issue ESC sequence
+          ESC PARAM,AX          ; AX = 000b (see operand summary for 8088)
+        else
+          REG = REG - 1
+          ife REG
+            ESC PARAM,CX                ; CX = 001b
+          else
+            REG = REG - 1
+            ife REG
+              ESC PARAM,DX              ; DX = 010b
+            else
+              REG = REG - 1
+              ife REG
+                ESC PARAM,BX            ; BX = 011b
+              else
+                REG = REG - 1
+                ife REG
+                  ESC PARAM,SP          ; SP = 100b
+                else
+                  REG = REG - 1
+                  ife REG
+                    ESC PARAM,BP        ; BP = 101b
+                  else
+                    REG = REG - 1
+                    ife REG
+                      ESC PARAM,SI      ; SI = 110b
+                    else                ; If REG >= 7, assume 7
+                      ESC PARAM,DI      ; DI = 111b
+                    endif
+                  endif
+                endif
+              endif
+            endif
+          endif
+        endif
+endm    ; Done with ESC_REG macro
+ 
+ 
+;***********************************************************************;
+;                                                                       ;
+;       CHECK_ST - Inputs parameter "ST(i)" and returns with REG=i      ;
+;                                                                       ;
+;***********************************************************************;
+ 
+CHECK_ST macro P_ST
+        REG = -1        ; Assume no match is found
+        ifidn <&P_ST>,<ST(0)>   ; Is i=0?
+          REG = 0
+        endif
+        ifidn <&P_ST>,<ST(1)>    
+          REG = 1
+        endif
+        ifidn <&P_ST>,<ST(2)>    
+          REG = 2
+        endif
+        ifidn <&P_ST>,<ST(3)>    
+          REG = 3
+        endif
+        ifidn <&P_ST>,<ST(4)>    
+          REG = 4
+        endif
+        ifidn <&P_ST>,<ST(5)>    
+          REG = 5
+        endif
+        ifidn <&P_ST>,<ST(6)>    
+          REG = 6
+        endif
+        ifidn <&P_ST>,<ST(7)>    
+          REG = 7
+        endif
+        ifidn <&P_ST>,<st(0)>   ; Is i=0?        
+          REG = 0
+        endif
+        ifidn <&P_ST>,<st(1)>    
+          REG = 1
+        endif
+        ifidn <&P_ST>,<st(2)>    
+          REG = 2
+        endif
+        ifidn <&P_ST>,<st(3)>    
+          REG = 3
+        endif
+        ifidn <&P_ST>,<st(4)>    
+          REG = 4
+        endif
+        ifidn <&P_ST>,<st(5)>    
+          REG = 5
+        endif
+        ifidn <&P_ST>,<st(6)>    
+          REG = 6
+        endif
+        ifidn <&P_ST>,<st(7)>    
+          REG = 7
+        endif
+        ;
+        ; If i not between 0 or 7, see if actually an
+        ; "ST(i)" or "ST(I)" string, indicating use of
+        ; top of stack element
+        ;
+        ifidn <&P_ST>,<ST(i)>
+          REG = 0
+        endif
+        ifidn <&P_ST>,<ST(I)>
+          REG = 0
+        endif
+        ifidn <&P_ST>,<st(i)>
+          REG = 0
+        endif
+        ifidn <&P_ST>,<st(I)>
+          REG = 0
+        endif
+endm
+;***********************************************************************;
+;*                                                                      ;
+;*      CHK_CONC - Simple macro that will automatically insert          ;
+;*                      WAIT statements AFTER every 8087 instruction    ;
+;*                      which accesses CPU main memory.  If variable    ;
+;*                      "AUTOSYNC" <> 0, then these WAITs will be       ;
+;*                      inserted (providing no concurrency but relieving;
+;*                      the programmer from worrying about synchronizing;
+;*                      data references. If the user program sets       ;
+;*                      AUTOSYNC to a zero value, then no WAITS         ;
+;*                      are inserted after the instructions and it is   ;
+;*                      the user's responsibility to insure synch-      ;
+;*                      ronization.                                     ;
+;*                                                                      ;
+;***********************************************************************;
+ 
+CHK_CONC macro
+ 
+        if AUTOSYNC
+                WAIT    ; Automatic syncronization
+        endif
+endm
+ 
+ 
+ 
+;***********************************************************************;
+;                                                                       ;
+;       CHOOSE_4 - Determine which of four parameters (XXX1 to XXX4)    ;
+;                  should be used in ESC sequence, depending on P1      ; 
+;                  and P2 values.  P1 and P@ are parameters passed      ;
+;                  by user in macro call.  XXX1 to XXX4 are macro-      ;
+;                  dependent parameters tacked on to the call to        ;
+;                  CHOOSE_4 by the specific 8087 macro called by the    ;
+;                  user code.                                           ;
+;                                                                       ;
+;***********************************************************************;                                                                       
+ 
+CHOOSE_4 macro P1,P2,XXX1,XXX2,XXX3,XXX4
+        ; Initialize variables
+        ZERO = 0
+        NOTZERO = 0
+        REG = 0
+        ;
+        ; If user passed no parameters, (P1 and P2 are "blank") then
+        ; issue a call to ESC_REG macro to set up proper ESC sequence.
+        ; An arithmetic instruction with no operands is identical to the
+        ; same instruction with the operand form "ST(1),ST".
+        ; Example: "FDIV" - Divides second element on stack by first and
+        ;              places result in second element on stack.
+        ;
+        ifb <P1>
+                REG = 1
+                ESC_REG XXX1,REG
+        else
+          ;
+          ; Check to see if first parameter (P1) passed by user is "ST".
+          ; If yes, indicates that second parameter (P2) is of form "ST(i)"
+          ; so use CHECK_ST macro to determine 'i'.  Then call ESC_REG macro
+          ; to issue ESC sequence
+          ; Example : "FADD ST,ST(4)" - Adds register four (fifth element on
+          ;             8087 stack) to top element and leaves result on top 
+          ;             of stack.
+          ;
+          ifidn <P1>,<ST>
+            CHECK_ST P2
+            ZERO = REG + 1
+            ife ZERO
+              REG = 1
+            endif
+            ESC_REG XXX2,REG
+          else
+          ifidn <P1>,<st>
+            CHECK_ST P2
+            ZERO = REG + 1
+            ife ZERO
+              REG = 1
+            endif
+            ESC_REG XXX2,REG
+          else
+            ;
+            ; See if P1 is of form "ST(i)".  CHECK_ST returns with REG = -1
+            ; if not, else REG = i (i from 0 to 7).  If of ST(i) form, assume
+            ; P2 is ST (ie. operands are "ST(i),ST".  Use ESC_REG for ESC
+            ; sequence
+            ; Example : "FSUB ST(3),ST" - Subtract top of stack from register
+            ;           three (the fourth element down the stack) and leave
+            ;           result in register 3.
+            ;
+            CHECK_ST P1
+            NOTZERO = REG + 1
+            if NOTZERO
+                ESC_REG XXX1,REG
+            else
+              ;
+              ; See if P1 indicates operation is "SHORT" real type.  If so,
+              ; then P2 is address of source/destination and xxx3 sets up
+              ; SHORT version of operation requested.
+              ; Example : "FMUL SHORT VECTOR[SI]" - Multiply 32 bit number
+              ;           found in memory at VECTOR offset from DS:SI address
+              ;           by top of 8087 stack and leave result on top of stack
+              ;
+              ifidn <P1>,<SHORT>
+                ESC XXX3,P2
+                CHK_CONC        ; Insert non-concurrent WAIT?
+              else
+              ifidn <P1>,<short>
+                ESC XXX3,P2
+                CHK_CONC        ; Insert non-concurrent WAIT?
+              else
+                ;
+                ; See if P1 indicates a "LONG" real type.  If so, P2 is
+                ; source/destination address and XXX4 is LONG opcode.
+                ; Example : "FDIV LONG [BP].ID_NUMB" - Divide top of stack
+                ;                by 64 bit number found at SS:BP + ID_NUMB
+                ;                in memory.  Leave result on top of 8087 stack
+                ;
+                ifidn <P1>,<LONG>
+                  ESC XXX4,P2
+                  CHK_CONC       ; Insert non-concurrent WAIT?
+                else
+                ifidn <P1>,<long>
+                  ESC XXX4,P2
+                  CHK_CONC       ; Insert non-concurrent WAIT?
+                else 
+                  ;
+                  ; See if P1 indicates "TEMP" real type. If so, P2 is
+                  ; source/destination and XXX2 is TEMP opcode.
+                  ; Example : "FLD TEMP INTERMEDIATE" - Load 80-bit temporary
+                  ;              real number from memory address INTERMEDIATE
+                  ;              onto top of 8087 stack
+                  ;
+                  ifidn <P1>,<TEMP>
+                    ESC XXX2,P2
+                   CHK_CONC      ; Insert non-concurrent WAIT?
+                  else
+                  ifidn <P1>,<temp>
+                    ESC XXX2,P2
+                    CHK_CONC     ; Insert non-concurrent WAIT?
+                  else
+                    ;
+                    ; If none of above, assume operation is of type "ST(i)"
+                    ; and take appropriate action
+                    ; Example :"FFREE ST(2)" - Free register 2 in 8087
+                    ;
+                    REG = 1
+                    ESC_REG XXX2,REG
+                  endif
+                endif
+              endif
+            endif
+          endif
+        endif
+      endif
+    endif
+  endif
+endif
+endm
+ 
+ 
+;***********************************************************************;
+;                                                                       ;
+;       INT_SIZE - For all integer operations, determine proper         ;
+;                  parameters to use in ESC sequence                    ;
+;                                                                       ;
+;***********************************************************************;
+ 
+INT_SIZE macro P1,P2,XXX_S,XXX_W,XXX_L
+ 
+        ;
+        ; Do :WORD" integer operation.
+        ; Example : "FIMUL WORD PULSE_CNT[SI]" - Multiply 16 bit integer
+        ;               value found at (DS:SI + PULSE_CNT) by top of stack
+        ;               and leave result on top of stack
+        ;
+        ifidn <P1>,<SHORT>
+          ESC XXX_S,P2
+        else
+        ifidn <P1>,<short>
+          ESC XXX_S,P2
+        else
+          ;
+          ; Do "LONG" integer operation.
+          ; Example : "FILD LONG POS_LABEL" - Load 64-bit integer onto top
+          ;           of stack from main memory at POS_LABEL
+          ;
+          ifidn <P1>,<LONG>
+            ESC XXX_L,P2
+          else
+          ifidn <P1>,<long>
+            ESC XXX_L,P2
+          else
+            ERROR IN macro !!!
+          endif
+        endif
+      endif
+    endif
+CHK_CONC        : Insert non-concurrent WAIT?
+endm
+ 
+;***********************************************************************;
+;*                                                                      ;
+;*              DEFINE ALL 8087 MNEMONICS HERE                          ;
+;*                  (In alphabetical order)                             ;
+;*                                                                      ;
+;***********************************************************************;
+ 
+ 
+FABS    macro           ; Absolute value - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0CH,CX
+endm
+ 
+FADD    macro   P1,P2   ; Add real -//source/destination,source
+                        ;       //ST,ST(i)/ST(i),ST/short-real/long-real
+        ifb  <P1>       ; If no parameters, classical stack - discard operands
+                FADDP ST(1),ST
+        else
+                WAIT    ; Synchronization cmd
+                CHOOSE_4 P1,P2,20H,00H,00H,20H
+        endif
+endm
+ 
+FADDP   macro   P1,P2   ; Add real and pop - destination,source
+                        ;       ST(i),ST
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,,30H
+endm
+ 
+FBLD    macro   P1      ; Packed decimal (BCD) load - source
+                        ;       packed-decimal
+        WAIT            ; Synchronization cmd
+        ESC 3CH,P1
+endm
+ 
+FBSTP   macro   P1      ; Packed decimal (BCD) load - source
+                        ;       packed-decimal
+        WAIT            ; Synchronization cmd
+        ESC 3EH,P1
+endm
+ 
+FCHS    macro           ; Change sign - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0CH,AX
+endm
+ 
+FCLEX   macro           ; Clear exceptions - No operands
+        WAIT            ; Synchronization cmd
+        FNCLEX          ;
+endm
+ 
+FCOM    macro   P1,P2   ; Compare real - //source
+                        ;       //ST(i)/short-real/long-real
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,P2,02H,,02H,22H
+endm
+ 
+FCOMP   macro   P1,P2   ; Compare real and pop - //source
+                        ;       //ST(i)/short-real/long-real
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,P2,03H,,03H,23H
+endm
+ 
+FCOMPP  macro   P1,P2   ; Compare real and pop twice - No operands
+        WAIT            ; Synchronization cmd
+        ESC 33H,CX
+endm
+ 
+FDECSTP macro           ; Decrement stack pointer - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0EH,SI
+endm
+ 
+FDISI   macro           ; Disable interrupts - No operands
+        WAIT            ; Synchronization cmd
+        FNDISI          ;
+endm
+ 
+FDIV    macro   P1,P2   ; Divide real - //source/destination,source
+                        ;       //ST(i),ST/short-real/long-real
+        ifb  <P1>       ; If no parameters, classical stack - discard operands
+                FDIVP ST(1),ST
+        else
+                WAIT    ; Synchronization cmd
+                CHOOSE_4 P1,P2,26H,06H,06H,26H
+        endif
+endm
+ 
+FDIVP   macro   P1,P2   ; Divide real and pop - destination,source
+                        ;       ST(i),ST
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,,36H
+endm
+ 
+FDIVR   macro P1,P2     ; Divide real reversed - //source/destination,source
+                        ;       //ST,ST(i)/ST(i),ST/short-real/long-real
+        ifb  <P1>       ; If no parameters, classical stack - discard operands
+                FDIVRP ST(1),ST
+        else
+                WAIT            ; Synchronization cmd
+                CHOOSE_4 P1,P2,27H,07H,07H,27H
+        endif
+endm
+ 
+FDIVRP  macro   P1,P2   ; Divide real reversed and pop - destination,source
+                        ;       ST(i),ST
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,,37H
+endm
+ 
+FENI    macro           ; Enable interrupts - No operands
+        WAIT            ; Synchronization cmd
+        FNENI           ;
+endm
+ 
+FFREE   macro   P1      ; Free register - destination
+                        ;       ST(i)
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,,28H
+endm
+ 
+FIADD   macro   P1,P2   ; Integer add - source
+                        ;       word-integer/short-integer
+        WAIT            ; Synchronization cmd
+        INT_SIZE P1,P2,10H,30H
+endm
+ 
+FICOM   macro   P1,P2   ; Integer compare - source
+                        ;       word-integer/short-integer
+        WAIT            ; Synchronization cmd
+        INT_SIZE P1,P2,12H,32H
+endm
+ 
+FICOMP  macro   P1,P2   ; Integer compare and pop
+                        ;       word-integer/short-integer
+        WAIT            ; Synchronization cmd
+        INT_SIZE P1,P2,13H,33H
+endm
+ 
+FIDIV   macro   P1,P2   ; Integer divide - source
+                        ;       word-integer/short-integer
+        WAIT            ; Synchronization cmd
+        INT_SIZE P1,P2,16H,36H
+endm
+ 
+FIDIVR  macro   P1,P2   ; Integer divide reversed - source
+                        ;       word-integer/short-integer
+        WAIT            ; Synchronization cmd
+        INT_SIZE P1,P2,17H,37H
+endm
+ 
+FILD    macro   P1,P2   ; Integer load - source
+                        ;       word-integer/short-integer/long-integer
+        WAIT            ; Synchronization cmd
+        INT_SIZE P1,P2,18H,38H,3DH
+endm
+ 
+FIMUL   macro   P1,P2   ; Integer multiply - source
+                        ;       word-integer/short-integer
+        WAIT            ; Synchronization cmd
+        INT_SIZE P1,P2,11H,31H
+endm
+ 
+FINCSTP macro           ; Increment stack pointer - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0EH,DI
+endm
+ 
+FINIT   macro           ; Initialize processor - No operands
+        WAIT            ; Synchronization cmd
+        FNINIT          ;
+endm
+ 
+FIST    macro   P1,P2   ; Integer store - destination
+                        ;       word-integer/short-integer
+        WAIT            ; Synchronization cmd
+        INT_SIZE P1,P2,1AH,3AH
+endm
+ 
+FISTP   macro   P1,P2   ; Integer store and pop - destination
+                        ;       word-integer/short-integer/long-integer
+        WAIT            ; Synchronization cmd
+        INT_SIZE P1,P2,1BH,3BH,3FH
+endm
+ 
+FISUB   macro   P1,P2   ; Integer subtract - source
+                        ;       word-integer/short-integer
+        WAIT            ; Synchronization cmd
+        INT_SIZE P1,P2,14H,34H
+endm
+ 
+FISUBR  macro   P1,P2   ; Integer subtract reversed - source
+                        ;       word-integer/short-integer
+        WAIT            ; Synchronization cmd
+        INT_SIZE P1,P2,15H,35H
+endm
+ 
+FLD     macro   P1,P2   ; Load real - source
+                        ;       ST(i)/short-real/long-real/temp-real
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,P2,08H,1DH,08H,28H ; 1DH INDICATES TEMPORARY REAL !!
+endm
+ 
+FLDCW   macro   P1      ; Load control word - source
+                        ;       2-bytes
+        WAIT            ; Synchronization cmd
+        ESC 0DH,P1
+endm
+ 
+FLDEVN  macro   P1      ; Load environment - source
+                        ;       14-bytes
+        WAIT            ; Synchronization cmd
+        ESC 0CH,P1
+endm
+ 
+FLDLG2  macro           ; Load log 2 (base 10) - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0DH,SP
+endm
+ 
+FLDLN2  macro           ; Load log 2 (base e) - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0DH,BP
+endm
+ 
+FLDL2E  macro           ; Load log e (base 2) - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0DH,DX
+endm
+ 
+ 
+FLDL2T  macro           ; Load log 10 (base 2) - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0DH,CX
+endm
+ 
+FLDPI   macro           ; Load pi - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0DH,BX
+endm
+ 
+FLDZ    macro           ; Load +0.0 - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0DH,SI
+endm
+ 
+FLD1    macro           ; Load +1.0 - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0DH,AX
+endm
+ 
+FMUL    macro P1,P2     ; Multiply real - //source/destination,source
+                        ;       //ST(i),ST/ST,ST(i)/short-real/long-real
+        ifb  <P1>       ; If no parameters, classical stack - discard operands
+                FMULP ST(1),ST
+        else
+                WAIT            ; Synchronization cmd
+                CHOOSE_4 P1,P2,21H,01H,01H,21H
+        endif
+endm
+ 
+FMULP   macro   P1,P2   ; Multiply real and pop - destination,source
+                        ;       ST(i),ST
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,,31H
+endm
+ 
+FNCLEX  macro           ; Clear exceptions - No wait FCLEX
+        ESC 1CH,DX      ;
+endm
+ 
+FNDISI  macro           ; Disable interrupts - No wait FDISI
+        ESC 1CH,CX      ;
+endm
+ 
+FNENI   macro           ; Enable interrupts - No wait FENI
+        ESC 1CH,AX      ;
+endm
+ 
+FNINIT  macro           ; Initialize processor - No wait FINIT
+        ESC 1CH,BX      ;
+endm
+ 
+FNOP    macro           ; No operation - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0AH,AX      ;
+endm
+ 
+FNSAVE  macro   P1      ; Save state - destination (No wait FSAVE)
+                        ;       94-bytes
+        ESC 2EH,P1      ;
+endm
+ 
+FNSTCW  macro   P1      ; Store control word - destination (No wait FSTCW)
+                        ;       2-bytes
+        ESC 0FH,P1      ;
+endm
+ 
+FNSTENV macro   P1      ; Store environment - destination (No wait FSTENV)
+                        ;       14-bytes
+        ESC 0EH,P1
+endm
+ 
+FNSTSW  macro   P1      ; Store status word - destination (No wait FSTSW)
+                        ;       2-bytes
+        ESC 2FH,P1
+endm
+ 
+FPATAN  macro           ; Partial arctangent - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0EH,BX
+endm
+ 
+FPREM   macro           ; Partial remainder - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0FH,AX
+endm
+ 
+FPTAN   macro           ; Partial tangent - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0EH,DX
+endm
+ 
+FRNDINT macro           ; Round to integer - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0FH,SP
+endm
+ 
+FRSTOR  macro   P1      ; Restore saved state - source
+                        ;       94-bytes
+        WAIT            ; Synchronization cmd
+        ESC 2CH,P1
+endm
+ 
+FSAVE   macro   P1      ; Save state - destination
+                        ;       94-bytes
+        WAIT            ; Synchronization cmd
+        FNSAVE P1       ;
+endm
+ 
+FSCALE  macro           ; Scale - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0FH,BP
+endm
+ 
+FSQRT   macro           ; Square root - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0FH,DX
+endm
+ 
+FST     macro   P1,P2   ; Store real - destination
+                        ;       ST(i)/short-real/long-real
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,P2,2AH,,0AH,2AH
+endm
+ 
+FSTCW   macro   P1      ; Store control word - destination
+                        ;       2-bytes
+        WAIT            ; Synchronization cmd
+        FNSTCW P1       ;
+endm
+ 
+FSTENV  macro   P1      ; Store environment - destination
+                        ;       14-bytes
+        WAIT            ; Synchronization cmd
+        FNSTENV P1      ;
+endm
+ 
+FSTP    macro   P1,P2   ; Store real and pop - destination
+                        ;       ST(i)/short-real/long-real/temp-real
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,P2,2BH,1FH,0BH,2BH ; 1FH INDICATES TEMPORARY REAL !!
+endm
+ 
+FSTSW   macro   P1      ; Store status word - destination 
+                        ;       2-bytes
+        WAIT            ; Synchronization cmd
+        FNSTSW P1       ;
+endm
+ 
+FSUB    macro   P1,P2   ; Subtract real - //source/destination,source
+                        ;       //ST,ST(i)/ST(i),ST/short-real/long-real
+        ifb  <P1>       ; If no parameters, classical stack - discard operands
+                FSUBP ST(1),ST
+        else
+                WAIT    ; Synchronization cmd
+                CHOOSE_4 P1,P2,24H,04H,04H,24H
+        endif
+endm
+ 
+FSUBP   macro   P1,P2   ; Subtract real and pop - destination,source
+                        ;       ST(i),ST
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,,34H
+endm
+ 
+FSUBR   macro   P1,P2   ; Subtract real reversed - //source/destination,source
+                        ;       //ST,ST(i)/ST(i),ST/short-real/long-real
+        ifb  <P1>       ; If no parameters, classical stack - discard operands
+                FSUBRP ST(1),ST
+        else
+                WAIT    ; Synchronization cmd
+                CHOOSE_4 P1,P2,25H,05H,05H,25H
+        endif
+endm
+ 
+FSUBRP  macro   P1,P2   ; Subtract real reversed and pop - destination,source
+                        ;       ST(i),ST
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,,35H
+endm
+ 
+FTST    macro           ; Test stack top against +0.0 - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0CH,SP
+endm
+ 
+FWAIT   macro           ; (CPU) Wait while 8087 is busy - No operands
+        WAIT            ; NOTE : CPU instruction, not escape code
+endm
+ 
+FXAM    macro           ; Examine stack top - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0CH,BP
+endm
+ 
+FXCH    macro   P1      ; Exchange registers - //destination
+                        ;       //ST(i)
+        WAIT            ; Synchronization cmd
+        CHOOSE_4 P1,,09H
+endm
+ 
+FXTRACT macro           ; Extract exponent and significand - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0EH,SP
+endm
+ 
+FYL2X   macro           ; Y * log X (base 2) - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0EH,CX
+endm
+ 
+FYL2XP1 macro           ; Y * log (X+1) (base 2) - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0FH,CX
+endm
+ 
+F2XM1   macro           ; (2^^X - 1) - No operands
+        WAIT            ; Synchronization cmd
+        ESC 0EH,AX
+endm
+ 
+ 
+ 
+AUTOSYNC=1      ; Initialize M8087 to automatic synchronization
+    ; Synchronization cmd
+        ESC 0EH,AX
+endm
+ 
+ 
+ 
+AUTOSYNC

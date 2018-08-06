@@ -1,0 +1,67 @@
+
+To install the terminal device driver enter the following line
+in your CONFIG.SYS file for MS-DOS 3.1 and above.  The device driver
+files are in the \SN0000 (0000 is your serial number) directory.
+
+The STTY.EXE program, found in the \BIN directory, allows you to change 
+the device characteristics from the MS-DOS command line.
+
+
+DEVICE=MSJTTY01.SYS 00000 2048 2048
+
+  ^         ^       ^    ^    ^
+  |         |       |    |    |
+  |         |       |    |    |--- Tx_Ring_Buffer_Size  (128 - ( 16K - 1 ))
+  |         |       |    |    		Restricted Version is 16 bytes
+  |         |       |    |-------- Rx_Ring_Buffer_Size  (128 - ( 16K - 1 ))
+  |         |       |   		Restricted Version is 16 bytes
+  |         |       |
+  |         |       |------------- Serial Number (exactly)
+  |         |
+  |         |--------------------- Device Driver File Name (MSJTTY01.SYS)
+  |
+  |------------------------------- MS-DOS Configuration Parameter
+
+
+
+
+There are currently four sub-directories for Microsoft \C\MSC, and \BASIC
+Each of these have  examples that shows how to interface to 
+the terminal file device driver MSJTTY01.SYS whose terminal (file)
+file name is "tty01"  The device driver name file name "tty02" 
+(for COM2 hardware) is not provided in this demo.
+
+The \C\MSC directory has several demonstration programs that show
+different techniques for setting up modes and using the terminal
+driver.  Each of the demonstration directories have their 
+own README files.
+
+The \BASIC directory provides a simple, however thoroughly documented
+example on how to interface to the device driver using the Microsoft 
+Quick Basic 6.0 compiler and libraries.  See the file IODEMO.BAS for
+the example.   Use the Microsoft MAKE utility to generate the demo
+program by issuing the command "MAKE MAKEDEMO" from that directory.
+Naturally, the LIB environment variable should contain path(s) to your
+basic libraries.
+
+If your a Pascal or Clipper programmer, and can read some C code, 
+these examples are well worth your while.  There are directories
+for Quick Pascal 1.0 and Turbo Pascal 5.0. and Clipper for the 
+non-restricted version.
+
+Before you proceed too far, look at the documentation for the STTY
+command.  It is an equivalent of the MODE command under DOS, but
+is much more powerful in what it can do.  STTY.EXE in in the \BIN
+directory.
+
+
+Any questions please call:  Boulder Software Group
+                            P.O. Box 14200
+                            Boulder, CO  80308-4200
+
+                            (303) 440-7868	(Tech. Support)
+                            (303) 449-8612	(FAX)
+
+
+
+

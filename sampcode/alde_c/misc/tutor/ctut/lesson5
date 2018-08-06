@@ -1,0 +1,291 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24
+.R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,30
+[1mPonzoTUTOR
+.WNT
+   let's try IF FOR a WHILE   
+
+.R4C1
+~b~Imain() {                                    /* what's in a name ?    */ ~N
+~b~I    int i, j;                               /* a bunch of integers.  */ ~N
+~b~I    char name[10];                          /* an array of 10 chars. */ ~N
+~b~I    for (i=0; i<25; i++)                    /* print '\n', 25 times, */ ~N
+~b~I        printf("\n");                       /* to clear the screen!  */ ~N
+~b~I    printf("\n Type your name : ");         /* ask for a name.       */ ~N
+~b~I    scanf("%s",&name);                      /* input the name.       */ ~N
+~b~I    for (i=0, j=0; name[i] != '\0'; i++)  { /* a nice for-loop.      */ ~N
+~b~I        if ( name[i] == 'e' )               /* check for an 'e'.     */ ~N
+~b~I            j++;                            /* if so, increment j.   */ ~N
+~b~I    }                                       /* end of for-loop       */ ~N
+~b~I    printf("\n The letter e occurs %d times in %s",j,name);          */ ~N
+~b~I}                                           /* end of main()         */ ~N
+.R17C1
+    Let's look at this program.
+    It's supposed to ask for a name, then print out the number of times
+    the letter ~Ie~N occurs in the name.
+.WR4C1
+~Vmain() {                                    /* what's in a name ?    */ ~N
+~V    int i, j, num;                          /* a bunch of integers.  */ ~N
+~V    char name[10];                          /* an array of 10 chars. */ ~N
+.R17C1
+    This part is familiar. Note that we allow for a name of ~I9~N characters
+    since the 10th will be the terminating ~I'\0'~N  (remember?).            
+                                                                           
+.WR4C1
+~b~Imain() {                                    /* what's in a name ?    */ ~N
+~b~I    int i, j;                               /* a bunch of integers.  */ ~N
+~b~I    char name[10];                          /* an array of 10 chars. */ ~N
+~V    for (i=0; i<25; i++)                    /* print '\n', 25 times, */ ~N
+~V        printf("\n");                       /* to clear the screen!  */ ~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    We use a ~Ifor~N loop to print ~I25~N ~b~In~Newlines (thereby clearing
+    the screen ..not very elegent, but.. ).                                
+    The new thing here is ~V i++ ~N which, in ~IC~N, means ~Iincrement i~N.
+.WR7C1
+~b~I    for (i=0; i<25; i++)                    /* print '\n', 25 times, */ ~N
+~b~I        printf("\n");                       /* to clear the screen!  */ ~N
+~V    printf("\n Type your name : ");         /* ask for a name.       */ ~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    We now ask for your name by printing:                                    
+                                                                           
+~r~I Type your name : ~N                                                   
+.WR9C1
+~b~I    printf("\n Type your name : ");         /* ask for a name.       */ ~N
+~V    scanf("%s",&name);                      /* input the name.       */ ~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    Then we wait for the user to type in his/her name (ending with the       
+    ~IEnter~N key), and put this ~Istring~N at ~Imemory address~N ~V &name ~N.
+                                                                               
+.WR10C1
+~b~I    scanf("%s",&name);                      /* input the name.       */ ~N
+~b~I    for (~Fi=0, j=0~N~b~I; name[i] != '\0'; i++)  { /* a nice for-loop.      */ ~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    Now we go through the ~b~Iname[]~N array, one character at-a-time, starting
+    with ~b~Ii=0~N (the first character is the ~Izero~Nth!). We will count the
+    number of times the letter ~Ie~N occurs and store this count in the variable
+    ~b~Ij~N, so we also initialize ~b~Ij=0~N, too! (Note the use of the ~ICOMMA~N
+    between ~b~Ii=0~N and ~b~Ij=0~N).
+.WR11C1
+~b~I    for (i=0, j=0; ~Fname[i] != '\0'~N~b~I; i++)  { /* a nice for-loop.      */ ~N
+.R17C1
+                                                                               
+                                                                               
+                                                                               
+                                                                               
+                                                                               
+.R17C1
+    This ~Ifor-loop~N will continue so long as the ~b~Ii~Nth character in the
+    ~b~Iname[]~N array is not the ~INULL '\0'~N. (Note the construction ~F~I!=~N
+    which, in C, means ~INOT EQUAL~N).
+.WR11C1
+~b~I    for (i=0, j=0; name[i] != '\0'; ~Fi++~N~b~I)  { /* a nice for-loop.      */ ~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    Of course, each time we advance through the characters in the array
+    ~b~Iname[]~N we must increment ~b~Ii~N (until we reach the end).                          
+                                                                               
+.WR11C1
+~b~I    for (i=0, j=0; name[i] != '\0'; i++)  ~F{~N~b~I /* a nice for-loop.      */ ~N
+.R17C1
+    ...our openers for the ~Ifor~N...                                       
+                                                                               
+                                                                               
+.WR12C1
+~V        if ( name[i] ~F==~N~V 'e' )               /* check for an 'e'.     */ ~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    And now we check the ~b~Ii~Nth character, ~b~Nname[i]~N, to see if its ~IEQUAL~N
+    to the letter ~Ie~N. (Note the curious way we check for ~F==~N).           
+    (Had we used ~b~Iname[i]='e'~N it would compile OK, but this actually     
+     ~Iassigns~N to ~b~Iname[i]~N the character ~I'e'~N rather than checking
+     for ~Iequality~I! ...and ~b~Iname~N would be ~IALL e~Ns).
+.WR12C1
+~b~I        if ( name[i] == 'e' )               /* check for an 'e'.     */ ~N
+~V            j++;                            /* if so, increment j.   */ ~N
+.R17C1
+                                                                               
+                                                                               
+                                                                               
+                                                                               
+                                                                               
+.R17C1
+    Now, ~Iif~N we find an ~I'e'~N, we increment ~b~Ij~N.
+.WR13C1
+~b~I            j++;                            /* if so, increment j.   */ ~N
+~b~I~F    }~N~b~I                                       /* end of for-loop       */ ~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    ...and this ~b~I~F}~N ends the ~Ifor-loop~N.
+.WR11C1
+~b~I    for (i=0, j=0; name[i] != '\0'; i++)  { /* a nice for-loop.      */ ~N
+.R14C1
+~b~I    }                                       /* end of for-loop       */ ~N
+~V    printf("\n The letter e occurs %d times in %s",j,name);          */ ~N
+.R17C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R17C1
+    ...and, after leaving the ~Ifor-loop~N, we print the results:
+
+~r~IThe letter e occurs ~N  ~r~I times in ~N
+                               
+                   ~Ij~N           ~Iname~N
+                   goes here.  goes here.
+.WN
+~b~Imain() {                                    /* what's in a name ?    */ ~N
+~b~I    int i, j;                               /* a bunch of integers.  */ ~N
+~b~I    char name[10];                          /* an array of 10 chars. */ ~N
+~b~I    for (i=0; i<25; i++)                    /* print '\n', 25 times, */ ~N
+~b~I        printf("\n");                       /* to clear the screen!  */ ~N
+~b~I    printf("\n Type your name : ");         /* ask for a name.       */ ~N
+~b~I    scanf("%s",&name);                      /* input the name.       */ ~N
+~b~I    for (i=0, j=0; name[i] != '\0'; i++)  { /* a nice for-loop.      */ ~N
+~b~I        if ( name[i] == 'e' )               /* check for an 'e'.     */ ~N
+~b~I            j++;                            /* if so, increment j.   */ ~N
+~b~I    }                                       /* end of for-loop       */ ~N
+~b~I    printf("\n The letter e occurs %d times in %s",j,name);          */ ~N
+~b~I}                                           /* end of main()         */ ~N
+    After we ~Icompile~N and ~Ilink~N and ~Iexe~Ncute, we get:
+
+~r~I Type your name : ~N ~IPeter~N
+                   
+                   we type this, then press the Enter key, and get:
+
+~r~IThe letter e occurs 2 times in Peter~N
+.WK9,30
+nice!nice!
+.WNT
+    IF (this ) do that ELSE IF (this) do that ELSE do that   
+.R4C1
+    We may wish to check for several characters (not just 'e'), so we could say:
+
+1 ~b~I        if ( name[i] == 'e' )       j++;    /* increment j if an 'e' */~N
+2 ~b~I        else if ( name[i] == 'f' )  k++;    /* increment k if an 'f' */~N
+3 ~b~I        else if ( name[i] == 'g' )  l++;    /* increment l if an 'g' */~N
+4 ~b~I        else ;                              /* else do nothing       */~N
+
+    In Line 1 we increment the variable ~b~Ij~N (which counts the number of times
+    an 'e' occurs.
+    In Line 2 we increment the variable ~b~Ik~N (which counts the number of times
+    an 'f' occurs.
+    In Line 3 we increment the variable ~b~Il~N (which counts the number of times
+    an 'g' occurs.
+    In Line 4 (which is reached only if the character is none of the above) we
+    do nothing.  (We could have done something interesting, but we should, just
+    once, demonstrate a DO NOTHING statement .... just the !@#$$% SEMI-COLON!).
+
+    (We would, of course, have declared ~b~Ik~N and ~b~Il~N as ~b~Iint~N data types).
+.WK10,32
+of course!
+.WNT
+   More stuff like i++   
+    Although we could have incremented ~b~Ii~N by using ~b~Ii=i+1~N, we used
+    the ~Iincrement operator ++~N. There is also (what else?) a ~Idecrement~N
+    ~Ioperator --~N. In fact these can be either ~Ipre-~N or ~Ipost-operative~N.
+
+~b~Ij=i--~N   will assign to ~b~Ij~N the value of ~b~Ii~N, ~Ithen~N will 
+        decrement ~b~Ii~N.
+~b~Ij=--i~N   will first decrement ~b~Ii~N, ~Ithen~N assign to ~b~Ij~N the decremented
+        value of ~b~Ii~N.
+
+    Note the convenience of typing ~b~Iantidisestablishmentarianism++~N and not
+       ~b~Iantidisestablishmentarianism=antidisestablishmentarianism+1~N.
+
+    Also, the following ~Iassignment operators~N may be used:
+
+~b~Ix+=5~N       instead of   ~b~Ix=x+5~N
+~b~Ix-=5~N       instead of   ~b~Ix=x-5~N
+~b~Ix*=5~N       instead of   ~b~Ix=x*5~N
+~b~Ix/=5~N       instead of   ~b~Ix=x/5~N
+.WNT
+    and tests for EQUALITY && INEQUALITY etc.  
+.R5C1
+    To test for equality of, say, ~b~Ix~N and ~b~I5~N we ask if ~b~Ix==5~N.
+    Had we used something like: ~b~Iif (x=5)~N then ~b~Ix~N would be assigned
+    the value ~b~I5~N (and, of course, ~b~Ix~N would now BE equal to ~b~I5~N and
+    the if-statements would certainly be executed).
+
+    We also use ~b~Iif (x!=5)~N (for NOT EQUAL) and ~b~Iif (x>5)~N and ~b~Iif (x<5)~N.
+
+    We also have: ~b~Iif (x>5 && x!=7)~N where ~b~I&&~N means AND ...so this reads:
+    if (x is GREATER than 5) AND (x is NOT EQUAL to 7)
+.R15C1
+    We also have: ~b~Iif (x=5 ³³ x>=7)~N where ~b~I³³~N means OR  ...so this reads:
+    if (x is EQUAL to 5) OR (x is GREATER or EQUAL to 7) 
+.WR15C1
+    We also have: ~b~Iif (x~F=~N
+.K19,60
+x==5 !!!
+.WN
+
+
+.T
+   && that's all folks!   
+.K16,32
+au revoir!
+
+
+.q
+

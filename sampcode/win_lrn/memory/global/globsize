@@ -1,0 +1,6 @@
+globsize.obj: globsize.c
+   cl -c -W2 -AS -Gsw -Od -Zped globsize.c
+
+globsize.exe: globsize.obj globsize.def
+   link4 globsize,/align:16,/map/li,slibw,globsize.def
+   mapsym globsize

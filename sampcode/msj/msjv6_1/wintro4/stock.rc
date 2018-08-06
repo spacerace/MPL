@@ -1,0 +1,155 @@
+#include "windows.h"
+#include "stock.h"
+
+ID_STOCK ICON   stock.ico
+ID_GRAPH ICON   graph.ico
+
+StockAccelerators ACCELERATORS
+BEGIN
+  "^A", ID_TICK_ADD
+  "^C", ID_TICK_CHANGE
+  "^O", ID_OPEN
+  "^P", ID_PRINT
+  "^S", ID_SAVE
+END
+
+
+StockMenu MENU
+BEGIN
+  POPUP "&File"
+  BEGIN
+    MENUITEM  "&New...",           ID_NEW
+    MENUITEM  "&Open...\tCTRL+O",  ID_OPEN
+    MENUITEM  "&Save...\tCTRL+S",  ID_SAVE
+    MENUITEM  "&Close",            ID_CLOSE
+    MENUITEM  "&Print\tCTRL+P",    ID_PRINT
+    MENUITEM  "E&xit",             ID_EXIT
+  END
+
+  POPUP "&Edit"
+  BEGIN
+    MENUITEM "&Add tick...\tCTRL+A",     ID_TICK_ADD
+    MENUITEM "&Change tick...\tCTRL+C",  ID_TICK_CHANGE
+  END
+
+  POPUP "&Graph"
+  BEGIN
+    MENUITEM "&Price",           ID_GRAPH_PRICE
+    MENUITEM "&Volume",          ID_GRAPH_VOLUME
+    MENUITEM "&Zoom",            ID_GRAPH_ZOOM
+    MENUITEM "&Options...",      ID_GRAPH_OPTIONS
+    MENUITEM "&Colors...",       ID_GRAPH_COLORS
+    POPUP    "&Grid"
+    BEGIN
+      MENUITEM "&Horizontal",    ID_GRAPH_GRID_HORZ
+      MENUITEM "&Vertical",      ID_GRAPH_GRID_VERT
+    END
+  END
+
+  POPUP "&Window"
+  BEGIN
+    MENUITEM "&Tile",            ID_WINDOW_TILE
+    MENUITEM "&Cascade",         ID_WINDOW_CASCADE
+    MENUITEM "Arrange &Icons",   ID_WINDOW_ICONS
+    MENUITEM "Close &All",       ID_WINDOW_CLOSEALL
+  END
+
+  POPUP "\a&F1=Help"
+  BEGIN
+    MENUITEM  "&About Stock...",  ID_ABOUT
+  END
+END
+
+ID_ABOUT DIALOG LOADONCALL MOVEABLE DISCARDABLE 25, 23, 184, 78
+  CAPTION "About MSJ Stock"
+  STYLE   WS_BORDER | DS_MODALFRAME | WS_CAPTION | WS_DLGFRAME | 
+          WS_POPUP  | WS_SYSMENU
+BEGIN
+  CONTROL "MSJ Stock" -1,"static", SS_CENTER | WS_GROUP | WS_CHILD, 0, 15, 184, 8
+  CONTROL "OK" IDOK, "button", BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP | WS_CHILD, 76, 60, 32, 14
+  CONTROL ID_STOCK, -1, "static", SS_ICON | WS_CHILD, 25, 14, 16, 21
+END
+
+
+ADDTICK DIALOG LOADONCALL MOVEABLE DISCARDABLE 112, 31, 106, 86
+  CAPTION "Add a Tick"
+  STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_POPUP
+BEGIN
+    CONTROL "Date:", -1, "static", SS_LEFT | WS_CHILD, 2, 7, 22, 8
+    CONTROL "", ID_TICK_DATE, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 53, 5, 48, 12
+    CONTROL "Closing price:", -1, "static", SS_LEFT | WS_CHILD, 2, 26, 55, 11
+    CONTROL "", ID_TICK_PRICE, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 57, 25, 44, 12
+    CONTROL "Volume:", -1, "static", SS_LEFT | WS_CHILD, 2, 44, 32, 8
+    CONTROL "", ID_TICK_VOLUME, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 38, 43, 63, 12
+    CONTROL "OK", 1, "button", BS_DEFPUSHBUTTON | WS_TABSTOP | WS_CHILD, 9, 66, 28, 14
+    CONTROL "Cancel", 2, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 63, 66, 32, 14
+END
+
+Open DIALOG 10, 10, 148, 112
+STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+CAPTION "Open "
+BEGIN
+        LTEXT "Open File &Name:", IDC_FILENAME, 4,  4,  60, 10
+        EDITTEXT                  IDC_EDIT,     4, 16, 100, 12, ES_AUTOHSCROLL
+        LTEXT "&Files in",        IDC_FILES,    4, 40,  32, 10
+        LISTBOX,                  IDC_LISTBOX,  4, 52,  70, 56, WS_TABSTOP
+        LTEXT "",                 IDC_PATH,     40, 40, 100, 10
+        DEFPUSHBUTTON "&Open" ,   IDOK,        87, 60,  50, 14
+        PUSHBUTTON "Cancel",      IDCANCEL,    87, 80,  50, 14
+END
+
+
+GRAPH DIALOG LOADONCALL MOVEABLE DISCARDABLE 48, 32, 212, 125
+CAPTION "Stock Information"
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_SYSMENU | WS_POPUP
+BEGIN
+    CONTROL "Stock Symbol:", -1, "static", SS_LEFT | WS_CHILD, 4, 7, 49, 8
+    CONTROL " ", ID_SYMBOL, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 60, 7, 32, 12
+    CONTROL "Minimum Price:", -1, "static", SS_LEFT | WS_CHILD, 4, 29, 54, 8
+    CONTROL "", ID_MINPRICE, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 60, 27, 32, 12
+    CONTROL "Maximum Price:", -1, "static", SS_LEFT | WS_CHILD, 4, 48, 57, 10
+    CONTROL "", ID_MAXPRICE, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 60, 47, 32, 12
+    CONTROL "Scale Factor:", -1, "static", SS_LEFT | WS_CHILD, 4, 68, 46, 8
+    CONTROL "", ID_FACTOR, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 60, 67, 32, 12
+    CONTROL "Tick Interval:", -1, "static", SS_LEFT | WS_CHILD, 4, 88, 44, 8
+    CONTROL "", ID_TICKINT, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 60, 87, 32, 12
+    CONTROL "Price Denominator:", -1, "static", SS_LEFT | WS_CHILD, 4, 108, 65, 8
+    CONTROL "", ID_DENOMINATOR, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 69, 107, 18, 12
+
+    CONTROL "Grids", -1, "button", BS_GROUPBOX | WS_CHILD, 100, 8, 55, 109
+    CONTROL "Vertical", ID_VERTGRID, "button", BS_AUTOCHECKBOX | WS_TABSTOP | WS_CHILD, 103, 19, 37, 12
+    CONTROL "Horizontal", ID_HORZGRID, "button", BS_AUTOCHECKBOX | WS_TABSTOP | WS_CHILD, 103, 32, 45, 12
+    CONTROL "Grid Style", -1, "static", SS_LEFT | WS_CHILD, 103, 46, 36, 8
+    CONTROL "", ID_GRIDSTYLE, "combobox", 
+             WS_TABSTOP | CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | WS_VSCROLL | WS_CHILD, 104, 56, 46, 58
+
+    CONTROL "OK", 1, "button", BS_DEFPUSHBUTTON | WS_TABSTOP | WS_CHILD, 170, 12, 29, 14
+    CONTROL "Cancel", 2, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 170, 38, 29, 14
+    CONTROL "Help", ID_HELP, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 170, 63, 29, 14
+END
+
+
+STRINGTABLE
+BEGIN
+  ID_NEW,                 "Create a new database"
+  ID_OPEN,                "Open an existing stock file"
+  ID_SAVE,                "Save the current stock file"
+  ID_CLOSE,               "Close the current stock file"
+  ID_PRINT,               "Print the current chart"
+  ID_TICK_ADD,            "Add a tick to a stock"
+  ID_TICK_CHANGE,         "Edit the ticks"
+  ID_GRAPH_PRICE,         "Display a graph of the price"
+  ID_GRAPH_VOLUME,        "Display a graph of the volume"
+  ID_GRAPH_ZOOM,          "Zoom the active graph"
+  ID_GRAPH_COLORS,        "Change the graph's colors"
+  ID_GRAPH_GRID_HORZ,     "Add/Remove horizontal grid lines"
+  ID_GRAPH_GRID_VERT,     "Add/Remove vertical grid lines"
+  ID_ABOUT,               "Display information about this application"
+  ID_EXIT,                "Exit the application"
+  1,                      "New, Open, Close, Print, Exit"
+  2,                      "Add and modify ticks"
+  3,                      "Manipulate stock charts"
+  4,                      "Arrange windows"
+  5,                      "Help on the MSJ Stock program"
+END
+

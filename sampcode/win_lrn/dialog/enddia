@@ -1,0 +1,10 @@
+
+enddia.obj: enddia.c enddia.h
+    cl  -c -AS -Gsw -Os -Zpe -W2 enddia.c
+
+enddia.res: enddia.rc enddia.h
+    rc -r enddia.rc
+
+enddia.exe: enddia.obj enddia.res enddia.def
+    link4 /align:16 enddia,,nul,slibw/NOE,enddia.def
+    rc enddia.res

@@ -1,0 +1,30 @@
+# Makefile for AVIO Browsing utility
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC	=	cl -c -G2s -Od -W3 -Zpei
+LF	=	/align:16 /codeview /map /NOD
+OBJS	=	browse.obj avio.obj
+
+# Inference rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+# Dependencies
+#
+browse.res:	browse browse.h browse.ico browse.rc
+
+avio.obj:	browse avio.c avio.h
+
+browse.obj:	browse avio.h browse.c browse.h
+
+browse.exe:	$(OBJS) browse.def browse.obj browse.res
+    link $(LF) $(OBJS), browse.exe, browse.map, slibce opendlg os2, browse.def
+    rc browse.res
+    mapsym browse

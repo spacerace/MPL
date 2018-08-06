@@ -1,0 +1,7 @@
+setbkcol.obj: setbkcol.c
+  cl -c -Fs -W2 -AS -Gsw -Od -Zped setbkcol.c
+
+setbkcol.exe: setbkcol.obj setbkcol.def
+    link4 setbkcol,/align:16,,slibw,setbkcol.def
+    del setbkcol.obj
+    del setbkcol.map

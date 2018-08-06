@@ -1,0 +1,1386 @@
+
+
+
+
+
+
+            The Presentation Manager Vector Fonts
+            by Charles Petzold
+            
+            
+            
+            Let's begin with a question: What graphics programming
+            language stores fonts as a lines and curves (rather than
+            bitmaps), and thus allows fonts to be arbitrarily stretched,
+            rotated, outlined, filled with different patterns, or even
+            used as clipping areas?
+            
+            One answer is obviously PostScript, Adobe Systems' page
+            composition language implemented on many high-end laser
+            printers (beginning with the Apple LaserWriter) and Allied
+            Corporation's Linotronic phototypesetters. Over the past few
+            years, PostScript has become the language of choice for
+            computer manipulation of fonts and text.
+            
+            But an equally valid answer is GPI -- the Graphics
+            Programming Interface component of the OS/2 Presentation
+            Manager. As we'll see, GPI has facilities to do virtually
+            everything with fonts that you can do with PostScript.
+            
+            
+            The Trouble With Text
+            
+            The display of text is always the most problematic part of a
+            graphics programming system. Unlike lines and polygons
+            (which are merely mathematical constructs), text is rooted
+            in a long tradition of aesthetic typography. In any computer
+            graphics system, the goal must always be to display text
+            that is as pleasing and as easy to read as a well-printed
+            book.
+            
+            Yet, most computer output devices (such as video displays
+            and printers) are digital media. The subtly shaped and
+            rounded characters that comprise traditional fonts must be
+            broken down into discrete pixels for storage and then
+            reassembled on the output device. This often causes
+            distortions in the appearance of the text.
+            
+            But one major advantage of using a computer for this job is
+            versatility:  We can use a wide variety of fonts in various
+            sizes and characteristics, and modify these fonts for
+            display.  The extent to which we can modify fonts is
+            dependent on the way in which the fonts are stored in
+            memory.
+            
+            
+            Images and Vectors
+            
+            A font is generally stored in computer (or printer) memory
+            in one of two very different ways:
+            
+
+
+
+
+
+
+
+
+
+
+
+
+            First, a font can be stored as an "image" or "bitmap." Each
+            character of the font is simply a rectanglar array of bits.
+            The 0 bits generally correspond to the background around the
+            character and the 1 bits correspond to the character itself.
+            
+            Secondly, a font can be stored in a "vector" or "outline"
+            format. Each character is defined as a series of lines and
+            curves that enclose areas. The character is displayed by
+            drawing the outline on the output device and filling the
+            enclosed areas.
+            
+            Image and vector fonts have distinct advantages and
+            disadvantages. Image font are always created for specific
+            font sizes and specific device resolutions. The size of a
+            particular image font cannot easily be changed. (For
+            example, enlarging an image font by doubling the rows and
+            columns of pixels often emphasizes the jaggedness of the
+            characters.) Also, image fonts cannot be rotated except
+            possibly by 90 degree increments.
+            
+            Vector fonts are much more malleable. Because they are
+            defined as a series of lines and curves, vector fonts can be
+            stretched or compressed to any size and can be rotated to
+            any angle. Vector fonts are not tied to a particular output
+            device resolution.
+            
+            In general, however, image fonts are more legible that
+            vector fonts. Various techniques are used to design image
+            fonts so they fool the eye into thinking the characters are
+            smoother than they actually are. Vector fonts --
+            particularly when displayed on low resolution devices and
+            scaled to small font sizes -- can be adjusted only by
+            mathematical algorithms, which currently are less capable
+            than human font designers. Another advantage of image fonts
+            is performance:  Vector fonts usually require much more
+            processing time to draw each character.
+            
+            Most conventional laser printers store fonts as images,
+            either within the printer or in font cartridges. The printer
+            is restricted to specific font sizes and the characters
+            cannot be arbitrarily rotated. Much more versatile are the
+            fonts stored in PostScript-based printers. These fonts are
+            stored as vectors. PostScript fonts can be stretched or
+            compressed to any size, they can be arbitrarily rotated,
+            filled with various patterns, and used for clipping.
+            
+            
+            The GPI Fonts
+            
+            The Graphics Programming Interface (GPI) of the OS/2
+            Presentation Manager can, of course, take advantage of fonts
+            that are stored in and supported by output devices such as
+            laser printers.
+            
+
+
+
+
+
+
+
+
+
+
+
+
+            But GPI also includes its own support of both image and
+            vector fonts. The image fonts are expected, of course,
+            because they are particularly suited for low resolution
+            video displays and dot matrix printers. Image fonts are an
+            important part of most graphics programming systems (such as
+            Microsoft Windows GDI).
+            
+            The addition of vector fonts in GPI is a real treat. GPI can
+            use these vector fonts with any output device. Thus, various
+            font techniques that previously have been restricted to
+            PostScript printers are now possible with other laser
+            printers and even the video display.
+            
+            This article shows you how to work with vector fonts in GPI
+            and demonstrates many PostScript-like techniques. Quite
+            simply, the font support in GPI is nearly as strong as that
+            in PostScript. However, GPI has a serious deficiency that
+            I'll discuss at the end of this article.
+            
+            OS/2 1.1 is shipped with three resource-only dyanamic link
+            libraries with a .FON extension. These are font files, and
+            the contents are shown in Figure 1.
+            
+            In addition, the video display device driver (DISPLAY.DLL)
+            and printer device drivers may also contain fonts designed
+            specifically for the device. For example, the default
+            "System Proportional" font is stored in DISPLAY.DLL.
+            
+            Important: If you want to use any of the fonts in the .FON
+            files, you must install the fonts from the Presentation
+            Manager Control Panel program. It is only necessary to
+            install one font from each of the three files, and you only
+            need do this once.
+            
+            Each font has a face name. This is shown in quotation marks
+            in Figure 1.  Each of the image fonts is available in
+            several point sizes and for several output devices: the CGA,
+            EGA, VGA (and 8514/A), and IBM Proprinter. GPI can syntesize
+            variations of these fonts, such as italic or boldfaced
+            versions.
+            
+            Vector fonts, however, need not be designed for a particular
+            output device and point size because they can be arbitrary
+            scaled. You'll note that italic and boldface versions of the
+            vector fonts are also included.
+            
+            The vector fonts in GPI are equivalent to the Courier,
+            Helvetica, and Times fonts included in most PostScript
+            printers. However, because Helvetica and Times are
+            registered trademarks, these names are not used to identify
+            the vector fonts in GPI.
+            
+            A little exploration of the font files will reveal that
+            vector fonts are encoded as a series of GPI drawing orders.
+
+
+
+
+
+
+
+
+
+
+
+
+            When drawing text with these fonts, GPI translates the
+            drawing orders into GPI functions, usually GpiPolyLine to
+            draw straight lines and GpiPolyFilletSharp to draw curves.
+            
+            
+            The VECTFONT Program
+            
+            The VECTFONT program demonstrates the use GPI vector fonts.
+            For purposes of clarity, I've divided the program into
+            several modules.
+            
+            The VECTFONT "Display" menu lists 16 options. The first
+            option (to display nothing) is the default. The other 15
+            options correspond to routines in the VF01.C through VF15.C
+            files (described below).  The VF00.C file contains some
+            "helper" functions used by the routines in VF01.C through
+            VF15.C.
+            
+            VECTFONT creates a micro presentation space during the
+            WM_CREATE message using page units of PU_TWIPS. ("Twips" is
+            fabricated word standing for "20th of a point." A printer's
+            point size is 1/72nd inch, so page units correspond to
+            1/1440 inch.) VECTFONT then modifies the page viewport
+            rectangle so that a page unit corresponds to 1 point, which
+            (as you may know) is the default coordinate system in
+            PostScript.
+            
+            Although VECTFONT displays output to the screen, vector
+            fonts are obviously more suited for laser printers. As you
+            will see, the appearance of the fonts -- even at 24 point
+            sizes -- is not nearly as good as the image fonts.
+            
+            You'll also notice that several of the demonstration
+            routines in VECTFONT requires a few seconds to run. For
+            anything other than a demonstration program, you'd probably
+            want to use a second thread of execution so as to not hold
+            up message processing.
+            
+            
+            Selecting an Outline Font
+            
+            To use an outline font in a Presentation Manager program,
+            you must first create a "logical font" and then select the
+            font into your presentation space.
+            
+            The GpiCreateLogFont function creates a logical font and
+            associates the font with a local ID (a number between 1L and
+            254L that you select). This function requires a pointer to a
+            structure of type FATTRS ("font attributes") that specifies
+            the attributes of the font you want.
+            
+            To create a vector font, most of the fields in this
+            structure can be set to zero. The most important fields are
+            szFacename (which is set to the face name of the font) and
+
+
+
+
+
+
+
+
+
+
+
+
+            fsFontUse, which is set to the constant identifiers
+            FATTR_FONTUSE_OUTLINE and FATTR_FONTUSE_TRANSFORMABLE,
+            combined with the C bitwise OR operator.
+            
+            You may prefer using the CreateVectorFont function in VF00.C
+            for creating a vector font. The VF00.C file contains several
+            other helpful functions that are used by the demonstration
+            routines in VF01.C through VF15.C.
+            
+            The CreateVectorFont function requires only the presentation
+            space handle, the local ID, and the face name:
+            
+            
+            CreateVectorFont(hps, lcid,
+                             szFacename);
+            
+            
+            After you create a logical font (using either
+            GpiCreateLogFont or CreateVectorFont), you can select the
+            font into the presentation space:
+            
+            
+            GpiSetCharSet(hps, lcid);
+            
+            
+            The lcid parameter is the local ID for the font. After the
+            font is selected in the presentation space, you can alter
+            the attributes of the font with various functions described
+            below, obtain information about the font by calling
+            GpiQueryFontMetrics, GpiQueryWidthTable, and
+            GpiQueryTextBox, and you can use the font for text output
+            with one of the text functions such as GpiCharStringAt.
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            When you no longer need the font, you select the default
+            font back into the presentation space:
+            
+            
+            GpiSetCharSet(
+                  hps,
+                  LCID_DEFAULT);
+            
+            
+            and then delete the local ID associated with the font:
+            
+            
+            GpiDeleteSetId(hps, lcid);
+            
+            
+            In VECTFONT, I always use the identifier LCID_MYFONT for the
+            local ID. This is defined in VECTFONT.H as 1L.
+            
+            
+            Scaling to a Point Size
+            
+            When you call GpiSetCharSet to select a vector font into the
+            prsentation space, the initial width and height of the font
+            are based on the GPI "character box," which defines a
+            character width and height in page units. The default
+            character box is based on the size of the default system
+            font. You can change the character box size by calling
+            GpiSetCharBox.
+            
+            Very important: To get a correctly proportioned vector font,
+            it is necessary to change the character box size. Do not use
+            the default Generally you set the height of the character
+            box to the desired height of the font. If you want the a
+            vector font to have a normal width, you set the width of the
+            character box equal to the height. For a skinnier font, set
+            the width of the character box less than the height; for a
+            fatter font, set the width greater than the height.
+            
+            If you're working in page units of PU_PELS, you must also
+            adjust the character box dimensions to account for
+            differences in horizontal and vertical resolution of the
+            output device. For this reason, it's much easier to work
+            with vector fonts if you use one of the metric page units
+            (PU_LOENGLISH, PU_HIENGLISH, PU_LOMETRIC, PU_HIMETRIC, or
+            PU_TWIPS). With these page units, horizontal and vertical
+            page units are the same.
+            
+            For example, suppose you're using page units of PU_TWIPS.
+            This means that one page unit is equal to 1/20 of a point or
+            1/1440 inch.  After selecting a vector font into the
+            presentation space, you want to scale the font to 24 points.
+            You first define a structure of type SIZEF:
+            
+            
+
+
+
+
+
+
+
+
+
+
+
+
+            SIZEF sizfx;
+            
+            
+            The two fields of this structure are named cx and cy and are
+            interpreted as 32-bit FIXED numbers, that is, the high 16-
+            bits are interpreted as an integer, and the low 16-bits are
+            interpreted as a fraction.
+            
+            If you want to scale the vector font to a 24 point height,
+            you can use the MAKEFIXED macro to set to the fields of the
+            structure like this:
+            
+            
+            sizfx.cx = MAKEFIXED(
+                         24 * 20, 0);
+            sizfx.cy = MAKEFIXED(
+                         24 * 20, 0);
+            
+            
+            Multiplying by 20 is necessary to convert the point size you
+            want to twips. Then call GpiSetCharBox:
+            
+            
+            GpiSetCharBox(hps, &sizfx);
+            
+            
+            After setting the character box, any character or text
+            dimensions you obtain from GpiQueryFontMetrics,
+            GpiQueryTextBox, and GpiQueryWidthTable will reflect the new
+            font size.
+            
+            The ScaleVectorFont routine in VF00.C can help in scaling a
+            vector font to a desired point size. The function will work
+            with any page units, even PU_PELS. The second and third
+            parameters to ScaleVectorFont specify a point size in units
+            of 0.1 points. (For example, use 240 for a 24-point size.)
+            If you want a normally proportioned vector font, set the
+            third parameter to ScaleVectorFont equal to the second
+            parameter.
+            
+            The VF01.C file shows how the functions discussed so far can
+            be used to display all the available vector fonts in 24
+            point sizes. You can run the function in VF01.C by selecting
+            the "24 Point Fonts" option from the VECTFONT "Display"
+            menu.
+            
+            
+            Arbitrary Stretching
+            
+            Besides scaling the vector font to a specific point size,
+            you can also scale vector fonts to fit within an arbitrary
+            rectangle. For example, you may want to scale a short text
+            string to fill the client window.
+            
+
+
+
+
+
+
+
+
+
+
+
+
+            The function shown in VF02.C shows how this is done. You can
+            run this function by selecting "Stretched Font" from
+            VECTFONT's menu. The function in VF02.C displays the word
+            "Hello!" in the "Tms Rmn Italic" font stretched to the size
+            of the client window.
+            
+            The ScaleFontToBox function in VF00.C helps out with this
+            job. This function first calls GpiQueryTextBox to obtain the
+            coordinates of a parallelogram that encompasses the text
+            string. The character box is then scaled based on the size
+            of this text box and the rectangle to which the font must be
+            stretched. The QueryStartPointInTextBox function in VF00.C
+            determines the starting point of the text string (that is,
+            the point at the baseline of the left side of the first
+            character) within this rectangle. This point is used in the
+            GpiCharStringAt function to display the text.
+            
+            
+            Mirror Images
+            
+            Besides scaling the font to a particular size, the character
+            box can also flip the characters around the horizontal or
+            vertical axis.
+            
+            If the character box height (the cy field of the SIZEF
+            structure) is negative, then the characters will be flipped
+            around the baseline and displayed upside down. If the
+            character box width (the cx field) is negative, the
+            individual characters are flipped around the vertical axis.
+            Moreover, GpiCharStringAt will draw a character string from
+            right to left. It's as if the whole character string is
+            flipped around the vertical line at the left side of the
+            first character.
+            
+            The function in VF03.C displays the same string four times,
+            using all possible combinations of negative and positive
+            character box dimensions. You can run this function by
+            selecting "Mirrored Font" from the VECTFONT menu.
+            
+            
+            Vector Fonts and Transformations
+            
+            Unlike image fonts, vector fonts can be scaled to any size
+            and sheared and rotated to any angle. The matrix transforms
+            described in my article "OS/2 Graphics Programming
+            Interface: An Introduction to Coordinate Spaces" (Microsoft
+            Systems Journal, Volume 3, Number 4) affect vector fonts in
+            the same way they affect the display of other graphics
+            primitives.
+            
+            In addition, GPI also supports several functions
+            specifically for performing transforms on vector fonts.
+            We've already seen how the GpiSetCharBox function allows
+            font characters to be scaled. The GpiSetCharAngle rotates
+
+
+
+
+
+
+
+
+
+
+
+
+            the font characters and the GpiSetCharShear performs x-
+            shear.
+            
+            
+            Character Angle and Rotation
+            
+            By default, the baseline of the vector font characters is
+            parallel to the x axis in world coordinates. You can change
+            this by calling GpiSetCharAngle. This rotates the vector
+            fonts characters.
+            
+            The character angle is specified using a GRADIENTL
+            structure, which has two fields named x and y of type LONG.
+            Imagine a line connecting the point (0,0) to the point (x,y)
+            in world coordinates. The baseline of each character is
+            parallel to this line. The direction of the text is the same
+            as the direction from (0,0) to (x,y).
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            You can also think of this in trigonometric terms. The
+            baseline of the text is parallel to a line at angle a
+            measured counterclockwise from the x-axis, where:
+            
+            
+            a = arctan (y/x)
+            
+            
+            and y and x are the two fields of the GRADIENTL structure.
+            
+            
+            
+            The absolute magnitudes of y and x are not important. What's
+            important are the relative magnitudes and signs. The signs
+            of x and y determine the direction of the text string as
+            indicated in the following table:
+            
+            
+            x    y    Direction
+            -    -    ---------
+            
+            +    +    To upper right
+            -    +    To upper left
+            -    -    To lower left
+            +    -    To lower right
+            
+            
+            The function in VF04.C uses the GpiSetCharAngle function to
+            display eight text strings at 45 degree increments around
+            the center of the client window. Each string displays the
+            fields of the GRADIENTL structure that is used in the
+            GpiSetCharAngle call.
+            
+            In this example, the text strings begin with a blank
+            character so as not to make a mess of overlapping characters
+            in the center of the client window. The character angle does
+            not affect the interpretation of the starting position of
+            the string specified in the GpiCharStringAt function. If you
+            move your head so that a particular string is seen as
+            running left to right, the starting position still refers to
+            the point at the baseline of the left side of the first
+            character.
+            
+            You can make the characters in a text string follow a curved
+            path by individually calculating the starting position an
+            angle of each character and displaying the characters one at
+            a time. This is what is done in VF05.C to display "Hello,
+            world!" around the perimeter of a circle.
+            
+            The text string is scaled based on the circumference of a
+            circle that is positioned in the center of the window and
+            has a diameter half the width or height (whichever is less)
+            of the window. The GpiQueryWidthTable function is used to
+
+
+
+
+
+
+
+
+
+
+
+
+
+            obtain the width of individual characters and then space
+            them around the circle.
+            
+            
+            Character Shear
+            
+            It is easy to confuse the character angle and character
+            shear. Lets look at the difference. The character angle
+            refers to the orientation of the baseline. Text displayed
+            with various character angles is rotated but otherwise not
+            distorted in any way.
+            
+            The character shear affects the appearance of the characters
+            themselves apart from any rotation. Character shear by
+            itself "bends" characters to the left or right, but the
+            bottom of each character remains parallel to the x-axis. You
+            can use character shear to create oblique (sometimes
+            mistakenly called italic) versions of a font.
+            
+            To set character shear you call the GpiSetCharShear
+            function. This function requires a pointer to a structure of
+            type POINTL, which has two fields named x and y. Imagine a
+            line drawn from (0,0) to the point (x,y) in world
+            coordinates. The left and right sides of each character are
+            parallel to this line.
+            
+            The function shown in in VF06.C displays seven text strings
+            using different character shears.
+            
+            You can run this function by selecting "Character Shear"
+            from the VECTFONT menu. Each string displays the x and y
+            values used in the POINTL structure to set the character
+            shear.
+            
+            The character shear is governed by the relative magnitudes
+            and signs of the x and y fields of the POINTL structure. If
+            the signs of both fields are the same, the characters tilt
+            to the right; if different, the characters tilt to the left.
+            The character shear does not cause characters to be flipped
+            upside down. For example, character shear using the point
+            (100,100) has the same effect as (-100,-100).
+            
+            The angle of the left and right sides of the characters from
+            the y axis is sometimes called the shear angle. In theory,
+            the shear angle can range to just above -180 degrees
+            (infinite left shear) to just under +180 degrees (infinite
+            right shear) and is equal to:
+            
+            
+            a = arctan (x/y)
+            
+            
+            where x and y are the two fields of the POINTL structure.
+            
+
+
+
+
+
+
+
+
+
+
+
+
+            When you set a non-default character shear, the
+            GpiQueryTextBox function returns an array of points that
+            define a parallelogram rather than a rectangle. However, the
+            top and bottom sides of this text box are the same width as
+            for a non-sheared text string, and the distance between the
+            top and bottom sides also remains the same.
+            
+            You can use character shear to draw an oblique shadow of a
+            text string. The function in VF07.C colors the background of
+            the client window blue, and displays the text string
+            "Shadow" twice.
+            
+            The first call to GpiCharStringAt displays the shadow. This
+            is drawn in dark blue using a positive character shear. The
+            second call to GpiCharStringAt draws the characters upright
+            in red with a slightly smaller character box height. You can
+            run this function by selecting "Font with Shadow" from the
+            VECTFONT menu.
+            
+            
+            A Primer on Paths
+            
+            To explore more capabilities of vector fonts, it's necessary
+            to become familiar with the GPI "path," which is similar to
+            a PostScript path. In GPI, you create a path by calling line
+            drawing functions between calls to the GpiBeginPath and
+            GpiEndPath functions:
+            
+            
+            GpiBeginPath(hps, idPath);
+                 <... call line
+                      drawing
+                      functions ... >
+            GpiEndPath (hps) ;
+            
+            
+            This is called a "path bracket." In OS/2 1.1, idPath must be
+            set equal to 1L. The functions that are valid within a path
+            bracket are listed in the documentation of the Presentation
+            Manager functions.
+            
+            The functions you call within the path bracket do not draw
+            anything. Instead, the lines that make up the path are
+            retained by the system. Often the lines you draw in a path
+            will enclose areas, but they don't have to.
+            
+            After the GpiEndPath call, you can do one of three things
+            with the path you've created:
+            
+                 *    Call GpiStrokePath to draw the lines that comprise
+                      the path. These lines are drawn using the
+                      geometric line width, joins, and ends (discussed
+                      shortly).
+            
+
+
+
+
+
+
+
+
+
+
+
+
+                 *    Call GpiFillPath to fill enclosed areas defined by
+                      the path. Any open areas are automatically
+                      closed. The area is filled with the current
+                      pattern.
+            
+                 *    Call GpiSetClipPath to make the enclosed areas of
+                      the path a clipping area. Any open areas are
+                      automatically closed. Subsequent GPI calls will
+                      only display output within the enclosed area
+                      defined by the path.
+            
+            Each of these three functions cause the path to be deleted.
+            Prior to calling any of these three functions you can call
+            GpiModifyPath, which I'll describe towards the end of this
+            article.
+            
+            Normally, GpiCharStringAt and the other text output
+            functions are not valid in a path bracket. The exception is
+            when a vector font is selected in the presentation space.
+            When called from within a path bracket, GpiCharStringAt does
+            not draw the text string. Instead, the outlines of the
+            characters become part of the path.
+            
+            This facility opens up a whole collection of PostScript-like
+            stylistic techniques that you can use with vector fonts.
+            
+            
+            Hollow Characters
+            
+            Let's begin by calling GpiCharStringAt in a path bracket and
+            then use GpiStrokePath to draw the lines of the path.
+            GpiStrokePath has the following syntax:
+            
+            
+            GpiStrokePath(
+                 hps, idPath, 0L);
+            
+            
+            In the initial version of the Presentation Manager, the last
+            parameter of the function must be set to 0L. When used to
+            stroke a path created by calling GpiCharStringAt, only the
+            outline is drawn and not the interiors. This creates hollow
+            characters.
+            
+            The function in VF08.C uses this technique to display the
+            outline of the characters in the text string "Hollow." You
+            can run this function by selecting "Hollow Font" from the
+            VECTFONT menu.
+            
+            You may want to display characters in one color with an
+            outline of another color. In this case, you must call
+            GpiCharStringAt twice, first to draw the interior in a
+            specific color, and secondly in a path bracket followed by a
+            GpiStrokeFont call to draw the outline.
+
+
+
+
+
+
+
+
+
+
+
+
+            
+            The function in VF09.C does something like this to draw text
+            with a drop shadow.
+            
+            The shadow is drawn first using a normal GpiCharStringAt
+            call. Another GpiCharStringAt functions draws the text again
+            in the current window background color at a 1/6 inch offset
+            to the first string. This is surrounded by an outline
+            created by a third GpiCharStringAt call in a path bracket
+            followed by GpiStrokeFont.
+            
+            Quite similar to this is the creation of characters that
+            look like solid blocks, as shown in the function in VF10.C.
+            Eighteen character strings are drawn at 1 point offsets
+            using CLR_DARKGREEN. This is capped by the character string
+            drawn again in CLR_GREEN and the border in CLR_DARKGREEN.
+            
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Geometrically Thick Lines
+            
+            At first, it may seem as if there is no difference between
+            drawing a line normally, like this:
+            
+            
+            GpiMove(hps, &ptlBeg);
+            GpiLine(hps, &ptlEnd);
+            
+            
+            and calling these same two functions within a path bracket
+            and then stroking the path, like this:
+            
+            
+            GpiBeginPath(hps, idPath);
+            GpiMove(hps, &ptlBeg);
+            GpiLine(hps, &ptlEnd);
+            GpiEndPath(hps)
+            GpiStrokePath(hps, idPath, 0);
+            
+            
+            There are, in fact, some very significant differences.
+            
+            First, the line drawn with the normal GpiLine function has
+            what is called a "cosmetic" line width. The default width of
+            the line is based on the resolution of the output device. It
+            is a device dependent width for a "normal" line. The width
+            of the line does not change when you use matrix transforms
+            to set different scaling factors in the coordinate space.
+            Although GPI provides a function called GpiSetLineWidth to
+            change the cosmetic line width, this function is not
+            implemented in OS/2 1.1.
+            
+            But a line drawn by stroking a path has a "geometric" line
+            width. This is a line width (in world coordinates) that you
+            set with the GpiSetLineWidthGeom function. Because this line
+            width is specified in world coordinates, it is affected by
+            any scaling that you set using matrix transforms.
+            
+            Secondly, a line draw with GpiLine can have different line
+            types that you set with the GpiSetLineType function. These
+            line types are various combinations of dots and dashes. The
+            line is drawn with the current line color and the current
+            line mix.
+            
+            But a line drawn by stroking a path does not use the line
+            type. The line is instead treated as an area that follows
+            the path of the line but which has a geometric width. This
+            area is filled with the pattern that you set with
+            GpiSetPattern, colored with the current pattern foreground
+            and background color, and the current pattern foreground and
+            background mix.
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Third, a line drawn by stroking the path can have various
+            types of line "joins" and "ends." By calling GpiSetLineJoin
+            you can specify that lines meet with a rounded, square, or
+            miter join. GpiSetLineEnd lets you specify rounded, square,
+            or flat ends to the lines.
+            
+            The function in the VF11.C file demonstrates the use of
+            geometrically thick lines filled with patterns to give the
+            letters a kind of "neon" look.
+            
+            You can run this function by selecting "Neon Effect" from
+            the VECTFONT menu. The function strokes the path using
+            various geometric line widths filled with a PATSYM_HALFTONE
+            pattern and several colors. The outline of the font is
+            white, but surrounded with a halo of red.
+            
+            A better effect could be achieved on devices capable of more
+            than 16 colors. In this case, you can use a solid pattern
+            but color each stroke with a different shade of red.
+            
+            
+            Filling the Path
+            
+            When introducing paths earlier in this article, I mentioned
+            that you can do one of three things with a path: stroke it,
+            fill it, or use it for clipping. Let's move on to the
+            second: filling the path.
+            
+            To fill a path, you call:
+            
+            
+            GpiFillPath(hps,
+                 idPath, lOption);
+            
+            
+            This fills the path with the current pattern. Any open areas
+            of the path are automatically closed before being filled.
+            The lOption parameter can be either FPATH_ALTERNATE or
+            FPATH_WINDING to fill the path using alternate or winding
+            modes. For vector fonts, FPATH_WINDING causes the interiors
+            of some letters (such as "O") to be filled. You'll probably
+            want to use FPATH_ALTERNATE instead.
+            
+            If the current area filling pattern is PATSYM_SOLID, then
+            the code:
+            
+            
+            GpiBeginPath(hps, idPath);
+            GpiCharStringAt(hps, &ptl,
+                            cch, szText);
+            GpiEndPath(hps);
+            GpiFillPath(hps,
+                        idPath,
+                        FPATH_ALTERNATE);
+
+
+
+
+
+
+
+
+
+
+
+
+            
+            
+            does roughly the same thing with a vector font as a
+            GpiCharStringAt by itself. When using GpiFillPath you'll
+            want to set a pattern other than PATSYM_SOLID. (A bug in
+            OS/2 1.1 causes the current pattern to be reset to
+            PATSYM_SOLID during a path bracket in which GpiCharStringAt
+            is called. You can get around this bug by calling
+            GpiSetPattern after you end the path.)
+            
+            The function in VF12.C uses GpiFillPath to display the text
+            string "Fade" eight times filled with the eight GPI shading
+            patterns (PATSYM_DENSE1 through PATSYM_DENSE8) and then
+            finishes by calling GpiCharStringAt outside of a path
+            bracket. You can run this function by selecting "Fading
+            Font" from the VECTFONT menu.
+            
+            
+            Clipping to the Text Characters
+            
+            The third option after creating a path is to call
+            GpiSetClipPath:
+            
+            
+            GpiSetClipPath(hps, idPath,
+                           lOption);
+            
+            The lOption parameter can be either SCP_RESET (which equals
+            0L, so it's the default) or SCP_AND. The SCP_RESET option
+            causes the clipping path to be reset so that no clipping
+            occurs. The SCP_AND option sets the new clipping path to the
+            intersection of the old clipping path and the path you've
+            just defined in a path bracket. Any open areas in the path
+            are automatically closed.
+            
+            You can combine the SCP_AND option with either SCP_ALTERNATE
+            (the default) or SCP_WINDING. As with GpiFillPath, you'll
+            probably want to use alternate mode when working with paths
+            created from vector fonts
+            
+            The function in VF13.C calls GpiCharStringAt with the text
+            string "WOW" within a path bracket. This is followed by a
+            call to GpiSetClipPath. The clipping path is now the
+            interior of the letters. The function draws a series of
+            colored lines emanating from the center of the client
+            window.
+            
+            The function in VF14.C uses a similar technique but draws a
+            series of areas defined by splines.
+            
+            
+            Modifying the Path
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Between the call to GpiEndPath to end the path and the call
+            to GpiStrokePath, GpiFillPath, or GpiSetClipPath, you can
+            call GpiModifyPath. This function uses the current geometric
+            line width, line join, and line end to convert every line in
+            the path to a new line that encloses an area around the old
+            line.
+            
+            For example, suppose that the path contained a single
+            straight line. After GpiModifyPath the path would contain a
+            closed line in the shape of a hotdog. The width of this
+            hotdog is the geometric line width. The ends of the hotdog
+            could be round, square, or flat, depending on the current
+            line end attribute.
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Following the creation of a path, these two functions in
+            succession:
+            
+            
+            GpiModifyPath(hps, ID_PATH,
+                          MPATH_STROKE);
+            GpiFillPath(hps, ID_PATH,
+                        FPATH_WINDING) ;
+            
+            
+            is usually equivalent to:
+            
+            
+            GpiStrokePath(hps, ID_PATH,
+                          0L);
+            
+            
+            GpiModifyPath and GpiStrokePath are the only two functions
+            that use the geometric line width, joins, and ends.
+            
+            In theory, you can call GpiStrokePath after GpiModifyPath,
+            like this:
+            
+            
+            GpiModifyPath(hps, ID_PATH,
+                          MPATH_STROKE);
+            GpiStrokePath(hps, ID_PATH,
+                          0L);
+            
+            
+            This should do something, and it should be rather
+            interesting, but GPI usually reports that it can't create
+            the path because it's too complex.
+            
+            Instead, let's look at GpiModifyPath followed by
+            GpiSetClipPath. The function in VF15.C is almost the same as
+            the one in VF13.C except that it sets the geometric line
+            width to 6 (1/12 inch) and calls GpiModifyPath before
+            calling GpiSetClipPath.
+            
+            Note that the colored lines are clipped not to the interior
+            of the characters, but to their original outlines. By the
+            use of GpiModifyPath, the outlines of the characters have
+            themselves been made into a path that is 1/12 inch wide.
+            This is the path that is used for clipping.
+            
+            
+            Is It Enough?
+            
+            I think it's clear that the facilities provided by GPI for
+            working with vector fonts equal -- and sometimes exceed --
+            those in PostScript. The GPI interface is very powerful and
+            very versatile.
+            
+
+
+
+
+
+
+
+
+
+
+
+
+            Is that enough?
+            
+            No, it's not. The implementation of vector fonts in GPI has
+            a structural flaw that still leaves PostScript the king.
+            
+            Take a close look at the display of the "Helv" font. You'll
+            notice that the two legs of the "H" are different in width
+            by one pixel when they should be the same width. This is
+            undoubtedly due to a rounding error. It's obviously more
+            noticeable on a low-resolution video display than it would
+            be on a 300 dpi laser printer, but even on a laser printer
+            such errors will affect the legibility of the text.
+            
+            Errors such as this do not occur with PostScript fonts.
+            PostScript fonts are true algorithms that are able to
+            recognize and correct any anomalies in the rendition of the
+            characters. In contrast, GPI fonts (which are encoded as a
+            simple series of polylines and polyfillets) are drawn
+            blindly without any feedback or correction.
+            
+            So, while we can rejoice in what we have in GPI, there is
+            still the need to hope for improvement.
+            
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Figure 1
+            
+            
+            Dynamic Link
+            Library File   Image Fonts             Vector Fonts
+            ------------   -----------             ------------
+            
+            COURIER.FON    "Courier" (8, 10, and   "Courier"
+                            12 points for CGA,     "Courier Bold"
+                            EGA, VGA, and          "Courier Italic"
+                            IBM Proprinter)        "Courier Bold Italic"
+            
+            HELV.FON       "Helv" (8, 10, 12, 14,  "Helv"
+                            18, and 24 points      "Helv Bold"
+                            for CGA, EGA, VGA,     "Helv Italic"
+                            and IBM Proprinter)    "Helv Bold Italic"
+            
+            TIMES.FON      "Tms Rmn" (8, 10, 12,   "Tms Rmn"
+                            14, 18, and 24 points  "Tms Rmn Bold"
+                            for CGA, EGA, VGA,     "Tms Rmn Italic"
+                            and IBM Proprinter)    "Tms Rmn Bold Italic"
+            
+            
+            Caption:  The OS/2 1.1 dynamic link library files that            Caption:                                              
+            contain fonts. The font face names are shown in quotation
+            marks.
+            
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

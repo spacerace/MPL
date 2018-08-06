@@ -1,0 +1,394 @@
+;
+;       Wordstar pop-up mouse menus
+;
+
+;       Set up initial labels for mouse commands
+
+        begin leftb,rightb,bothb,mousel,mouser,mouseu,moused,16,40
+
+;       -------------------- Left Button ---------------------------
+
+;       Display edit/block menu if in edit mode else display no-file menu
+
+leftb:  match 1,12,,"e",imen,chk33  ;Check for e in editing no file
+chk33:  match 1,12,,"n",imen,chkl   ;Check for n in not editing (V 3.3)
+
+chkl:   match 1,11,,":",emen,nothing ;Check for : after drive letter
+
+
+;       -------------------- Right button ------------------------
+
+;       If in edit mode execute cursor movement menu else nothing
+
+rightb: match 1,11,,":",movmen,nothing    ;Check state of WS
+
+;       --------------------- Both buttons ------------------------
+
+;       If in edit mode execute edit/file menu, if not in edit
+;       mode then type escape.
+
+bothb:  match 1,11,,":",emen2,keyesc    ;Both buttons - Check state
+
+;       -------------------- Mouse left -----------------------
+
+mousel: match 1,11,,":",lchkctrl,nothing          ;Edit mode?
+lchkctrl: match 1,1,,"^",nothing,keyctrls               ;Yes - Move left
+
+;       ------------------- Mouse right -----------------------
+
+mouser: match 1,11,,":",rchkctrl,nothing          ;Edit mode?
+rchkctrl: match 1,1,,"^",nothing,keyctrld               ;Yes - Move right
+
+;       --------------------- Mouse up -----------------------
+
+mouseu: match 1,11,,":",uchkctrl,nothing          ;Edit mode?
+uchkctrl: match 1,1,,"^",nothing,keyctrle         ;Yes - Move up
+
+;       ------------------- Mouse down -----------------------
+
+moused: match 1,11,,":",dchkctrl,nothing          ;Edit mode?
+dchkctrl: match 1,1,,"^",nothing,keyctrlx               ;Yes - Move down
+
+;       Initial menu displayed when left button pressed
+
+imen:   popup 2,1
+        text "ษออออออออออออออออออ < < <  N O - F I L E   M E N U  > > > ออออออออออออออออออป"
+        text "บ Cancel menu    Change drive   Print a file   Rename a file  Run a program บ"
+        text "บ Open document  Toggle file dir               Delete a file  Run Spellstar บ"
+        text "บ Open non-doc   Set help level Exit to DOS    Copy a file    Run Mailmerge บ"
+        text "ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ"
+        select 2,3,15
+        select 3,3,15,keyd
+        select 4,3,15,keyn
+        select 2,18,15,keyl
+        select 3,18,15,keyf
+        select 4,18,15,hlpmen
+        select 2,33,15,keyp
+;
+        select 4,33,15,keyx
+        select 2,48,15,keye
+        select 3,48,15,keyy
+        select 4,48,15,keyo
+        select 2,63,14,keyr
+        select 3,63,14,keys
+        select 4,63,14,keym
+        pend
+
+;       Set help level
+
+hlpmen: popup 2,1
+        text "ษอออออ SET HELP LEVEL ออออป"
+        text "บ       Cancel menu       บ"
+        text "บ   All menus displayed   บ"
+        text "บ  Main menu suppressed   บ"
+        text "บ Prefix menus suppressed บ"
+        text "บ  All menus suppressed   บ"
+        text "ศอออออออออออออออออออออออออผ"
+        select 2,3,23
+        select 3,3,23,keyh3
+        select 4,3,23,keyh2
+        select 5,3,23,keyh1
+        select 6,3,23,keyh0
+        pend
+
+; Edit/Block menu - selected by pressing left button in edit mode
+
+emen:   popup 2,1
+        text "ษออออออ EDIT / BLOCK MENU ออออออป"
+        text "บ Cancel Menu      Begin block  บ"
+        text "บ Reform           End block    บ"
+        text "บ Center text      Copy block   บ"
+        text "บ Toggle insert    Move block   บ"
+        text "บ Find text        Delete block บ"
+        text "บ Find/Replace     Write block  บ"
+        text "บ Find/Replace agn Column block บ"
+        text "ศอออออออออออออออออออออออออออออออผ"
+        select 2,3,17
+        select 3,3,17,keyctrlb
+        select 4,3,17,keyctrloc
+        select 5,3,17,keyctrlv
+        select 6,3,17,keyctrlqf
+        select 7,3,17,keyctrlqa
+        select 8,3,17,keyctrll
+        select 2,20,12,keyctrlkb
+        select 3,20,12,keyctrlkk
+        select 4,20,12,keyctrlkc
+        select 5,20,12,keyctrlkv
+        select 6,20,12,keyctrlky
+        select 7,20,12,keyctrlkw
+        select 8,20,12,keyctrlkn
+        pend
+
+; Edit / File menu displayed when both buttons pressed in edit mode
+
+emen2:  popup 2,1
+        text "ษออออออออ EDIT / FILE MENU ออออออออป"
+        text "บ Cancel menu    Print/Format menu บ"
+        text "บ Save & Resume  Margins/Tabs menu บ"
+        text "บ Save & Done    Toggles menu      บ"
+        text "บ Save & Exit    File command menu บ"
+        text "บ Abandon file   Help menu         บ"
+        text "ศออออออออออออออออออออออออออออออออออผ"
+        select 2,3,15
+        select 3,3,15,keyctrlks
+        select 4,3,15,keyctrlkd
+        select 5,3,15,keyctrlkx
+        select 6,3,15,keyctrlkq
+        select 2,18,17,frmtmen
+        select 3,18,17,mtmen
+        select 4,18,17,togmen
+        select 5,18,17,filmen
+        select 6,18,17,hlpmen2
+        pend
+
+; Print/Format menu selected from Edit menu
+
+frmtmen: popup 2,1
+        text "ษอออออออออออออ PRINT FORMAT MENU อออออออออออออออป"
+        text "บ Cancel menu    Subscript      Print pause     บ"
+        text "บ Bold           Superscript    Overprint line  บ"
+        text "บ Double strike  Strikeout      Nonbreak space  บ"
+        text "บ Underscore     Phantom space  Standard pitch  บ"
+        text "บ Overprint char Phantom Rubout Alternate pitch บ"
+        text "ศอออออออออออออออออออออออออออออออออออออออออออออออผ"
+        select 2,3,15
+        select 3,3,15,keyctrlpb
+        select 4,3,15,keyctrlpd
+        select 5,3,15,keyctrlps
+        select 6,3,15,keyctrlph
+        select 2,18,15,keyctrlpv
+        select 3,18,15,keyctrlpt
+        select 4,18,15,keyctrlpx
+        select 5,18,15,keyctrlpf
+        select 6,18,15,keyctrlpg
+        select 2,33,15,keyctrlpc
+        select 3,33,15,keyctrlprk
+        select 4,33,15,keyctrlpo
+        select 5,33,15,keyctrlpn
+        select 6,33,15,keyctrlpa
+        pend
+
+;       Margins/Tabs menu selected from main edit menu
+
+mtmen:  popup 2,1
+        text "ษออออออออออ MARGINS / TABS MENU ออออออออออออป"
+        text "บ Cancel menu        Set a tab stop         บ"
+        text "บ Set left margin    Set tab stop at cursor บ"
+        text "บ Set right margin   Set a paragraph tab    บ"
+        text "บ Release margins    Clear a tab stop       บ"
+        text "ศอออออออออออออออออออออออออออออออออออออออออออผ"
+        select 2,3,19
+        select 3,3,19,keyctrlol
+        select 4,3,19,keyctrlor
+        select 5,3,19,keyctrlox
+        select 2,22,22,keyctrloi
+        select 3,22,22,keyctrloie
+        select 4,22,22,keyctrlog
+        select 5,22,22,keyctrlon
+        pend
+
+; Help menu selected from Edit/File menu
+
+hlpmen2: popup 2,1
+        text "ษอออออออออออออ HELP MENU ออออออออออออออป"
+        text "บ Cancel menu           Mouse help     บ"
+        text "บ Set help level        Status line    บ"
+        text "บ Paragraph reform      Ruler line     บ"
+        text "บ Flags in right column Margins & tabs บ"
+        text "บ Dot commands          Place markers  บ"
+        text "บ Index of commands     Moving text    บ"
+        text "ศออออออออออออออออออออออออออออออออออออออผ"
+        select 2,3,22
+        select 3,3,22,chlpmen
+        select 4,3,22,keyctrljb
+        select 5,3,22,keyctrljf
+        select 6,3,22,keyctrljd
+        select 7,3,22,keyctrlji
+        select 2,25,14,mousehlp
+        select 3,25,14,keyctrljs
+        select 4,25,14,keyctrljr
+        select 5,25,14,keyctrljm
+        select 6,25,14,keyctrljp
+        select 7,25,14,keyctrljv
+        pend
+
+; Set help level from edit mode - ctrlj then h0,h1,h2,h3
+
+chlpmen: execute keyctrlj,hlpmen
+
+;       Mouse help
+
+mousehlp: popup 2,1
+        text "ษออออออออออออออออ MOUSE  HELP ออออออออออออออออออป"
+        text "บ                                               บ"
+        text "บ Left button  - Displays Edit/Block menu       บ"
+        text "บ Right button - Displays Cursor movement menu  บ"
+        text "บ Both buttons - Displays Edit/File menu        บ"
+        text "บ                                               บ"
+        text "บ Moving the mouse up,down,left, or right will  บ"
+        text "บ cause the cursor to move in that direction.   บ"
+        text "บ                                               บ"
+        text "ศอออออออออออออออออออออออออออออออออออออออออออออออผ"
+        select 1,19,11
+        pend
+
+; File command menu selected from main edit menu
+
+filmen: popup 2,1
+        text "ษ FILE COMMANDS ป"
+        text "บ  Cancel menu  บ"
+        text "บ  Read a file  บ"
+        text "บ  Copy a file  บ"
+        text "บ Delete a file บ"
+        text "บ Rename a file บ"
+        text "บ  Print a file บ"
+        text "ศอออออออออออออออผ"
+        select 2,3,13
+        select 3,3,13,keyctrlkr
+        select 4,3,13,keyctrlko
+        select 5,3,13,keyctrlkj
+        select 6,3,13,keyctrlke
+        select 7,3,13,keyctrlkp
+        pend
+
+; Toggle menu selected from main edit menu
+
+togmen: popup 2,1
+        text "ษออออออออออออ TOGGLES MENU ออออออออออออออป"
+        text "บ Cancel menu       Toggle soft hyphen   บ"
+        text "บ Toggle ruler line Toggle vari-Tabs     บ"
+        text "บ Toggle word wrap  Toggle print display บ"
+        text "บ Toggle justify    Toggle auto page brk บ"
+        text "ศออออออออออออออออออออออออออออออออออออออออผ"
+        select 2,3,18
+        select 3,3,18,keyctrlot
+        select 4,3,18,keyctrlow
+        select 5,3,18,keyctrloj
+        select 2,21,20,keyctrloe
+        select 3,21,20,keyctrlov
+        select 4,21,20,keyctrlod
+        select 5,21,20,keyctrlop
+        pend
+
+; Cursor movement menu displayed when right button pressed in edit mode
+
+movmen: popup 2,1
+        text "ษอออออออ CURSOR MOVEMENT อออออออป"
+        text "บ Cancel menu    Top of screen  บ"
+        text "บ Screen up      Bottom of scrn บ"
+        text "บ Screen down    Start of file  บ"
+        text "บ Previous place End of file    บ"
+        text "ศอออออออออออออออออออออออออออออออผ"
+        select 2,3,15
+        select 3,3,15,keyctrlr
+        select 4,3,15,keyctrlc
+        select 5,3,15,keyctrlqp
+        select 2,18,15,keyctrlqe
+        select 3,18,15,keyctrlqx
+        select 4,18,15,keyctrlqr
+        select 5,18,15,keyctrlqc
+        pend
+
+;               --- Key Commands ---
+
+keyctrls: type 19                       ;Ctrl S - Left char
+keyctrld: type 4                        ;Ctrl D - Right char
+keyctrle: type 5                        ;Ctrl E - Up char
+keyctrlx: type 24                       ;Ctrl X - Down char
+keyctrlr: type 18                       ;Ctrl R - Screen down
+keyctrlj: type 10
+keyctrlk: type 11
+keyctrlkb: type 11,"B"
+keyctrlkc: type 11,"C"
+keyctrlkd: type 11,"D"
+keyctrlkk: type 11,"K"
+keyctrlkn: type 11,"N"
+keyctrlkp: type 11,"P"
+keyctrlkx: type 11,"X"
+keyctrlks: type 11,"S"
+keyctrlkq: type 11,"Q"
+keyctrlkv: type 11,"V"
+keyctrlkw: type 11,"W"
+keyctrlky: type 11,"Y"
+keyctrlkr: type 11,"R"
+keyctrlko: type 11,"O"
+keyctrlkj: type 11,"J"
+keyctrlke: type 11,"E"
+keyctrll:  type 12
+keyctrlb: type 2
+keyctrlc: type 3
+keyctrlg: type 7
+keyctrlp: type 16
+keyctrlq: type 17
+keyctrlo: type 15
+keyctrlv: type 22
+keyctrljb: type 10,"B"
+keyctrljf: type 10,"F"
+keyctrljd: type 10,"D"
+keyctrlji: type 10,"I"
+keyctrljs: type 10,"S"
+keyctrljr: type 10,"R"
+keyctrljp: type 10,"P"
+keyctrljm: type 10,"M"
+keyctrljv: type 10,"V"
+keyctrloc: type 15,"C"
+keyctrlox: type 15,"X"
+keyctrlol: type 15,"L"
+keyctrlor: type 15,"R"
+keyctrloi: type 15,"I"
+keyctrloie: type 15,"I",27
+keyctrlog: type 15,"G"
+keyctrlon: type 15,"N"
+keyctrlot: type 15,"T"
+keyctrlow: type 15,"W"
+keyctrloj: type 15,"J"
+keyctrloe: type 15,"E"
+keyctrlov: type 15,"V"
+keyctrlod: type 15,"D"
+keyctrlop: type 15,"P"
+keyctrlprk: type 16,13                          ;Ctrl K then return key
+keyctrlpa: type 16,"A"
+keyctrlpb: type 16,"B"
+keyctrlpc: type 16,"C"
+keyctrlpd: type 16,"D"
+keyctrlpf: type 16,"F"
+keyctrlpg: type 16,"G"
+keyctrlph: type 16,"H"
+keyctrlpn: type 16,"N"
+keyctrlpo: type 16,"O"
+keyctrlps: type 16,"S"
+keyctrlpt: type 16,"T"
+keyctrlpv: type 16,"V"
+keyctrlpx: type 16,"X"
+keyctrlqa: type 17,"A"
+keyctrlqe: type 17,"E"
+keyctrlqf: type 17,"F"
+keyctrlqr: type 17,"R"
+keyctrlqc: type 17,"C"
+keyctrlqk: type 17,"K"
+keyctrlqp: type 17,"P"
+keyctrlqq: type 17,"Q"
+keyctrlqx: type 17,"X"
+keyctrlqy: type 17,"Y"
+keyd:   type "D"                ;D - Open Document
+keye:   type "E"                ;E - Rename
+keyf:   type "F"                ;F - Toggle directory
+keyh:   type "H"                ;H - Help menu
+keyh0:  type "H0"               ;H - Set help level 0
+keyh1:  type "H1"               ;H - Set help level 1
+keyh2:  type "H2"               ;H - Set help level 2
+keyh3:  type "H3"               ;H - Set help level 3
+keyl:   type "L"                ;L - Change drive
+keym:   type "M"                ;M - Run mailmerge
+keyn:   type "N"                ;N - Open Non document
+keyo:   type "O"                ;O - Copy
+keyp:   type "P"                ;P - Print
+keyr:   type "R"                ;R - Run program
+keys:   type "S"                ;S - Run spellstar
+keyx:   type "X"                ;X - Exit
+keyy:   type "Y"                ;Y - Delete
+keyesc: type 27                 ;Escape
+
+NOTHING:        NOTHING
+
+; The end

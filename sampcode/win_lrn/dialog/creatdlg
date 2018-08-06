@@ -1,0 +1,10 @@
+creatdlg.res: creatdlg.rc creatdlg.h
+   rc -r creatdlg.rc
+
+creatdlg.obj: creatdlg.c creatdlg.h
+   cl -c -W2 -AS -Gsw -Od -Zped creatdlg.c
+
+creatdlg.exe: creatdlg.obj creatdlg.res creatdlg.def
+   link4 creatdlg,/align:16,/map/li,slibw/NOE,creatdlg.def
+   mapsym creatdlg
+   rc creatdlg.res

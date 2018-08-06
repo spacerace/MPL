@@ -1,0 +1,161 @@
+BEGIN lb,rb,bb,lma,rma,uma,dma,32,16
+
+;------------------------------BOTH BUTTONS----------------------------------
+
+bb:     EXECUTE ESCAPE
+
+;------------------------------LEFT BUTTON-----------------------------------
+
+lb:     MATCH 24,7,NORMAL,"Y",YES,lb1             ;"Enter Y"
+lb1:    MATCH 24,5,NORMAL,"w",YES,lb2             ;"Overwrite"
+lb2:    MATCH 24,15,NORMAL,":",YES,lb3            ;"Confirm change:"
+lb3:    MATCH 22,1,NORMAL,"H",NUL,MAIN            ;"HELP:" 
+
+;------------------------------RIGHT BUTTON----------------------------------
+
+rb:     MATCH 22,7,NORMAL,"D:",RETURN,rb1         ;"COMMAND:" 
+rb1:    MATCH 22,4,NORMAL,"Y:",RETURN,rb2         ;"COPY:" 
+rb2:    MATCH 22,6,NORMAL,"E:",RETURN,rb3         ;"DELETE:"
+rb3:    MATCH 22,7,NORMAL,"T:",RETURN,rb4         ;"FORMAT:" 
+rb4:    MATCH 22,14,NORMAL,"T:",RETURN,rb5        ;"FORMAT DEFAULT:" 
+rb5:    MATCH 22,4,NORMAL,"O:",RETURN,rb6         ;"GOTO:" 
+rb6:    MATCH 22,6,NORMAL,"T:",RETURN,rb7         ;"INSERT:" 
+rb7:    MATCH 22,4,NORMAL,"K:",RETURN,rb8         ;"LOCK:" 
+rb8:    MATCH 22,4,NORMAL,"E:",RETURN,rb9         ;"MOVE:" 
+rb9:    MATCH 22,5,NORMAL,"T:",RETURN,rb10        ;"PRINT:" 
+rb10:   MATCH 22,8,NORMAL,"R:",RETURN,rb11        ;"TRANSFER:" 
+rb11:   MATCH 22,6,NORMAL,"W:",RETURN,rb12        ;"WINDOW:" 
+rb12:   MATCH 22,12,NORMAL,"T:",RETURN,rb13       ;"WINDOW SPLIT:" 
+rb13:   MATCH 22,8,NORMAL,"L:",RETURN,rb14        ;"EXTERNAL:" 
+rb14:   MATCH 22,1,NORMAL,"H",RETURN,rb15         ;"HELP:" 
+rb15:   MATCH 24,7,NORMAL,"Y",YES,rb16            ;"Enter Y"
+rb16:   MATCH 24,5,NORMAL,"w",YES,rb17            ;"Overwrite"
+rb17:   MATCH 24,15,NORMAL,":",YES,TB             ;"Confirm change:"
+
+;------------------------------LEFT MOTION-----------------------------------
+
+lma:    MATCH 22,1,NORMAL,"H",BKSP,lma1           ;"HELP:" 
+lma1:   MATCH 24,18,NORMAL,"ty",LEFT,lma2         ;"Select option or type ..."
+lma2:   MATCH 24,1,NORMAL,"M",LEFT,lm1            ;"Multiplan ..."
+
+lmb:    MATCH 24,18,NORMAL,"ty",BKSP,lmb1         ;"Select option or type ..."
+lmb1:   MATCH 24,1,NORMAL,"M",BKSP,lm1            ;"Multiplan ..."
+
+lm1:    MATCH 24,1,NORMAL,"Se",BKSP,lm2           ;"Select option"
+lm2:    MATCH 24,9,NORMAL,"op",SPBKSP,lm3         ;"Invalid option ..."
+lm3:    MATCH 24,23,NORMAL,"w",NUL,lm4            ;"Press any key to redraw ..."
+lm4:    MATCH 24,15,NORMAL,":",NUL,lm5            ;"Confirm change:"
+lm5:    MATCH 24,7,NORMAL,"Y",NUL,lm6             ;"Enter Y"
+lm6:    MATCH 24,5,NORMAL,"w",NUL,LEFT            ;"Overwrite"
+
+;------------------------------RIGHT MOTION----------------------------------
+
+rma:    MATCH 22,1,NORMAL,"H",SP,rma1             ;"HELP:" 
+rma1:   MATCH 24,18,NORMAL,"ty",RIGHT,rma2        ;"Select option or type ..."
+rma2:   MATCH 24,1,NORMAL,"M",RIGHT,rm1           ;"Multiplan ..."
+
+rmb:    MATCH 24,18,NORMAL,"ty",SP,rmb1           ;"Select option or type ..."
+rmb1:   MATCH 24,1,NORMAL,"M",SP,rm1              ;"Multiplan ..."
+
+rm1:    MATCH 24,1,NORMAL,"Se",SP,rm2             ;"Select option"
+rm2:    MATCH 24,9,NORMAL,"op",SPBKSP,rm3         ;"Invalid option ..."
+rm3:    MATCH 24,23,NORMAL,"w",NUL,rm4            ;"Press any key to redraw ..."
+rm4:    MATCH 24,15,NORMAL,":",NUL,rm5            ;"Confirm change:"
+rm5:    MATCH 24,7,NORMAL,"Y",NUL,rm6             ;"Enter Y"
+rm6:    MATCH 24,5,NORMAL,"w",NUL,RIGHT           ;"Overwrite"
+
+;------------------------------UP MOTION-------------------------------------
+
+uma:    MATCH 22,1,NORMAL,"H",NUL,uma1            ;"HELP:" 
+uma1:   MATCH 24,18,NORMAL,"ty",UP,uma2           ;"Select option or type ..."
+uma2:   MATCH 24,1,NORMAL,"M",UP,um1              ;"Multiplan ..."
+
+umb:    MATCH 24,18,NORMAL,"ty",NUL,umb1          ;"Select option or type ..."
+umb1:   MATCH 24,1,NORMAL,"M",NUL,um1             ;"Multiplan ..."
+
+um1:    MATCH 24,1,NORMAL,"Se",NUL,um2            ;"Select option"
+um2:    MATCH 24,9,NORMAL,"op",SPBKSP,um3         ;"Invalid option ..."
+um3:    MATCH 24,23,NORMAL,"w",NUL,um4            ;"Press any key to redraw ..."
+um4:    MATCH 24,15,NORMAL,":",NUL,um5            ;"Confirm change:"
+um5:    MATCH 24,7,NORMAL,"Y",NUL,um6             ;"Enter Y"
+um6:    MATCH 24,5,NORMAL,"w",NUL,UP              ;"Overwrite"
+
+;------------------------------DOWN MOTION-----------------------------------
+
+dma:    MATCH 22,1,NORMAL,"H",NUL,dma1            ;"HELP:" 
+dma1:   MATCH 24,18,NORMAL,"ty",DOWN,dma2         ;"Select option or type ..."
+dma2:   MATCH 24,1,NORMAL,"M",DOWN,dm1            ;"Multiplan ..."
+
+dmb:    MATCH 24,18,NORMAL,"ty",NUL,dmb1          ;"Select option or type ..."
+dmb1:   MATCH 24,1,NORMAL,"M",NUL,dm1             ;"Multiplan ..."
+dm1:    MATCH 24,1,NORMAL,"Se",NUL,dm2            ;"Select option"
+dm2:    MATCH 24,9,NORMAL,"op",SPBKSP,dm3         ;"Invalid option ..."
+dm3:    MATCH 24,23,NORMAL,"w",NUL,dm4            ;"Press any key to redraw ..."
+dm4:    MATCH 24,15,NORMAL,":",NUL,dm5            ;"Confirm change:"
+dm5:    MATCH 24,7,NORMAL,"Y",NUL,dm6             ;"Enter Y"
+dm6:    MATCH 24,5,NORMAL,"w",NUL,DOWN            ;"Overwrite"
+
+;------------------------------MENUS-----------------------------------------
+
+MAIN:   popup 19,1,NORMAL
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+text "MAIN: Enter Cancel Cell Command Reference Recalc  :   ,  Help CURSOR            "
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+select 2,7,5,RETURN
+select 2,13,6,ESCAPE
+select 2,20,4,CELL
+select 2,25,7,COMMAND
+select 2,33,9,REFERENCE
+select 2,43,6,RECALC
+select 2,50,3,COLON
+select 2,54,3,COMMA
+select 2,58,4,HELP
+select 2,63,6,CURSOR
+pend
+
+COMMAND:  ASSIGN ,,,lmb,rmb,umb,dmb,,
+CELL:     ASSIGN ,,,lma,rma,uma,dma,,
+
+CURSOR: popup 19,1,NORMAL
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+text "CURSOR: MAIN Home End NxtWindow NxtCell PageUp PageDown PageLeft PageRight      "
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+select 2,9,4,MAIN
+select 2,14,4,HOME
+select 2,19,3,END
+select 2,23,9,NXTWINDOW
+select 2,33,7,NXTCELL
+select 2,41,6,PGUP
+select 2,48,8,PGDOWN
+select 2,57,8,PGLEFT
+select 2,66,9,PGRIGHT
+pend
+
+;------------------------------KEYS------------------------------------------
+
+NUL:           NOTHING
+BKSP:          TYPE 8                             ;Backspace
+TB:            TYPE 9                             ;Tab
+RETURN:        TYPE 13                            ;Enter
+ESCAPE:        TYPE 27                            ;Esc
+HELP:          TYPE 0,35                          ;Alt-H
+SP:            TYPE " "
+YES:           TYPE "Y"
+SPBKSP:        TYPE " ",8                         ;Space,Backspace
+NXTWINDOW:     TYPE 0,59                          ;F1
+NXTCELL:       TYPE 0,60                          ;F2
+REFERENCE:     TYPE 0,61                          ;F3
+RECALC:        TYPE 0,62                          ;F4
+COLON:         TYPE ":"
+COMMA:         TYPE ","
+HOME:          TYPE 0,132                         ;Ctrl-PgUp
+END:           TYPE 0,79                          ;End
+PGUP:          TYPE 0,73                          ;PgUp
+PGDOWN:        TYPE 0,81                          ;PgDn
+PGLEFT:        TYPE 0,115                         ;Ctrl-Left
+PGRIGHT:       TYPE 0,116                         ;Ctrl-Right
+LEFT:          TYPE 0,75                          ;Left
+RIGHT:         TYPE 0,77                          ;Right
+UP:            TYPE 0,72                          ;Up
+DOWN:          TYPE 0,80                          ;Down
+

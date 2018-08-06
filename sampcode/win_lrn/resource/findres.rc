@@ -1,0 +1,9 @@
+#include <style.h>
+#include "findres.h"
+
+FindRes ICON  findres.ico
+
+FindRes MENU
+    BEGIN
+	MENUITEM "&Find Resource", IDM_FIND
+    END

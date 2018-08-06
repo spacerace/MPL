@@ -1,0 +1,12 @@
+NAME    gbitdim
+
+DESCRIPTION 'Test GetBitmapDimension function.'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  4096
+STACKSIZE 4096
+

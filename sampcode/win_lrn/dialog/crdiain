@@ -1,0 +1,9 @@
+crdiain.obj: crdiain.c  crdiain.h
+     cl  -d  -c  -Asnw  -Gsw  -Os  -Zdpe  crdiain.c
+
+crdiain.res: crdiain.rc crdiain.h
+     rc -r crdiain.rc
+
+crdiain.exe:  crdiain.obj crdiain.def crdiain.res
+     link4 crdiain,crdiain/align:16,crdiain,slibw/noe,crdiain.def
+     rc crdiain.res

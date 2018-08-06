@@ -1,0 +1,13 @@
+
+		Problems with the AVIO Browsing sample
+
+ ** The text background should be white.  This can be done by sending the
+    correct Ansi escape sequence through VioWrtTTY.
+
+ ** All the AVio support should be placed in a dyn-link so that its workings
+    can be divorced from the way that text is stored and retrieved.  This
+    dyn-link should support multiple AVio windows from a single application.
+    The window class should be registered by the dynlink on first invocation.
+    The probably also means that the creation call should pass the window
+    handles for the scroll bars that go with the avio window, since we
+    may have several windows and consequently several scroll bar pairs.

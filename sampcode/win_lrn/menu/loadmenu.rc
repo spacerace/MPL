@@ -1,0 +1,22 @@
+#include "style.h"
+#include "loadmenu.h"
+
+loadmenu MENU
+BEGIN
+   POPUP "Menu1"
+	BEGIN
+	MENUITEM "These",     Item1
+	MENUITEM "menu",      Item1+1
+	MENUITEM "options",   Item1+2
+	MENUITEM "don't",     Item1+3
+	MENUITEM "do",	      Item1+4
+	MENUITEM "anything.", Item1+5
+	MENUITEM "They",      Item1+6
+	MENUITEM "are",       Item1+7
+	MENUITEM "just",      Item1+8
+	MENUITEM "here",      Item1+9
+	MENUITEM "for",       Item1+10
+	MENUITEM "the",       Item1+11
+	MENUITEM "example.",  Item1+12
+	END
+END

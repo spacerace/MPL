@@ -1,0 +1,24 @@
+#include    <style.h>
+#include    "gmenuitc.h"
+
+#define GRP      WS_GROUP
+#define TAB      WS_TABSTOP
+#define TABGRP   WS_TABSTOP | WS_GROUP
+#define DLGMODAL WS_POPUP | WS_DLGFRAME
+
+GetMenuItemCountFunc MENU
+BEGIN
+     POPUP  "First"
+     BEGIN
+       MENUITEM "Entry One",   ONE
+       MENUITEM "Entry Two",   TWO
+       MENUITEM "Entry Three", THREE
+     END
+     POPUP  "Second"
+     BEGIN
+       MENUITEM "Entry One",   ONE
+       MENUITEM "Entry Two",   TWO
+       MENUITEM "Entry Three", THREE
+     END
+     
+END

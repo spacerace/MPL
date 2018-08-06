@@ -1,0 +1,160 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,32
+[1mPonzoTUTOR
+.WNT
+    FIELDS    
+.R5C1
+    Suppose we wish to manipulate the results of a questionnaire containing
+    20 questions with answers either YES or NO. If we store the answers in an
+    ~n~Iint~Neger variable ~b~Ix~N, with x=1 corresponding to a YES answer and
+    x=0 to a NO, then (since integers occupy 2 bytes of memory, usually) this
+    would require 40 bytes per questionnaire and, if 1000 people answered the
+    questionnaire the results would occupy 40,000 bytes ... too much!!
+
+    ~ISO~N, we store the answers in a 1-byte ~b~Ichar~Nacter variable ~b~Ix~N with
+    either  x='Y' or x='N. That would take 20,000 bytes of memory ... too much!
+
+    ~ISO~N (since 1=YES and 0=NO only needs ~I1 bit~N of memory) we store the
+    results in 20,000 ~Ibits~N ... let's see ... at 8 bits per byte that would
+    take ... 20000/8=~I2500~N bytes ... just right.
+
+    Is there a DATA TYPE called ~b~Ibit~N (so we could declare ~b~Ibit x;~N) ?
+    Alas, there is NOT ... but we ~Ican~N create a ~Istructure~N with members which
+    occupy ~Ibits~N of memory!
+.WN
+~b~I    struct byte  {    /* define a structure called byte   */ ~N
+~b~I        unsigned member1 : 1;  /*  member occupies  1 bit */ ~N
+~b~I        unsigned member2 : 4;  /*  member occupies 4 bits */ ~N
+~b~I        unsigned member3 : 3;  /*  member occupies 3 bits */ ~N
+~b~I    } x;              /* declare x to be such a structure */ ~N
+
+    Now ~b~Ix~N is a structure of type ~b~Ibyte~N which has 3 members (in this example).
+    Each member is an ~b~Iunsigned~N integer.
+    These members are made to occupy a number of ~Ibits~N.
+    The colon ~b~I : ~N followed by an integer (like 1,4 and 3) arranges this for
+    us.
+
+    Now we can (as usual) refer to ~b~Ix.member1~N, ~b~Ix.member2~N  and ~b~Ix.member3~N
+    and (for example) say: ~b~Ix.member1=0;~N or ~b~Ix.member2=13;~N, etc.
+
+    Since ~b~Ix.member1~N is 1 bit wide,  it will hold numbers 0 and 1 only.
+    Since ~b~Ix.member2~N is 4 bits wide, it will hold numbers 0,1,2,..., 15.
+    Since ~b~Ix.member3~N is 3 bits wide, it will hold numbers 0,1,2,..,7.
+
+.w
+    ... and the whole structure, with all 3 members, only fills one byte of
+    memory (since 1+4+3 bits =1 byte).
+
+    ~IThe members, occupying a number of adjacent bits in memory, are called~N
+                           ~V   FIELDS   ~N
+.WN
+    If we define another struct called bytes, and declare *x ...
+~b~I    struct bytes {    /* define a structure called bytes  */ ~N
+~b~I        unsigned member1 : 1;  /* member occupies  1 bit  */ ~N
+~b~I        unsigned member2 : 4;  /* member occupies 4 bits  */ ~N
+~b~I        unsigned member3 : 4;  /* member occupies 3 bits  */ ~N
+~b~I    } *x;             /* declare x to be a pointer        */ ~N
+    so that ~b~Ix~N is now a ~r~Ipointer~N to a structure, then we would access
+    a member with:  ~b~Ix->member1~N  (remember?)
+
+    If you're really squeezed for memory space, then cram as much into a
+    2-byte integer as possible by using ~Ibits~N.
+
+    Note that, in the above structure, we now have 1+4+4 bits which is more
+    than a byte will hold, so the compiler will put ~b~Imember3~N into a
+    second byte (and "waste" the remaining 3 bits of the first byte and
+    probably the remaining 4 bits of the second byte too!)
+
+.K17,32
+8bits/byte
+.WNT
+    UNIONS   
+.R5C1
+    If you're still in need of memory space you can arrange to have several
+    variables occupy the ~Isame~N memory space ... but not at the same time
+    (of course).
+
+    This union of variables is called a ... ~V  UNION  ~N (what else?)
+~b~I    union sam  {     /* define a union called sam    */ ~N
+~b~I        int x;       /* the first member is an int   */ ~N
+~b~I        float y;     /* the second member is a float */ ~N
+~b~I        char z;      /* the third member is a char   */ ~N
+~b~I    } jeckyl, *hyde; /* declare some unions          */ ~N
+
+    Since these 3 variables ~b~Ix~N, ~b~Iy~N and ~b~Iz~N occupy different amounts
+    of memory the variable ~b~Ijeckyl~N will occupy sufficient memory to hold
+    the largest of ~b~Ix~N, ~b~Iy~N and ~b~Iz~N (in this case, it's ~b~Iy~N).
+
+    You may point to a union ( ~b~Ihyde~N is a ~r~Ipointer~N)
+    and/or access one of its members ( ~b~Ijeckyl.x=123~N or ~b~Ihyde->z='A'~N ).
+.WN
+~b~I    union sam  {     /* define a union called sam    */ ~N
+~b~I        int x;       /* the first member is an int   */ ~N
+~b~I        float y;     /* the second member is a float */ ~N
+~b~I        char z;      /* the third member is a char   */ ~N
+~b~I    } jeckyl, *hyde; /* declare some unions          */ ~N
+
+    If you say: ~b~Ijeckyl.x=123~N ( an integer ) then the space set aside for
+    ~b~Ijeckyl~N will be occupied (in part) by the integer ~b~I123~N.
+
+    If you then say: ~b~Iprintf("%f",jeckyl.y);~N the printf function will go
+    to the memory location where jeckyl lives, interpret the 2-byte ~b~Iint~N 
+    ~I123~N as a 7-byte float ('cause we said ~b~I%f~N) and print garbage!
+.K19,60
+  MORAL?
+.W
+~V                                                                          ~N
+~V    jeckyl and *hyde will contain an int, float or char depending upon    ~N
+~V      whether the last thing you put there was an int, float or char!     ~N
+~V                                                                          ~N
+.WN
+
+    So, keep track with some variable called WhoThere.
+
+~b~I#define  CHAR     1 ~N
+~b~I#define  INTEGER  2 ~N
+~b~I#define  FLOAT    3 ~N
+~b~I .................. ~N
+~b~Iint WhoThere;       ~N
+~b~I .................. ~N
+
+    Each time you say:
+
+    ~b~Ihyde->y=12.34;~N then also say: ~b~IWhoThere=FLOAT;~N
+
+    so you can check if ~b~IWhoThere==CHAR~N or ~b~IWhoThere==INTEGER~N etc.
+
+    to see who's currently a member of this union!
+.K3,60
+ easy eh?
+.WN
+
+
+.T
+   That's all folks!   
+.K16,32
+au revoir!
+
+
+.q
+

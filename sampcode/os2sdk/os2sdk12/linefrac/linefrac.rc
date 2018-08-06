@@ -1,0 +1,145 @@
+/*
+    Resources for Linefractal application
+    Created by Microsoft Corporation, 1989
+*/
+#include <os2.h>
+#include "linefrac.h"
+
+#define TABGRP  WS_TABSTOP|WS_GROUP
+rcinclude linefrac.dlg
+
+POINTER IDR_KOCH0	koch0.ptr
+POINTER IDR_KOCH1	koch1.ptr
+POINTER IDR_KOCH2	koch2.ptr
+POINTER IDR_KOCH3	koch3.ptr
+POINTER IDR_TRACKINGPTR track.ptr
+POINTER IDR_PASTINGPTR	paste.ptr
+
+BITMAP 100 shark.bmp
+BITMAP 101 saw.bmp
+BITMAP 102 koch.bmp
+BITMAP 103 stove.bmp
+BITMAP 104 square.bmp
+
+MENU IDR_LINEFRACTAL PRELOAD
+BEGIN
+    SUBMENU  "~File",	      IDM_FILE
+	BEGIN
+	    MENUITEM "~Load...",	IDM_LOAD, 	MIS_TEXT
+	    MENUITEM "~Save...",	IDM_SAVE, 	MIS_TEXT
+	    MENUITEM SEPARATOR
+	    MENUITEM "E~xit",		SC_CLOSE,	MIS_SYSCOMMAND
+	    MENUITEM "A~bout...",	IDM_ABOUT,	MIS_TEXT
+	END
+    SUBMENU  "~Edit",	      IDM_EDIT
+	BEGIN
+	    MENUITEM "~Select", 		       IDM_SELECT,	      MIS_TEXT
+	    MENUITEM "Select ~all of surface",	       IDM_SELECTALL,	      MIS_TEXT
+	    MENUITEM "Cu~t",			       IDM_CUT,		      MIS_TEXT
+	    MENUITEM "~Copy",			       IDM_COPY, 	      MIS_TEXT
+	    MENUITEM "~Paste",			       IDM_PASTE,	      MIS_TEXT
+	    MENUITEM "~Use Clipboard",		       IDM_USECLIPBRD,	      MIS_TEXT, MIA_DISABLED
+	    MENUITEM "",			      -1,		     MIS_SEPARATOR
+	    MENUITEM "Paste ~w/ S",		       IDM_PASTES,	      MIS_TEXT
+	    MENUITEM "         DSa",		       IDM_PASTEDSA,	      MIS_TEXT
+	    MENUITEM "         DSo",		       IDM_PASTEDSO,	      MIS_TEXT
+	    MENUITEM "         DSx",		       IDM_PASTEDSX,	      MIS_TEXT
+	    MENUITEM "         Sn",		       IDM_PASTESN,	      MIS_TEXT
+	    MENUITEM "         DSan",		       IDM_PASTEDSAN,	      MIS_TEXT
+	    MENUITEM "         DSon",		       IDM_PASTEDSON,	      MIS_TEXT
+	    MENUITEM "         DSxn",		       IDM_PASTEDSXN,	      MIS_TEXT
+	END
+    SUBMENU  "~Thread",       IDM_THREAD
+	BEGIN
+	    SUBMENU  "~New",	      IDM_NEWTHREAD
+		BEGIN
+		    MENUITEM "~Direct", 		    IDM_DCDIRECT,	  MIS_TEXT
+		    MENUITEM "~Memory ...",		    IDM_DCMEMORY,	  MIS_TEXT
+		    MENUITEM "~PostScript",		    IDM_DCPOSTSCRIPT,	  MIS_TEXT, MIA_DISABLED
+		    MENUITEM "P~roPrinter",		    IDM_DCPROPRINTER,	  MIS_TEXT, MIA_DISABLED
+		END
+	    SUBMENU  "~Bring to top", IDM_THREADTOTOP,
+		BEGIN
+		    MENUITEM "~0.",			    IDM_THR0TOTOP,	  MIS_TEXT
+		    MENUITEM "~1.",			    IDM_THR1TOTOP,	  MIS_TEXT
+		    MENUITEM "~2.",			    IDM_THR2TOTOP,	  MIS_TEXT
+		    MENUITEM "~3.",			    IDM_THR3TOTOP,	  MIS_TEXT
+		    MENUITEM "~4.",			    IDM_THR4TOTOP,	  MIS_TEXT
+		    MENUITEM "~5.",			    IDM_THR5TOTOP,	  MIS_TEXT
+		    MENUITEM "~6.",			    IDM_THR6TOTOP,	  MIS_TEXT
+		    MENUITEM "~7.",			    IDM_THR7TOTOP,	  MIS_TEXT
+		    MENUITEM "~8.",			    IDM_THR8TOTOP,	  MIS_TEXT
+		    MENUITEM "~9.",			    IDM_THR9TOTOP,	  MIS_TEXT
+		END
+	    MENUITEM "~Edit DC parameters ...", 	    IDM_EDITTHREADPARAMS,  MIS_TEXT
+	    MENUITEM "~Kill top thread",		    IDM_KILLTOPTHREAD,	  MIS_TEXT
+	    MENUITEM "Kill ~all threads",		    IDM_KILLALLTHREADS,	  MIS_TEXT
+	    MENUITEM "",				   -1,			  MIS_SEPARATOR
+	    MENUITEM "Automatic cyclic ~switch",	    IDM_AUTOSWITCH,	  MIS_TEXT
+	    MENUITEM "Switch ~delay ...",		    IDM_SWITCHDELAY,	  MIS_TEXT
+	    MENUITEM "Update ~menus on thread switch",	    IDM_UPDATEMENUS, MIS_TEXT
+	    MENUITEM "",				   -1,			  MIS_SEPARATOR
+	    MENUITEM "New thread ~inherits from top",	    IDM_THREADINHERITANCE, MIS_TEXT
+	END
+    SUBMENU  "~Control",      IDM_CONTROL
+	BEGIN
+	    MENUITEM "~Redraw", 		       IDM_REDRAW,		 MIS_TEXT
+	    MENUITEM "~Abort drawing",		       IDM_ABORT,		 MIS_TEXT
+	    MENUITEM "~Clear surface",		       IDM_CLEARBITMAP,		 MIS_TEXT
+	    MENUITEM "Cop~y bitmap to screen",	       IDM_COPYBITMAPTOSCREEN,	 MIS_TEXT
+	    MENUITEM "~Square up the window",	       IDM_SQUAREBITMAP, 	 MIS_TEXT
+	    MENUITEM "Resi~ze surface to window",      IDM_RESIZEBITMAPTOWINDOW,  MIS_TEXT
+	    MENUITEM "",			      -1,			 MIS_SEPARATOR
+	    MENUITEM "~Mouse click changes recursion", IDM_MOUSECHANGESRECURSION, MIS_TEXT
+	    MENUITEM "A~nimate mouse pointer",	       IDM_ANIMATEPTR,		 MIS_TEXT
+	    MENUITEM "Mouse ~pointer preferences ...", IDM_PTRPREFERENCES,	 MIS_TEXT
+	    MENUITEM "Cyclic redraw ~timer delay ...", IDM_TIMERDELAY,		 MIS_TEXT
+	END
+    SUBMENU  "F~ractal",      IDM_FRACTAL
+	BEGIN
+	    MENUITEM "#100",			       IDM_SHARKTOOTH,	      MIS_BITMAP
+	    MENUITEM "#101",			       IDM_SAWTOOTH,	      MIS_BITMAP
+	    MENUITEM "#102",			       IDM_KOCH, 	      MIS_BITMAP
+	    MENUITEM "#103",			       IDM_STOVE,	      MIS_BITMAP
+	    MENUITEM "#104",			       IDM_SQUAREWAVE,	      MIS_BITMAP
+	    MENUITEM "~Space filling curve",	       IDM_SPACEFILLER,	      MIS_TEXT | MIS_BREAKSEPARATOR
+	    MENUITEM "~Hourglass",		       IDM_HOURGLASS,	      MIS_TEXT
+	    MENUITEM "",			      -1,		      MIS_SEPARATOR
+	    MENUITEM "~Redraw after change",	       IDM_FRACREDRAW,	      MIS_TEXT
+	END
+    SUBMENU  "~Primitive",    IDM_PRIMITIVE
+	BEGIN
+	    MENUITEM "Poly~Line",		       IDM_POLYLINE,	      MIS_TEXT
+	    MENUITEM "Poly~Fillet",		       IDM_POLYFILLET,	      MIS_TEXT
+	    MENUITEM "Poly~Spline",		       IDM_POLYSPLINE,	      MIS_TEXT
+	    MENUITEM "Poly~Marker",		       IDM_POLYMARKER,	      MIS_TEXT
+	    MENUITEM "~Peano curvelet", 	       IDM_PEANO,	      MIS_TEXT
+	    MENUITEM "",			      -1,		      MIS_SEPARATOR
+	    MENUITEM "~Redraw after change",	       IDM_PRIMREDRAW,	      MIS_TEXT
+	END
+    SUBMENU  "~Attributes",   IDM_ATTRIBUTES
+	BEGIN
+	    MENUITEM "~Line attributes ...",	       IDM_LINEATTRS,	      MIS_TEXT
+	    MENUITEM "~Marker attributes ...",	       IDM_MARKERATTRS,	      MIS_TEXT
+	    MENUITEM "~Area attributes ...",	       IDM_AREAATTRS,	      MIS_TEXT
+	    MENUITEM "~Image attributes ...",	       IDM_IMAGEATTRS,	      MIS_TEXT
+	    MENUITEM "Mi~scellaneous attributes ...",  IDM_MISCATTRS,	      MIS_TEXT
+	    MENUITEM "~Fractal dimensions ...",        IDM_DIMENSIONS,	      MIS_TEXT
+	    MENUITEM "~Drag fractal dimensions",       IDM_DRAGDIMS,	      MIS_TEXT
+	    MENUITEM "",			      -1,		      MIS_SEPARATOR
+	    MENUITEM "~Redraw after change",	       IDM_ATTRREDRAW,	      MIS_TEXT
+	END
+    SUBMENU  "En~vironment",  IDM_ENVIRONMENT
+	BEGIN
+	    MENUITEM "AutoResi~ze bitmap",	       IDM_AUTORESIZE,	      MIS_TEXT
+	    MENUITEM "Auto~Select fractal dimensions", IDM_AUTOSELECTDIMS,     MIS_TEXT
+	    MENUITEM "~Clear surface on redraw",       IDM_CLEARONREDRAW,      MIS_TEXT
+	    MENUITEM "~Automatic cyclic redraw",       IDM_AUTOSTARTREDRAW,    MIS_TEXT
+	    MENUITEM "Collect ~bounds on fractals",    IDM_COLLECTBOUNDS,      MIS_TEXT
+	END
+END
+
+STRINGTABLE
+BEGIN
+    IDS_TITLE,	    "LineFractal Application"
+END

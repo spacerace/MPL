@@ -1,0 +1,224 @@
+------------------------------------------------------------------
+
+Microsoft Editor Extension (m_ext.zxt)
+
+------------------------------------------------------------------
+
+(c)  Copyright Ken Waldron, 1989.
+               P.O. Box 69807 Stn K, Vancouver, B.C. V5K 4Y7
+
+     Permission is granted to distribute this documentation for
+     non-commercial purposes on electronic bulletin boards
+     provided that documented source files and executables are
+     distributed with it, and no special fee is charged for
+     downloading them. For other uses, please obtain written
+     permission. Microsoft and Wordstar are registered trademarks
+     of Microsoft Corporation and Micropro International,
+     respectively.
+
+     NOTE:  If you've used earlier versions, please note that
+     =====  the extension name has been changed to m_ext.ZXT.
+
+This file documents release 2.3 of m_ext.zxt, an extension for the
+Microsoft Editor. The editor, M.EXE, is shipped with MASM 5.x and
+MSC 5.x. The extension adds a number of editor functions that I
+have found useful. The functions are written in assembly language
+so they are compact and fast. Here's a quick list:
+
+     Changecase
+     Dequeue
+     Enqueue
+     Fill
+     Number
+     Pdelword
+     Quik
+     Transpose
+
+To use the new functions, either load the extension manually, or
+place the following in your tools.ini file just after [M] label:
+
+     load:$INIT:m_ext.zxt
+
+This will work as shown if your environment defines INIT as a path
+to a directory and if you have copied m_ext.zxt to that directory.
+If you keep m_ext.zxt elsewhere, specify the correct path.
+
+Assign the new functions to desired key-chords. It is convenient
+to put the assignments in tools.ini also. For example:
+
+     Changecase:alt+C
+     Pdelword:alt+T
+     Quik:ctrl+Q
+
+If you have any questions or problems or would like to suggest a
+new function to be added to the extension, please write to me at
+the address shown above.
+
+------------------------------------------------------------------
+
+Changecase
+     Toggles the case of an alphabetic character under the cursor.
+
+Arg boxarg Changecase
+Arg markarg Changecase       [the area referenced must be a box]
+     Changes upper-case characters in specified box to lower-case.
+
+Arg Arg boxarg Changecase
+Arg Arg markarg Changecase   [the area referenced must be a box]
+     Changes lower-case characters in specified box to upper-case.
+
+Returns FALSE if the argument is invalid, otherwise TRUE.
+
+------------------------------------------------------------------
+
+Dequeue
+     Inserts the contents of the queue at the current line.
+
+Meta Dequeue
+     Inserts the first line of the queue at the current line and
+     removes the line from the queue.
+
+Returns FALSE if queue is empty and TRUE otherwise.
+
+See the definition of the Enqueue function for more information
+about the queue functions and the queue file.
+
+------------------------------------------------------------------
+
+[Meta] Enqueue
+     Copies the current line to the end of the queue.
+
+Arg [Arg] [Meta] linearg Enqueue
+Arg [Arg] [Meta] numarg Enqueue
+Arg [Arg] [Meta] markarg Enqueue [area referenced must be a linearg]
+     Copies the selected lines to the end of the queue. If the
+     extra Arg prefix is supplied, then the selected lines are
+     deleted after they are copied (the deleted lines are not
+     copied to the built-in editor clipboard).
+
+If the Meta prefix is supplied then the contents of the queue are
+erased before the new text is appended.
+
+Returns FALSE if the argument is invalid and TRUE otherwise.
+
+See also the Dequeue function.
+
+The queue is a pseudo file maintained by the Enqueue and Dequeue
+functions. I use it to gather scattered lines together: Enqueue
+the lines in turn, then Dequeue them all at the desired location.
+The queue may be used to reverse the order of a group of lines:
+Enqueue the lines, then Meta Dequeue them one at a time. The queue
+is also handy as an extra clipboard (but note that the queue is
+strictly line-oriented).
+
+------------------------------------------------------------------
+
+Arg linearg Fill
+Arg numarg Fill
+Arg markarg Fill     [the area referenced must be a linearg]
+     Fills the selected lines by rearranging text to the right of
+     the cursor to fit as many words as possible on each line
+     between the cursor column and the fill margin. The default
+     fill margin is at column 72 (this can be changed by assigning
+     a different value to the numeric switch "fillmargin"). Words
+     are delimited by spaces. Extra spaces and lines are lost
+     after filling. If a single word is too long to fit between
+     the cursor column and the fill margin then the word will
+     spill over the margin.
+
+Returns FALSE if the argument is invalid or the fillmargin is
+less than the initial cursor column or greater than BUFLEN.
+Otherwise returns TRUE.
+
+Tip: Fill may be used to break a group of lines into a list of
+     words. Set fillmargin to 1, mark the lines, and Fill.
+
+Bugs:
+     If the editor switch "trailspace" is on, then trailing spaces
+     are treated as a word.
+
+     Lines which end up "empty" after filling are deleted, even if
+     they contain text to the left of the cursor.
+
+     After a call to Fill, only that one Fill can be undone; the
+     rest of the undo stack is lost (I don't know why).
+
+------------------------------------------------------------------
+
+[Meta] Number
+     This function is used to generate integer sequences. Each
+     time it is called, Number inserts a string representing the
+     current value of "numcount" as a base "numbase" integer at
+     the cursor position, then increments numcount by the amount
+     of "numstep" (which may be negative, in which case numcount
+     is decremented). If the Meta prefix is used then the number
+     is right adjusted in a field "numwidth" columns wide, padded
+     with the character of ASCII value "numpad" (if the number is
+     too long for the field then numwidth is ignored).
+
+[Meta] Arg Number
+     As above, except that numcount is not incremented.
+
+[Meta] Arg Arg Number
+     As in first paragraph above, except that numcount is first
+     initialized to zero.
+
+Always returns TRUE.
+
+Numeric switches        Default value        Legal values
+recognized by Number
+--------------------    ----------------     -----------------------
+     numcount                 0              -32768..32767
+     numstep                  1              -32768..32767
+     numwidth                 6              1..BUFLEN
+     numbase                 10              2..36
+     numpad                  32  (space)     1..255
+
+Bugs:
+     Expect weirdness if switches are set out of range. If numbase
+     is out of range, Number will use the default base 10 to avoid
+     fatal math errors. If numpad is zero, then if padding is
+     used, the NUL padding character(s) will truncate the current
+     line before the number is inserted. If numpad is otherwise
+     out of range the padding character is unpredictable. If
+     numwidth is out of range it will be ignored. If numcount is
+     incremented out of range it will simply wrap around, changing
+     its sign. If you undo Number, numcount will NOT be
+     decremented by the undo.
+
+------------------------------------------------------------------
+
+Pdelword
+     Deletes the character under the cursor and any characters
+     immediately following which are in the same class. There are
+     two main character classes: alphanumeric characters and
+     space. Others (including tab and newline) are in classes of
+     their own. Deleted text is not copied to the clipboard. The
+     deletions are undoable.
+
+Always returns TRUE.
+
+------------------------------------------------------------------
+
+Quik
+     I attach this function to ctrl+Q to implement the Wordstar
+     quick cursor movement commands. It is a replacement for the
+     WS.ZXT extension supplied with the editor. Only the cursor
+     movement keys are supported (ctrl+Q S|D|E|X|R|C), and their
+     interpretation is changed slightly. Avoids the need to load
+     two extension files, saving time and memory (if you can live
+     without the non-cursor commands ctrl+Q A|F|K|Y)
+
+Returns the value of the command string executed.
+
+------------------------------------------------------------------
+
+Transpose
+     Exchanges the character under the cursor with the following
+     character. If the cursor is at or beyond the last character
+     on the line, then the last two characters on the line are
+     exchanged.
+
+Always returns TRUE.
+
+------------------------------------------------------------------

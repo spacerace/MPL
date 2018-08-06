@@ -1,0 +1,20 @@
+			     WNKTERM
+
+	  A Simple Windows Terminal Program with Kermit
+
+			 William S. Hall
+		     3665 Benton Street, #66
+		      Santa Clara, CA 95051
+
+
+     WNKTERM is a Windows terminal program derived from WNTERM by
+adding the Kermit file transfer protocol.  WNKTERM is primarily
+an educational example which shows how to program Kermit in the
+Microsoft Windows environment and what steps are needed to attach
+the resulting Kermit modules to an existing communications
+program. 
+
+     The communications features of WNKTERM are identical to the
+WNTERM program.  For more information, see WNTERM.DOC. For Kermit
+operation, see the file WNKERM.DOC.
+

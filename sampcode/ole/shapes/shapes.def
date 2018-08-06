@@ -1,0 +1,46 @@
+NAME         MISHAPES
+
+DESCRIPTION  'Simple Microsoft L&E server app'
+
+EXETYPE      WINDOWS
+
+STUB         'WINSTUB.EXE'
+
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE MULTIPLE
+
+HEAPSIZE     8000
+STACKSIZE    16000
+
+EXPORTS
+     About                  @1
+     OpenDlg                @2
+     SaveDlg                @3
+         ItemWndProc                @4
+         DocWndProc                 @5
+     MainWndProc                @6
+
+
+         SrvrOpen                   @7
+         SrvrCreate                 @8
+         SrvrCreateFromTemplate     @9
+         SrvrEdit                   @10
+         SrvrExit                   @11
+         SrvrRelease                @12
+
+
+         DocSave                    @13
+         DocClose                   @14
+         DocRelease                 @15
+         DocGetObject               @16
+         DocSetHostNames            @17
+         DocSetDocDimensions        @18
+
+
+
+         ItemOpen                   @19
+         ItemDelete                 @20
+         ItemGetData                @21
+         ItemSetData                @22
+         ItemSetTargetDevice        @23
+         ItemEnumFormats            @24

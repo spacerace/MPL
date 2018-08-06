@@ -1,0 +1,10 @@
+#include  "SetWl.h"
+#include  <windows.h>
+
+SetWl MENU
+    BEGIN
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

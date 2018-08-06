@@ -1,0 +1,240 @@
+*******************************************************************************
+*                                                                             *
+************************* C CD-ROM Directory Listing **************************
+*                                                                             *
+******** ALDE Publishing  4830 West 77th Street  Minneapolis, MN 55435 ********
+*                                                                             *
+*******************************************************************************
+
+FILENAME/DIR        DIRECTORY   DESCRIPTION
+===============================================================================
+ABOUT               MISC\ZED    Make your own on-line help in C
+ACE                 MISC\ZED    Patrick Bennett's text editor in C 1.24
+ADDLF.C             MSC         Add line feeds to files
+ADVC                MISC\FUNC   Advanced C functions
+ALLDIR.C            LATTICE     Directory function
+ANALYZE2            MISC\UTIL   C source analyzer for projects w/docs
+ANSI.C              DESMET_C    Test ANSI driver function
+ANYWHERE            MISC\UTIL   File search across directories and drives
+AREACODE.C          MISC\ZED    C source for AREACODE.EXE
+ATOL.H              MISC\FUNC   ATOL function
+BAWK                MISC\COMM   Public domain AWK
+BEYONDC             MISC\UTIL   ASCII file comparison utility
+BIGSORT             CI_C86      Big sort with C source code
+BINCOMP.C           TURBO_C     File compairison utility
+BISICC              CI_C86      UNIX line CC command
+BMAC                LATTICE     ASSM IF/THEN program
+BNSLIB              TURBO_C     Object module library manager for Turbo C
+BPLUS11             MISC\LIB    B+ file routines for C
+BRACE               MISC\UTIL   Check curly braces for matching pairs
+C-TO-PAS.C          MISC\UTIL   Converts C code to Pascal code
+CALC.C              MISC\ZED    Calculatow w/variables & 50 functions
+CALLS               AZTEC_C     Compiled under AZTEC C Ver 2.2
+CASM                MSC         Calls Macro-Assem from MS C language
+CASM1               LATTICE     Lattice assembler interface
+CASYNC.ASM          LATTICE     Function to call any interrupt from Lattice
+CAT.C               MISC\FUNC   Concatenate files
+CB1                 MISC\PRNT   Printer formatter
+CB2                 MISC\UTIL   Code beautifier for C
+CC                  CI_C86      Compiler aid for C 86 one step compiling
+CC68                MISC\UTIL   C cross compiler for 68k family
+CCHECK              MISC\UTIL   Good public domain lint w/C source
+CCOMP               MISC\UTIL   C beautifier
+CCOUNT.C            MISC\UTIL   Counts lines w/comment, w/code & total
+CDOC.EXE            MISC\FUNC   Scan C source & extraction function calls
+CDOCZ               AZTEC_C     Document C source code
+CFLOW               LATTICE     Analyze C program flow with .LIB & .EXE
+CFLOWX              CI_C86      CFLOW with cross reference for C 86
+CGRAPH              MISC\GRAPH  PC compiler for C
+CHATT               MISC\UTIL   Change file attributes from command line
+CIPHER2             MISC\UTIL   Lucifer/NBS encrypt/de-crypt algorithm
+CLESSONS.TXT        MISC\TUTOR  Good tutorial for C
+CLFEB88             MISC\FUNC   Source for Terminate Stay Resident menus
+CLIB1               MISC\LIB    C library with source (part 1 of 2)
+CLIB2               MISC\LIB    C library with source (part 2 of 2)
+CLS                 LATTICE     Clear video screen from Lattice C
+CMENU.C             MISC\ZED    Menu system with C source
+CMODEM.C            MISC\COMM   Modem program in C for Hayes compatible
+CMP.C               MISC\UTIL   File compare in C source
+COLOR               MISC\GRAPH  Set screen color in text mode
+COMM.C              DESMET_C    Small communications program
+COMMSUPP            DESMET_C    Communications support for DeSmet C
+COMRING             LATTICE     Library of communications routines
+CONIO.C             MISC\UTIL   Larry Jordon's console I/O functions
+CPG                 MISC\PRNT   Source listing formatter
+CPM2.C              CI_C86      Critical Path Method Project Scheduler
+CRC.C               MISC\COMM   Cyclic Redundancy Check function
+CRT                 LATTICE     OBJECT file for CRT functions
+CSOURCE             MISC\LIB    C language source files
+CSR20A              TURBO_C     C Spot Run version 2.0
+CTASK11             MSC         Multi-task MC C or Turbo C programs
+CTEXT               MISC\TUTOR  C language tutorial
+CTHREAD             MISC\TUTOR  C help and tutor
+CTLBREAK            LATTICE     CTRL/BREAK handler
+CTOOLBX1            MISC\LIB    C toolbox library
+CTUT                MISC\TUTOR  Teach yourself C programming
+CTUTOR1             MISC\TUTOR  Learn about C
+CUG236              MISC\UTIL   C utilities from the C users group
+CUTILS              MISC\UTIL   Miscellaneous utilites for C
+CXREF               MISC\UTIL   Another C cross reference utility
+DATE                MSC         Change date & time of file with source
+DAY.C               DESMET_C    Number of days between two dates
+DEGUGC              MISC\UTIL   C language debugger with documentation
+DEQ                 MISC\UTIL   Selective delete w/wild card (.C & .EXE)
+DETAR               MISC\COMM   DOS program to de-TAR UNIX .TAR files
+DFIELD              LATTICE     OBJECT file for data field functions
+DI                  MISC\LIB    Directory listing utility
+DISPIO              LATTICE     BIOS video functions & applications
+DLC_TSR             MISC\LIB    DATALIGHT C code shell for TSR programs
+DLIBS               MISC\LIB    Shareware library for DATALIGHT C
+DLIBSSRC            MISC\LIB    Shareware library for DATALIGHT C
+DLLIB               MISC\LIB    Steve's C functions lib for DATALIGHT C
+DRIVERS             LATTICE     Device driver interface for Lattice C
+DSKTST              LATTICE     Disk test program in Lattice C
+DUMPS               MISC\FUNC   ASCIII/HEX dump in C
+DUMP_GRA.C          MISC\GRAPH  Graphic dump in C
+EDIT1.C             MISC\ZED    Editor in C
+EDIT_C              MISC\ZED    Wordstar like editor in C
+EGAPAINT            MISC\GRAPH  Screen paint with source in Turbo C 1.5
+EGASAVE             MISC\GRAPH  C routines for saving EGA screens
+ERAQ.C              LATTICE     Delete function with verify and pathing
+ERRMERGE            LATTICE     Merge error messages with source
+EXECNEW.ASM         LATTICE     Load & execute programs from Lattice C
+EXTMEM              TURBO_C     Access extended memory in C
+FIELD.C             MISC\FUNC   Fields in C
+FILEIO.C            LATTICE     File I/O functions
+FRAME.C             MISC\GRAPH  Draw a frame on the screen
+FXOC.C              MISC\FUNC   Function extraction utility
+GETSEG-C.ASM        LATTICE     Get value for all segment resistors
+GET_IT              MISC\FUNC   FIND, GOTO sub-directories using text files
+GLOB                MISC\UTIL   Wildcard expansion routine in C
+GOODIE.C            MISC\ZED    Bizaare Indeed!
+GOTHIC              MISC\PRNT   Gothic banner printer with C source
+GRAPH               TURBO_C     Graphics library for CGA
+GRAPHICS            MISC\GRAPH  Variouse graphics routines
+HERCBIOS            MISC\GRAPH  Hercules BIOS for CGA
+HSA_TC              TURBO_C     Graphics toolbox for Turbo C
+IBMTTY.C            MISC\COMM   L. Cuthbertson's TTY program in C
+INDEX.C             MISC\UTIL   Create text file indexes in C
+INFERNG             MISC\UTIL   Inference engine with C source
+IOS1-20.ASM         LATTICE     Level 1 I/O functions
+ISAMC.LBR           MISC\FUNC   OBJECT code for ISAM utilities
+ISCHECK.C           MSC         Checks ISSOMTHING matrix
+ISR-CLCK.ASM        LATTICE     Trap timer interrups
+JPLC1               MISC\LIB    C library from the Jet Propulsion Lab
+JPLC2               MISC\LIB    C library from the Jet Propulsion Lab
+KWMV                AZTEC_C     Modify CROOT.C (AZTEC) for wildcards
+K_R                 MISC\TUTOR  Source code from K and R book
+LAR.C               MISC\UTIL   LU type library utility C source
+LAR_C86             CI_C86      Library utility in C86 source
+LBLCS               MISC\FUNC   ASM functions for CRT and KB for C
+LBN                 MISC\UTIL   Another C source checker
+LCFUNCS             LATTICE     Access Lattice functions from ASM programs
+LEX                 MISC\UTIL   Generate table driven lexical analyzer
+LIFE.C              MISC\ZED    The Game of Life in C
+LISTC.C             MISC\UTIL   Another C file lister
+LOCATE.C            MISC\UTIL   C routine to position cursor
+LU.C                MISC\UTIL   Library utility in C source
+LUCIFER.C           MISC\UTIL   Encrypt/De-crypt bytes, LUCIFER algorythm
+LUMPS               MISC\UTIL   LUMP / UNLUMP files
+LZW                 AZTEC_C     Lempel-Zev compression for AZTEC C
+M8087.MAC           MSC         Assembler macro for 8087 coprocessor
+MANDEL              MISC\GRAPH  Displays fractal images on screen
+MATH                MISC\FUNC   Various math functions in C
+MATRIX              MISC\UTIL   Dournelle's matrix benchmark
+ME39SRC1            MISC\LIB    EMACS C library (part 1 of 2)
+ME39SRC2            MISC\LIB    EMACS C library (part 2 of 2)
+MEMCLEAN            MISC\UTIL   Zero memory out and avoid parity checks
+MENCON              MISC\ZED    L Cuthbertson's menu driver in C
+MFRACT.C            MISC\GRAPH  Fractuals in C (needs graphics.h)
+MIKES30C            MSC         Useful routines from Mike's C BBS
+MINILINT.C          MISC\UTIL   T Jenning's C source checker
+MISC.C              CI_C86      Misc C functions for C86
+MOUSE               MISC\UTIL   Mouse routines in C
+MOVMEML.ASM         MISC\FUNC   C callable function to move memory
+MSCTOOLS            MSC         Lynn Long's tools for MS C 4.0
+MSC_WIND            MSC         Text window routines for MS C 5.0
+MULTITSK            LATTICE     Multi-tasking functions library
+NUMBIT.C            MSC         Numbering program
+OC.C                MISC\UTIL   UNIX like binary dump in C
+OCT_DUMP.C          MISC\UTIL   Flexible file dump in C (OCT/HEX/ASCII/BIN)
+OPT88               CI_C86      C88 Optimizer for CI86
+OUTSTNG.C           MISC\COMM   Output string to COMM port
+PAREN               MISC\UTIL   Finds common bugs in C programs
+PARK.C              MISC\UTIL   Park that hard disk (source)
+PRINT.C             MISC\PRNT   Print TXT files w/page #, headers, etc
+PROBE               MISC\UTIL   Analyze C code
+PTOC                MISC\UTIL   Pascal to C conversion program
+QSORTNET.C          MISC\UTIL   C source to one QSORT __ f/usenet
+RANDOM              LATTICE     Random number generator
+REKEY               MISC\UTIL   Key redefinition in C
+RENAME.C            MISC\UTIL   Functional equivalent to DOS REN command
+ROMAN.C             MISC\PRNT   Print Roman numerals
+R_LA4_01            MISC\LIB    Thirty-three C programs
+R_LA4_02            MISC\LIB    Thirty C programs
+SCBENCH             MISC\UTIL   Good benchmark in Small C
+SDBS                MISC\ZED    Small database in C
+SEARCH.C            MISC\UTIL   C directory searching utility
+SETPRTR.C           MISC\PRNT   Set up menu for MX-80 w/source code
+SIMGRAFC            MISC\GRAPH  Simple graphics in C
+SNAP                DESMET_C    Dump memory area in HEX/character format
+SORT.C              LATTICE     B tree sorting utility
+SORTDIR.C           MISC\UTIL   Sorts directories
+SOUNDEX.C           MISC\FUNC   Soundex algorithm in C
+SPOOL.C             MISC\PRNT   Queue file to DOS spooler
+SQ.C                MISC\UTIL   CP/M file squeezer (C source)
+SQUPORT             MISC\UTIL   Portable squeeze/unsqueeze in C
+SQ_USQ              MISC\UTIL   CP/M compatable file squeezer utility
+SRT.C               MISC\UTIL   Another C sorting utility
+STAYRESC            MISC\UTIL   Terminate & stay resident in C
+STEVIE              MISC\ZED    UNIX VI like editor
+STRMATH.C           MISC\FUNC   Perform arithmetic on numrical strings
+STRUCT.DOC          MISC\TUTOR  Hint on using filler in C structures
+SUPER_C             MISC\UTIL   Source code from "Supercharging C"
+SWITCH.C            CI_C86      Select active display
+TABLAT              MISC\UTIL   Match tab spacing in C program to editor
+TABS                MISC\UTIL   Manipulate file tabs
+TAIL.C              MISC\UTIL   View the end of an ASCII file
+TCDEBUG             TURBO_C     Turbo C debugger
+TCDEV               TURBO_C     Device driver with source code
+TCLIB               TURBO_C     Library of Turbo C routines
+TCOMM11             TURBO_C     Communications library for Version 1.1
+TCXL                TURBO_C     Winow library for CIS
+TCXREF              TURBO_C     Cross reference utility
+TEMPL               MISC\UTIL   101 keyboard template generator
+TIME.ASM            LATTICE     Time stamp and benchmark test
+TIMEX               MISC\UTIL   Timed execution of DOS cmds w/ C source
+TONE.C              LATTICE     Lattice C tone generator
+TONE.C              MISC\FUNC   Generate speaker tones
+TOOLS               MISC\UTIL   UNIX like tools with C source
+TOWERS.C            MISC\ZED    Towers of Hanoi game in C
+TPAS2MSC            MSC         Convert Turbo Pascal to MS C
+TPRINT              MISC\PRNT   Print one C function per page
+TPRINT1             MISC\PRNT   Print an ASCII file
+TR.C                MISC\UTIL   Trasliteration program
+TRES2               TURBO_C     Make Turbo C memory resident programs
+TSORT.C             MISC\UTIL   Text file sort in C
+TTY.C               MISC\COMM   General purpose terminal program
+TYPESQ.C            CI_C86      Type a squeezed ASCII file
+UCTURBO             TURBO_C     Library for Turbo C
+UNTAB4              MISC\UTIL   Remove tabs from C source listing
+VT100TST            DESMET_C    VT100 emulator and test in C
+V_SYNC.C            MISC\ZED    Output to CRT during vertical blanking
+WILDCARD            LATTICE     Wildcard command line parsing
+WINDKW              AZTEC_C     FIDO-10, simply window mgmt library
+WINDOW              DESMET_C    A simple window management program
+WINDOW10            TURBO_C     Windows for Turbo C
+WINDOW4C            LATTICE     Windowing functions
+WIND_C86            CI_C86      Window functions for CI86
+WNDWBOSS            MISC\GRAPH  Neat windowingin C with demo
+XC.C                MISC\LIB    C cross referecner
+XC1                 MISC\UTIL   Cross reference C programs
+XC3                 MISC\PRNT   Cross reference printer utility
+XENIX.ASM           LATTICE     Ready to link XENIX
+XLSP20              MISC\UTIL   LISP program with C source
+XMODM11.C           MISC\COMM   XMODEM utilities
+XREF.C              MISC\UTIL   Cross reference algorithm (version 1.0)
+YACCUNX             MISC\COMM   UNIX/XENIX version of YACC w/source
+YAM                 MISC\COMM   Yet another Modem (C source BDS for CPM)
+YEARCAL             MISC\ZED    Super calendar program in C
+ZAPLOAD             MISC\UTIL   Convert binary files to Intel HEX format

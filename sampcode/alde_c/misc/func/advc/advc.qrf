@@ -1,0 +1,49 @@
+                        ADVC Quick Reference Document
+
+
+        E = Equipment,  I = Input,  M = Misc,  S = String,  V = Video
+
+                      * = use of nonstandard C features
+
+
+
+
+E*  commports       get number of serial ports installed
+E*  displaytype     see if display is color or monochrome
+E*  drivespace      get amount of free space on a given disk drive
+E*  getdrive        get letter of default disk drive
+E*  joystick        see if a joystick port is installed
+E*  limmfree        see how much expanded memory is available
+E*  limmtotal       see how much expanded memory is installed
+E*  printports      get number of parallel ports installed
+E*  totalmem        return amount of normal memory installed
+
+I*  getkey          wait for one of a list of keys to be pressed
+I*  mousebuttons    see if mouse buttons are pressed
+I*  mousecheck      see if a mouse is installed, and how many buttons it has
+I*  mouseclick      see if mouse buttons were clicked
+I*  mousecol        see what column the mouse cursor is in
+I*  mousecursor     turn mouse cursor on or off
+I*  mouseloc        set the mouse cursor location
+I*  mouserow        see what row the mouse cursor is in
+
+M*  delay           wait for a specified number of seconds
+
+S   any2dec         convert a string of a given base to a number
+S   bsqueeze        squeeze blanks from a string
+S   bunsqueeze      unsqueeze a blank-squeezed string
+S   dec2any         convert a number to a string of a given base
+S   extract         extract a delimited substring from a string
+S   locase          convert a string to lowercase
+S   multiand        AND the elements of a string with a given value
+S   multior         OR the elements of a string with a given value
+S   multixor        XOR the elements of a string with a given value
+S   reverse         reverse the order of the chrs in a string
+S   soundex         calculate the soundex code for a string
+S   strip           strip occurrences of a given chr from a string
+S   striprange      strip a given (inclusive) range of chrs from a string
+S   upcase          convert a string to uppercase
+
+V*  bkscroll        scroll an area of the screen down (or clear it)
+V*  clreol          clear from cursor to end of line
+V*  scroll          scroll an area of the screen up (or clear it)

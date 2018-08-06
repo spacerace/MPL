@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "GetCLong.h"
+
+GetCLong MENU
+    BEGIN
+        POPUP "Menu"
+           BEGIN
+              MENUITEM "&GetClassLong",                     IDM_GETCLASSLONG
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

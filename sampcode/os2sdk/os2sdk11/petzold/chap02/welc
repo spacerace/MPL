@@ -1,0 +1,9 @@
+#----------------
+# WELC make file
+#----------------
+
+welc.obj : welc.c
+     cl -c -G2s -W3 welc.c
+
+welc.exe : welc.obj welc.def
+     link welc, /align:16, NUL, os2, welc

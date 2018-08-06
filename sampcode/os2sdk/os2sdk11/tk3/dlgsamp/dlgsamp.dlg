@@ -1,0 +1,81 @@
+/*
+   Dialog file for DLGSAMP
+   Created by Microsoft Corp., 1989
+*/
+DLGTEMPLATE DLG_AUTORADIOBUTTONEXAMPLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Auto Radio Button Example", DLG_AUTORADIOBUTTONEXAMPLE,
+           3, 5, 140, 155, FS_DLGBORDER | WS_VISIBLE , FCF_TITLEBAR
+    BEGIN
+        LTEXT "Select one of the radio",	 ID_NULL,  8, 130, 124,  9
+        LTEXT "buttons, and the client area",	 ID_NULL,  8, 120, 124,  9
+        LTEXT "of the window will be",		 ID_NULL,  8, 110, 124,  9
+        LTEXT "repainted in the color of",	 ID_NULL,  8, 100, 124,  9
+        LTEXT "your choice.",			 ID_NULL,  8,  90, 124,  9
+        AUTORADIOBUTTON "Red",			  RB_RED, 30,  70, 100, 13
+        AUTORADIOBUTTON "Green",		RB_GREEN, 30,  55, 100, 13
+        AUTORADIOBUTTON "Blue",			 RB_BLUE, 30,  40, 100, 13
+        PUSHBUTTON "Enter", 			  DID_OK,  8,  14,  50, 16
+        PUSHBUTTON "Esc=Cancel",	      DID_CANCEL, 67,  14,  65, 16
+    END
+END
+ 
+DLGTEMPLATE DLG_CHECKBOXEXAMPLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Check Box Example", DLG_CHECKBOXEXAMPLE, 3, 5, 140, 155,
+                FS_DLGBORDER | WS_VISIBLE, FCF_TITLEBAR
+    BEGIN
+        LTEXT "Select one or more check",	 ID_NULL,  8, 130, 124,  9
+        LTEXT "boxes, and the client area",	 ID_NULL,  8, 120, 124,  9
+        LTEXT "of the window will be",		 ID_NULL,  8, 110, 124,  9
+        LTEXT "repainted in the color(s) of",	 ID_NULL,  8, 100, 124,  9
+        LTEXT "your choice.",			 ID_NULL,  8,  90, 124,  9
+        CHECKBOX "Red",				  CB_RED, 30,  70, 100, 13
+        CHECKBOX "Green",			CB_GREEN, 30,  55, 100, 13
+        CHECKBOX "Blue",			 CB_BLUE, 30,  40, 100, 13
+        PUSHBUTTON "Enter",			  DID_OK,  8,  14,  50, 16
+        PUSHBUTTON "Esc=Cancel",	      DID_CANCEL, 67,  14,  65, 16
+    END
+END
+ 
+DLGTEMPLATE DLG_LISTBOXEXAMPLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "List Box Example", DLG_LISTBOXEXAMPLE, 3, 5, 140, 125,
+                FS_DLGBORDER | WS_VISIBLE, FCF_TITLEBAR
+    BEGIN
+        LTEXT "Select an item and press Enter",	 ID_NULL,  3, 107, 135,  9
+        CONTROL "", LB_1, 13,  33,  98, 57, WC_LISTBOX , WS_VISIBLE
+        PUSHBUTTON "Enter",			  DID_OK,  8,  14,  50, 16
+        PUSHBUTTON "Esc=Cancel",	      DID_CANCEL, 67,  14,  65, 16
+    END
+END
+ 
+DLGTEMPLATE DLG_ENTRYFIELDEXAMPLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Entry Field Example", DLG_ENTRYFIELDEXAMPLE, 6, 11, 140, 155,
+                FS_DLGBORDER | WS_VISIBLE, FCF_TITLEBAR
+    BEGIN
+        LTEXT "Enter data into the two entry ",	 ID_NULL,  6, 135, 135,  9
+        LTEXT "fields below and press ENTER.",	 ID_NULL,  6, 125, 135,  9
+        LTEXT "The program will then verify ",	 ID_NULL,  6, 105, 135,  9
+        LTEXT "that fields contain integer",	 ID_NULL,  6,  95, 135,  9
+        LTEXT "values in the range 1-100.",	 ID_NULL,  6,  85, 135,  9
+        LTEXT "Entry Field 1 ...",		 ID_NULL,  6,  65,  70,  9
+        LTEXT "Entry Field 2 ...",		 ID_NULL,  6,  45,  70,  9
+        ENTRYFIELD "",			EF_1, 80,  65,  32, 14, ES_MARGIN
+        ENTRYFIELD "",			EF_2, 80,  45,  32, 14, ES_MARGIN
+        PUSHBUTTON "Enter",			  DID_OK,  8,  14,  50, 16
+        PUSHBUTTON "Esc=Cancel",	      DID_CANCEL, 67,  14,  65, 16
+    END
+END
+ 
+DLGTEMPLATE DLG_ABOUT {
+    DIALOG "", 0, 10, 60, 160, 75, WS_SAVEBITS | FS_DLGBORDER {
+	CTEXT	"Microsoft OS/2"		   -1, 10, 60, 140, 10
+	CTEXT	"Dialog Box Sample"		   -1, 10, 50, 140, 10
+	ICON	ID_MAINWND		 	   -1,  8, 40,   0,  0
+	CTEXT	"Version 1.0"			   -1, 10, 30, 140, 10
+	CTEXT	"Created by Microsoft Corp., 1989" -1, 10, 20, 140, 10
+	DEFPUSHBUTTON "Ok"		   DID_OK, 64,  4, 32,  14, WS_GROUP
+    }
+}

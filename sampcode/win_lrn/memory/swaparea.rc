@@ -1,0 +1,7 @@
+#include "style.h"
+#include "swaparea.h"
+
+ResMenu MENU
+  BEGIN
+    MENUITEM "&Execute", IDM_EXECUTE
+  END

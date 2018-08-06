@@ -1,0 +1,10 @@
+Touch.com
+written by Jeffrey spidle on 4 jun 84
+UNIX type utility
+Touch is a utility that is found on unix systems. It is used
+to set the date and time of files to the current date and time.
+  It is often used in conjunction with MAKE.
+  Global filenames are accepted will work only on files
+that are in the current default directory.
+  Must be used with DOS 2.0.
+

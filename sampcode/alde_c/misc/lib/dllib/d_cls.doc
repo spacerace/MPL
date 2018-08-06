@@ -1,0 +1,39 @@
+
+
+
+
+        NAME
+                d_cls -- clear current screen
+
+        SYNOPSIS
+                void d_cls();
+
+
+        DESCRIPTION
+        This function clears the screen on the current page.
+
+
+
+        EXAMPLE
+
+             d_cls();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

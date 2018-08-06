@@ -1,0 +1,16 @@
+#--------------------
+# CONVMENU make file
+#--------------------
+
+convmenu.obj : convmenu.c convmenu.h
+     cl -c -G2sw -W3 convmenu.c
+
+convmenu.res : convmenu.rc convmenu.h
+     rc -r convmenu
+
+convmenu.exe : convmenu.obj convmenu.def
+     link convmenu, /align:16, NUL, os2, convmenu
+     rc convmenu.res
+
+convmenu.exe : convmenu.res
+     rc convmenu.res

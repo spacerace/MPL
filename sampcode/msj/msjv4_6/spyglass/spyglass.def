@@ -1,0 +1,16 @@
+NAME						SPYGLASS
+
+DESCRIPTION			'SpyGlass - (C) Copyright 1988 - Kevin P. Welch'
+
+STUB						'C:\BIN\WINSTUB.EXE'
+
+CODE						MOVEABLE
+DATA						MOVEABLE MULTIPLE
+
+HEAPSIZE				2048
+STACKSIZE				2048
+
+EXPORTS			
+	SpyGlassWndFn				@1
+
+

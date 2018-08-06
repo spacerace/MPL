@@ -1,0 +1,925 @@
+
+
+
+
+
+
+
+                              ADVC v1.1, 04/22/87
+                             Advanced C Functions
+
+                     Copyright (c) Thomas Hanlin III, 1987
+
+          *Before June 1, 1987:                  *After June 1, 1987:
+          6812 Sydenstricker Rd                  1712 Maple Hill Place
+          Springfield, VA 22152                  Alexandria, VA 22302
+
+
+     These  routines  may  be  freely  distributed, provided that all files are
+ included  intact  and unmodified.  A distribution/handling fee of no more than
+ $10 may be charged.
+
+     The  ADVC  routines  have been tested and appear to be bug-free.  However,
+ I can't guarantee as to whether they will work as advertised on your computer,
+ using  your  compiler.    Powerful  low-level access techniques are used which
+ could  conceivably  cause  havoc  on the wrong machines or wrong compilers, or
+ if  you  don't  use  them  properly.  Be warned, and don't use ADVC unless you
+ know what you're doing!
+
+     The ADVC routines are grouped in files according to their type: Equipment,
+ Input,  Misc,  String,  Video.    In  order to use a routine, you will have to
+ extract it from the appropriate file using an editor.
+
+     You are responsible for setting up any "include" files which may be neces-
+ sary for any given routine that you use in your program.
+
+     These  routines  have been tested using Microsoft C, version 4.0.  A large
+ number  of  the  functions  provide  low-level  access  to  the machine, which
+ requires  use  of  nonportable  code.   You will have to convert these to your
+ compiler if you use something other than Microsoft C.
+
+     These  routines  are  intended  as  a supplemental C library for folks who
+ have  some  idea  what  they're  doing.  They are not designed with the novice
+ in  mind.   If  you  don't  understand  how to use the functions, you probably
+ shouldn't attempt to use them just yet!
+
+     If  you find the ADVC functions to be useful, your contribution to support
+ my  efforts  will  be  welcome.  Suggested amount, $15.  Strike a blow against
+ overpriced software-- support shareware!
+
+     Notation: Routines  are  labeled  "Generic"  if they will work on with any
+ C  compiler  on any machine.  Routines are labeled "MS C" if they use features
+ specific to Microsoft C and/or the IBM PC environment.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: ANY2DEC
+
+ Type: String / Generic
+
+ Description:
+     Converts  a  number  in  string form, in any base (2-35), into an unsigned
+ integer.    No  checking  for  validity is done-- characters are assumed to be
+ within  the  proper  range  for  the base chosen, and the number as a whole is
+ assumed to be within unsigned integer range.
+
+ Usage:
+     include <string.h>
+     int any2dec(str,base)
+         char *str;
+         unsigned int base;
+
+
+
+
+ Name: BSQUEEZE
+
+ Type: String / Generic
+
+ Description:
+     Squeezes  a  string  by  replacing  blanks  with a code sequence.  Assumes
+ an  input  string  which  only  uses normal ASCII (1-127) codes, with a length
+ of  less  than  127  characters.   Outputs a string which may include extended
+ ASCII  codes  (128-255).    Typical  space  savings for text is 15%.  A static
+ buffer  is  used,  so the result will be overwritten on subsequent calls.  See
+ also BUNSQUEEZE (not as bad as it sounds!).
+
+ Usage:
+     unsigned char *bsqueeze(str)
+        unsigned char *str;
+
+ Oddities:
+     May  not  be  entirely  generic,  as it assumes a useable character set of
+ at least 256 characters.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: BUNSQUEEZE
+
+ Type: String / Generic
+
+ Description:
+     Unsqueezes  a  string  which was squeezed with BSQUEEZE.  Assumes an input
+ string  with  a  length of less than 127 characters.  A static buffer is used,
+ so the result will be overwritten on subsequent calls.
+
+ Usage:
+     unsigned char *bunsqueeze(str)
+        unsigned char *str;
+
+ Oddities:
+     May  not  be  entirely  generic,  as  it  assumes  a useable character set
+ comprised of 256 characters.
+
+
+
+
+ Name: BKSCROLL
+
+ Type: Video / MS C
+
+ Description:
+     Scrolls  an  area  of  the  screen down by a specified number of lines, or
+ clears  it entirely if you specify zero lines.  The screen area to be scrolled
+ is defined by its upper left and lower right corners.
+
+ Usage:
+     #include <dos.h>
+     void bkscroll(leftcol,toprow,rightcol,bottomrow,lines)
+         int leftcol, toprow, rightcol, bottomrow, lines;
+
+ Oddities:
+     Uses the BIOS video interrupts.
+
+
+
+
+ Name: CLREOL
+
+ Type: Video / MS C
+
+ Description:
+     Clears from the current cursor position to the end of line.
+
+ Usage:
+      #include <dos.h>
+      void clreol()
+
+ Oddities:
+     Uses the BIOS video interrupts.
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: COMMPORTS
+
+ Type: Equipment / MS C
+
+ Description:
+     Returns the number of communications (serial) ports that are installed.
+
+ Usage:
+     #include <dos.h>
+     int commports()
+
+ Oddities:
+     Uses a BIOS interrupt.
+
+
+
+
+ Name: DEC2ANY
+
+ Type: String / Generic
+
+ Description:
+     This  function  converts  an  unsigned integer into an ASCII string in the
+ base  of  your  choice  (2-35).    It uses a static buffer, so the result will
+ be overwritten on subsequent calls.
+
+ Usage:
+      char *dec2any(number,base)
+         unsigned int number, base;
+
+
+
+
+ Name: DELAY
+
+ Type: Miscellaneous / MS C
+
+ Description:
+     Delays for a given number of seconds.
+
+ Usage:
+      #include <stddef.h>
+      #include <time.h>
+      void delay(seconds)
+         unsigned int seconds;
+
+ Oddities:
+     Uses  a  time  function  specific to Microsoft C, which returns the GMT as
+ a number of seconds.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: DISPLAYTYPE
+
+ Type: Video / MS C
+
+ Description:
+     Returns the type of the current display: 0 = mono, 1 = color.
+
+ Usage:
+     #include <dos.h>
+     int displaytype()
+
+ Oddities:
+     Uses a BIOS video interrupt.
+
+
+
+
+ Name: DRIVESPACE
+
+ Type: Equipment / MS C
+
+ Description:
+     Returns  the  amount  of  free space left on a given disk drive, in bytes.
+ Specify the drive by its letter, or use '@' for the default drive.
+
+ Usage:
+     #include <ctype.h>
+     #include <dos.h>
+
+ Oddities:
+     Uses a DOS interrupt.
+
+
+
+
+ Name: EXTRACT
+
+ Type: String / Generic
+
+ Description:
+     Extracts  a  delimited  substring  from a string.  Substrings are numbered
+ starting at one, and may not be over 80 characters in length.  A static buffer
+ is used for the substring, so save results if need be before the next use.
+
+ Example usage:
+     extract("John Doe=1919 Main St=Springfield IL 12345",'=',2)
+ would  return  the  second  substring  delimited  by an equal sign, or in this
+ case "1919 Main St".
+
+ Usage:
+      char *extract(str,delimiter,elementnumber)
+         char *str, delimiter;
+         int elementnumber;
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: GETDRIVE
+
+ Type: Equipment / MS C
+
+ Description:
+     Returns the current default disk drive.
+
+ Usage:
+      #include <dos.h>
+      char getdrive()
+
+ Oddities:
+     Uses a DOS interrupt.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: GETKEY
+
+ Type: Input / MS C
+
+ Description:
+     Waits  for  one  of  a list of keys to be pressed, and returns the pressed
+ key.    The  list  of  valid  keys must be in uppercase; the returned key will
+ always  be  converted  to  uppercase.  If the list of valid keys is null, then
+ the first key pressed will be returned.
+
+ Usage:
+      #include <conio.h>
+      #include <ctype.h>
+      char getkey(str)
+         char *str;
+
+ Oddities:
+     Uses  unbuffered  input  to  get  a  key as soon as it's pressed.  This is
+ a common but nonstandard function.
+
+
+
+
+ Name: JOYSTICK
+
+ Type: Equipment / MS C
+
+ Description:
+     Returns the number of joystick ports installed (0-1).
+
+ Usage:
+      #include <dos.h>
+      int joystick()
+
+ Oddities:
+     Uses a BIOS interrupt.
+
+
+
+
+ Name: LIMMFREE
+
+ Type: Equipment / MS C
+
+ Description:
+     Returns  the  number  of free pages of installed LIM-spec expanded memory.
+ One page is 16k bytes.
+
+ Usage:
+      #include <dos.h>
+      int limmfree()
+
+ Oddities:
+     Uses a weird interrupt.
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: LIMMTOTAL
+
+ Type: Equipment / MS C
+
+ Description:
+     Returns  the  total number of installed pages of LIM-spec expanded memory.
+ One page is 16k bytes.
+
+ Usage:
+      #include <dos.h>
+      int limmtotal()
+
+ Oddities:
+     Uses a weird interrupt.
+
+
+
+
+ Name: LOCASE
+
+ Type: String / Generic
+
+ Description:
+     Convert a string to lowercase.
+
+ Usage:
+      #include <ctype.h>
+      char *locase(str)
+         char *str;
+
+
+
+
+ Name: MOUSEBUTTONS
+
+ Type: Input / MS C
+
+ Description:
+     See if mouse buttons are pressed.  The result is returned as follows:
+  0: no button pressed
+  1: left button is pressed
+  2: right button is pressed
+  3: both buttons are pressed
+
+ Usage:
+      #include <dos.h>
+      int mousebuttons()
+
+ Oddities:
+     Uses a weird interrupt.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: MOUSECHECK
+
+ Type: Input / MS C
+
+ Description:
+     Sees  if  a  mouse  is  installed.  If not, zero will be returned.  If so,
+ the  mouse  is  initialized,  and  the number of buttons the mouse has will be
+ returned.
+
+ Usage:
+      #include <dos.h>
+      int mousecheck()
+
+ Oddities:
+     Uses a weird interrupt.
+
+
+
+
+ Name: MOUSECLICK
+
+ Type: Input / MS C
+
+ Description:
+     Tells  you  if  a  mouse  button  has been clicked since you last checked.
+ The values returned are the same as for MOUSEBUTTONS.
+
+ Usage:
+      #include <dos.h>
+      int mouseclick
+
+ Oddities:
+     Uses a weird interrupt.
+
+
+
+
+ Name: MOUSECOL
+
+ Type: Input / MS C
+
+ Description:
+     Returns  the  column  where  the  mouse  cursor  is located.  See the file
+ MOUSE.TXT for more information (important!).
+
+ Usage:
+      #include <dos.h>
+      int mousecol()
+
+ Oddities:
+     Uses a weird interrupt.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: MOUSECURSOR
+
+ Type: Input / MS C
+
+ Description:
+     Makes  the mouse cursor visible or invisible.  Use zero to turn the cursor
+ off, nonzero to turn it back on.
+
+ Usage:
+      #include <dos.h>
+      void mousecursor(toggle)
+         int toggle;
+
+ Oddities:
+     Uses a weird interrupt.
+
+
+
+
+ Name: MOUSELOC
+
+ Type: Input / MS C
+
+ Description:
+     Sets  the  location  of the mouse cursor.  See the file MOUSE.TXT for more
+ information (important!).
+
+ Usage:
+      #include <dos.h>
+      void mouseloc(column,row)
+         int column, row;
+
+ Oddities:
+     Uses a weird interrupt.
+
+
+
+
+ Name: MOUSEROW
+
+ Type: Input / MS C
+
+ Description:
+     Returns the row where the mouse cursor is located.  See the file MOUSE.TXT
+ for more information (important!).
+
+ Usage:
+      #include <dos.h>
+      int mouserow()
+
+ Oddities:
+     Uses a weird interrupt.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: MULTIAND
+
+ Type: String / Generic
+
+ Description:
+     Performs  an  AND  on each character of a string with a given value.  Note
+ that if this results in a NUL, your string may be prematurely terminated!
+
+ Usage:
+      char *multiand(str,c)
+         char *str, c;
+
+
+
+
+ Name: MULTIOR
+
+ Type: String / Generic
+
+ Description:
+     Performs an OR on each character of a string with a given value.
+
+ Usage:
+      char *multior(str,c)
+         char *str, c;
+
+
+
+
+ Name: MULTIXOR
+
+ Type: String / Generic
+
+ Description:
+     Performs  an  XOR  on each character of a string with a given value.  Note
+ that if this results in a NUL, your string may be prematurely terminated!
+
+ Usage:
+      char *multixor(str,c)
+         char *str, c;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: PRINTPORTS
+
+ Type: Equipment / MS C
+
+ Description:
+     Returns the number of printer (parallel) ports installed.
+
+ Usage:
+      #include <dos.h>
+      int printports()
+
+ Oddities:
+     Uses a BIOS call.
+
+
+
+
+ Name: REVERSE
+
+ Type: String / Generic
+
+ Description:
+     Reverses the order of characters in a string.
+
+ Usage:
+      #include <string.h>
+      char *reverse(str)
+         char *str;
+
+
+
+
+ Name: SCROLL
+
+ Type: Video / MS C
+
+ Description:
+     Scrolls an area of the screen up by a specified number of lines, or clears
+ it  entirely  if  you  specify  zero lines.  The screen area to be scrolled is
+ defined by its upper left and lower right corners.
+
+ Usage:
+     #include <dos.h>
+     void scroll(leftcol,toprow,rightcol,bottomrow,lines)
+        int leftcol, toprow, rightcol, bottomrow, lines;
+
+ Oddities:
+     Uses BIOS video interrupts.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: SOUNDEX
+
+ Type: String / Generic
+
+ Description:
+     Returns a "soundex" code for a string.  This code is based on an algorithm
+ for  determining  words  that  sound  alike, and can be used (for instance) to
+ index  a  phone directory by names that sound/look similar.  The code returned
+ will  be  up to 80 characters long, but never longer than the string for which
+ the  code  was  generated.   A static buffer is used, so save the code if need
+ be before calling the routine a second time.
+
+ Usage:
+      #include <ctype.h>
+      char *soundex(str)
+         char *str;
+
+
+
+
+ Name: STRIP
+
+ Type: String / Generic
+
+ Description:
+     Strips all occurrences of a given character from a given string.
+
+ Usage:
+      char *strip(str,c)
+         char *str, c;
+
+
+
+
+ Name: STRIPRANGE
+
+ Type: String / Generic
+
+ Description:
+     Strips all characters in a given inclusive range from a given string.
+
+ Usage:
+      char *striprange(str,lowchr,highchr)
+         char *str, lowchr, highchr;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Name: TOTALMEM
+
+ Type: Equipment / MS C
+
+ Description:
+     Returns the total amount of installed memory, in kilobytes.
+
+ Usage:
+      #include <dos.h>
+      int totalmem()
+
+ Oddities:
+     Uses a BIOS interrupt.
+
+
+
+
+ Name: UPCASE
+
+ Type: String / Generic
+
+ Description:
+     Convert a string to uppercase.
+
+ Usage:
+      #include <ctype.h>
+      char *upcase(str)
+         char *str;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

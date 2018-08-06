@@ -1,0 +1,38 @@
+
+
+        NAME
+                badext -- report invalid filename extension and exit
+
+        SYNOPSIS
+                badext(ext);
+                char *ext;
+
+
+        DESCRIPTION
+        This function may be used when an invalid filename extension must
+        cause the termination of a program.  It is called with the
+        offending extension as the argument string.  An error message
+        is sent to stderr, and the program terminates via the aabort()
+        function of this library.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

@@ -1,0 +1,25 @@
+/*----------------------------------
+   TYPECLIP.RC resource script file
+  ----------------------------------*/
+
+#include <os2.h>
+#include "typeclip.h"
+
+MENU ID_RESOURCE
+     {
+     SUBMENU "~Edit",         IDM_EDIT
+          {
+          MENUITEM "Cu~t\tShift+Del",   IDM_CUT
+          MENUITEM "~Copy\tCtrl+Ins",   IDM_COPY
+          MENUITEM "~Paste\tShift+Ins", IDM_PASTE
+          MENUITEM "C~lear\tDel",       IDM_CLEAR
+          }
+     }
+
+ACCELTABLE ID_RESOURCE
+     {
+     VK_DELETE, IDM_CUT,   VIRTUALKEY, SHIFT
+     VK_INSERT, IDM_COPY,  VIRTUALKEY, CONTROL
+     VK_INSERT, IDM_PASTE, VIRTUALKEY, SHIFT
+     VK_DELETE, IDM_CLEAR, VIRTUALKEY
+     }

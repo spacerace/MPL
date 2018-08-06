@@ -1,0 +1,6 @@
+dump.obj : dump.asm
+  masm dump;
+
+dump.exe : dump.obj
+  link dump;
+

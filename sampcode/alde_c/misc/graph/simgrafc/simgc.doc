@@ -1,0 +1,2381 @@
+
+
+
+
+
+
+	This library was placed on The Consultants' Exchange by the author.
+			( 7 1 4 )   8 4 2 - 6 3 4 8
+				  24 hours
+
+
+
+
+
+				    SIMGRAPH
+
+			     Simple Graphics Library
+
+				       for
+
+			      C, FORTRAN and BASIC
+
+
+
+			   Copyright 1983, 1984, 1985
+
+				  Ryan Software
+
+				  Version 3.00
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				 TABLE OF CONTENTS
+
+								  Page
+
+	1. Important Notice					    1
+
+	2. Registration Information				    1
+
+	3. General						    2
+
+	4. What is on the Diskette				    3
+
+	5. List of Functions					    4
+
+	6. Appendices
+
+	     a. C Functions
+
+	     b. FORTRAN Functions
+
+	     c. BASIC Functions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				 IMPORTANT NOTICE
+
+
+
+	SIMGRAPH  is copyrighted, written and maintained by:
+
+			       Ryan  Software
+			       P.O.  Box 3064
+			       Orange, CA  92665
+
+	Users  of this program are encouraged to copy and distribute  the
+	graphics  library and demonstrations programs which are a part of
+	this package for non-commericial purposes.
+
+	No fee or other charges may be made in the distribution of  these
+	programs without the written permission of Ryan Software.
+
+	Version  numbers  appear in the documentation and in  the  source
+	code.  The most current version of the programs and the  SIMGRAPH
+	libraries may be obtained from Ryan Software.
+
+	SIMGRAPH is a trademark of Ryan Sofware.
+
+
+
+
+			     REGISTRATION INFORMATION
+
+	If you find the program library useful you are encouraged to make
+	a donation of $40.  Those who make a donation will be entitled to
+	receive the following:
+
+	       o  Become a registered user
+	       o  A printed manual.
+	       o  All  assembly language source code for the  C,  FORTRAN
+		  and BASIC versions.
+	       o  Source code of additional demonstration programs.
+	       o  Any new enhancements
+	       o  Free upgrades if you return the original diskette  with
+		  a postage paid diskette mailer. ($10 if you do not send
+		  a diskette and mailer)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					      1
+
+
+
+
+				      GENERAL
+
+	This  software was written originally written to enable  programs
+	written  in Lattice and Microsoft C to display color graphics  in
+	the   medium  resolution  mode	on  an	IBM-PC	with  a  standard
+	color/graphics adapter card.
+
+	The  C,  FORTRAN  and BASIC library of routines  are  distributed
+	without  charge to interested parties for the express purpose  of
+	being  able to display graphics in any of  those  languages.  The
+	libraries  or portions of those libraries may not be used in  any
+	commercial program or program sold for profit without the written
+	permission of Ryan Software.
+
+	The routines are all written in assembly language to optimize for
+	speed.	The first code was written in 1983 by Lance Robinson  and
+	has since been enhanced and added to by Tracy Lenocker.
+
+	The  SIMGRAPH libraries runs faster than any other public  domain
+	graphics  programs  and faster than many  commerically	available
+	programs.
+
+	Although  this	library  represents  only  fundamental	 graphics
+	display routines,  they will allow you to perform the most wanted
+	features  for  screen plotting.  With the  SIMGRAPH  library  any
+	programmer  can  easily construct other needed types of  graphics
+	such as circles,  and arcs.  Using only these basic routines  you
+	can  easily  construct	more comprehensive  programs  to  general
+	screen	plotting,  bar	charts,  pie  charts and other	types  of
+	programs.  Due	to  the  speed of the SIMGRAPH	library  you  can
+	quickly display and rotate objects.
+
+	For   more  comprehensive  graphic  routines  the   user   should
+	investigate  the commercially available programs such as the HALO
+	graphics programs.
+
+	 Lattice C version
+
+	When  linking  a  program  all	you need to  do  is  specify  the
+	SIMGRAFC.LIB  along  with  the Lattice C model	library  you  are
+	using.	An example of a batch file which will compile and link	a
+	single program is given below:
+
+		  lc1 %1
+		  if errorlevel 1 goto err
+		  lc2 %1
+		  if errorlevel 1 goto err
+		  link cs+%1,%1,,simgraph+lcs
+		  if errorlevel 1 goto err
+		  rem COMPILE COMPLETE
+		  goto end
+		  :err
+		  rem ERRORS ENCOUNTERED
+		  :end
+
+
+					      2
+
+
+
+	 FORTRAN Version
+
+	The library SIMGRAFF.LIB must be linked with the program you have
+	written.
+
+	 BASIC Version
+
+	The library SIMGRAFB.LIB must be linke with the program you  have
+	written and compiled using BASCOM.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					      3
+
+
+
+			      WHAT IS ON THE DISKETTE
+
+
+	SIMGRAFC.LIB	-  The C graphic and non-graphic library routines
+
+	SIMGRAFF.LIB	-  The FORTRAN graphic and non-graphic library
+			   routines
+
+	SIMGRAFB.LIB	-  The BASIC graphic and non-graphic library
+			   routines
+
+	SIMGRAPH.DOC	-  This document file
+
+	DEMOn.COM	-  A series of demonstration programs
+
+	DEMOn.C 	-  Source code for the C demonstration programs
+
+	DEMOn.FOR	-  Source  code  for  the  FORTRAN  demonstration
+			   programs
+
+	DEMOn.BAS	-  Source   code  for  the  BASIC   demonstration
+			   programs
+
+	READ.ME 	-  Most current changes and announcements
+
+
+
+
+	Additionally the registered users diskette contains:
+
+	LIBHEAD.ASM	-  Header code for all the function libraries
+
+	SIMGRAPH.ASM	-  Source code for the graphic functions
+
+	NGFALL.ASM	-  Source  code  for  the  non-graphic	functions
+			   including those that are C specific.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					      4
+
+
+
+				LIST OF C FUNCTIONS
+
+
+
+
+
+
+
+	Graphics Functions		Functional Description
+	----------------------------	---------------------------------
+	g_init()			Initialize medium resolution mode
+	g_clear()			Clear the graphics screen
+	g_text(mode)			Reset back to text mode
+	g_pal(color)			Select a color palette
+	g_bakgnd(color) 		Select a background color
+	g_dot(x,y,color)		Display a dot
+	g_line(x1,y1,x2,y2,color)	Display a line
+	g_getdot(x,y)			Get the color of a displayed dot
+	g_xormode()			Set or reset XOR mode
+	g_window(xmin,ymin,xmax,ymax)	Set graphics window limits
+	g_limits(xmin,ymin,xmax,ymax)	Get current window limits
+	g_vert(x1,y1,y2,color)		DIsplays a vertical line
+
+
+
+
+
+
+
+
+
+
+	Non-graphic Functions		Functional Description
+	-----------------------------	---------------------------------
+	randseed()			Initialize rand() with a seed
+	rand()				Random number generator
+	cls()				Clear the text screen
+	locate()			Locate the cursor to a position
+	keyboard()			Returns keyboard information
+	peekb() 			Read a byte from memory
+	peekw() 			Read a word from memory
+	pokeb() 			Poke a byte into memory
+	pokew() 			Poke a word into memory
+	sysint()			Sets registers, then 8086 INT
+	getreg()			Returns a given 8086 register
+	inton() 			Enables interrupts
+	intoff()			Disables interrupts
+	movblock()			Move a block of memory
+
+
+
+
+
+
+
+
+
+					      5
+
+
+
+			     LIST OF FORTRAN FUNCTIONS
+
+
+
+
+
+
+
+	Graphics Functions		Functional Description
+	----------------------------	---------------------------------
+	GSCRN(MODE)			Initialize medium resolution mode
+	GCLEAR(MODE)			Clear the graphics screen
+	GTEXT(MODE)			Reset back to text mode
+	GPAL(COLORS)			Select a color palette
+	GBKGND(COLOR)			Select a background color
+	GDOT(X,Y,COLOR) 		Display a dot
+	GLINE(X1,Y1,X2,Y2,COLOR)	Display a line
+	GETDOT(X,Y)			Get the color of a displayed dot
+	GXOR()				Set or reset XOR mode
+	GWINDOW(XMIN,YMIN,XMAX,YMAX)	Set graphics window limits
+	GLIMITS(XMIN,YMIN,XMAX,YMAX)	Get current window limits
+	GVERT(X1,Y1,Y2,COLOR)		Draw a vertical line
+
+
+
+
+
+
+
+
+
+
+	Non-graphic Functions		Functional Description
+	-----------------------------	---------------------------------
+	RSEED() 			Initialize RAND() with a seed
+	RAND()				Random number generator
+	CLS()				Clear the text screen
+	LOCATE()			Locate the cursor to a position
+	KEYB()				Return keyboard information
+	SCREAD()			Read character and attribute
+	SCWRIT()			Write a character and attribute
+	SCUP()				Scroll the screen up
+	SCDOWN()			Scroll the screen down
+	PEEKB() 			Read a byte from memory
+	PEEKW() 			Read a word from memory
+	POKEB() 			Poke a byte into memory
+	POKEW() 			Poke a word into memory
+
+
+
+
+
+
+
+
+
+
+					      6
+
+
+
+			      LIST OF BASIC FUNCTIONS
+
+
+
+
+
+
+
+	Graphics Functions		Functional Description
+	----------------------------	---------------------------------
+	GSCRN(MODE)			Initialize medium resolution mode
+	GCLEAR(MODE)			Clear the graphics screen
+	GTEXT(MODE)			Reset back to text mode
+	GPAL(COLORS)			Select a color palette
+	GBKGND(COLOR)			Select a background color
+	GDOT(X,Y,COLOR) 		Display a dot
+	GLINE(X1,Y1,X2,Y2,COLOR)	Display a line
+	GETDOT(X,Y)			Get the color of a displayed dot
+	GXOR()				Set or reset XOR mode
+	GWINDOW(XMIN,YMIN,XMAX,YMAX)	Set graphics window limits
+	GLIMITS(XMIN,YMIN,XMAX,YMAX)	Get current window limits
+	GVERT(X1,Y1,Y2,COLOR)		Draw a vertical line
+
+
+
+
+
+
+
+
+
+
+	Non-graphic Functions		Functional Description
+	-----------------------------	---------------------------------
+	RSEED() 			Initialize RAND() with a seed
+	RAND()				Random number generator
+	CLS()				Clear the text screen
+	LOCATE()			Locate the cursor to a position
+	KEYB()				Return keyboard information
+	SCREAD()			Read character and attribute
+	SCWRIT()			Write a character and attribute
+	SCUP()				Scroll the screen up
+	SCDOWN()			Scroll the screen down
+	PEEKB() 			Read a byte from memory
+	PEEKW() 			Read a word from memory
+	POKEB() 			Poke a byte into memory
+	POKEW() 			Poke a word into memory
+
+
+
+
+
+
+
+
+
+
+					      7
+				C FUNCTIONS
+
+
+
+
+
+	 NAME
+
+	   g_init		--> initialize the medium graphics mode
+
+	 SYNOPSIS
+
+	   g_init();
+
+
+	 DESCRIPTION
+
+	  This	function initializes the standard color/graphics  adapter
+	  to 320x200 medium resolution mode.
+
+
+	 RETURNS
+
+	  Nothing
+
+
+	 SAMPLE CALL
+
+	  main()
+
+	  {
+	  g_init();
+	  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 1
+				C FUNCTIONS
+
+
+	 NAME
+
+	  g_clear		   --> clears the graphics screen
+
+	 SYNOPSIS
+
+	  g_clear();
+
+
+	 DESCRIPTION
+
+	  This	function will clear the graphic screen to the  background
+	  color.
+
+
+	 RETURNS
+
+	  Nothing
+
+
+	 SAMPLE CALL
+
+
+	  main()
+	  {
+	  g_clear();
+	  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 2
+				C FUNCTIONS
+
+
+	 NAME
+
+	  g_text()	    --> Resets the display to 40 or 80
+				column mode.
+
+	 SYNOPSIS
+
+	  g_text(mode);
+
+	  int mode;		      mode is either 40 or 80
+
+	 DESCRIPTION
+
+	  This	function  resets the display from graphics to text  mode.
+
+	  This	function  should be called upon exiting from  a  graphics
+	  program  or  else  the display will continue to  be  in  medium
+	  resolution  graphics	mode  and cannot display  the  normal  80
+	  column text mode.
+
+	 RETURNS
+
+	  Nothing
+
+	 SAMPLE CALL
+
+	  main()
+	  {
+
+	  g_init();
+	  g_clear();
+	  g_text(80);		       /* resets back to 80 column
+					  mode			   */
+	  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 3
+				C FUNCTIONS
+
+
+	 NAME
+
+	  g_pal 		    --> Sets the palette number
+
+	 SYNOPSIS
+
+	  g_pal(pn);
+
+	  int pn;			palette number
+
+
+	 DESCRIPTION
+
+
+	  The  palette	number,  pn,  corresponds  to  the  two  standard
+	  palettes  that may be used used in the medium resolution  mode.
+	  Functions  using colors will have their colors chosen from  the
+	  current palette. The palettes are:
+
+		    Color	Palette 0	 Palette 1
+		    -----	---------	 ---------
+		      1 	  Green 	   Cyan
+		      2 	  Red		   Magenta
+		      3 	  Brown 	   White
+
+	 RETURNS
+
+	  Nothing
+
+
+	 SAMPLE CALL
+
+	  main()
+	  {
+	  int pn;
+	  g_init();
+	  g_clear();
+	  pn = 1;		      /* select palette 1 (RGBrn) */
+	  g_pal(pn);
+	  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 4
+				C FUNCTIONS
+
+
+	 NAME
+
+	  g_bakgnd()		  ---> Sets the background color
+
+	 SYNOPSIS
+
+	  g_bakgnd(bc);
+
+	  int bc;		bc is the background color
+
+
+	 DESCRIPTION
+
+	  The  background  color  may  be  set	to  any  of  the  sixteen
+	  selectable  colors  in the medium resolution	mode.  The  color
+	  number and the corresponding color is given below:
+
+	      Number	Color		   Number	  Color
+	      ------	------- 	   ------	  -------
+		0	Black		     8		  Gray
+		1	Blue		     9		  Light Blue
+		2	Green		    10		  Light Green
+		3	Cyan		    11		  Light Cyan
+		4	Red		    12		  Light Red
+		5	Magenta 	    13		  Light Magenta
+		6	Brown		    14		  Yellow
+		7	White		    15		  High Intensity
+							  White
+
+
+
+	 RETURNS
+
+
+	  Nothing
+
+	 SAMPLE CALL
+
+
+	  main()
+	  {
+
+	  int pn = 2;			/* selects palette 1 (GRBrn)  */
+	  int bc = 1;			/* background color is blue   */
+
+	  g_init();
+	  g_clear();
+	  g_pal(pn);
+	  g_bakgnd(bc);
+	  }
+
+
+
+
+
+
+
+				  C - 5
+				C FUNCTIONS
+
+
+	 NAME
+
+	  g_dot()			 --> Displays a colored dot
+
+	 SYNOPSIS
+
+	  g_dot(x,y,clr);
+
+	  int x, y, clr;		dot at coordinates x, y
+					in color clr
+
+
+	 DESCRIPTION
+
+
+	  This function displays a dot at the coordinates x,  and y where
+	  both x and y are integer numbers. The maximum limits of x are 0
+	  and  319.  the limits of y are 0 and 199.  The  actual  display
+	  region  on the screen may be limited by the use of the g_window
+	  function.
+
+	  The  color  is determined by both the numerical value  and  the
+	  palette number. The color number may be between 1 and 3 and the
+	  table of colors are given in the g_pal() function above.
+
+	 RETURNS
+
+	  Nothing
+
+
+	 SAMPLE CALL
+
+	  main()
+	  {
+
+	  int pn = 2;			/* selects palette 1 (GRB)  */
+	  int bc = 1;			/* background color is blue */
+	  int x, y, clr;
+
+	  g_init();
+	  g_clear();
+	  g_pal(pn);
+	  g_bakgnd(bc);
+	  x = 159;
+	  y = 99;
+	  clr = 2;
+	  g_dot(x,y,clr);		/*  displays  a blue dot  in  the
+					    center of the screen     */
+	  }
+
+
+
+
+
+
+
+
+				  C - 6
+				C FUNCTIONS
+
+
+	 NAME
+
+	  g_line()			--> draws a line between points
+
+	 SYNOPSIS
+
+	  g_line(x1,y1,x2,y2,clr);
+
+	  int x1;	  x coordinate of the beginning of the line
+	  int y1;	   y coordinate of the beginning of the line
+	  int x2;	   x coordinate of the end of the line
+	  int y2;	   y coordinate of the end of the line
+	  int clr;	   color to be chosen from the current palette
+
+
+	 DESCRIPTION
+
+	  This function draws a line between the two defined points.  The
+	  limits of the line are determined by the use of the  g_window()
+	  function.  The maximum limits are the full screen limits, 0-219
+	  in   the  horizontal	direction  and	0-199  in  the	 vertical
+	  direction. The color is selected from the current palette.
+
+	 RETURNS
+
+	  Nothing
+
+	 SAMPLE CALL
+
+	  main()
+	  {
+
+	  int pn = 2;			/* selects palette 1 (GRB)  */
+	  int bc = 1;			/* background color is blue */
+	  int x1, y1, x2, y2, clr;
+
+	  g_init();
+	  g_clear();
+	  g_pal(pn);
+	  g_bakgnd(bc);
+	  x1 = 0, y1 = 0;
+	  x2 = 219, y2 = 199;
+	  clr = 2;
+	  g_line(x1,y1,x2,y2,clr);	/* draws a diagonal line
+					   across the screen in red */
+	  }
+
+
+
+
+
+
+
+
+
+
+
+				  C - 7
+				C FUNCTIONS
+
+
+	 NAME
+
+	  g_getdot()		      --> Return the color of a dot
+
+	 SYNOPSIS
+
+	  rclr = g_dot(x,y);
+
+	  int x;	    x coordinate of the dot
+	  int y;	    y coordinate of the dot
+	  int rclr;	    the value of the color of the dot
+
+
+	 DESCRIPTION
+
+	  This	function  returns  the	color of a  dot  which	has  been
+	  displayed on the screen at coordinates x and y.
+
+	 RETURNS
+
+	  rclr = the color value corresponding to the current palette and
+		 color number. The values are between 1 and 3.
+
+
+	 SAMPLE CALL
+
+
+	  main()
+	  {
+
+	  int pn = 2;			/* selects palette 1 (GRB)  */
+	  int bc = 1;			/* background color is blue */
+	  int x, y, clr, rclr;
+
+	  g_init();
+	  g_clear();
+	  g_pal(pn);
+	  g_bakgnd(bc);
+	  x = 159;
+	  y = 99;
+	  clr = 2;
+	  g_dot(x,y,clr);		/*  displays  a blue dot  in  the
+					    center of the screen     */
+	  rclr = g_getdot(x,y); 	/* gets the color	    */
+	  }
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 8
+				C FUNCTIONS
+
+
+	 NAME
+
+	  g_xormode()		 --> Sets/resets displaying to an
+				      exclusive-or mode
+
+	 SYNOPSIS
+
+	  g_xormode(ltf);
+
+	  int ltf;		     /* logical value for setting xor
+					on or off		     */
+
+	 DESCRIPTION
+
+	  This	function  sets the display mode of dots and lines  to  be
+	  either  in an exclusive-or mode or not in an exclusive-or mode.
+	  The argument is a logical value. The values are:
+
+				 0 = normal (no exclusive-or)
+		    anything else  = XOR mode
+
+	 RETURNS
+
+	  Nothing
+
+	 SAMPLE CALL
+
+	  #DEFINE FALSE 0
+	  #DEFINE TRUE	~FALSE
+
+	  g_xormode(TRUE);	     /* set display to XOR mode) */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 9
+				C FUNCTIONS
+
+
+	 NAME
+
+	  g_window()	    --> Sets windowing limits for the display
+				of dots and lines
+
+	 SYNOPSIS
+
+	  g_window(x1,y1,x2,y2);
+
+	  int x1, y1;	 coordinates of the lower left display window
+	  int x2, y2;	 coordinates of the upper right display window
+
+	 DESCRIPTION
+
+	  This	function sets a display window for the display of dots or
+	  lines.  All displaying is limited to the window area.  Function
+	  calls  to areas outside the window will not disturb the  screen
+	  area outside the window. Lines will be chopped if out of range.
+
+	 RETURNS
+
+	  Nothing
+
+	 SAMPLE CALL
+
+	  main()
+	  {
+
+	  int pn = 2;			/* selects palette 1 (GRB)  */
+	  int bc = 1;			/* background color is blue */
+	  int x1, y1, x2, y2;
+
+	  g_init();
+	  g_clear();
+	  g_pal(pn);
+	  g_bakgnd(bc);
+	  x1 = 0, y1 = 0;
+	  x2 = 50, y2 = 50;
+	  clr = 2;
+	  g_window(x1,y1,x2,y2);      /* sets the display window to
+					 an area in the upper left
+					 of the screen		   */
+	  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 10
+				C FUNCTIONS
+
+
+	 NAME
+
+	  g_limits()	    --> Returns the window limits which have
+				been previously set with a window
+				function.
+
+	 SYNOPSIS
+
+	  g_limits(x1,y1,x2,y2);
+
+	  int x1, y1;	 coordinates of the lower left display window
+	  int x2, y2;	 coordinates of the upper right display window
+
+	 DESCRIPTION
+
+	  This function returns the display window limits for the display
+	  of dots or lines.
+
+	 RETURNS
+
+	  Values are returned in the x1, y1, x2, y2 arguments
+
+	 SAMPLE CALL
+
+	  main()
+	  {
+
+	  int pn = 2;			/* selects palette 1 (GRB)  */
+	  int bc = 1;			/* background color is blue */
+	  int x1, y1, x2, y2;
+
+	  g_init();
+	  g_clear();
+	  g_pal(pn);
+	  g_bakgnd(bc);
+	  x1 = 0, y1 = 0;
+	  x2 = 50, y2 = 50;
+	  clr = 2;
+	  g_limits(x1,y1,x2,y2);      /* returns the display window
+					 limits 		   */
+	  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 11
+				C FUNCTIONS
+
+
+	 NAME
+
+	     g_vert		       --> Displays a vertical line
+
+	 SYNOPSIS
+
+	     g_vert((x1,y1,y2,clr);
+
+	     int X1;		 x position
+	     int y1, y2;	 y minimum and y maximum respectively
+	     int clr;		 color of the line
+
+
+	 DESCRIPTION
+
+	     This   routine  will  draw  vertical  lines.   It	uses   an
+	     optimization  which causes the lines to be drawn even faster
+	     than g_line.
+
+
+	 RETURNS
+
+	     Nothing
+
+
+	 SAMPLE CALL
+
+	  main()
+	  {
+
+	  int pn = 2;			/* selects palette 1 (GRB)  */
+	  int bc = 1;			/* background color is blue */
+	  int x1, y1, x2, y2, clr;
+
+	  g_init();
+	  g_clear();
+	  g_pal(pn);
+	  g_bakgnd(bc);
+	  x1 = 0, y1 = 0;
+	  x2 = 219, y2 = 199;
+	  clr = 2;
+	  g_vert(x1,y1,y2,clr);      /* draws a vertical line
+					down the screen in red */
+	  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 12
+				C FUNCTIONS
+
+
+	 NAME
+
+	   randseed()	    --> initializes the random seed
+
+	 SYNOPSIS
+
+	   randseed(w1,w2);
+
+	   int w1;		   word 1 value
+	   int w2;		   word 2 value
+
+	 DESCRIPTION
+
+	  This	function  initializes the random number seed to  a  value
+	  chosen  by  word1 and word2.	A predictable sequence of  random
+	  sequences  may be obtained.  If both word1 and word2	are  zero
+	  then	the  function gets a value from the system clock for  the
+	  seed.
+
+	 RETURNS
+
+	  Nothing
+
+	 SAMPLE CALL
+
+	  randseed(0,0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 13
+				C FUNCTIONS
+
+
+	 NAME
+
+	  rand()		   --> Returns a random number
+
+	 SYNOPSIS
+
+	  value = rand(range);
+
+	  unsigned value;	      value returned
+	  unsigned range;	      range for determining the value
+
+
+	 DESCRIPTION
+
+	  This	function returns a value within a  specified  range.  The
+	  range  may be from 1 to 65535.  The value will be between 0 and
+	  range-1. If range is 0 then the value will default to between 0
+	  and 65535.
+
+
+	 RETURNS
+
+	  The random number in value.
+
+
+	 SAMPLE CALL
+
+
+	  value = rand(range);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 14
+				C FUNCTIONS
+
+
+	 NAME
+
+	  cls() 		   --> Clears the text screen
+
+	 SYNOPSIS
+
+	  cls(atr);
+
+	  int atr:		   desired screen attribute
+
+
+	 DESCRIPTION
+
+	  This	function  will	clear  the screen  to  the  given  screen
+	  attribute.  These  attributes  are given in the  IBM	Technical
+	  Reference Manual.
+
+
+	 RETURNS
+
+	  Nothing
+
+
+	 SAMPLE CALL
+
+
+	  cls(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 15
+				C FUNCTIONS
+
+
+	 NAME
+
+	  locate()		 --> Positions the cursor on the text
+				     screen.
+
+
+	 SYNOPSIS
+
+	  locate(row,column);
+
+	  int row;		      cursor row
+	  int column;		      cursor column
+
+
+	 DESCRIPTION
+
+	This  function	positions  the cursor to the  specified  row  and
+	column.
+
+
+	 RETURNS
+
+	  Nothing
+
+
+	 SAMPLE CALL
+
+	  int row = 10;
+	  int column = 24;
+	  locate(row,column);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 16
+				C FUNCTIONS
+
+
+	 NAME
+
+	  keyboard()		 --> Returns keyboard information
+
+	 SYNOPSIS
+
+	  c = keyboard(option);
+
+	  unsigned c;		 value returned
+	  int option;		 keyboard command:
+				    0 = return next character from keyboard
+				    1 = return character if any (0 otherwise)
+				    2 = return the SHIFT status
+				    3 = returns character if any, also takes
+					character out of input buffer.
+				    4 = clears buffer, then returns next key.
+				    5 = Clear keyboard buffer.
+
+	 DESCRIPTION
+
+	  This	function provides direct access to the keyboard interrupt
+	  16h.	The  main use of this routine is to test the keyboard  to
+	  see if any keys are waiting.
+
+
+	 RETURNS
+
+	  It returns the value waiting at the keyboard.
+
+	 SAMPLE CALL
+
+
+	  c = keyboard(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 17
+				C FUNCTIONS
+
+
+	 NAME
+
+	   scr_read		      --> Reads the character and the
+					  attribute byte
+	 SYNOPSIS
+
+	   ca = scr_read();
+	   unsigned ca; 	   the character/attribute byte
+
+
+	 DESCRIPTION
+
+	   This  routine returns the character and attribute byte at  the
+	   current  cursor position.  The lower 8 bits are the	character
+	   value and the upper 8 bits are the screen attribute.
+
+
+
+	 RETURNS
+
+	   The character and attribute
+
+
+	 SAMPLE CALL
+
+	  main()
+	  {
+	  unsigned ca;
+
+	  ca = scr_read();
+	  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 18
+				C FUNCTIONS
+
+
+	 NAME
+
+	   scr_write		      --> Writes the character and the
+					  attribute byte, count times
+
+	 SYNOPSIS
+
+	   scr_write(c,attr,count);
+
+	   int c;	     Character to write
+	   int attr;	     Attribute to write to screen
+	   int count;	     Count of character/attributes to write
+
+
+	 DESCRIPTION
+
+	   This routine writes the character and an attribute byte to the
+	   screen beginning at the current cursor location. The character
+	   may be written any number of times.
+
+
+	 RETURNS
+
+	   Nothing
+
+
+	 SAMPLE CALL
+
+	   int c, attr, count;
+
+	   scr_write(c,attr,count);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 19
+				C FUNCTIONS
+
+
+	 NAME
+
+	   scr_up		   --> Scrolls the screen up a given
+				       number of lines
+	 SYNOPSIS
+
+	     scr_up(col1,row1,col2,row2,lines,attr);
+
+	     int col1,row1;	 Upper left corner of window to scroll.
+	     int col2,row2;	 Lower right corner of window to scroll.
+	     int lines; 	 Number of lines to scroll up. 0=full screen.
+	     int attr;		 Attribute to fill vacant lines
+
+
+	 DESCRIPTION
+
+	   This routine scrolls the screen up a given number of lines.
+
+
+	 RETURNS
+
+	   Nothing
+
+
+	 SAMPLE CALL
+
+	   int col1,row1,col2,row2,lines,attr;
+
+	   scr_up(row1,col1,row2,col2,lines,attr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 20
+				C FUNCTIONS
+
+
+	 NAME
+
+	   sc_down		   --> Scrolls the screen down a given
+				       number of lines
+	 SYNOPSIS
+
+	     scr_down(col1,row1,col2,row2,lines,attr);
+
+	     int col1,row1;	 Upper left corner of window to scroll.
+	     int col2,row2;	 Lower right corner of window to scroll.
+	     int lines; 	 Number of lines to scroll down. 0=full screen.
+	     int attr;		 Attribute to fill vacant lines
+
+
+	 DESCRIPTION
+
+	   This routine scrolls the screen down a given number of lines.
+
+
+	 RETURNS
+
+	   Nothing
+
+
+	 SAMPLE CALL
+
+	   int c1,r1,c2,r2,lines,attr;
+
+	   scr_down(c1,r1,c2,r2,lines,attr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 21
+				C FUNCTIONS
+
+
+
+	 NAME
+
+	  peekb()	    --> Gets a byte from memory
+
+	 SYNOPSIS
+
+	  c = peekb(offset,segment);
+
+	  int c;		      returned byte
+	  unsigned offset;	      offset from segment of memory
+	  unsigned segment;	      segment of data
+
+	 DESCRIPTION
+
+	  This function reads a byte from the specified memory address
+
+
+	 RETURNS
+
+	  The memory value in c.
+
+
+	 SAMPLE CALL
+
+	  c = peekb(offset,segment);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 22
+				C FUNCTIONS
+
+
+
+	 NAME
+
+	  peekw()	    --> Gets a word from memory
+
+	 SYNOPSIS
+
+	  c = peekw(offset,segment);
+
+	  unsigned c;		      returned word
+	  unsigned offset;	      offset from segment of memory
+	  unsigned segment;	      segment of data
+
+	 DESCRIPTION
+
+	  This function reads a word from the specified memory address
+
+
+	 RETURNS
+
+	  The memory value in c.
+
+
+	 SAMPLE CALL
+
+	  c = peekw(offset,segment);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 23
+				C FUNCTIONS
+
+
+	 NAME
+
+	  pokeb()	    --> writes a byte to memory
+
+	 SYNOPSIS
+
+	  c = pokeb(offset,segment,byte);
+
+	  int c;		    value at memory address before write
+	  unsigned offset;	    offset from segment of memory
+	  unsigned segment;	    segment of data
+	  int byte;		    data to be written
+
+	 DESCRIPTION
+
+	  This function writes a byte of data to memory.  It also returns
+	  the value in memory before the new byte is written.
+
+
+	 RETURNS
+
+	  The previous value in memory.
+
+
+	 SAMPLE CALL
+
+
+	  c = pokeb(offset,segment,byte);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 24
+				C FUNCTIONS
+
+
+	 NAME
+
+	  pokew()	    --> writes a word to memory
+
+	 SYNOPSIS
+
+	  c = pokew(offset,segment,word);
+
+	  unsigned c;		      value at memory address before write
+	  unsigned offset;	    offset from segment of memory
+	  unsigned segment;	    segment of data
+	  unsigned word;	    data to be written to memory
+
+	 DESCRIPTION
+
+	  This function writes a word of data to memory.  It also returns
+	  the value in memory before the new byte is written.
+
+
+	 RETURNS
+
+	  The previous value in memory.
+
+
+	 SAMPLE CALL
+
+
+	  c = pokew(offset,segment,word);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 25
+				C FUNCTIONS
+
+
+	 NAME
+
+	  sysint()	    --> Performs an 8086 system interrupt
+
+	 SYNOPSIS
+
+	  int sysint(vec,sreg,rreg);
+
+	  unsigned char vec;	      interrupt to execute
+	  struct regval *sreg	      registers before interrupt
+	  struct regval *rreg	      registers after interrupt
+
+
+
+	 DESCRIPTION
+
+	  This	function will perform a system interrupt.  The for of the
+	  structure is:
+
+		  struct regval {int  ax,bx,cx,dx,si,di,ds,es;};
+
+	 RETURNS
+
+	  This	function  returns the registers after  the  interrupt  in
+	  rreg.
+
+
+	 SAMPLE CALL
+
+
+	  sysint(vec.sreg,rreg);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 26
+				C FUNCTIONS
+
+
+	 NAME
+
+	  getreg()	    --> Get the value of a specified 8086
+				register
+
+	 SYNOPSIS
+
+	  c = getreg(regnum);
+
+	  unsigned c;		 value of the specified register
+	  int regnum;		 0 = return with CS
+				 1 = return with DS
+				 2 = return with SP
+			 any other = return with CS
+
+
+	 DESCRIPTION
+
+	  This	function  returns  the	registered as  specified  in  the
+	  argument regnum.
+
+
+	 RETURNS
+
+	  The value of the register is returned.
+
+
+	 SAMPLE CALL
+
+
+	  c = getreg(regnum);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 27
+				C FUNCTIONS
+
+
+	 NAME
+
+	  inton()	    --> Enables the system interrupts
+
+	 SYNOPSIS
+
+	  inton();		 Enables interrupts
+
+
+	 DESCRIPTION
+
+	  This function enables the system interrupts.
+
+
+
+	 RETURNS
+
+	  Nothing
+
+
+	 SAMPLE CALL
+
+
+	  inton();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 28
+				C FUNCTIONS
+
+
+	 NAME
+
+	  intoff()		 --> Disables the system interrupts
+
+	 SYNOPSIS
+
+	  intoff()		 disables the interrupts
+
+
+	 DESCRIPTION
+
+	  This function disables the system interrupts.
+
+
+
+	 RETURNS
+
+	  Nothing
+
+
+	 SAMPLE CALL
+
+
+	  intoff();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 29
+				C FUNCTIONS
+
+
+	 NAME
+
+	  movblock()	    --> Moves a block of memory from one address
+				to another.
+	 SYNOPSIS
+
+	  movblock(source.ofs,source.seg,destin.ofs,destin.seg,byte.count)
+
+	  unsigned source.ofs;	      source offset from segment
+	  unsigned source.seg;	      segment of data
+	  unsigned destin.ofs;	      destination offset from segment
+	  unsigned destin.seg;	      destination segment of data
+	  unsigned byte.count;	      number of bytes to be moved
+
+
+	 DESCRIPTION
+
+	  This	function  moves  a block of byte.count	memory	from  one
+	  address to another.
+
+
+	 RETURNS
+
+	  Nothing
+
+
+	 SAMPLE CALL
+
+	  movblock(soff,sseg,doff,dseg,count);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  C - 30
+
+

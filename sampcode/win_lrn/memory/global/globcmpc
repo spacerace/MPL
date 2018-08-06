@@ -1,0 +1,7 @@
+
+globcmpc.obj: globcmpc.c
+   cl -c -W2 -AS -Gsw -Od -Zped globcmpc.c
+
+globcmpc.exe: globcmpc.obj globcmpc.def
+   link4 globcmpc,/align:16,/map/li,slibw,globcmpc.def
+   mapsym globcmpc

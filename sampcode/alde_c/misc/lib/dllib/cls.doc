@@ -1,0 +1,39 @@
+
+
+
+        NAME
+                cls -- clear screen and home cursor
+
+        SYNOPSIS
+                void cls();
+
+
+        DESCRIPTION
+        This function clears the screen on page 0 and places the
+        cursor in the upper left-hand corner.  It is simply an
+        invocation of two other functions:
+             d_cls();
+             d_pos(0, 0, 0);
+
+
+
+        EXAMPLE
+
+             cls();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

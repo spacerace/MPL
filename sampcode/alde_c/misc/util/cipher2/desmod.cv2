@@ -1,0 +1,321 @@
+/***************************** desmods *************************
+ * DESMODS: encrypt/decrypt bytes using the NBS DES algorithm.
+ * Programmed by R.W.Outerbridge; uses Jim Gillogly's DES.
+ *
+ * Usage: des (+|-)([ecb]|<cbc|cks>) key1 <ivec>
+ *              EN/DE   MODES           KEYS
+ *
+ *      + :     ENcrypt (default if MODE specified)
+ *      - :     DEcrypt (presumes encrypted input)
+ *
+ *      Modes of Operation (choose ONE):
+ *
+ *      ecb : (default) Electronic Code Book.  Only uses one key.
+ *              If simply "+" or "-" is specified, ecb is used.
+ *      cbc : Cipher Block Chaining.  Uses two keys.
+ *      cks : ChecKSum.  Generates a 64-bit checksum using two keys.
+ *
+ *      Both keys may be as long as you wish.  The practical limit
+ *      on keylength is the size of your system's argument buffer.
+ *      WARNING: on some machines all arguments become CAPITALS.
+ *      WARNING: non-ascii machines MAY get different results.
+ *
+ *      Any character may be used in keys - depending on the O/S -
+ *      except ASCII NULL (0x00).  The one letter key '#', when used 
+ *      for "key1", will cause desmods to use a preset default key
+ *      (for verification and testing).  Failing to specify "ivec", if
+ *      required, will result in "key1" being used for both keys.  It
+ *      is an error to omit "key1".  There is no provision for giving
+ *      arbitrary, absolute, bit-valued keys.
+ *
+ *      As painful as they are to use, long keys are MUCH safer;
+ *      think up nonsense phrases you can safely remember.
+ *
+ * 8501.29 : Default key ['#'] not erased from command line.  rwo
+ */
+
+#include <stdio.h>
+#define toascii(a)      ((a)&0177)
+#define EN      0
+#define DE      1
+#define CKS     2
+#define MODS    6       /* three modes times two cases  */
+typedef char    BYTE;   /* BYTE = (vax) ? int : char    */
+        
+/* cryptographic declarations   */
+void copy8(), xor8(), getkey();
+BYTE Block[8], Link[8], Temp[8], IV[8];
+BYTE DFLTKY[8] = { 1,35,69,103,137,171,205,239 };
+        /* DO NOT ALTER! => 0x0123456789abcdef <=       */
+
+extern void desinit(), kinit(), des();
+
+/* I/O declarations     */
+void ruderr(), put8(), vraiput(), initio();
+int IOedf, End, Once;
+BYTE Last[8];
+
+int Ecb(), Cbc(), Cks();
+struct modes {
+        char *name;
+        int (*func)();
+        };
+struct modes ModsOp[MODS] = {   /* Must be CAPs for CP/M        */
+        { "ecb", Ecb },
+        { "ECB", Ecb },
+        { "cbc", Cbc },
+        { "CBC", Cbc },
+        { "cks", Cks },
+        { "CKS", Cks }  };
+
+main(argc, argv)
+int argc;
+char **argv;
+        {
+        int (*xeqtr)();
+        int step, ende, edio, ok, i;
+        BYTE kv[8];
+
+        argv++; argc--;
+        if(argc > 3 || argc < 2) ruderr();
+        else desinit();
+
+        for(step=0; argc > 0; step++) {
+                switch(step) {
+                case 0:         /* set en/de and/or default mode        */
+                        if(*argv[0] == '+' || *argv[0] == '-') {
+                                ende = (*argv[0] == '+') ? EN : DE;
+                                *argv[0]++ = NULL;
+                                if(*argv[0] == NULL) {
+                                        xeqtr = Ecb;    /* default mode */
+                                        edio = ende;
+                                        argv++; argc--;
+                                        break;
+                                        }
+                                }
+                        else ende = EN;
+
+                        for(i=ok=0; i < MODS && !ok; i++) {
+                                if(strcmp(argv[0], ModsOp[i].name) == 0) {
+                                        xeqtr = ModsOp[i].func;
+                                        ok = 1;
+                                        }
+                                }
+                        if(!ok) {
+                                fprintf(stderr,
+                                        "Des: unknown mode >%s<.\n", argv[0]);
+                                ruderr();
+                                }
+                        while(*argv[0]) *argv[0]++ = NULL;
+                        argv++; argc--;
+
+                        /* set appropriate IO modes     */
+                        if(xeqtr == Cks) edio = CKS;
+                        else edio = ende;
+
+                /* falling through....  */
+                case 1: /* get the key and IV, if needed and present    */
+                        if(strcmp(argv[0], "#") == 0) {
+                                copy8(DFLTKY, kv);
+                                *argv[0] = NULL;
+                                }
+                        else getkey(argv[0], kv);
+                        argv++; argc--;
+                        
+                        /* if nothing left, but an IV needed, use the key */
+                        if(argc == 0) {
+                                if(xeqtr != Ecb) copy8(kv, IV);
+                                break;
+                                }
+                        else if(xeqtr == Ecb) {
+                                fprintf(stderr, "Des: ivec ignored.\n");
+                                while(*argv[0]) *argv[0]++ = NULL;
+                                argv++; argc--;
+                                break;
+                                }
+
+                        else getkey(argv[0], IV);
+                        argv++; argc--;
+                        break;
+
+                default:
+                        fprintf(stderr, "Des: Programming error!\n");
+                        exit(1);
+                        break;
+                        }       /* switch       */
+                }       /* argument parsing     */
+
+        kinit(kv, ende);
+        initio(edio);
+        (*xeqtr)(ende); /* ta-da!       Take it away xeqtr!  */
+        exit(0);
+        }       /* end of main  */
+
+void ruderr() {
+        fprintf(stderr, "Usage: des (+|-)([ecb]|<cbc|cks>) key1 <ivec>\n");
+        exit(1);
+        }
+
+Cbc(e_d)        /* Cipher Block Chaining                */
+int e_d;        /* Ciphertext errors are self-healing.  */
+        {
+        copy8(IV, Link);
+        while(get8(Block) != EOF) {
+                if(e_d == DE) {
+                        des(Block, Temp);
+                        xor8(Temp, Link);
+                        copy8(Block, Link);
+                        put8(Temp);
+                        }
+                else {
+                        xor8(Block, Link);
+                        des(Block, Link);
+                        put8(Link);
+                        }
+                }
+        return;
+        }
+
+Cks(dummy)      /* CBC authentication checksum generator        */
+int dummy;      /* The banks use this for verifications.        */
+        {
+        int i, j, k;
+        long count = 0L;
+        copy8(IV, Link);
+        while(get8(Block) != EOF) {
+                xor8(Block, Link);
+                des(Block, Link);
+                count++;
+                }
+        fprintf(stdout, ": %0ld bytes\t: ", count<<3);
+        for(i=j=0; i < 2; i++) {
+                for(k=0; k < 4; k++, j++)
+                        fprintf(stdout, "%02x", Link[j]&0377);
+                putc(' ', stdout);
+                }
+        fprintf(stdout, ":\n");
+        return;
+        }
+
+Ecb(dummy)      /* Electronic Code Book : simple substitution   */
+int dummy;      /* Yawn.        For static data and random access.      */
+        {
+        while(get8(Block) != EOF) {
+                des(Block, Block);
+                put8(Block);
+                }
+        return;
+        }
+
+void copy8(from, to)
+register BYTE *from, *to;
+        {
+        register BYTE *ep;
+        ep = &to[8];
+        while(to < ep) *to++ = *from++;
+        return;
+        }
+
+void xor8(to, with)
+register BYTE *to, *with;
+        {
+        register BYTE *ep;
+        ep = &to[8];
+        while(to < ep) *to++ ^= *with++;
+        return;
+        }
+
+void put8(block)
+register BYTE *block;
+        {
+        if(IOedf == DE) copy8(block, Last);
+        else vraiput(block, &block[8]);
+        return;
+        }
+
+get8(input)     /* KLUDGE: incomplete blocks handled sleazily   */
+register BYTE *input;
+        {
+        register int i, j;
+        if(End == 1) return(EOF);       /* no more input        */
+
+        for(i=0; i < 8 && ((j = getc(stdin)) != EOF); i++) *input++ = j;
+
+        if(IOedf == DE) {       /* DECRYPTION   */
+                /* complete block?      pending output? */
+                if(i == 8 && (Once > 0)) vraiput(Last, &Last[8]);
+                else if(j == EOF) {
+                        End = 1;
+                        if(Once > 0) {
+                                /* incomplete block means no nulls      */
+                                if(i != 0) i = 0;
+                                else {  
+                                        i = Last[7]&0377;
+                                        if(i > 8) i = 0;        /* huh? */
+                                        }
+                                vraiput(Last, &Last[8-i]);
+                                }
+                        return(EOF);
+                        }
+                }
+        else if(j == EOF) {     /* ENCRYPTION   */
+                End = 1;
+                if(i == 0 && (IOedf == EN || (Once > 0))) {
+                        /* if no padding to do, print a kludge  */
+                        if(IOedf == EN && (Once > 0)) putc('0', stdout);
+                        return(EOF);
+                        }
+                for(j=i; j < 7; j++) *input++ = NULL;
+                *input = 8-i;
+                }
+        Once = 1;
+        return(0);
+        }
+
+void vraiput(cp, ep)
+register BYTE *cp, *ep;
+        {
+        while(cp < ep) putc((char)*cp++, stdout);
+        return;
+        }
+
+void initio(edf)        /* use this as a hook on systems without UNIX   */
+int edf;
+        {
+        IOedf = edf;
+        End = Once = 0;
+        return;
+        }
+
+void getkey(aptr, kptr)
+register char *aptr;
+register BYTE *kptr;
+        {
+        register BYTE *store;
+        register int i, first;
+        BYTE hold[8];
+        store = kptr;
+        first = 1;
+        kinit(DFLTKY, EN);
+        copy8(DFLTKY, hold);
+        while(*aptr || first) {
+                kptr = store;
+                for(i=0; i<8 && (*aptr != NULL); i++) {
+                        *kptr++ = toascii(*aptr);
+                        *aptr++ = NULL;
+                        }
+                while(i++ < 8) *kptr++ = NULL;
+                xor8(store, hold);
+                des(store, hold);
+                first = 0;
+                }
+        copy8(hold, store); 
+        return;
+        }
+
+/* des cks # < /dev/null 
+ *      : 8 bytes       : c9574425 6a5ed31d :
+ *      : (-DKSX64)     : acdcebea eb77deaa :
+ *                      (rwo/8502.16.18:30/V1.2)                */
+/************************* desmods ******************************/
+

@@ -1,0 +1,14 @@
+
+loadmenu.res: loadmenu.rc
+    rc -r loadmenu.rc
+
+loadmenu.obj: loadmenu.c
+   cl -c -W2 -AS -Gsw -Od -Zped loadmenu.c
+
+loadmenu.exe: loadmenu.obj loadmenu.def
+   link4 loadmenu,/align:16,/map/li,slibw/NOE,loadmenu.def
+   mapsym loadmenu
+   rc loadmenu.res
+
+loadmenu.exe: loadmenu.res
+    rc loadmenu.res

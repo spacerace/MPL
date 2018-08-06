@@ -1,0 +1,19 @@
+#------------------
+# BITLIB make file
+#------------------
+
+bitlib.obj : bitlib.asm
+     masm bitlib ;
+
+bitlib.res : bitlib.rc bitmap1.bmp bitmap2.bmp bitmap3.bmp \
+                       bitmap4.bmp bitmap5.bmp bitmap6.bmp \
+                       bitmap7.bmp bitmap8.bmp bitmap9.bmp
+     rc -r bitlib
+
+bitlib.dll : bitlib.obj bitlib.def
+     link bitlib, bitlib.dll /align:16, NUL,, bitlib
+     rc bitlib.res bitlib.dll
+
+bitlib.dll : bitlib.res
+     rc bitlib.res bitlib.dll
+

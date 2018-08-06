@@ -1,0 +1,6 @@
+
+drmenubr.obj: drmenubr.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 drmenubr.c
+
+drmenubr.exe: drmenubr.obj drmenubr.def
+    link4 /align:16 drmenubr,,nul,slibw/NOE,drmenubr.def

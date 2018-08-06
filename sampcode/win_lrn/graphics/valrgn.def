@@ -1,0 +1,14 @@
+NAME	Valrgn
+
+DESCRIPTION 'Demonstrate the use of the ValidateRgn function'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  4096
+STACKSIZE 5000
+
+EXPORTS
+    ValrgnWndProc @1

@@ -1,0 +1,12 @@
+#include "style.h"
+
+TestMenu MENU
+  BEGIN
+    MENUITEM "Test", 100
+    POPUP "GetMenuState"
+      BEGIN
+        MENUITEM  "Item 1", 101
+        MENUITEM  "Item 2", 102, CHECKED
+        MENUITEM  "Item 3", 103
+      END
+  END

@@ -1,0 +1,96 @@
+
+              MEMORY CLEAN FOR THE IBM PERSONAL COMPUTER
+
+                             Version 1.00
+                             May 3, 1983
+
+                         Robert J. Beilstein
+                        413 Wells Avenue, West
+                    North Syracuse, New York 13212
+
+
+One of the unfortunate "features" of the IBM Personal Computer is
+that, while the 8088 processor will address 1024K of memory, the BIOS
+(and, thus, DOS) will only recognize the first 640K (on "regular"
+PC's, without the expansion box and ROM, 544K) of memory.
+
+While there are a number of programs around which are able to ignore
+the memory size passed from DOS, and make use of the additional
+memory, there is still a fairly serious problem that needs to be
+addressed.
+
+When the machine is powered up, the contents of memory are
+unpredictable.  In particular, there is probably only a 50%
+probability that any given memory location has the proper parity.
+
+The ROM BIOS "initial reliability tests" write to both planar and I/O
+RAM during initialization.  This not only sets proper parity in the
+memory locations (this happens automatically when the locations are
+written into), it also tests the memory for proper operation (though,
+curiously, it never attempts to write an odd-parity value).
+
+Unfortunately, this setting and testing of memory only occurs in the
+first 640K (544K) of memory.  Thus, any additional memory in the
+system is left in an uninitialized state.
+
+If a program attempts to reference a location in this uninitialized
+memory before first writing to it (extremely poor programming
+practice, it is true), then there is a 50% chance that the result will
+be a "PARITY CHECK 2".
+
+This seems like an awfully stiff penalty to pay for a program bug, as
+it requires one to power down the machine in order to clear it.
+
+MEMCLEAN is a program which will write an initial value (with good
+parity) into all of the memory locations which IBM misses.
+
+When called without additional parameters, the program will clear the
+high memory from X'C0000' through X'EFFFF' (768K to 960K).
+
+If a parameter of "544K" is specified, locations X'88000' through
+X'9FFFF' (544K to 640K) will be cleared.  This is for compatibility
+with older (non XT) PC's.
+
+If "SEGA" is specified, then locations X'A0000' through X'AFFFF' are
+included.  This area is defined to be "reserved" by IBM, but is (for
+now) available for use.
+
+Specifying "NOHIGH" will inhibit writing into the high memory area
+(X'C0000' through X'EFFFF').
+
+Note that writing into nonexistent memory locations causes no problems
+(other than using up some time).  So there is no problem if there is
+memory only up to (say) 576K.
+
+The following examples illustrate the use of MEMCLEAN:
+
+1.  A PC/XT with memory in the high area, but not in the "reserved"
+area:
+
+A>memclean
+
+
+2.  A "regular" PC with 704K of contiguous memory (i.e. up through
+X'AFFFF'):
+
+A>memclean sega 544k nohigh
+
+3.  A "regular" PC with every available memory location populated:
+
+A>memclean 544k sega
+
+4.  A PC/XT with 704K of contiguous memory:
+
+A>memclean sega nohigh
+
+
+Permission is given to use and copy this program and documentation
+freely, as long as no charge is made for its distribution or use, and
+as long as the notices and copyright statements in the program and
+documentation are left intact.  For complete details of the terms and
+conditions, please see the source code.
+
+All other rights are reserved.  Program and documentation Copyright
+(C) Robert J. Beilstein, 1983.
+
+

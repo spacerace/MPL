@@ -1,0 +1,57 @@
+; Definitions file for WNTERM
+;
+; Copyright (c) 1980, 1990 by
+; William S. Hall
+; 3665 Benton Street, #66
+; Santa Clara, CA 95051
+
+NAME
+
+DESCRIPTION 'Simple Windows Terminal Program'
+
+STUB 'Winstub.exe'
+
+EXETYPE		WINDOWS
+
+HEAPSIZE	1024
+STACKSIZE	4096
+
+CODE	MOVEABLE
+DATA	MOVEABLE MULTIPLE
+
+SEGMENTS
+    _TERMRES PRELOAD MOVEABLE
+    _TERMINT PRELOAD MOVEABLE DISCARDABLE
+    _TERMMSC LOADONCALL MOVEABLE DISCARDABLE
+
+EXPORTS
+    MainWndProc		@1
+    MainWndSubProc	@2
+    AboutBoxProc	@3
+    SetCommParams	@4
+    FindSmallFont	@5
+; Kermit definitions items.
+;
+; Copyright (c) 1990 by
+; William S. Hall
+; 3665 Benton Street #66
+; Santa Clara, CA 95051
+;
+; The contents of this file must be
+; appended to the main module's definition file
+;
+SEGMENTS
+    KRM_WNKERM LOADONCALL MOVEABLE DISCARDABLE
+    KRM_WNKINT LOADONCALL MOVEABLE DISCARDABLE
+    KRM_WNKMSC LOADONCALL MOVEABLE DISCARDABLE
+
+EXPORTS
+    krmDoTimeout	@1000
+    krmXferDlgBox	@1001
+    krmCancelBoxProc	@1002
+    krmSendFileProc	@1003
+    krmProtocol		@1004
+    krmPackets		@1005
+    krmHideChildren	@1006
+
+

@@ -1,0 +1,11 @@
+dlgint.obj: dlgint.c dlgint.h
+  cl -c -W2 -AS -Gsw -Od -Zped dlgint.c
+
+dlgint.res: dlgint.rc dlgint.ico dlgint.h dlgint.dlg
+  rc -r dlgint.rc
+
+dlgint.exe: dlgint.obj dlgint.def dlgint.res 
+    link4 dlgint,/align:16,,slibw,dlgint.def
+    rc dlgint.res
+    del dlgint.map
+

@@ -1,0 +1,15 @@
+; Definition file for DLGSAMP
+; Created by Microsoft Corp., 1989
+;
+NAME	DlgSamp	WINDOWAPI
+ 
+DESCRIPTION 'OS/2 Presentation Manager Dialog Sample Program'
+ 
+STUB    'OS2STUB.EXE'
+ 
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+ 
+HEAPSIZE    4096        ; Must be non-zero to use Local memory manager
+STACKSIZE   4096        ; Must be non-zero for SS == DS
+                        ; suggest 4k as minimum stacksize

@@ -1,0 +1,11 @@
+
+loadstr.obj: loadstr.c
+   cl -c -W2 -AS -Gsw -Od -Zped loadstr.c
+
+loadstr.res: loadstr.rc
+   rc -r loadstr.rc
+
+loadstr.exe: loadstr.obj loadstr.def loadstr.res
+   link4 loadstr,/align:16,/map/li,slibw,loadstr.def
+   mapsym loadstr
+   rc loadstr.res

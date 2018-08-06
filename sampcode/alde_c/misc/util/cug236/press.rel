@@ -1,0 +1,95 @@
+                 Press Release for C Users' Group Starter Disk
+
+     This disk is the result of an effort to produce a disk of very portable 
+programs that people new to the group can compile and run with minimal hassle.  
+The programs almost all exist in other library volumes, but they suffered from 
+portability problems in their original forms.  The effort required to render a 
+program portable ranged from moderate (the MSDOS programs) to severe (the BDS C 
+programs).
+
+     The objective of the effort has been realized as far as I can validate the 
+programs with one notable exception.  BAWK has a very deeply ingrained 
+dependency on the truth of the statement sizeof(int) == sizeof(char *).  It 
+will require a person experienced in compiler/interpreter writing to remove 
+this dependency as it involves changing BAWK's runtime interpreter from weakly 
+typed (like BDS C) to strongly typed (like modern C compilers).  The upshot is 
+that BAWK will not work under the MSDOS large model, though it will work under 
+the MSDOS small model.
+
+     I was able to compile and run every program on the disk in the following 
+environments:
+
+     1)   AZTEC C II / CP/M 2.2
+
+     2)   Eco-C / CP/M 2.2 (except BAWK which overflowed the linker's memory)
+
+     3)   Eco-C88 / MSDOS 3.1 (except BAWK which brought a strange error 
+               message that I can't decipher from the compiler's code 
+               generator)
+
+     4)   Microsoft C 3.0 (small model) / MSDOS 2.0
+
+     5)   Microsoft C 3.0 (large model) / MSDOS 2.0 (except BAWK -- see above)
+
+     A few minor tweaks were required, but these have been documented at the 
+top of each program as switches that can be flipped by uncommenting #define 
+directives.
+
+     On to the contents of the disk.....
+
+     1)   2UP       Rearranges text from single-column format to multi-column 
+                    format.
+
+     2)   BAWK      A GREP-based text pattern search and replace facility.
+
+     3)   CB        Arranges curly-braces, indentation, and so forth of a C 
+                    program source into a rather readable form.
+
+     4)   CFLOW     Lists function definitions and function calls of a C 
+                    program source so that one can see who calls what.
+
+     5)   FCOMP     A rather intelligent text file comparator.
+
+     6)   HEAD      Lists the first n lines of each file in a list of text 
+                    files.
+
+     7)   PLCHECK   Shows the indentation level of each line of a C program 
+                    source.
+
+     8)   RETAB     A combination of DETAB and ENTAB.  Detabifies a file then 
+                    entabifies it with a (possibly) different tab increment 
+                    without changing the file's appearence.
+
+     9)   RETABF    Same as RETAB except that it works from stdin to stdout 
+                    instead of between two named files.
+
+     10)  RS232EXP  Conducts a question-and-answer session about RS-232 comm 
+                    link problems.
+
+     11)  SGREP     A different GREP-based text pattern search and replace 
+                    facility.
+
+     12)  TEE       Takes snapshots of the contents of pipelines in "pipe-
+                    fitting" applications.
+
+     13)  XC        Cross-references a C program source.
+
+     In the course of this project, I discovered that, while the C language 
+will allow one to write quite portable code, most of you out there don't do so. 
+That makes your efforts almost useless to people who aren't running exactly 
+your environment.  How do you write portable code?  Watch this space in future 
+issues.
+
+     You are encouraged to validate these programs under environments that are 
+not available to me.  If you tell me what modifications you've had to make to 
+the package to get it to work for you, I can incorporate them into future 
+releases of the package.  That way, others will not have to rediscover what you 
+have learned.  In particular, if some enterprising compiler hacker will improve 
+BAWK's interpreter.....
+
+                                        William C. Colley, III
+                                        14 Hawthorne Drive
+                                        Oberlin, OH 44074
+
+                                        (216) 775-3680
+

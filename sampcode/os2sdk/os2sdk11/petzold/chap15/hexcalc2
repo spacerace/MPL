@@ -1,0 +1,16 @@
+#--------------------
+# HEXCALC2 make file
+#--------------------
+
+hexcalc2.obj: hexcalc2.c hexcalc.h
+     cl -c -G2sw -W3 hexcalc2.c
+
+hexcalc.res : hexcalc.rc hexcalc.h
+     rc -r hexcalc.rc
+
+hexcalc2.exe : hexcalc2.obj hexcalc2.def
+     link hexcalc2, /align:16, NUL, os2, hexcalc2
+     rc hexcalc.res hexcalc2.exe
+
+hexcalc2.exe : hexcalc.res
+     rc hexcalc.res hexcalc2.exe

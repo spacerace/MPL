@@ -1,0 +1,39 @@
+
+
+       NAME
+               wkdayname -- return a pointer to name of day string
+
+       SYNOPSIS
+               char *wkdayname(day);
+               int day;        day number 0-6
+
+
+
+       DESCRIPTION
+       This function returns a character pointer to a text string
+       naming the day of the week indicated by the day parameter.
+       Day 0 is Sunday, and day 6 is Saturday.  Strings are null terminated
+       and may be used directly or copied to another string.
+
+
+       EXAMPLE
+
+              printf("Today is %s", wkdayname(3));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

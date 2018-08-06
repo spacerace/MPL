@@ -1,0 +1,6 @@
+      Logic has been added to permit operation of the Toolkit in a 
+      network  environment.   On  each  call  to  the Toolkit when 
+      operating  in a network environment,  a LockChannels request 
+      is made at the beginning of the call, and  a ReleaseChannels 
+      call  is  made  at  the   end;  to prevent conflicts between 
+      network users and Toolkit users of devices on a SCSI bus.

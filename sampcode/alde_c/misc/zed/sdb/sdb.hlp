@@ -1,0 +1,24 @@
+create <rname> ( <adefs> ) <size>       - create a new relation
+insert <rname>                          - insert tuples into a relation
+delete <rse> ;                          - delete tuples from relations
+update <anames> from <rse> ;            - update tuples within a relation
+print [<u>] <anames> from <rse> [<i>] ; - print tuples
+sort <rname> by <snames> ;              - sort a relation file
+import <fname> into <rname>             - import tuples from a file
+export <rname> [<i>] ;                  - export tuples to a file
+extract <rname> [<i>] ;                 - extract definition to a file
+compress <rname>                        - compress a relation file
+define <mname>                          - define a macro
+exit                                    - exit SDB
+
+<u>             ::=     using <fname>
+<i>             ::=     into <fname>
+<adefs>         ::=     <a list of attribute definitions>
+<rse>           ::=     <rnames> [where <boolean-expression>]
+<rname>         ::=     <a relation name>
+<rnames>        ::=     <a comma separated list of <rname>s>
+<aname>         ::=     [<rname> .] <an attribute name>
+<anames>        ::=     * | <a comma separated list of <aname>s>
+<sname>         ::=     <aname> { ascending | descending }
+<snames>        ::=     <a comma separated list of <sname>s>
+

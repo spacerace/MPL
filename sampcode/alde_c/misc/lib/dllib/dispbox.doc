@@ -1,0 +1,41 @@
+
+
+        NAME
+                disp_box -- display a box on the screen
+
+        SYNOPSIS
+                void disp_box(row, col, width, height, style);
+                int row, col;       position to display upper left corner
+                int height, width;  size of box
+                int style;          0 = single line, 1 = double line,
+                                    2 = single line reverse video,
+                                    3 = double line reverse video
+
+
+        DESCRIPTION
+        This function uses the features of Datalight's display
+        package functions, and therefore, must follow the rules
+        laid down by Datalight for their use.  Specifically,
+        disp_open() must be called prior to using this function,
+        and the functions may fail of the target system is not a
+        very close compatible since direct memory writing is being
+        used.  disp_box places a single line or double line box on the
+        screen with the upper left corner anchored at "row" and "column",
+        with the size denoted by the "height" and "width" values.
+        No error checking is done on any value.  Invalid values may have
+        unpredictable results.
+
+
+        EXAMPLE
+
+              int i;
+              disp_open();    /* initialize the package */
+              disp_cls();     /* clear the screen */
+              disp_box(0, 0, 80, 24, 1); /* border the entire screen */
+                                         /* with double graphics line */
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

@@ -1,0 +1,24 @@
+Code 05                                  -Mode Select
+
+Input registers - ES:BX points to a buffer containing the bytes that are to 
+be output during the data phase of the mode select command. Byte 0 contains 
+the length of the buffer in bytes to be output. Bytes 1-n are the data bytes.
+
+Special output registers - none.
+
+Operation:
+
+    The purpose of this command is to send the required parameters to the 
+    device in preparation for the issuing of the unit format command. The 
+    SCSI Mode Select (15h) command is issued to the specified device. The 
+    length of the data phase is taken from byte 0 of the caller's buffer.
+    During the data phase of the command, successive bytes are taken from the
+    caller's buffer and sent to the device.
+
+    A check is made for SCSI Request asserted, and SCSI C/D deasserted between
+    each byte. If C/D is asserted or the buffer is exhausted, the operation 
+    proceeds to the Status/Message phase.
+
+    If an error is detected during the Status/Message phase, a SCSI Request 
+    Sense is issued and the results returned in AH/AL.
+

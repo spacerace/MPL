@@ -1,0 +1,10 @@
+#include "style.h"
+#include "freeres.h"
+
+face1 BITMAP freeres.bmp
+
+
+STRINGTABLE
+BEGIN
+    IDSNAME,	"freeres"
+END

@@ -1,0 +1,11 @@
+;------------------------------------
+; DEVCAPS.DEF module definition file
+;------------------------------------
+
+NAME           DEVCAPS   WINDOWAPI
+
+DESCRIPTION    'Device Capabilities (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

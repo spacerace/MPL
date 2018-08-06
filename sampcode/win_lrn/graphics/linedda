@@ -1,0 +1,7 @@
+
+linedda.obj: linedda.c
+   cl -c -W2 -AS -Gsw -Od -Zped linedda.c
+
+linedda.exe: linedda.obj linedda.def
+   link4 linedda,/align:16,/map/li,slibw/NOE,linedda.def
+   mapsym linedda

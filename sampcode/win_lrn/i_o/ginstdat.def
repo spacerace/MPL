@@ -1,0 +1,12 @@
+NAME    ginstdat
+
+DESCRIPTION 'Test GetInstanceData function.'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  4096
+STACKSIZE 8096
+

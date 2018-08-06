@@ -1,0 +1,7 @@
+
+loclcmpc.obj: loclcmpc.c
+   cl -c -W2 -AS -Gsw -Od -Zped loclcmpc.c
+
+loclcmpc.exe: loclcmpc.obj loclcmpc.def
+   link4 loclcmpc,/align:16,/map/li,slibw/NOE,loclcmpc.def
+   mapsym loclcmpc

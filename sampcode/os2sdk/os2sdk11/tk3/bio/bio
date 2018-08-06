@@ -1,0 +1,34 @@
+# Makefile for BIOrhythm program
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC	=	cl -c -AM -G2s -W3 -Zpei
+LF	=	/align:16 /codeview /map /NOD
+OBJS	=	bio.obj biocmd.obj biopaint.obj wndproc.obj
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+# Dependencies
+#
+bio.res:	bio bio.h bio.ico bio.rc
+
+bio.obj:	bio bio.c bio.h
+
+biocmd.obj:	bio bio.h biocmd.c
+
+biopaint.obj:	bio bio.h biopaint.c
+
+wndproc.obj:	bio bio.h wndproc.c
+
+bio.exe:	bio $(OBJS) bio.res bio.def
+    link $(LF) $(OBJS), bio.exe, bio.map, mlibce os2, bio.def
+    rc bio.res
+    mapsym bio

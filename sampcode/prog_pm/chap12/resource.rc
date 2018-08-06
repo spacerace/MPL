@@ -1,0 +1,8 @@
+/*----------------------------------
+   RESOURCE.RC resource script file
+  ----------------------------------*/
+
+#include "resource.h"
+
+POINTER ID_RESOURCE resource.ico
+POINTER IDP_CIRCLE  resource.ptr

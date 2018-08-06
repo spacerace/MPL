@@ -1,0 +1,2190 @@
+Microsoft Systems Journal
+Volume 3; Issue 1; January, 1988
+
+Code Listings For:
+
+	Saywhat
+	pp. 09-30
+
+Author(s): Michael Geary
+Title:     Converting Windows Applications For Microsoft OS/2 PM
+
+
+
+Figure 1w
+=========
+
+
+#  MAKE file for SAYWHAT (Windows version)
+
+sw.obj:  sw.c  sw.h
+    cl -c -AS -DLINT_ARGS -Gcsw -Oas -W3 -Zdp sw.c
+
+sw.res:  sw.rc  sw.h
+    rc -r sw.rc
+
+saywhat.exe:  sw.obj  sw.res  sw.def
+    link4 sw, saywhat/align:16, saywhat/map/line, slibw, sw.def
+    rc sw.res saywhat.exe
+    mapsym saywhat
+
+
+Figure 3w
+=========
+
+
+; SW.DEF - Module definition file for SAYWHAT (Windows version)
+
+NAME    SayWhat
+
+DESCRIPTION 'Say What!'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  128
+STACKSIZE 4096
+
+EXPORTS
+    SayAboutDlgProc     @1
+    SayWhatDlgProc      @2
+    SayWhatWndProc      @3
+
+
+Figure 4w
+=========
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#include <style.h>
+#include "sw.h"
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+STRINGTABLE
+BEGIN
+    STR_NAME,    "SayWhat!"
+    STR_TITLE,   "Say What!"
+    STR_WHAT,    "Hello Windows!"
+END
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+SayWhat!    MENU
+BEGIN
+
+  POPUP "&Say"
+  BEGIN
+    MENUITEM "&What..."                 , CMD_WHAT
+    MENUITEM SEPARATOR
+    MENUITEM "E&xit"                    , CMD_EXIT
+    MENUITEM SEPARATOR
+    MENUITEM "A&bout SayWhat!..."       , CMD_ABOUT
+  END
+
+END
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+DLG_ABOUT DIALOG 19, 17, 130, 83
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+  CTEXT "Microsoft Windows",   -1,  0,  8, 127,  8
+  CTEXT "Say What!",           -1,  0, 18, 127,  8
+  CTEXT "Version 1.00",        -1,  0, 30, 127,  8
+  CTEXT "By Michael Geary",    -1,  0, 44, 129,  8
+  DEFPUSHBUTTON "Ok",        IDOK, 48, 62,  32, 14
+END
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+DLG_WHAT DIALOG 49, 41, 177, 103
+CAPTION "Say What!"
+STYLE WS_CAPTION | WS_SYSMENU | WS_VISIBLE | WS_POPUP
+BEGIN
+  CONTROL "Say &What:"   -1,            "Static",    SS_LEFT | WS_GROUP,                                  8, 10,  40,  8
+  CONTROL ""             ITEM_WHAT,     "Edit",      ES_LEFT | ES_AUTOHSCROLL | WS_BORDER | WS_TABSTOP,  56,  8, 112, 12
+  CONTROL "&Time Delay:" -1,            "Static",    SS_LEFT,                                             8, 28,  53,  8
+  CONTROL ""             ITEM_INTBAR,   "ScrollBar", SBS_HORZ | WS_TABSTOP,                              56, 28,  88,  8
+  CONTROL ""             ITEM_INTERVAL, "Edit",      ES_LEFT | WS_BORDER | WS_TABSTOP,                  152, 26,  16, 12
+  CONTROL "&Stability:"  -1,            "Static",    SS_LEFT,                                             8, 46,  56,  8
+  CONTROL ""             ITEM_DISTBAR,  "ScrollBar", SBS_HORZ | WS_TABSTOP,                              56, 46,  88,  8
+  CONTROL ""             ITEM_DISTANCE, "Edit",      ES_LEFT | WS_BORDER | WS_TABSTOP,                  152, 44,  16, 12
+  CONTROL "Painting:"    -1,            "Static",    SS_LEFT,                                             8, 64,  40,  8
+  CONTROL "&Clean"       ITEM_CLEAN,    "Button",    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,         56, 62,  36, 12
+  CONTROL "&Flicker"     ITEM_FLICKER,  "Button",    BS_AUTORADIOBUTTON,                                 96, 62,  42, 12
+  CONTROL "Enter"        IDOK,          "Button",    BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP,           24, 82,  48, 14
+  CONTROL "Esc=Close"    IDCANCEL,      "Button",    BS_PUSHBUTTON | WS_TABSTOP,                        104, 82,  48, 14
+END
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+Figure 5w
+=========
+
+
+/* SW.H - C header file for SAYWHAT (Windows version) */
+
+/* String table constants */
+
+#define STR_NAME        101
+#define STR_TITLE       102
+#define STR_WHAT        103
+
+/* Menu command IDs */
+
+#define CMD_ABOUT       201
+#define CMD_EXIT        202
+#define CMD_WHAT        203
+
+/* Dialog box resource IDs */
+
+#define DLG_ABOUT       301
+#define DLG_WHAT        302
+
+/* 'What...' dialog box item IDs */
+
+#define ITEM_WHAT       401
+#define ITEM_INTBAR     402
+#define ITEM_INTERVAL   403
+#define ITEM_DISTBAR    404
+#define ITEM_DISTANCE   405
+#define ITEM_CLEAN      406
+#define ITEM_FLICKER    407
+
+/* Timer IDs */
+
+#define TIMER_MOVE      501
+#define TIMER_CHAR      502
+
+
+Figure 6w
+=========
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *\
+ *  SW.C - C code for SayWhat - Windows version                  * 
+\* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#ifndef LINT_ARGS
+#define LINT_ARGS  /* turn on argument checking for C runtime */
+#endif
+
+#include <windows.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include "sw.h"
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#define MIN_INTERVAL    1       /* limits for nInterval */
+#define MAX_INTERVAL    999
+
+#define MIN_DISTANCE    1       /* limits for nDistance */
+#define MAX_DISTANCE    99
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Static variables  */
+
+HANDLE  hInstance;              /* application instance handle */
+
+HWND    hWndWhat;               /* main window handle */
+HWND    hWndPanel;              /* contral panel dialog handle */
+
+FARPROC lpfnDlgProc;            /* ProcInstance for dialog */
+
+char    szAppName[10];          /* window class name */
+char    szTitle[15];            /* main window title */
+
+char    szText[40];             /* current "what" text */
+NPSTR   pText = szText;         /* ptr into szText for icon mode */
+char    cBlank = ' ';           /* a blank we can point to */
+
+RECT    rcText;                 /* current text rectangle */
+POINT   ptAdvance;              /* increments for SayAdvanceText */
+POINT   ptCharSize;             /* X and Y size of a character */
+POINT   ptScreenSize;           /* X and Y size of the screen */
+
+int     nDisplayPlanes;         /* number of display planes */
+DWORD   rgbTextColor;           /* current text color */
+HBRUSH  hbrBkgd;                /* brush for erasing background */
+
+int     nInterval = 40;         /* current "Interval" setting */
+int     nDistance = 30;         /* current "Distance" setting */
+int     nDistLeft = 0;          /* change direction when hits 0 */
+BOOL    bCleanPaint = TRUE;     /* clean or flickery painting? */
+BOOL    bMouseDown = FALSE;     /* is mouse down? */
+BOOL    bIconic = FALSE;        /* is main window iconic? */
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Full prototypes for our functions to get type checking  */
+
+BOOL FAR PASCAL SayAboutDlgProc( HWND, unsigned, WORD, LONG );
+void            SayAdvanceTextChar( HWND );
+void            SayAdvanceTextPos( HWND );
+void            SayChangeColor( HWND );
+void            SayDoBarMsg( HWND, HWND, WORD, int );
+void            SayFillRect( HDC, int, int, int, int );
+void            SayInitBar( HWND, int, int, int, int );
+BOOL            SayInitApp( HANDLE, int );
+void            SayInvalidateText( HWND );
+void            SayLimitTextPos( HWND );
+void            SayMoveText( HWND, POINT );
+void            SaySetBar( HWND, int *, int );
+void            SayExitApp( int );
+BOOL FAR PASCAL SayWhatDlgProc( HWND, unsigned, WORD, LONG );
+void            SayWhatPaint( HWND );
+LONG FAR PASCAL SayWhatWndProc( HWND, unsigned, WORD, LONG );
+void     PASCAL WinMain( HANDLE, HANDLE, LPSTR, int );
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Dialog function for the "About" box  */
+
+BOOL FAR PASCAL SayAboutDlgProc( hWndDlg, wMsg, wParam, lParam )
+    HWND        hWndDlg;
+    unsigned    wMsg;
+    WORD        wParam;
+    LONG        lParam;
+{
+    switch( wMsg )
+    {
+      case WM_COMMAND:
+        switch( wParam )
+        {
+          case IDOK:
+            EndDialog( hWndDlg, TRUE );
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Advances to next display character in iconic mode.
+ *  Forces in a blank when it reaches the end of string.
+ */
+
+void SayAdvanceTextChar( hWnd )
+    HWND        hWnd;
+{
+    if( ! bIconic )
+        return;
+
+    if( pText == &cBlank )
+        pText = szText;
+    else if( ! *(++pText) )
+        pText = &cBlank;
+
+    SayChangeColor( hWnd );
+    SayInvalidateText( hWnd );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Advances text position according to ptAdvance.  Decrements
+ *  nDistLeft first, and when it reaches zero, sets a new
+ *  randomized ptAdvance and nDistLeft, also changes color.
+ *  Does nothing if mouse is down, so text will track mouse.
+ */
+
+void SayAdvanceTextPos( hWnd )
+    HWND        hWnd;
+{
+    int         i;
+
+    if( bMouseDown )
+        return;
+
+    SayInvalidateText( hWnd );
+
+    if( nDistLeft-- < 0 ) {
+        nDistLeft = rand() % nDistance + 1;
+        do {
+            i = rand();
+            ptAdvance.x = (
+                i < SHRT_MAX/3   ? -1
+              : i < SHRT_MAX/3*2 ?  0
+              :                     1
+            );
+            i = rand();
+            ptAdvance.y = (
+                i < SHRT_MAX/3   ? -1
+              : i < SHRT_MAX/3*2 ?  0
+              :                     1
+            );
+        } while( ptAdvance.x == 0  &&  ptAdvance.y == 0 );
+        if( ! bIconic )
+            SayChangeColor( hWnd );
+    } else {
+        rcText.left   += ptAdvance.x;
+        rcText.right  += ptAdvance.x;
+        rcText.top    += ptAdvance.y;
+        rcText.bottom += ptAdvance.y;
+    }
+
+    SayInvalidateText( hWnd );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Changes color to a random selection, if color is available.
+ *  Forces a color change - if the random selection is the same
+ *  as the old one, it tries again.
+ */
+
+void SayChangeColor( hWnd )
+    HWND        hWnd;
+{
+    HDC         hDC;
+    DWORD       rgbNew;
+    DWORD       rgbWindow;
+
+    if( nDisplayPlanes <= 1 ) {
+        rgbTextColor = GetSysColor(COLOR_WINDOWTEXT);
+    } else {
+        rgbWindow = GetSysColor(COLOR_WINDOW);
+        hDC = GetDC( hWnd );
+        do {
+            rgbNew = GetNearestColor(
+                hDC,
+                MAKELONG( rand(), rand() ) & 0x00FFFFFFL
+            );
+        } while( rgbNew == rgbWindow || rgbNew == rgbTextColor );
+        rgbTextColor = rgbNew;    
+        ReleaseDC( hWnd, hDC );
+    }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Handles scroll bar messages from the control dialog box.
+ *  Adjusts scroll bar position, taking its limits into account,
+ *  copies the scroll bar value into the adjacent edit control,
+ *  then sets the nDistance or nInterval variable appropriately.
+ */
+
+void SayDoBarMsg( hWndDlg, hWndBar, wCode, nThumb )
+    HWND        hWndDlg;
+    HWND        hWndBar;
+    WORD        wCode;
+    int         nThumb;
+{
+    int         nPos;
+    int         nOldPos;
+    int         nMin;
+    int         nMax;
+    int         idBar;
+
+    idBar = GetWindowWord( hWndBar, GWW_ID );
+
+    nOldPos = nPos = GetScrollPos( hWndBar, SB_CTL );
+    GetScrollRange( hWndBar, SB_CTL, &nMin, &nMax );
+
+    switch( wCode )
+    {
+        case SB_LINEUP:         --nPos;             break;        
+
+        case SB_LINEDOWN:       ++nPos;             break;    
+
+        case SB_PAGEUP:         nPos -= 10;         break;    
+
+        case SB_PAGEDOWN:       nPos += 10;         break;    
+
+        case SB_THUMBPOSITION:
+        case SB_THUMBTRACK:     nPos = nThumb;      break;    
+
+        case SB_TOP:            nPos = nMin;        break;    
+
+        case SB_BOTTOM:         nPos = nMax;        break;    
+    }
+
+    if( nPos < nMin )
+        nPos = nMin;
+
+    if( nPos > nMax )
+        nPos = nMax;
+
+    if( nPos == nOldPos )
+        return;
+
+    SetScrollPos( hWndBar, SB_CTL, nPos, TRUE );
+
+    SetDlgItemInt( hWndDlg, idBar+1, nPos, FALSE );
+
+    switch( idBar )
+    {
+      case ITEM_DISTBAR:
+        nDistance = nPos;
+        break;
+
+      case ITEM_INTBAR:
+        KillTimer( hWndWhat, TIMER_MOVE );
+        nInterval = nPos;
+        SetTimer( hWndWhat, TIMER_MOVE, nInterval, NULL );
+        InvalidateRect( hWndWhat, NULL, FALSE );
+        break;
+    }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Terminates the application, freeing up allocated resources.
+ *  Note that this function does NOT return to the caller, but
+ *  exits the program.
+ */
+
+void SayExitApp( nRet )
+    int         nRet;
+{
+    if( GetModuleUsage(hInstance) == 1 ) {
+        DeleteObject( hbrBkgd );
+    }
+
+    exit( nRet );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Fills a specified rectangle with the background color.
+ *  Checks that the rectangle is non-empty first.
+ */
+
+void SayFillRect( hDC, nLeft, nTop, nRight, nBottom )
+    HDC         hDC;
+    int         nLeft;
+    int         nTop;
+    int         nRight;
+    int         nBottom;
+
+{
+    RECT        rcFill;
+
+    if( nLeft >= nRight  ||  nTop >= nBottom )
+        return;
+
+    SetRect( &rcFill, nLeft, nTop, nRight, nBottom );    
+
+    FillRect( hDC, &rcFill, hbrBkgd );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Initializes the application.  */
+
+BOOL SayInitApp( hPrevInstance, nCmdShow )
+    HANDLE      hPrevInstance;
+    int         nCmdShow;
+{
+    WNDCLASS    Class;
+    HDC         hDC;
+    TEXTMETRIC  Metrics;
+
+    LoadString(
+        hInstance, STR_NAME,  szAppName, sizeof(szAppName)
+    );
+    LoadString(
+        hInstance, STR_TITLE, szTitle,   sizeof(szTitle)
+    );
+    LoadString(
+        hInstance, STR_WHAT,  szText,    sizeof(szText)
+    );
+
+    hDC = CreateIC( "DISPLAY", NULL, NULL, NULL );
+    GetTextMetrics( hDC, &Metrics );
+    nDisplayPlanes = GetDeviceCaps( hDC, PLANES );
+    DeleteDC( hDC );
+
+    ptCharSize.x = Metrics.tmMaxCharWidth;
+    ptCharSize.y = Metrics.tmHeight;
+
+    ptScreenSize.x = GetSystemMetrics(SM_CXSCREEN);
+    ptScreenSize.y = GetSystemMetrics(SM_CYSCREEN);
+
+    if( ! hPrevInstance ) {
+
+        hbrBkgd = CreateSolidBrush( GetSysColor(COLOR_WINDOW) );
+
+        Class.style         = 0; /* CS_HREDRAW | CS_VREDRAW; */
+        Class.lpfnWndProc   = SayWhatWndProc;
+        Class.cbClsExtra    = 0;
+        Class.cbWndExtra    = 0;
+        Class.hInstance     = hInstance;
+        Class.hIcon         = NULL;
+        Class.hCursor       = LoadCursor( NULL, IDC_ARROW );
+        Class.hbrBackground = COLOR_WINDOW + 1;
+        Class.lpszMenuName  = szAppName;
+        Class.lpszClassName = szAppName;
+
+        if( ! RegisterClass( &Class ) )
+            return FALSE;
+
+    } else {
+
+        GetInstanceData(
+            hPrevInstance, (NPSTR)&hbrBkgd, sizeof(hbrBkgd)
+        );
+    }
+
+    hWndWhat = CreateWindow(
+        szAppName,
+        szTitle,
+        WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, 0,
+        CW_USEDEFAULT, 0,
+        (HWND)NULL,
+        (HMENU)NULL,
+        hInstance,
+        (LPSTR)NULL
+    );
+
+    if( ! hWndWhat )
+        return FALSE;
+
+    ShowWindow( hWndWhat, nCmdShow );
+    UpdateWindow( hWndWhat );
+
+    return TRUE;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Initializes one scroll bar in the control dialog.  */
+
+void SayInitBar( hWndDlg, idBar, nValue, nMin, nMax )
+    HWND        hWndDlg;
+    int         idBar;
+    int         nValue;
+    int         nMin;
+    int         nMax;
+{
+    HWND        hWndBar;
+
+    hWndBar = GetDlgItem( hWndDlg, idBar );
+
+    SetScrollRange( hWndBar, SB_CTL, nMin, nMax, FALSE );
+    SetScrollPos( hWndBar, SB_CTL, nValue, FALSE );
+
+    SetDlgItemInt( hWndDlg, idBar+1, nValue, FALSE );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Invalidates the text within the main window, adjusting the
+ *  text rectangle if it's gone out of bounds.
+ */
+
+void SayInvalidateText( hWnd )
+    HWND        hWnd;
+{
+    SayLimitTextPos( hWnd );
+    InvalidateRect( hWnd, &rcText, FALSE );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Checks the text position against the window client area
+ *  rectangle.  If it's moved off the window in any direction,
+ *  forces it back inside, and also reverses the ptAdvance value
+ *  for that direction so it will "bounce" off the edge.  Handles
+ *  both the iconic and open window cases.
+ */
+
+void SayLimitTextPos( hWnd )
+    HWND        hWnd;
+{
+    RECT        rcClient;
+    POINT       ptTextSize;
+
+    ptTextSize = ptCharSize;
+
+    if( ! bIconic ) {
+        pText = szText;
+        ptTextSize.x *= strlen(szText);
+    }
+
+    GetClientRect( hWndWhat, &rcClient );
+
+    if( rcText.left > rcClient.right - ptTextSize.x ) {
+        rcText.left = rcClient.right - ptTextSize.x;
+        ptAdvance.x = -ptAdvance.x;
+    }
+
+    if( rcText.left < rcClient.left ) {
+        rcText.left = rcClient.left;
+        ptAdvance.x = -ptAdvance.x;
+    }
+
+    if( rcText.top > rcClient.bottom - ptTextSize.y ) {
+        rcText.top = rcClient.bottom - ptTextSize.y;
+        ptAdvance.y = -ptAdvance.y;
+    }
+
+    if( rcText.top < rcClient.top ) {
+        rcText.top = rcClient.top;
+        ptAdvance.y = -ptAdvance.y;
+    }
+
+    rcText.right  = rcText.left + ptTextSize.x;
+    rcText.bottom = rcText.top  + ptTextSize.y;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Moves the text within the window, by invalidating the old
+ *  position, adjusting rcText according to ptMove, and then
+ *  invalidating the new position.
+ */
+
+void SayMoveText( hWnd, ptMove )
+    HWND        hWnd;
+    POINT       ptMove;
+{
+    SayInvalidateText( hWnd );
+    rcText.left = ptMove.x - (rcText.right  - rcText.left  >> 1);
+    rcText.top  = ptMove.y - (rcText.bottom - rcText.top   >> 1);
+    SayInvalidateText( hWnd );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Sets one of the dialog scroll bars to *pnValue.  If that value
+ *  is out of range, limits it to the proper range and forces
+ *  *pnValue to be within the range as well.
+ */
+
+void SaySetBar( hWndDlg, pnValue, idBar )
+    HWND        hWndDlg;
+    int *       pnValue;
+    int         idBar;
+{
+    HWND        hWndBar;
+    int         nMin;
+    int         nMax;
+    int         nValue;
+    BOOL        bOK;
+
+    hWndBar = GetDlgItem( hWndDlg, idBar );
+
+    GetScrollRange( hWndBar, SB_CTL, &nMin, &nMax );
+
+    nValue = GetDlgItemInt( hWndDlg, idBar+1, &bOK, FALSE );
+
+    if( bOK  &&  nValue >= nMin  &&  nValue <= nMax ) {
+        *pnValue = nValue;
+        SetScrollPos( hWndBar, SB_CTL, nValue, TRUE );
+    } else {
+        SetDlgItemInt(
+            hWndDlg,
+            idBar+1,
+            GetScrollPos( hWndBar, SB_CTL ),
+            FALSE
+        );
+    }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Dialog function for the control panel dialog box.  */
+
+BOOL FAR PASCAL SayWhatDlgProc( hWndDlg, wMsg, wParam, lParam )
+    HWND        hWndDlg;
+    unsigned    wMsg;
+    WORD        wParam;
+    LONG        lParam;
+{
+    HWND        hWndBar;
+    RECT        rcWin;
+    int         n;
+
+    switch( wMsg )
+    {
+      case WM_COMMAND:
+        switch( wParam )
+        {
+          case IDOK:
+            KillTimer( hWndWhat, TIMER_MOVE );
+            GetDlgItemText(
+                hWndDlg, ITEM_WHAT, szText, sizeof(szText)
+            );
+            if( strlen(szText) == 0 )
+                LoadString(
+                    hInstance, STR_WHAT, szText, sizeof(szText)
+                );
+            pText = szText;
+            SaySetBar( hWndDlg, &nInterval, ITEM_INTBAR );
+            SaySetBar( hWndDlg, &nDistance, ITEM_DISTBAR );
+            SetTimer( hWndWhat, TIMER_MOVE, nInterval, NULL );
+            InvalidateRect( hWndWhat, NULL, FALSE );
+            return TRUE;
+
+          case IDCANCEL:
+            DestroyWindow( hWndDlg );
+            return TRUE;
+
+          case ITEM_CLEAN:
+          case ITEM_FLICKER:
+            bCleanPaint =
+                IsDlgButtonChecked( hWndDlg, ITEM_CLEAN );
+            return TRUE;
+        }
+        return FALSE;
+
+      case WM_HSCROLL:
+        if( HIWORD(lParam) )
+            SayDoBarMsg(
+                hWndDlg, HIWORD(lParam), wParam, LOWORD(lParam)
+            );
+        return TRUE;
+
+      case WM_INITDIALOG:
+        GetWindowRect( hWndDlg, &rcWin );
+        ClientToScreen( hWndWhat, (LPPOINT)&rcWin.left );
+        ClientToScreen( hWndWhat, (LPPOINT)&rcWin.right );
+        n = rcWin.right - ptScreenSize.x + ptCharSize.x;
+        if( n > 0 )
+            rcWin.left -= n;
+        rcWin.left &= ~7;  /* byte align */
+        n = rcWin.bottom - ptScreenSize.y + ptCharSize.y;
+        if( n > 0 ) 
+            rcWin.top -= n;
+        SetWindowPos(
+            hWndDlg,
+            (HWND)NULL,
+            rcWin.left,
+            rcWin.top,
+            0, 0,
+            SWP_NOSIZE | SWP_NOZORDER |
+                SWP_NOREDRAW | SWP_NOACTIVATE
+        );
+        SetDlgItemText( hWndDlg, ITEM_WHAT, szText );
+        SendDlgItemMessage(
+            hWndDlg, ITEM_WHAT,
+            EM_LIMITTEXT, sizeof(szText)-1, 0L
+        );
+        SayInitBar(
+            hWndDlg, ITEM_INTBAR,
+            nInterval, MIN_INTERVAL, MAX_INTERVAL
+        );
+        SayInitBar(
+            hWndDlg, ITEM_DISTBAR,
+            nDistance, MIN_DISTANCE, MAX_DISTANCE
+        );
+        CheckDlgButton( hWndDlg, ITEM_CLEAN, TRUE );
+        return TRUE;
+
+      case WM_NCDESTROY:
+        FreeProcInstance( lpfnDlgProc );
+        hWndPanel = NULL;
+        return FALSE;
+    }
+    return FALSE;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Painting procedure for the main window.  Handles both the
+ *  clean and flickery painting methods for demonstration
+ *  purposes.
+ */
+
+void SayWhatPaint( hWnd )
+    HWND        hWnd;
+{
+    PAINTSTRUCT ps;
+
+    BeginPaint( hWnd, &ps );
+
+    SetTextColor( ps.hdc, rgbTextColor );
+
+    SayLimitTextPos( hWnd );
+
+    if( bCleanPaint ) {
+
+        /* Clean painting, avoid redundant erasing */
+
+        TextOut(
+            ps.hdc,
+            rcText.left,
+            rcText.top,
+            pText,
+            bIconic ? 1 : strlen(szText)
+        );
+
+        SayFillRect(
+            ps.hdc,
+            ps.rcPaint.left,
+            ps.rcPaint.top,
+            rcText.left,
+            ps.rcPaint.bottom
+        );
+
+        SayFillRect(
+            ps.hdc,
+            rcText.left,
+            ps.rcPaint.top,
+            rcText.right,
+            rcText.top
+        );
+
+        SayFillRect(
+            ps.hdc,
+            rcText.left,
+            rcText.bottom,
+            rcText.right,
+            ps.rcPaint.bottom
+        );
+
+        SayFillRect(
+            ps.hdc,
+            rcText.right,
+            ps.rcPaint.top,
+            ps.rcPaint.right,
+            ps.rcPaint.bottom
+        );
+
+    } else {
+        
+        /* Flickery painting, erase background and
+           paint traditionally */
+
+        FillRect( ps.hdc, &ps.rcPaint, hbrBkgd );
+
+        TextOut(
+            ps.hdc,
+            rcText.left,
+            rcText.top,
+            pText,
+            bIconic ? 1 : strlen(szText)
+        );
+
+    }
+
+    EndPaint( hWnd, &ps );
+
+    if( ! nInterval )
+        SayAdvanceTextPos( hWnd );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Window function for the main window.  */
+
+LONG FAR PASCAL SayWhatWndProc( hWnd, wMsg, wParam, lParam )
+    HWND        hWnd;
+    unsigned    wMsg;
+    WORD        wParam;
+    LONG        lParam;
+{
+    FARPROC     lpfnAbout;
+
+    switch( wMsg )
+    {
+      case WM_COMMAND:
+        switch( wParam )
+        {
+          case CMD_ABOUT:
+            lpfnAbout =
+                MakeProcInstance( SayAboutDlgProc, hInstance );
+            DialogBox(
+                hInstance, MAKEINTRESOURCE(DLG_ABOUT),
+                hWnd, lpfnAbout
+            );
+            FreeProcInstance( lpfnAbout );
+            return 0L;
+
+          case CMD_EXIT:
+            DestroyWindow( hWndWhat );
+            return 0L;
+
+          case CMD_WHAT:
+            if( hWndPanel ) {
+                BringWindowToTop( hWndPanel );
+            } else {
+                lpfnDlgProc =
+                    MakeProcInstance( SayWhatDlgProc, hInstance );
+                if( ! lpfnDlgProc )
+                    return 0L;
+                hWndPanel = CreateDialog(
+                    hInstance,
+                    MAKEINTRESOURCE(DLG_WHAT),
+                    (HWND)NULL,
+                    lpfnDlgProc
+                );
+                if( ! hWndPanel )
+                    FreeProcInstance( lpfnDlgProc );
+            }
+        }
+        break;
+
+      case WM_CREATE:
+        srand( (int)time(NULL) );
+        SetTimer( hWnd, TIMER_MOVE, nInterval, NULL );
+        return 0L;
+
+      case WM_DESTROY:
+        if( hWndPanel )
+            DestroyWindow( hWndPanel );
+        PostQuitMessage( 0 );
+        return 0L;
+
+      case WM_KEYDOWN:
+        SayInvalidateText( hWnd );
+        switch( wParam )
+        {
+          case VK_LEFT:
+            rcText.left -= ptCharSize.x;
+            ptAdvance.x  = -1;
+            ptAdvance.y  = 0;
+            break;
+
+          case VK_RIGHT:
+            rcText.left += ptCharSize.x;
+            ptAdvance.x  = 1;
+            ptAdvance.y  = 0;
+            break;
+
+          case VK_UP:
+            rcText.top  -= ptCharSize.y >> 1;
+            ptAdvance.x  = 0;
+            ptAdvance.y  = -1;
+            break;
+
+          case VK_DOWN:
+            rcText.top  += ptCharSize.y >> 1;
+            ptAdvance.x  = 0;
+            ptAdvance.y  = 1;
+            break;
+
+          default:
+            return 0L;
+        }
+        SayInvalidateText( hWnd );
+        nDistLeft = nDistance;
+        return 0L;
+
+      case WM_LBUTTONDOWN:
+        if( bMouseDown )
+            break;
+        KillTimer( hWnd, TIMER_MOVE );
+        bMouseDown = TRUE;
+        SetCapture( hWnd );
+        SayMoveText( hWnd, MAKEPOINT(lParam) );
+        break;
+
+      case WM_LBUTTONUP:
+        if( ! bMouseDown )
+            break;
+        bMouseDown = FALSE;
+        ReleaseCapture();
+        SayMoveText( hWnd, MAKEPOINT(lParam) );
+        SetTimer( hWnd, TIMER_MOVE, nInterval, NULL );
+        break;
+
+      case WM_MOUSEMOVE:
+        if( bMouseDown )
+            SayMoveText( hWnd, MAKEPOINT(lParam) );
+        break;
+
+      case WM_PAINT:
+        SayWhatPaint( hWnd );
+        return 0L;
+
+      case WM_SIZE:
+        if( wParam == SIZEICONIC ) {
+            if( ! bIconic )
+                SetTimer( hWnd, TIMER_CHAR, 1000, NULL );
+            bIconic = TRUE;
+        } else {
+            if( bIconic )
+                KillTimer( hWnd, TIMER_CHAR );
+            bIconic = FALSE;
+        }
+        SayInvalidateText( hWnd );
+        nDistLeft = 0;
+        SayAdvanceTextPos( hWnd );
+        return 0L;
+
+      case WM_TIMER:
+        switch( wParam )
+        {
+          case TIMER_MOVE:
+            SayAdvanceTextPos( hWnd );
+            break;
+
+          case TIMER_CHAR:
+            SayAdvanceTextChar( hWnd );
+            break;
+        }
+        return 0L;
+    }
+    return DefWindowProc( hWnd, wMsg, wParam, lParam );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Main function for the application.  */
+
+void PASCAL WinMain( hInst, hPrevInst, lpszCmdLine, nCmdShow )
+    HANDLE      hInst;
+    HANDLE      hPrevInst;
+    LPSTR       lpszCmdLine;
+    int         nCmdShow;
+{
+    MSG         msg;
+
+    hInstance = hInst;
+
+    if( ! SayInitApp( hPrevInst, nCmdShow ) )
+        SayExitApp( 1 );
+
+    while( GetMessage( &msg, NULL, 0, 0 ) ) {
+
+        if( hWndPanel  &&  IsDialogMessage( hWndPanel, &msg ) )
+            continue;
+
+        TranslateMessage( &msg );
+        DispatchMessage( &msg );
+    }
+
+
+    SayExitApp( msg.wParam );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+Figure 1pm
+=========
+
+
+#  MAKE file for SAYWHAT (Presentation Manager version)
+
+swp.obj:    swp.c  swp.h
+    cl -c -AS -DLINT_ARGS -G2csw -Oat -W3 -Zp swp.c
+
+swp.res:    swp.rc  swp.h
+    rc -r swp.rc
+
+saywhatp.exe:  swp.obj  swp.res  swp.def
+    link @swp.lnk
+    mapsym saywhat
+    rc swp.res saywhat.exe
+
+
+
+Figure 2pm
+=========
+
+
+swp
+saywhatp/align:16
+saywhatp/map/co
+wincalls gpicalls doscalls slibc slibc5
+swp.def
+
+
+
+Figure 3pm
+=========
+
+
+; SWP.DEF - Module definition file for SAYWHAT (PM version)
+
+NAME    SayWhat
+
+DESCRIPTION 'Say What!'
+
+STUB    'OS2STUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  128
+STACKSIZE 8192
+
+EXPORTS
+    SayAboutDlgProc     @1
+    SayWhatDlgProc      @2
+    SayWhatWndProc      @3
+
+
+
+Figure 4pm
+=========
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *\
+ *  SWP.RC - Resource file for SayWhat - PM version              *
+\* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#include <os2pm.h>
+#include "swp.h"
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+STRINGTABLE
+{
+  STR_NAME,    "SayWhat!"
+  STR_TITLE,   "Say What!"
+  STR_WHAT,    "Hello Windows!"
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+MENU SayWhat!
+{
+  SUBMENU "~Say",                  -1
+  {
+    MENUITEM "~What...",           CMD_WHAT
+    MENUITEM SEPARATOR
+    MENUITEM "E~xit",              CMD_EXIT
+    MENUITEM SEPARATOR
+    MENUITEM "A~bout SayWhat!...", CMD_ABOUT
+  }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+DLGTEMPLATE DLG_ABOUT
+{
+  DIALOG "", DLG_ABOUT, 19, 17, 130, 83, FS_DLGBORDER | WS_SAVEBITS | WS_VISIBLE
+  {
+    CTEXT "Microsoft Windows",   -1,  0, 67, 127,  8
+    CTEXT "Say What!",           -1,  0, 57, 127,  8
+    CTEXT "Version 1.00",        -1,  0, 45, 127,  8
+    CTEXT "By Michael Geary",    -1,  0, 31, 129,  8
+    DEFPUSHBUTTON "Ok",        IDOK, 48,  7,  32, 14
+  }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+DLGTEMPLATE DLG_WHAT
+{
+  DIALOG "Say What!", DLG_WHAT, 49, 41, 177, 103, FS_TITLEBAR | FS_SYSMENU | FS_BORDER | WS_VISIBLE
+  {
+    CONTROL "Say ~What:"   -1,              8, 85,  40,  8, WC_STATIC,    SS_LEFT | WS_GROUP
+    CONTROL ""             ITEM_WHAT,      56, 83, 112, 12, WC_EDIT,      ES_LEFT | ES_AUTOSCROLL | ES_MARGIN | WS_TABSTOP
+    CONTROL "~Time Delay:" -1,              8, 66,  53,  9, WC_STATIC,    SS_LEFT
+    CONTROL ""             ITEM_INTBAR,    56, 67,  88,  8, WC_SCROLLBAR, SBS_HORZ | WS_TABSTOP
+    CONTROL ""             ITEM_INTERVAL, 152, 65,  16, 12, WC_EDIT,      ES_LEFT | ES_MARGIN | WS_TABSTOP
+    CONTROL "~Stability:"  -1,              8, 48,  56,  9, WC_STATIC,    SS_LEFT
+    CONTROL ""             ITEM_DISTBAR,   56, 49,  88,  8, WC_SCROLLBAR, SBS_HORZ | WS_TABSTOP
+    CONTROL ""             ITEM_DISTANCE, 152, 47,  16, 12, WC_EDIT,      ES_LEFT | ES_MARGIN | WS_TABSTOP
+    CONTROL "Painting:"    -1,              8, 31,  40,  8, WC_STATIC,    SS_LEFT
+    CONTROL "~Clean"       ITEM_CLEAN,     56, 29,  36, 12, WC_BUTTON,    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP
+    CONTROL "~Flicker"     ITEM_FLICKER,   96, 29,  42, 12, WC_BUTTON,    BS_AUTORADIOBUTTON
+    CONTROL "Enter"        IDOK,           24,  7,  48, 14, WC_BUTTON,    BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP
+    CONTROL "Esc=Close"    IDCANCEL,      104,  7,  48, 14, WC_BUTTON,    BS_PUSHBUTTON | WS_TABSTOP
+  }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+Figure 5pm
+=========
+
+
+/* SWP.H - C header file for SAYWHAT (PM version) */
+
+/* String table constants */
+
+#define STR_NAME        101
+#define STR_TITLE       102
+#define STR_WHAT        103
+
+/* Menu command IDs */
+
+#define CMD_ABOUT       201
+#define CMD_EXIT        202
+#define CMD_WHAT        203
+
+/* Dialog box resource IDs */
+
+#define DLG_ABOUT       301
+#define DLG_WHAT        302
+
+/* 'What...' dialog box item IDs */
+
+#define ITEM_WHAT       401
+#define ITEM_INTBAR     402
+#define ITEM_INTERVAL   403
+#define ITEM_DISTBAR    404
+#define ITEM_DISTANCE   405
+#define ITEM_CLEAN      406
+#define ITEM_FLICKER    407
+
+/* Timer IDs */
+
+#define TIMER_MOVE      501
+#define TIMER_CHAR      502
+
+/* Menu resource IDs */
+
+#define MENU_WHAT       601
+
+
+Figure 6pm
+=========
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *\
+ *  SWP.C - C code for SayWhat - Presentation Manager version    *
+\* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#ifndef LINT_ARGS
+#define LINT_ARGS  /* turn on argument checking for C runtime */
+#endif
+
+#include <os2pm.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include "swp.h"
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#define MIN_INTERVAL    1       /* limits for nInterval */
+#define MAX_INTERVAL    999
+
+#define MIN_DISTANCE    1       /* limits for nDistance */
+#define MAX_DISTANCE    99
+
+#define COLORDATAMAX    5
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Static variables  */
+
+HAB     hAB = NULL;             /* anchor block handle */
+HMQ     hMsgQ = NULL;           /* message queue handle */
+
+HWND    hWndWhatFrame;          /* frame window handle */
+HWND    hWndWhat;               /* client window handle */
+HWND    hWndPanel;              /* control panel dialog handle */
+
+CHAR    szAppName[10];          /* window class name */
+CHAR    szTitle[15];            /* main window title */
+
+CHAR    szText[40];             /* current "what" text */
+PSZ     npszText = szText;      /* ptr into szText for icon mode */
+CHAR    cBlank = ' ';           /* a blank we can point to */
+
+RECT    rcText;                 /* current text rectangle */
+POINT   ptAdvance;              /* increments for SayAdvanceText */
+POINT   ptCharSize;             /* X and Y size of a character */
+POINT   ptScreenSize;           /* X and Y size of the screen */
+
+LONG    lColorMax;              /* number of available colors */
+LONG    lColor;                 /* current text color index */
+
+SHORT   nInterval = 40;         /* current "Interval" setting */
+SHORT   nDistance = 30;         /* current "Distance" setting */
+SHORT   nDistLeft = 0;          /* change direction when hits 0 */
+BOOL    bCleanPaint = TRUE;     /* clean or flickery painting? */
+BOOL    bMouseDown = FALSE;     /* is mouse down? */
+BOOL    bIconic = FALSE;        /* is main window iconic? */
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Full prototypes for our functions to get type checking  */
+
+ULONG FAR PASCAL SayAboutDlgProc( HWND, USHORT, ULONG, ULONG );
+VOID             SayAdvanceTextChar( HWND );
+VOID             SayAdvanceTextPos( HWND );
+VOID             SayChangeColor( HWND );
+VOID             SayDoBarMsg( HWND, USHORT, USHORT, SHORT );
+VOID             SayExitApp( INT );
+VOID             SayFillRect( HPS, SHORT, SHORT, SHORT, SHORT );
+VOID             SayInitBar( HWND, SHORT, SHORT, SHORT, SHORT );
+BOOL             SayInitApp( VOID );
+VOID             SayInvalidateText( HWND );
+VOID             SayLimitTextPos( HWND );
+VOID             SayMoveText( HWND, POINT );
+VOID             SaySetBar( HWND, SHORT *, SHORT );
+ULONG FAR PASCAL SayWhatDlgProc( HWND, USHORT, ULONG, ULONG );
+VOID             SayWhatPaint( HWND );
+ULONG FAR PASCAL SayWhatWndProc( HWND, USHORT, ULONG, ULONG );
+void  cdecl      main( INT, PSZ );
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Dialog function for the "About" box  */
+
+ULONG FAR PASCAL SayAboutDlgProc( hWndDlg, wMsg, lParam1, lParam2 )
+    HWND        hWndDlg;
+    USHORT      wMsg;
+    ULONG       lParam1;
+    ULONG       lParam2;
+{
+    switch( wMsg )
+    {
+      case WM_COMMAND:
+        switch( LOUSHORT(lParam1) )
+        {
+          case IDOK:
+            WinDismissDlg( hWndDlg, TRUE );
+            break;
+        }
+    }
+    return WinDefDlgProc( hWndDlg, wMsg, lParam1, lParam2 );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Advances to next display character in iconic mode.
+ *  Forces in a blank when it reaches the end of string.
+ */
+
+VOID SayAdvanceTextChar( hWnd )
+    HWND        hWnd;
+{
+    if( ! bIconic )
+        return;
+
+    if( npszText == &cBlank )
+        npszText = szText;
+    else if( ! *(++npszText) )
+        npszText = &cBlank;
+
+    SayChangeColor( hWnd );
+    SayInvalidateText( hWnd );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Advances text position according to ptAdvance.  Decrements
+ *  nDistLeft first, and when it reaches zero, sets a new
+ *  randomized ptAdvance and nDistLeft, also changes color.
+ *  Does nothing if mouse is down, so text will track mouse.
+ */
+
+VOID SayAdvanceTextPos( hWnd )
+    HWND        hWnd;
+{
+    SHORT       i;
+
+    if( bMouseDown )
+        return;
+
+    SayInvalidateText( hWnd );
+
+    if( nDistLeft-- < 0 ) {
+        nDistLeft = rand() % nDistance + 1;
+        do {
+            i = rand();
+            ptAdvance.x = (
+                i < SHRT_MAX/3   ? -1
+              : i < SHRT_MAX/3*2 ?  0
+              :                     1
+            );
+            i = rand();
+            ptAdvance.y = (
+                i < SHRT_MAX/3   ? -1
+              : i < SHRT_MAX/3*2 ?  0
+              :                     1
+            );
+        } while( ptAdvance.x == 0  &&  ptAdvance.y == 0 );
+        if( ! bIconic )
+            SayChangeColor( hWnd );
+    } else {
+        rcText.xLeft   += ptAdvance.x;
+        rcText.xRight  += ptAdvance.x;
+        rcText.yTop    += ptAdvance.y;
+        rcText.yBottom += ptAdvance.y;
+    }
+
+    SayInvalidateText( hWnd );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Changes color to a random selection, if color is available.
+ *  Forces a color change - if the random selection is the same
+ *  as the old one, it tries again.
+ */
+
+VOID SayChangeColor( hWnd )
+    HWND        hWnd;
+{
+    HPS         hPS;
+    LONG        lWindow;
+    LONG        lNew;
+
+    hPS = WinGetPS( hWnd );
+
+    if( lColorMax <= 2 ) {
+        lColor = GpiQueryColorIndex(
+            hPS,
+            WinQuerySysColor( hAB, SCLR_WINDOWTEXT ),
+            0L
+        );
+    } else {
+        lWindow = GpiQueryColorIndex(
+            hPS,
+            WinQuerySysColor( hAB, SCLR_WINDOW ),
+            0L
+        );
+        do {
+            lNew = rand() % lColorMax;
+        } while( lNew == lWindow || lNew == lColor );
+        lColor = lNew;
+    }
+
+    WinReleasePS( hPS );
+
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Handles scroll bar messages from the control dialog box.
+ *  Adjusts scroll bar position, taking its limits into account,
+ *  copies the scroll bar value into the adjacent edit control,
+ *  then sets the nDistance or nInterval variable appropriately.
+ */
+
+VOID SayDoBarMsg( hWndDlg, idBar, wCode, nThumb )
+    HWND        hWndDlg;
+    USHORT      idBar;    
+    USHORT      wCode;
+    SHORT       nThumb;
+{
+    SHORT       nPos;
+    SHORT       nOldPos;
+    ULONG       lRange;
+
+    nOldPos = nPos =
+        (SHORT)WinSendDlgItemMsg(
+            hWndDlg, idBar, SBM_QUERYPOS, 0L, 0L
+        );
+
+    lRange =
+        WinSendDlgItemMsg(
+            hWndDlg, idBar, SBM_QUERYRANGE, 0L, 0L
+        );
+
+    switch( wCode ) {
+
+        case SB_LINEUP:         --nPos;                   break;        
+
+        case SB_LINEDOWN:       ++nPos;                   break;    
+
+        case SB_PAGEUP:         nPos -= 10;               break;    
+
+        case SB_PAGEDOWN:       nPos += 10;               break;    
+
+        case SB_THUMBPOSITION:
+        case SB_THUMBTRACK:     nPos = nThumb;            break;    
+
+        case SB_TOP:            nPos = LOUSHORT(lRange);  break;    
+
+        case SB_BOTTOM:         nPos = HIUSHORT(lRange);  break;    
+
+    }
+
+    if( nPos < LOUSHORT(lRange) )
+        nPos = LOUSHORT(lRange);
+
+    if( nPos > HIUSHORT(lRange) )
+        nPos = HIUSHORT(lRange);
+
+    if( nPos == nOldPos )
+        return;
+
+    WinSendDlgItemMsg(
+        hWndDlg, idBar, SBM_SETPOS, (LONG)nPos, 0L
+    );
+
+    WinSetDlgItemShort( hWndDlg, idBar+1, nPos, FALSE );
+
+    switch( idBar )
+    {
+      case ITEM_DISTBAR:
+        nDistance = nPos;
+        break;
+
+      case ITEM_INTBAR:
+        WinStopTimer( hAB, hWndWhat, TIMER_MOVE );
+        nInterval = nPos;
+        WinStartTimer( hAB, hWndWhat, TIMER_MOVE, nInterval );
+        WinInvalidateRect( hWndWhat, NULL );
+        break;
+    }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Terminates the application, freeing up allocated resources.
+ *  Note that this function does NOT return to the caller, but
+ *  exits the program.
+ */
+
+VOID SayExitApp( nRet )
+    INT         nRet;
+{
+    if( hWndWhatFrame )
+        WinDestroyWindow( hWndWhatFrame );
+
+    if( hMsgQ )
+        WinDestroyMsgQueue( hMsgQ );
+
+    if( hAB )
+        WinTerminate( hAB );
+
+    exit( nRet );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Fills a specified rectangle with the background color.
+ *  Checks that the rectangle is non-empty first.
+ */
+
+VOID SayFillRect( hPS, xLeft, xBottom, xRight, xTop )
+    HPS         hPS;
+    SHORT       xLeft;
+    SHORT       xBottom;
+    SHORT       xRight;
+    SHORT       xTop;
+
+{
+    RECT        rcFill;
+
+    if( xLeft >= xRight  ||  xBottom >= xTop )
+        return;
+
+    WinSetRect( hAB, &rcFill, xLeft, xBottom, xRight, xTop );    
+
+    WinFillRect(
+        hPS,
+        &rcFill,
+        WinQuerySysColor( hAB, SCLR_WINDOW )
+    );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Initializes the application.  */
+
+BOOL SayInitApp()
+{
+    HPS         hPS;
+    BOOL        bOK;
+
+    hAB = WinInitialize();
+    if( ! hAB )
+        return FALSE;
+
+    hMsgQ = WinCreateMsgQueue( hAB, 0 );
+    if( ! hMsgQ )
+        return FALSE;
+
+    WinLoadString(
+        hAB, NULL, STR_NAME,  szAppName, sizeof(szAppName)
+    );
+    WinLoadString(
+        hAB, NULL, STR_TITLE, szTitle,   sizeof(szTitle)
+    );
+    WinLoadString(
+        hAB, NULL, STR_WHAT,  szText,    sizeof(szText)
+    );
+
+    bOK = WinRegisterClass(
+        hAB,
+        szAppName,
+        (LPFNWP)SayWhatWndProc,
+        CS_SYNCPAINT,
+        0,
+        NULL
+    );
+    if( ! bOK )
+        return FALSE;
+
+    hWndWhatFrame = WinCreateStdWindow(
+        (HWND)NULL,
+        FS_TITLEBAR | FS_SYSMENU |
+            FS_MENU | FS_MINMAX | FS_SIZEBORDER,
+        szAppName,
+        szTitle,
+        0L,
+        (HMODULE)NULL,
+        MENU_WHAT,
+        &hWndWhat
+    );
+
+    if( ! hWndWhatFrame )
+        return FALSE;
+
+    WinShowWindow( hWndWhat, TRUE );
+
+    return TRUE;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Initializes one scroll bar in the control dialog.  */
+
+VOID SayInitBar( hWndDlg, idBar, nValue, nMin, nMax )
+    HWND        hWndDlg;
+    SHORT       idBar;
+    SHORT       nValue;
+    SHORT       nMin;
+    SHORT       nMax;
+{
+    HWND        hWndBar;
+
+    hWndBar = WinWindowFromID( hWndDlg, idBar );
+
+    WinSendDlgItemMsg(
+        hWndDlg,
+        idBar,
+        SBM_SETSCROLLBAR,
+        (LONG)nValue,
+        MAKELONG( nMin, nMax )
+    );
+
+    WinSetDlgItemShort( hWndDlg, idBar+1, nValue, FALSE );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Invalidates the text within the main window, adjusting the
+ *  text rectangle if it's gone out of bounds.
+ */
+
+VOID SayInvalidateText( hWnd )
+    HWND        hWnd;
+{
+    SayLimitTextPos( hWnd );
+    WinInvalidateRect( hWnd, &rcText );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Checks the text position against the window client area
+ *  rectangle.  If it's moved off the window in any direction,
+ *  forces it back inside, and also reverses the ptAdvance value
+ *  for that direction so it will "bounce" off the edge.  Handles
+ *  both the iconic and open window cases.
+ */
+
+VOID SayLimitTextPos( hWnd )
+    HWND        hWnd;
+{
+    RECT        rcClient;
+    POINT       ptTextSize;
+
+    ptTextSize = ptCharSize;
+
+    if( ! bIconic ) {
+        npszText = szText;
+        ptTextSize.x *= strlen(szText);
+    }
+
+    WinQueryWindowRect( hWndWhat, &rcClient );
+
+    if( rcText.xLeft > rcClient.xRight - ptTextSize.x ) {
+        rcText.xLeft = rcClient.xRight - ptTextSize.x;
+        ptAdvance.x = -ptAdvance.x;
+    }
+
+    if( rcText.xLeft < rcClient.xLeft ) {
+        rcText.xLeft = rcClient.xLeft;
+        ptAdvance.x = -ptAdvance.x;
+    }
+
+    if( rcText.yBottom < rcClient.yBottom ) {
+        rcText.yBottom = rcClient.yBottom;
+        ptAdvance.y = -ptAdvance.y;
+    }
+
+    if( rcText.yBottom > rcClient.yTop - ptTextSize.y ) {
+        rcText.yBottom = rcClient.yTop - ptTextSize.y;
+        ptAdvance.y = -ptAdvance.y;
+    }
+
+    rcText.xRight = rcText.xLeft   + ptTextSize.x;
+    rcText.yTop   = rcText.yBottom + ptTextSize.y;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Moves the text within the window, by invalidating the old
+ *  position, adjusting rcText according to ptMove, and then
+ *  invalidating the new position.
+ */
+
+VOID SayMoveText( hWnd, ptMove )
+    HWND        hWnd;
+    POINT       ptMove;
+{
+    SayInvalidateText( hWnd );
+    rcText.xLeft   =
+        ptMove.x - (rcText.xRight - rcText.xLeft    >> 1);
+    rcText.yBottom =
+        ptMove.y - (rcText.yTop   - rcText.yBottom  >> 1);
+    SayInvalidateText( hWnd );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Sets one of the dialog scroll bars to *pnValue.  If that value
+ *  is out of range, limits it to the proper range and forces
+ *  *pnValue to be within the range as well.
+ */
+
+VOID SaySetBar( hWndDlg, pnValue, idBar )
+    HWND        hWndDlg;
+    SHORT *     pnValue;
+    SHORT       idBar;
+{
+    ULONG       lRange;        
+    SHORT       nValue;
+    BOOL        bOK;
+
+    lRange =
+        WinSendDlgItemMsg(
+            hWndDlg, idBar, SBM_QUERYRANGE, 0L, 0L
+        );
+
+    nValue =
+        WinQueryDlgItemShort( hWndDlg, idBar+1, &bOK, FALSE );
+
+    if(
+        bOK  &&
+        nValue >= LOUSHORT(lRange)  &&
+        nValue <= HIUSHORT(lRange)
+    ) {
+        *pnValue = nValue;
+        WinSendDlgItemMsg(
+            hWndDlg, idBar, SBM_SETPOS, (LONG)nValue, (LONG)TRUE
+        );
+    } else {
+        WinSetDlgItemShort(
+            hWndDlg,
+            idBar + 1,
+            (INT)WinSendDlgItemMsg(
+                hWndDlg, idBar, SBM_QUERYPOS, 0L, 0L
+            ),
+            FALSE
+        );
+    }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Dialog function for the control panel dialog box.  */
+
+ULONG FAR PASCAL SayWhatDlgProc( hWndDlg, wMsg, lParam1, lParam2 )
+    HWND        hWndDlg;
+    USHORT      wMsg;
+    ULONG       lParam1;
+    ULONG       lParam2;
+{
+    HWND        hWndBar;
+    RECT        rcWin;
+    SHORT       n;
+
+    switch( wMsg )
+    {
+    case WM_COMMAND:
+        switch( LOUSHORT(lParam1) )
+        {
+          case IDOK:
+            WinStopTimer( hAB, hWndWhat, TIMER_MOVE );
+            WinQueryWindowText(
+                WinWindowFromID( hWndDlg, ITEM_WHAT ),
+                sizeof(szText),
+                szText
+            );
+            if( strlen(szText) == 0 )
+                WinLoadString(
+                    hAB, NULL, STR_WHAT, szText, sizeof(szText)
+                );
+            npszText = szText;
+            SaySetBar( hWndDlg, &nInterval, ITEM_INTBAR );
+            SaySetBar( hWndDlg, &nDistance, ITEM_DISTBAR );
+            WinStartTimer( hAB, hWndWhat, TIMER_MOVE, nInterval );
+            WinInvalidateRect( hWndWhat, NULL );
+            break;
+
+          case IDCANCEL:
+            WinDestroyWindow( hWndDlg );
+            break;
+
+          case ITEM_CLEAN:
+          case ITEM_FLICKER:
+            bCleanPaint = (BOOL)WinSendDlgItemMsg(
+                hWndDlg, ITEM_CLEAN,
+                BM_QUERYCHECK, 0L, 0L
+            );
+            break;
+        }
+        break;
+
+    case WM_DESTROY:
+        hWndPanel = NULL;
+        break;
+
+    case WM_HSCROLL:
+        SayDoBarMsg(
+            hWndDlg, LOUSHORT(lParam1),
+            HIUSHORT(lParam2), LOUSHORT(lParam2)
+        );
+        break;
+
+    case WM_INITDLG:
+        WinQueryWindowRect( hWndDlg, &rcWin );
+        WinMapWindowPoints(
+            hWndWhat, (HWND)NULL, (LPPOINT)&rcWin.xLeft, 2
+        );
+        n = rcWin.xRight - ptScreenSize.x + ptCharSize.x;
+        if( n > 0 )
+            rcWin.xLeft -= n;
+        rcWin.xLeft &= ~7;  /* byte align */
+        n = rcWin.yTop - ptScreenSize.y + ptCharSize.y;
+        if( n > 0 )
+            rcWin.yBottom -= n;
+        WinSetWindowPos(
+            hWndDlg,
+            (HWND)NULL,
+            rcWin.xLeft,
+            rcWin.yBottom,
+            0, 0,
+            SWP_MOVE
+        );
+        WinSetWindowText(
+            WinWindowFromID( hWndDlg, ITEM_WHAT ), szText
+        );
+        WinSendDlgItemMsg(
+            hWndDlg, ITEM_WHAT, EM_SETTEXTLIMIT,
+            (LONG)sizeof(szText)-1, 0L
+        );
+        SayInitBar(
+            hWndDlg, ITEM_INTBAR,  nInterval,
+            MIN_INTERVAL, MAX_INTERVAL
+        );
+        SayInitBar(
+            hWndDlg, ITEM_DISTBAR, nDistance,
+            MIN_DISTANCE, MAX_DISTANCE
+        );
+        WinSendDlgItemMsg(
+            hWndDlg, ITEM_CLEAN, BM_SETCHECK, (LONG)TRUE, 0L
+        );
+        break;
+    }
+    return WinDefDlgProc( hWndDlg, wMsg, lParam1, lParam2 );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Painting procedure for the main window.  Handles both the
+ *  clean and flickery painting methods for demonstration
+ *  purposes.
+ */
+
+VOID SayWhatPaint( hWnd )
+    HWND        hWnd;
+{
+    HPS         hPS;
+    RECT        rcPaint;
+    GPOINT      gptText;
+
+    hPS = WinBeginPaint( hWnd, (HPS)NULL, &rcPaint );
+
+    GpiSetColor( hPS, lColor );
+
+    SayLimitTextPos( hWnd );
+
+    gptText.x = (LONG)rcText.xLeft;
+    gptText.y = (LONG)rcText.yBottom;
+
+    if( bCleanPaint ) {
+
+        /* Clean painting, avoid redundant erasing */
+
+        GpiSetBackMix( hPS, MIX_OVERPAINT );
+
+        GpiCharStringAt(
+            hPS,
+            &gptText,
+            (LONG)( bIconic ? 1 : strlen(szText) ),
+            npszText
+        );
+
+        SayFillRect(
+            hPS,
+            rcPaint.xLeft,
+            rcPaint.yBottom,
+            rcText.xLeft,
+            rcPaint.yTop
+        );
+
+        SayFillRect(
+            hPS,
+            rcText.xLeft,
+            rcText.yTop,
+            rcText.xRight,
+            rcPaint.yTop
+        );
+
+        SayFillRect(
+            hPS,
+            rcText.xLeft,
+            rcPaint.yBottom,
+            rcText.xRight,
+            rcText.yBottom
+        );
+
+        SayFillRect(
+            hPS,
+            rcText.xRight,
+            rcPaint.yBottom,
+            rcPaint.xRight,
+            rcPaint.yTop
+        );
+
+    } else {
+        
+        /* Flickery painting, erase background and
+           paint traditionally */
+
+        WinFillRect(
+            hPS,
+            &rcPaint,
+            WinQuerySysColor( hAB, SCLR_WINDOW )
+        );
+
+        GpiCharStringAt(
+            hPS,
+            &gptText,
+            (LONG)( bIconic ? 1 : strlen(szText) ),
+            npszText
+        );
+    }
+
+    WinEndPaint( hPS );
+
+    if( ! nInterval )
+        SayInvalidateText( hWnd );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Window function for the main window.  */
+
+ULONG FAR PASCAL SayWhatWndProc( hWnd, wMsg, lParam1, lParam2 )
+    HWND        hWnd;
+    USHORT      wMsg;
+    ULONG       lParam1;
+    ULONG       lParam2;
+{
+    POINT       ptMouse;
+    GSIZE       gsChar;
+    HPS         hPS;
+    LONG        ColorData[COLORDATAMAX];
+    BOOL        bNowIconic;
+
+    switch( wMsg )
+    {
+      case WM_BUTTON1DOWN:
+        if( bMouseDown )
+            break;
+        WinStopTimer( hAB, hWnd, TIMER_MOVE );
+        bMouseDown = TRUE;
+        WinSetCapture( hAB, hWnd );
+        ptMouse.x = LOUSHORT(lParam1);
+        ptMouse.y = HIUSHORT(lParam1);
+        SayMoveText( hWnd, ptMouse );
+        return 0L;
+
+      case WM_BUTTON1UP:
+        if( ! bMouseDown )
+            break;
+        bMouseDown = FALSE;
+        WinSetCapture( hAB, (HWND)NULL );
+        ptMouse.x = LOUSHORT(lParam1);
+        ptMouse.y = HIUSHORT(lParam1);
+        SayMoveText( hWnd, ptMouse );
+        WinStartTimer( hAB, hWnd, TIMER_MOVE, nInterval );
+        return 0L;
+
+      case WM_CHAR:
+        if(
+            ( LOUSHORT(lParam1) & KC_KEYUP )  ||
+            ! ( LOUSHORT(lParam1) & KC_VIRTUALKEY )
+        ) {
+            break;
+        }
+        SayInvalidateText( hWnd );
+        switch( HIUSHORT(lParam2) )
+        {
+          case VK_LEFT:
+            rcText.xLeft -= ptCharSize.x;
+            ptAdvance.x   = -1;
+            ptAdvance.y   = 0;
+            break;
+          case VK_RIGHT:
+            rcText.xLeft += ptCharSize.x;
+            ptAdvance.x   = 1;
+            ptAdvance.y   = 0;
+            break;
+          case VK_UP:
+            rcText.yBottom -= ptCharSize.y >> 1;
+            ptAdvance.x     = 0;
+            ptAdvance.y     = -1;
+            break;
+          case VK_DOWN:
+            rcText.yBottom += ptCharSize.y >> 1;
+            ptAdvance.x     = 0;
+            ptAdvance.y     = 1;
+            break;
+          default:
+            return 0L;
+        }
+        SayInvalidateText( hWnd );
+        nDistLeft = nDistance;
+        return 0L;
+
+      case WM_COMMAND:
+        switch( LOUSHORT(lParam1) )
+        {
+          case CMD_ABOUT:
+            WinDlgBox(
+                (HWND)NULL, hWnd, (LPFNWP)SayAboutDlgProc,
+                NULL, DLG_ABOUT, NULL
+            );
+            return 0L;
+
+          case CMD_EXIT:
+            WinDestroyWindow( hWndWhatFrame );
+            return 0L;
+
+          case CMD_WHAT:
+            if( hWndPanel ) {
+                WinSetWindowPos(
+                    hWndPanel,
+                    HWND_TOP,
+                    0, 0, 0, 0,
+                    SWP_ZORDER | SWP_ACTIVATE 
+                );
+            } else {
+                hWndPanel = WinLoadDlg(
+                    (HWND)NULL,
+                    (HWND)NULL,
+                    (LPFNWP)SayWhatDlgProc,
+                    NULL,
+                    DLG_WHAT,
+                    NULL
+                );
+            }
+        }
+        return 0L;
+
+      case WM_CREATE:
+        /* find out character/screen sizes, number of colors */
+        hPS = WinGetPS( hWnd );
+        GpiQueryCharBox( hPS, &gsChar );
+        GpiQueryColorData( hPS, (LONG)COLORDATAMAX, ColorData );
+        WinReleasePS( hPS );
+        lColorMax = ColorData[3];
+        ptCharSize.x = gsChar.width;
+        ptCharSize.y = gsChar.height;
+        ptScreenSize.x =
+          WinQuerySysValue( (HWND)NULL, SV_CXSCREEN );
+        ptScreenSize.y =
+          WinQuerySysValue( (HWND)NULL, SV_CYSCREEN );
+        /* initialize timer */
+        srand( (INT)time(NULL) );
+        WinStartTimer( hAB, hWnd, TIMER_MOVE, nInterval );
+        return 0L;
+
+      case WM_DESTROY:
+        if( hWndPanel )
+            WinDestroyWindow( hWndPanel );
+        WinPostQueueMsg( hMsgQ, WM_QUIT, 0L, 0L );
+        return 0L;
+
+      case WM_ERASEBACKGROUND:
+        return 1L;  /* don't erase */
+
+      case WM_MINMAX:
+        bNowIconic = ( LOUSHORT(lParam1) == SWP_MINIMIZE );
+        if( bIconic != bNowIconic ) {
+            bIconic = bNowIconic;
+            if( bIconic )
+                WinStopTimer( hAB, hWnd, TIMER_CHAR );
+            else
+                WinStartTimer( hAB, hWnd, TIMER_CHAR, 1000 );
+        }
+        return 1L;
+
+      case WM_MOUSEMOVE:
+        if( bMouseDown ) {
+            ptMouse.x = LOUSHORT(lParam1);
+            ptMouse.y = HIUSHORT(lParam1);
+            SayMoveText( hWnd, ptMouse );
+        }
+        return 0L;
+
+      case WM_PAINT:
+        SayWhatPaint( hWnd );
+        return 0L;
+
+      case WM_SIZE:
+        SayInvalidateText( hWnd );
+        nDistLeft = 0;
+        SayAdvanceTextPos( hWnd );
+        return 0L;
+
+      case WM_TIMER:
+        switch( LOUSHORT(lParam1) ) {
+            case TIMER_MOVE:
+                SayAdvanceTextPos( hWnd );
+                break;
+            case TIMER_CHAR:
+                SayAdvanceTextChar( hWnd );
+                break;
+        }
+        return 0L;
+    }
+    return WinDefWindowProc( hWnd, wMsg, lParam1, lParam2 );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Main function for the application.  */
+
+void cdecl main( nArgs, pArgs )
+    INT         nArgs;
+    PSZ         pArgs;
+{
+    QMSG        qMsg;
+
+    if( ! SayInitApp() )
+        SayExitApp( 1 );
+
+    while( WinGetMsg( hAB, &qMsg, (HWND)NULL, 0, 0 ) ) {
+
+        if( hWndPanel  &&  WinProcessDlgMsg( hWndPanel, &qMsg ) )
+            continue;
+
+        WinDispatchMsg( hAB, &qMsg );
+    }
+
+    SayExitApp( 0 );
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

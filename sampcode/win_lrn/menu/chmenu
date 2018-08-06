@@ -1,0 +1,6 @@
+
+chmenu.obj: chmenu.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 chmenu.c
+
+chmenu.exe: chmenu.obj chmenu.def
+    link4 /align:16 chmenu,,nul,slibw/NOE,chmenu.def

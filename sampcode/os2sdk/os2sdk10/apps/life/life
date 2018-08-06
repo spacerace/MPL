@@ -1,0 +1,32 @@
+#
+#	Makefile for LIFE.EXE, OS/2 Game of Life
+#
+# Macros
+LIB=..\..\..\lib
+INC=..\..\..\INCLUDE
+
+# rules
+
+.c.obj:
+    cl -c -Ox -I$(INC) $*.c
+
+.asm.obj:
+    masm $*.asm;
+
+# Dependencies
+
+life.obj:	life.c	life
+
+life2.obj:	life2.asm life
+
+mouapi.obj:	 mouapi.c life
+
+int33h.obj:	int33h.asm life
+
+
+mouapi.lib:	mouapi.obj int33h.obj
+	lib	mouapi -+mouapi -+int33h;
+
+life.exe:	life.obj life2.obj mouapi.lib
+	link life life2,,, slibcp doscalls;
+	bind life mouapi.lib $(LIB)\api.lib $(LIB)\doscalls.lib

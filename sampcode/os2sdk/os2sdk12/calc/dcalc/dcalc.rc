@@ -1,0 +1,38 @@
+#include <pmwin.h>
+#include "dcalc.h"
+
+rcinclude dcalc.dlg
+
+POINTER  IDR_CALC   calc.ico
+POINTER  IDP_FINGER finger.ptr
+
+
+/******** Main Menu ********/
+
+MENU	IDR_CALC PRELOAD
+BEGIN
+    SUBMENU   "~Edit", -1
+    BEGIN
+        MENUITEM    "~Copy\tCtrl+Ins ",     CMD_COPY
+        MENUITEM    "~Paste\tShift+Ins",    CMD_PASTE
+        MENUITEM    "",                     0, MIS_SEPARATOR
+        MENUITEM    "E~xit",                CMD_EXIT
+        MENUITEM    "A~bout Calculator...", CMD_ABOUT
+    END
+END
+
+/****** Accelerator table *****/
+
+ACCELTABLE      IDR_CALC PRELOAD
+BEGIN
+    VK_INSERT,	   CMD_COPY,	VIRTUALKEY, CONTROL
+    VK_INSERT,	   CMD_PASTE,	VIRTUALKEY, SHIFT
+END
+
+
+STRINGTABLE FIXED PRELOAD
+BEGIN
+    1, "Calculator"
+    2, "Error"
+    3, "±"          ;the plus/minus key
+END

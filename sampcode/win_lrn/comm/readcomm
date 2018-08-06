@@ -1,0 +1,12 @@
+readcomm.obj: readcomm.c 
+  cl -c -W2 -AS -Gsw -Od -Zped readcomm.c
+
+readcomm.res: readcomm.rc readcomm.ico
+  rc -r readcomm.rc
+
+readcomm.exe: readcomm.obj readcomm.def readcomm.res 
+    link4 readcomm,/align:16,,slibw,readcomm.def
+    rc readcomm.res
+    del readcomm.obj
+    del readcomm.map
+

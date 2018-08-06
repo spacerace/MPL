@@ -1,0 +1,22 @@
+/*------------------------------
+   LIFE.RC resource script file
+  ------------------------------*/
+
+#include <os2.h>
+#include "life.h"
+
+POINTER ID_RESOURCE life.ico
+
+MENU ID_RESOURCE
+     {
+     SUBMENU "~Cell-Size",    IDM_SIZE
+          {
+          MENUITEM "~Large",  IDM_LARGE,, MIA_CHECKED
+          MENUITEM "~Small",  IDM_SMALL
+          MENUITEM "~Tiny",   IDM_TINY
+          }
+     MENUITEM "~Start!",      IDM_START
+     MENUITEM "S~top!",       IDM_STOP,,  MIA_DISABLED
+     MENUITEM "Ste~p!",       IDM_STEP
+     MENUITEM "C~lear!",      IDM_CLEAR
+     }

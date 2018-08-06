@@ -1,0 +1,46 @@
+
+
+        NAME
+                onexit -- install a common exit routine
+
+        SYNOPSIS
+                onexit(addr);
+                int *addr;      address of function to call
+
+
+
+        DESCRIPTION
+        This function is used to install a function into the
+        common_exit routine.  It may be used to provide a means
+        of insuring that one or more operations are performed before
+        a program exit.  Note that the installed routine is ONLY
+        called if common_exit() is called to invoke it.  Doing
+        a standard exit() will NOT call the installed routine.
+
+
+        EXAMPLE
+
+             void exithandler() {
+                  removetick();
+                  }                /* insure ticker is removed */
+
+             main() {
+                   onexit(&exithandler);
+                          ..
+                          ..
+                          ..
+                    common_exit();
+                    }
+
+        N.B.:
+            Any function in this Library which does an exit will
+            call common_exit.   This includes (but may not be limited to):
+                error()      aabort()       badext()
+                eraok()      exit2dos()     cant()
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

@@ -1,0 +1,6 @@
+garf.obj: garf.c
+    cl -d -c -AS -Gsw -Os -Zpe garf.c
+
+garf.exe: garf.obj garf.def
+    link4 garf,/align:16,/map,slibw/NOE,garf.def
+    mapsym garf

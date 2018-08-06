@@ -1,0 +1,6 @@
+invert.obj: invert.c
+   cl -c -W2 -AS -Gsw -Od -Zped invert.c
+
+invert.exe: invert.obj invert.def
+   link4 invert,/align:16,/map/li,slibw,invert.def
+   mapsym invert

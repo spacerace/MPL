@@ -1,0 +1,6 @@
+clean.obj : clean.asm
+  masm clean;
+
+clean.exe : clean.obj
+  link clean;
+

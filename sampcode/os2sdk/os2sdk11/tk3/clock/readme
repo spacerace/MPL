@@ -1,0 +1,17 @@
+Comments about CLOCK
+
+The program illustrates various Gpi calls.  It starts a timer
+which sends it WM_TIMER messages once per second.  DosGetDateTime
+returns the system time.  The various graphical parts of the clock
+face (face, hour hand, minute hand, second hand, major ticks, minor
+ticks), are each drawn by setting the model transform and then
+drawing the part in an unchanging location in world space.  Once per
+minute, the clock is drawn from scratch.  The second hand is drawn
+in XOR mode, so it can be redrawn in its old location (effectively
+erasing it) and then drawn in its new location, without requiring
+that the whole clock be redrawn.
+
+Under "Preferences", if you select "Hide Frame Controls", all windows
+but the client window and the size border disappear.  You can
+restore them by double-clicking on the clock window, or by typing
+any keyboard character when the clock window has the focus.

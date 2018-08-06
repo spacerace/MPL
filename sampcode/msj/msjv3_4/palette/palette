@@ -1,0 +1,14 @@
+CFLAGS=-c -AS -FPa -Gsw -Os -Zep
+
+palette.res: palette.h palette.ico palette.rc
+	rc -r palette.rc
+	
+palette.obj: palette.h spectrum.h palette.c
+   cl $(CFLAGS) palette.c
+
+spectrum.obj: spectrum.h spectrum.c
+   cl $(CFLAGS) spectrum.c
+
+palette.exe: palette.res palette.obj palette.def palette.lnk spectrum.obj
+   link4 @palette.lnk
+   rc palette.res

@@ -1,0 +1,46 @@
+#
+# Page Selection Control - MAKE FILE
+#
+# LANGUAGE      : Microsoft C5.1
+# MODEL         : small
+# ENVIRONMENT   : Microsoft Windows 2.1 SDK
+# STATUS        : operational
+#
+# Eikon Systems, Inc.
+# 989 East Hillsdale Blvd, Suite 260
+# Foster City, California 94404
+# 415-349-4664
+#
+# 11/30/89 1.00 - Kevin P. Welch - initial creation.
+#
+
+page.res: page.rc page.h page.d
+   rc -r page.rc
+
+page0.obj: page0.asm
+   masm /MX page0.asm;
+
+page1.obj: page1.c page.h page.d
+   cl -c -u -Alnw -Gsw -Os -W3 -Zp -D_WINDOWS -D_WINDLL page1.c
+
+page2.obj: page2.c page.h page.d
+   cl -c -u -Alnw -Gsw -Os -W3 -Zp -D_WINDOWS -D_WINDLL page2.c
+
+page3.obj: page3.c page.h page.d
+   cl -c -u -Alnw -Gsw -Os -W3 -Zp -D_WINDOWS -D_WINDLL page3.c
+
+page4.obj: page4.c page.h page.d
+   cl -c -u -Alnw -Gsw -Os -W3 -Zp -D_WINDOWS -D_WINDLL page4.c
+
+page5.obj: page5.c page.h page.d
+   cl -c -u -Alnw -Gsw -Os -W3 -Zp -D_WINDOWS -D_WINDLL page5.c
+
+page.dll: page0.obj page1.obj page2.obj page3.obj page4.obj page4.obj page.def
+   link4 page0+page1+page2+page3+page4+page5, page.dll /AL:16, , mdllcaw libw /NOD, page
+   rc page.res page.dll
+
+page.dll: page.res
+   rc page.res page.dll
+
+page.lib: page.def
+   implib page.lib page.def

@@ -1,0 +1,9 @@
+#include <style.h>
+#include "lockres.h"
+
+Sample TEXT lockres.txt
+
+Lock MENU
+    BEGIN
+         MENUITEM  "&Resource"    IDM_RES
+    END

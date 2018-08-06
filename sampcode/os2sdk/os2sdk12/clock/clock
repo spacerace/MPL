@@ -1,0 +1,41 @@
+# Makefile for CLOCK.EXE
+# Created by Microsoft Corportation, 1989
+#
+
+# Abbreviations
+#
+
+CC	=	cl -c -Asnd -G2sc -Od -W3 -Zip
+LF	=	/align:16 /codeview /map /NOD
+OBJS	=	clock.obj dialogs.obj paint.obj wndproc.obj
+
+# Inference Rules
+#
+.rc.res:
+    rc -r $*.rc
+
+.c.obj:
+    $(CC) $*.c
+
+
+all: clock.exe
+# Resources
+#
+clock.res:	clock clock.ico clock.rc res.h
+
+
+# C Files
+#
+clock.obj:      clock clock.c clock.h res.h
+
+dialogs.obj:	clock dialogs.c
+
+paint.obj:	clock paint.c
+
+wndproc.obj:    clock clock.h res.h wndproc.c
+
+# Files:  CLOCK.EXE, CLOCK.SYM
+#
+clock.exe:	clock $(OBJS) clock.def clock.rc
+    link $(LF) $(OBJS), clock.exe, clock.map, os2 slibcep, clock.def
+    rc clock.res clock.exe

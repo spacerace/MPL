@@ -1,0 +1,6 @@
+pmetafil.obj: pmetafil.c
+    cl -d -c -AS -Gsw -Os -Zpe pmetafil.c
+
+pmetafil.exe: pmetafil.obj pmetafil.def
+    link4 pmetafil,/align:16,/map,slibw/NOE,pmetafil.def
+    mapsym pmetafil

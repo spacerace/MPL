@@ -1,0 +1,16 @@
+Comments about SNAP
+
+This program allows you to screen dump to a Win386 loadable file (but
+color is lost).
+
+
+File List:
+hand.ptr	Hand pointer used when snapshotting
+readme		This file
+select.ptr	Selection pointer when selecting region to snap
+snap.c		Source code
+snap.def	Definition file
+snap.h		Resource ID file
+snap.ico	Icon (Person holding a camera)
+snap.ptr	Person holding a camera
+snap.rc		Resource file

@@ -1,0 +1,47 @@
+/* 
+ * WNTMNU resource file
+ *
+ * Menus and string tables for WNTERM
+ *
+ * Copyright (c) 1989, 1990
+ * William S. Hall
+ * 3665 Benton Street, #66
+ * Santa Clara, CA 95051
+ */
+
+/* strings */
+STRINGTABLE
+BEGIN
+    IDS_APPNAME,		"Wnterm"
+    IDS_ABOUT,			"A&bout..."
+    IDS_WINTITLE,		"Windows Terminal on "
+    IDS_ICONSTRING		"WTRM"
+    IDS_OFFLINE			"&Local"
+    IDS_ONLINE			"&Line"
+    IDS_COM1			"COM1:"
+    IDS_COM2			"COM2:"
+    IDS_COM3			"COM3:"
+    IDS_COM4			"COM4:"
+    IDS_PORTSECTION		"ports"
+    IDS_CANNOTOPENFIRSTPORT	"Cannot open this port; try the next one?"
+    IDS_CANNOTOPENANYPORT	"Cannot open any communications port; exiting."
+    IDS_COMMSETERROR		"Cannot set communications port."
+    IDS_SMALLFONT		"SmallFont"
+    IDS_FONTFACE		"Courier"
+    IDS_CANNOTOPENPORT		"Cannot open communications port."
+END
+
+/* menu */
+WNTERM MENU
+BEGIN
+    MENUITEM "&Local", IDM_OFFLINE
+    POPUP "&Terminal"
+    BEGIN
+	MENUITEM "&Communications...", IDM_COMM
+	MENUITEM "&LocalEcho", IDM_LOCAL
+	MENUITEM "Clear&Screen", IDM_CLEAR
+	MENUITEM SEPARATOR
+	MENUITEM "A&bout...", IDM_ABOUT
+    END
+END
+

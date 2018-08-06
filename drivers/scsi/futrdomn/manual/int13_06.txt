@@ -1,0 +1,45 @@
+Code 06                                  -Format Unit with Passed List
+
+Input registers - ES:BX points to a buffer containing the bytes of data that 
+are to be output during the data phase of the command. Byte 0 contains the 
+MSB and byte 1 the LSB of the length(N) of the number of bytes to be output
+during the data phase. Bytes 2-N contain the data that is to be output. If the
+length is 0, no bytes are output.
+
+DH contains flags that are part of the format command. The specific definition
+of the flags to the device are device dependent. This byte is OR'ed with byte
+1 of the command before it is output to the device.
+
+AL contains the interleave factor. This is output as byte 4 of the command.
+
+Special output registers - none.
+
+Operation:
+
+    This command is normally used to send defect lists to the drive for 
+    formatting. By changing the flags and the contents of the buffer, this
+    could be a format cylinder command, format  unit command, format with
+    manufacturer's defect list, format with passed list, format with spares,
+    etc. The specific operation is dependent on what the specific disk drive
+    manufacturer has implemented.
+
+    The SCSI Format Unit (04) command is issued to the device. The contents 
+    of the caller's DH register are OR'ed with the LUN to form byte 1 on the 
+    command. The caller's AL register is sent as byte 4 for the interleave.
+
+    The length of the data phase is taken from bytes 0 and 1 of the caller's 
+    buffer. Note that the  MSB is in byte 0 and the LSB in byte 1. During the
+    data phase of the command, successive  bytes are taken from the caller's 
+    buffer and sent to the device.
+
+    A check is made for SCSI Request asserted, and SCSI C/D deasserted between
+    each byte. If C/D is asserted or buffer is exhausted, the operation 
+    proceeds to the Status/Message phase. There is no timeout for this 
+    command. Many devices pick up the data bytes, such as for    defect 
+    management,	as they are needed during the formatting operation. As a 
+    result, there is no predetermined timeout interval. If the device hangs,
+    the system must be restarted.
+
+    If an error is detected during the Status/Message phase, a SCSI Request 
+    Sense is issued and  the results returned in AH/AL.
+

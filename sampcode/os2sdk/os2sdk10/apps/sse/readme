@@ -1,0 +1,8 @@
+SSE is a simple screen editor for OS/2. It shows how to use
+the VIO and KBD functions, and also segmented memory management.
+The command set and user interface is a subset of that available
+in Microsoft QuickBasic. It supports 43 line mode on an EGA. It
+will preserve the line mode at startup, unless /43 or /25 is used
+to override the default.
+
+Usage:	SSE [/bw] [/43|/25] filename

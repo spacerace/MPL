@@ -1,0 +1,25 @@
+OBJS	=	demo.obj getdrive.obj getdir.obj valid.obj setdrive.obj \
+		fcount.obj readname.obj
+
+.asm.obj:
+    masm $*;
+
+.bas.obj:
+    bc $*;
+
+getdrive.obj:	getdrive.asm
+
+getdir.obj:	getdir.asm
+
+valid.obj:	valid.bas
+
+setdrive.obj:	setdrive.asm
+
+fcount.obj:	fcount.asm
+
+readname.obj:	readname.asm
+
+demo.obj:	demo.bas
+
+demoasm.exe:	$(OBJS)
+    link /nod $(OBJS), demoasm.exe, , doscalls brun60ep;

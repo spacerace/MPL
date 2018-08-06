@@ -1,0 +1,1245 @@
+Microsoft Systems Journal
+Volume 2; Issue 5; November, 1987
+
+Code Listings For:
+
+	MAZE
+	pp. 13-38
+
+Author(s): Kevin P. Welch
+Title:     Interprogram COmmunications Using Winows' Dynamic Data Exchange
+
+
+
+Figure 12
+=========
+
+
+CFLAGS=-c -u -AS -FPa -Gsw -Os -Zep
+
+maze.obj: maze.h maze.c
+   cl $(CFLAGS) maze.c
+
+maze.exe: maze.obj maze.def maze.lnk
+   link4 @maze.lnk
+
+
+
+
+Figure 13
+=========
+
+
+NAME				Maze
+
+DESCRIPTION			'Dynamic Data Exchange Maze'
+
+STUB				'\BIN\WINSTUB.EXE'
+
+CODE				MOVEABLE 
+DATA				MOVEABLE MULTIPLE
+
+HEAPSIZE			2048
+STACKSIZE			2048
+
+EXPORTS			
+	MazeWndFn		@1
+
+
+
+
+
+Figure 14
+=========
+
+
+maze /align:16
+maze
+maze
+slibw
+maze.def
+
+
+
+Figure 15
+=========
+
+
+/*
+ * DDE MAZE - HEADER FILE
+ *
+ * LANGUAGE : Microsoft C
+ * MODEL		: Small
+ * STATUS	: Operational
+ *
+ * 09/22/87 - Kevin P. Welch - initial creation.
+ *
+ */
+ 
+#define MAZE_COLS			3
+#define MAZE_ROWS			5
+
+#define SC_GRAB_BALL		0x0100
+#define SC_GRAB_FOCUS	0x0101
+
+#define HI				HIWORD(lPrm)
+#define LO				LOWORD(lPrm)
+
+#define RGB_BLACK			RGB(0x00,0x00,0x00)
+#define RGB_WHITE			RGB(0xFF,0xFF,0xFF)
+
+/*
+ * BALL DATA STRUCTURE DEFINITIONS
+ *
+ */
+
+#define BALL_WIDTH	6
+#define BALL_HEIGHT	6
+
+#define RANDOM_MOTION	(((rand()%2)*2)-1)
+
+#define H_BOUNCE(a,b)	((a<=0)?1:((a>=b)?-1:Ball.iHorzMotion))
+#define V_BOUNCE(a,b)	((a<=0)?1:((a>=b)?-1:Ball.iVertMotion))
+
+#define ADVISE_OFF	(!Link[i].bAdviseBall)
+
+#define OUTSIDE_LEFT	(Ball.rPosn.left<=Link[i].rHole.left)
+#define OUTSIDE_RIGHT	(Link[i].rHole.right<=Ball.rPosn.right)
+#define OUTSIDE_TOP	(Ball.rPosn.top<=Link[i].rHole.top)
+#define OUTSIDE_BOTTOM	(Link[i].rHole.bottom<=Ball.rPosn.bottom)
+
+#define OUTSIDE_WIDTH	((OUTSIDE_LEFT)||(OUTSIDE_RIGHT))
+#define OUTSIDE_HEIGHT	((OUTSIDE_TOP)||(OUTSIDE_BOTTOM))
+
+#define OUTSIDE_HOLE	((ADVISE_OFF)||(OUTSIDE_WIDTH)||(OUTSIDE_HEIGHT))
+
+typedef struct {
+	RECT		rPosn;		/* current ball position */
+	long		lTimeIn;	/* time ball entered maze */
+	int		iHorzMotion;	/* vertical ball motion offset */
+	int		iVertMotion;	/* horizontal ball motion offset */
+	BOOL		bIsBouncing;	/* ball bouncing flag */
+} BALL;
+
+/*
+ * MAZE DATA STRUCTURE DEFINITIONS
+ *
+ */
+
+#define DISPLAY_WIDTH			(Maze.wWidth+BALL_WIDTH)
+#define DISPLAY_HEIGHT			(Maze.wHeight+BALL_HEIGHT)
+
+typedef struct {
+	WORD		wNum;		/* maze window number */
+	WORD		wLinks;		/* number of maze links */
+	WORD		wWidth;		/* width of maze client area */
+	WORD		wHeight;	/* height of maze client area */
+	BOOL		bInitiate;	/* in initiate flag */
+	BOOL		bGrabBall;	/* grab the ball flag */
+	BOOL		bGrabFocus;	/* grab the focus flag */
+	WORD		wGoingAway;	/* maze going away counter */
+} MAZE;
+
+
+/*
+ * COMMUNICATION LINK DATA STRUCTURE DEFINITIONS
+ *
+ */
+
+#define MAX_LINK			32
+
+#define HOLE_WIDTH			20
+#define HOLE_HEIGHT			14
+
+typedef struct {
+	HWND		hWnd;		/* client window handle */
+	WORD		wNum;		/* client window number */
+	RECT		rHole;		/* client hole position */
+	BOOL		bAdviseBall;	/* advise client of ball flag */
+	BOOL		bAdviseStat;	/* advise client of stats flag */
+} LINK;
+
+
+/*
+ * DYNAMIC DATA EXCHANGE DEFINITIONS
+ *
+ */
+ 
+#define ACCEPTED		0x8000
+#define REJECTED		0x0000
+
+#define WM_DDE_INITIATE 	0x03e0
+#define WM_DDE_TERMINATE	0x03e1
+#define WM_DDE_ADVISE     	0x03e2
+#define WM_DDE_UNADVISE   	0x03e3
+#define WM_DDE_ACK        	0x03e4
+#define WM_DDE_DATA       	0x03e5
+#define WM_DDE_REQUEST   	0x03e6
+#define WM_DDE_POKE       	0x03e7
+#define WM_DDE_EXECUTE    	0x03e8
+
+#define SEND(a,b,c)		SendMessage(a,b,hWnd,c)
+#define POST(a,b,c)		PostMessage(a,b,hWnd,c)
+
+#define DDE_INITIATE(a,b,c)	SEND(a,WM_DDE_INITIATE,MAKELONG(b,c))
+#define DDE_TERMINATE(a)	POST(a,WM_DDE_TERMINATE,0L)
+#define DDE_ADVISE(a,b)		Advise(a,hWnd,b)
+#define DDE_UNADVISE(a,b)	POST(a,WM_DDE_UNADVISE,MAKELONG(0,b))
+#define DDE_ACK(a,b,c)		POST(a,WM_DDE_ACK,MAKELONG(b,c))
+#define DDE_DATA(a,b,c,d,e)	Transmit(a,hWnd,WM_DDE_DATA,b,c,d,e)
+#define DDE_POKE(a,b,c,d,e)	Transmit(a,hWnd,WM_DDE_POKE,b,c,d,e)
+
+typedef struct {
+	WORD	fEmpty:12;	/* reserved for future use */
+	WORD	fResponse:1;	/* in response to request */
+	WORD	fRelease:1;	/* release data */
+	WORD	fNoData:1;	/* null data handle ok */
+	WORD	fAck:1;		/* Ack expected */
+	WORD	cfFormat;	/* clipboard data format */
+	BYTE	info[30];	/* data buffer */
+} DATA;
+
+typedef DATA *		PDATA;
+typedef DATA FAR *	LPDATA;
+
+
+
+
+Figure 16
+=========
+
+
+/*
+ * DDE MAZE - FUNCTION DEFINITIONS
+ *
+ * LANGUAGE 	: Microsoft C
+ * MODEL	: Small
+ * STATUS	: Operational
+ *
+ * 09/22/87 - Kevin P. Welch - initial creation.
+ *
+ */
+ 
+VOID		BounceBall( HWND );
+WORD		DestroyMaze( WORD );
+ATOM		BumpGlobalAtom( ATOM );
+BOOL		FindLink( WORD *, HWND );
+BOOL		Advise( HWND, HWND, ATOM );
+HWND		CreateMaze( HANDLE, HANDLE, WORD );
+BOOL		Transmit( HWND, HWND, WORD, ATOM, BOOL, LONG, LONG );
+
+LPSTR FAR PASCAL	lstrcpy( LPSTR, LPSTR );
+LONG FAR PASCAL	MazeWndFn( HWND, WORD, WORD, LONG );
+
+
+
+
+Figure 17
+=========
+
+
+/*
+ * DDE MAZE - SOURCE CODE
+ *
+ * LANGUAGE 	: Microsoft C
+ * MODEL	: Small
+ * STATUS	: Operational
+ *
+ * 09/22/87 - Kevin P. Welch - initial creation.
+ *
+ * The DDE Maze demonstrates how Dynamic Data Exchange (DDE) can be
+ * used in multiple server, multiple client conversations.  The maze
+ * supports two distinct data items - one used in passing the animated
+ * ball between instances of the Maze, the other for reporting vital
+ * Maze statistics to an interested listener.
+ *
+ * Note that the DDE techniques demonstrated in this program are
+ * a simplification of the general specification.  In ALL cases
+ * where you observe differences between this application and the
+ * specification, please follow the published protocol.
+ *
+ * Special thanks to Ed Fries, Geoff Nichols, and David West as
+ * they helped me see the forest from the trees!
+ *
+ */
+ 
+#include <windows.h>
+#include "maze.h"
+#include "maze.d"
+
+ATOM		aWnd;		/* window number item */
+ATOM		aBall;		/* bouncing ball topic */
+ATOM		aGrab;		/* grab the ball item */
+ATOM		aStat;		/* statistics item */
+ATOM		aAnyMaze;	/* generic maze atom */
+ATOM		aThisMaze;	/* this maze atom */
+
+MAZE		Maze;		/* maze data structure */		
+BALL		Ball;		/* ball data structure */
+LINK		Link[MAX_LINK];	/* maze communications link */
+
+
+/*
+ * MAZE MAINLINE & MESSAGE PROCESSING LOOP
+ *
+ *	hInst		current instance handle
+ *	hPrevInst	previous instance handle
+ *	lpsCmd		execution command line string
+ *	wCmdShow		initial show-window option
+ *
+ * This mainline is responsible for calling the initialization and
+ * termination routines in addition to processing and distributing
+ * all incoming messages.  Note the revised message processing
+ * loop used to animate the bouncing ball.
+ *
+ */
+ 
+WORD PASCAL WinMain( hInst, hPrevInst, lpsCmd, wCmdShow )
+	HANDLE		hInst;
+	HANDLE		hPrevInst;
+	LPSTR		lpsCmd;
+	WORD		wCmdShow;
+{
+	MSG		Msg;		/* current system message */
+	HWND		hWnd;		/* maze window handle */
+
+	/* create & initialize maze */
+	hWnd = CreateMaze( hInst, hPrevInst, wCmdShow );
+
+	/* message processing loop */
+	do {
+	
+		/* retrieve next message */
+		if ( Ball.bIsBouncing ) {			
+			if ( PeekMessage(&Msg,NULL,0,0,TRUE) ) {
+				if ( Msg.message != WM_QUIT ) {
+					TranslateMessage( &Msg );
+					DispatchMessage( &Msg );
+				}
+			} else
+				BounceBall( hWnd );			
+		} else 
+			if ( GetMessage(&Msg,NULL,0,0) ) {
+				TranslateMessage( &Msg );
+				DispatchMessage( &Msg );
+			}
+	
+	} while ( Msg.message != WM_QUIT );
+
+	/* destroy maze & exit */
+	exit( DestroyMaze(Msg.wParam) );
+
+}
+
+
+/*
+ * MAZE WINDOW MESSAGE PROCESSING FUNCTION
+ *
+ *	hWnd			window handle
+ *	wMsg			window message number
+ *	wPrm			additional message info
+ *	lPrm			additional message info
+ *
+ * This function processes all the messages related to the maze
+ * window, including all the DDE messages required in order to
+ * participate in one or more conversations.  Note that this
+ * window function handles DDE messages for both the client and
+ * the server sides of the conversation!
+ *
+ */
+ 
+LONG FAR PASCAL MazeWndFn( hWnd, wMsg, wPrm, lPrm )
+	HWND		hWnd;
+	WORD		wMsg;
+	WORD		wPrm;
+	LONG		lPrm;
+{
+	WORD		i;		/* channel number */
+	LONG		lAck;		/* acknowledgement of message */
+
+	/* initialization */
+	lAck = FALSE;
+	
+	/* process message */
+	switch( wMsg )
+		{
+	case WM_CREATE : /* create window */
+		
+		/* adjust window position if tileable */
+		if ( Maze.wNum <= MAZE_ROWS*MAZE_COLS )
+			MoveWindow(
+				hWnd,
+				(Maze.wWidth*((Maze.wNum-1)%MAZE_COLS)),
+				(Maze.wHeight*((Maze.wNum-1)/MAZE_COLS)),
+				Maze.wWidth,
+				Maze.wHeight,
+				TRUE
+			);
+			
+		break;
+	case WM_SYSCOMMAND : /* system command */
+		
+		/* process sub-message */
+		switch( wPrm )
+			{
+		case SC_GRAB_BALL :			
+			
+			/* inform all clients */
+			if ( Maze.bGrabBall ) {
+				Maze.bGrabBall = FALSE;
+				for (i=0; i<Maze.wLinks; i++)
+					DDE_UNADVISE( Link[i].hWnd, aGrab );
+			} else {
+				Maze.bGrabBall = TRUE;
+				for (i=0; i<Maze.wLinks; i++)
+					DDE_ADVISE( Link[i].hWnd, aGrab );
+			}
+			
+			/* update system menu */
+			CheckMenuItem( 
+				GetSystemMenu(hWnd,FALSE), 
+				SC_GRAB_BALL,
+				(Maze.bGrabBall)?MF_CHECKED:MF_UNCHECKED
+			);
+			
+			break;
+		case SC_GRAB_FOCUS :
+			
+			/* adjust state & system menu */
+			Maze.bGrabFocus = (Maze.bGrabFocus) ? FALSE : TRUE;
+			CheckMenuItem( 
+				GetSystemMenu(hWnd,FALSE), 
+				SC_GRAB_FOCUS,
+				(Maze.bGrabFocus)?MF_CHECKED:MF_UNCHECKED
+			);
+			
+			break;
+		default :
+			lAck = DefWindowProc( hWnd, wMsg, wPrm, lPrm );
+			break;
+		}
+		
+		break;
+	case WM_GETMINMAXINFO : /* get window size info */
+		
+		/* set minimum tracking height */
+		((LPPOINT)lPrm)[3].y = 5 * HOLE_HEIGHT;
+		
+		break;
+	case WM_SIZE : /* window being sized */
+		
+		/* adjust animation statistics */
+		Ball.lTimeIn = GetCurrentTime();
+
+		/* calculate hole adjusted window dimensions */
+		Maze.wWidth = LOWORD(lPrm) - HOLE_WIDTH;
+		Maze.wHeight = HIWORD(lPrm) - HOLE_HEIGHT;
+			
+		/* randomly position all holes */
+		for ( i=0; i<Maze.wLinks; i++ ) {
+			Link[i].rHole.left = rand() % Maze.wWidth;
+			Link[i].rHole.top = rand() % Maze.wHeight;
+			Link[i].rHole.right = Link[i].rHole.left + HOLE_WIDTH;
+			Link[i].rHole.bottom = Link[i].rHole.top + HOLE_HEIGHT;
+		}
+			
+		/* calculate ball adjusted window dimensions */
+		Maze.wWidth = LO - BALL_WIDTH;
+		Maze.wHeight = HI - BALL_HEIGHT;
+			
+		/* randomly position bouncing ball */
+		Ball.rPosn.left = rand() % Maze.wWidth;
+		Ball.rPosn.top = rand() % Maze.wHeight;
+		Ball.rPosn.right = Ball.rPosn.left + BALL_WIDTH;
+		Ball.rPosn.bottom = Ball.rPosn.top + BALL_HEIGHT;
+		
+		/* assign ball movement direction */
+		Ball.iHorzMotion = RANDOM_MOTION;
+		Ball.iVertMotion = RANDOM_MOTION;
+						
+		break;
+	case WM_PAINT : /* window needs painting */
+		
+		{
+			PAINTSTRUCT	Region;	/* temporary paint structure */
+			BYTE		sInterior[8];  /* temporary text 
+                                                          string */
+		
+			BeginPaint( hWnd, &Region );
+			
+			/* draw all holes in window */
+			for ( i=0; i<Maze.wLinks; i++ ) {
+			
+				/* select appropriate text & brush colors */
+				if ( Link[i].bAdviseBall || Link[i].bAdviseStat ) {
+					SetBkColor( Region.hdc, RGB_BLACK );
+					SetTextColor( Region.hdc, RGB_WHITE );
+					SelectObject( Region.hdc, GetStockObject(BLACK_BRUSH) );
+				} else {
+					SetBkColor( Region.hdc, RGB_WHITE );
+					SetTextColor( Region.hdc, RGB_BLACK );
+					SelectObject( Region.hdc, GetStockObject(WHITE_BRUSH) );
+				}
+				
+				/* draw black hole  */
+				Rectangle(
+					Region.hdc, 
+					Link[i].rHole.left, 
+					Link[i].rHole.top, 
+					Link[i].rHole.right, 
+					Link[i].rHole.bottom 
+				);
+				
+				if ( Link[i].wNum )
+					sprintf( sInterior, "%u", Link[i].wNum );
+				else
+					strcpy( sInterior, "?" );
+				
+				DrawText(
+					Region.hdc,
+					sInterior,
+					strlen(sInterior),
+					&Link[i].rHole,
+					DT_CENTER|DT_VCENTER|DT_NOCLIP|DT_SINGLELINE
+				);
+			
+			}
+				
+			EndPaint( hWnd, &Region );
+		
+		}
+		
+		break;
+	case WM_CLOSE : /* end it all */
+
+		if ( Maze.wLinks ) {
+		
+			/* pass ball to first interested client */
+			if ( Ball.bIsBouncing ) {
+				for (i=0; (i<Maze.wLinks)&&(!Link[i].bAdviseBall); i++);
+				DDE_DATA(
+					Link[ (i<Maze.wLinks) ? i : 0 ].hWnd, 
+					aGrab, 
+					FALSE,
+					(LONG)Maze.wNum,
+					(LONG)((GetFocus()==hWnd)?TRUE:FALSE)
+				);
+			}
+	
+			/* notify all clients */
+			for (i=0; i<Maze.wLinks; i++) {
+				if (Link[i].bAdviseBall) DDE_UNADVISE(Link[i].hWnd,aBall);
+				if (Link[i].bAdviseStat) DDE_UNADVISE(Link[i].hWnd,aStat);
+				DDE_TERMINATE( Link[i].hWnd );
+			}
+
+			/* wait till someone pulls the plug */
+			Maze.wGoingAway = Maze.wLinks;
+
+			Maze.wLinks = 0;
+			Ball.bIsBouncing = FALSE;
+			SetWindowText( hWnd, "Maze dying..." );
+			
+		} else
+			DestroyWindow( hWnd );
+		
+		break;
+	case WM_DESTROY : /* end it all! */
+		PostQuitMessage( 0 );
+		break;
+	case WM_DDE_INITIATE : /* initiate DDE conversation */
+		
+		/* process message if interesting request */
+		if ( (hWnd!=wPrm)&&(LO==aAnyMaze||LO==aThisMaze)&&(HI==aBall) ) {
+		
+			/* check if caller already a client */
+			if ( !FindLink(&i,wPrm) ) {
+
+				/* add caller to list of links */
+				i = Maze.wLinks++;
+
+				Link[i].wNum = 0;
+				Link[i].hWnd = (HWND)wPrm;
+				Link[i].bAdviseBall = FALSE;
+				Link[i].bAdviseStat = FALSE;
+
+				/* re-add global atoms */
+				BumpGlobalAtom( HI );
+				BumpGlobalAtom( aThisMaze );
+			
+				SEND( wPrm, WM_DDE_ACK, MAKELONG(aThisMaze,HI) );
+
+				/* ask caller to become a server also */
+				if ( (!Maze.bInitiate)&&(LO==aAnyMaze) ) {
+					Maze.bInitiate = TRUE;
+					DDE_INITIATE( wPrm, aAnyMaze, aBall );
+					Maze.bInitiate = FALSE;
+				}
+
+				/* rearrange window & update display */
+				SEND(hWnd,WM_SIZE,MAKELONG(DISPLAY_WIDTH,DISPLAY_HEIGHT));				
+				InvalidateRect( hWnd, NULL, TRUE );
+
+			}
+
+		}
+		
+		break;
+	case WM_DDE_ADVISE : /* advise client on DDE item */
+		
+		{
+			WORD	wAnswer;   /* answer to advise message */
+			LPDATA	lpData;	   /* temporary advise structure */
+	
+			/* initialization */
+			wAnswer = REJECTED;
+			
+			/* search for link */
+			if ( FindLink(&i,wPrm)&&((HI==aGrab)||(HI==aStat)) ) {
+				
+				lpData = (LPDATA)GlobalLock( LO );
+				if ( lpData ) {
+							
+					if ( lpData->cfFormat == CF_TEXT ) {
+					
+						wAnswer = ACCEPTED;
+						Link[i].bAdviseBall |= (HI==aGrab);
+						Link[i].bAdviseStat |= (HI==aStat);
+					
+						GlobalUnlock( (HANDLE)LO );
+						GlobalFree( (HANDLE)LO );
+						
+						InvalidateRect( hWnd, NULL, TRUE );
+						
+					} else
+						GlobalUnlock( LO );
+							
+				}
+				
+			} 
+			
+			/* respond to message */
+			DDE_ACK( wPrm, wAnswer, HI );
+		
+		}
+		
+		break;
+	case WM_DDE_UNADVISE : /* stop advising client on DDE item */
+		
+		{
+			WORD	wAnswer;  /* answer to advise message */
+			LPDATA	lpData;	  /* temporary advise structure */
+	
+			/* initialization */
+			wAnswer = REJECTED;
+			
+			/* search for link */
+			if ( FindLink(&i,wPrm)&&((HI==aGrab)||(HI==aStat)) ) {
+				
+				wAnswer = ACCEPTED;
+				if (HI==aGrab) Link[i].bAdviseBall=FALSE;
+				if (HI==aStat) Link[i].bAdviseStat=FALSE;
+					
+				InvalidateRect( hWnd, NULL, TRUE );
+						
+			} 
+			
+			/* respond to message */
+			DDE_ACK( wPrm, wAnswer, HI );
+		
+		}
+		
+		break;
+	case WM_DDE_REQUEST : /* client requestion data item */
+		
+		{
+			WORD	wAnswer;   /* answer to advise message */
+			LPDATA	lpData;	   /* temporary advise structure */
+	
+			if ( FindLink(&i,wPrm)&&(HI==aStat)&&(LO==CF_TEXT) ) 
+				DDE_DATA(
+					Link[i].hWnd, 
+					aStat,
+					TRUE, 
+					(Ball.bIsBouncing)?GetCurrentTime()-Ball.lTimeIn:0L,
+					DISPLAY_WIDTH*(LONG)DISPLAY_HEIGHT
+				);
+			else
+				DDE_ACK( wPrm, REJECTED, HI );
+		
+		}
+			
+		break;
+	case WM_DDE_POKE : /* client providing unsolicited data item */
+	case WM_DDE_DATA : /* server providing data item */
+		
+		{
+			WORD	wData1;		/* window number */
+			WORD	wData2;		/* focus state */
+			LPDATA	lpData;		/* temporary advise structure */
+			BOOL	bRespond;	/* boolean respond flag */
+			WORD	wResponse;	/* response to message */
+			char	sString[30];	/* temporary data string */
+	
+			/* initialization */
+			bRespond = TRUE;
+			wResponse = REJECTED;
+
+			/* search for link & check data item */
+			if ( FindLink(&i,wPrm)&&((HI==aGrab)||(HI==aWnd)) ) {
+						
+				/* retrieve data - lock may not succeed */
+				lpData = (LPDATA)GlobalLock( LO );
+				if ( lpData ) {
+									
+					/* check format */
+					if ( lpData->cfFormat == CF_TEXT ) {
+						
+						/* extract data */
+						lstrcpy( (LPSTR)sString, lpData->info );				
+						sscanf( sString, "%u\t%u", &wData1, &wData2 );
+						
+						/* process data */
+						if ( HI == aGrab ) {
+
+							/* grab ball */
+							Ball.bIsBouncing = TRUE;
+							Ball.lTimeIn = GetCurrentTime();
+							if (Maze.bGrabFocus && wData2) SetFocus(hWnd);
+							
+							/* randomize display */
+							SEND(
+								hWnd,
+								WM_SIZE,
+								MAKELONG(DISPLAY_WIDTH,DISPLAY_HEIGHT)
+							);				
+
+						} else 
+							Link[i].wNum = wData1;				
+			
+						/* Determine if acknowledgement required */
+						if ( !lpData->fAck ) {
+							bRespond = FALSE;
+							GlobalDeleteAtom( HI );
+						} else
+							wResponse = ACCEPTED;
+									
+						/* unlock memory & free if required */
+						if ( lpData->fRelease ) {
+							GlobalUnlock( LO );
+							GlobalFree( LO );
+						} else
+							GlobalUnlock( LO );
+						
+						/* force system to repaint display */
+						InvalidateRect( hWnd, NULL, TRUE );		
+						
+					} else
+						GlobalUnlock( LO );
+											
+				} 
+												
+			} 
+					
+			/* respond to caller */
+			if (bRespond) DDE_ACK(wPrm,wResponse,HI);
+		
+		}
+
+		break;
+	case WM_DDE_ACK : /* DDE acknowledgement */
+
+		if ( Maze.bInitiate ) {
+			
+			/* delete atoms - since bumped */
+			GlobalDeleteAtom( LO );
+			GlobalDeleteAtom( HI );
+			
+			/* inform server of window number */
+			DDE_POKE(
+				wPrm, 
+				aWnd,
+				FALSE, 
+				(LONG)Maze.wNum,
+				(LONG)((GetFocus()==hWnd)?TRUE:FALSE)
+			);
+
+			/* inform server of current advise status */
+			if ( Maze.bGrabBall ) 
+				DDE_ADVISE( wPrm, aGrab );
+			
+		}
+
+		break;
+	case WM_DDE_TERMINATE : /* end a DDE conversation */
+
+		if ( FindLink(&i,wPrm) ) {
+		
+			/* respond with an unadvise on all items */
+			if (Link[i].bAdviseBall) DDE_UNADVISE(wPrm,aBall);
+			if (Link[i].bAdviseStat) DDE_UNADVISE(wPrm,aStat);
+			
+			/* remove caller from list */
+			memcpy(&Link[i],&Link[i+1],(Maze.wLinks-i-1)*sizeof(LINK));
+			Maze.wLinks--;
+			
+			/* respond with a matching terminate & update display */
+			DDE_TERMINATE( wPrm );
+			InvalidateRect( hWnd, NULL, TRUE );
+		
+		} else
+			if ( (Maze.wGoingAway)&&(Maze.wGoingAway-- == 1) )
+				DestroyWindow( hWnd );
+		
+		break;
+	default : /* pass on to default */
+		lAck = DefWindowProc( hWnd, wMsg, wPrm, lPrm );
+		break;
+	}
+	
+	/* return result */
+	return( lAck );
+
+}
+
+
+/*
+ * CREATE DDE MAZE
+ *
+ *	hInst		current instance handle
+ *	hPrevInst	previous instance handle
+ *	wCmdShow	initial show window command
+ *
+ * This function creates and initializes the Maze, including the
+ * definition of all global atoms.  A handle to the maze window is
+ * returned if the entire process is successful.
+ *
+ */
+ 
+static HWND CreateMaze( hInst, hPrevInst, wCmdShow )
+	HANDLE	hInst;
+	HANDLE	hPrevInst;
+	WORD	wCmdShow;
+{
+	WORD		i;		/* temporary loop variable */
+	HWND		hWnd;		/* new maze window handle */
+	HMENU		hMenu;		/* system menu handle */
+	WORD		wQueue;		/* queue length counter */
+	BOOL		bSearch;	/* boolean search flag */
+	BOOL		bPresent;	/* number present flag */
+	WNDCLASS	WndClass;	/* window class structure */
+	BYTE		sCaption[64];	/* current window caption */
+	
+	/* perform instance specific initialization */
+	if ( !hPrevInst ) {
+	
+		Maze.wNum = 1;
+
+		Ball.bIsBouncing = TRUE;
+		Ball.lTimeIn = GetCurrentTime();
+
+		memset( &WndClass, 0, sizeof(WNDCLASS) );
+		
+		WndClass.lpszClassName = (LPSTR)"MazeWindow";
+		WndClass.hCursor = LoadCursor(NULL,IDC_ARROW);
+		WndClass.lpszMenuName = (LPSTR)NULL;
+		WndClass.style = CS_HREDRAW | CS_VREDRAW;
+		WndClass.lpfnWndProc = 	MazeWndFn;
+		WndClass.hInstance = hInst;
+		WndClass.hIcon = NULL;
+		WndClass.hbrBackground = (HBRUSH)(COLOR_MENU + 1);
+
+	} else {
+
+		GetInstanceData( hPrevInst, (NPSTR)&Maze, sizeof(MAZE) );
+		GetInstanceData( hPrevInst, (NPSTR)Link, MAX_LINK*sizeof(LINK) );
+				
+		Link[Maze.wLinks++].wNum = Maze.wNum;
+
+		bSearch = TRUE;
+		Maze.wNum = 1;
+
+		while ( bSearch ) {
+		
+			bPresent = FALSE;
+			for (i=0; i<Maze.wLinks; i++)
+				if ( Link[i].wNum == Maze.wNum )
+					bPresent = TRUE;
+					
+			if ( bPresent )
+				Maze.wNum++;
+			else
+				bSearch = FALSE;
+		
+		}		
+		
+		Maze.wLinks = 0;
+		Ball.bIsBouncing = FALSE;
+	
+	}
+
+	/* continue Maze initialization */
+	if ( hPrevInst || RegisterClass(&WndClass) ) {
+	
+		/* adjust maze queue length */
+		wQueue = 42;
+		while ( !SetMessageQueue(wQueue--) );
+		
+		/* define caption & initial position */
+		sprintf( sCaption, "DDE Maze - #%u", Maze.wNum );
+			
+		Maze.wGoingAway = 0;
+		Maze.bGrabBall = FALSE;
+		Maze.bGrabFocus = FALSE;
+		Maze.wWidth = GetSystemMetrics(SM_CXSCREEN) / MAZE_COLS;	
+		Maze.wHeight = GetSystemMetrics(SM_CYSCREEN) / MAZE_ROWS;
+				
+		hWnd = CreateWindow(
+				"MazeWindow",		/* class name */
+				sCaption,		/* caption */
+				WS_OVERLAPPEDWINDOW,	/* style */
+				0,			/* x position */
+				0,			/* y position */
+				0,			/* width */
+				0,			/* height */
+				(HWND)NULL,		/* parent window */
+				(HMENU)NULL,		/* menu */
+				hInst,			/* application */
+				(LPSTR)NULL		/* other data */
+			);
+
+		if ( hWnd ) {
+		
+			/* revise system menu */		
+			hMenu = GetSystemMenu( hWnd, FALSE );
+			ChangeMenu(hMenu,0,NULL,0,MF_APPEND|MF_SEPARATOR );
+			ChangeMenu(hMenu,0,"Grab the ball",SC_GRAB_BALL,MF_APPEND);
+			ChangeMenu(hMenu,0,"Grab the focus",SC_GRAB_FOCUS,MF_APPEND);
+		
+			/* define global atoms */
+			sprintf( sCaption, "Maze%u", Maze.wNum );
+
+			aAnyMaze = GlobalAddAtom( "Maze" );
+			aThisMaze = GlobalAddAtom( sCaption );
+			aBall = GlobalAddAtom( "Ball" );
+			aWnd = GlobalAddAtom( "Window" );
+			aGrab = GlobalAddAtom( "Grab" );
+			aStat = GlobalAddAtom( "Statistics" );
+				
+			/* initiate DDE conversation on ball */
+			Maze.bInitiate = TRUE;
+			DDE_INITIATE( -1, aAnyMaze, aBall );
+			Maze.bInitiate = FALSE;
+
+			/* seed random number & display maze */
+			srand( hInst );
+			ShowWindow( hWnd, wCmdShow );
+		
+		} else
+			exit( 2 );
+	
+	} else
+		exit( 1 );
+		
+	/* return final result */
+	return( hWnd );
+	
+}
+
+
+/*
+ * BOUNCE BALL IN DDE MAZE
+ *
+ *	hWnd	maze window handle
+ *
+ * This function animates the DDE Maze by moving the ball around the
+ * window.  If the ball "falls" into a "hole" a DDE message is
+ * posted to the appropriate client and the ball transferred.  In
+ * addition, various summary statistics are also provided for those
+ * interested listeners.  
+ *
+ */
+ 
+static VOID BounceBall( hWnd )
+	HWND	hWnd;
+{
+	WORD	i;		/* client channel number */
+	HDC	hDC;		/* temporary display context */
+	LONG	lElapsed;	/* elapsed time ball was bouncing */
+
+	/* check if ball inside hole */
+	for ( i=0; (i<Maze.wLinks)&&(OUTSIDE_HOLE); i++ );
+
+	/* animate ball if not in hole */
+	if ( i == Maze.wLinks ) {
+
+		hDC = GetDC( hWnd );
+		
+		/* Note - you could erase the bouncing ball here using an
+		 * InvertRect call with the current ball position.  Leaving it
+		 * out results in an interesting visual effect!
+		 */
+		
+		Ball.iHorzMotion = H_BOUNCE( Ball.rPosn.left, Maze.wWidth );
+		Ball.iVertMotion = V_BOUNCE( Ball.rPosn.top, Maze.wHeight );
+					
+		/* compute new ball position & draw */
+		Ball.rPosn.top += Ball.iVertMotion;
+		Ball.rPosn.left += Ball.iHorzMotion;
+		Ball.rPosn.right += Ball.iHorzMotion;
+		Ball.rPosn.bottom += Ball.iVertMotion;	
+		
+		InvertRect( hDC, &Ball.rPosn );		
+		ReleaseDC( hWnd, hDC );
+
+	} else {
+		
+		/* pass ball to client */
+		Ball.bIsBouncing = FALSE;
+		DDE_DATA(
+			Link[i].hWnd, 
+			aGrab,
+			FALSE, 
+			(LONG)Maze.wNum,
+			(LONG)((GetFocus()==hWnd)?TRUE:FALSE)
+		);
+
+		/* calculate animation statistics */
+		lElapsed = GetCurrentTime() - Ball.lTimeIn;
+			
+		/* inform all statistics clients */
+		for ( i=0; i<Maze.wLinks; i++ )
+			if ( Link[i].bAdviseStat ) 
+				DDE_DATA(
+					Link[i].hWnd, 
+					aStat,
+					FALSE,
+					lElapsed,
+					DISPLAY_WIDTH*(LONG)DISPLAY_HEIGHT
+				);
+	
+		InvalidateRect( hWnd, NULL, TRUE );	
+
+	}
+
+}
+
+
+/*
+ * ADVISE SERVER TO SEND DATA
+ *
+ *	hToWnd		client window handle
+ *	hFromWnd	server window handle
+ *	aItem		atom representing item
+ *
+ * This function enables the calling routine to advise a client window
+ * regarding a particular item of data.  This function assumes that
+ * the data is to be sent in CF_TEXT format without requiring any
+ * acknowledgement.  A value of TRUE is returned if the function is
+ * successful.
+ *
+ */
+ 
+static BOOL Advise( hToWnd, hFromWnd, aItem )
+	HWND	hToWnd;
+	HWND	hFromWnd;
+	ATOM	aItem;
+{
+	/* local variables */
+	HANDLE	hMem;		/* temporary memory handle */
+	LPDATA	lpData;		/* pointer to data structure */
+	BOOL	bResult;	/* result of function */
+	
+	bResult = FALSE;
+	
+	/* allocate memory & check if succeeded */
+	hMem = GlobalAlloc( GHND|GMEM_DDESHARE, (DWORD)sizeof(DATA) );
+	if ( hMem ) {
+
+		/* lock the data - may not suceed with expanded memory */
+		lpData = (LPDATA)GlobalLock( hMem );
+		if ( lpData ) {
+
+			/* define data structure constants */
+			lpData->fAck = FALSE;
+			lpData->fNoData = FALSE;
+			lpData->cfFormat = CF_TEXT;
+			
+			/* unlock prior to sending */
+			GlobalUnlock( hMem );
+			
+			/* notify server to send data */
+			bResult = PostMessage(
+				hToWnd,
+				WM_DDE_ADVISE,
+				hFromWnd,
+				MAKELONG(hMem,aItem)
+			);
+
+		} else
+			GlobalFree( hMem );
+
+	}
+	
+	/* return result */
+	return( bResult );
+
+} 
+
+
+/*
+ * TRANSMIT DDE DATA TO CLIENT
+ *
+ *	hToWnd		destination window handle
+ *	hFromWnd	server window handle
+ *	wMsg		message number to use
+ *	aItem		atom representing data item
+ *	bResp		data in response to a request
+ *	l1		first portion data item to send
+ *	l2		second portion data item to send
+ *
+ * This function enables the calling routine to transmit data to a
+ * client window using either a DDE_DATA or DDE_POKE messgae.  It is
+ * assumed that the information is sent in CF_TEXT format and does not
+ * require the client to respond.  A value of TRUE is returned if the
+ * entire process is successful.
+ *
+ */
+ 
+static BOOL Transmit( hToWnd, hFromWnd, wMsg, aItem, bResp, l1, l2 )
+	HWND	hToWnd;
+	HWND	hFromWnd;
+	WORD	wMsg;
+	ATOM	aItem;
+	BOOL	bResp;
+	LONG	l1;
+	LONG	l2;
+{
+	/* local variables */
+	HANDLE	hMem;		/* temporary memory handle */
+	LPDATA	lpData;		/* pointer to data structure */
+	BOOL	bResult;	/* boolean result value */
+	char	sString[32];	/* local string variable */
+	
+	bResult = FALSE;
+
+	/* allocate memory & check if succeeded */
+	hMem = GlobalAlloc( GHND|GMEM_DDESHARE, (DWORD)sizeof(DATA) );
+	if ( hMem ) {
+
+		/* lock the data - may not suceed with expanded memory */
+		lpData = (LPDATA)GlobalLock( hMem );
+		if ( lpData ) {
+
+			/* define data structure constants */
+			lpData->fAck = FALSE;
+			lpData->fRelease = TRUE;
+			lpData->fResponse = bResp;
+			lpData->cfFormat = CF_TEXT;
+			
+			BumpGlobalAtom( aItem );
+
+			/* format the data */
+			sprintf( sString, "%ld\t%ld", l1, l2 );
+			lstrcpy( lpData->info, (LPSTR)sString );
+			
+			/* unlock prior to sending */
+			GlobalUnlock( hMem );
+			
+			bResult = PostMessage(
+					hToWnd,
+					wMsg,
+					hFromWnd,
+					MAKELONG(hMem,aItem)
+				);
+			
+		} else
+			GlobalFree( hMem );
+
+	}
+	
+	/* return result */
+	return( bResult );
+
+} 
+
+
+
+/*
+ * DESTROY DDE MAZE
+ *
+ *	wQuit	application exit code
+ *
+ * This function destroys all resources consumed by the Maze during
+ * execution.  Included is the removal of all global atoms.  A final
+ * exit code is returned by the function.
+ *
+ */
+ 
+static WORD DestroyMaze( wQuit )
+	WORD	wQuit;
+{
+
+	/* remove global atoms */
+	GlobalDeleteAtom( aAnyMaze );
+	GlobalDeleteAtom( aThisMaze );
+	GlobalDeleteAtom( aBall );
+	GlobalDeleteAtom( aWnd );
+	GlobalDeleteAtom( aGrab );
+	GlobalDeleteAtom( aStat );
+
+	/* return final exit code */
+	return( wQuit );
+
+}
+
+
+
+/*
+ * FIND DDE LINK
+ *
+ *	pwNdx	index to link
+ *	hWnd	window handle of caller
+ *
+ * This function finds the link references by the window handle
+ * provided.  The resulting link is returned to the caller.  The
+ * function returns TRUE if the window handle was found.
+ *
+ */
+ 
+static BOOL FindLink( pwNdx, hWnd )
+	WORD *	pwNdx;
+	HWND	hWnd;
+{
+	WORD	i;
+	
+	for (i=0; i<Maze.wLinks; i++)
+		if ( Link[i].hWnd == hWnd ) {
+			*pwNdx = i;
+			return( TRUE );
+		}
+			
+	return( FALSE );
+		
+}
+
+
+/*
+ * BUMP GLOBAL ATOM
+ *
+ *	aAtom	atom to bump
+ *
+ * This function increments the reference count to the specified
+ * global atom.  It is assumed that the atom supplied is defined and
+ * valid.  The value supplied is returned.
+ *
+ */
+ 
+static ATOM BumpGlobalAtom( aAtom )
+	ATOM		aAtom;
+{
+	char		sName[64];				
+	
+	GlobalGetAtomName( aAtom, sName, sizeof(sName) );
+	return( GlobalAddAtom(sName) );
+}	

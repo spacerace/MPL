@@ -1,0 +1,13 @@
+Code 15                                  -Return DASD
+
+Input registers - none.
+
+Special output registers -
+
+    AX    - 300h to mean that this is a hard disk.
+
+    CX:DX: - Capacity of the addressed disk. If this is zero, the execution of
+           the SCSI Read Capacity command failed. This usually means that the 
+           disk needs to be formatted. If the drive has 256 byte sectors, the
+           size information returned is equivalent  to 512 byte sectors.
+

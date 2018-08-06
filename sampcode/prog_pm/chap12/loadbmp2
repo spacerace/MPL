@@ -1,0 +1,16 @@
+#--------------------
+# LOADBMP2 make file
+#--------------------
+
+loadbmp2.obj : loadbmp2.c loadbmp.h
+     cl -c -G2sw -W3 loadbmp2.c
+
+loadbmp.res : loadbmp.rc loadbmp.h loadbmp.bmp
+     rc -r loadbmp
+
+loadbmp2.exe : loadbmp2.obj loadbmp2.def
+     link loadbmp2, /align:16, NUL, os2, loadbmp2
+     rc loadbmp.res loadbmp2.exe
+
+loadbmp2.exe : loadbmp.res
+     rc loadbmp.res loadbmp2.exe

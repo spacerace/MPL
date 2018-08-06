@@ -1,0 +1,15 @@
+
+NAME    FreeMem
+
+DESCRIPTION 'Free Memory Display by Charles Petzold'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  1024
+STACKSIZE 4096
+
+EXPORTS
+    WndProc @1

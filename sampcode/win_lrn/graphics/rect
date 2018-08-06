@@ -1,0 +1,6 @@
+rect.obj:   rect.c
+     cl  -d  -c  -Asnw	-Gsw  -Os  -Zdpe  rect.c
+
+rect.exe:  rect.obj rect.def
+     link4 rect,rect/align:16,rect/map,slibw,rect.def
+     mapsym rect

@@ -1,0 +1,7 @@
+setvcque.obj: setvcque.c
+  cl -c -Fs -W2 -AS -Gsw -Od -Zped setvcque.c
+
+setvcque.exe: setvcque.obj setvcque.def
+    link4 setvcque,/align:16,,slibw,setvcque.def
+    del setvcque.obj
+    del setvcque.map

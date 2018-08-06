@@ -1,0 +1,595 @@
+
+
+
+
+        CRT FILE UTILITIES                              LIBRARY FUNCTIONS
+
+
+        NAME
+
+        cursor         Position the screen cursor at passed location
+
+
+        SYNOPSIS
+
+        int cursor(x,y)
+        int x,  /* X coordinate for cursor position */
+            y;  /* Y coordinate for cursor position */
+
+
+        FUNCTION
+
+        Force the IBM PC cursor to the specified location.  Works through 
+        direct BIOS calls, (int 10).  NOTE the order of cursor address is 
+        X,Y where x is the horizontal position and y the vertical.
+
+        RETURNS
+
+        Nothing.
+
+
+        EXAMPLE
+
+          {
+          int  x,y;
+
+          x = 0;
+          y = 10;
+          cursor(x,y);  /* move cursor to beginning line 10 */
+
+          cursor(40,12);  /* move cursor to center of screen */
+          }
+
+             
+        SEE ALSO
+
+        erase, clr_from, clrline
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        1
+
+
+
+
+
+
+
+
+        CRT FILE UTILITIES                              LIBRARY FUNCTIONS
+
+
+        NAME
+
+        erase          Clear the entire screen
+
+
+        SYNOPSIS
+
+        int  erase()
+
+
+        FUNCTION
+
+        Erase the entire IBM PC screen.  Note this is done through direct 
+        BIOS calls to int 10.
+
+
+        RETURNS
+
+        Nothing.
+
+
+        EXAMPLE
+
+          {
+          erase();    /* screen is now clear */
+          }
+
+             
+        SEE ALSO
+
+        cursor, clr_from, clrline
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        2
+
+
+
+
+
+
+
+
+        CRT FILE UTILITIES                              LIBRARY FUNCTIONS
+
+
+        NAME
+
+        clr_from       Clear the screen from the x,y position down 
+
+
+        SYNOPSIS
+
+        int clr_from(x,y)
+        int x,    /* X coordinate for start of erase */
+            y;    /* Y coordinate for start of erase */
+
+
+        FUNCTION
+
+        Used to erase to the end of the screen.  This routine uses direct 
+        BIOS calls to int 10.   Note also that the X coordinate should be 
+        0  or  strange  things may happen,  since the erase  is  done  by 
+        scrolling a window on the screen.
+
+
+        RETURNS
+
+        Nothing.
+
+
+        EXAMPLE
+
+          {
+          int x,y;
+
+          cursor(0,10),printf("hello there");
+          cursor(0,20),printf("Only this line will be erased");
+
+          clr_from(0,15);  /* screen is cleared from 0,15 to 79,24 */
+          }
+
+             
+        SEE ALSO
+
+        cursor, erase, clrline
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        3
+
+
+
+
+
+
+
+
+        CRT FILE UTILITIES                              LIBRARY FUNCTIONS
+
+
+        NAME
+
+        clrline        Clear the screen to the end of this line
+
+
+        SYNOPSIS
+
+        int clrline()
+
+
+        FUNCTION
+
+        Clear  to end of line function.   Locates current cursor position 
+        and  clears screen from there to end of the  line.   Uses  direct 
+        BIOS calls to int 10.
+
+
+        RETURNS
+
+        Nothing.
+
+
+        EXAMPLE
+
+          {
+          erase();
+          cursor(0,10),printf("Hello world, how are you doing?");
+
+          cursor(11,10);
+          clrline();    /* erases ", how are you doing?" */
+          }
+
+             
+        SEE ALSO
+
+        cursor, erase, clr_from
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        4
+
+
+
+
+
+
+
+
+        CRT FILE UTILITIES                              LIBRARY FUNCTIONS
+
+
+        NAME
+
+        beep           Sound the speaker at a low frequency
+
+
+        SYNOPSIS
+
+        int  beep()
+
+
+        FUNCTION
+
+        Sets the speaker frequency to a pleasant low tone and "beeps" for 
+        about a quarter second.   This function uses direct access to IBM 
+        PC  hardware ports.   The beep is used for error responses in the 
+        data field handler routines.
+
+
+        RETURNS
+
+        Nothing.
+
+
+        EXAMPLE
+
+          {
+          /*-- if the value is good return so, else tell them its bad -*/
+          if (a > b)
+            return(ok);
+          else
+            {
+            beep();
+            return(bad);
+            }
+          }
+
+             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        5
+
+
+
+
+
+
+
+
+        CRT FILE UTILITIES                              LIBRARY FUNCTIONS
+
+
+        NAME
+
+        box            Draw a box using IBM block graphics on screen
+
+
+        SYNOPSIS
+
+        int box(ulx,uly,lrx,lry)
+        int ulx,    /* upper left hand X coordinate of box */
+            uly,    /* upper left hand Y coordinate of box */
+            lrx,    /* lower right hand X coordinate of box */
+            lry;    /* lower right hand Y coordinate of box */
+
+
+        FUNCTION
+
+        Draw a box using IBM PC block graphics characters on the  screen.  
+        You  must pass the routine the upper left hand corner of the  box 
+        and the lower right hand corner of the box.  This routine use the 
+        bdos library function to perform its work.
+
+
+        RETURNS
+
+        Nothing.
+
+
+        EXAMPLE
+
+          {
+          box(0,0,79,24);  /* draw a box around the whole screen */
+
+          box(10,10,20,20); /* draw a smaller box inside the first */ 
+          }
+
+             
+        SEE ALSO
+
+        hline, vline
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        6
+
+
+
+
+
+
+
+
+        CRT FILE UTILITIES                              LIBRARY FUNCTIONS
+
+
+        NAME
+
+        hline          Draw a horizontal line
+
+
+        SYNOPSIS
+
+        int hline(character,length)
+        int character,    /* character to send to the screen (8 bits) */
+            length;       /* number of characters to draw */
+
+
+        FUNCTION
+
+        Draw  a  horizontal line using the passed character  and  length.  
+        This  function  is useful in finishing off boxes,  or ruling  off 
+        areas in them.   Uses the bdos library function.   It draws  from 
+        the left of the screen to the right.
+
+
+        RETURNS
+
+        Nothing.
+
+
+        EXAMPLE
+
+          {
+          box(0,0,79,24);  /* draw a big box */
+          cursor(30,1),printf("M E N U   T I T L E"); 
+          cursor(0,2),bdos(6,204,0);  /* wall of a title block */
+          hline(205,78);              /* inside the box */
+          bdos(6,185,0);
+          }
+
+             
+        SEE ALSO
+
+        box, vline
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        7
+
+
+
+
+
+
+
+
+        CRT FILE UTILITIES                              LIBRARY FUNCTIONS
+
+
+        NAME
+
+        vline          Draw a vertical line on the screen
+
+
+        SYNOPSIS
+
+        int vline(x,y,character,length)
+        int x,          /* X coordinate to start */
+            y,          /* Y coordinate to start */
+            character,  /* character to use (int) */
+            length;     /* number of characters to draw */
+
+
+        FUNCTION
+
+        Draw  a vertical line on the screen.   You tell it the starting X 
+        and Y address, the character to draw, and the length of the line.  
+        The routine uses bdos library function calls.   It draws from the 
+        top of the screen down.
+
+
+        RETURNS
+
+        Nothing.
+
+
+        EXAMPLE
+
+          {
+          erase();
+          vline(40,0,186,25);  /* divide the screen in half with a */
+                               /* double line character */
+          }
+
+             
+        SEE ALSO
+
+        box, hline
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        8
+
+
+
+
+
+
+
+
+        CRT FILE UTILITIES                              LIBRARY FUNCTIONS
+
+
+                                Lattice Utilities
+
+        These object file utilities are being distributed at no charge to 
+        all people who are interested in obtaining them.  The BBS form of 
+        these files includes only the large code - large data model (-ml) 
+        object  files  and matching documentation.   If  these  utilities 
+        sound  interesting try them out.   We will supply the source code 
+        on an IBM PC DSDD disk to these utilities,  so you can use any of 
+        the four memory models, for a price of $25.00.
+
+        Users  of this software may incorporate it into any product  they 
+        desire.   There  is no charge for this.   You may NOT  sell  this 
+        package by itself in any form what so ever.   The only exceptions 
+        to  this  are a limited distribution fee for Clubs and  or  Users 
+        Groups not to exceed $10.00 per disk.
+
+
+                                    Warranty
+
+        NONE!   We  are not responsible or liable for any damages  either 
+        real  or consequential.   This package is free after  all.   Note 
+        that   this  software  has  been  running  in  several  different 
+        commercial  packages for three years now so it must do  something 
+        right.
+
+
+             Copyright 1983, 1984, 1985 by Elfring Consulting, Inc.
+
+                               All rights reserved
+
+
+
+        Full source code is available for $25.00 from:
+
+             Elfring Consulting, Inc.
+             4N899 W. Mary Drive
+             St. Charles, Illinois
+             60174
+
+             312-377-3520
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        9
+
+
+
+
+

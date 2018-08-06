@@ -1,0 +1,6 @@
+findwin.obj: findwin.c
+    cl -d -c -AS -Gsw -Os -Zpe findwin.c
+
+findwin.exe: findwin.obj findwin.def
+    link4 findwin,/align:16,/map,slibw/NOE,findwin.def
+    mapsym findwin

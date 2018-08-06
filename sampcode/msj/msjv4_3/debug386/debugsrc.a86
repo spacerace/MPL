@@ -1,0 +1,674 @@
+NAME	ISR
+
+EXTRN display_and_edit_regs:FAR
+
+CODE SEGMENT PUBLIC 'CODE' 
+ASSUME CS:CODE
+
+PUBLIC INT1_ISR, INT9_ISR, SYSREQ_ISR, ISR_common
+PUBLIC orig_INT1_ISR_ptr, orig_INT3_ISR_ptr, orig_SYSREQ_ISR_ptr
+PUBLIC orig_INT9_ISR_ptr
+
+$EJECT
+
+;-----------------------------------------------------------------------------
+;
+;  This Assembly language module is composed of two interrupt service routines
+;  (ISRs) and another block of code shared between the two ISRs.
+;
+;  The module is used to either awaken a register display/edit routine as a
+;  result of an 80386 debug exception, or to awaken the display/edit routine
+;  as a result of a user request to "pop-it-up" (via the SYSREQ key).
+;
+;  The first ISR, known as INT1_ISR, services the 80386 debug exception interrupt,
+;  and then CALLs the common block of code, ISR_common.
+;
+;  ISR_common copies the current 80386 register image into a large data
+;  structure and then CALLs the register display/edit routine (written in a 
+;  higher-level language).
+;
+;  The second ISR, known as SYSREQ_ISR, is chained into the BIOS INT 15h
+;  interrupt, and it merely awaits a SYSREQ key press (passing any other
+;  INT 15h requests to the original INT 15h handler) before calling
+;  ISR_common.
+;
+;  The display/edit routine (not shown in this article, but written in
+;  PL/M-86) allows the user to examine and/or modify, by reading/altering
+;  the aforementioned register image data structure, the normal 80386 
+;  registers (in full 32 bit form), as well as the debug registers.
+;
+;-----------------------------------------------------------------------------
+
+$EJECT
+
+;-----------------------------------------------------------------------------
+;
+;  Define structure/data area used to hold copies of the register images
+;  as they exist when the INT 1 ISR is entered.
+;
+;  W A R N I N G :
+;	The register ordering is  F I X E D ! ! !  The display_and_edit_regs
+;	subroutine assumes a predefined ordering.
+;
+;  A L S O :
+;	You probably noticed that each table entry is 32 bits long,
+;	even though some registers are actually only 16 bits long (like CS).
+;	The uniform entry size makes indexing into the table much easier
+;	on the display routines.  If a register is only 16 bits wide, then
+;	the high order 16 bits of its register image from the following structure
+;	are wasted.  This is not a problem, since the program is not so large
+;	that such wastage is critical.
+;
+;-----------------------------------------------------------------------------
+ISR_register_image	LABEL	DWORD
+ISR_DR0		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_DR1		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_DR2		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_DR3		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_DR6		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_DR7		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_CS		DW	0			;This register is 16 bits wide
+		DW	?			;  (these 16 bits unused)
+ISR_EIP		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_SS		DW	0			;This register is 16 bits wide
+		DW	?			;  (these 16 bits unused)
+ISR_ESP		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_DS		DW	0			;This register is 16 bits wide
+		DW	?			;  (these 16 bits unused)
+ISR_ESI		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_ES		DW	0			;This register is 16 bits wide
+		DW	?			;  (these 16 bits unused)
+ISR_EDI		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_EAX		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_EBX		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_ECX		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_EDX		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_EBP		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_FS		DW	0			;This register is 16 bits wide
+		DW	?			;  (these 16 bits unused)
+ISR_GS		DW	0			;This register is 16 bits wide
+		DW	?			;  (these 16 bits unused)
+ISR_CR0		DW	0			;This register is 32 bits wide
+		DW	0
+ISR_EFLAGS	DW	0			;This register is 32 bits wide
+	  	DW	0
+;-----------------------------------------------------------------------------
+;
+;  The following space is allocated for the display_and_edit_regs routine,
+;  but is not used by the ISRs.
+;
+;-----------------------------------------------------------------------------
+dr0_segment		DD	0
+dr0_offset		DD	0
+dr0_compare_value	DD	0
+dr0_compare_enable	DD	0
+dr1_segment		DD	0
+dr1_offset		DD	0
+dr1_compare_value	DD	0
+dr1_compare_enable	DD	0
+dr2_segment		DD	0
+dr2_offset		DD	0
+dr2_compare_value	DD	0
+dr2_compare_enable	DD	0
+dr3_segment		DD	0
+dr3_offset		DD	0
+dr3_compare_value	DD	0
+dr3_compare_enable	DD	0
+dr0_boolean		DD	0
+dr1_boolean		DD	0
+dr2_boolean		DD	0
+dr3_boolean		DD	0
+
+$EJECT
+
+;-----------------------------------------------------------------------------
+;
+;  Allocate storage for INT 3 flag -- this flag is set/reset by the
+;  register display routine, and indicates whether the ISR_common code
+;  should trigger an INT3 shortly before RETing.
+;
+;-----------------------------------------------------------------------------
+INT3_flag		DB	?
+
+
+;-----------------------------------------------------------------------------
+;
+;  Allocat storage for the request flag -- we set this flag to indicate
+;  to the register display routine whether we're calling it from
+;  SYSREQ ("pop-up" request) or INT1 (debug exception has occurred).
+;
+;-----------------------------------------------------------------------------
+request_flag		DB	?
+INT1_request		EQU	0
+SYSREQ_request		EQU	1
+
+
+;-----------------------------------------------------------------------------
+;
+;  Define the values necessary for processing SYSREQ key presses.
+;
+;-----------------------------------------------------------------------------
+SYSREQ_key_pressed		EQU	08500h
+keyboard_status_port		EQU	064h
+input_buffer_full		EQU	002h
+enable_keyboard			EQU	0AEh
+PIC				EQU	020h
+EOI				EQU	020h
+
+
+;-----------------------------------------------------------------------------
+;
+;  ISR local stack definition...
+;
+;-----------------------------------------------------------------------------
+		DW	512 DUP (0)
+ISR_stack	LABEL	WORD
+
+
+;-----------------------------------------------------------------------------
+;
+;  Where we store the original SS:SP before we install the local stack.
+;
+;-----------------------------------------------------------------------------
+orig_ISR_stack_ptr	DW	?
+			DW	?
+
+
+;-----------------------------------------------------------------------------
+;
+;  Storage for copy of local code segment value.
+;
+;-----------------------------------------------------------------------------
+local_data_seg		DW	CODE
+
+
+
+;-----------------------------------------------------------------------------
+;
+;  Define storage for the original interrupt service routine addresses
+;  for the interrupts onto which we'll be chaining or installing ourselves.
+;
+;-----------------------------------------------------------------------------
+orig_INT1_ISR_ptr 	DW	?
+			DW	?
+orig_INT3_ISR_ptr	DW	?
+			DW	?
+orig_INT9_ISR_ptr	DW	?
+			DW	?
+orig_SYSREQ_ISR_ptr	DW	?
+			DW	?
+
+
+;-----------------------------------------------------------------------------
+;
+;  The following instruction prefix is 80386-specific.  It identifies the
+;  subsequent instruction as one which uses a 32 bit operand size.  This
+;  prefix allows us to create 80386 instructions using an 80286 assembler.
+;
+;-----------------------------------------------------------------------------
+operand_size_32_prefix	EQU	066H
+
+
+;-----------------------------------------------------------------------------
+;
+;  Define stack frame which exists at the time the ISR_common is CALLed.
+;
+;-----------------------------------------------------------------------------
+ISR_stack_parm	 	STRUC
+	ISR_RTNA	DW	?		;Return address (to INT1_ISR or SYSREQ_ISR)
+	old_IP		DW	?		;CS:IP of code which was in progress at time
+	old_CS		DW	?		;  the debug exception occurred
+	old_FLAGS	DW	?		;State of the FLAGS at time of exception
+ISR_stack_parm	 	ENDS
+
+
+;-----------------------------------------------------------------------------
+;
+;  Define flag which can be used to determine whether or not we're already
+;  servicing an interrupt request (in other words, are we being re-entered ? )
+;
+;-----------------------------------------------------------------------------
+ISR_in_progress		DB	FALSE
+FALSE			EQU	0
+TRUE			EQU	0FFh
+
+$EJECT
+
+;-----------------------------------------------------------------------------
+;									
+;		INT1 (80386 Debug Exception) Handler				
+;									
+;  This interrupt service routine can be entered as a result of	
+;  one of the following conditions:				
+;									
+;		1 - instruction execution breakpoint			
+;		2 - data access breakpoint				
+;		3 - general detect fault				
+;		4 - single step trap					
+;		5 - task switch breakpoint				
+;
+;  The ISR first ensures that it is not being re-entered, and then
+;  CALLs ISR_common.
+;									
+;-----------------------------------------------------------------------------
+INT1_ISR	PROC	FAR
+
+	JMP	INT1_start			;Jump around header field
+	DB	'DAGGER'			;This header is a "marker" used to 
+						;  determine if the ISR is already
+						;  installed
+
+INT1_start:
+	PUSHF					;Save FLAGs
+	CMP	CS:ISR_in_progress,TRUE		;Are we being re-entered?
+	JNE	not_being_reentered		;NO
+	POPF					;YES, recover FLAGs,
+	STI					;  put interrupts back on,
+	IRET					;  and leave
+
+
+;-----------------------------------------------------------------------------
+;
+;  Mark "in progress" flag so that we can't be re-entered
+;
+;-----------------------------------------------------------------------------
+not_being_reentered:
+	MOV	CS:ISR_in_progress,TRUE		;Show "in progress"
+	MOV	CS:request_flag,INT1_request	;Set flag indicating that this
+						;  INT occurred as a result of
+						;  an 80386 debug exception
+	POPF					;Recover FLAGS
+
+	CALL	ISR_common			;CALL common ISR code
+	IRET					;  and leave
+
+INT1_ISR	ENDP
+
+$EJECT
+
+;-----------------------------------------------------------------------------
+;									
+;		SYSREQ (System Request Key) Handler			
+;									
+;  This interrupt service routine can be entered as a result of	
+;  one of the following conditions:				
+;									
+;		SYSREQ key pressed					
+;			OR						
+;		some other BIOS INT 15 request occurred			
+;									
+;  We will only CALL ISR_common if the ISR was entered as a result of a user
+;  request to "pop-up" the register display/edit screen.
+;  Otherwise, we simply chain onto the old BIOS INT 15 ISR.		
+;									
+;-----------------------------------------------------------------------------
+SYSREQ_ISR	PROC	FAR
+
+	PUSHF					;Save FLAGS
+	CMP	AX,SYSREQ_key_pressed		;Was the INT for SYSREQ key ?
+	JE	process_SYSREQ			;YES -- do local processing
+
+chain_to_original_ISR:
+	POPF					;NO, recover FLAGS
+	STI					;Interrupts back on
+	JMP	DWORD PTR CS:orig_SYSREQ_ISR_ptr ;Chain on to original SYSREQ ISR
+
+process_SYSREQ:
+	PUSH	AX				;Save AX
+	MOV	AL,EOI				
+	OUT	PIC,AL				;Issue End-of-Interrupt to PIC
+await_keybd_controller:
+	IN	AL,keyboard_status_port		;Get keyboard controller status
+	TEST	AL,input_buffer_full		;Keyboard controller ready to accept command ?
+	JNZ	await_keybd_controller		;NO
+	MOV	AL,enable_keyboard		;YES
+	OUT	keyboard_status_port,AL		;Re-enable keyboard
+	POP	AX				;  recover AX
+	POPF					;  recover FLAGS,
+
+;-----------------------------------------------------------------------------
+;
+;  IF we're being re-entered, then simply chain to original ISR.
+;
+;-----------------------------------------------------------------------------
+	PUSHF					;Save flags
+	CMP	CS:ISR_in_progress,TRUE		;Are we being re-entered?
+	JNE	SYSREQ_not_being_reentered	;NO
+	JMP	chain_to_original_ISR		;Chain to original ISR
+
+;-----------------------------------------------------------------------------
+;
+;  ELSE:  mark "in progress" flag so that we can't be re-entered
+;
+;-----------------------------------------------------------------------------
+SYSREQ_not_being_reentered:
+	MOV	CS:ISR_in_progress,TRUE		;Show "in progress"
+	MOV	CS:request_flag,SYSREQ_request	;Set flag indicating that this
+						;  INT occurred as a result of
+						;  a user request to "pop-up"
+						;  the display/edit routine
+	POPF					;Recover FLAGS
+
+	CALL	ISR_common			;  CALL common ISR code,
+	JMP	DWORD PTR CS:orig_SYSREQ_ISR_ptr ;  and then JMP to original INT 15h ISR
+
+SYSREQ_ISR	ENDP
+
+$EJECT
+
+INT9_ISR	PROC	FAR
+
+	JMP	DWORD PTR CS:orig_INT9_ISR_ptr
+
+INT9_ISR	ENDP
+
+$EJECT
+
+ISR_common	PROC	NEAR
+
+;-----------------------------------------------------------------------------
+;
+;  Common interrupt service routine code (shared by INT1_ISR and SYSREQ_ISR)
+;
+;  This common block of code simply copies the current register state into
+;  the large data structure described earlier.  The address of the data
+;  structure is passed to the display/edit registers routine, which is a
+;  higher-level language subroutine that allows the user to edit the
+;  normal 80386 registers, as well as edit the debug registers.
+;
+;-----------------------------------------------------------------------------
+	STI					;Interrupts back on
+
+;-----------------------------------------------------------------------------
+;
+;  Put EBP into data structure. 
+;  Put EAX into data structure.
+;  Then get EFLAGS into data structure via EAX.  FLAGS (low word of EFLAGS)
+;  were pushed onto the stack by the CPU when the INT occurred.  We'll
+;  just OR the FLAGS (low 16 bits of EFLAGS) from the stack with the high word 
+;  of current EFLAGS.
+;
+;-----------------------------------------------------------------------------
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_EBP,BP			;EBP into global structure
+
+	DB	operand_size_32_prefix		
+	MOV	BP,SP				;EBP = current ESP
+
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_EAX,AX			;EAX into global structure
+
+	DB	operand_size_32_prefix
+	PUSHF					;PUSH EFLAGS
+	DB	operand_size_32_prefix
+	POP	AX				;POP EAX (high word of EAX has high word of EFLAGS)
+	MOV	AX,[BP].old_FLAGS		;Get FLAGS from stack into low word of EAX
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_EFLAGS,AX 		;EFLAGS into global structure
+
+$EJECT
+
+;-----------------------------------------------------------------------------
+;
+;  Get CS:IP from stack (placed there by 80386 when INT 1 occurred).
+;
+;-----------------------------------------------------------------------------
+	MOV	AX,[BP].old_CS			;Get CS from stack
+	MOV	CS:ISR_CS,AX			;CS into global structure
+	DB	operand_size_32_prefix
+	SUB	AX,AX				;Clear high word of EAX
+	MOV	AX,[BP].old_IP			;Get IP from stack into low word of EAX
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_EIP,AX			;EIP into global structure
+
+;-----------------------------------------------------------------------------
+;
+;  Copy the rest of the registers into the data structure.
+;
+;-----------------------------------------------------------------------------
+	MOV	CS:ISR_DS,DS			;DS
+
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_ESI,SI			;ESI
+
+	MOV	CS:ISR_ES,ES			;ES
+
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_EDI,DI			;EDI
+
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_EBX,BX			;EBX
+
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_ECX,CX			;ECX
+
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_EDX,DX			;EDX
+
+	DB	08Ch,0E0h			;FS
+	MOV	CS:ISR_FS,AX			
+
+	DB	08Ch,0E8h			;GS
+	MOV	CS:ISR_GS,AX			
+
+	DB	00Fh,020h,0C0h			;CR0
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_CR0,AX			
+
+	DB	0Fh,021h,0C0h			;DR0
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_DR0,AX			
+
+	DB	0Fh,021h,0C8h			;DR1
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_DR1,AX			
+
+	DB	0Fh,021h,0D0h			;DR2
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_DR2,AX			
+
+	DB	0Fh,021h,0D8h			;DR3
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_DR3,AX			
+
+	DB	0Fh,021h,0F0h			;DR6
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_DR6,AX			
+
+	DB	0Fh,021h,0F8h			;DR7
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_DR7,AX			
+
+$EJECT
+
+;-----------------------------------------------------------------------------
+;
+;  Save original SS:SP into save area and also into the global structure, 
+;  and then create a new SS:SP so that we can CALL a stack-intensive 
+;  P/LM-86 routine.
+;
+;-----------------------------------------------------------------------------
+	DB	operand_size_32_prefix
+	ADD	BP,SIZE ISR_stack_parm		;Adjust EBP (which is a copy
+						;  of original ESP) so that it
+						;  reflects original state of
+						;  ESP at the time INT occurred
+	DB	operand_size_32_prefix
+	MOV	CS:ISR_ESP,BP			;ESP into global structure
+	MOV	CS:ISR_SS,SS			;SS into global structure
+
+	MOV	CS:orig_ISR_stack_ptr,SP	;Save SP into local storage
+	MOV	CS:orig_ISR_stack_ptr + 2,SS	;Save SS into local storage
+
+	CLI					;Clear INTs while working on stack regs
+	MOV	SS,CS:local_data_seg		;New SS
+	LEA	SP,ISR_stack			;New SP
+	STI					;Restore INTs
+
+;-----------------------------------------------------------------------------
+;
+;  CALL the PL/M-86 procedure responsible for displaying and processing
+;  the information we've just put into the data structure.
+;  The PL/M routine will read and display the register state (as shown
+;  in the data structure), and will allow the user to indirectly modify the
+;  registers (including the debug registers) via edits to that same
+;  structure.
+;  When the display/edit routine RETurns, we'll copy the register image
+;  back into the 80386 registers.
+;
+;-----------------------------------------------------------------------------
+	LEA	AX,ISR_register_image		;Pass the address of the 
+	PUSH	CS				;  register image
+	PUSH	AX				;  as a pointer on the stack
+	LEA	AX,INT3_flag			;Pass the addrs of INT3 flag
+	PUSH	CS				;  so that the display/edit routine
+	PUSH	AX				;  can set/reset it as the user so desires
+	MOV	AL,CS:request_flag		;Pass the request type flag so
+	PUSH	AX				;  that the display/edit routine
+						;  can determine whether it was called
+						;  as the result of an INT 1 or SYSREQ
+	CALL	display_and_edit_regs		;CALL the P/LM-86 PROCedure
+
+$EJECT
+
+;-----------------------------------------------------------------------------
+;
+;  Transfer the edited register images from the global structure 
+;  back into the 80386 registers.
+;
+;-----------------------------------------------------------------------------
+	DB	operand_size_32_prefix
+	MOV	BX,CS:ISR_EBX			;EBX
+
+	DB	operand_size_32_prefix
+	MOV	CX,CS:ISR_ECX			;ECX
+
+	DB	operand_size_32_prefix
+	MOV	DX,CS:ISR_EDX			;EDX
+
+	DB	operand_size_32_prefix
+	MOV	SI,CS:ISR_ESI			;ESI
+
+	DB	operand_size_32_prefix
+	MOV	DI,CS:ISR_EDI			;EDI
+
+	DB	operand_size_32_prefix
+	MOV	BP,CS:ISR_EBP			;EBP
+
+	MOV	ES,CS:ISR_ES			;ES
+
+	MOV	DS,CS:ISR_DS			;DS
+
+	MOV	AX,CS:ISR_FS
+	DB	08Eh,0E0h			;MOV FS,AX
+
+	MOV	AX,CS:ISR_GS
+	DB	08Eh,0E8h			;MOV GS,AX
+
+	DB	operand_size_32_prefix
+	MOV	AX,CS:ISR_CR0
+	DB	00Fh,022h,0C0h			;MOV CR0,EAX
+
+	DB	operand_size_32_prefix
+	MOV	AX,CS:ISR_DR0
+	DB	00Fh,023h,0C0h			;MOV DR0,EAX
+
+	DB	operand_size_32_prefix
+	MOV	AX,CS:ISR_DR1
+	DB	00Fh,023h,0C8h			;MOV DR1,EAX
+
+	DB	operand_size_32_prefix
+	MOV	AX,CS:ISR_DR2
+	DB	00Fh,023h,0D0h			;MOV DR2,EAX
+
+	DB	operand_size_32_prefix
+	MOV	AX,CS:ISR_DR3
+	DB	00Fh,023h,0D8h			;MOV DR3,EAX
+
+;-----------------------------------------------------------------------------
+;
+;  Clear out DR6 -- all bits in that reg must be reset after each
+;  INT 1  (ignore whatever is currently sitting in the DR6 register image).
+;
+;-----------------------------------------------------------------------------
+	DB	operand_size_32_prefix
+	SUB	AX,AX				;SUB EAX,EAX
+	DB	00Fh,023h,0F0h			;MOV DR6,EAX
+
+	DB	operand_size_32_prefix
+	MOV	AX,CS:ISR_DR7			;MOV EAX,CS:ISR_DR7
+	DB	00Fh,023h,0F8h			;MOV DR7,EAX
+
+	DB	operand_size_32_prefix
+	MOV	AX,CS:ISR_EFLAGS		;MOV EAX,CS:ISR_EFLAGS
+	DB	operand_size_32_prefix
+	PUSH	AX				;PUSH EAX
+	DB	operand_size_32_prefix
+	POPF					;POP EFLAGS
+
+	DB	operand_size_32_prefix
+	MOV	AX,CS:ISR_EAX			;MOV EAX,CS:ISR_EAX
+
+$EJECT
+
+;-----------------------------------------------------------------------------
+;
+;  Clean up stack.
+;
+;-----------------------------------------------------------------------------
+	CLI					;Clear INTs while working on stack
+	MOV	SS,CS:orig_ISR_stack_ptr + 2	;Get original SS
+	MOV	SP,CS:orig_ISR_stack_ptr	;Get original SP
+	MOV	CS:ISR_in_progress,FALSE	;Show "no longer in progress"
+
+;-----------------------------------------------------------------------------
+;
+;  Issue an INT3 (old-style debugger interrupt) if user so directed.
+;  In that fashion, we can trigger a "real" debugger (presumably one which
+;  will allow us to examine/modify memory and display symbol information).
+;  We can merely get rid of the local caller's return address (SYSREQ_ISR or INT1_ISR),
+;  and then "JMP" directly to the original INT3 ISR.  Since our code
+;  was entered as a result of an INT1, then the stack will already be
+;  set up such that the INT3 routine has only to execute an IRET.
+;
+;-----------------------------------------------------------------------------
+	PUSHF
+	CMP	CS:INT3_flag,0			;Did the user want an INT3 ?
+	JZ	ISR_common_RET			;NO
+	POPF					;YES, recover flags,
+	ADD	SP,2				;  pop-off the local
+						;  caller's return address
+	PUSH	BP				;Save reg
+	MOV	BP,SP				;Get stack ptr
+	INC	WORD PTR [BP + 2]		;Adjust IP on stack such that
+						;  the INT3 handler can DEC to
+						;  adjust for the "INT3"
+	POP	BP				;Recover reg
+	STI					;Put interrupts back on,
+	JMP	DWORD PTR CS:orig_INT3_ISR_ptr	;  and then "JMP" to the 
+						;  original INT3 ISR
+	
+ISR_common_RET:
+	POPF					;Recover flags
+	STI					;Interrupts back on
+	RET
+
+ISR_common	ENDP
+
+CODE	ENDS
+END

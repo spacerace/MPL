@@ -1,0 +1,12 @@
+#include <style.h>
+#include "diabox.h"
+
+diabox MENU
+BEGIN
+  POPUP "DialogBox"
+  BEGIN
+    MENUITEM "Modal", IDDBOX
+    MENUITEM "Modeless", IDDBOX2
+  END
+END
+

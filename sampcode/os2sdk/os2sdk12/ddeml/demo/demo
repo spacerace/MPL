@@ -1,0 +1,43 @@
+#===================================================================
+#
+#   Demo Application Make file
+#
+#===================================================================
+#
+# Default compilation macros
+#
+
+CC  = cl -W3 -DLINT_ARGS -u -d -c -Asnd -G2sw -Oas -Zped -DSLOOP
+ASM = masm
+
+#===================================================================
+#
+# Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(CC) $*.c
+
+.asm.obj:
+    $(ASM) $*.asm;
+
+.rc.res:
+    rc -r $*.rc
+
+#===================================================================
+#
+# Dependencies
+#
+#===================================================================
+
+demo.res: demo.rc demo.ico demo.h
+
+demo.obj: demo.c demo.h
+
+demo.exe: demo.obj demo.res demo.def
+    link demo, demo/codeview, demo/map, os2 ..\ddeml slibcep/nod, demo.def
+    rc demo.res
+    mapsym demo
+    
+

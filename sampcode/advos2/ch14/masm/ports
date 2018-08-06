@@ -1,0 +1,8 @@
+ports.obj : ports.asm
+	masm /T ports.asm;
+
+portio.obj : portio.asm
+	masm /T portio.asm;
+
+ports.exe : ports.obj portio.obj ports.def
+	link ports+portio,ports,,os2,ports

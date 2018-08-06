@@ -1,0 +1,7 @@
+textcol.obj: textcol.c
+  cl -c -Fs -W2 -AS -Gsw -Od -Zped textcol.c
+
+textcol.exe: textcol.obj textcol.def
+    link4 textcol,/align:16,,slibw,textcol.def
+    del textcol.obj
+    del textcol.map

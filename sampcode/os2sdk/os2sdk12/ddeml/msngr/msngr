@@ -1,0 +1,54 @@
+#===================================================================
+#
+#   Messenger Application Make file
+#
+#===================================================================
+#
+# Default compilation macros
+#
+
+CVP = -Zi -Od
+CVPLINK = /CO
+CC  = cl -W3 -DLINT_ARGS -DSLOOP -u -c -Fc -Asnw -G2s -Od -Zpe -PLM $(CVP)
+ASM = masm
+
+#===================================================================
+#
+# Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(CC) $*.c | sed -e /C4074/d
+
+.asm.obj:
+    $(ASM) $*.asm;
+
+.rc.res:
+    rc -r $*.rc
+
+#===================================================================
+#
+# Dependencies
+#
+#===================================================================
+
+msngr.res: msngr.rc msngr.dlg dialog.h msngr.h
+
+msngr.obj: msngr.c msngr.h ..\ddeml.h
+    $(CC) -B1 c1l.exe $*.c | sed -e /C4074/d
+
+link.obj: link.c msngr.h ..\ddeml.h
+    $(CC) -B1 c1l.exe $*.c | sed -e /C4074/d
+
+bmap.obj: bmap.c msngr.h ..\ddeml.h
+    $(CC) -B1 c1l.exe $*.c | sed -e /C4074/d
+
+util.obj: util.c msngr.h ..\ddeml.h
+    $(CC) -B1 c1l.exe $*.c | sed -e /C4074/d
+
+msngr.exe: msngr.obj util.obj link.obj bmap.obj msngr.res msngr.def 
+    link msngr util link bmap, msngr, msngr/map $(CVPLINK), os2 ..\ddeml slibcep/nod, msngr.def
+    rc msngr.res
+    mapsym msngr
+

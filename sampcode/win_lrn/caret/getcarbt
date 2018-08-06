@@ -1,0 +1,5 @@
+getcarbt.obj: getcarbt.c
+  cl -c -W2 -AS -Gsw -Od -Zped getcarbt.c
+
+getcarbt.exe: getcarbt.obj getcarbt.def
+    link4 getcarbt,/align:16,,slibw/NOE,getcarbt.def

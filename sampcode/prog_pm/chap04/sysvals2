@@ -1,0 +1,9 @@
+#--------------------
+# SYSVALS2 make file
+#--------------------
+
+sysvals2.obj : sysvals2.c sysvals.h
+     cl -c -G2sw -W3 sysvals2.c
+
+sysvals2.exe : sysvals2.obj sysvals2.def
+     link sysvals2, /align:16, NUL, os2, sysvals2

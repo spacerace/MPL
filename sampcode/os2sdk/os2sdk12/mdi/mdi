@@ -1,0 +1,62 @@
+#===================================================================
+#
+#   MDI Sample Application Makefile
+#
+#   Created by Microsoft Corporation, 1989
+#
+#===================================================================
+#
+# Default compilation macros
+#
+
+CC      = cl -c -u -AL -G2s -Od -W3 -Zpeid
+LF	= /align:16 /codeview /map /nod
+
+#===================================================================
+#
+# Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+#===================================================================
+#
+# Dependencies
+#
+#===================================================================
+
+mdi.exe:     mdi.obj      mdidoc.obj   mdidata.obj  mdiinit.obj\
+             arrange.obj  mdisplit.obj       app.def\
+             app.obj      appdata.obj  appdoc.obj   appinit.obj\
+             app.res      mdi          app.lnk      app.res
+    link $(LF) @app.lnk
+    rc app.res mdi.exe
+    mapsym mdi
+
+app.res: app.rc app.ico app.h mdi mdi.rc mdi.ico mdi.h\
+         vsplit.ptr hsplit.ptr hvsplit.ptr
+
+app.obj:        mdi app.c app.h mdi.h
+
+appdata.obj:	mdi appdata.c app.h
+
+appdoc.obj:	mdi appdoc.c app.h mdi.h
+
+appinit.obj:	mdi appinit.c app.h mdi.h
+
+mdi.obj:	mdi mdi.c mdi.h app.h
+
+mdiinit.obj:	mdi mdiinit.c mdi.h app.h
+
+mdidoc.obj:	mdi mdidoc.c mdi.h app.h
+
+mdidata.obj:	mdi mdidata.c mdi.h app.h
+
+arrange.obj:	mdi arrange.c arrange.h
+
+mdisplit.obj:	mdi mdisplit.c mdi.h app.h

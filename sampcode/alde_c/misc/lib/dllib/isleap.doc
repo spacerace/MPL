@@ -1,0 +1,39 @@
+
+
+       NAME
+               isleap -- check if year is a leap year
+
+       SYNOPSIS
+               r = isleap(year);
+               BOOL r;          returns TRUE if leapyear, else FALSE
+               int year;        year value from 1980
+
+       DESCRIPTION
+       This function simply checks the specified year to return a
+       TRUE if the specified year is a leap year.
+
+
+
+       EXAMPLE
+
+               if(isleap(1986)) printf("This is a leap year");
+               else printf("This is not a leap year");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

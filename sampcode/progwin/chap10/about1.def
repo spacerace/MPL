@@ -1,0 +1,15 @@
+;-----------------------------------
+; ABOUT1.DEF module definition file
+;-----------------------------------
+
+NAME           ABOUT1
+
+DESCRIPTION    'About Box Demo No. 1 (c) Charles Petzold, 1990'
+EXETYPE        WINDOWS
+STUB           'WINSTUB.EXE'
+CODE           PRELOAD MOVEABLE DISCARDABLE
+DATA	       PRELOAD MOVEABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        WndProc
+               AboutDlgProc

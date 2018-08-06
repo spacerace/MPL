@@ -1,0 +1,52 @@
+#================================================================
+#
+#	Makefile for GENAPP (this is LARGE MODEL)
+#
+#================================================================
+
+# removed the /NOD flag for large model
+LINK		= link
+MODEL		= M
+WLIBS		= mlibw
+AUTHORS		= -DPC_PORT -DRV -DSTANDALONE_TEST -DMEM_PROTO  -DAS
+CC			= cl
+DEBUG		= 
+CFLAGS		= -c -u -A$(MODEL) -FPa -Gw -Os -Zpe$(DEBUG) -W3 $(AUTHORS)
+TMP_OBJ		= .
+HOME_OBJ	= .
+HOME_SRC	= .
+
+#----------------------------------------------------------------
+
+ST_OBJS		= 		\
+		winmain.obj 	\
+		applcatn.obj	\
+		envrnmt.obj
+
+#----------------------------------------------------------------
+
+ST_LINK		= winmain pcdebug pcutil \
+		applcatn envrnmt
+
+#----------------------------------------------------------------
+
+genapp.res:	genapp.cur genapp.ico genapp.rc wgenapp.h
+		rc -r genapp.rc
+
+#----------------------------------------------------------------
+
+$(HOME_OBJ)\winmain.obj:	winmain.c
+		$(CC) $(CFLAGS) $(HOME_SRC)\winmain.c
+
+$(HOME_OBJ)\applcatn.obj:	applcatn.c
+		$(CC) $(CFLAGS) $(HOME_SRC)\applcatn.c
+
+$(HOME_OBJ)\envrnmt.obj:	envrnmt.c
+		$(CC) $(CFLAGS) $(HOME_SRC)\envrnmt.c
+
+#----------------------------------------------------------------
+genapp.exe:	$(ST_OBJS) genapp.def genapp.res
+		$(LINK)/NOE @genapp.lnk
+		rc genapp.res
+
+# old version:	$(LINK) $(ST_LINK), genapp/align:16, nul, $(WLIBS), genapp.def

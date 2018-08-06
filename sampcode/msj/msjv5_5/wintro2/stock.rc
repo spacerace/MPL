@@ -1,0 +1,88 @@
+#include "windows.h"
+#include "stock.h"
+
+ID_STOCK ICON   stock.ico
+ID_GRAPH ICON   graph.ico
+
+StockAccelerators ACCELERATORS
+BEGIN
+  "^A", ID_TICK_ADD
+  "^C", ID_TICK_CHANGE
+  "^O", ID_OPEN
+  "^P", ID_PRINT
+  "^S", ID_SAVE
+END
+
+
+StockMenu MENU
+BEGIN
+  POPUP "&File"
+  BEGIN
+    MENUITEM  "&New...",           ID_NEW
+    MENUITEM  "&Open...CTRL+O",    ID_OPEN
+    MENUITEM  "&Save...CTRL+S",    ID_SAVE
+    MENUITEM  "&Close",            ID_CLOSE
+    MENUITEM  "&Print  CTRL+P",    ID_PRINT
+    MENUITEM  "E&xit",             ID_EXIT
+    MENUITEM  SEPARATOR
+    MENUITEM  "&Mapping modes...", ID_MAP
+  END
+
+  POPUP "&Edit"
+  BEGIN
+    MENUITEM "&Add tick...   CTRL+A",  ID_TICK_ADD
+    MENUITEM "&Change tick...CTRL+C",  ID_TICK_CHANGE
+  END
+
+  POPUP "&Graph"
+  BEGIN
+    MENUITEM "&Price",           ID_GRAPH_PRICE
+    MENUITEM "&Volume",          ID_GRAPH_VOLUME
+    MENUITEM "&Zoom",            ID_GRAPH_ZOOM
+    MENUITEM "&Options...",      ID_GRAPH_OPTIONS
+    MENUITEM "&Colors...",       ID_GRAPH_COLORS
+    POPUP    "&Grid"
+    BEGIN
+      MENUITEM "&Horizontal",    ID_GRAPH_GRID_HORZ
+      MENUITEM "&Vertical",      ID_GRAPH_GRID_VERT
+    END
+  END
+
+  POPUP "&Window"
+  BEGIN
+   MENUITEM "&Tile",            ID_WINDOW_TILE
+   MENUITEM "&Cascade",         ID_WINDOW_CASCADE
+   MENUITEM "Arrange &Icons",   ID_WINDOW_ICONS
+   MENUITEM "Close &All",       ID_WINDOW_CLOSEALL
+  END
+
+  POPUP "\a&F1=Help"
+  BEGIN
+    MENUITEM  "&About Stock...",  ID_ABOUT
+  END
+END
+
+STRINGTABLE
+BEGIN
+  ID_NEW,              "Create a new database"
+  ID_OPEN,             "Open an existing stock file"
+  ID_SAVE,             "Save the current stock file"
+  ID_CLOSE,            "Close the current stock file"
+  ID_PRINT,            "Print the current chart"
+  ID_TICK_ADD,         "Add a tick to a stock"
+  ID_TICK_CHANGE,      "Edit the ticks"
+  ID_GRAPH_PRICE,      "Display a graph of the price"
+  ID_GRAPH_VOLUME,     "Display a graph of the volume"
+  ID_GRAPH_ZOOM,       "Zoom the active graph"
+  ID_GRAPH_COLORS,     "Change the graph's colors"
+  ID_GRAPH_GRID_HORZ,  "Add/Remove horizontal grid lines"
+  ID_GRAPH_GRID_VERT,  "Add/Remove vertical grid lines"
+  ID_ABOUT,            "Display information about this application"
+  ID_EXIT,             "Exit the application"
+  1,                   "New, Open, Close, Print, Exit"
+  2,                   "Add and modify ticks"
+  3,                   "Manipulate stock charts"
+  4,                   "Arrange windows"
+  5,                   "Help on the MSJ Stock program"
+END
+

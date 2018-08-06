@@ -1,0 +1,6 @@
+gdblclkt.obj: gdblclkt.c
+    cl -d -c -AS -Gsw -Os -Zpe gdblclkt.c
+
+gdblclkt.exe: gdblclkt.obj gdblclkt.def
+    link4 gdblclkt,/align:16,/map,slibw/NOE,gdblclkt.def
+    mapsym gdblclkt

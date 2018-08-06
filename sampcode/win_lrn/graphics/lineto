@@ -1,0 +1,7 @@
+
+lineto.obj: lineto.c
+   cl -c -W2 -AS -Gsw -Od -Zped lineto.c
+
+lineto.exe: lineto.obj lineto.def
+   link4 lineto,/align:16,/map/li,slibw/NOE,lineto.def
+   mapsym lineto

@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "ShowSB.h"
+
+ShowSB MENU
+    BEGIN
+        POPUP "&Set Scroll Bar State"
+            BEGIN
+                MENUITEM  "&Show Scroll Bar",               IDM_SHOW
+                MENUITEM  "&Hide Scroll Bar",               IDM_HIDE
+            END					            
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+

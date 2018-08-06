@@ -1,0 +1,6 @@
+scem.obj: scem.c
+    cl -d -c -AS -Gsw -Os -Zpe scem.c
+
+scem.exe: scem.obj scem.def
+    link4 scem,/align:16,/map,slibw/NOE,scem.def
+    mapsym scem

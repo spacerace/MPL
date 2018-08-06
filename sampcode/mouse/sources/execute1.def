@@ -1,0 +1,41 @@
+;       SAMPLE Microsoft Mouse `EXECUTE1' MENU
+;
+; NOTE: Please review the comments below before you compile
+;       and use this source file as a mouse menu.
+;
+; The EXECUTE1 menu provides an example of the functional
+; limitations of the Microsoft Mouse EXECUTE statement.
+;
+; This example calls a label from a menu (menu1), where the
+; label (run:) specifies that two commands be executed (cls
+; & menu2).  The label 'cls:' causes a 'cls<return>'
+; sequence to be sent to the keyboard buffer, after which
+; 'menu2:'is run.
+;
+; Running the menu appears to yield the opposite order of
+; operations.  That is, the 'cls<enter>' command is executed
+; AFTER 'menu2:' terminates.  The keystrokes 'cls<enter>'
+; are sent to the keyboard buffer BEFORE 'menu2:' is
+; executed, but since the menu has not relinquished control
+; to DOS, they are not immediately acted upon.
+;
+; Note: See the file EXECUTE2.DEF for a related example.
+;
+;
+BEGIN lb
+
+lb:     execute menu1
+
+menu1: MENU   " sample 'execute' function menu (1)",1,40,NORMAL
+       option "  clear the screen, and run menu2  ",run
+       MEND
+;
+run:   execute cls,menu2
+;
+menu2: MENU   " sample 'execute' function menu (2)",1,40,NORMAL
+       option "             do nothing            ",nul
+       MEND
+;
+cls:   type "cls",enter
+nul:   nothing
+;

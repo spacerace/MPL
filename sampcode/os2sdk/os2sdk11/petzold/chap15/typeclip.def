@@ -1,0 +1,11 @@
+;------------------------------------
+; TYPECLIP.DEF module definition file
+;------------------------------------
+
+NAME           TYPECLIP  WINDOWAPI
+
+DESCRIPTION    'Clipboard Text Demonstration (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

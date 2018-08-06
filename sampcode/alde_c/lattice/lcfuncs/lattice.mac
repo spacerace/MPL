@@ -1,0 +1,623 @@
+
+; LATTICE.MAC - Macros for utilizing Lattice C library
+
+; Macro Include file for interfacing Assembler programs with the
+; Lattice C 2.17 library.  (Small Model Only)
+
+; NOTE: This library of macros is for those of us crazies who want
+; to write in assembler, yet use the many functions of the Lattice C
+; library.  Most people do it the other way around, that is, access
+; assembler language routines from a C program.  It should be a simple
+; task to modify this for other libraries, such as Microsoft or MIX C.
+; The most important details to look for are the names of the segments
+; assumed by the library modules.  I've seen at least one C compiler that
+; always pushes the number of arguments on the stack before the function
+; call.  The best way to modify this library is to write a C program in
+; the target language, and inspect the output (hopefully ASM source).
+; If possible turn Optimization off.  If the compiler does optimization,
+; it makes it more difficult to figure out what registers are really
+; required for each function call because the compiler will generally try
+; to hold the contents of a particular register for as long as possible.
+;
+; Written By Mark E Johnson               February 1987 ( March 20, 1987 )
+;            Johnson Bros. Wholesale Liquor Company
+;            2341 University Avenue
+;            St. Paul MN  55116
+;            TEL. 612-646-2736
+
+        .XLIST
+
+; To use these routines, put the line 'include lattice.mac'
+; at the top of your assembler program.  If you aren't using any
+; of the math functions, insert the line 'NOMATH=1' before the
+; 'include lattice.mac'.  Then your program will be about 4K smaller.
+
+; Use the small model (LCS) only!
+; after assembly link just like a Lattice C program:
+
+; LINK C+myprog, myprog,, LCM+LC
+; EXE2BIN myprog.exe myprog.com
+
+; WHERE C    = Lattice C.ASM assembled for COM files
+;       LCM  = Lattice Math library (Optional)
+;       LC   = Lattice Standard IO Library
+
+; NOTE that C functions do not clean up the stack on return
+;      It is up to you to do so.  In this program I do this
+;      by MOVing BP,SP before pushing arguments, and after
+;      the call, MOVe SP,BP. Another way to do this is to
+;      do as many pops after the function call as pushes before
+;      the function call.   Another way is to add a constant
+;      to SP after the function call.
+
+; *********************** MACROS IN THIS FILE *************************
+
+; PSEG    MACRO                          ; Macro to start code segment
+; ENDPS   MACRO                          ; Macro to end code segment
+; DSEG    MACRO                          ; Macro to start a data segment
+; ENDDS   MACRO                          ; Macro to end a data segment
+
+; loaddbl MACRO                          ; Load double into registers
+; pushdbl MACRO                          ; Load Double onto stack
+; storedbl MACRO                         ; Store registers to Double
+; _fopen  MACRO    fname, fmode, fp      ; Open named file
+; _fclose MACRO    fp                    ; Close file
+; _printf MACRO    fp, format, arg       ; Display variable to device
+; _print  MACRO    fp, arg               ; Print Text string to fp
+; _printd MACRO    fp, format, number    ; Display Double float to device
+; _sscanf MACRO    ss, format, number    ; Obtain variable from string
+; _scanf  MACRO    fp, format, number    ; Read variable from device
+; _fgetc  MACRO    fp                    ; Read character from device to AL
+; _fputc  MACRO    fp                    ; Output character in AL to device
+; _fread  MACRO    buffer, blksiz, numblks, fp  ; Read device into buffer
+; _fwrite MACRO    buffer, blksiz, numblks, fp  ; Write buffer to device
+
+; _add    MACRO    op1, op2, dest        ; Add Op1 and Op2
+; _sub    MACRO    op1, op2, dest        ; Subtract Op2 from Op1
+; _mul    MACRO    op1, op2, dest        ; Multiply Op1 by Op2
+; _div    MACRO    op1, op2, dest        ; Divide Op1 by Op2
+
+; _atan   MACRO    source, dest          ; Calculate Arc-Tangent
+; _cos    MACRO    source,dest           ; Calculate cosine
+; _exp    MACRO    source, dest          ; Calculate exponential F(x)
+; _log    MACRO    source, dest          ; Calculate Natural Log
+; _sin    MACRO    source,dest           ; Calculate Sine in radians
+; _pow    MACRO    x, y, dest            ; pow(x,y) = x ^y
+; _sqrt   MACRO    source, dest          ; Calculate Square root
+; _tan    MACRO    source,dest           ; calculate Tangent
+; comp    MACRO    arg1, arg2            ; Compare two Double floats
+; _DtoI   MACRO    dbl, int              ; Convert Double float to Int
+; _ItoD   MACRO    int, dbl              ; Convert Int to Double float
+; _DtoL   MACRO    dbl, long             ; Convert Double float to Long-Int
+; _LtoD   MACRO    long, dbl             ; Convert Long-Int to Double float
+
+; ***************   SAMPLE PROGRAM   *******************************
+;
+;  skeleton of a program
+;  this example inputs a number, then prints the square root
+;
+;        include   lattice.mac
+;        PSEG                        ; Program segment MUST start with PSEG
+;
+; _MAIN  proc      near              ; you MUST have a procedure _MAIN !!!
+;
+;        _fopen    fname, imode, fp1
+;        _fopen    fname, omode, fp2
+;        _printf   fp2,mess1         ; Print opening message
+;        _scanf    fp1,Dfmt,num1     ; Read double precision number
+;        _sqrt     num1,num1         ; Obtain square root
+;        _printd   fp2,mess2,num1    ; print message and number
+;        ret
+;
+; _MAIN  endp
+;
+;        ENDPS                       ; You MUST have an ENDPS
+;
+;        DSEG                        ; Data MUST go into DSEG
+; fp1    dw        ?
+; fp2    dw        ?
+; fname  db        'CON:',0
+; imode  db        'r',0
+; omode  db        'w',0
+; Sfmt   db        '%s',0
+; mess1  db        'Enter Decimal number ',0
+; Dfmt   db        '%lf',0
+; mess2  db        0ah,'Square root is %lf',0
+; num1   db        8 dup (?)
+;
+;        ENDDS                       ; End of data segment (MUST have!)
+;        end
+
+; ******************************************************************
+
+MSDOS   EQU      2
+
+COM     EQU      0     ; Generate a Com file
+LPROG   EQU      0
+LDATA   EQU      0
+
+;
+; The following symbols are established via LPROG and LDATA as follows:
+;
+S8086   EQU      1
+D8086   EQU      0
+P8086   EQU      0
+L8086   EQU      0
+
+        .LIST
+; Functions defined in LC.LIB and LCM.LIB
+        extrn    fprintf:near
+        extrn    fscanf:near
+        extrn    sscanf:near
+        extrn    fopen:near
+        extrn    fclose:near
+        extrn    fputc:near
+        extrn    fgetc:near
+        extrn    fread:near
+        extrn    fwrite:near
+
+        IFNDEF   NOMATH
+        extrn    cxa55:near   ; double Add
+        extrn    cxm55:near   ; double Multiply
+        extrn    cxs55:near   ; double Subtract
+        extrn    cxd55:near   ; double Divide
+        extrn    cxc55:near   ; Compare two doubles
+        extrn    cxv50:near   ; convert double to int
+        extrn    cxv05:near   ; convert int to double
+        extrn    cxv53:near   ; convert Double to long int
+        extrn    cxv35:near   ; convert Long int to Double
+        extrn    atan:near    ; Arctangent
+        extrn    cos:near     ; Cosine
+        extrn    exp:near     ; Exponential function of X
+        extrn    log:near     ; Natural log
+        extrn    pow:near     ; Power
+        extrn    sin:near     ; Sine in radians
+        extrn    sqrt:near    ; square root
+        extrn    tan:near     ; Tangent
+        ENDIF
+
+        .XLIST
+
+
+DSEG    MACRO                          ; Macro to start a data segment
+DGROUP  group   DATA
+DATA    segment word public 'DATA'
+        assume  DS:DGROUP
+ENDM
+
+
+ENDDS   MACRO                          ; Macro to end a data segment
+DATA    ENDS
+ENDM
+
+
+PSEG    MACRO                          ; Macro to start code segment
+PGROUP  group    PROG
+PROG    segment  byte public 'PROG'
+        assume   CS:PGROUP
+ENDM
+
+
+ENDPS   MACRO                          ; Macro to end code segment
+PROG    ENDS
+ENDM
+
+loaddbl MACRO                          ; Load double into registers
+        mov      ax,ds:word ptr [si+6]
+        mov      bx,ds:word ptr [si+4]
+        mov      cx,ds:word ptr [si+2]
+        mov      dx,ds:word ptr [si]
+ENDM
+
+pushdbl MACRO                          ;Load Double onto stack
+        loaddbl
+        push     ax
+        push     bx
+        push     cx
+        push     dx
+ENDM
+
+storedbl MACRO                         ; Store registers to Double
+        mov      ds:word ptr [si+6],ax
+        mov      ds:word ptr [si+4],bx
+        mov      ds:word ptr [si+2],cx
+        mov      ds:word ptr [si],dx
+ENDM
+
+; Open a file for input or output
+; format: _fopen(iname, imode, fp1)
+; iname   db     'CON:',0
+; imode   db     'r',0
+; fp1     dw     ?
+;
+_fopen  MACRO    fname, fmode, fp      ; Open named file
+        mov      bp,sp
+        mov      ax,offset &fmode        ;"w" or "r" or See page 3-18
+        push     ax
+        mov      ax,offset &fname
+        push     ax
+        call     fopen
+        mov      ds:word ptr &fp,ax
+        mov      sp,bp
+ENDM
+
+; Close a previously opened file
+; format _fclose(fp1)
+;
+_fclose MACRO    fp                    ; Close file
+        mov      bp,sp
+        push     word ptr ds:&fp
+        call     fclose
+        mov      sp,bp
+ENDM
+
+; Uses fprintf to display a string
+; format: _printf(fp, arg)
+; fp      dw     0    (filled in by fopen)
+; fmt     db     '%s',0
+; arg     db     'This is a string',0
+;
+_printf MACRO    fp,  arg              ; Display variable to device
+        mov      bp,sp
+        mov      ax,offset &arg
+        push     ax
+        push     word ptr ds:&fp
+        call     fprintf
+        mov      sp,bp
+ENDM
+
+; Print a literal string to fp
+; Example:  _print   'Hello world'
+;
+_print  MACRO    fp, arg               ; Print Text string to fp
+        LOCAL    saddr
+        ENDPS
+        DSEG
+saddr   db       string,'0'
+        ENDDS
+        PSEG
+        _printf  fp,saddr
+ENDM
+
+_printi MACRO    fp, format, value     ; Display an int, or character
+        mov      bp,sp
+        push     ds:word ptr &value
+        mov      ax,offset &format
+        push     ax
+        push     ds:word ptr &fp
+        call     fprintf
+        mov      sp,bp
+ENDM
+
+
+        IFNDEF   NOMATH
+; Uses printf to output a Double precision number
+; format: _print1(fp, fmt, num1);
+; fp      dw     0   (filled in by fopen)
+; fmt     db     '%lf',0
+; number  db     8 dup (0)
+;
+_printd MACRO    fp, format, number    ; Display Double float to device
+        mov      bp,sp
+        mov      si,offset &number
+        pushdbl
+        mov      ax,offset &format
+        push     ax
+        push     word ptr ds:&fp
+        call     fprintf
+        mov      sp,bp
+ENDM
+        ENDIF
+
+; perform SSCANF function ( ptr  <-- input string )
+; Format: _sscanf(string, fmt, number)
+; string  db     '1.2323',0
+; fmt     db     '%lf',0
+; number  db     8 dup (?)
+;
+_sscanf MACRO    ss, format, number    ; Obtain variable from string
+        mov      bp,sp
+        mov      ax,offset &number
+        push     ax
+        mov      ax,offset &format
+        push     ax
+        mov      ax,offset &ss
+        push     ax
+        call     sscanf
+        mov      sp,bp
+ENDM
+
+; Input a double precision number ( or any other simple data type )
+; Format: _scanf(fp, fmt, number);
+; fp      dw     0   (filled in by fopen)
+; fmt     db     '%lf',0
+; number  db     8 dup (?)
+;
+_scanf  MACRO    fp, format, number    ; Read variable from device
+        mov      bp,sp
+        mov      ax,offset &number
+        push     ax
+        mov      ax,offset &format
+        push     ax
+        push     word ptr ds:&fp
+        call     fscanf
+        mov      sp,bp
+ENDM
+
+; FGETC - Read a character from *fp
+;         Character returned in AL
+;
+_fgetc  MACRO    fp                    ; Read character from device
+        mov      bp,sp
+        push     word ptr ds:&fp
+        call     fgetc
+        mov      sp,bp
+ENDM
+
+; FPUTC - Put a character to *fp
+;         Character is in AL
+;
+_fputc  MACRO    fp                    ; Output character to device
+        mov      bp,sp
+        sub      ah,ah
+        push     word ptr ds:&fp
+        push     ax
+        call     fputc
+        mov      sp,bp
+ENDM
+
+; FREAD - Read a block of data from *fp, into area pointed by BUFER
+;         Returns actual number of bytes read in AX
+; Format: _fread(*bufloc, 128, 8, *fp)
+; bufloc  dw     ?
+;
+_fread  MACRO    buffer, blksiz, numblks, fp  ; Read device into buffer
+        mov      bp,sp
+        push     word ptr ds:&fp
+        mov      ax,ds:word ptr &numblks
+        push     ax
+        mov      ax,ds:word ptr &blksiz
+        push     ax
+        mov      ax,ds:word ptr &buffer       ; Get address of area
+        push     ax
+        call     fread
+        mov      sp,bp
+ENDM
+
+; FWRITE - Read a block of data from *fp, BUFFER points to data area
+;          Returns actual number of bytes read in AX
+; Format:  _fwrite(*bufloc, 128, 8, *fp)
+; bufloc   dw    ?
+;
+_fwrite MACRO    buffer, blksiz, numblks, fp  ; Write buffer to device
+        mov      bp,sp
+        push     word ptr ds:&fp
+        mov      ax,ds:word ptr &numblks
+        push     ax
+        mov      ax,ds:word ptr &blksiz
+        push     ax
+        mov      ax,ds:word ptr &buffer
+        push     ax
+        call     fwrite
+        mov      sp,bp
+ENDM
+
+        IFNDEF   NOMATH
+
+;Add two doubles, dest=op1+op2
+;
+_add    MACRO    op1, op2, dest        ; Add Op1 and Op2
+        mov      si,offset &op1
+        loaddbl
+        mov      si, offset &op2
+        push     si
+        call     cxa55
+        mov      si, offset &dest
+        storedbl
+ENDM
+
+; Subtract two doubles: dest=op1-op2
+;
+_sub    MACRO    op1, op2, dest        ; Subtract Op2 from Op1
+        mov      si,offset &op1
+        loaddbl
+        mov      si, offset &op2
+        push     si
+        call     cxs55
+        mov      si, offset &dest
+        storedbl
+ENDM
+
+; Multiply two doubles:  dest=op1*op2
+;
+_mul    MACRO    op1, op2, dest        ; Multiply Op1 by Op2
+        mov      si,offset &op1
+        loaddbl
+        mov      si, offset &op2
+        push     si
+        call     cxm55
+        mov      si, offset &dest
+        storedbl
+ENDM
+
+; Divide two doubles: dest=op1/op2
+;
+_div    MACRO    op1, op2, dest        ; Divide Op1 by Op2
+        mov      si,offset &op1
+        loaddbl
+        mov      si, offset &op2
+        push     si
+        call     cxd55
+        mov      si, offset &dest
+        storedbl
+ENDM
+
+; ****** High Level Mathematical Functions ******
+; ******      Grouped Alphabetically       ******
+
+_atan   MACRO    source, dest          ; Calculate Arc-Tangent
+        mov      bp,sp
+        mov      si,offset &source     ; setup for the ATAN function
+        pushdbl
+        call     atan
+        mov      si,offset &dest
+        storedbl
+        mov      sp,bp
+ENDM
+
+_cos    MACRO    source,dest           ; Calculate cosine
+        mov      bp,sp
+        mov      si,offset &source
+        pushdbl
+        call     cos
+        mov      si,offset &dest
+        storedbl
+        mov      sp,bp
+ENDM
+
+_exp    MACRO    source, dest          ; Calculate exponential F(x)
+        mov      bp,sp
+        mov      si,offset &source
+        pushdbl
+        call     exp
+        mov      si,offset &dest
+        storedbl
+        mov      sp,bp
+ENDM
+
+_log    MACRO    source, dest          ; Calculate Natural Log
+        mov      bp,sp
+        mov      si,offset &source
+        pushdbl
+        call     log
+        mov      si,offset &dest
+        storedbl
+        mov      sp,bp
+ENDM
+
+_pow    MACRO    x, y, dest          ; pow(x,y) = x ^y
+        mov      bp,sp
+        mov      si,offset &y
+        pushdbl
+        mov      si,offset &x
+        pushdbl
+        call     pow
+        mov      si,offset &dest
+        storedbl
+        mov      sp,bp
+ENDM
+
+_sin    MACRO    source,dest           ; Calculate Sine in radians
+        mov      bp,sp
+        mov      si,offset &source
+        pushdbl
+        call     sin
+        mov      si,offset &dest
+        storedbl
+        mov      sp,bp
+ENDM
+
+; Square root: dest=sqrt(source)
+;
+_sqrt   MACRO    source, dest          ; Calculate Square root
+        mov      bp,sp
+        mov      si,offset &source
+        pushdbl
+        call     sqrt
+        mov      si,offset &dest
+        storedbl
+        mov      sp,bp
+ENDM
+
+_tan    MACRO    source,dest           ; calculate Tangent
+        mov      bp,sp
+        mov      si,offset &source
+        pushdbl
+        call     tan
+        mov      si,offset &dest
+        storedbl
+        mov      sp,bp
+ENDM
+
+
+;Compare two floating point numbers
+;Results are in Flags, and can be acted upon with conditional jumps:
+;                      ==  JZ
+;                      !=  JNZ
+;                      >   JG
+;                      <   JL
+;                      >=  JGE
+;                      <=  JLE
+;
+COMP    MACRO    arg1, arg2            ; Compare two Double floats
+        mov      bp,sp
+        mov      si,offset &arg1
+        loaddbl
+        mov      si,offset &arg2
+        push     si
+        call     cxc55
+        mov      sp,bp
+ENDM
+
+; Convert double to integer
+;
+_dtoi   MACRO    dbl, int              ; Convert Double float to Int
+        mov      bp,sp
+        mov      si,offset &dbl
+        loaddbl
+        call     cxv50
+        mov      ds:word ptr &int,ax
+        mov      sp,bp
+ENDM
+
+; Convert integer to double
+;
+_itod   MACRO    int, dbl              ; Convert Int to Double float
+        mov      bp,sp
+        mov      ax,ds:word ptr &int
+        call     cxv05
+        push     ax
+        push     bx
+        push     cx
+        push     dx
+        mov      si,offset &dbl
+        storedbl                     ; ax->6, bx->4
+        mov     sp,bp
+ENDM
+
+; Convert Double to Long Int
+;
+_dtol   MACRO    dbl, long             ; Convert Double float to Long-Int
+        mov      bp,sp
+        mov      si,offset &dbl
+        loaddbl
+        call     cxv53
+        mov      si,offset &long
+        mov      ds:word ptr &long,bx
+        mov      ds:word ptr &long+2,ax
+        mov      sp,bp
+ENDM
+
+; Convert Long Int to double
+;
+_ltod   MACRO    long, dbl             ; Convert Long-Int to Double float
+        mov      bp,sp
+        mov      ax,offset &dbl + 2
+        mov      bx,offset &dbl
+        call     cxv35
+        mov      si,offset &dbl
+        storedbl
+        mov      sp,bp
+ENDM
+
+        ENDIF
+
+CPSIZE  EQU      2            ; CPSIZE -> code pointer size (2 or 4)
+DPSIZE  EQU      2            ; DPSIZE -> data pointer size (2 or 4)
+
+        .LIST
+; User's _MAIN starts here.
+
+        PUBLIC   _MAIN
+
+

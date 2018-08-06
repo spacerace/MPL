@@ -1,0 +1,7 @@
+hello-e.obj : hello-e.asm
+  masm hello-e;
+
+hello-e.com : hello-e.obj
+  link hello-e;
+
+

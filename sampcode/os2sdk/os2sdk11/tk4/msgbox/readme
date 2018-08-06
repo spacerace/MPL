@@ -1,0 +1,23 @@
+Comments about MSGBOX
+
+The MSGBOX program brings up a dialog box that allows the user to
+experiment with all possible combinations of message box styles.
+
+There are three groups of radio buttons corresponding to the button
+configuration, icon displayed, and default button values.  One choice
+of each of these determines the look of the message box.  The style
+value computed from these choices is displayed in the Message Box
+Style edit box.  The return value of the WinMessageBox() routine is
+displayed in the Return Code box.  The "Show Box" button is used to 
+cause a message box to be displayed.
+
+File List:
+
+MSGBOX		Makefile
+MSGBOX.C	Source file
+MSGBOX.DEF	Definition file
+MSGBOX.EXE	Executable
+MSGBOX.H	Header file
+MSGBOX.RC	Resource file
+MSGBOX.SYM	Symbol file
+README		This file

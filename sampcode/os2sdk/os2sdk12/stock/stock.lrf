@@ -1,0 +1,5 @@
+stock ea file mem print
+stock
+stock /MAP
+os2 /NOD:slibce slibcep
+stock.def

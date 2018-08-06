@@ -1,0 +1,44 @@
+
+
+        NAME
+                openp -- open a file in the PATH
+                opend -- open a file in an environment variable
+                openg -- opend/openp combination
+
+        SYNOPSIS
+                fh = openp(name, mode);
+                fh = opend(name, mode, envar);
+                fh = openg(name, mode, envar);
+                int fh;            file handle returned
+                char *name;        filename
+                int mode;          mode
+                char *envar;       name of environment variable
+
+        DESCRIPTION
+        These three functions allow the opening of a file in other than just
+        the current directory.  All functions will attempt the open in the
+        current directory first, and if that fails, will then expand to search:
+             openp -- searchs PATH environment variable
+             opend -- searches a specified environment variable,
+                      with directories specified in the same syntax as for PATH
+             openg -- performs an opend() first, and upon failure an openp()
+        These functions will return -1 upon failure.  The file MUST
+        EXIST in order for a file handle to be returned.  Therefore, these
+        functions cannot be used to create new files.
+
+        EXAMPLE
+
+             int fh;
+
+             if((fh = openp("foo.bar", O_READ)) == -1) cant("foo.bar");
+             else puts("File is now opened!");
+
+             if((fh = opend("stdio.h", O_READ, "INCLUDE")) == -1)
+                  cant("stdio.h");
+             else puts("stdio.h is open for reading");
+
+             /* fopeng works the same as fopend */
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

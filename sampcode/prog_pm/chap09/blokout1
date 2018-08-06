@@ -1,0 +1,9 @@
+#--------------------
+# BLOKOUT1 make file
+#--------------------
+
+blokout1.obj : blokout1.c
+     cl -c -G2sw -W3 blokout1.c
+
+blokout1.exe : blokout1.obj blokout1.def
+     link blokout1, /align:16, NUL, os2, blokout1

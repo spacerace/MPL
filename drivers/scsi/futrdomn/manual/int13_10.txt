@@ -1,0 +1,12 @@
+Code 10                                  -Test Unit Ready
+
+Output registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    A SCSI Test Unit Ready (00) command is issued to the specified 
+    disk. If an error is detected during the Status/Message phase, 
+    a SCSI Request Sense is issued and the results returned in AH/AL.
+

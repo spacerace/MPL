@@ -1,0 +1,6 @@
+exec1.obj : exec1.asm
+ masm exec1;
+
+exec1.exe : exec1.obj exec1.def
+ link exec1,,,os2,exec1;
+

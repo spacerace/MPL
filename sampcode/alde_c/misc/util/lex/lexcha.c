@@ -1,0 +1,13 @@
+/*
+ * Bob Denny	 28-Aug-82  Remove reference to stdio.h
+ * Scott Guthery 20-Nov-83	Adapt for IBM PC & DeSmet C
+ */
+
+#include <lex.h>
+
+extern char *llend, *llp2;
+
+lexchar()
+{
+        return(llend<llp2? *llend++&0377: lexgetc());
+}

@@ -1,0 +1,148 @@
+.T
+   and now a TEST   
+.R4C1
+    If we declare ~b~Ix~N to be an ARRAY of ~I6~N rows and ~I7~N columns, then:
+.Q
+The member of the ARRAY in row 3, column 3 is called 
+x[2][2]
+    ~Inot~N x(2,2) or x(2)(2) or x[3,3) or etc. etc.
+
+.Q
+Which member does x+5*7+2 select ?
+x[5][2]
+
+.Q
+Where does x point to ?
+x is NOT a pointer!
+
+    ( The names of ~I1~N-dimensional arrays are ~w~Rpointers~N.)
+    ( Since, for example, ~b~Ix[2]~N is a 1-dim array, ~IIT~N is a ~w~Rpointer~N.)
+.Q
+x[3] points to which element ? 
+x[3][0]
+.WN
+0 ~b~I#include <stdio.h>                      ~N
+1 ~b~Imain() {                                ~N
+2 ~b~I    char c;                             ~N
+3 ~b~I    while ( (c=getchar()) !='e' ) {     ~N
+4 ~b~I        if ( 'a'<=c && c<='z')          ~N
+5 ~b~I            printf("%c",c+'A'-'a');     ~N
+6 ~b~I    }                                   ~N
+7 ~b~I}                                       ~N
+.Q
+If you type the letter  p  what will the program print ? 
+P
+.Q
+If you type the letter  P  what will the program print ? 
+P
+.Q
+What must you type to have the program stop ?
+e
+.WR9C1
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+.w
+.R10C1
+    In Line 3, the program will ~b~Igetchar~N from the keyboard and assign it
+    to ~b~Ic~N. As long as ~b~Ic~N is NOT EQUAL to 'e' it enters the ~b~Iwhile~N loop.
+
+    In Line 4 it checks if ~b~Ic~N is a lower case 'a' to 'z'. If so, Line 5
+    is executed.
+
+    Line 5 will print the ~b~I%c~Nharacter whose 'value' is:
+    ~Ithe value of c + the value of 'A' - the value of 'a'~N
+
+    If you type a ~b~Ip~N, the ASCII value is ~I112~N.
+    The ASCII value of 'A' is ~I65~N and for 'a' it's ~I97~N.
+    The value of ~b~Ic+'A'-'a'~N is ~I112+65-97~N which is ~I80~N, the ASCII
+    value for P ...so the program types a P ...and, in general, it converts
+    all lower case letters to upper case!
+.WN
+0 ~b~I#include <stdio.h>                      ~N
+1 ~b~Imain(A,B)  {                            ~N
+2 ~b~Ichar B                                  ~N
+3 ~b~Iint A;                                  ~N
+4 ~b~Iprintf("%s",b[1]);                      ~N
+5 ~b~I}                                       ~N
+
+.Q
+How many errors ? 
+TOO MANY!
+    The arguments of ~b~Imain()~M MUST be declared ~Ibefore~N the opening ~b~I{~N.
+    The first argument is ALWAYS an ~b~Iint~N.
+    The second argument is ALWAYS a ~w~Rpointer~N to an ARRAY (of ~w~Rpointers~N).
+    Their IS a difference between B[1] and b[1] (Line 4).
+    Lastly (firstly?), Line 2 needs the  !@#$%  SEMI-COLON!
+.W
+0 ~b~I#include <stdio.h>                      ~N
+1 ~b~Imain(A,B)                               ~N
+2 ~b~Iint A;                                  ~N
+3 ~b~Ichar *B[];                              ~N
+4 ~b~I{                                       ~N
+5 ~b~Iprintf("%s",B[1]);                      ~N
+6 ~b~I}                                       ~N
+.WN
+0 ~b~I#include <stdio.h>                      ~N
+1 ~b~Imain(argc,argv)                         ~N
+2 ~b~Iint argc;                               ~N
+3 ~b~Ichar *argv[];                           ~N
+4 ~b~I{                                       ~N
+5 ~b~I    FILE *file_pointer, *fopen();       ~N
+6 ~b~I    file_pointer=fopen(argv[1],"r");    ~N
+7 ~b~I}                                       ~N
+
+    If the above program is compiled/linked under the name ~Isam~N, then
+    executed with the command:
+
+~Isam george~N
+.Q
+what is the value of the integer argc ?
+2
+.Q
+what string does argv[0] point to ? 
+sam
+.Q
+what string does argv[1] point to ? 
+george
+.WN
+0 ~b~I#include <stdio.h>                      ~N
+1 ~b~Imain() {                                ~N
+2 ~b~I    char x[5]={'1','2','3','4','5'};    ~N
+3 ~b~I    char *y;                            ~N
+4 ~b~I    y=x;                                ~N
+5 ~b~I    printf("%s",x);                     ~N
+6 ~b~I    printf("%s",y);                     ~N
+7 ~b~I}                                       ~N
+.Q
+What does Line 5 print ? 
+12345è w
+    Since we forgot to terminate ~b~Ix[]~N with ~I'\0'~N, then ~b~Iprintf()~N
+    will start printing the characters, beginning with the ~Iaddress~N determined
+    by the ~r~Ipointer~N ~b~Ix~N, and continue  ...and continue... until (finally)
+    it reaches a ~I0~N (somewhere in memory!) ...yielding lots of garbage!
+.Q
+What does Line 6 print ? 
+12345è w
+
+    In Line 4, the VARIABLE POINTER ~b~Iy~N is made to point to the same ~Istring~N
+    that ~b~Ix~N points to, so Line 6 prints the same 12345+garbage!
+.WN
+
+
+.T
+   That's all folks!   
+
+
+.K16,32
+au revoir!
+
+.q
+

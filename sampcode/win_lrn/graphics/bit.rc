@@ -1,0 +1,4 @@
+#include <style.h>
+
+world1  BITMAP bit.bmp
+

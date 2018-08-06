@@ -1,0 +1,12 @@
+#--------------------
+# BUTTONS2 make file
+#--------------------
+
+buttons2.obj : buttons2.c
+     cl -c -G2sw -W3 buttons2.c
+
+sqbtn.obj : sqbtn.c
+     cl -c -G2sw -W3 sqbtn.c
+
+buttons2.exe : buttons2.obj sqbtn.obj buttons2.def
+     link buttons2 sqbtn, /align:16, NUL, os2, buttons2

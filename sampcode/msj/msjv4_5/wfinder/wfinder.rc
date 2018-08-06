@@ -1,0 +1,47 @@
+/*
+ * WINDOWS FILE FINDER UTILITY - RESOURCE FILE
+ *
+ * LANGUAGE : Microsoft C 5.1
+ * TOOLKIT  : Windows 2.10 SDK
+ * MODEL    : Small or Medium
+ * STATUS   : Operational
+ *
+ * 07/21/88 - Kevin P. Welch - initial creation.
+ *
+ */
+
+#include <windows.h>
+#include "finder.h"
+
+Icon     ICON     Finder.ico
+
+Finder DIALOG LOADONCALL MOVEABLE DISCARDABLE 32, 32, 218, 150
+CAPTION " Windows File Finder "
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_SYSMENU | WS_MINIMIZEBOX
+BEGIN
+      CONTROL "Pattern:", -1, "static", SS_LEFT | WS_CHILD, 6, 6, 32, 10
+      CONTROL "", ID_PATTERN, "edit", ES_LEFT | WS_BORDER | WS_GROUP | WS_TABSTOP | WS_CHILD, 40, 5, 134, 12
+      CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD, 178, 0, 1, 150
+      CONTROL "&Search", ID_SEARCH, "button", BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP | WS_CHILD, 183, 5, 32, 14
+      CONTROL "&Run", ID_RUN, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD | WS_DISABLED, 183, 23, 32, 14
+      CONTROL "&Quit", ID_QUIT, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 183, 42, 32, 14
+      CONTROL "", ID_DRIVES, "listbox", LBS_NOTIFY | LBS_SORT | LBS_MULTIPLESEL | LBS_STANDARD | WS_BORDER | WS_VSCROLL | WS_TABSTOP | WS_CHILD, 184, 78, 30, 66
+      CONTROL "", ID_FILES, "listbox", LBS_NOTIFY | LBS_SORT | LBS_STANDARD | WS_BORDER | WS_VSCROLL | WS_TABSTOP | WS_CHILD, 6, 22, 168, 122
+END
+
+About DIALOG LOADONCALL MOVEABLE DISCARDABLE 32, 32, 192, 80
+CAPTION "About Windows File Finder..."
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_VISIBLE | WS_POPUP
+BEGIN
+      CONTROL "&Ok", IDOK, "button", BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP | WS_CHILD, 157, 5, 32, 14
+      CONTROL "Windows File Finder", -1, "static", SS_LEFT | WS_GROUP | WS_CHILD, 6, 6, 144, 8
+      CONTROL "Microsoft Systems Journal", -1, "static", SS_LEFT | WS_CHILD, 6, 14, 144, 8
+      CONTROL "Designed && Developed by:", -1, "static", SS_LEFT | WS_CHILD, 6, 28, 144, 8
+      CONTROL "Kevin P. Welch", -1, "static", SS_LEFT | WS_CHILD, 6, 42, 144, 8
+      CONTROL "Eikon Systems, Inc.", -1, "static", SS_LEFT | WS_CHILD, 6, 50, 144, 8
+      CONTROL "989 East Hillsdale Blvd, Suite 260", -1, "static", SS_LEFT | WS_CHILD, 6, 58, 144, 8
+      CONTROL "Foster City, California 94404", -1, "static", SS_LEFT | WS_CHILD, 6, 66, 136, 8
+      CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD, 152, 0, 1, 80
+      CONTROL "Icon", -1, "static", SS_ICON | WS_CHILD, 170, 46, 16, 26
+END
+/

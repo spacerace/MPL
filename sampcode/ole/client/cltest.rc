@@ -1,0 +1,149 @@
+#include "windows.h"
+#include "cldemo.h"
+
+
+Menu MENU
+BEGIN
+    POPUP        "&File"
+    BEGIN
+	MENUITEM   "&New",		 IDM_NEW
+	MENUITEM   "&Open...",		 IDM_OPEN
+	MENUITEM   "&Save",		 IDM_SAVE
+	MENUITEM   "Save &As...",	 IDM_SAVEAS
+	MENUITEM   SEPARATOR
+	MENUITEM   "Insert&File...",	 IDM_INSERTFILE
+	POPUP   "&Insert"
+		BEGIN
+		MENUITEM "SHAPES", 	IDM_SHAPES
+		MENUITEM "PAINTBRUSH", 	IDM_PBRUSH
+		MENUITEM "EXCEL", 	IDM_EXCEL
+		MENUITEM "GRAPH", 	IDM_GRAPH
+		MENUITEM "TORUS", 	IDM_TORUS
+		END
+		
+	MENUITEM   SEPARATOR
+	MENUITEM   "&Print",		 IDM_PRINT
+	MENUITEM   "E&xit",		 IDM_EXIT
+    END
+
+    POPUP        "&Edit"
+    BEGIN
+        MENUITEM    "&Undo\tAlt+BkSp",     IDM_UNDO   
+        MENUITEM    SEPARATOR
+        MENUITEM    "Cu&t\tShift+Del",     IDM_CUT
+        MENUITEM    "&Copy\tCtrl+Ins",     IDM_COPY
+        MENUITEM    "&Paste\tShift+Ins",   IDM_PASTE  
+        MENUITEM    "Paste &Link",         IDM_LINK  
+        MENUITEM    SEPARATOR
+        MENUITEM    "&Delete\tDel",        IDM_CLEAR  
+        MENUITEM    SEPARATOR
+        MENUITEM    "Properties...",       IDM_PROPERTIES
+    END
+
+    POPUP        "&Other"
+    BEGIN
+	MENUITEM   "&Close Object",		 IDM_CLOSE
+        MENUITEM    "Reconnect",      	   IDM_RECONNECT  
+        MENUITEM    SEPARATOR
+        MENUITEM    "Copy &From Link",        IDM_COPYLINK  
+        MENUITEM    "Equal",      	   IDM_EQUAL
+        MENUITEM    SEPARATOR
+	MENUITEM   "&About Lesson1...", IDM_ABOUT
+    END
+
+
+END
+
+Accelerators ACCELERATORS
+BEGIN
+    VK_BACK,   IDM_UNDO,  VIRTKEY, ALT
+    VK_DELETE, IDM_CUT,   VIRTKEY, SHIFT
+    VK_INSERT, IDM_COPY,  VIRTKEY, CONTROL
+    VK_INSERT, IDM_PASTE, VIRTKEY, SHIFT
+    VK_DELETE, IDM_CLEAR, VIRTKEY, SHIFT
+END
+
+
+AboutBox DIALOG 22, 17, 144, 75
+STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+CAPTION "About Lesson1"
+BEGIN
+    CTEXT "Microsoft Windows"             -1,       0,  5, 144,  8
+    CTEXT "Object Linking And Embedding"  -1,       0, 14, 144,  8
+    CTEXT "Sample Client Application"     -1,       0, 23, 144,  8
+    CTEXT "Version 0.1"                   -1,       0, 34, 144,  8
+    DEFPUSHBUTTON "OK"                  IDOK,      53, 59,  32, 14, WS_GROUP
+END
+
+SaveAs DIALOG 10, 10, 108, 60
+STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+CAPTION "File Save As"
+BEGIN
+        LTEXT "Save File Name:",  IDC_FILENAME, 4,  4,  60, 10
+        EDITTEXT,                 IDC_EDIT,     4, 16, 100, 12, ES_AUTOHSCROLL
+        LTEXT "",                 IDC_PATH,     4, 30, 100, 10
+        DEFPUSHBUTTON "&OK ",     IDOK,         4, 42,  45, 14
+        PUSHBUTTON "Cancel",      IDCANCEL,    58, 42,  45, 14
+END
+
+Open DIALOG 10, 10, 148, 112
+STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+CAPTION "File Open "
+BEGIN
+        LTEXT "Open File &Name:", IDC_FILENAME, 4,  4,  60, 10
+        EDITTEXT                  IDC_EDIT,     4, 16, 100, 12, ES_AUTOHSCROLL
+        LTEXT "&Files in",        IDC_FILES,    4, 40,  32, 10
+        LISTBOX,                  IDC_LISTBOX,  4, 52,  70, 56, WS_TABSTOP|WS_VSCROLL
+        LTEXT "",                 IDC_PATH,    40, 40, 100, 10
+        DEFPUSHBUTTON "&Open" ,   IDOK,        87, 60,  50, 14
+        PUSHBUTTON "Cancel",      IDCANCEL,    87, 80,  50, 14
+END
+
+LINKPROP DIALOG LOADONCALL MOVEABLE DISCARDABLE 70, 50, 198, 98
+CAPTION "Link Properties"
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | WS_POPUP
+BEGIN
+    CONTROL "Reference to ", 309, "static", SS_LEFT | WS_GROUP | WS_CHILD, 10, 3, 47, 8
+    CONTROL "", IDD_LINKINFO, "static", SS_LEFT | WS_GROUP | WS_CHILD, 57, 5, 62, 7
+    CONTROL "Update", -1, "button", BS_GROUPBOX | WS_CHILD, 18, 43, 107, 26
+    CONTROL "Automatic", IDD_AUTO, "button", BS_AUTORADIOBUTTON | WS_TABSTOP | WS_CHILD, 24, 53, 42, 12
+    CONTROL "Manual", IDD_MANUAL, "button", BS_AUTORADIOBUTTON | WS_TABSTOP | WS_CHILD, 77, 53, 36, 12
+    CONTROL "&Edit Source", 308, "button", BS_DEFPUSHBUTTON | WS_TABSTOP | WS_CHILD, 10, 79, 44, 14
+    CONTROL "U&nlink", IDD_FREEZE, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 81, 79, 37, 14
+    CONTROL "&Update Now", IDD_UPDATE, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 145, 79, 48, 14
+    CONTROL "&Ok", 1, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 156, 11, 33, 14
+    CONTROL "&Cancel", 2, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 156, 43, 33, 14
+    CONTROL "", IDD_DOCNM, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 13, 20, 57, 14
+    CONTROL "", IDD_ITEMNM, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 82, 20, 50, 14
+END
+
+
+
+
+
+
+
+EmbProp DIALOG 70, 47, 174, 53
+CAPTION "Object Properties"
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_SYSMENU | WS_POPUP
+BEGIN
+    LTEXT "Embedded ",                  IDD_WHAT,  10,  7, 47,  8
+    LTEXT "",                           IDD_WHICH, 47,  7, 75,  8
+    DEFPUSHBUTTON "&Change to Picture", IDD_FREEZE, 8, 31, 65, 14
+    PUSHBUTTON "&Edit Source",          IDD_EDIT,  82, 31, 48, 14
+    PUSHBUTTON "&Ok",                   IDOK,     136,  6, 33, 14
+    PUSHBUTTON "&Cancel",               IDCANCEL, 137, 31, 33, 14
+END
+
+FILEIO DIALOG LOADONCALL MOVEABLE DISCARDABLE 10, 17, 195, 52
+CAPTION "File I/O"
+FONT 8, "Helv"
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_VISIBLE | DS_MODALFRAME | WS_POPUP
+BEGIN
+    CONTROL "", 101, "edit", ES_LEFT | ES_AUTOHSCROLL | WS_BORDER | WS_TABSTOP | WS_CHILD, 42, 7, 122, 12
+    CONTROL "&Files:", -1, "static", SS_LEFT | WS_CHILD, 14, 8, 22, 8
+    CONTROL "OK", 1, "button", BS_DEFPUSHBUTTON | WS_TABSTOP | WS_CHILD, 30, 28, 54, 15
+    CONTROL "CANCEL", 2, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 96, 29, 54, 14
+END
+
+

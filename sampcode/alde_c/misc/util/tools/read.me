@@ -1,0 +1,66 @@
+Here are some utilitys, made by a UNIX addict, to imitate closely
+the corresponding UNIX commands.
+All of you know these commands, so I don't think manual pages
+are required.
+
+Some brief explanation:
+
+df:
+   Usage: df [drive:]
+    When called without arguments, it will display the space
+    used / free in Kbytes and in clusters, of all available drives
+    from C: on upwards.
+    With an drive identifier as argument, it will display the same
+    info for the given drive, followed by the default info.
+
+du:
+   Usage: du -s [directory]
+    Du will give you the disk usage in Kbytes from the current or
+    given directory downwards. The -s option only gives a summary.
+
+ls:
+   Usage: ls -Flrst [file [file ...]] (or directory)
+   Options: -F : Add '/' for subdirectorys, and * for executable files.
+            -l : Long listing, status and date/time info is displayed.
+            -r : Reverse the sort order.
+            -s : Also display the size in Kbytes before the filename.
+            -t : Sort by modify time instead of alphabetically
+
+rm:
+   Usage: rm [-rf] file/directory [file...]
+   Allows multiple file arguments (not like 'del')
+   Options: -r : Recursive delete of all files and subdirs.
+            -f : Delete read-only files also.
+   Warning: rm -rf \ is FATAL!!
+
+mv:
+   Usage: mv file file
+          mv file [file ..] directory
+   Allows full path names in both source and destination (on same drive).
+   This command actually moves links, not files.
+   Existing destination files will be overwritten!
+
+------------------------------------------------------------------------------
+
+Compiling:
+   The sources supplied are for Microsoft C 4.0, I haven't tried other
+   compilers, so maybe some others will work too.
+   Also you need MASM to assemble the clsize.asm file.
+   The file 'all' is the makefile for Microsoft make. Just type 'make all'.
+
+Status of the software:
+   These programs are freeware, please distribute freely, and without
+   additional costs, exept for disks or postage.
+   But please distribute the complete package only, including this notice.
+
+Disclaimer:
+   I have used the software for quite a time now, and now harmful bugs
+   have appeared. But I don't take any responsibility for any harm
+   caused by the use (or misuse) of these programs.
+
+All programs written by K.van Houten
+                        Delft University of Technology
+                        Delft / The Netherlands
+                        karel@dutesta.UUCP
+
+

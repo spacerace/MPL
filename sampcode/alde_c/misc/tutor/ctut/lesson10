@@ -1,0 +1,353 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,32
+[1mPonzoTUTOR
+.WNT
+    the C PREPROCESSOR   
+.R4C1
+~b~IBEGIN                                                  ~N   ~b~Imain()   {          ~N 
+~b~I  DECLARE_AN_INTEGER x;                                ~N   ~b~I  int x;            ~N 
+~b~I  LET x=0;                                             ~N   ~b~I  x=0;              ~N 
+~b~I  AS_LONG_AS ( x IS_LESS_THAN 5 )  DO                  ~N   ~b~I  while (x<5) {     ~N 
+~b~I  LET x INCREASE_BY 1;                                 ~N   ~b~I  x+=1;             ~N
+~b~I  PRINT_x;                                             ~N   ~b~I  printf("%d",x);   ~N 
+~b~I  THEN_STOP                                            ~N   ~b~I  }                 ~N 
+~b~IEND                                                    ~N   ~b~I}                   ~N 
+    Wouldn't it be nice if we could write the Left-Hand program (above) and
+    have it (magically) turn itself into the Right-Hand program?
+.WK16,60
+GOOD LUCK!
+.W
+    This would require the following ~Idefinitions~N:
+define  ~b~IBEGIN~N               to mean    ~b~Imain() {~N
+define  ~b~IDECLARE_AN_INTEGER~N  to mean    ~b~Iint~N
+define  ~b~ILET~N                 to mean     (nothing!)
+define  ~b~IAS_LONG_AS~N          to mean    ~b~Iwhile~N
+define  ~b~IIS_LESS_THAN~N        to mean    ~b~I<~N
+define  ~b~IDO~N                  to mean    ~b~I{~N
+define  ~b~IINCREASE_BY~N         to mean    ~b~I+=~N
+define  ~b~IPRINT_x~N             to mean    ~b~Iprintf("%d",x)~N
+define  ~b~ITHEN_STOP~N           to mean    ~b~I}~N
+define  ~b~IEND~N                 to mean    ~b~I}~N
+.WN
+
+    One fascinating aspect of the ~IC~N language is its ability to perform
+    replacements of ~b~IBEGIN~N  by ~b~Imain()  {~N, and ~b~ILET~N by
+    nothing (a "null string") and ~b~IEND~N by ~b~I}~N, etc. etc.
+
+    Before the C-compiler goes to work on your program, a ~IC-preprocessor~N
+    will make the appropriate replacements ... and (MAGIC!) the compiler gets
+    a normal, standard, C program to compile.
+
+    To tell the preprocessor that you have redefined certain C-phrases, you
+    need only ~Ibegin~N your program with these ~I#definitions~N.
+.WK16,32
+beg[1;5mpardon?[0m
+.WNT
+    #define THIS and THAT   
+.R4C1
+~b~I#define  BEGIN                 main() {       ~N
+~b~I#define  DECLARE_AN_INTEGER    int            ~N
+~b~I#define  LET                                  ~N
+~b~I#define  AS_LONG_AS            while          ~N
+~b~I#define  IS_LESS_THAN          <              ~N
+~b~I#define  INCREASE_BY           +=             ~N
+~b~I#define  PRINT_x               printf("%d",x) ~N
+~b~I#define  THEN_STOP             }              ~N
+~b~I#define  END                   }              ~N
+~b~I                                              ~N
+~b~IBEGIN                                                  ~N  
+~b~I  DECLARE_AN_INTEGER x;                                ~N  
+~b~I  LET x=0;                                             ~N  
+~b~I  AS_LONG_AS ( x IS_LESS_THAN 5 ) DO                   ~N  
+~b~I  PRINT_x;                                             ~N  
+~b~I  THEN_STOP                                            ~N  
+~b~IEND                                                    ~N  
+.w
+
+    If the above program is written and compiled, the preprocessor will make
+    all replacements indicated by the various ~b~I#define~N statements!
+.WK5,60
+  MAGIC!
+.WN
+
+    The ~b~I#define~N statements are instructions to the ~Ipreprocessor~N.
+    We've actually seen such instructions before!
+
+    Remember ~b~I#include <stdio.h>~N  ??
+
+    THAT was ~Ialso~N an instruction to the preprocessor .. to replace the phrase,
+    ~b~I#include <stdio.h>~N by the library of standard input/output routines.
+    ( .. which explains why a compiled program is often very much larger than
+    the program we write with our favourite text-editor .. it contains the
+    ~Ii/o~N library of functions!)
+.K16,32
+  I  C!
+.WNT
+    #include <stdio.h>  and   #include <math.h>   
+.R5C1
+    Since ~IC~N is supposed to be a ~IPORTABLE~N language (write a C program
+    on your favourite text-editor and compile if for ANY computer for which
+    you have a compiler), the ~Ist~Nan~Id~Nard ~Ii~Nput/~Io~Nutput routines
+    are system dependent ... and not, strictly speaking, part of the language!
+    Somebody has written the functions in ~Istdio.h~N with a specific computer
+    in mind.
+.R12C1
+    ... which reminds me ... the library of MATH functions (such as ~b~Isin()~N)
+    is NOT in ~Istdio.h~N. If you use them, be sure to ~b~I#include <math.h>~N.
+.b11-14
+.K16,23
+[1;33m  NOW he[0m
+.K16,37
+[1;33m tells me![0m
+.WNT
+     even sexier #definitions    
+.R5C1
+    In the previous example we used:
+
+~b~I#define  PRINT_x               printf("%d",x) ~N
+
+    which meant that, to ~Iprint y~N or ~Iprint a~N etc. we would need more 
+    #definitions (like PRINT_y and  PRINT_a).
+
+    ~IBUT~N, C is very smart. You can include a ~IVARIABLE~N in the
+    #definition (within parentheses!), for example:
+
+~b~I#define  PRINT(x)             printf("%d",x) ~N
+
+    ... and now use ~b~IPRINT(y)~N or ~b~IPRINT(a)~N etc and the 
+    preprocessor would make the substitutions to ~b~Iy~N or ~b~Ia~N.
+.K19,60
+ NOTE: ()
+.WNT
+    SUGAR for the kids    
+.R5C1
+QUESTION:     How to teach programming to kids?
+
+ANSWER:       Invent your own kiddie-C!
+
+    Let the kids write this          but have the C-compiler get this
+                                           
+~b~IBEGIN                         ~N   ~b~Imain()  {                        ~N
+~b~I    LET x=0;                  ~N   ~b~I    int x=0;                     ~N
+~b~I    IF (x LESS 10) DO         ~N   ~b~I    while (x<10) {               ~N
+~b~I        PRINT(x);             ~N   ~b~I    printf(" %d ",x);            ~N
+~b~I        PRINT(SQUARE(x));     ~N   ~b~I    printf(" %d ",x*x);          ~N
+~b~I        NEWLINE;              ~N   ~b~I    printf("\n");                ~N
+~b~I        INCREASE(x);          ~N   ~b~I    x+=1;                        ~N
+~b~I    ENDIF                     ~N   ~b~I    }                            ~N
+~b~ISTOP                          ~N   ~b~I}                                ~N
+.W
+    ... can you see what ~I#definitions~N are necessary ???
+.WN
+    These #definitions:
+~b~I#define  BEGIN         main()  {             ~N
+~b~I#define  LET           int                   ~N
+~b~I#define  IF            while                 ~N
+~b~I#define  LESS          <                     ~N
+~b~I#define  DO            {                     ~N
+~b~I#define  PRINT(x)      printf(" %d ",x)      ~N
+~b~I#define  SQUARE(x)     x*x                   ~N
+~b~I#define  NEWLINE       printf("\n")          ~N
+~b~I#define  INCREASE(x)   x+=1                  ~N
+~b~I#define  ENDIF         }                     ~N
+~b~I#define  STOP          }                     ~N
+    turn  this                         into this 
+~b~IBEGIN                         ~N   ~b~Imain()  {                        ~N
+~b~I    LET x=0;                  ~N   ~b~I    int x=0;                     ~N
+~b~I    IF (x LESS 10) DO         ~N   ~b~I    while (x<10) {               ~N
+~b~I        PRINT(x);             ~N   ~b~I    printf(" %d ",x);            ~N
+~b~I        PRINT(SQUARE(x));     ~N   ~b~I    printf(" %d ",x*x);          ~N
+~b~I        NEWLINE;              ~N   ~b~I    printf("\n");                ~N
+~b~I        INCREASE(x);          ~N   ~b~I    x+=1;                        ~N
+~b~I    ENDIF                     ~N   ~b~I    }                            ~N
+~b~ISTOP                          ~N   ~b~I}                                ~N
+.WN
+
+    Of course the kids would have to type in all those !@#$% #definitions!!!
+
+    ... or would they ??
+
+    We (the master over~IC~Ner) would have all those !@#$% #definitions!!!
+    in a separate file (on disk) called ~Isugar.c~N  so the kids would only
+    have to begin their program with:    ~b~I#include <sugar.c>~N
+
+    The preprocessor would ~b~I#include~N all those  !@#$% #definitions!!!
+    at the beginning of every program, then make all the appropriate
+    substitutions/replacements ...
+.K16,32
+ SUGAR!
+.WN
+
+
+    We have written the #definitions using CAPITALS to replace C-phrases.
+
+    That's not necessary, but ADVISABLE! ( then it's obvious which parts of
+    your program are HOME-MADE and which are "real C")
+
+    Not only do #definitions allow us to write ~IC~N in a personal dialect,
+    but they also allow us to quickly change certain C-phrases.
+.K16,32
+  you C?
+.WNT
+      notes from the author   
+.R4C1
+    On the IBM PC (with the "ansi.sys" program installed), I can clear the
+    screen by using :    ~b~Iprintf("?[2J");~N   
+    
+    In place of the question mark, I type an "escape character"
+    by holding down the ~IAlt~N key and typing the number ~I27~N on the
+    number pad ... and the "left-arrow" appears when I release the Alt key.
+    (I can't do it HERE, in this lesson, 'cause it would clear the screen!!)
+
+    Now, I begin my programs with a #definition (among others)
+
+~b~I#define   CLEAR     printf("?[2J")~N
+
+    then I can use ~b~ICLEAR;~N  wherever I need it, in my program.
+
+    Tomorrow, when I buy a sexier C-compiler for the PC (or learn more ~IC~N!) 
+    ... one which has all the features included in "ansi.sys" ... including a
+    ~b~Iclr_screen()~N function, I replace the above #definition by:
+
+~b~I#define   CLEAR     clr_screen()~N
+.WK19,60
+that[1;37;44mIS[0;32mnice
+.WNT
+    typedefinitions    
+.R5C1
+    You begin your program with ~b~I#define SAM  int~N and it will be
+    ~Ipreprocessed~N, and every occurrence of ~b~ISAM~N will be replaced by
+     ~b~Iint~N  ...  as in ~b~ISAM x=0;~N which gets passed on to the compiler
+    (by the preprocessor) as ~b~Iint x=0;~N
+    
+    This "replacement" by the preprocessor holds for anything ... not just 
+    DATA TYPES ( so ~b~I#define  NewLinePlease  printf("\n")~N allows you to
+    use ~b~INewLinePlease;~N in place of ~b~Iprintf("\n");~N ).
+
+    BUT, there is a "special" feature for DATA TYPES, called ~b~Itypedef~N.
+    Place, at the beginning of your program:
+
+~b~Itypedef  int   INCHES~N            (note the order!)
+
+    ... and you may subsequently use, in your program:
+
+~b~IINCHES   x, y, z;~N
+
+.w
+    and the variables ~b~Ix~N, ~b~Iy~N and ~b~Iz~N will be regarded (by the compiler)
+    as ~b~Iint~N variables.
+.K16,60
+what's[0;1;44mNEW?[0m
+.WN
+
+    Hmmmm ...
+
+~b~Itypedef  int   INCHES~N            (note the order!)
+
+    doesn't seem like it's any different from
+
+~b~I#define  INCHES   int~N            (note the order!)
+
+    BUT, remember the curious way we had to refer to an argument, passed to a
+    function, which was ~Iitself~N a function?
+
+~b~Ifloat solve(f,x,error)~N
+~b~Ifloat (*f)();         ~N           (note the curiosity!)
+~b~Ifloat x, error;       ~N
+~b~I{                     ~N
+
+    Here, the C-phrase ~b~Ifloat (*f)();~N, says that ~b~If~N is a ~Ipointer~N
+    to a ~Ifunction~N, and this function returns a ~Ifloat~N.
+.WN
+~b~Ifloat solve(f,x,error)   ~N
+~b~Ifloat (*f)();            ~N           (note the curiosity!)
+~b~Ifloat x, error;          ~N
+~b~I{                        ~N
+
+    Now, using ~b~Itypedef~N, we may introduce a home-made DATA TYPE called
+    ~IPointer to a Function which returns a Float~N.
+
+~b~Itypedef  float   (*PFF)()~N           (note the order!)
+
+    Use the above ~b~Itypedef~N (near the beginning of your program) and
+    (MAGIC!) the phrase ~b~IPFF~N is interpreted (by the compiler) as meaning a
+    ~IPointer to a Function which returns a Float~N.
+
+    Use it, in ~b~Isolve()~N,  like so:
+.w
+
+~b~Ifloat solve(f,x,error)   ~N
+~b~IPFF  f;                  ~N 
+~b~Ifloat x, error;          ~N
+~b~I{                        ~N
+.K19,60
+nice eh?
+.WN
+.R10C1
+    Since ~b~Itypedef~N is more than "just a dumb replacement of characters",
+    the preprocessor won't touch it ... but passes it along to the compiler!
+
+    ... and THAT makes it different from a ~b~I#define~N too!
+.b9-14
+.WN
+~b~Itypedef  char  *STRING   ~N      
+
+    Here STRING is a pointer to a string and you may write ~b~ISTRING x;~N
+    meaning that ~b~Ix~N is a pointer to a ~b~Ichar~Nacter string.
+
+~b~Itypedef  int   VECTOR[5] ~N   
+
+   Here VECTOR is an array of 5 ~Iint~Ns and you may write
+   ~b~IVECTOR x;~N so ~b~Ix~N is an array of 5 integers.
+
+~b~Itypedef  int   INTEGER   ~N   
+
+    Here INTEGER is an int (of course!), and you may write ~b~IINTEGER x;~N
+    ... and, when you compile your C program for a different computer
+    where ~b~Iint~N DATA TYPES are ~I4 bytes long~N (and you were counting on
+    their being only ~I2 bytes long~N!) you change this ~Ione~N statement to:
+
+~b~Itypedef  short INTEGER   ~N   meaning a "short" integer.
+
+    and all your references to ~b~IINTEGER x;~N and ~b~IINTEGER y;~N etc.
+    will be changed!
+.WN
+
+
+
+
+.T
+   That's all folks!   
+.K16,32
+au revoir!
+
+
+.q
+
+
+
+
+
+#include <sugar.c>
+
+

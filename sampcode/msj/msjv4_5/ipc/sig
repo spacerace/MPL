@@ -1,0 +1,10 @@
+COPT=/Lp /W3 /Zp /Zie /Zl /G2s /I$(INCLUDE) /DSTUB
+
+sig.exe: sig.c sig
+	cl $(COPT) sig.c /link /co /noe
+
+
+
+
+
+

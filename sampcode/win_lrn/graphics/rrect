@@ -1,0 +1,12 @@
+rrect.obj: rrect.c 
+  cl -c -W2 -AS -Gsw -Od -Zped rrect.c
+
+rrect.res: rrect.rc rrect.ico
+  rc -r rrect.rc
+
+rrect.exe: rrect.obj rrect.def rrect.res 
+    link4 rrect,/align:16,,slibw,rrect.def
+    rc rrect.res
+    del rrect.obj
+    del rrect.map
+

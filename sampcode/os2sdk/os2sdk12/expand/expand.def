@@ -1,0 +1,16 @@
+NAME	Expand	WINDOWAPI
+
+DESCRIPTION 'Mininum PM Windows Application'
+
+STUB    'OS2STUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  1024
+STACKSIZE 4096
+
+EXPORTS
+    WndProc
+    AboutDlgProc
+    DialogProc

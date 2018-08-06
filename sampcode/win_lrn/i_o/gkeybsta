@@ -1,0 +1,6 @@
+gkeybsta.obj: gkeybsta.c
+    cl -d -c -AS -Gsw -Os -Zpe gkeybsta.c
+
+gkeybsta.exe: gkeybsta.obj gkeybsta.def
+    link4 gkeybsta,/align:16,/map,slibw/NOE,gkeybsta.def
+    mapsym gkeybsta

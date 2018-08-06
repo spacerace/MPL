@@ -1,0 +1,6 @@
+polygon.obj: polygon.c
+     cl  -d  -c  -Asnw	-Gsw  -Os  -Zdpe  polygon.c
+
+polygon.exe:  polygon.obj polygon.def
+     link4 polygon,polygon/align:16,polygon/map,slibw,polygon.def
+     mapsym polygon

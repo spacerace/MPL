@@ -1,0 +1,245 @@
+; bmac.mac  27 Oct 83  Craig Milo Rogers at USC/ISI
+;	Added BEXTRN to declare external routines.
+; bmac.mac  27 Oct 83  Craig Milo Rogers at USC/ISI
+;	Added NOSAVE and PRIVATE parameters to the BENTRY macro.
+; bmac.mac  17 Oct 83  Craig Milo Rogers at USC/ISI
+;	This version is designed to interface with the Lattice C
+; environment.  For example, subroutine agruments are stored with
+; the first argument occupying the lowest address on the stack.
+; The BP register is not handled quite correctly, however, so there
+; may be incompatibilities with C library routines which expect a
+; varying number of arguments.
+;
+; BMAC - Macros for 8088 Assembly Language
+; Ron Burk, June 1983
+; Dr. Dobbs Journal, Number 84, October 1983, pp. 98-106.
+;
+;	Stack format (lowest address at bottom):
+;
+;	|	Previous data	| <===	BP on call from C routines.
+;	+-----------------------+
+;	|	Last Arg	|
+;	|	.		|
+;	|	.		|
+;	|	First Arg	|
+;	+-----------------------+
+;	|  (Optional Saved CS)	|
+;	|	Saved IP	| <===	SP at start of BENTRY macro.
+;	+-----------------------+
+;	|	Prev BP		| <===	SP and BP after BENTRY macro.
+;	+-----------------------+
+;	|	First Local	|
+;	|	.		|
+;	|	.		|
+;	|	Last Local	| <===	SP after AUTO macro.
+;	+-----------------------+
+;	|	First Reg	|
+;	|	.		|
+;	|	.		|
+;	|	Last Reg	| <===	SP after SAVE macro.
+;	+-----------------------+
+;	
+
+@ARGDEF	MACRO	ARGNAMES	;; Internal macro for defining args.
+  ifnb <ARGNAMES>		;; If there were any arguments:
+    if @nosave			;;   Is BP being left untouched?
+      @err <No arguments allowed in BENTRY when NOSAVE is specified.>
+    endif
+    if LPROG			;;   Large program model:
+      @nargs=4			;;     Allow 4 bytes for return address.
+    else			;;   Small program model:
+      @nargs=2			;;     Allow 2 bytes for return address.
+    endif
+    irp arg,<ARGNAMES>		;;   For each argument:
+      @nargs=@nargs+2		;;     Point to argument (skip saved BP).
+      arg&&@=@nargs		;;     Define a redefinable offset.
+      ifndef arg		;;     If name not yet defined:
+	arg equ [BP + arg&&@]	;;       Define name itself.
+      endif
+    endm
+  endif
+ENDM				;; End of @ARGDEF macro.
+
+
+@ERR	MACRO	MSG		;; Print error message if in pass 1.
+  if1
+    %out MSG
+  endif
+ENDM				;; End of @ERR macro.
+
+
+@CHECK	MACRO	EXTRA,MACNAME	;; Checks for bad invocation.
+  ifnb <EXTRA>
+    @err <You forgot angle brackets in MACNAME macro.>
+  endif
+ENDM				;; End of @CHECK macro.
+
+
+BEXTRN	MACRO	FUNCS,MISTAKE	;; Declare external procedures:
+  ifb <FUNCS>			;; Check for missing argument.
+    @err <Missing function names on BEXTRN macro.>
+  endif
+  @check MISTAKE,BEXTRN		;; Check for missing brackets.
+  if LPROG			;; Large or small programs?
+				;; Large model:
+    irp func,<FUNCS>		;; Process list of functions.
+	EXTRN	func:FAR	;; Declare an external routine.
+    endm
+  else
+				;; Small model:
+	PSEG			;; Programs are in this public segment.
+    irp func,<FUNCS>		;; Process list of functions.
+	EXTRN	func:NEAR	;; Declare an external routine.
+    endm
+	ENDPS			;; Return to former segment.
+  endif
+ENDM
+
+BENTRY	MACRO	FUNC,ARGNAMES,OPTIONAL,MISTAKE	;; Defines procedure:
+  ifb <FUNC>			;; Check for missing function name.
+    @err <Missing function name on BENTRY macro.>
+  endif
+  @check MISTAKE,BENTRY		;; Check for missing brackets.
+  @nlv=0			;; Number of bytes of local variables so far.
+  @savefl=0			;; Set nonzero when SAVE macro has been used.
+  @nosave=0			;; Set nonzero when BP is not to be saved.
+  @private=0			;; Set nonzere when FUNC is not global.
+  irp flag,<@AX,@BX,@CX,@DX,@SI,@DI,@DS,@SS,@ES,@flags>
+    flag=0			;; Initialize register flags.
+  endm
+  ifnb <OPTIONAL>		;; Any optional arguments?
+    irp keyword,<OPTIONAL>	;; Process list of optional keywords.
+      ifidn <keyword>,<NOSAVE>	;; Request to not save BP?
+	@nosave=1		;;  Yes, do not save BP.
+      else
+	ifidn <keyword>,<PRIVATE>
+	  @private=1		;; This is a local function.
+	else
+	  @err <Unrecognized key word KEYWORD in BENTRY FUNC.>
+	endif
+      endif
+    endm
+  endif
+  @argdef <ARGNAMES>		;; Define argument offsets.
+  ife @private			;; Is this a global function?
+	PUBLIC	FUNC		;; Publicly available procedure.
+  endif
+  if LPROG
+FUNC	PROC	FAR		;; Long procedure pointers.
+  else
+FUNC	PROC	NEAR		;; Short procedure pointers.
+  endif
+  ife @nosave			;; Don't save BP when NOSAVE is present.
+	PUSH	BP		;; Save previous BP.
+	MOV	BP,SP		;; Save pointer to arguments.
+  endif
+ENDM				;; End of BENTRY macro.
+
+
+AUTO	MACRO	VARS,MISTAKE	;; Defines local variables.
+  if @savefl			;; Must not use save before auto!
+    @err <***ERROR*** Must not SAVE before AUTO.>
+  endif
+  if @nosave			;; Does BP point to current stack loc?
+    @err <No auto variables allowed when NOSAVE is specified.>
+  endif
+  @check MISTAKE,AUTO		;; Check for missing brackets.
+  irp var,<VARS>
+    @nlv=@nlv+2			;; Two more bytes of local variable.
+    var&&@=-@nlv		;; Offset of variable (skip saved BP).
+    ifndef var			;; If not defined,
+      var equ [BP + var&&@]	;;   build permanent definition.
+    endif
+  endm
+	SUB	SP,@nlv		;; Bump SP past local vars.
+ENDM				;; End of AUTO macro.
+
+
+@POP	MACRO	REG		;; Internal macro to pop a register.
+  if @&REG			;; If we saved this reg:
+    ifidn <reg>,<flags>
+	POPF			;; Use special instruction for flags.
+    else
+	POP	REG		;; Use ordinary pop.
+    endif
+  endif
+ENDM				;; End of @POP macro.
+
+
+BEND	MACRO	FUNC		;; Define end of procedure.
+  ifb <FUNC>
+    @err <Missing name on BEND macro.>
+  endif
+  irp reg,<flags,ES,SS,DS,DI,SI,DX,CX,BX,AX>
+    @pop reg			;; Restore any saved registers.
+  endm
+  if @nlv			;; If any local variables,
+	ADD	SP,@nlv		;;   release stack space.
+  endif
+  ife @nosave			;; Don't restore BP if we didn't save it.
+	POP	BP		;; Restore old BP.
+  endif
+	RET			;; Return to caller.
+FUNC	ENDP			;; Define end of procedure.
+ENDM				;; End of BEND macro.
+
+
+@SAVE	MACRO	R1,R2		;; Famulus of SAVE macro.
+  ifidn <R1>,<R2>		;; If they are the same:
+    @&R1=1			;;   Set flag to show register saved.
+    @found=1			;;   Tell caller we found it.
+  endif
+ENDM				;; End of @SAVE macro.
+
+
+SAVE	MACRO	REGS,MISTAKE	;; Macro for saving registers.
+  if @savefl
+    @err <***ERROR*** Must not SAVE more than once.>
+  endif
+  @savefl=1			;; Enforce ordering constraints.
+  @check MISTAKE,SAVE		;; Check for missing brackets.
+  irp reg,<REGS>		;; Check if all registers are known:
+    @found=0			;;   Haven't found register yet.
+    irp regname,<AX,BX,CX,DX,SI,DI,DS,SS,ES,flags>
+      @save regname,reg		;;   Set corresponding register flag.
+    endm
+    ife @found			;;   If we don't know a register:
+      @err <***ERROR*** 'reg': Unknown register name in SAVE.>
+    endif
+  endm
+  irp reg,<AX,BX,CX,DX,SI,DI,DS,SS,ES,flags>
+    if @&&reg			;; Are we supposed to save this register?
+      ifidn <flags>,<reg>
+	PUSHF			;; Special instruction to save flags.
+      else
+	PUSH	reg		;; Save the register.
+      endif
+    endif
+  endm
+ENDM				;; End of SAVE macro.
+
+BCALL	MACRO	FUNC,ARGS,MISTAKE	;; Macro for calling procedures.
+  @check MISTAKE,FUNC		;; Check for missing brackets.
+  @nrgs=0			;; Will get number of arguments.
+  ifnb <ARGS>			;; Any arguments to process?
+    irp arg,<ARGS>
+      @nrgs=@nrgs+1		;; Count number of arguments.
+    endm
+  endif
+  @thsrg=@nrgs			;; Scan through all arguments,
+  rept @nrgs			;; right-to-left:
+    @i=@thsrg			;;   Next, scan through arguments
+    irp arg,<ARGS>		;;   left-to-right:
+      @i=@i-1			;;     Have we finally reached the
+      ife @i			;;     desired argument?
+	PUSH	arg		;;       Yes, store it on the stack.
+      endif
+    endm			;;   End of left-to-right scan.
+    @thsrg=@thsrg-1		;;   Set to look for previous argument.
+  endm				;; End of right-to-left scan.
+	CALL	FUNC		;; Call the target procedure.
+  if @nrgs			;; Were there any arguments?
+	ADD	SP,@nrgs*2	;; Remove any arguments from stack.
+  endif
+ENDM				;; End of BCALL macro.
+

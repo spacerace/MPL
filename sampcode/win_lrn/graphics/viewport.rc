@@ -1,0 +1,52 @@
+#include  "style.h"
+#include  "ViewPort.h"
+
+ViewPort MENU
+    BEGIN
+        POPUP "&Menu"
+            BEGIN
+                MENUITEM  "&Change Variables",              IDM_CHANGE
+                MENUITEM  "GetView&portExt",                IDM_GETVIEWPORTEXT
+                MENUITEM  "Ge&tWindowExt",                  IDM_GETWINDOWEXT
+                MENUITEM  "&OffsetViewportOrg",             IDM_OFFVIEWPORT
+                MENUITEM  "Offset&WindowOrg",               IDM_OFFWINDOW
+                MENUITEM  "Scale&ViewportExt",              IDM_SCALEVIEW
+                MENUITEM  "ScaleWindowE&xt",                IDM_SCALEWINDOW
+                MENUITEM  "&SetViewportExt",                IDM_SETVIEWPORT
+                MENUITEM  "SetView&portOrg",                IDM_SETVIEWPORTORG
+                MENUITEM  "SetWindow&Ext",                  IDM_SETEXTENT
+                MENUITEM  "SetW&indowOrg",                  IDM_SETWINDOWORG
+            END					            
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+GetAngle DIALOG LOADONCALL MOVEABLE DISCARDABLE 13, 14, 104, 50
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+     LTEXT "Enter Angle Shift",-1, 2,  4,100, 10
+     EDITTEXT              IDD_RADIUS,  2, 18,100, 12, ES_AUTOHSCROLL
+     DEFPUSHBUTTON "&OK",    IDOK,      2, 32, 50, 14, WS_GROUP
+     PUSHBUTTON    "Cancel", IDCANCEL, 54, 32, 50, 14, WS_GROUP
+END
+
+
+GetRadius DIALOG LOADONCALL MOVEABLE DISCARDABLE 13, 14, 104, 50
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+     LTEXT "Enter Radius Increment",-1, 2,  4,100, 10
+     EDITTEXT              IDD_RADIUS,  2, 18,100, 12, ES_AUTOHSCROLL
+     DEFPUSHBUTTON "&OK",    IDOK,      2, 32, 50, 14, WS_GROUP
+     PUSHBUTTON    "Cancel", IDCANCEL, 54, 32, 50, 14, WS_GROUP
+END
+
+
+EnterPointDlg DIALOG LOADONCALL MOVEABLE DISCARDABLE 13, 14, 104, 58
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+     LTEXT "",            IDD_TEXT2,       2,  4, 96, 10
+     LTEXT "",            IDD_TEXT1,       2, 14, 96, 10
+     EDITTEXT             IDD_X,           2, 24, 49, 12, ES_AUTOHSCROLL
+     EDITTEXT             IDD_Y,          53, 24, 49, 12, ES_AUTOHSCROLL
+     DEFPUSHBUTTON "&OK", IDOK,           27, 40, 50, 14, WS_GROUP
+END
+

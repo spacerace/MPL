@@ -1,0 +1,16 @@
+# compilation flags
+CFLAGS=-AM -c -Gsw -Osal -W2 -Zp
+
+# MDI
+mdi1.obj: mdi1.c mdi.h
+   cl $(CFLAGS) mdi1.c
+
+mdi2.obj: mdi2.c mdi.h
+   cl $(CFLAGS) mdi2.c
+
+mdi3.obj: mdi3.c mdi.h
+   cl $(CFLAGS) mdi3.c
+
+mdi.lib: mdi1.obj mdi2.obj mdi3.obj
+   lib mdi-+mdi1-+mdi2-+mdi3;
+   del mdi.bak

@@ -1,0 +1,61 @@
+
+	CFLOW --
+		a program to reveal C program structure 
+		 		  by Mark Ellington
+
+	In exploring the many C programs available in the public
+	domain you may discover that many are poorly commented
+	(if at all) and use difficult to decipher program structure
+	It may be hard to remember how your own programs work when
+	they are not fresh in your mind.  If you want to change a 
+	module what will happen to other functions that use it, 
+	and which ones are they? 
+
+	This program, CFLOW, accepts a C source file as input
+	and generates as output to STDOUT a roughly structured
+	listing of module (function) declarations and the function
+	calls within them.
+
+	The listing is vertically structured according to sequence,
+	with each module call encountered (i.e. printf(---)) listed
+	on a new line.  The horizontal structuring is strictly in
+	accordance with the level of open braces "{" at the time
+	the module call is read, and is developed by sending one
+	horizontal tab for each open level at the time the function
+	call is read.  A function declaration (where the function
+	and its variables are declared) will always be at braces 
+	level 0 and will be at the left margin.  For convenience
+	the module declarations are preceded by "**" on the line
+	above and include their variable declarations.
+	
+	Nesting without braces, as within a multiple level "if"
+	construct, is not revealed by CFLOW.  Include files are
+	ignored as are "#define" macros.  
+
+	To use cflow, simply type in:
+
+		 "CFLOW FILENAME.EXT"  
+
+	Use the complete filename (drive and extension).  The 
+	structure listing will be sent to the screen.  The cflow.obj 
+	file in this release was compiled with C/80 so it supports 
+	i/o redirection -- to get a printed listing type:
+
+		"CFLOW FILENAME.EXT >LST:"
+
+	Or you can use control-P and send to the console as usual.
+        To route the listing to a disk file type:
+
+		"CFLOW FILENAME.EXT >LISTFILE.EXT"
+
+	If you want to change and compile CFLOW.C using BDS you
+	should uninclude "cflolib.c80" and use the BDS library
+	calls instead.  You will also have to change "fopen" and
+	"fclose"(?) and use the BDS i/o library for redirection if
+	you want it.
+
+						M.S.E.
+						05/27/84
+
+
+

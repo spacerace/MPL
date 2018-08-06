@@ -1,0 +1,175 @@
+                 Installable Device Drivers in C
+
+
+     This document is intended to describe a method for using 
+Lattice C (small model) to develop Installable Device Drivers for 
+MS-DOS.  Additionally, a number of C functions (provided in 
+library format) are defined.
+
+     Installable Device Drivers are created by first writing the 
+functions to be supported, then linking these functions with the 
+Driver Header.  A prototype header file is provided in the file 
+HDR.ASM.  Note that two data items (the Attribute and Name/unit 
+fields) must be filled in with information specific to your 
+driver before this file will assemble properly.
+
+     The driver header file assumes the existence of the 
+following functions (stubs are provided in the DRIVER.LIB library 
+file), which perform the various operations described in the 
+Installable Device Drivers chapter of the DOS Reference Manual:
+
+          Init()
+          MediaCheck()
+          BuildBPB()
+          IoCtlIn()
+          Input()
+          ndInput()
+          InputStatus()
+          InputFlush()
+          Output()
+          OutVerify()
+          OutStatus()
+          OutFlush()
+          IoCtlOut()
+          DevOpen()
+          DevClose()
+          RemMedia()
+
+     A sample character device driver is included in this 
+package, which allows for a device named "MON".  Outputting to 
+this device will cause characters to appear on the IBMPC 
+monochrome screen.  Study of the file MONO.C should reveal the 
+details of this implementation.
+
+     Questions or comments on this package may be directed to:
+
+                          Frank Whaley
+                       7211 Camino Colegio
+                     Rohnert Park, CA  94928
+
+     Through the balance of this document, the pseudo-type "Addr" 
+is used to describe a long integer value (32-bits) which is used 
+to contain a memory address.  Note that the Segment:Offset 
+addressing method used in the 8086 family of processors causes 
+this data type to be incompatible with true long integers.  The 
+following definition is assumed:
+
+                      typedef   long Addr;
+
+
+Addr EndAddr();
+
+     EndAddr() returns the driver's ending address, as required 
+     by the Init function call.
+
+
+Addr Dword(ptr)
+     	char	*ptr;
+
+     Dword() converts a 16-bit pointer (into the driver's data 
+     segment) to a 32-bit pointer.
+
+
+int CopyB(from, to, len)
+	Addr	from,
+		to;
+	int	len;
+
+     CopyB() copies a section of memory "len" bytes in length 
+     from the area whose address is "from" to the area whose 
+     address is "to".  Note that this code assumes that the 
+     memory sections do not overlap and that a forward copy is 
+     correct.  This function returns the number of bytes copied.
+
+
+int CopyW(from, to, len)
+	Addr	from,
+		to;
+	int	len;
+
+     CopyW() copies a section of memory "len" words in length 
+     from the area whose address is "from" to the area whose 
+     address is "to".  Note that this code assumes that the 
+     memory sections do not overlap and that a forward copy is 
+     correct.  This function returns the number of words copied.
+
+char InB(port)
+	int	port;
+
+     InB() inputs and returns a byte from the hardware port 
+     described by "port".
+
+
+int InW(port)
+	int	port;
+
+     InW() inputs and returns a word from the hardware port 
+     described by "port".
+
+
+char OutB(byte, port)
+	char	byte;
+	int	port;
+
+     OutB() outputs the byte "byte" to the hardware port 
+     described by "port".  This function returns the output byte.
+
+
+char OutW(word, port)
+	int	word,
+		port;
+
+     OutW() outputs the word "word" to the hardware port 
+     described by "port".  This function returns the output word.
+
+
+char PeekB(addr)
+	Addr	addr;
+
+     PeekB() returns the byte value found at the absolute address 
+     given by "addr".
+
+
+int PeekW(addr)
+	Addr	addr;
+
+     PeekW() returns the word value found at the absolute address 
+     given by "addr".
+
+char PokeB(val, addr)
+	char	val;
+	Addr	addr;
+
+     PokeB() stores the value "val" into the absolute byte 
+     address given by "addr".  This function returns "val".
+
+
+int PokeB(val, addr)
+	int	val;
+	Addr	addr;
+
+     PokeB() stores the value "val" into the absolute word 
+     address given by "addr".  This function returns "val".
+
+
+int SetB(start, len, byte)
+	Addr	start;
+	int	len;
+	char	byte;
+
+     SetB() initializes a section of memory "len" bytes in 
+     length, beginning with the address given by "start", to the 
+     value "byte".  This function returns the number of bytes 
+     set.
+
+
+int SetW(start, len, word)
+	Addr	start;
+	int	len,
+     		word;
+
+     SetW() initializes a section of memory "len" words in 
+     length, beginning with the address given by "start", to the 
+     value "word".  This function returns the number of words 
+     set.
+

@@ -1,0 +1,14 @@
+# SetDoubleClickTime makefile
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+.c.obj:
+    $(cp)  $*.c
+
+setdblck.obj: setdblck.c 
+
+setdblck.exe: setdblck.obj setdblck.def
+    link4 setdblck,/align:16,/map,slibw/NOE,setdblck.def
+    del setdblck.obj
+    del setdblck.map
+

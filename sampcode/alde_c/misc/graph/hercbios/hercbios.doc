@@ -1,0 +1,240 @@
+
+
+                             *****   HERCBIOS   *****
+                        BIOS PATCH FOR THE HERCULES BOARD
+
+                               Dave Tutelman  1986
+
+
+
+          The accompanying program is a front end to the INT 10 (VIDEO)
+        functions of the DOS BIOS, so that the important functions work
+        on a Hercules graphics board or its clones. (It was developed on
+        a SuperComputer clone of a Hercules) It is a
+        terminate-and-stay-resident program, that is installed by being
+        called; it is NOT a DOS driver. If you want it installed at boot,
+        include it in AUTOEXEC.BAT, not CONFIG.SYS.
+
+        WHAT IT'S GOOD FOR
+
+        The major strength of this program is that it will allow you to
+        write programs for the Hercules board that run in graphics mode,
+        and still write text easily on the graphics screen. With it, you
+        can program in those higher-level language processors that use
+        the DOS or BIOS calls for display, using their standard I/O calls
+        to write text to the graphics screen. (For a list of known
+        compatible and incompatible languages, see the section later in
+        this manual.)
+
+        A second use of this program is to allow the running of existing
+        graphics programs that use the BIOS calls for ALL screen display.
+        It will NOT allow most commercial graphics programs written for
+        the the Color Graphics Adapter (CGA) to run on the Hercules
+        board. That is because most graphics programs write directly to
+        the video memory instead of using the BIOS calls. The only
+        existing graphics program that this has been tested against is
+        PC-LISP; that is the only graphics program I've encountered that
+        uses the BIOS exclusively.
+
+
+        HOW IT WORKS
+
+        HERCBIOS is a terminate-and-stay-resident program that intercepts
+        all calls to Interrupt 10H, the BIOS video services. It will
+        either process the interrupt or pass the call on to the real
+        BIOS, depending on whether something specific to the Hercules
+        board needs to be done. Specifically, HERCBIOS handles the
+        interrupt itself if (1) the board is in graphics mode, or (2) the
+        BIOS call is a request to enter graphics mode.
+
+        Two graphics modes are recognized and processed by HERCBIOS:
+
+             Mode 6 - IBM Hi-res mode:  This uses part of the 720x348
+             Hercules raster as a 640x200 IBM-compatible graphics screen.
+             It will work with programs for the IBM CGA and its clones,
+             provided they use the BIOS services for their graphics
+             display. (Note - such programs are rare.)
+
+             Mode 8 - Hercules-specific mode:  This uses the full
+
+                                      - 1 -
+
+
+             Hercules raster.
+
+        Actually, both modes are quite capable of putting a pixel
+        anywhere on the Hercules raster.  The major difference is that
+        Mode 6 draws characters in an 8x8 pixel box (like the CGA), while
+        Mode 8 uses the finer resolution of the Hercules board to improve
+        legibility by using a 12x8 pixel box for characters. In either
+        mode, more characters than 25x80 will fit on the screen. Mode 6
+        supports 43x90 characters on the screen (but 25x80 inside the
+        640x200-pixel sub-screen); Mode 8 supports 29x90 characters.
+
+        The functions implemented by HERCBIOS are:
+
+                Fn  0 - Set mode (6, 7, or 8)
+                Fn  2 - Set cursor position
+                Fn  3 - Read cursor position
+                Fn  5 - New display page
+                Fn  9 - Write character with attribute
+                Fn 10 - Write character
+                Fn 12 - Write pixel
+                Fn 13 - Read pixel
+                Fn 14 - Teletypewriter-style character write
+                Fn 15 - Get video status
+
+        Check your System Programmers' Guide for the use of these BIOS
+        functions.
+
+        A number of properties of the alphanumeric display are not
+        supported by the hardware when you enter graphics mode. For
+        instance, the cursor is not shown in graphics mode, nor are all
+        of the character attributes. HERCBIOS does its best to emulate
+        the alphanumeric mode, but it cannot implement a cursor or the
+        blinking or bold attributes. The table below shows the "best
+        shot" that HERCBIOS takes at character attributes:
+
+                CODE    USUALLY MEANS           IBM MODE        HERC MODE
+                00      invisible               invisible       invisible
+                01      underline               [normal]        underline
+                07      normal                  normal          normal
+                0F      hi-intens               [rev video]     [rev video]
+                70      rev video               rev video       rev video
+
+
+                Anything else displays as normal
+
+        The teletypewriter-style output protects the bottom line on the
+        screen as an unscrolled line, for status messages, function key
+        labels, etc. This is non-standard, but I like it. (And we do have
+        more rows than the CGA display. It's the 43rd line that isn't
+        scrolled.)
+
+
+
+
+
+
+
+                                      - 2 -
+
+
+        MAKING AND INSTALLING THE PROGRAM
+        Making the .COM File from Assembler Source
+
+        HERCBIOS was originally developed on ASM 1.0. The version
+        included with this uses MASM 4.0. I don't know for sure whether
+        it will assemble with other versions of assembler.
+
+        The commands for making HERCBIOS.COM from the source are in the
+        MAKEFILE included with the distribution. I run it with NDMAKE, an
+        excellent MS-DOS shareware MAKE from Don Knellers, but it should
+        be easy to adapt to your own favorite MAKE. If you make it by
+        hand, the commands are:
+
+                masm  hercbios;
+                masm  gchar;
+                masm  graph;
+                link  hercbios gchar graph,  hercbios.exe;
+                exe2bin  hercbios.exe hercbios.com
+                del  hercbios.exe
+
+        If you have a machine whose processor is an iAPX 286, 186, or
+        188, you may be able to get some increased performance and a
+        smaller .COM file by editing one character in the header file
+        hercbios.h. Simply remove the ";" that comments out the
+        definition of iAPX286. That will allow some non-8088 instructions
+        to assemble, as well as changing some code that was optimized for
+        speed (at the expense of storage and beauty) on the 8088. (This
+        option is known to assemble and link, but has not been tested; I
+        have no access to a 286 machine with Hercules graphics.)
+
+
+        Installing HERCBIOS.COM
+
+        Once you have HERCBIOS.COM, store it where your PATH will find it
+        and add the line
+
+                HERCBIOS
+
+        to your AUTOEXEC.BAT file somewhere after the PATH command. This
+        will cause it to be installed during boot, so it will be there
+        whenever you run your graphics programs. (Its presence won't
+        affect operation of your computer in alphanumeric mode, since it
+        passes on to the normal BIOS anything that's not in graphics
+        mode.)
+
+        I am including a couple of demonstration/test programs in this
+        distribution, so that you can:
+           - See how to write programs for HERCBIOS.
+           - Test to assure that it runs with your computer and monitor.
+        The programs can be run in their executable form and their source
+        can be examined.
+
+
+
+
+
+
+                                      - 3 -
+
+
+        COMPATIBILITY AND INCOMPATIBILITY
+
+        HERCBIOS has been tested on a Hercules board in an IBM PC-XT, a
+        Hercules-compatible board I built from a SuperComputer bare
+        board, and a Leading Edge XT clone. The current version works
+        with all of these, but I have a homebrew monitor that has trouble
+        syncing to the higher sweep rate of the monochrome display. If
+        you have trouble with the stability of your image, try fiddling
+        with the parameters for the 6845 display chip. They are in the
+        file HERCBIOS.ASM, in the "db" statement defining vid_parm_table
+        at the end of Function 0 (Set Video Mode). I have left in (but
+        commented out) the set of parameters that works on my homebrew
+        monitor.
+
+        I have written programs using HERCBIOS in a number of languages.
+        Here are some of the caveats I'd like to pass on:
+
+          - Things are fine using INT 10h calls in assembler.  (No big
+            surprise.)
+
+          - Turbo Pascal works with HERCBIOS, with one caveat (at least
+            for releases 1 and 2). The Pascal cursor function GoTOXY will
+            home the cursor if presented with x>80 or y>25. To make full
+            use of the 29x90 or 43x90 screen, you will have to write your
+            own version of GoTOXY, using Turbo's machine language escape
+            to issue the INT 10h.
+
+          - I've written a little in Microsoft C 3.0. No problems so far.
+
+          - The TESTPIX program was written in deSmet C 2.4. It worked
+            fine, with one caveat. The console I/O routine getchar()
+            seems to write to display memory (perhaps as part of keyboard
+            echo). This can interfere with what is displayed on the
+            Hercules board display page 1.  (I had no problems on page
+            0.)
+
+          - Forget about using it with BASICA or GWBASIC. Microsoft BASIC
+            graphics routines write directly to display memory,
+            completely bypassing the BIOS.
+
+
+        USE AND ENJOY!
+
+        Bug reports to:
+                            Dave Tutelman
+                            16 Tilton Drive
+                            Wayside, NJ 07712
+
+
+                            Currently receive EMail at ...!mtuxo!mtuxt!dmt
+
+
+        Flames to:
+                            /dev/null
+
+
+
+                                      - 4 -

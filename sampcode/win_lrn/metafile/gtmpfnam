@@ -1,0 +1,22 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+gtmpfnam.obj: gtmpfnam.c
+
+gtmpfnam.exe: gtmpfnam.obj gtmpfnam.def
+    link4 gtmpfnam,/align:16,/map,slibw/NOE,gtmpfnam.def
+    mapsym gtmpfnam

@@ -1,0 +1,45 @@
+	.XLIST
+IF1
+; title.mac  15 Nov 83  Craig Milo Rogers at USC/ISI
+;	Created these macros to make titles better.
+
+.TITLE	MACRO	TEXT
+	TITLE	TEXT
+	ENDM
+
+.SBTTL	MACRO	TEXT
+IF1
+@TTLNUM	= @TTLNUM + 1
+	@SBTTL	<TEXT>,%@TTLNUM,%@PAGNUM
+ELSE
+	SUBTTL	TEXT
+ENDIF
+	ENDM
+
+.SBHED	MACRO	TEXT
+IF1
+@TTLNUM	= @TTLNUM + 1
+@PAGNUM	= @PAGNUM + 1
+	@SBTTL	<TEXT>,%@TTLNUM,%@PAGNUM
+ELSE
+	SUBTTL	TEXT
+	PAGE	+
+ENDIF
+	ENDM
+
+@SBTTL	MACRO	TEXT,TNUM,PNUM
+IF &TNUM LT 10
+@TTL0&TNUM EQU	'Page  &PNUM: &TEXT'
+ELSE
+@TTL&TNUM EQU	'Page &PNUM: &TEXT'
+ENDIF
+	ENDM
+
+@TTLNUM	= 0			; Number of subtitles.
+@PAGNUM	= 1			; Current "page" number.
+
+ELSE
+	PAGE	,132		; Line printer width
+ENDIF
+	.LIST
+

@@ -1,0 +1,17 @@
+#
+# make file for hello1.c
+#
+
+INCLUDE=c:\os2\include\mt
+LIB=c:\os2\lib
+COPT=/Lp /W3 /Zp /G2s /Ox /i$(INCLUDE) /Alfw
+#for debugging:
+#COPT=/Lp /W3 /Zpiel /G2s /i$(INCLUDE) /Alfw
+
+hello1.exe: hello1.c hello1
+	cl $(COPT) hello1.c /link /co llibcmt
+
+
+
+
+

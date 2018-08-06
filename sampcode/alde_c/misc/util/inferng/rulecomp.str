@@ -1,0 +1,47 @@
+
+/*
+Pseudo code for the rule compiler :
+
+compile_rules(rule_file,output_compile_file)
+{
+OPEN rule_file ;
+WHILE ( EOF in rule_file NOT reached )
+	{
+	locate keyword
+	IF ( keyword not located on line and line not blank )
+		{
+		OUTPUT error message to user telling of problem
+		}
+	place flag associated with keyword into rule section
+	IF (following string is in string section)
+		{
+		place the address of the string into the rule section
+		}
+	ELSE
+		{
+		place the string into the string section (0 delimit)
+		place the address of the string into the rule section
+		}
+	IF ( the keyword is a THEN or THENHYP )
+		{
+		place and additional IF flag and a zeroed 
+		    pointer in the rule section 
+		place address of hypothesis or then clause into
+		    hypstack section
+		}
+	}
+IF (last keyword not of a "HYP" type )
+	{
+	OUTPUT warning to user about this being a problem
+	}
+place  two successive IF flags - zeroed pointer into the rule section
+    to mark the end of the rules section.
+CLOSE rule_file 
+OPEN compile_output_file 
+OUTPUT number of bytes in rule section to compile_output_file
+COPY rule section to compile_output_file
+OUTPUT number of bytes in string section to compile_output_file
+COPY string section to compile_output_file
+CLOSE compile_output_file
+}
+*/

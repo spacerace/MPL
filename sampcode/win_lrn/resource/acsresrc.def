@@ -1,0 +1,9 @@
+NAME           acsresrc
+DESCRIPTION    'Resource Use Example'
+STUB           'WINSTUB.EXE'
+CODE           MOVEABLE
+DATA           MOVEABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        WndProc
+

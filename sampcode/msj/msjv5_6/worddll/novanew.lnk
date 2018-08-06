@@ -1,0 +1,6 @@
+novanew libentry
+novanew.dll
+
+mdllcew libw  /NOD
+novanew.def
+

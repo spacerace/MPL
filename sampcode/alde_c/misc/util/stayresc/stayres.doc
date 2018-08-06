@@ -1,0 +1,68 @@
+
+
+		       TERMINATE AND STAY RESIDENT
+		       --------- --- ---- --------
+			      Brian Irvine
+
+
+   STAYRES.C was written for the Cware C Development System ( DeSmet C ).
+It uses library functions and other features ( such as in-line assembly
+language ) which might not be available with other C compilers.  However, the
+basic stuff is there and it should be a trivial task to convert it to be
+compilable under other C compilers.
+
+   When a resident program takes over from DOS, if the program uses DOS I/O, it
+will most likely leave the local DOS stack and register values changed from
+what they were when the program gained control.  When control is returned to
+DOS, then it gets very confused and usually ends up doing something completely
+unpredictable, or just going off into j-space.	As a result, most programs
+which terminate and stay resident take care of their own disk and screen I/O,
+and are written in assembly language.  This does not have to be the case,
+however.  Programs can be written in high-level languages as long as a little
+stack management is performed before and after program use.
+
+   The programming in STAYRES.C proposes one solution to the problem.  It saves
+the top of the DOS stack and all of the processor registers on the local
+program stack before the program is entered.  The program can then perform
+normal operations like disk access and formatted screen output.  On exit, all
+of the information saved on the local stack is transferred back to the DOS
+stack and to the processor registers, creating virtually the same machine state
+as was present before the program took control.
+
+   STAYRES.C works by redirecting the BIOS INT 16H keyboard service routine
+vector to point to an internal routine.  The old INT 16H vector is moved to INT
+67H so that it can be used by STAYRES.C itself.  Now when DOS issues a request
+for the next character from the queue, we can examine the character before
+passing it on to DOS.  If it is the character or keypress combination which we
+have designated as that required to activate the TSR program, then we make a
+further check to see if the program is already active.	If not, then we go
+through the process of saving the machine state, then call the entry point of
+the TSR program.
+
+   The TSR code is contained in a module which requires the modification of
+only one line of code to suit the name of the function which will be designated
+as the main entry point to the program.  The module can then be compiled and
+linked in with any other object modules to produce a complete program.
+
+   The code contained in STAYRES.C is inspired by a set of Turbo Pascal
+routines written by Lane H. Ferris.  I have taken the central idea of Lane's
+code and used it in this program.  The Turbo routines are available on the
+Borland SIG on Compuserve.
+
+   I realize that I don't know all there is about this process, so if you have
+any further information you would like to impart, or if you have any comments
+or suggestions for modifications or improvements, please leave a message for me
+on Compuserve.	Use Easyplex or leave a message addressed to me on one of the
+IBM PC Sig's.
+
+   I am releasing this code to the Public Domain so that others can use the
+information for non-profit purposes.  If you do use the code in any of your
+applications, I ask only that you give credit for the source.  Feel free to
+copy and distribute these files as you wish, but please ensure that the credits
+are included.
+
+					Brian Irvine
+					3379 St Marys Place
+					Santa Clara, CA 95051
+					Compuserve User ID [71016,544]
+

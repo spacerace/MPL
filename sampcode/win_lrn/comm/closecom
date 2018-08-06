@@ -1,0 +1,6 @@
+closecom.obj: closecom.c
+    cl -d -c -AS -Gsw -Os -Zpe closecom.c
+
+closecom.exe: closecom.obj closecom.def
+    link4 closecom,/align:16,/map,slibw/NOE,closecom.def
+    mapsym closecom

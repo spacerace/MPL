@@ -1,0 +1,16 @@
+#include "Scroll.h"
+Scroll ICON Scroll.ico
+Scroll MENU
+     BEGIN
+	POPUP "&File"
+	     BEGIN
+		 MENUITEM "E&xit",		IDM_EXIT
+		 MENUITEM "A&bout Scroll...",	IDM_ABOUT
+	     END
+	POPUP "&Scroll"
+	     BEGIN
+		 MENUITEM "Scroll DC",		IDM_DC
+		 MENUITEM "Scroll Window",	IDM_WIN
+	     END
+	MENUITEM "\a&Help",			IDM_HELP
+     END

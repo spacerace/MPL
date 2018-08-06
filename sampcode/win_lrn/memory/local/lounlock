@@ -1,0 +1,6 @@
+lounlock.obj: lounlock.c
+    cl -c -W2 -AS -Gsw -Od -Zped lounlock.c
+
+lounlock.exe: lounlock.obj lounlock.def
+    link4 lounlock,/align:16,/map/li, slibw, lounlock.def
+    mapsym lounlock

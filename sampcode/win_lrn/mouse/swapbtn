@@ -1,0 +1,10 @@
+
+swapbtn.obj: swapbtn.c
+   cl /Fs -c -W2 -AS -Gsw -Od -Zped swapbtn.c
+
+swapbtn.exe: swapbtn.obj swapbtn.def
+   link4 swapbtn,/align:16,/map/li,slibw/NOE,swapbtn.def
+   mapsym swapbtn
+   del swapbtn.obj
+   del swapbtn.map
+   del swapbtn.sym

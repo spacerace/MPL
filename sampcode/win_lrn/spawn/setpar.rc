@@ -1,0 +1,15 @@
+#include <windows.h>
+#include  "SetPar.h"
+
+SetPar MENU
+    BEGIN
+        POPUP "&Set Parent"
+            BEGIN
+                MENUITEM  "&Set Parent 1",                  IDM_SETPARENT1
+                MENUITEM  "Set &Parent 2",                  IDM_SETPARENT2
+            END					            
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

@@ -1,0 +1,34 @@
+Comments about MDI
+
+This sample demonstrates the MultiDocument Interface standard.
+It implements splitter bars, child windows (documents), and
+other features; and paints the windows appropriately.
+
+File list:
+
+app.c		MDI sample application source file
+app.def		Definition file
+app.h		Resource IDs
+app.ico		Icon
+app.lnk		LINK helper file
+app.rc 		Application resource file
+appdata.c	Contains application global variables
+appdata.h 	Exports application variables
+appdoc.c 	Application window procedures and main routines
+appinit.c	MDI initialization functions
+arrange.c 	Window arrangement code
+arrange.h 	The public interface to arrange.c
+hsplit.ptr 	Horizontal split pointer
+hvsplit.ptr 	Horizontal/vertical split pointer
+mdi 		Makefile
+mdi.c 		MDI application
+mdi.h 		Resource IDs
+mdi.ico		MDI application icon
+mdi.rc 		Resource file
+mdidata.c 	More global variables
+mdidata.h 	More global exports
+mdidoc.c 	Window routines
+mdiinit.c 	Initialization code
+mdisplit.c 	Splitter bar implementation
+readme		You saw it here first!
+vsplit.ptr	Vertical split pointer

@@ -1,0 +1,1796 @@
+
+E
+     Unicorn Library Documentation  3.1                         page 48
+
+     __________________________________________________________________
+
+                               ellipser
+F
+     Plots an ellipse on the graphics screen.  The ellipse may be
+     rotated in 6 degree increments from 0 to 90 degrees.  To obtain
+     full 360 degree rotation the major axis may be defined as either
+     x or y with rotation.
+
+
+
+     Call:   ellipser(xc, yc, rotate, r1, r2, color);
+
+             xc      =  column coordinate of center
+             yc      =  row coordinate of center
+             rotate  =  angle of rotation (0, 6, 12, 18 etc.)
+             r1      =  half the distance along the x-axis (columns)
+             r2      =  half the distance along the y axis (rows)
+             color   =  color of the ellipse
+
+
+
+     Example:    main()
+                 {
+                   sm(4);  /*  set graphics mode  */
+
+                   /* draw an ellipse in color 2 rotated 48 degrees */
+
+                   ellipser(100,100,48, 50, 80, 2);
+                 }
+
+
+Unicorn 1 Documentation  3.1                                      page 49
+
+__________________________________________________________________________
+
+
+                               equipchk
+
+
+Returns an integer idicative of the equipment contained on the PC.  The
+number may be interpreted as follows:
+
+bit 0           -  diskette installed
+bit 1           -  not used
+bit 2, 3        -  always 11
+bit 4, 5        -  initial video mode
+                     01  =  40 x 25 BW
+                     10  =  80 x 25 BW
+bit 6, 7        -  number of diskette drives ( only if bit 0 = 1)
+                     00 = 1
+                     01 = 2
+bit 8           -  0 = dma present
+                   1 = no dma on system
+bit 9, 10, 11   -  number of RS-232 cards installed
+bit 12          -  game I/O attached
+bit 13          -  not used
+bit 14, 15      -  number of printers
+
+
+
+Call:         equipchk();
+
+
+Example:      main()
+              {
+                 equipchk();  /* get current equipment status */
+              }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 50
+
+     __________________________________________________________________
+
+                               flagdec
+F
+
+    Decrements the mouse cursor flag.  If the flag is greater than or equal
+    to zero the cursor is visible, if 0 or less then the cursor is not
+    visible.
+
+
+   Call:  flagdec();
+
+
+   Example:
+            main();
+            {
+              mreset();
+              flagdec();
+            }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 51
+
+     ___________________________________________________________________
+                               flaginc
+F
+
+    Increments the mouse cursor flag.  If the flag is greater than or equal
+    to zero the cursor is visible, if 0 or less then the cursor is not
+    visible.
+
+
+   Call:  flaginc();
+
+
+   Example:
+            main();
+            {
+              mreset();  /* sets cursor flag to -1 */
+              flaginc(); /* now cursor is visible */
+            }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 52
+
+     __________________________________________________________________
+
+                               forward
+F
+     Moves the turtle (turtle graphics) in its current direction by a
+     specified distance.  The distance is measured in pixels.
+
+
+
+
+     Call:   forward(pixels);
+
+             pixels  =  number of pixels to move in current direction
+
+
+
+
+     Example:    main()
+                 {
+                    sm(4);  /* set graphics mode */
+                    pendown();  /* set pen down on screen to draw */
+                    forward(50);  /* move forward 50 pixels */
+                 }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 53
+
+     __________________________________________________________________
+
+                              GAL_LT
+F
+    This macro converts gallons to liters.
+
+
+    Call:   GAL_LT(gallons);
+
+
+
+    Example:
+             main()
+             {
+                printf("%lf gallons is %lf liters\n", 4.5, GAL_LT(4.5));
+             }
+
+
+E
+     Unicorn 1 Documentation  3.1                               page 54
+
+     _____________________________________________________________________
+
+
+F                               gcomtype
+
+
+    Returns a ROM byte indicating what type of computer is in use.
+
+
+    Call:
+          gcomtype();
+
+
+    Example:
+              main()
+              {
+                 printf("%d", gcomtype());
+              }
+
+E
+     Unicorn 1 Documentation  3.1                                  page 55
+
+     _____________________________________________________________________
+
+
+F                               gcurpos
+
+     A C bios call to get the current cursor position.  This is similar to
+     the assembly language call getcurp.  By examining both you will see
+     how to implement both types of functions.
+
+
+     Call:  gcurpos(row, column, page);
+
+     Where:
+            row     =  the current cursor row
+            column  =  the current cursor column
+            page    =  the current cursor page
+
+     Example:
+              main()
+              {
+                  int row, column, page;
+
+                  gcurpos(row, column, page);
+              }
+
+      The values are placed into the variables.
+
+
+
+E
+     Unicorn 1 Documentation  3.1                                  page 56
+
+     _____________________________________________________________________
+
+
+F                               getbcnt
+
+
+     Returns the count of button presses.
+
+
+     Call:   getbcnt(which);
+
+     Where:
+             which = 0 for left button count or
+                     1 for right button count
+
+
+     Example:
+
+         main()
+         {
+            printf("There haas been a total of %d left presses", getbcnt(0));
+         }
+
+
+
+
+E
+     Unicorn 1 Documentation  3.1                                  page 57
+
+     _____________________________________________________________________
+
+
+F                               getrbcnt
+
+
+     Returns the count of button releases.
+
+
+     Call:   getbrcnt(which);
+
+     Where:
+             which = 0 for left button count or
+                     1 for right button count
+
+
+     Example:
+
+       main()
+       {
+          printf("There haas been a total of %d left releases", getbrcnt(0));
+       }
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 58
+
+__________________________________________________________________________
+
+
+F                               getbstat
+
+     Returns the current mouse button status.  The return is is follows:
+     0 - no button is pressed
+     1 - left button is pressed
+     2 - right button is pressed
+     3 - both buttons are pressed
+
+
+     Call:  getbstat();
+
+     Example:
+              main();
+              {
+                 if (getbstat == 0)
+                    printf("No mouse button is pressed");
+                 if (getbstat == 1)
+                    printf("The left button is pressed");
+                 if (getbstat == 2)
+                    printf("The right button is pressed");
+                 if (getbstat == 3)
+                    printf("Both buttons are pressed");
+               }
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 59
+
+__________________________________________________________________________
+
+
+F                               getchne
+
+Get a character from the standard input with no echo.
+
+
+
+
+
+Call:         getchne();
+
+
+
+
+
+
+Example:      main()
+              {
+                 int a;
+                 a = getchne(); /* return a character in a with no echo */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 60
+
+__________________________________________________________________________
+
+                               getctype
+
+
+Returns an integer indicating the type of IBM-PC.
+
+return:
+       FFh  =  Original IBM-PC
+       FEh  =  PC XT, portable PC or PC with revised system board
+       FDh  =  PCjr
+       FCh  =  PC-AT
+
+
+
+Call:         getctype();
+
+
+
+Example:      main()
+              {
+                 int a;
+                 a = getctype();  /* find what type of machine it is */
+                 if (a==255)
+                   printf("This is an original IBM-PC");
+              }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 61
+
+     __________________________________________________________________
+
+                               getcurp
+
+F     This returns the current position of the cursor on the screen in
+     row, column format.
+
+
+
+
+     Call:    getcurp(&row, &column);
+
+              row     =  the current cursor row position
+              column  =  the current cursor column position
+
+
+
+     Example:   main()
+                {
+                   getcurp(row, column);
+                }
+
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 62
+
+__________________________________________________________________________
+
+
+F                               getdmaj
+
+
+    Returns the DOS major version.  If using DOS 3.2 this will return 3.
+
+    Call:  getdmaj();
+
+
+    Example:
+            main()
+            {
+               printf("The DOS major version is %d\n", getdmaj());
+             }
+
+
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 63
+
+__________________________________________________________________________
+
+
+F                               getdmin
+
+
+    Returns the DOS minor version.  If using DOS 3.2 this will return 2.
+
+    Call:  getdmin();
+
+
+    Example:
+            main()
+            {
+               printf("The DOS minor version is %d\n", getdmin());
+             }
+
+
+
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 64
+
+__________________________________________________________________________
+
+
+F                               getdver
+
+
+    Returns the DOS version.  If using DOS 3.2 this will return 3.2.
+
+    Call:  getdver();
+
+
+    Example:
+            main()
+            {
+               printf("The DOS version is %d\n", getdver());
+             }
+
+
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 65
+
+__________________________________________________________________________
+
+
+F                               gethpos
+
+    Returns an integer value for the mouse cursor's current horizontal
+    position.  It must be within the current virtual screen limits.
+
+
+    Call:  gethpos();
+
+
+    Example:
+             main()
+             {
+                 printf("The mouse's horizontal position is %d", gethpos());
+             }
+
+
+
+
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 66
+
+__________________________________________________________________________
+
+
+F                               getkey
+
+    Returns the ASCII code for a keypress.  If no key is available it
+    will wait until a key is pressed.
+
+
+
+    Call:  getkey();
+
+
+    Example:
+            main()
+            {
+               printf("The ASCII code is %d", getkey());
+            }
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 67
+
+__________________________________________________________________________
+
+
+F                               getkeycd
+
+    Returns the ASCII code for a keypress.  If no key is available it
+    will wait until a key is pressed.
+
+
+
+    Call:  getkeycd();
+
+
+    Example:
+            main()
+            {
+               printf("The ASCII code is %d", getkeycd());
+            }
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 68
+
+__________________________________________________________________________
+
+
+F                               getscode
+
+    Returns the scan code for a keypress.  If no key is available it
+    will wait until a key is pressed.
+
+
+
+    Call:  getscode();
+
+
+    Example:
+            main()
+            {
+               printf("The scan code is %d", getscode());
+            }
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 69
+
+__________________________________________________________________________
+
+
+F                               getstate
+
+    Returns the current video mode.
+
+
+
+    Call:  getstate();
+
+
+    Example:
+            main()
+            {
+               printf("The video mode is %d", getstate());
+            }
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 70
+
+__________________________________________________________________________
+
+
+F                               getvpos
+
+    Returns the current mouse cursor vertical position.
+
+
+
+    Call:  getvpos();
+
+
+    Example:
+            main()
+            {
+               printf("The mouse vertical position is %d", getvpos());
+            }
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 71
+
+__________________________________________________________________________
+
+
+F                               get_page
+
+    Returns the current video page.
+
+
+
+    Call:  get_page();
+
+
+    Example:
+            main()
+            {
+               printf("The video page is %d", get_page());
+            }
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 72
+
+__________________________________________________________________________
+
+                               gliss
+F
+
+Produces a sliding sound or glissando using the IBM mode of sound
+production.
+
+
+
+
+Call:         gliss(beg, end, rate);
+
+              beg  = starting frequency
+              end  = ending frequency
+              rate = rate of increase/decrease.  a larger rate slows it down
+
+
+
+
+Example:      main()
+              {
+                 gliss(300, 2000, 1); /* rapid slide from 300 to 2000 cycles*/
+                 gliss(2000, 300, 10); /* slower slide down from 2000 to
+                                          300 cycles */
+              }
+
+
+
+
+E
+Unicorn 1 Documentation  3.1                                      page 73
+
+__________________________________________________________________________
+
+
+F                               GM_OZ
+
+    Returns the number of ounces in a given numbe of grams.
+
+
+
+    Call:  GM_OZ(grams);
+
+    Where:
+          grams = grams to convert to ounces.
+
+    Example:
+            main()
+            {
+               printf("There are %d ounces in %d grams", GM_OZ(56.9), 56.9);
+            }
+
+
+E
+     Unicorn Library Documentation  3.1                         page 74
+
+     __________________________________________________________________
+
+                               gothic
+
+F     Displays Gothic characters on the graphics screen.  All characters
+     are displayed in a 16 pixel wide by 20 pixel high matrix.
+
+
+
+     Call:   gothic(char, ulc, ulr, color);
+
+             char   =  character to print
+             ulc    =  upper left corner column
+             ulr    =  upper left corner row
+             color  =  color of the character
+
+
+
+
+
+     Example:   main()
+                {
+                  sm(4);   /*  set graphics mode */
+
+                  /*  print a gothic W at 20, 30 in color 3 */
+
+                  gothic('W', 20, 30, 3);
+                }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 75
+
+     ___________________________________________________________________
+
+                              hollow
+F
+     This function prints outline characters on the graphics screen.  The
+     characters are defined in a 16 column by 30 row pixel matrix.
+
+
+
+     Call:    hollow(char, ulc, ulr, color);
+
+             char   =  character to print
+             ulc    =  upper left corner column
+             ulr    =  upper left corner row
+             color  =  color of the character
+
+
+
+
+
+     Example:   main()
+                {
+                  sm(4);   /*  set graphics mode */
+
+                  /*  print an outline W at 20, 30 in color 3 */
+
+                  hollow('W', 20, 30, 3);
+                }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 76
+
+     ___________________________________________________________________
+
+                              INCH_CM
+F
+    Converts inches to centimenters.  Implemented as a macro in UC.H.
+
+
+
+
+
+
+
+
+     Call:   INCH_CM(inches);
+
+     Where:
+             inches  = number of inches to convert to cm.
+
+
+
+
+
+
+     Example:
+             main()
+             {
+                printf("There are %d cm in %d inches", INCH_CM(5.6), 5.6);
+             }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 77
+
+     __________________________________________________________________
+
+                              indexch
+
+F     Returns the position of a character withing a string.
+
+
+
+
+
+     Call:   indexch(str, ch);
+
+             str  =  string to be searched
+             ch   =  character to search for
+
+
+
+     Example:    main()
+                 {
+                     /*  find the position of the character 'i' */
+                     /*  should return a 2 */
+                     indexch("This is a test", 'i');
+                 }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 78
+
+     __________________________________________________________________
+
+                              indexr
+
+F     Returns the rightmost position of a character in a given string.
+     Returns -1 if the character is not found in the string.
+
+
+
+
+
+
+     Call:   indexr(str, ch);
+
+             str  =  string to be searched
+             ch   =  character to search for
+
+
+
+
+     Example:    main()
+                 {
+                    /* find the rightmost poistion of 'i' in "this is a
+                       test".  Should return 5  */
+                    indexr("This is a test", 'i');
+                 }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 79
+
+     ___________________________________________________________________
+
+                               iskey
+F
+
+    Returns non-zero if there is a key waiting in the keyboard buffer.
+    If there is no key it returns 0.
+
+
+
+
+
+
+     Call:   iskey();
+
+
+
+     Example:     main()
+                  {
+                    printf("%d", iskey());
+                  }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 80
+
+     ___________________________________________________________________
+
+                               kbstat
+F
+
+     Returns the keyboard status byte.
+
+
+
+
+
+     Call:   kbstat();
+
+
+
+     Example:     main()
+                  {
+                    printf("The keyboard status is%d", kbstat());
+                  }
+
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 81
+
+     ___________________________________________________________________
+
+                               keystat
+F
+
+     Returns the keyboard status byte.
+
+     bit 0 - right shift
+     bit 1 - left shift
+     bit 2 - ctrl
+     bit 3 - alt
+     bit 4 - scroll lock
+     bit 5 - num lock
+     bit 6 - caps lock
+     bit 7 - insert
+
+
+     Call:   keystat();
+
+
+
+     Example:     main()
+                  {
+                    printf("The keyboard status is%d", keystat());
+                  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 82
+
+     ___________________________________________________________________
+
+                               KG_LB
+F
+
+     Converts kilograms to pounds.
+
+     Call:   KG_LB(kilograms);
+
+     Where:  kilograms  = the number of kilograms to convert to pounds.
+
+
+
+     Example:
+           main()
+           {
+             printf("There are %d pounds in %d kilograms", KG_LB(5.6), 5.6);
+           }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 83
+
+     ___________________________________________________________________
+
+                               LB_KG
+F
+
+     Converts pounds to kilograms.
+
+     Call:   LB_KG(pounds);
+
+     Where:  pounds = the number of pounds to convert to kilograms.
+
+
+
+     Example:
+           main()
+           {
+             printf("There are %d kilograms in %d pounds", LB_KG(5.6), 5.6);
+           }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 84
+
+     ___________________________________________________________________
+
+                               lhjoystk
+F
+
+     Returns the current left horixontal position for the joystick.
+
+     Call:   lhjoystk();
+
+
+
+     Example:
+           main()
+           {
+              printf("The left horizontal position is %d", lhjoystk());
+           }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 85
+
+     ___________________________________________________________________
+
+                               lightpen
+F
+
+     Returns the current position of the lightpen.
+
+     Call:   lightpen(&row, &column, &ras_line, &ras_col);
+
+     Where:
+          row      =  The current text row
+          column   =  The current text column
+          ras_line =  the current graphics raster line row
+          ras_col  =  the current graphics raster column
+
+
+     Example:
+           main()
+           { int row, col, ras_line, ras_col;
+                  /* place lightpen position into the above variables */
+             lightpen(&row, &col, &ras_line, &ras_col);
+           }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 86
+
+     __________________________________________________________________
+
+                               line
+
+F     Draws a line on the graphics screen given the two endpoints and
+     the color.
+
+
+
+
+     Call:    line(x1, y1, x2, y2, color);
+
+              x1, y1  =  end point coordinates
+              x2, y2  =  second end point coordinates
+              color   =  color of the line
+
+
+     Example:   main()
+                {
+                   sm(4);  /*  set the graphics mode  */
+
+                   /*  draw a line in color 3 from 30,50 to 180, 140 */
+
+                   line(30,50,180,140,3);
+                }
+
+
+E
+     Unicorn Library Documentation  3.1                         page 87
+
+     __________________________________________________________________
+
+                               locate
+
+F     Returns the color of a pixel on the graphics screen.
+
+
+
+
+     Call:  variable = locate(row, column);
+
+            variable  =  the return variable
+            row       =  the row of the pixel
+            column    =  the column of the pixel
+
+
+
+
+     Example:   main()
+                {
+                   int a;
+                   sm(4);  /*  set graphics mode  */
+
+                   /* find the color of the pixel located at 100, 110 */
+                   a = locate(100,110);
+                   /* print it out */
+                   printf("The color of the pixel at 100, 110 is %d\n", a);
+                }
+
+
+Unicorn 1 Documentation  3.1                                      page 88
+
+__________________________________________________________________________
+
+                               lprintf
+
+
+Send a string to line printer 1.
+
+
+
+
+
+Call:         lprintf(string);
+
+              string = a pointer to string to be printed on printer
+
+
+
+
+Example:      main()
+              {
+                 lprintf("This is a test"); /* send string to printer */
+              }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 89
+
+__________________________________________________________________________
+
+
+                              lputch
+
+
+This function prints a single character to the printer.  It is limited to
+supporting only line printer #1.
+
+
+
+Call:         lputch(char);
+
+              char  =  the character to be printed.
+
+Return:       printer status
+                 bit 0 = timeout occurred
+                 bit 1 = [unused]
+                 bit 2 = [unused]
+                 bit 3 = I/O error
+                 bit 4 = selected
+                 bit 5 = out of paper
+                 bit 6 = acknowledge
+                 bit 7 = not busy
+
+
+Example:      main()
+              {
+                 char a;
+
+                 a = 'x';
+                 lputch(a);      /* print the letter 'x' on the printer */
+                                 /*  at the current print head location */
+              }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 90
+
+     ___________________________________________________________________
+
+                               lsthpos
+F
+
+     Returns the last horizontal position when a button was pressed.
+
+     Call: lsthpos(which);
+
+     Where:
+            which = 0 for last left button press
+                    1 for last right button press
+
+     Example:
+
+  main()
+  {
+    printf("The position was %d on the last left button press", lsthpos(0));
+  }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 91
+
+     ___________________________________________________________________
+
+                               lsthrpos
+F
+
+     Returns the last horizontal position when a button was released.
+
+     Call: lsthrpos(which);
+
+     Where:
+            which = 0 for last left button press
+                    1 for last right button press
+
+     Example:
+
+        main()
+        {
+          printf("The position was %d on the last");
+          printf(" left button release", lsthrpos(0));
+        }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 92
+
+     ___________________________________________________________________
+
+                               lstvpos
+F
+
+     Returns the last vertical position when a button was pressed.
+
+     Call: lstvpos(which);
+
+     Where:
+            which = 0 for last left button press
+                    1 for last right button press
+
+     Example:
+
+        main()
+        {
+          printf("The position was %d on the last");
+          printf(" left button press", lstvpos(0));
+        }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 93
+
+     ___________________________________________________________________
+
+                               lstvrpos
+F
+
+     Returns the last vertical position when a button was released.
+
+     Call: lstvrpos(which);
+
+     Where:
+            which = 0 for last left button press
+                    1 for last right button press
+
+     Example:
+
+        main()
+        {
+          printf("The position was %d on the last");
+          printf(" left button release", lstvrpos(0));
+        }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 94
+
+     ___________________________________________________________________
+
+                               LT_GAL
+F
+
+     Converts liters to gallons.  Defined as a macro in UC.H.
+
+     Call: LT_GAL(liters);
+
+
+     Example:
+
+        main()
+        {
+          printf("There are %lf gallons in %lf liters", LT_GAL(67.8), 67.8);
+        }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 95
+
+     ___________________________________________________________________
+
+                               lvjoystk
+F
+
+     Returns the left vertical position of the joystick.
+
+
+     Call: lvjoystk();
+
+
+     Example:
+
+        main()
+        {
+          printf("The joystick vertical position is %d", lvjoystk());
+        }
+
+
+
+Unicorn 1 Documentation  3.1                                      page 96
+
+__________________________________________________________________________
+
+
+                              memsize
+
+
+Returns an integer containing the number of kilobytes of memory installed.
+
+
+
+
+Call:         memsize();
+
+
+
+
+
+
+Example:      main()
+              {
+                 int a;
+                 a = memsize(); /* get kilobytes of memory */
+              }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 97
+
+     ___________________________________________________________________
+
+                               mgun
+F
+
+     Produces a popping machine gun type sound.
+
+     Call: mgun();
+
+
+     Example:
+
+        main()
+        {
+          mgun();
+        }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 98
+
+     __________________________________________________________________
+
+                               moveto
+
+F     Moves the turtle pen to an absolute pixel location without
+     drawing.
+
+
+
+
+
+     Call:   moveto(col, row);
+
+             col  =  the new column coordinate
+             row  =  the new row coordinate
+
+
+
+     Example:   main()
+                {
+                   sm(4);  /* set the graphics mode  */
+
+                   /*  move the turtle pen to 100, 30 */
+                   moveto(100, 30);
+                 }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 99
+
+     ___________________________________________________________________
+
+                               mreset
+F
+
+     Checks to see if the mouse driver is installed.  Returns 0 if NOT
+     installed or -1 if mouse IS installed.
+
+     Call: mreset();
+
+
+     Example:
+
+        main()
+        {
+           if (mreset() == 0)
+              then printf("There is no mouse installed - Boo-Hoo!");
+           else printf("Hooray, the mouse is present!");
+        }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 100
+
+     __________________________________________________________________
+
+                              msize
+
+     Returns the current memory size in kilobytes.
+
+
+F
+
+
+     Call:   msize();
+
+
+
+     Example:
+              main()
+              {
+                 printf("There are %d KBytes of memory", msize());
+              }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 101
+
+     __________________________________________________________________
+
+                             OZ_GM
+
+     Converts ounces to grams.  Defined as a macro in UC.H.
+
+
+F
+
+
+     Call:   OZ_GM(ounces);
+
+
+
+     Example:
+           main()
+           {
+              printf("There are %lf ounces in %lf grams", OZ_GM(53.8), 53.8);
+           }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 102
+
+     __________________________________________________________________
+
+                               note
+
+F                         Tandy 1000 only
+
+     Plays a musical tone on the internal speaker.  This function
+     includes all sharps and flats and a total of 7 octaves.  The user
+     is given access to all three voices and full control over the
+     volume.
+     Future versions will include duration for added control over the
+     note.
+
+
+
+
+     Call:   note(voice, octave, note, volume);
+
+             voice   =  1, 2, or 3 ( selects sound channel)
+             octave  =  1 - 7 with 1 being the lowest
+             note    =  note from below table
+             volume  =  0 (off) to 15 (loudest)
+
+             A  - 1      octave 3 contains middle C
+             A# - 2
+             B  - 3
+             C  - 4
+             C# - 5
+             D  - 6
+             D# - 7
+             E  - 8
+             F  - 9
+             G  - 10
+             G# - 11
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 103
+
+     __________________________________________________________________
+
+                               paint
+
+F     Fills an area containing a seed point and bounded by a single color
+     with a specified color.
+
+
+
+
+
+     Call:   paint(column, row, paintc, boundry);
+
+             column   =  column coordinate of seed point inside boundry
+             row      =  row coordinate of seed point inside boundry
+             paintc   =  color to paint the enclosed region
+             boundry  =  color of the boundry to the region to fill
+
+
+
+
+
+     Example:   main()
+                {
+                   sm(4);  /* set graphics mode  */
+                   /* draw a circle */
+                   circle(100,100,50,1,1,3);
+                   /* paint the circle (watch the border color! */
+                   paint(100,100,2,3);
+                }
+
+
+E
+     Unicorn Library Documentation  3.1                         page 104
+
+     __________________________________________________________________
+
+                               palette
+
+F                             IBM-PC only
+
+     Changes the palette or color set to be used on an IBM-PC.
+
+
+
+
+
+     Call:   palette(a, b, c);
+
+             a  =  the palette number (0 to 3)
+             b  =  mode ( 4-normal,  5- extra or highlighted color sets)
+             c  =  background color
+
+
+
+     Example:  main()
+               {
+                  sm(4);  /* set the graphics mode */
+                  /* set the color set to highlighted palette 2 with a
+                     blue background.                                 */
+                  palette(2, 5, 1);
+               }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 105
+
+     __________________________________________________________________
+
+                             pcurpos
+
+     Puts the cursor at a specific screen location.
+
+
+F
+
+
+     Call:   pcurpos(row, col, page);
+
+     Where:
+             row  = desired cursor row
+             col  = desired cursor column
+             page = desired cursor page.
+
+
+     Example:
+           main()
+           {
+              pcurpos(20, 40, 0); /* place the cursor at row 20, column
+                                     40 on video page 0.  */
+           }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 106
+
+     __________________________________________________________________
+
+                               pencolor
+
+F     Sets the turtle graphics pen color.
+
+
+
+
+
+
+
+     Call:    pencolor(color);
+
+              color  =  the pen color to use.  may be 0-3 for IBM or
+                        0-16 for Tandy 1000
+
+
+
+     Example:   main()
+                {
+                   sm(4);  /*  set graphics mode  */
+                   /* change pen color to 3 */
+                   pencolor(3);
+                }
+
+
+E
+     Unicorn Library Documentation  3.1                         page 107
+
+     __________________________________________________________________
+
+                               pendown
+
+F      Places the turtle graphics "pen down" on the screen so that it
+     may draw.
+
+
+
+
+
+     Call:   pendown();
+
+
+
+
+
+     Example:   main()
+                {
+                   sm(4);  /*  set the graphics mode */
+                   /* place the pen down in preperation for drawing */
+                   pendown();
+                }
+
+E
+     Unicorn Library Documentation  3.1                         page 108
+
+     __________________________________________________________________
+
+                               penup
+
+F     Lift the pen up so that it may be moved without drawing.
+
+
+
+
+
+     Call:  penup();
+
+
+
+
+
+     Example:   main()
+                {
+                   sm(4);  /* set the graphics mode  */
+                   /* lift up the pen */
+                   penup();
+                }
+
+
+Unicorn 1 Documentation  3.1                                     page 109
+
+__________________________________________________________________________
+
+
+                              phasor
+
+
+Make a phasor sound.
+
+
+
+
+
+Call:         phasor();
+
+
+
+
+Example:      main()
+              {
+                 phasor(); /* make phasor sound */
+              }
+
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 110
+
+     __________________________________________________________________
+
+                             playibm
+
+F
+     Plays tones on an IBM or compatible speaker.  It produces only a
+     single tone.  Octave 3 contains middle C.  All octaves are defined
+     for A through G#.
+
+
+
+     Call:   playibm(note, octave, time);
+
+     Where:
+            note    = the note number from the below table
+                      A,  A#,  B,  C,  C#,  D,  D#,  E,  F,  F#,  G,  G#
+                      1,   2,  3,  4,   5,  6,   7,  8,  9,  10, 11,  12
+            octave  = octave from 1 to 8 starting from the lowest octave
+            time    = the time of the tone in milliseconds
+
+     Example:
+           main()
+           {
+              play(4,3,500); /* play middle C for .5 seconds */
+           }
+
+
+
+E
+     Unicorn Library Documentation  3.1                         page 111
+
+     __________________________________________________________________
+
+                               point
+
+F     Light up a single pixel in a specified color.
+
+
+
+
+     Call:  point(column, row, color);
+
+            column  =  the pixel column
+            row     =  the pixel row
+            color   =  color to light the pixel
+
+
+
+     Example:    main()
+                 {
+                    sm(4);  /*  set the graphics mode  */
+                    /*  light the pixel at 110,110 in color 3 */
+                    point(110, 110, 3);
+                 }
+
+
+

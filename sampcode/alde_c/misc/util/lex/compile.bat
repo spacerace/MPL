@@ -1,0 +1,26 @@
+cc base TD
+cc commen TD
+cc dfa TD
+cc eclosu TD
+cc gettok TD
+cc impure TD
+cc integ TD
+cc lex TD
+cc lexcha TD
+cc lexech TD
+cc lexerr TD
+cc lexget TD
+cc lexlen TD
+cc lexpee TD
+cc lexsrt TD
+cc lexswi TD
+cc llsave TD
+cc lmovb TD
+cc lmovi TD
+cc mapch TD
+cc min TD
+cc out1 TD
+cc out2 TD
+cc token TD
+cc ytab
+cc yylex TD

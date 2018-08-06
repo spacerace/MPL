@@ -1,0 +1,14 @@
+Code 1A                            -Read Cylinder Capacity
+
+Input registers - none.
+
+Special output registers - CX:DX is the address of the last logical block of 
+the specified cylinder.
+
+Operation:
+    The SCSI Read Capacity (25h) Command is issued to the specified disk with
+    the PMI bit set in byte 8 bit 0 of the command sequence. Note that not 
+    all disks support this operation. It is sometimes used for incremental  
+    formatting of the disk by cylinder and marking defects by cylinder as on 
+    Adaptec controllers.
+

@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "GetTimeR.h"
+
+GetTimeR MENU
+    BEGIN
+        POPUP "Menu"
+           BEGIN
+              MENUITEM "&GetTimerResolution",               IDM_GETTIMER
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

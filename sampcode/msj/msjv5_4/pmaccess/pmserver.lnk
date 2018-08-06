@@ -1,0 +1,7 @@
+pmserver errexit msgq client
+/align:16 /co
+NUL
+os2 llibcmt
+pmserver.def
+
+

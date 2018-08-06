@@ -1,0 +1,10 @@
+
+showenv.obj : showenv.asm
+  masm showenv;
+
+getenv.obj : getenv.asm
+  masm getenv;
+
+showenv.exe : showenv.obj getenv.obj showenv.def 
+  link showenv+getenv,,,os2,showenv.def
+

@@ -1,0 +1,39 @@
+
+
+        NAME
+                strip -- strip a newline from a string
+
+        SYNOPSIS
+                void strip(str);
+                char *str;
+
+
+        DESCRIPTION
+        If the specified string terminates with a newline (\n)
+        character, this function will replace the character with
+        a NULL.
+
+
+
+        EXAMPLE
+
+                char str[] = "This is a string\n";
+                strip(str);
+                   the newline is stripped from str
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

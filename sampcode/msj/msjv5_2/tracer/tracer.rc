@@ -1,0 +1,63 @@
+#include <os2.h>
+#include "tracer.h"
+
+POINTER TRACERICON   tracer.ico
+
+MENU TRACERICON      PRELOAD
+BEGIN
+ SUBMENU  "~Options", IDMOPTIONS
+  BEGIN
+   MENUITEM "~Clear Message Area\t^C",      IDMCLEAR,    MIS_TEXT
+   MENUITEM "~Log Messages to File...\t^L", IDMLOG,      MIS_TEXT
+   MENUITEM "~About...\t^A",                IDMABOUT,    MIS_TEXT
+  END
+  MENUITEM  "~F1=Help", ID_HELPBUTTON, MIS_HELP | MIS_BUTTONSEPARATOR
+END
+ACCELTABLE      TRACERICON
+BEGIN
+    "^A", IDMABOUT
+    "^L", IDMLOG
+    "^C", IDMCLEAR
+END
+DLGTEMPLATE IDMABOUT LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "", 5, 10, 23, 190, 52, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS
+    BEGIN
+        CONTROL "OS/2 Debugging Utility", -1, 17, 35, 156, 14,
+                WC_STATIC, SS_TEXT | DT_CENTER | DT_TOP | WS_GROUP |
+                WS_VISIBLE
+        CONTROL "Version 1.00", -1, 57, 17, 74, 8, WC_STATIC,
+                SS_TEXT | DT_CENTER | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "OK", 6, 5, 2, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                BS_DEFAULT | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Daniel Hildebrand", 256, 55, 29, 82, 8, WC_STATIC,
+                SS_TEXT | DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+    END
+END
+DLGTEMPLATE 9 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "", 9, 10, 17, 209, 74, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS
+    BEGIN
+        CONTROL "Ok", 6, 7, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                BS_DEFAULT | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel", 10, 51, 4, 38, 12, WC_BUTTON,
+                BS_PUSHBUTTON | BS_DEFAULT | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Log File: ", -1, 6, 57, 50, 10, WC_STATIC, SS_TEXT
+                | DT_CENTER | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "\\tracer.fle", 11, 63, 59, 100, 8, WC_ENTRYFIELD,
+                ES_LEFT | ES_AUTOSCROLL | ES_MARGIN | WS_TABSTOP |
+                WS_VISIBLE
+        CONTROL "Screen Scroll On/Off", 13, 106, 24, 103, 9,
+                WC_BUTTON, BS_AUTOCHECKBOX | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Log File On/Off", 12, 10, 24, 91, 9, WC_BUTTON,
+                BS_AUTOCHECKBOX | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help", 2, 97, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                BS_DEFAULT | BS_HELP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Truncate Log File before proceeding", 14, 10, 41,
+                171, 10,
+                WC_BUTTON, BS_AUTOCHECKBOX | WS_TABSTOP | WS_VISIBLE
+    END
+END
+

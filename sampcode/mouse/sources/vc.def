@@ -1,0 +1,288 @@
+
+BEGIN	lb,rb,bb,lm,rm,um,dm,32,16
+
+;------------------------------BOTH BUTTONS----------------------------------
+
+bb:	MATCH 2,1,INVERSE,"[",CTRLC,bb1		;"[Edit]:"
+bb1:	MATCH 2,1,INVERSE,"V",CTRLC,bb2		;"Value"
+bb2:	MATCH 2,5,INVERSE,"l ",CTRLC,ESCAPE		;"Label" not "Label:"
+
+;------------------------------LEFT BUTTON-----------------------------------
+
+lb:	MATCH 2,1,INVERSE," ",MAIN,lb1		;Not in command mode 
+lb1:	MATCH 2,1,INVERSE,"(C)",MAIN,lb2	;"(C)"
+lb2:	MATCH 2,1,INVERSE,"V",VALUE,lb3		;"Value"
+lb3:	MATCH 2,5,INVERSE,"l ",LABEL,lb4		;"Label" not "Label:"
+lb4:	MATCH 2,12,INVERSE,"N=",NO,lb5		;"Replicate: N=No Change ..."
+lb5:	MATCH 2,13,INVERSE,"Y",YES,lb6		;"Clear: Type Y ..."
+lb6:	MATCH 2,12,INVERSE,"Y",YES,lb7		;"Quit: Type Y ..."
+lb7:	MATCH 2,25,INVERSE,"Y",YES,lb8		;"... File already ..."
+lb8:	MATCH 2,19,INVERSE,"Y",YES,RETURN		;"Delete File: Type Y ..."
+
+;------------------------------RIGHT BUTTON----------------------------------
+
+rb:	MATCH 2,1,INVERSE," ",MAIN,rb1		;Not in command mode 
+rb1:	MATCH 2,1,INVERSE,"(C)",MAIN,rb2	;"(C)"
+rb2:	MATCH 2,1,INVERSE,"V",VALUE,rb3		;"Value"
+rb3:	MATCH 2,5,INVERSE,"l ",LABEL,rb4		;"Label" not "Label:"
+rb4:	MATCH 2,12,INVERSE,"N=",REL,lb5		;"Replicate: N=No Change ..."
+rb5:	MATCH 2,13,INVERSE,"Y",YES,rb6		;"Clear: Type Y ..."
+rb6:	MATCH 2,12,INVERSE,"Y",YES,rb7		;"Quit: Type Y ..."
+rb7:	MATCH 2,25,INVERSE,"Y",YES,rb8		;"... File already ..."
+rb8:	MATCH 2,19,INVERSE,"Y",YES,RETURN		;"Delete File: Type Y ..."
+
+;------------------------------LEFT MOTION-----------------------------------
+
+lm:	MATCH 2,1,INVERSE," ",LEFT,lm1		;Not in command mode 
+lm1:	MATCH 2,1,INVERSE,"(C)",LEFT,lm2		;"(C)"
+lm2:	MATCH 2,1,INVERSE,"V",LEFT,lm3		;"Value"
+lm3:	MATCH 2,1,INVERSE,"M",LEFT,lm4		;"Move:"
+lm4:	MATCH 2,1,INVERSE,"[",LEFT,lm5		;"[Edit]:"
+lm5:	MATCH 2,1,INVERSE,"Rep",LEFT,lm6	;"Replicate:"
+lm6:	MATCH 2,6,INVERSE,": L",LEFT,lm7	;"Print: Lower right ..."
+lm7:	MATCH 2,10,INVERSE,": L",LEFT,NUL	;"Data save: Lower right ..."
+
+;------------------------------RIGHT MOTION----------------------------------
+
+rm:	MATCH 2,1,INVERSE," ",RIGHT,rm1		;Not in command mode 
+rm1:	MATCH 2,1,INVERSE,"(C)",RIGHT,rm2	;"(C)"
+rm2:	MATCH 2,1,INVERSE,"V",RIGHT,rm3		;"Value"
+rm3:	MATCH 2,1,INVERSE,"M",RIGHT,rm4		;"Move:"
+rm4:	MATCH 2,1,INVERSE,"[",RIGHT,rm5		;"[Edit]:"
+rm5:	MATCH 2,1,INVERSE,"Rep",RIGHT,rm6	;"Replicate:"
+rm6:	MATCH 2,6,INVERSE,": L",RIGHT,rm7	;"Print: Lower right ..."
+rm7:	MATCH 2,10,INVERSE,": L",RIGHT,NUL	;"Data save: Lower right ..."
+
+;------------------------------UP MOTION-------------------------------------
+
+um:	MATCH 2,1,INVERSE," ",UP,um1		;Not in command mode 
+um1:	MATCH 2,1,INVERSE,"(C)",UP,um2		;"(C)"
+um2:	MATCH 2,1,INVERSE,"V",UP,um3		;"Value"
+um3:	MATCH 2,1,INVERSE,"M",UP,um4		;"Move:"
+um4:	MATCH 2,1,INVERSE,"Rep",UP,um5		;"Replicate:"
+um5:	MATCH 2,6,INVERSE,": L",UP,um6	;"Print: Lower right ..."
+um6:	MATCH 2,10,INVERSE,": L",UP,NUL	;"Data save: Lower right ..."
+
+;------------------------------DOWN MOTION-----------------------------------
+
+dm:	MATCH 2,1,INVERSE," ",DOWN,dm1		;Not in command mode 
+dm1:	MATCH 2,1,INVERSE,"(C)",DOWN,dm2	;"(C)"
+dm2:	MATCH 2,1,INVERSE,"V",DOWN,dm3		;"Value"
+dm3:	MATCH 2,1,INVERSE,"M",DOWN,dm4		;"Move:"
+dm4:	MATCH 2,1,INVERSE,"Rep",DOWN,dm5	;"Replicate:"
+dm5:	MATCH 2,6,INVERSE,": L",DOWN,dm6	;"Print: Lower right ..."
+dm6:	MATCH 2,10,INVERSE,": L",DOWN,NUL	;"Data save: Lower right ..."
+
+;------------------------------MENUS-----------------------------------------
+
+MAIN:	popup	2,1,INVERSE
+	text "Main: Command Label Value Goto Home Window Recalc Absolute "
+	select	1,7,7,COMMAND
+	select	1,15,5,QUOTE
+	select	1,21,5,PLUSBKSP
+	select	1,27,4,GREAT
+	select	1,32,4,HOME
+	select	1,37,6,SEMICOLON
+	select	1,44,6,BANG
+	select	1,51,8,POUND
+	pend
+
+COMMAND:	popup	2,1,INVERSE
+	text "Command: Blank Clear Delete Edit Format Global Insert Move "
+	text "         Print Replicate Storage Titles Version Window Repeat(-)                "
+	select	1,10,5,B
+	select	1,16,5,C
+	select	1,22,6,DELETE
+	select	1,29,4,E
+	select	1,34,6,FORMAT
+	select	1,41,6,GLOBAL
+	select	1,48,6,INSERT
+	select	1,55,4,M
+	select	2,10,5,PRINT
+	select	2,16,9,R
+	select	2,26,7,STORAGE
+	select	2,34,6,TITLE
+	select	2,41,7,V
+	select	2,49,6,WINDOW
+	select	2,56,9,REPEAT
+	pend
+B:	TYPE "/b"
+C:	TYPE "/c"
+E:	TYPE "/e"
+M:	TYPE "/m"
+R:	TYPE "/r"
+V:	TYPE "/v"
+REPEAT:   TYPE "/-"
+
+DELETE:	popup	2,1,INVERSE
+  	text "Delete: Row Column                                "
+	select	1,9,3,DR
+	select	1,13,6,DC
+	pend
+DR:	TYPE "/dr"
+DC:	TYPE "/dc"
+
+FORMAT:	popup	2,1,INVERSE
+	text "Format: Default General Integer Left Right Dollar($) Graph(*) "
+	select	1,9,7,FD
+	select	1,17,7,FG
+	select	1,25,7,FI
+	select	1,33,4,FL
+	select	1,38,5,FR
+	select	1,44,9,FDOLLAR
+	select	1,54,8,FGRAPH
+	pend
+FD:	TYPE "/fd"
+FG:	TYPE "/fg"
+FI:	TYPE "/fi"
+FL:	TYPE "/fl"
+FR:	TYPE "/fr"
+FDOLLAR:	TYPE "/f$"
+FGRAPH:	TYPE "/f*"
+
+GLOBAL:	popup	2,1,INVERSE
+	text "Global: Column Order Recalc Format                "
+	select	1,9,6,GC
+	select	1,16,5,ORDER
+	select	1,22,6,RECALC
+	select	1,29,6,FORMAT2
+	pend
+GC:	TYPE "/gc"
+
+ORDER:	popup	2,1,INVERSE
+	text "Reeval Order: Row Column                          "
+	select	1,15,3,GOR
+	select	1,19,6,GOC
+	pend
+GOR:	TYPE "/gor"
+GOC:	TYPE "/goc"
+
+RECALC:	popup	2,1,INVERSE
+	text "Recalc: Auto Manual                               "
+	select	1,9,4,GRA
+	select	1,14,6,GRM
+	pend
+GRA:	TYPE "/gra"
+GRM:	TYPE "/grm"
+
+FORMAT2:	popup	2,1,INVERSE
+	text "Format: Default General Integer Left Right Dollar($) Graph(*) "
+	select	1,9,7,GFD
+	select	1,17,7,GFG
+	select	1,25,7,GFI
+	select	1,33,4,GFL
+	select	1,38,5,GFR
+	select	1,44,9,GFDOLLAR
+	select	1,54,8,GFGRAPH
+	pend
+GFD:	TYPE "/gfd"
+GFG:	TYPE "/gfg"
+GFI:	TYPE "/gfi"
+GFL:	TYPE "/gfl"
+GFR:	TYPE "/gfr"
+GFDOLLAR:	TYPE "/gf$"
+GFGRAPH:	TYPE "/gf*"
+
+INSERT:	popup	2,1,INVERSE
+	text "Insert: Row Column                                "
+	select	1,9,3,IR
+	select	1,13,6,IC
+	pend
+IR:	TYPE "/ir"
+IC:	TYPE "/ic"
+
+PRINT:	popup	2,1,INVERSE
+	text "Print: Printer File                               "
+	select	1,8,7,PP
+	select	1,16,4,PF
+	pend
+PP:	TYPE "/pp"
+PF:	TYPE "/pf"
+
+STORAGE:	popup	2,1,INVERSE
+	text "Storage: Load Save Delete Quit Data(#)            "
+	select	1,10,4,SL
+	select	1,15,4,SS
+	select	1,20,6,SD
+	select	1,27,4,SQ
+	select	1,32,7,DATA
+	pend
+SL:	TYPE "/sl"
+SS:	TYPE "/ss"
+SD:	TYPE "/sd"
+SQ:	TYPE "/sq"
+
+DATA:	popup	2,1,INVERSE
+	text "Data: Save Load                                   "
+	select	1,7,4,SPOUNDS
+	select	1,12,4,SPOUNDL
+	pend
+SPOUNDS:	TYPE "/s#s"
+SPOUNDL:	TYPE "/s#l"
+
+TITLE:	popup	2,1,INVERSE
+	text "Titles: Horizontal Vertical Both None             "
+	select	1,9,10,TH
+	select	1,20,8,TV
+	select	1,29,4,TB
+	select	1,34,4,TN
+	pend
+TH:	TYPE "/th"
+TV:	TYPE "/tv"
+TB:	TYPE "/tb"
+TN:	TYPE "/tn"
+
+WINDOW:	popup	2,1,INVERSE
+	text "Window: Horizontal Vertical 1Window Synch Unsynch "
+	select	1,9,10,WH
+	select	1,20,8,WV
+	select	1,29,7,W1
+	select	1,37,5,WS
+	select	1,43,7,WU
+	pend
+WH:	TYPE "/wh"
+WV:	TYPE "/wv"
+W1:	TYPE "/w1"
+WS:	TYPE "/ws"
+WU:	TYPE "/wu"
+ 
+LABEL:	popup	2,1,INVERSE
+	text "Label: Execute Edit "
+	select	1,8,7,RETURN
+	select	1,16,4,CTRLE
+	pend
+
+VALUE:	popup	2,1,INVERSE
+	text "Value: Enter Period Edit Recalc Absolute "
+	select	1,8,5,RETURN
+	select	1,14,6,PERIOD
+	select	1,21,4,CTRLE
+	select	1,26,6,BANG
+	select	1,33,8,POUND
+	pend
+
+
+;------------------------------KEYS------------------------------------------
+
+NUL:    NOTHING
+CTRLC:	TYPE 3
+CTRLE:	TYPE 5
+BKSP:    	TYPE 8
+RETURN: 	TYPE 13
+ESCAPE: 	TYPE 27
+BANG:	TYPE "!"
+QUOTE:  TYPE 34
+POUND:	TYPE "#"
+PLUSBKSP:	TYPE "+",8
+PERIOD:		TYPE "."
+SEMICOLON:	TYPE ";"
+GREAT:	TYPE ">"
+NO:	TYPE "n"
+REL:	TYPE "r"
+YES:	TYPE "y"
+HOME:		TYPE 0,71
+UP:     	TYPE 0,72
+LEFT:   	TYPE 0,75
+RIGHT:  	TYPE 0,77
+DOWN:   	TYPE 0,80
+

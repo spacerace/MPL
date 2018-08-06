@@ -1,0 +1,11 @@
+NAME	Browse	    WINDOWAPI
+
+DESCRIPTION 'OS/2 File Browser Demo'
+
+STUB    'OS2STUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+STACKSIZE   4096        ; Must be non-zero for SS == DS
+                        ; suggest 4k as minimum stacksize

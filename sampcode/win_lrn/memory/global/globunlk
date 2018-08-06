@@ -1,0 +1,6 @@
+globunlk.obj: globunlk.c
+   cl -c -W2 -AS -Gsw -Od -Zped globunlk.c
+
+globunlk.exe: globunlk.obj globunlk.def
+   link4 globunlk,/align:16,/map/li,slibw,globunlk.def
+   mapsym globunlk

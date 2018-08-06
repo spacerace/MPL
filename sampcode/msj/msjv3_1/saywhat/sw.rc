@@ -1,0 +1,71 @@
+/*
+
+Figure 4w
+=========
+
+*/
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#include <style.h>
+#include "sw.h"
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+STRINGTABLE
+BEGIN
+    STR_NAME,    "SayWhat!"
+    STR_TITLE,   "Say What!"
+    STR_WHAT,    "Hello Windows!"
+END
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+SayWhat!    MENU
+BEGIN
+
+  POPUP "&Say"
+  BEGIN
+    MENUITEM "&What..."                 , CMD_WHAT
+    MENUITEM SEPARATOR
+    MENUITEM "E&xit"                    , CMD_EXIT
+    MENUITEM SEPARATOR
+    MENUITEM "A&bout SayWhat!..."       , CMD_ABOUT
+  END
+
+END
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+DLG_ABOUT DIALOG 19, 17, 130, 83
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+  CTEXT "Microsoft Windows",   -1,  0,  8, 127,  8
+  CTEXT "Say What!",           -1,  0, 18, 127,  8
+  CTEXT "Version 1.00",        -1,  0, 30, 127,  8
+  CTEXT "By Michael Geary",    -1,  0, 44, 129,  8
+  DEFPUSHBUTTON "Ok",        IDOK, 48, 62,  32, 14
+END
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+DLG_WHAT DIALOG 49, 41, 177, 103
+CAPTION "Say What!"
+STYLE WS_CAPTION | WS_SYSMENU | WS_VISIBLE | WS_POPUP
+BEGIN
+  CONTROL "Say &What:"   -1,            "Static",    SS_LEFT | WS_GROUP,                                  8, 10,  40,  8
+  CONTROL ""             ITEM_WHAT,     "Edit",      ES_LEFT | ES_AUTOHSCROLL | WS_BORDER | WS_TABSTOP,  56,  8, 112, 12
+  CONTROL "&Time Delay:" -1,            "Static",    SS_LEFT,                                             8, 28,  53,  8
+  CONTROL ""             ITEM_INTBAR,   "ScrollBar", SBS_HORZ | WS_TABSTOP,                              56, 28,  88,  8
+  CONTROL ""             ITEM_INTERVAL, "Edit",      ES_LEFT | WS_BORDER | WS_TABSTOP,                  152, 26,  16, 12
+  CONTROL "&Stability:"  -1,            "Static",    SS_LEFT,                                             8, 46,  56,  8
+  CONTROL ""             ITEM_DISTBAR,  "ScrollBar", SBS_HORZ | WS_TABSTOP,                              56, 46,  88,  8
+  CONTROL ""             ITEM_DISTANCE, "Edit",      ES_LEFT | WS_BORDER | WS_TABSTOP,                  152, 44,  16, 12
+  CONTROL "Painting:"    -1,            "Static",    SS_LEFT,                                             8, 64,  40,  8
+  CONTROL "&Clean"       ITEM_CLEAN,    "Button",    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,         56, 62,  36, 12
+  CONTROL "&Flicker"     ITEM_FLICKER,  "Button",    BS_AUTORADIOBUTTON,                                 96, 62,  42, 12
+  CONTROL "Enter"        IDOK,          "Button",    BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP,           24, 82,  48, 14
+  CONTROL "Esc=Close"    IDCANCEL,      "Button",    BS_PUSHBUTTON | WS_TABSTOP,                        104, 82,  48, 14
+END
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

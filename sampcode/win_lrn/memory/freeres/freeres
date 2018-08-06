@@ -1,0 +1,6 @@
+freeres.obj: freeres.c
+    cl -d -c -AS -Gsw -Os -Zpe freeres.c
+
+freeres.exe: freeres.obj freeres.def
+    link4 freeres,/align:16,/map,slibw/NOE,freeres.def
+    mapsym freeres

@@ -1,0 +1,16 @@
+#------------------
+# BLOWUP make file
+#------------------
+
+blowup.obj : blowup.c blowup.h
+     cl -c -G2sw -W3 blowup.c
+
+blowup.res : blowup.rc blowup.h
+     rc -r blowup
+
+blowup.exe : blowup.obj blowup.def
+     link blowup, /align:16, NUL, os2, blowup
+     rc blowup.res
+
+blowup.exe : blowup.res
+     rc blowup.res

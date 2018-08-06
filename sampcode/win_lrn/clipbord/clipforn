@@ -1,0 +1,6 @@
+clipforn.obj: clipforn.c
+    cl -c -d -AS -Gsw -Os -Zpe clipforn.c
+
+clipforn.exe: clipforn.obj clipforn.def
+    link4 clipforn,/align:16,/map, slibw/NOE, clipforn.def
+    mapsym clipforn

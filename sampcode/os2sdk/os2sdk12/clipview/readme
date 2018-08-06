@@ -1,0 +1,26 @@
+Information about CLIPVIEW
+
+ClipView allows the user to browse the contents of the clipboard.  It
+demonstrates several things:  How to process clipboard formats, how to
+handle scroll bars (in the BITMAP case), how to use listboxes effectively
+(the Render... dialog box), how to save > 64K BITMAP files (as Linefrac
+does), how to use metafiles, and how to create and use the multi-line
+edit control.
+
+There is a lot of additional functionality which can be added to the
+clipboard viewer (see the PROBLEMS file which has been included).
+
+NOTE:	This file requires the OPENDLG.DLL library to be on the LIBPATH
+	variable (in CONFIG.SYS).  Otherwise, the program won't run.
+
+Files included:
+
+CLIPFILE.C	    Source routines for saving clipboard formats
+CLIPVIEW	    Makefile
+CLIPVIEW.C	    Source for the viewing/window handling
+CLIPVIEW.DEF	    Definition file
+CLIPVIEW.H	    Header file (all declarations/constants)
+CLIPVIEW.ICO	    Icon
+CLIPVIEW.RC	    Resource file
+PROBLEMS	    Problems/suggested additions to this application
+README		    This file

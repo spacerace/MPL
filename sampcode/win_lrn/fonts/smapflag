@@ -1,0 +1,6 @@
+smapflag.obj: smapflag.c
+    cl -d -c -AS -Gsw -Os -Zpe smapflag.c
+
+smapflag.exe: smapflag.obj smapflag.def
+    link4 smapflag,/align:16,/map,slibw/NOE,smapflag.def
+    mapsym smapflag

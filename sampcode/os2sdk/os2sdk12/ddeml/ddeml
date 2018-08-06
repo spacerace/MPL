@@ -1,0 +1,84 @@
+#===================================================================
+#
+#   DDE manager DLL make file
+#
+#===================================================================
+#
+# Default compilation macros
+#
+
+CRUISER=0
+#DEBUG=-DDEBUG -Zi -Od
+DEBUG=
+CVPLINK=/CO
+OBJ1 =ddeml.obj dmgstrt.obj dmgdb.obj dmgstr.obj dmgwndp.obj dmgdde.obj
+OBJ2 =dmgq.obj dmghsz.obj dmgmon.obj test.obj mem.obj
+EXTRAS=$(DEBUG) -DSLOOP
+DEFFILE=ddeml.def
+LINK=link
+
+
+ASM = masm
+CC  = cl -W3 -J -c -u -Asnw -Gsc2 -Zep $(EXTRAS) 
+NOBOGUS =
+
+#===================================================================
+#
+# Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(CC) $*.c $(NOBOGUS)
+
+.asm.obj:
+    $(ASM) $*.asm;
+
+.rc.res:
+    rc -r $*.rc
+
+ddeml.lnk: ddeml
+        echo $(OBJ1) +                                   > ddeml.lnk
+        echo $(OBJ2) $(OBJ3)                            >> ddeml.lnk
+        echo ddeml.dll/far                             >> ddeml.lnk
+        echo ddeml/map $(CVPLINK)                      >> ddeml.lnk
+        echo os2/nod /noe llibcdll                     >> ddeml.lnk
+        echo $(DEFFILE)                                 >> ddeml.lnk
+
+#===================================================================
+#
+# Dependencies
+#
+#===================================================================
+
+ddeml.obj: ddeml.c ddemlp.h ddeml.h
+
+dmgdb.obj: dmgdb.c ddemlp.h ddeml.h
+
+dmghsz.obj: dmghsz.c ddemlp.h ddeml.h
+
+dmgmon.obj: dmgmon.c ddemlp.h ddeml.h
+
+dmgstr.obj: dmgstr.c ddemlp.h ddeml.h
+
+dmgwndp.obj: dmgwndp.c ddemlp.h ddeml.h
+
+dmgdde.obj: dmgdde.c ddemlp.h ddeml.h
+
+dmgq.obj: dmgq.c ddemlp.h ddeml.h
+
+dmgstrt.obj: dmgstrt.asm
+
+test.obj: test.c ddemlp.h ddeml.h
+
+mem.obj: mem.c ddemlp.h ddeml.h
+
+ddeml.res: ddeml.rc ddemlp.h ddeml.h
+
+
+ddeml.dll: $(OBJ1) $(OBJ2) ddeml.lnk ddeml.res $(DEFFILE)
+    $(LINK) @ddeml.lnk
+    rc ddeml.res ddeml.dll
+    mapsym ddeml
+    implib ddeml.lib $(DEFFILE)
+    

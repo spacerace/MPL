@@ -1,0 +1,11 @@
+
+Æè                    SAMPLE HELP FILES FOR ACE
+ 
+Æ    acecomnd.hlp Æ- command summary for ACE
+Æ    attrib.hlp   Æ- list of default attributes
+
+Æ    switch.hlp   Æ- format of the switch statement.
+Æ    precdnce.hlp Æ- precedence and order of evaluation of C operators
+                   (K&R, p. 49)
+
+Æ    ascii.hlp    Æ- list of ASCII characters.

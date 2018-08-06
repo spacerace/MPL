@@ -1,0 +1,16 @@
+#--------------------
+# GRAFMENU make file
+#--------------------
+
+grafmenu.obj : grafmenu.c grafmenu.h
+     cl -c -G2sw -W3 grafmenu.c
+
+grafmenu.res : grafmenu.rc grafmenu.h bighelp.bmp
+     rc -r grafmenu
+
+grafmenu.exe : grafmenu.obj grafmenu.def
+     link grafmenu, /align:16, NUL, os2, grafmenu
+     rc grafmenu.res
+
+grafmenu.exe : grafmenu.res
+     rc grafmenu.res

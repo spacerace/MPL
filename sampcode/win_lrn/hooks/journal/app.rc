@@ -1,0 +1,32 @@
+#include "style.h"
+#include "APP.h"
+
+APPICON  ICON    APP.ico
+
+STRINGTABLE
+BEGIN
+    IDSNAME,    "APP"
+    IDSABOUT,   "About..."
+    IDSTITLE,   "APP Skeleton"
+END
+
+ABOUTBOX DIALOG 22, 17, 154, 75
+STYLE WS_POPUP | WS_DLGFRAME
+BEGIN
+    CTEXT "Microsoft Windows"                   -1, 0,  5, 154, 8
+    ICON  "APP"                                 -1,  9, 23,  0, 0
+    CTEXT "Skeleton application"                -1,  0, 14, 154, 8
+    CTEXT "Version 2.00"                        -1, 30, 34, 94, 8
+    CTEXT "Copyright © 1987, Microsoft Corp."   -1,  0, 47,154, 9
+    DEFPUSHBUTTON "Ok"                        IDOK, 61, 59, 32, 14, WS_GROUP
+END
+
+APP menu
+begin
+    POPUP "Options"
+       begin
+          MENUITEM "Record On"    , IDRECORDON
+          MENUITEM "Record Off"   , IDRECORDOFF
+          MENUITEM "Play On"      , IDPLAY
+       end
+end

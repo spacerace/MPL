@@ -1,0 +1,5 @@
+
+Microsoft (R) Program Maintenance Utility   Version 1.11    
+Copyright (c) Microsoft Corp 1988-90. All rights reserved.
+
+	cl -Lp -W2 -c -u -AS -Gsw2 -Zep -DCHECKASSERTS -Zi -PLM stock.c

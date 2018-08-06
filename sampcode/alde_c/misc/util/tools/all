@@ -1,0 +1,34 @@
+.c.obj:
+    cl -nologo -c $*.c
+
+.obj.exe:
+    link $** /NOI,,NUL;
+
+df.obj: df.c
+
+df.exe: df.obj
+
+clsize.obj: clsize.asm
+    masm /ML clsize ;
+
+du.obj: du.c
+
+du.exe: du.obj clsize.obj
+    link du.obj clsize.obj /NOI /STA:10000;
+
+ls.obj: ls.c
+
+ls.exe: ls.obj clsize.obj
+    link ls.obj clsize.obj /NOI /STA:10000;
+
+mv.obj: mv.c
+
+mv.exe: mv.obj
+
+rm.obj: rm.c
+
+wild.obj: wild.c
+
+rm.exe: rm.obj wild.obj
+
+

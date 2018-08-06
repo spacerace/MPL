@@ -1,0 +1,21 @@
+#
+# Terminal emulater makefile.
+#
+LIB=..\..\..\lib
+INC=..\..\..\include
+
+CFLAGS=-Lp -Zp -G2 -Ox -I$(INC)
+
+terminal:	terminal.exe 
+
+terminal.obj:	terminal.c terminal terminal.def
+		cl -c $(CFLAGS) terminal.c
+
+modem.obj:	modem.c terminal
+		cl -c $(CFLAGS) modem.c
+
+options.obj:	options.c terminal
+		cl -c $(CFLAGS) options.c
+
+terminal.exe:	terminal.obj modem.obj options.obj 
+		link terminal modem options ,,,$(LIB)\slibcp $(LIB)\doscalls,;

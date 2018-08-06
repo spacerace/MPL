@@ -1,0 +1,6 @@
+gkeystat.obj: gkeystat.c
+    cl -d -c -AS -Gsw -Os -Zpe gkeystat.c
+
+gkeystat.exe: gkeystat.obj gkeystat.def
+    link4 gkeystat,/align:16,/map,slibw/NOE,gkeystat.def
+    mapsym gkeystat

@@ -1,0 +1,9 @@
+NAME            FINDER
+DESCRIPTION     'OS/2 PM File Finder - Jerry Weldon - 1988'
+STUB            'os2stub.exe'
+
+HEAPSIZE        4096
+STACKSIZE       24576
+
+EXPORTS         FinderDlgProc
+                AboutDlgProc

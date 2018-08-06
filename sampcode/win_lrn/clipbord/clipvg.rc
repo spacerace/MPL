@@ -1,0 +1,6 @@
+#include <style.h>
+
+clipvg MENU
+    BEGIN
+	MENUITEM"&Command", 100
+    END

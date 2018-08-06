@@ -1,0 +1,19 @@
+POINTER  IDP_HSPLIT     hsplit.ptr
+POINTER  IDP_VSPLIT     vsplit.ptr
+POINTER  IDP_HVSPLIT    hvsplit.ptr
+
+MENU IDM_DOCSYSMENU PRELOAD
+BEGIN
+    SUBMENU    "", SC_DOCSYSMENU, MIS_BITMAP | MIS_SUBMENU
+    BEGIN
+        MENUITEM   "~Restore\tCtrl+F5",     SC_RESTORE,   MIS_SYSCOMMAND, MIA_DISABLED
+        MENUITEM   "~Move\tCtrl+F7",        SC_MOVE,      MIS_SYSCOMMAND
+        MENUITEM   "~Size\tCtrl+F8",        SC_SIZE,      MIS_SYSCOMMAND
+        MENUITEM   "Mi~nimize\tCtrl+F9",    SC_MINIMIZE,  MIS_SYSCOMMAND
+        MENUITEM   "Ma~ximize\tCtrl+F10",   SC_MAXIMIZE,  MIS_SYSCOMMAND
+        MENUITEM   "",                      ID_DUMMY,     MIS_SEPARATOR
+        MENUITEM   "~Close\tCtrl+F4",       SC_CLOSE,     MIS_SYSCOMMAND
+        MENUITEM   "",                      ID_DUMMY,     MIS_SEPARATOR
+        MENUITEM   "S~plit",                SC_SPLIT,     MIS_SYSCOMMAND
+    END
+END

@@ -1,0 +1,7 @@
+
+globunwr.obj: globunwr.c
+   cl -c -W2 -AS -Gsw -Od -Zped globunwr.c
+
+globunwr.exe: globunwr.obj globunwr.def
+   link4 globunwr,/align:16,/map/li,slibw,globunwr.def
+   mapsym globunwr

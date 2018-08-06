@@ -1,0 +1,14 @@
+#   Define the dependencies
+
+stock.obj : stock.c
+    cl -c -Gsw -Od -W4 -Zdpi -AS stock.c
+
+stock.res : stock.rc
+    rc -r stock.rc
+
+stock.exe: stock.obj stock.def stock.res
+    \c\binb\link /nod /co stock, stock.exe, /map/li, \
+                 slibcew libw, stock
+    rc stock.res
+
+

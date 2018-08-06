@@ -1,0 +1,22 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+gtickcnt.obj: gtickcnt.c
+
+gtickcnt.exe: gtickcnt.obj gtickcnt.def
+    link4 gtickcnt,/align:16,/map,slibw/NOE,gtickcnt.def
+    mapsym gtickcnt

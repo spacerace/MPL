@@ -1,0 +1,8 @@
+scrxms.obj: scrxms.asm
+    masm scrxms;
+
+scrsave.obj: scrsave.c
+    cl -c scrsave.c
+
+scrsave.exe: scrxms.obj scrsave.obj
+    link scrsave+scrxms,,,slibcec;

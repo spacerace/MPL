@@ -1,0 +1,8 @@
+NAME           SAMPLE
+DESCRIPTION    'Demonstration Windows Program'
+STUB           'WINSTUB.EXE'
+CODE           MOVABLE
+DATA           MOVABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        WndProc

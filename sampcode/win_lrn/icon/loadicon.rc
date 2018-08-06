@@ -1,0 +1,12 @@
+#include <windows.h>
+#include  "LoadIcon.h"
+
+LoadIcon ICON LoadIcon.ico
+
+LoadIcon MENU
+    BEGIN
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

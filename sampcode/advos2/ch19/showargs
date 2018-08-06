@@ -1,0 +1,5 @@
+showargs.obj : showargs.asm
+  masm /T showargs.asm;
+
+showargs.exe : showargs.obj showargs.def
+  link showargs,,,os2,showargs

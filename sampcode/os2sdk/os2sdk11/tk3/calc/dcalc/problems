@@ -1,0 +1,12 @@
+
+		Problems with the DCalc Sample
+
+ ** When the window is minimized, one of the buttons overlays the window
+    icon.
+
+ ** When the window is minimized, a click on the icon does not bring up
+    the system menu.  Instead the mouse cursor changes to the calculator
+    icon, as if the Move command were selected.
+
+Note:  One solution to both these problems is not to allow the window to
+       become minimized.

@@ -1,0 +1,44 @@
+%ksend
+1163
+%ksend1
+2598
+%krecv
+3299
+%krecv1
+4937
+%checksum xmit1
+6347
+%checksum recv1
+7376
+%terminal/c1
+8408
+%cistty1
+9300
+%terminal
+11145
+%terminal/c
+13198
+%cistty
+14345
+%status
+15585
+%dos window
+16482
+%exit to dos
+17427
+%close capture
+17724
+%autodial
+17975
+%ascii xmit
+20584
+%checksum xmit
+22609
+%checksum recv
+24233
+%general information
+25886
+%bossinfo
+38880
+%end-of-file
+54107

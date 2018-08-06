@@ -1,0 +1,51 @@
+
+
+        NAME
+                ctlbrk -- control-break (^C) interrupt handler
+
+        SYNOPSIS
+                r = ctlbrk(func);
+                int *func;
+                int r;       return 0 to continue program, not zero
+                             to abort.
+
+        DESCRIPTION
+        This function is used to install a user-written interrupt handler for
+        DOS int 23h, the Control-C handler.  The default handler simply exits
+        (ungracefully) the host program.  Using ctlbrk(), a user-written
+        handler may be substituted for the default.  This may be desirable if
+        it is absolutely necessary to prevent an untimely user-inspired exit,
+        or if control-C is desired to perform some function within the program.
+        The parameter passed is the address of the actual function.
+        Passing a NULL parameter re-installs the handler
+        which was in the interrupt table before this function altered the
+        vector address.  Dos re-installs the original handler upon
+        any program exit, so it is unnecessary to uninstall this handler
+        before actually exiting.
+
+        EXAMPLE
+               #include <stdio.h>
+               #include <keys.h>
+               handler() {
+                    puts("Control-C Received!!!");
+                    return(0);      /* continue program */
+                    }
+
+               main() {
+                  char ch;
+                  ctlbrk(&handler);
+                  ch = NULL;
+                  while(ch != ESC) {  /* loop until ESCAPE pressed */
+                     ch = getche();
+                     }
+                  ctlbrk(NULL);        /* uninstall our trap */
+                  puts("Exiting program now.  Have a nice day!");
+                  }
+
+        WARNING:
+              Within the handler routine, keep the code simple and fast.
+              DO NOT use printf() or its relatives as these will destroy
+              the interrupt structure (for rather obscure reasons).
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

@@ -1,0 +1,3659 @@
+                                    T C X L
+                    An Extended Function Library for Turbo C
+                                  Version 3.3
+                                 by Mike Smedley
+                       (c) 1987, 1988  All Rights Reserved
+
+    This library is intended to be a supplement to the Turbo C function
+library.  It contains over 170 functions designed for use with the tiny and
+small memory models.  Libraries for the other models are provided with
+registration.  This library was compiled with Turbo C 1.5, however, you do not
+need TC 1.5 to use this library.  The following files should be included in
+this:
+
+                TCXL.DOC      - the library documentation
+                TCXL.H        - header file for all functions
+                TCXL.LIB      - the object code library
+                TCXLDEF.H     - header file for miscellaneous functions
+                TCXLDEMO.C    - the demonstration program source code
+                TCXLDEMO.MAK  - the make file used for compiling the demo
+                TCXLDEMO.PRJ  - project file used for compiling the demo
+                TCXLDSK.H     - header file for disk functions
+                TCXLEMS.H     - header file for EMS functions
+                TCXLHIST.DOC  - history of changes
+                TCXLKEY.H     - header file for keyboard functions
+                TCXLMOU.H     - header file for mouse functions
+                TCXLPRN.H     - header file for printer functions
+                TCXLQREF.DOC  - quick reference for TCXL functions
+                TCXLSTR.H     - header file for string functions
+                TCXLVID.H     - header file for video functions
+                TCXLWIN.H     - header file for windowing functions
+
+
+Features of the TCXL Function Library.
+
+            -   Windowing with multiple windows
+            -   Lotus/Intel/Microsoft EMS memory usage
+            -   EGA 43-line and VGA 50-line modes
+            -   Mouse functions for Microsoft compatible mice
+            -   Direct screen writing for fast screen writes
+            -   Screen/window swapping to memory or disk
+            -   DESQview window compatibility
+            -   Advanced string manipulation
+            -   String Pattern matching
+            -   Data encryption
+            -   Multi-field keyboard input from within windows
+            -   Bar-selection/pull-down menus
+            -   Formatted keyboard input
+            -   Equipment detection
+            -   Printing functions
+            -   Sound function
+            -   and more!
+
+
+
+
+
+
+
+                                      1    
+
+
+
+Registration Information.
+
+    You are free to copy and distribute this library freely, however, if you
+find this library of use to you, you are encouraged to register your copy.  The
+registration cost is $20.  Included in this registration cost is technical
+support; libraries for the Medium, Compact, Large, and Huge memory models;
+low-cost upgrades to future revisions; and best of all, the complete library
+source code!  This library may not be used in commercial applications without
+registration.  To register, please send payment and current version number to:
+
+                    Mike Smedley
+                    2441 N.E. Loop 410 #1505
+                    San Antonio, TX 78217
+
+    Or, for more information, I can be reached at one of the following points
+of contact:
+
+        Telephone       -   (512) 590-2910  (no collect calls, please)
+        CompuServe      -   User ID:  71331,2244
+        GEnie           -   Mail address:  M.SMEDLEY
+        Abbey Road BBS  -   (512) 590-6036  1200/2400/9600 8-N-1
+        Telstar BBS     -   (512) 822-8882  1200/2400 8-N-1
+
+
+
+DISCLAIMER:  The author claims no responsibility for any damages caused by the
+use or misuse of this library.  This product is distributed "as is" with no
+warranty expressed or implied.
+
+
+Trademarks Used:
+
+    CompuServe is a registered trademark of CompuServe Incorporated.
+    DESQview is a trademark of Quarterdeck Office Systems.
+    Epson is a registered trademark of Seiko Epson Corporation.
+    IBM is a registered trademark of International Business Machines.
+    LIM and EMS are trademarks of Lotus, Intel, and Microsoft Corporations.
+    Microsoft is a registered trademark of Microsoft Corporation.
+    Turbo C is a registered trademark of Borland International.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      2    
+
+
+
+
+
+Calling TCXL Functions from Turbo C.
+
+
+    To call these functions from Turbo C, you will need to have a line in your
+source code file including the appropriate TCXL header file.  Example:
+
+        #include "tcxlwin.h"
+
+    You will also need to link in the TCXL.LIB file when you link your program.
+You can do this in one of three ways:
+
+        1.  Compile & link from the environment.  Your project (.PRJ) file
+            must contain 'TCXL.LIB' in it.  It should look like:
+
+                myfile tcxl.lib
+
+        2.  Compile & link from the command line.  Type:
+
+                tcc myfile tcxl.lib
+
+        3.  Command line link only.  Type:
+
+                tlink c0s myfile,myfile,,tcxl emu maths cs /c/x
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      3    
+
+
+Calling TCXL Functions from Assembly Language.
+
+
+    Most of TCXL's functions (excluding macro-functions) can be called by
+assembly language.  Some functions will require the Turbo C CS.LIB library to
+be linked in also.  Any TCXL function which calls the Turbo C malloc() function
+cannot be called by an assembly program because malloc() needs information from
+the C0S.OBJ startup code.  Functions that use malloc() include some string
+functions, screen save/restore functions, and windowing functions.
+  
+    Turbo C passes its arguments to a function via the stack.  Arguments are
+pushed onto the stack in reverse order.  Turbo C places the underscore symbol
+preceeding the function name, so to call the getns() function, you must call it
+by _getns.  After the call to the function, you must readjust the stack.  For
+every push on the stack, the stack pointer needs to be incremented by 2.  The
+return value (if any) will be in the AX register.  Functions that return 16-bit
+values will have the high value in DX and the low value in AX.  Here's an
+example for the getns() function:
+
+            EXTRN   _getns:NEAR         ; so assembler won't flag an error
+            mov     ax,30               ; maximum length of input string
+            push    ax                  ; push it onto the stack
+            mov     ax,OFFSET straddr   ; address of string to receive input
+            push    ax                  ; push it onto the stack
+            call    _getns              ; call the function
+            add     sp,4                ; adjust stack 2 for every argument
+            or      ax,ax               ; is return value = 0?
+            jnz     exitprog            ; no, Esc was pressed, exit program
+            (rest of program)
+
+    Here's how to assemble and link your assembly language program with the
+TCXL function library:
+
+        1.  Assemble your assembly source code file with the case-sensitive
+            switch on:
+
+                masm /mx myfile ;
+
+        2.  Link your object file specifying TCXL as a library:
+
+                link myfile,,,tcxl cs
+
+        3.  Convert to a .COM file if applicable:
+
+                exe2bin myfile myfile.com
+
+
+
+
+
+
+
+
+
+
+
+
+                                      4    
+
+
+Using TCXL's Windowing Functions.
+
+
+    TCXL has a a powerful windowing system that can be very useful in an
+application program.  All windowing functions are prefixed with a 'w'.  The
+windowing is controlled by TCXL's window manager which is called by every
+windowing function.  The window manager keeps track of which window is active;
+each window's position, cursor location, attributes, etc.; how many windows are
+open; and other information.  All windowing functions set the _werrno global
+variable before returning.  The literal value of this variable can be viewed
+by calling the werrmsg() function.
+
+    You may open as many windows as memory permits.  Once a window is opened,
+it immediately becomes the active window.  TCXL's windowing functions can only
+be performed on the active window.  If you want to perform a function on a
+inactive window, you must activate it first.  See the supplied TCXLDEMO.C
+program for a complete example of how to use the windowing system.
+
+
+    Example:
+
+        int w1,w2;                              /*  window handles  */
+        w1=wopen(0,0,10,40,0,LCYAN|_BLUE);      /*  open 1st window  */
+        if(!w1) error_routine();                /*  check for error  */
+        waitkey();                              /*  wait for keypress  */
+        wputs("Hello, ");
+        waitkey();                              /*  wait for keypress  */
+        w2=wopen(7,20,18,60,2,LRED|_MAGENTA);   /*  open 2nd window  */
+        if(!w2) error_routine();                /*  check for error  */
+        wputs("Hello, ");
+        waitkey();                              /*  wait for keypress  */
+        if(wactiv(w1)) error_routine();         /*  activate 1st window  */
+        wputs("there");
+        waitkey();                              /*  wait for keypress  */
+        if(wactiv(w2)) error_routine();         /*  activate 2nd window  */
+        wputs("there");
+        waitkey();                              /*  wait for keypress  */
+        wclose();                               /*  close 2nd window  */
+        waitkey();                              /*  wait for keypress  */
+        wclose();                               /*  close 1st window  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      5    
+
+
+Using TCXL's Expanded Memory Specification (EMS) Functions.
+
+
+    TCXL contains several functions for simple management of expanded memory.
+All of TCXL's EMS functions are prefixed with 'ems'.  For those not familiar
+with expanded memory, I will briefly explain it.
+
+    The 8088 microprocessor is only able to address 1 Megabyte of memory.  When
+applications started needing more memory, Lotus, Intel, and Microsoft developed
+the Expanded Memory Specification.  This specification allows access to more
+than 1 Megabyte of memory by mapping 16K 'windows' of memory on an expanded
+memory board in and out of an unused area of DOS memory.  The Expanded Memory
+Manager (EMM) is a software driver that controls the mapping.
+
+    Physical pages are 16K blocks of memory which are located in an unused area
+of DOS memory.  There are typically 4 physical pages comprising a 64K
+contiguous area of mappable DOS memory.  The EMS page frame base address points
+to the beginning of the first physical page. Logical pages are 16K blocks of
+memory on the expanded memory board.  There can be as many logical pages as the
+expanded memory board has, up to 8 Megabytes.
+
+    Every program that uses expanded memory must do the following:
+
+        1.  determine if the EMM device driver is loaded
+        2.  determine if there are enough free pages for its application
+        3.  allocate pages of expanded memory
+        4.  find out what the EMS page frame base address is
+        5.  map logical pages onto physical pages
+        6.  deallocate pages when finished with them
+
+    Here's an example of using TCXL's EMS functions to perform these
+procedures:
+
+        int handle1,handle2;
+        char buf[14];
+        if(!emsexist()) {                   /* check for the EMM driver      */
+            printf("EMM not loaded\n");
+            exit(1);
+        }
+        handle1=emsalloc(2);                /* request 2 pages of EMS memory */
+        handle2=emsalloc(2);                /* request 2 more pages          */
+        if((!emsh1)||(!emsh2)) {            /* test for allocation error     */
+            printf("EMS allocation error\n");
+            exit(1);
+        }
+        emsmap(handle1,0,0);                /* map logical page 0 of handle 1
+                                               to physical page 0            */
+        emswrite("Hello, world",0,13);      /* write a string at offset 0,
+                                               automatically determines what
+                                               the page frame address is     */
+        emsmap(emsh2,0,0);                  /* map logical page 0 of handle 2
+                                               to physical page 0            */
+        emswrite("How are you?",0,13);      /* write a string at offset 0    */
+        emsmap(handle1,0,0);                /* map logical page 0 of handle 1
+                                               to physical page 0            */
+
+
+                                      6    
+        emsread(buf,0,13);                  /* read 13 bytes from offset 0
+                                               into buffer                   */
+        printf("buf = %s\n",buf);           /* display buffer contents       */
+        emsmap(handle2,0,0);                /* map logical page 0 of handle 2
+                                               to physical page 0            */
+        emsread(buf,0,13);                  /* read 13 bytes from offset 0
+                                               into buffer                   */
+        printf("buf = %s\n",buf);           /* display buffer contents       */
+        emsdealloc(handle2);                /* deallocate pages belonging to
+                                               handle 2                      */
+        emsdealloc(handle1);                /* deallocate pages belonging to
+                                               handle 1                      */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      7    
+
+
+Using TCXL's inputsf() and winputsf() Functions.
+
+
+    The inputsf() and winputsf() functions in TCXL accept keyboard input
+through the use of TCXL's own input format strings.  These format strings are
+not the same as what scanf() uses.  They have the ability to restrict and
+convert input for each character received from the keyboard.  They also allow
+for custom prompts between each character input.  The format control characters
+can be in any order in the string, but all letters must be in the case shown
+here.  Invalid control characters will cause the function to return an error
+and the receiving string will be null. Spaces can be used to improve
+readability of the format string.  If the Escape key is not disabled, when
+pressed it will return an error code and the receiving string will be null.
+Valid control characters are:
+
+            !.......!   - start and end exclamation points, any letters
+                          between them are format command toggles.  The
+                          valid format command toggles are:
+
+                            -   - decreases text attribute, works with
+                                  winputsf() only
+
+                            +   - increases text attribute, works with
+                                  winputsf() only
+
+                            C   - toggles copying of display (quoted)
+                                  characters to the receiving string.
+                                  (default is off)
+
+                            E   - toggles Escape key checking off/on.
+                                  When off, if the Escape key is pressed,
+                                  the function returns an error code and
+                                  the string will be null.   The default
+                                  for inputsf() is on.  For winputsf(),
+                                  the default is the value of _wesc upon
+                                  calling.
+
+                            L   - toggles lower-case conversion.  When on,
+                                  the case of input letters will be forced
+                                  to lower case.  (default is off)
+
+                            M   - toggles mixed-case conversion.  When on,
+                                  the case of input letters will be forced
+                                  to upper-case for the first letter of
+                                  each word and lower-case for the
+                                  remaining letters.  (default is off)
+
+                            R   - toggles return key checking.  When off,
+                                  the carriage return key will be ignored
+                                  until the end of the format string.
+                                  (default is on)
+
+                            U   - toggles upper-case conversion.  When on,
+                                  the case of input letters will be forced
+                                  to upper-case.  (default is off)
+
+
+                                      8    
+
+
+            '.......'   - start and end single quotes, any characters
+                          between them will be displayed as text.  If the 'C'
+                          command toggle is on, the characters will also be
+                          copied to the receiving string.
+
+            Character type codes:
+
+            #   - accept numeric character '0' thru '9'
+            9   - accept numeric character '0' thru '9', '.', '-', and '+'
+            ?   - accept any character
+            A   - accept alpha character 'A' thru 'Z', 'a' thru 'z', and space
+            L   - accept alpha character 'A' thru 'Z', 'a' thru 'z', and space
+                  input character will be converted to lower case
+            M   - accept alpha character 'A' thru 'Z', 'a' thru 'z', and space
+                  input character will be converted to mixed case
+            P   - accept printable character (ASCII 20 thru 7E)
+            U   - accept alpha character 'A' thru 'Z', 'a' thru 'z', and space
+                  input character will be converted to upper case
+            X   - accept alphanumeric character 'A' thru 'Z', 'a' thru 'z',
+                  '0' thru '9', and space
+            Y   - accept a yes/no character 'Y', 'y', 'N', and 'n'
+
+
+            <.......>   - start and end angle brackets, accept a character
+                          from valid list of characters between angle brackets.
+
+    Examples:
+
+        inputsf(str,"'Enter name:  ' !UR! XXXXX !R! XXXXXXXXXX");
+
+            Prompts for name, inputs string from keyboard converting characters
+            to upper case as it goes, allows up to 15 alphanumeric characters
+            as input.  The return key is disabled until at least 5 characters
+            have been entered.  Characters will be copied to str.  This space
+            must already be allocated!
+
+
+        inputsf(str,"!R! 'Enter phone:  '!C! '(' ### ') ' ### '-' ####");
+
+            Prompts for a full phone number including area code, allows only
+            digit characters and displays format punctuation as it goes.  The
+            entire field must be filled before return can be pressed.  All of
+            the characters except the prompt will be copied to the receiving
+            string.  The input string will be copied to str, which must have
+            already been allocated.
+
+
+        inputsf(str,"!R!'Enter SSAN:  '<0123456>##'-'##'-'####");
+
+            Prompts for a Social Security number.  Will not allow return to be
+            pressed until all digits have been entered.  The first digit of the
+            SSAN must be 0 - 6. Dashes will be displayed as you are typing in
+            the data, but will not be contained in the receiving string str.
+
+
+
+
+                                      9    
+        inputsf(str,"!R!'Enter DOB (MM/DD/YY):  '<01>#'/'<0123>#'/'##");
+
+            Prompts for Date of Birth.  Allows only valid digits for the input
+            date.  Prevents the return key from working until all digits have
+            been typed in.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      10   
+
+
+Using TCXL's Multi-Field Window Input Functions.
+
+
+    Two functions are needed to process multi-field keyboard input from
+windows:  winpdef(), and winpread().  The winpdef() function sets up an input
+field.  For every input field you want defined, you must call winpdef().  It
+displays the current contents of what is to be the receiving string. The size
+of the string before winpdef() is called will be the size of the input field.
+You may need to resize the string before calling winpdef().  You can do this
+with the strsetsz() function.  The winpdef() function will also specify the
+type of the field.  Valid field types are:
+
+        #   - allow only numeric characters '0' thru '9'
+        9   - allow only numeric characters '0' thru '9', '.', '-', and '+'
+        ?   - allow any characters
+        A   - allow only alpha characters 'A' thru 'Z', 'a' thru 'z', and space
+        L   - allow only alpha characters 'A' thru 'Z', 'a' thru 'z', and space
+              input characters will be converted to lower case
+        M   - allow only alpha characters 'A' thru 'Z', 'a' thru 'z', and space
+              input characters will be converted to mixed case
+        P   - allow only printable characters (ASCII 20 thru 7E)
+        U   - allow only alpha characters 'A' thru 'Z', 'a' thru 'z', and space
+              input characters will be converted to upper case
+        X   - allow only alphanumeric characters 'A' thru 'Z', 'a' thru 'z',
+              '0' thru '9', and space
+        Y   - allow only yes/no characters 'Y', 'y', 'N', and 'n'
+
+    The case of the field type characters must be as shown.  For every input
+field you want defined, you must call winpdef().
+
+    The winpread() function processes all fields defined with winpdef().  The
+user is allowed to move around and edit all of the fields.  Valid editing keys
+are:
+
+        LeftArrow   - moves cursor left inside the field
+        RightArrow  - moves cursor right inside the field
+        UpArrow     - moves cursor to the previous field up
+        DownArrow   - moves cursor to the next field down
+        Tab         - moves cursor to the next field right
+        Shift-Tab   - moves cursor to the next field left
+        Enter       - if the cursor is in the last field on the screen, it will
+                      process all fields.  Otherwise it will skip to the next
+                      field
+        Ctrl-Enter  - processes all fields, wherever the cursor may be
+        Home        - moves cursor to beginning of field
+        End         - moves cursor to end of field
+        Ctrl-Home   - moves cursor to the beginning of the first field on the
+                      screen
+        Ctrl-End    - moves cursor to the end of the last field on the screen
+        Ins         - inserts a space at cursor location.  All text to the
+                      right of the cursor will be shifted right.  The end
+                      character will be dropped.
+        Del         - deletes character at the cursor location.  All text to
+                      the right of the cursor will be shifted left and a space
+                      will be inserted at the end of the field.
+
+
+                                      11   
+        Esc         - if enabled, cancels input and returns a W_ESCPRESS value.
+                      Escape checking can be enabled or disabled by using the
+                      wsetesc() function before winpread() is called.
+
+    After the winpread() function is called, all fields defined with winpdef()
+will be cleared.  The receiving strings of all defined fields will now contain
+the data entered.  If Escape checking was on and the Esc key was pressed, then
+all receiving strings will contain the values they held before winpread() was
+called.
+
+    Another function that can be used in multi-field keyboard input is the
+winpxcel() function.  What this does is cancel all fields defined with
+winpdef().  For winpxcel() to have any effect, it must be called before
+winpread() is.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      12   
+
+
+Using TCXL's Window Bar-Selection Menus.
+
+
+    Two functions are needed to use TCXL's bar-selection menus:  wmbardef(),
+and wmbarget().  The wmbardef() function displays the menu option on the
+screen and assigns a tag character to it.  The tag character is used for
+identification of the menu option.  The tag character must be alphanumeric and
+is case insensitive.  For every menu option you have, the wmbardef() function
+must be called.
+
+    When all menu options have been defined, you will call the wmbarget()
+function.  The first argument to wmbarget() is the attribute of the selection
+bar.  The second argument is the tag character of where you want the selection
+bar to initially be located.  If an undefined tag character is used, then the
+initial position of the selection bar will default to the upper-leftmost
+option.  The third argument of wmbarget() is the pulldown parameter.  This is
+used for a pull-down menu system.  If a pull-down menu system is not being
+used, then the pulldown parameter should be specified as zero.
+
+    If you are using pull-down menus, then the pulldown parameter may have
+one of four values.  PDMAIN is used to signify that the menu you have just
+defined is to be the main menu of a pull-down menu system.  PDMENU is used to
+signify that the menu you have just defined is one of the pull-down menus from
+the main menu.  The other two values that the pulldown parameter can have are
+used for movement between pull-down menus.  PDPREV is used to signify that the
+menu you have just defined is the main menu and you wish to automatically
+select the option previous to the specified taginit.  PDNEXT is used to signify
+that the menu you have just defined is the main menu and you wish to
+automatically select the next option after the specified taginit.
+
+    Movement/selection keys that are used during the wmbarget() function are:
+
+        LeftArrow   - moves selection bar to previous option left.  If inside a
+                      pull-down menu, pressing this will cause wmbarget() to
+                      return PDPREV.
+        RightArrow  - moves selection bar to next option right.  If inside a
+                      pull-down menu, pressing this will cause wmbarget() to
+                      return PDNEXT.
+        UpArrow     - moves selection bar to previous option up.
+        DownArrow   - moves selection bar to next option down.  If pull-down
+                      menus are being used and you are currently in the main
+                      menu, then the option that the selection bar is on is
+                      selected.
+        Tab         - moves selection bar to next option right.
+        Shift-Tab   - moves selection bar to previous option left.
+        Enter       - selects the option that the selection bar is on.
+        Home        - moves selection bar to upper left option.
+        End         - moves selection bar to lower right option.
+        Esc         - if enabled, cancels input and returns a zero.  Escape
+                      checking can be enabled or disabled by using the
+                      wsetesc() function before wmbarget() is called.  If
+                      inside a pull-down menu, pressing this will cause
+                      wmbarget() to return PDMAIN.
+
+    When an option is selected, it's tag character will be returned by
+
+
+                                      13   
+wmbarget().  The tag character will be in the same case as when defined.  If
+the Esc key was pressed and Escape checking was on, a zero will be returned and
+the global variable _werrno will be set to W_ESCPRESS.  If any other error
+occurred, the return value will be zero and the global variable _werrno will be
+set to an error code (see TCXLWIN.H).  Once a selection is made, the wmbarget()
+function automatically clears all menu options defined by wmbardef().
+
+  If you are using wmbarget() to process a pull-down menu (PDMENU), and the
+LeftArrow or RightArrow key is pressed, then wmbarget() will return PDPREV or
+PDNEXT, respectively.  This allows you to input these return values back into
+the main menu's wmbarget() pulldown parameter to automatically select the
+previous or next pull-down window from the current pull-down window.  The
+Escape checking status will be ignored while using pull-down menus.  Instead,
+if in a pull-down menu (PDMENU), and the Esc key is pressed, wmbarget() will
+return PDMAIN, which allows you to reinput that value back into the main menu's
+wmbarget() pulldown parameter.  For a complete example of using pull-down
+menus, see the example in TCXLDEMO.C.
+
+    Another function that may be used for bar-selection menus is wmbarxcel().
+This can be used if you need to cancel all defined options before wmbarget() is
+called.
+
+Example for a Bar-Selection Menu:
+
+        int selection;
+        wopen(5,10,20,50,4,LMAGENTA|_RED);
+        wmbardef(2,2,LGREEN|_RED,"Add record",'A');
+        wmbardef(4,2,LGREEN|_RED,"Delete record",'D');
+        wmbardef(6,2,LGREEN|_RED,"Print record",'P');
+        wmbardef(8,2,LGREEN|_RED,"Update record",'U');
+        selection=wmbarget(LRED|_GREEN,'A',0);
+        wgotoxy(10,2);
+        wprintf("You selected %c\n",selection);
+        waitkey();
+        wclose();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      14   
+
+
+Using TCXL's Mouse Functions.
+
+
+    TCXL has several functions used to facilitate Microsoft compatible mice.
+All of these functions are prefixed with a 'ms'.  These functions will work
+on Microsoft mice or other mice using a Microsoft compatible driver.  These
+mouse functions allow you to:
+
+        1.  Initialize mouse/determine if mouse exists.
+        2.  Get the status of button presses/releases.
+        3.  Hide/reveal the mouse cursor.
+        4.  Get/set the mouse cursor position.
+        5.  Select type of mouse cursor (hardware or software).
+        5.  Adjust the mouse sensitivity (speed).
+        6.  Get information on direction of mouse movement.
+        7.  Establish horizontal/vertical boundries of mouse movement.
+
+    When reading or setting mouse coordinates, the values used are in pixels.
+To calculate mouse coordinates in terms of column and row instead of X and Y,
+you would multiply character width by column, and character height by row.
+Typically, screen characters are 8 pixels wide by 8 pixels tall.  So, to
+position the mouse cursor at column 60, row 15, you would use:
+
+        msgotoxy(60*8,15*8);
+
+    The mscursor() function sets the cursor type.  It takes 3 parameters:
+ctype, smask, and cmask.  If ctype = 1 then the cursor type is hardware.  The
+hardware cursor is the flashing block on your screen.  If this type of cursor
+is used, it will interfere with normal text cursor functions.  When using the
+hardware cursor type, the value for smask is the start scan line of the cursor,
+and the value for cmask is the stop scan line of the cursor.  If the ctype
+parameter = 0, then a software cursor is used.  For the software cursor, the
+smask parameter is the screen mask, and the cmask parameter is the cursor mask.
+The screen mask determines which of the characters attributes are preserved.
+The cursor mask defines how the attributes are changed to show the cursor.  For
+both masks, the bit values are as follows:
+
+        Bits 0-7:       ASCII value of character
+        Bits 8-10:      Foreground color
+        Bit 11:         Intensity
+        Bits 12-14:     Background color
+        Bit 15:         Blink
+
+    The msmotion() function determines direction and distance traveled since
+last msmotion() call.  The xcount and ycount parameters will either be negative
+or positive depending on direction mouse moved.  The amount will be the number
+of pixels travelled.
+
+    When updating the screen, the mouse cursor should be hidden with the
+mshidecur() function first, and then after the screen is updated, the
+msshowcur() should be called to re-display the mouse cursor.
+
+
+
+
+
+
+                                      15   
+
+
+                       Description of TCXL Functions
+                       -----------------------------
+
+
+Name:       attrib
+Purpose:    creates an attribute
+Prototype:  int attrib(int fore,int back,int bright,int blink);
+Header:     tcxlvid.h  tcxlwin.h
+Inputs:     fore    - foreground color code (0-7)
+            back    - background color code (0-7)
+            bright  - intensity (0-1)
+            blink   - blinking (0-1)
+Return:     attribute
+Also see:   setattr wtextattr
+Example:
+            prints(15,10,attrib(7,5,1,0),"Hello, world");
+
+
+Name:       beep
+Purpose:    sounds a beep in the speaker
+Prototype:  void beep(void);
+Header:     tcxldef.h
+Inputs:     none
+Return:     none
+Also see:   sound_
+Example:
+            beep();
+
+
+Name:       biosver
+Purpose:    returns the ROM BIOS version date
+Prototype:  char *biosver(void);
+Header:     tcxldef.h
+Inputs:     none
+Return:     address of the static string containing the ROM BIOS version date
+Also see:   machid
+Example:
+            printf("ROM BIOS version date is %s\n",biosver());
+
+
+Name:       box
+Purpose:    draws a box on the screen
+Prototype:  void box(int srow,int scol,int erow,int ecol,int btype,int atr);
+Header:     tcxlvid.h
+Inputs:     srow    - starting row upper left corner
+            scol    - starting column upper left corner
+            erow    - ending row lower right corner
+            ecol    - ending column
+            btype   - box type (0-5)
+            atr     - attribute
+Return:     none
+Also see:   attrib boxd
+Example:
+            box(0,0,22,79,1,WHITE|_BLUE);
+
+
+
+                                      16   
+ 
+Name:       boxd
+Purpose:    draws a box directly on the screen (no BIOS calls)
+Prototype:  void boxd(int srow,int scol,int erow,int ecol,int btype,int atr);
+Header:     tcxlvid.h
+Inputs:     srow    - starting row upper left corner
+            scol    - starting column upper left corner
+            erow    - ending row lower right corner
+            ecol    - ending column
+            btype   - box type (0-5)
+            atr     - attribute
+Return:     none
+Also see:   attrib box videoinit
+Example:
+            boxd(0,0,22,79,1,WHITE|_BLUE);
+
+ 
+Name:       capsoff
+Purpose:    toggles the CapsLock key off
+Prototype:  void capsoff(void);
+Header:     tcxlkey.h
+Inputs:     none
+Return:     none
+Also see:   capson kbstat numoff
+Example:
+            capsoff();
+
+
+Name:       capson
+Purpose:    toggles the CapsLock key on
+Prototype:  void capson(void);
+Header:     tcxlkey.h
+Inputs:     none
+Return:     none
+Also see:   capsoff kbstat numon
+Example:
+            capson();
+
+
+Name:       clearkeys
+Purpose:    clears the keyboard buffer
+Prototype:  void clearkeys(void);
+Header:     tcxlkey.h
+Inputs:     none
+Return:     none
+Also see:   waitkey
+Example:
+            int ch;
+            printf("Press a key:  ");
+            clearkeys();
+            ch=getche();
+
+
+Name:       clockcal
+Purpose:    determines if a clock-calendar board is installed (usually this
+            board will only be in XT machines)
+Prototype:  int clockcal(void);
+
+
+                                      17   
+Header:     tcxldef.h
+Inputs:     none
+Return:     a non-zero value if a clock-calendar board is present
+Example:
+            printf("A clock-calendar is%s installed\n",clockcal()?"":" not");
+
+
+Name:       clreol_
+Purpose:    clears to the end of line using current attribute
+Prototype:  void clreol_(void);
+Header:     tcxlvid.h
+Inputs:     none
+Return:     none
+Also see:   clrscrn clrwin
+Example:
+            prints(10,5,LCYAN|_BLUE,"Hello, worldXXXXXXXX");
+            gotoxy_(10,17);
+            clreol_();
+
+
+Name:       clrscrn
+Purpose:    clears the screen (up to 50 lines) using current attribute, and
+            homes the cursor
+Prototype:  void clrscrn(void);
+Header:     tcxlvid.h
+Inputs:     none
+Return:     none
+Also see:   clreol_ clrwin
+Example:
+            clrscrn();
+
+ 
+Name:       clrwin
+Purpose:    clears a window of the screen using current attribute
+Prototype:  void clrwin(srow,scol,erow,ecol);
+Header:     tcxlvid.h
+Inputs:     srow    - starting row upper left corner
+            scol    - starting column upper left corner
+            erow    - ending row lower right corner
+            ecol    - ending column lower right corner
+Return:     none
+Also see:   clreol_ clrscrn
+Example:
+            filld(10,10,20,20,'X',LCYAN|_BLUE);
+            clrwin(11,11,19,19);
+
+
+Name:       cvaltype
+Purpose:    checks given character against given character type code,
+            determines if character is valid type
+Prototype:  int cvaltype(int ch,int ctype);
+Header:     tcxlstr.h
+Inputs:     ch      - character to test
+            ctype   - character type code to compare with, see section on TCXL
+                      format strings for a list of valid character type codes.
+Return:     a 1 if character is a valid character type, otherwise a zero
+Also see:   winpdef
+
+
+                                      18   
+Example:
+            int valid=NO;
+            char ch='Z';
+            valid=cvaltype(ch,'#');
+            printf("%c is %sa valid char of type '#'\n",ch,valid?"":" not");
+
+
+Name:       delay_
+Purpose:    delays program execution for a specified duration
+Prototype:  void delay_(unsigned duration);
+Header:     tcxldef.h
+Inputs:     duration    - duration (0-65535) ie. 18 = 1 second
+Return:     none
+Also see:   timer waitkeyt
+Example:
+            printf("Testing\n1\n");
+            delay_(36);
+            printf("2\n");
+            delay_(36);
+            printf("3\n");
+
+
+Name:       disktoscrn
+Purpose:    copies a previously saved screen disk file back to the screen
+Prototype:  int disktoscrn(char *fname);
+Header:     tcxldsk.h tcxlvid.h
+Inputs:     fname   - address of the string containing file name to read from
+Return:     a zero if no error
+Also see:   disktowin fexist scrntodisk
+Example:
+            if(disktoscrn("SCREEN.DAT")) {
+                printf("Error reading input file\n");
+                exit(1);
+            }
+
+
+Name:       disktowin
+Purpose:    copies a previously saved window disk file back to the screen
+Prototype:  int disktowin(char *fname);
+Header:     tcxldsk.h
+Inputs:     fname   - address of the string containing file name to read from
+Return:     a zero if no error
+Also see:   disktoscrn fexist wintodisk
+Example:
+            if(disktowin("WINDOW.DAT")) {
+                printf("Error reading input file\n");
+                exit(1);
+            }
+
+
+Name:       emsalloc
+Purpose:    allocates pages of EMS memory.  See the section on using TCXL's EMS
+            functions for more information
+Prototype:  unsigned emsalloc(int numpages);
+Header:     tcxlems.h
+Inputs:     numpages  - the number of pages (16K blocks) requested
+Return:     the EMS handle or a 0 if an error occurred
+
+
+                                      19   
+Also see:   emsdealloc emsexist emsfree
+Example:
+            int handle1;
+            handle1=emsalloc(2);        /*  request 2 pages (32K)   */
+            if(!handle1) {
+                printf("EMS allocation error\n");
+                exit(1);
+            }
+
+
+Name:       emsdealloc
+Purpose:    deallocate previously allocated pages of EMS memory
+Prototype:  int emsdealloc(int handle);
+Header:     tcxlems.h
+Inputs:     handle  - the previously assigned EMS handle
+Return:     a 0 if no error or else an EMS error code
+Also see:   emsalloc
+Example:
+            if(emsdealloc(ems_handle)) {
+                printf("EMS deallocation error\n");
+                exit(1);
+            }
+
+
+Name:       emsexist
+Purpose:    determines if the EMS device driver is loaded.  See the section on
+            using TCXL's EMS functions for more information
+Prototype:  int emsexist(void);
+Header:     tcxlems.h
+Inputs:     none
+Return:     a 0 if EMS driver not loaded, or a 1 if EMS driver is loaded
+Also see:   emsalloc emsfree emstotal expmem
+Example:
+            printf("EMS device driver is %sloaded\n",(emsexist())?"":"not ");
+
+
+Name:       emsframe
+Purpose:    returns the EMS page frame base address (segment)
+Prototype:  unsigned emsframe(void);
+Header:     tcxlems.h
+Inputs:     none
+Return:     the EMS page frame base address (segment) or a zero if an error
+            occurred
+Also see:   emsmap
+Example:
+            printf("EMS page frame address is at:  %X\n",emsframe());
+
+
+Name:       emsfree
+Purpose:    returns the number of free EMS pages (16K blocks)
+Prototype:  unsigned emsfree(void);
+Header:     tcxlems.h
+Inputs:     none
+Return:     the number of free EMS pages
+Also see:   emsalloc emstotal
+Example:
+            printf("Free EMS pages:  %d\n",emsfree());
+
+
+                                      20   
+
+
+Name:       emsmap
+Purpose:    maps a logical EMS page onto a physical page address, emsalloc()
+            must be called prior to this function
+Prototype:  int emsmap(int handle,int lpage,int ppage);
+Header:     tcxlems.h
+Inputs:     handle  - the EMS handle previosly assigned
+            lpage   - the logical EMS page to map (0 - ?)
+            ppage   - the physical DOS page to map to (0 - 3)
+Return:     a zero if no error, or else an EMS error code
+Also see:   emsalloc emsframe
+Example:
+            if(emsmap(ems_handle,0,0)) {
+                printf("Error mapping logical page 0 to physical page 0\n");
+                exit(1);
+            }
+
+
+Name:       emsread
+Purpose:    reads bytes from an EMS page(s), emsalloc() and emsmap() must be
+            called prior to this function.  The source segment used will be
+            the current EMS page frame address and the destination segment will
+            be the program's DATA segment.
+Prototype:  int emsread(void *dest,unsigned emsofs,unsigned numbytes);
+Header:     tcxlems.h
+Inputs:     dest     - address to receive bytes read
+            emsofs   - offset from the EMS page frame base address at which to
+                       read the bytes from
+            numbytes - the number of bytes to read
+Return:     a zero if no error, otherwise an error
+Also see:   emsmap emswrite
+Example:
+            if(!emsread(buf,0x100,64)) {
+                printf("Failed to read 64 bytes from EMS memory\n");
+                exit(1);
+            }
+
+
+Name:       emstotal
+Purpose:    returns the total number of EMS pages (16K blocks) on the system
+Prototype:  unsigned emstotal(void);
+Header:     tcxlems.h
+Inputs:     none
+Return:     the total number of EMS pages on the system or a zero if an error
+            occurred
+Also see:   emsfree expmem
+Example:
+            printf("You have %d pages of EMS memory\n",emstotal());
+
+
+Name:       emsver
+Purpose:    returns the current EMS version
+Prototype:  char *emsver(void);
+Header:     tcxlems.h
+Inputs:     none
+Return:     the address of the static string containing the EMS version number
+
+
+                                      21   
+            or NULL if error
+Example:
+            printf("Your EMS version is %s\n",emsver());
+
+
+Name:       emswrite
+Purpose:    writes bytes to an EMS page(s), emsalloc() and emsmap() must be
+            called prior to this function.  The source segment will be the
+            program's DATA segment and the destination segment will be the
+            EMS current EMS page frame address.
+Prototype:  int emswrite(void *src,unsigned emsofs,unsigned numbytes);
+Header:     tcxlems.h
+Inputs:     src      - address of where to write bytes from
+            emsofs   - offset from EMS page frame base address of where to write
+                       bytes to
+            numbytes - number of bytes to write
+Return:     a zero if no error, otherwise an error
+Also see:   emsframe emsmap emsread
+Example:
+            if(!emswrite(buf,0x100,64)) {
+                printf("Failed to write 64 bytes to EMS memory\n");
+                exit(1);
+            }
+
+
+Name:       expmem
+Purpose:    determines the amount (if any) of expanded memory on the system
+Prototype:  unsigned expmem(void);
+Header:     tcxldef.h tcxlems.h
+Inputs:     none
+Return:     the amount of expanded memory in Kilobytes
+Also see:   emsexist extmem
+Example:
+            printf("Amt of expanded memory = %dK\n",expmem());
+
+
+Name:       extmem
+Purpose:    determines the amount of extended memory on an AT machine
+Prototype:  unsigned extmem(void);
+Header:     tcxldef.h
+Inputs:     none
+Return:     the amount of extended memory in Kilobytes
+Also see:   expmem
+Example:
+            printf("Amt of extended memory = %dK\n",extmem());
+
+
+Name:       fcmpdatm
+Purpose:    compares the dates and times of 2 files
+Prototype:  int fcmpdatm(char *fname1,char *fname2);
+Header:     tcxldsk.h
+Inputs:     fname1  - address of string containing filename1
+            fname2  - address of string containing filename2
+Return:     -1 if less than or equal to, 0 if error, 1 if greater than
+Also see:   fexist
+Example:
+            int i;
+
+
+                                      22   
+            i=fcmpdatm("C:FILE1.EXT","A:FILE1.EXT");
+            if(i>0) printf("Backup copy of file needs refreshing\n");
+
+
+Name:       fexist
+Purpose:    determines if a disk file exists
+Prototype:  int fexist(char *fname);
+Header:     tcxldsk.h
+Inputs:     fname   - the address of string containing file name to check,
+                      wildcards are allowed in the file name
+Return:     a 0 if file doesn't exist, a 1 if it does
+Also see:   fcmpdatm
+Example:
+            int i;
+            i=fexist("\\COMMAND.COM");
+            printf("\\COMMAND.COM does %sexist\n",i?"":"not ");
+
+
+Name:       fhide
+Purpose:    hides a disk file
+Prototype:  int fhide(char *filename);
+Header:     tcxldsk.h
+Inputs:     filename    - address of string containing file name
+Return:     a zero if an error occurred
+Example:
+            if(!fhide("MYFILE.EXT")) {
+                printf("Could not hide file\n");
+                exit(1);
+            }
+ 
+ 
+Name:       fill
+Purpose:    fills in a region of the screen with specified character/attribute
+Prototype:  void fill(int srow,int scol,int erow,int ecol,int ch,int atr);
+Header:     tcxlvid.h
+Inputs:     srow    - starting row upper left corner
+            scol    - starting column upper left corner
+            erow    - ending row lower left corner
+            ecol    - ending column lower left corner
+            ch      - character to fill with
+            atr     - attribute of character
+Return:     none
+Also see:   attrib filld
+Example:
+            box(1,1,10,10,3,LMAGENTA|_CYAN);
+            fill(2,2,9,9,' ',WHITE|_RED);
+
+ 
+Name:       filld
+Purpose:    fills in a region of the screen with specified character/attribute
+            by writing directly to the screen (no BIOS calls)
+Prototype:  void filld(int srow,int scol,int erow,int ecol,int ch,int atr);
+Header:     tcxlvid.h
+Inputs:     srow    - starting row upper left corner
+            scol    - starting column upper left corner
+            erow    - ending row lower left corner
+            ecol    - ending column lower left corner
+
+
+                                      23   
+            ch      - character to fill with
+            atr     - attribute of character
+Return:     none
+Also see:   attrib fill videoinit
+Example:
+            boxd(1,1,10,10,3,LMAGENTA|_CYAN);
+            filld(2,2,9,9,' ',WHITE|_RED);
+
+
+Name:       gameport
+Purpose:    determines if a game port is installed
+Prototype:  int gameport(int equip);
+Header:     tcxldef.h
+Inputs:     equip   - the result from the biosequip() function
+Return:     a 1 if a game port is installed
+Also see:   mathchip numflop numpar numser
+Example:
+            int i;
+            i=biosequip();
+            printf("Game port is %sinstalled\n",gameport(i)?"":"not ");
+
+
+Name:       getchf
+Purpose:    gets a character from the keyboard from a list of valid
+            characters, provides Escape checking
+Prototype:  int getchf(char *valid);
+Header:     tcxlkey.h
+Inputs:     valid   - address of list of valid characters
+Return:     the character pressed or 0 if the Escape key was pressed
+Also see:   getxch waitkey
+Example:
+            char ch;
+            printf("Are you sure?  ");
+            ch=getchf("YyNn");
+            if(ch!='Y'&&ch!='y') {
+                exit(0);
+            }
+
+ 
+Name:       getktot
+Purpose:    gets the total disk space in kilobytes
+Prototype:  unsigned getktot(int drive);
+Header:     tcxldsk.h
+Inputs:     drive   - the drive to check (3 = C:, 4 = D:, etc.)
+Return:     size of the specified disk in kilobytes, -1 if error
+Also see:   getvol
+Example:
+            printf("drive C: contains %u kilobytes\n",getktot(3));
+
+
+Name:       getns
+Purpose:    inputs a string of specified length from the keyboard, provides
+            Escape checking
+Prototype:  int getns(char *str,int max);
+Header:     tcxlkey.h
+Inputs:     str     - address of allocated space to receive input string
+            max     - maximum length of the input string
+
+
+                                      24   
+Return:     a 1 if the <Esc> key was pressed
+Also see:   inputsf prompts
+Example:
+            char age[2];
+            printf("Enter your age:  ");
+            if(getns(age,2)) {
+                printf("Escape was pressed\n");
+                exit(0);
+            }
+            printf("Your age is:  %s\n",age);
+
+ 
+Name:       getvol
+Purpose:    gets the volume label from a disk drive
+Prototype:  char *getvol(char drive);
+Header:     tcxldsk.h
+Inputs:     drive   - drive letter
+Return:     address of a static string containing the volume label or a zero if
+            the disk has no volume label
+Also see:   getktot
+Example:
+            printf("The volume label on drive C is:  %s\n",getvol('C'));
+
+
+Name:       getxch
+Purpose:    gets a key (ASCII code/extended ASCII code) from the keyboard
+Prototype:  void getxch(int *ch,int *xch);
+Header:     tcxlkey.h
+Inputs:     ch      - the address of where to store input key's ASCII code
+            xch     - the address of where to store input key's extended ASCII
+                      code
+Return:     none
+Also see:   getchf
+Example:
+            int ch,xch;
+            printf("Press a key:  ");
+            getxch(&ch,&xch);
+            printf("\nch = %c, ASCII code = %d, extended  = %d\n",ch,ch,xch);
+
+
+Name:       gotoxy_
+Purpose:    sets cursor coordinates on the screen
+Prototype:  void gotoxy_(int row,int col);
+Header:     tcxlvid.h
+Inputs:     row     - cursor row (Y coordinate)
+            col     - cursor column (X coordinate)
+Return:     none
+Also see:   readcur
+Example:
+            gotoxy_(20,30);
+            printf("We are at row 20, column 30\n");
+
+ 
+Name:       home
+Purpose:    homes the cursor
+Prototype:  void home(void);
+Header:     tcxlvid.h
+
+
+                                      25   
+Inputs:     none
+Return:     none
+Also see:   clrscrn gotoxy_
+Example:
+            home();
+            printf("We are at row 0, column 0\n");
+
+
+Name:       inputsf
+Purpose:    inputs a formatted string from the keyboard
+Prototype:  int inputsf(char *str,char *fmt);
+Header:     tcxlkey.h
+Inputs:     str     - address of the allocated space to receive string
+            fmt     - address of the format string, see section on using format
+                      strings
+Return:     a 0 if no error, a 1 if Escape, a 2 if invalid format string
+Also see:   getns prompts
+Example:
+            char str[255];
+            inputsf(str,!RE!'Enter phone number:  ('###') '###'-'####");
+            printf("\nYour phone number is:  %s\n",str);
+            inputsf(str,!EM!'Enter your name:  'AAAAAAAAAAAAAAAA");
+            printf("\nYour name is:  %s\n",str);
+
+
+Name:       kbstat
+Purpose:    returns the status of the keyboard control keys
+Prototype:  int kbstat(void);
+Header:     tcxlkey.h
+Inputs:     none
+Return:     status word of the keyboard flag
+Also see:   capsoff capson numoff numon
+Example:
+            if(kbstat()&CTRL) printf("The <Ctrl> key is now being pressed\n");
+
+
+Name:       lcrlf
+Purpose:    prints a carriage return and line feed on the printer
+Prototype:  void lcrlf(void);
+Header:     tcxlprn.h
+Inputs:     none
+Return:     none
+Also see:   lprintc
+Example:
+            lprints("Hello, world");
+            lcrlf();
+            lprintc(FF);
+
+
+Name:       lprintc
+Purpose:    prints a character on the printer
+Prototype:  void lprintc(int ch);
+Header:     tcxlprn.h
+Inputs:     ch  - the character to print
+Return:     none
+Also see:   lcrlf lprintf
+Example:
+
+
+                                      26   
+            lprints("Hello, world\n");
+            lprintc(FF);
+
+
+Name:       lprintf
+Purpose:    sends formatted output to the printer, works like printf()
+Prototype:  int lprintf(const char *format,...);
+Header:     tcxlprn.h
+Inputs:     format  - format string, refer to Turbo C manual under printf()
+            ...     - any additional arguments
+Return:     a zero if no error, otherwise a memory allocation error
+Also see:   lprintc lprintns lprints
+Example:
+            char ch='X';
+            int i=327;
+            char *str="Hello";
+            lprintf("%s %c %d\n",str,ch,i);
+
+
+Name:       lprintns
+Purpose:    prints a string on the printer, formatting width
+Prototype:  void lprintns(char *str,int width);
+Header:     tcxlprn.h
+Inputs:     str     - the address of the string to print
+            width   - width to print string, uses padding or truncating
+Return:     none
+Also see:   lprintf lprints lprintsu
+Example:
+            lprintns("Hello, world",5);
+            lcrlf();
+            lprintc(FF);
+
+
+Name:       lprints
+Purpose:    prints a string on the printer
+Prototype:  void lprints(char *str);
+Header:     tcxlprn.h
+Inputs:     str     - the address of the string to print
+Return:     none
+Also see:   lprintf lprintns lprintsu
+Example:
+            lprints("Hello, world\n");
+            lprintc(FF);
+
+ 
+Name:       lprintsb
+Purpose:    prints a bold-faced string on the printer
+Prototype:  void lprintsb(char *str);
+Header:     tcxlprn.h
+Inputs:     str     - the address of the string to print
+Return:     none
+Also see:   lprints lprintsu
+Example:
+            lprintsb("Hello, world\n");
+            lprintc(FF);
+
+ 
+
+
+                                      27   
+Name:       lprintsu
+Purpose:    prints an underlined string on the printer
+Prototype:  void lprintsu(char *str);
+Header:     tcxlprn.h
+Inputs:     str     - the address of the string to print
+Return:     none
+Also see:   lprints lprintsb
+Example:
+            lprintsu("Hello, world\n");
+            lprintc(FF);
+
+ 
+Name:       machid
+Purpose:    returns the value of the machine ROM ID byte
+Prototype:  int machid(void);
+Header:     tcxldef.h
+Inputs:     none
+Return:     the value of the machine ROM ID byte
+Also see:   biosver
+Example:
+            if(machid()==IBMPCAT) printf("You have an IBM PC/AT\n");
+
+
+Name:       mathchip
+Purpose:    determines if a math coprocessor is installed
+Prototype:  int mathchip(int equip);
+Header:     tcxldef.h
+Inputs:     equip   - the result from the biosequip() function
+Return:     a 1 if a math coprocessor is installed
+Also see:   gameport numflop numpar numser
+Example:
+            int i;
+            i=biosequip();
+            printf("Math coprocessor is %sinstalled\n",mathchip(i)?"":"not ");
+ 
+
+Name:       mode
+Purpose:    sets the video mode
+Prototype:  void mode(int mode_code);
+Header:     tcxlvid.h
+Inputs:     mode_code   - mode code number
+Return:     none
+Also see:   setlines vidtype
+Example:
+            mode(4);
+            printf("We are now in CGA graphics mode\n");
+
+ 
+Name:       msbpress
+Purpose:    gets info about specific button presses of mouse
+Prototype:  void msbpress(int button,int *bstat,int *bcount,int *x,int *y);
+Header:     tcxlmou.h
+Inputs:     button  - button to check, 0 = left button, 1 = right button
+            bstat   - address to receive button status (0 = not being pressed,
+                      1 = currently being pressed)
+            bcount  - address to receive number of times pressed since last
+                      call
+
+
+                                      28   
+            x       - address to receive X pixel coordinate at time of press
+            y       - address to receive Y pixel coordinate at time of press
+Return:     none
+Also see:   msbreles msstatus
+Example:
+            int bstat,int bcount,int x,int y;
+            msbpres(0,&bstat,&bcount,&x,&y);
+            printf("bstat = %d, bcount = %d, x = %d, y = %d\n",bstat,bcount,
+                x,y);
+
+
+Name:       msbreles
+Purpose:    gets info about specific button releases of mouse
+Prototype:  void msbreles(int button,int *bstat,int *bcount,int *x,int *y);
+Header:     tcxlmou.h
+Inputs:     button  - button to check, 0 = left button, 1 = right button
+            bstat   - address to receive button status (0 = not being pressed,
+                      1 = currently being pressed)
+            bcount  - address to receive number of times released since last
+                      call
+            x       - address to receive X pixel coordinate at time of release
+            y       - address to receive Y pixel coordinate at time of release
+Return:     none
+Also see:   msbpress msstatus
+Example:
+            int bstat,int bcount,int x,int y;
+            msbreles(0,&bstat,&bcount,&x,&y);
+            printf("bstat = %d, bcount = %d, x = %d, y = %d\n",bstat,bcount,
+                x,y);
+
+
+Name:       mscursor
+Purpose:    sets the mouse cursor mode
+Prototype:  void mscursor(int curtype,int smask,int cmask);
+Header:     tcxlmou.h
+Inputs:     curtype     - cursor type, 0 = software, 1 = hardware
+            smask       - screen mask (SW) or start scan line (HW), see section
+                          on using mouse functions for a description of mask
+            cmask       - cursor mask (SW) or stop scan line (HW), see section
+                          on using mouse functions for a description of mask
+Return:     none
+Also see:   msshowcur
+
+
+Name:       msgotoxy
+Purpose:    sets the mouse coordinates
+Prototype:  void msgotoxy(int x,int y);
+Header:     tcxlmou.h
+Inputs:     x   -   X pixel coordinate
+            y   -   Y pixel coordinate
+Return:     none
+Also see:   msstatus
+Example:
+            msgotoxy(20*8,10*8);  /* sets mouse cursor at row 10, column 20 */
+
+
+Name:       mshbounds
+
+
+                                      29   
+Purpose:    sets the mouse horizontal bounds
+Prototype:  void mshbounds(int left,int right);
+Header:     tcxlmou.h
+Inputs:     left    - left pixel boundry
+            right   - right pixel boundry
+Return:     none
+Also see:   msvbounds
+Example:
+                         /* limits mouse movement between columns 40 and 60 */
+            mshbounds(40*8,60*8);
+
+
+Name:       mshidecur
+Purpose:    hides the mouse cursor
+Prototype:  void mshidecur(void);
+Header:     tcxlmou.h
+Inputs:     none
+Return:     none
+Also see:   msshowcur
+Example:
+            msshowcur();        /*  now you see mouse cursor  */
+            mshidecur();        /*  now you don't             */
+
+
+Name:       msinit
+Purpose:    determines if mouse is present.  If so, initializes mouse.  See
+            section on how to use TCXL's mouse functions for details.
+Prototype:  int msinit(void);
+Header:     tcxlmou.h
+Inputs:     none
+Return:     a 0 if mouse is not present
+Example:
+            if(msinit()) {
+                printf("Mouse initialized!\n");
+            }
+            else {
+                printf("Mouse does not exist\n");
+            }
+
+
+Name:       msmotion
+Purpose:    gets information about the movement of mouse
+Prototype:  void msmotion(int *xcount,int *ycount);
+Header:     tcxlmou.h
+Inputs:     xcount   - address to receive amount of X movement in pixels -/+
+            ycount   - address to receive amount of Y movement in pixels -/+
+Return:     none
+Example:
+            int xcount,ycount;
+            msinit();
+            msmotion(&xcount,&ycount);
+            printf("Move mouse, then press a key\n");
+            waitkey();
+            msmotion(&xcount,&ycount);
+            if(xcount<0) printf("mouse moved left\n");
+            if(xcount>0) printf("mouse moved right\n");
+            if(ycount<0) printf("mouse moved up\n");
+
+
+                                      30   
+            if(ycount>0) printf("mouse moved down\n");
+
+
+Name:       msshowcur
+Purpose:    reveals the mouse cursor
+Prototype:  void msshowcur(void);
+Header:     tcxlmou.h
+Inputs:     none
+Return:     none
+Also see:   mshidecur
+Example:
+            msshowcur();        /*  now you see mouse cursor  */
+            mshidecur();        /*  now you don't             */
+
+
+Name:       msspeed
+Purpose:    adjusts mouse speed by changing its sensitivity
+Prototype:  void msspeed(int xratio,int yratio);
+Header:     tcxlmou.h
+Inputs:     xratio      - horizontal speed (higher numbers are slower)
+            yratio      - vertical speed (higher numbers are slower)
+Return:     none
+Example:
+            msinit();
+            msshowcur();
+            printf("move mouse around, then press a key\n");
+            waitkey();
+            msspeed(15,15);
+            printf("now see how mouse moves\n");
+            waitkey();
+
+
+Name:       msstatus
+Purpose:    returns the mouse status
+Prototype:  void msstatus(int *bstat,int *x,int *y);
+Header:     tcxlmou.h
+Inputs:     bstat   - address to receive button status (0 = not pressed, 1 =
+                      pressed)
+            x       - address to receive current X pixel coordinate
+            y       - address to receive current Y pixel coordinate
+Return:     none
+Example:
+            int bstat,x,y;
+            msstatus(&bstat,&x,&y);
+            printf("bstat = %d, x = %d, y = %d\n",bstat,x,y);
+
+
+Name:       msvbounds
+Purpose:    sets the mouse vertical bounds
+Header:     tcxlmou.h
+Prototype:  void msvbounds(int top,int bottom);
+Inputs:     top     - top pixel boundry
+            bottom  - bottom pixel boundry
+Return:     none
+Also see:   mshbounds
+Example:
+                        /*  limits mouse movement between rows 10 and 20  */
+
+
+                                      31   
+            msvbounds(10*8,20*8);
+
+
+Name:       numflop
+Purpose:    returns the number of floppy disk drives installed
+Prototype:  int numflop(int equip);
+Header:     tcxlmou.h
+Header:     tcxldef.h
+Inputs:     equip   - the result from the biosequip() function
+Return:     the number of floppy disk drives installed
+Also see:   gameport mathchip numpar numser
+Example:
+            int i;
+            i=biosequip();
+            printf("Number of floppy disk drives = %d\n",numflop(i));
+
+ 
+Name:       numoff
+Purpose:    toggles the NumLock key off
+Prototype:  void numoff(void);
+Header:     tcxlkey.h
+Inputs:     none
+Return:     none
+Also see:   capsoff kbstat numon
+Example:
+            numoff();
+
+ 
+Name:       numon
+Purpose:    toggles the NumLock key on
+Prototype:  void numon(void);
+Header:     tcxlkey.h
+Inputs:     none
+Return:     none
+Also see:   capson kbstat numoff
+Example:
+            numon();
+
+ 
+Name:       numpar
+Purpose:    determines the number of parallel ports
+Prototype:  int numpar(int equip);
+Header:     tcxldef.h
+Inputs:     equip   - the result from the biosequip() function
+Return:     the number of parallel ports installed
+Also see:   gameport mathchip numflop numser
+Example:
+            int i;
+            i=biosequip();
+            printf("Number of parallel ports = %d\n",numpar(i));
+
+ 
+Name:       numser
+Purpose:    determines the number of serial ports installed
+Prototype:  int numser(int equip);
+Header:     tcxldef.h
+Inputs:     equip   - the result from the biosequip() function
+
+
+                                      32   
+Return:     the number of serial ports installed
+Also see:   gameport mathchip numflop numpar
+Example:
+            int i;
+            i=biosequip();
+            printf("Number of serial ports = %d\n",numser(i));
+
+ 
+Name:       printc
+Purpose:    prints a character to the screen at a specified location and
+            attribute
+Prototype:  void printc(int row,int col,int attr,int ch,int count);
+Header:     tcxlvid.h
+Inputs:     row     - row
+            col     - column
+            attr    - attribute of character
+            ch      - character to print
+            count   - number of times to print character
+Return:     none
+Also see:   attrib printcd
+Example:
+            printc(18,60,LGREEN|BLINK,'Z',5);
+
+ 
+Name:       printcd
+Purpose:    prints a character directly to the screen at a specified
+            location and attribute (no BIOS calls)
+Prototype:  void printcd(int row,int col,int attr,int ch);
+Header:     tcxlvid.h
+Inputs:     row     - row
+            col     - column
+            attr    - attribute of character
+            ch      - character to print
+Return:     none
+Also see:   attrib printc videoinit
+Example:
+            printcd(18,60,LGREEN|BLINK,'Z');
+
+
+Name:       prints
+Purpose:    displays a string on the screen at a specified location
+            and attribute
+Prototype:  void prints(int row,int col,int attr,char *str);
+Header:     tcxlvid.h
+Inputs:     row     - cursor row
+            col     - cursor column
+            attr    - character attribute
+            str     - address of string to display
+Return:     none
+Also see:   attrib printsd
+Example:
+            prints(20,10,LRED|_LGREY,"Hello, world");
+
+ 
+Name:       printsd
+Purpose:    displays a string at a specified location in a specified
+            attribute directly on the screen (no BIOS calls)
+
+
+                                      33   
+Prototype:  void printsd(int row,int col,int attr,char *str);
+Header:     tcxlvid.h
+Inputs:     row     - cursor row
+            col     - cursor column
+            attr    - character attribute
+            str     - address of string to display
+Return:     none
+Also see:   attrib prints videoinit
+Example:
+            printsd(20,10,LRED|_LGREY,"Hello, world");
+
+ 
+Name:       prompts
+Purpose:    prompts for a string and accepts keyboard input
+Prototype:  void prompts(char *prompt,char *str);
+Header:     tcxlkey.h
+Inputs:     prompt  - address of string containing prompt
+            str     - address of where to place input string
+Return:     none
+Also see:   getns inputsf
+Example:
+            char name[30];
+            prompts("Enter your name:  ",name);
+
+ 
+Name:       readchat
+Purpose:    reads the character and attribute under the cursor
+Prototype:  int readchat(void);
+Header:     tcxlvid.h
+Inputs:     none
+Return:     integer containing character in low byte and attribute in high byte
+Also see:   revattr setattr
+Example:
+            int i;
+            prints(0,0,LGREEN|_BLUE,"Hello, world");
+            gotoxy_(0,7);
+            i=readchat();
+            gotoxy_(1,0);
+            printf("character is %c and attribute is %d\n",i,(i>>8));
+
+
+Name:       readcur
+Purpose:    reads the current cursor location
+Prototype:  void readcur(int *row,int *col);
+Header:     tcxlvid.h
+Inputs:     row     - address of location to receive cursor row
+            col     - address of location to receive cursor column
+Return:     none
+Also see:   gotoxy_
+Example:
+            int row,col;
+            readcur(&row,&col);
+            prints(0,0,LCYAN|BLINK,"Hello, world");
+            prints(row,col,LWHITE,"Hello,world");
+
+ 
+Name:       revattr
+
+
+                                      34   
+Purpose:    reverses the attribute of the character under the current cursor
+            location
+Prototype:  void revattr(int count);
+Header:     tcxlvid.h
+Inputs:     count   - the number of characters to reverse attribute of
+Return:     none
+Also see:   readchat setattr
+Example:
+            prints(0,0,LCYAN|_BLUE,"Hello, world");
+            gotoxy_(0,0);
+            revattr(5);
+
+
+Name:       scrndump
+Purpose:    dumps the current screen to the printer
+Prototype:  void scrndump(void);
+Header:     tcxlprn.h
+Inputs:     none
+Return:     none
+Also see:   scrntodisk ssave videoinit
+Example:
+            printf("Turn printer on and press a key to continue....");
+            waitkey();
+            scrndump();
+
+
+Name:       scrntodisk
+Purpose:    copies the current screen to a disk file
+Prototype:  int scrntodisk(char *fname);
+Header:     tcxldsk.h  tcxlvid.h
+Inputs:     fname   - address of the string containing file to write to
+Return:     a zero if no error
+Also see:   disktoscrn scrndump ssave wintodisk
+Example:
+            if(scrntodisk("SCREEN.DAT")) {
+                printf("Error creating file\n");
+                exit(1);
+            }
+
+
+Name:       setattr
+Purpose:    sets the attribute of the character under the current cursor
+            location
+Prototype:  void setattr(int attr,int count);
+Header:     tcxlvid.h
+Inputs:     attr    - attribute to set character
+            count   - the number of characters to set the attribute of
+Return:     none
+Also see:   attrib readchat revattr
+Example:
+            prints(0,0,LCYAN|_BLUE,"Hello, world");
+            gotoxy_(0,0);
+            setattr(LRED|BLINK,5);
+
+
+Name:       setcursz
+Purpose:    sets the cursor size
+
+
+                                      35   
+Prototype:  void setcursz(int sline,int eline);
+Header:     tcxlvid.h
+Inputs:     sline   - start line of cursor (32 for no cursor)
+            eline   - end line of cursor
+Return:     none
+Example:
+            setcursz(1,7);
+            printf("The cursor is now large\n");
+
+ 
+Name:       setlines
+Purpose:    sets the number of lines on the display
+Prototype:  int setlines(int numlines);
+Header:     tcxlvid.h
+Inputs:     numlines    - the number of lines to set the display to, valid
+                          numbers are 25, 43 for EGA, and 50 for VGA.
+Return:     zero if no error
+Also see:   mode vidtype
+Example:
+            if(setlines(43)) {
+                printf("You need an EGA monitor for 43-line mode\n");
+            }
+            else {
+                printf("You are now in EGA 43-line mode\n");
+            }
+
+
+Name:       sound_
+Purpose:    sounds a tone of specified pitch and duration
+Prototype:  void sound_(unsigned pitch,unsigned duration);
+Header:     tcxldef.h
+Inputs:     pitch       - pitch of tone (0-65535)
+            duration    - duration of tone (0-65535) ie. 18 = 1 second
+Return:     none
+Also see:   beep
+Example:
+            sound_(255,3);
+ 
+
+Name:       spc
+Purpose:    displays a specified number of spaces to the screen
+Prototype:  void spc(int num);
+Header:     tcxlvid.h
+Inputs:     num     - number of spaces to display
+Return:     none
+Example:
+            prints(15,50,7,"0123456789");
+            gotoxy_(15,53);
+            spc(3);
+
+
+Name:       srestore
+Purpose:    restores a previously saved screen
+Prototype:  void srestore(int *sbuf);
+Header:     tcxlvid.h
+Inputs:     sbuf    - address of previously saved screen buffer
+Return:     none
+
+
+                                      36   
+Also see:   ssave videoinit wrestore
+Example:
+            int *sbuf;
+            sbuf=ssave();
+            clrscrn();
+            srestore(sbuf);
+
+ 
+Name:       ssave
+Purpose:    saves the current screen to a buffer
+Prototype:  int *ssave(void);
+Header:     tcxlvid.h
+Inputs:     none
+Return:     address of newly created screen buffer or 0 if allocation error
+Also see:   scrndump scrntodisk srestore videoinit wsave
+Example:
+            int *sbuf;
+            sbuf=ssave();
+            clrscrn();
+            srestore(sbuf);
+
+ 
+Name:       strbmatch
+Purpose:    returns the best match of a string in an array of strings
+Prototype:  char *strbmatch(char *str,char *strarr[]);
+Header:     tcxlstr.h
+Inputs:     str     - address of string to match
+            strarr  - address of array of string pointers, the last string in
+                      the array must be empty
+Return:     address of the string in the array that best matched the given
+            string
+Also see:   strmatch
+Example:
+            char *strarr[4]= { "Hello","Computer","World","" };
+            char *str="help";
+            printf("best match is:  %s\n",strbmatch(str,strarr);
+
+
+Name:       strchg
+Purpose:    finds all letters in a string matching one character and
+            replaces them with another
+Prototype:  char *strchg(char *str,int oldch,int newch);
+Header:     tcxlstr.h
+Inputs:     str     - address of string to search
+            oldch   - character to search for
+            newch   - character to replace with
+Return:     the address of the modified string or a NULL if no matches found
+Also see:   strichg
+Example:
+            char *str="Hello there";
+            printf("Before:  %s\n",str);
+            strchg(str,'h','*');
+            printf("After:  %s\n",str);
+
+ 
+Name:       strcode
+Purpose:    encodes/decodes a string, call this function to encode a string,
+
+
+                                      37   
+            then call again using the same key to decode, when reading or
+            writing from a disk file, be sure to open the file in binary mode
+Prototype:  char *strcode(char *str,int key);
+Header:     tcxlstr.h
+Inputs:     str  - the string to encode/decode
+            key  - a key to encode the string with (1-255), to decode you must
+            use the same key as when encoded
+Return:     the address of the encoded/decoded string
+Example:
+            char *str="Hello, world";
+            printf("Before:   %s\n",str);
+            strcode(str,37);
+            printf("Encoded:  %s\n",str);
+            strcode(str,37);
+            printf("Decoded:  %s\n",str);
+
+
+Name:       strdel
+Purpose:    deletes a substring from within a string
+Prototype:  char *strdel(char *substr,char *str);
+Header:     tcxlstr.h
+Inputs:     substr  - address of substring to delete
+            str     - address of string to delete from
+Return:     a NULL if the substring was not found, or the address of the
+            modified string
+Also see:   stridel strinc strins strmid
+Example:
+            char *str="Hello, XXXXXworld";
+            strdel("XXXXX",str);
+            printf("%s\n",str);
+
+ 
+Name:       strichg
+Purpose:    finds all letters in a string matching one character and
+            replaces them with another, ignoring case of letters
+Prototype:  char *strichg(char *str,int oldch,int newch);
+Header:     tcxlstr.h
+Inputs:     str     - address of string to search
+            oldch   - character to search for
+            newch   - character to replace with
+Return:     the address of the modified string or a NULL if no matches found
+Also see:   strchg
+Example:
+            char *str="Hello there";
+            printf("Before:  %s\n",str);
+            strichg(str,'h','*');
+            printf("After:  %s\n",str);
+
+ 
+Name:       stridel
+Purpose:    deletes a substring from within a string, ignoring case of letters
+Prototype:  char *stridel(char *substr,char *str);
+Header:     tcxlstr.h
+Inputs:     substr  - address of substring to delete
+            str     - address of string to delete from
+Return:     a NULL if the substring was not found, or the address of the
+            modified string
+
+
+                                      38   
+Also see:   strdel striinc
+Example:
+            char *str="Hello, XXXXXworld";
+            stridel("XXXXX",str);
+            printf("%s\n",str);
+
+ 
+Name:       striinc
+Purpose:    determines if one string is included in another, ignoring case of
+            letters
+Prototype:  char *striinc(char *str1,char *str2);
+Header:     tcxlstr.h
+Inputs:     str1    - address of string1
+            str2    - address of string2
+Return:     the address where string1 is included in string2, or a NULL if
+            string1 is not included in string2
+Also see:   strinc strmid
+Example:
+            char *str1="HeLlo WOrLd";
+            char *str2="XXXXXXXHello, worldXXXXX";
+            if(striinc(str1,str2)) printf("%s is included in %s\n",str1,str2);
+
+ 
+Name:       strinc
+Purpose:    determines if one string is included in another
+Prototype:  char *strinc(char *str1,char *str2);
+Header:     tcxlstr.h
+Inputs:     str1    - address of string1
+            str2    - address of string2
+Return:     the address where string1 is included in string2, or a NULL if
+            string1 is not included in string2
+Also see:   striinc strmid
+Example:
+            char *str1="Hello world";
+            char *str2="XXXXXXXHello, worldXXXXX";
+            if(strinc(str1,str2)) printf("%s is included in %s\n",str1,str2);
+
+ 
+Name:       strins
+Purpose:    inserts one string into another
+Prototype:  char *strins(char *instr,char **str,int st_pos);
+Header:     tcxlstr.h
+Inputs:     instr   - the address of the string to insert
+            str     - the address of the address of the string to insert into
+            st_pos  - the starting position for where to insert
+Return:     the address of the newly allocated string, or a NULL if a memory
+            allocation error occurred
+Also see:   strdel strinc
+Example:
+            char *str="Hello!";
+            printf("%s\n",str);
+            strins(", world",&str,5);
+            printf("%s\n",str);
+            free(str);              /*  free memory when done with string  */
+
+
+Name:       striocc
+
+
+                                      39   
+Purpose:    returns the number of occurrences of a character in a string
+            ignoring the case of letters
+Prototype:  int striocc(char *str,int ch);
+Header:     tcxlstr.h
+Inputs:     str     - address of the string to search
+            ch      - the character to look for
+Return:     the number of occurrences of the character in the string
+Also see:   strocc
+Example:
+            char ch='L';
+            char *str="Hello, world";
+            printf("%c occurs in %s %d times\n",ch,str,striocc(str,ch));
+
+ 
+Name:       strleft
+Purpose:    takes a specified portion of a string from the left and creates
+            a new string
+Prototype:  char *strleft(char *str,int num_chars);
+Header:     tcxlstr.h
+Inputs:     str         - address of input string
+            num_chars   - number of characters to copy
+Return:     address of the newly created string or a NULL if a memory
+            allocation error occurred
+Also see:   strmid strright strtrim
+Example:
+            char *left;
+            char *str="Hello, worldXXXX";
+            left=strleft(str,12);
+            printf("%s\n",left);
+            free(left);             /*  free memory when done with string  */
+
+ 
+Name:       strltrim
+Purpose:    trims leading spaces off of a string
+Prototype:  char *strtrim(char **str);
+Header:     tcxlstr.h
+Inputs:     str  - address of the address of the string to trim
+Return:     address of the modified string
+Also see:   strright strsetsz strtrim
+Example:
+            char *str="        Hello, world";
+            printf("%s.\n",str);
+            strltrim(&str);
+            printf("%s.\n",str);
+
+
+Name:       strmatch
+Purpose:    compares 2 strings, returns a match score
+Prototype:  int strmatch(char *str1,char *str2);
+Header:     tcxlstr.h
+Inputs:     str1    - address of first string
+            str2    - address of second string
+Return:     a match score, the higher the score, the better they match
+Also see:   strbmatch
+Example:
+            char *str1="hello";
+            char *str2="help";
+
+
+                                      40   
+            printf("match score = %d\n",strmatch(str1,str2);
+
+
+Name:       strmid
+Purpose:    takes a section from input string starting at given position
+            and taking the given amount of characters creating a new string
+Prototype:  char *strmid(char *str,int st_pos,int num_chars);
+Header:     tcxlstr.h
+Inputs:     str         - address of input string
+            st_pos      - position in input string to start copying characters
+                          (starting at position 0)
+            num_chars   - number of characters to copy
+Return:     address of the newly created string or a NULL if a memory
+            allocation error occurred
+Also see:   strleft strright
+Example:
+            char *middle;
+            char *str="XXXXXHello, worldXXXX";
+            middle=strmid(str,5,12);
+            printf("%s\n",middle);
+            free(middle);             /*  free memory when done with string  */
+
+ 
+Name:       strocc
+Purpose:    returns the number of occurrences of a character in a string
+Prototype:  int strocc(char *str,int ch);
+Header:     tcxlstr.h
+Inputs:     str     - address of the string to search
+            ch      - the character to look for
+Return:     the number of occurrences of the character in the string
+Also see:   striocc
+Example:
+            char ch='l';
+            char *str="Hello, world";
+            printf("%c occurs in %s %d times\n",ch,str,strocc(str,ch));
+
+ 
+Name:       strright
+Purpose:    takes a specifed portion from the right side of a string creating
+            a new string
+Prototype:  char *strright(char *str,int num_chars);
+Header:     tcxlstr.h
+Inputs:     str         - address of input string
+            num_chars   - number of characters to copy
+Return:     address of the newly created string or a NULL if a memory
+            allocation error occurred
+Also see:   strleft strltrim strmid
+Example:
+            char *right;
+            char *str="XXXXXHello, world";
+            right=strright(str,12);
+            printf("%s\n",right);
+            free(right);             /*  free memory when done with string  */
+
+ 
+Name:       strrol
+Purpose:    rotates a string specified number of characters left, characters
+
+
+                                      41   
+            wrap around
+Prototype:  char *strrol(char *str,int count);
+Header:     tcxlstr.h
+Inputs:     str    - the address of the string to rotate
+            count  - number of characters to rotate
+Return:     the address of the modified string
+Also see:   strror strshl
+Example:
+            char *str="Hello, world";
+            printf("%s.\n",str);
+            strrol(str,3);
+            printf("%s.\n",str);
+
+
+Name:       strror
+Purpose:    rotates a string specified number of characters right, characters
+            wrap around
+Prototype:  char *strror(char *str,int count);
+Header:     tcxlstr.h
+Inputs:     str    - the address of the string to rotate
+            count  - number of characters to rotate
+Return:     the address of the modified string
+Also see:   strrol strshr
+Example:
+            char *str="Hello, world";
+            printf("%s.\n",str);
+            strror(str,3);
+            printf("%s.\n",str);
+
+
+Name:       strsetsz
+Purpose:    adjusts the length of a string by truncation or padding with
+            spaces
+Prototype:  char *strsetsz(char **str,int newsize);
+Header:     tcxlstr.h
+Inputs:     str     - address of pointer to the string
+            newsize - the new length of the string
+Return:     address of the new string or a NULL if a memory allocation error
+            occurred
+Also see:   strtrim
+Example:
+            char *str="Hello, world";
+            strsetsz(&str,25);
+            printf("%s.\n",str);
+            strsetsz(&str,5);
+            printf("%s.\n",str);
+
+
+Name:       strshl
+Purpose:    shifts a string specified number of characters left, characters
+            'drop off' and spaces are added to the string
+Prototype:  char *strshl(char *str,int count);
+Header:     tcxlstr.h
+Inputs:     str    - the address of the string to shift
+            count  - number of characters to shift
+Return:     the address of the modifed string
+Also see:   strrol strshr
+
+
+                                      42   
+Example:
+            char *str="Hello, world";
+            printf("%s.\n",str);
+            strshl(str,3);
+            printf("%s.\n",str);
+
+
+Name:       strshr
+Purpose:    shifts a string specified number of characters right, characters
+            'drop off' and spaces are added to the string
+Prototype:  char *strshr(char *str,int count);
+Header:     tcxlstr.h
+Inputs:     str    - the address of the string to shift
+            count  - number of characters to shift
+Return:     the address of the modified string
+Also see:   strror strshl
+Example:
+            char *str="Hello, world";
+            printf("%s.\n",str);
+            strshr(str,3);
+            printf("%s.\n",str);
+
+
+Name:       strtrim
+Purpose:    trims trailing spaces off of a string
+Prototype:  char *strtrim(char *str);
+Header:     tcxlstr.h
+Inputs:     str  - address of the string to trim
+Return:     address of the modified string
+Also see:   strleft strltrim strsetsz
+Example:
+            char *str="Hello, world          ";
+            printf("%s.\n",str);
+            strtrim(str);
+            printf("%s.\n",str);
+
+
+Name:       struplow
+Purpose:    converts a string to mixed upper & lower case characters
+Prototype:  char *struplow(char *str);
+Header:     tcxlstr.h
+Inputs:     str   - the address of the string to convert
+Return:     the address of the modified string
+Also see:   touplow
+Example:
+            char *str="heLlO, wOrLd";
+            printf("%s.\n",str);
+            struplow(str);
+            printf("%s.\n",str);
+
+
+Name:       tabstop
+Purpose:    calculates a tab stop from given column and tab width
+Prototype:  int tabstop(int col,int tabwidth);
+Header:     tcxldef.h
+Inputs:     col         - column
+            tabwidth    - tab width
+
+
+                                      43   
+Return:     the next tab stop
+Example:
+            printf("tabstop after column 5 is %d\n",tabstop(5,8);
+
+
+Name:       timer
+Purpose:    returns the value of the BIOS timer
+Prototype:  unsigned long timer(void);
+Header:     tcxldef.h
+Inputs:     none
+Return:     current value of the BIOS timer
+Also see:   delay_
+Example:
+            printf("%lu\n",timer());
+            delay_(36);
+            printf("%lu\n",timer());
+
+
+Name:       touplow
+Purpose:    converts a character to upper or lower case depending on previous
+            character
+Prototype:  int touplow(char *str,char *pos,int ch);
+Header:     tcxlstr.h
+Inputs:     str     - address of string
+            pos     - current position in string
+            ch      - character to convert
+Return:     the converted character
+Also see:   struplow
+Example:
+            char *str="Hello, world";
+            printf("Before: %s\n",str);
+            *(str+7)=touplow(str,str+7,*(str+7));
+            printf("After:  %s\n",str);
+
+
+Name:       videoinit
+Purpose:    initializes TCXL's video system.  By default all TCXL functions
+            performing direct screen writes go to the CGA video RAM segment at
+            0xb800.  If you want these functions to work correctly with a
+            monochrome video adapter or within a DESQview window, you must call
+            this function.  This function sets the value of the global variable
+            _videoseg
+Prototype:  void videoinit(void);
+Header:     tcxlvid.h  tcxlwin.h
+Inputs:     none
+Return:     none
+Also see:   vidtype
+Example:
+            videoinit();
+
+
+Name:       vidtype
+Purpose:    determines the display adapter type
+Prototype:  int vidtype(void);
+Header:     tcxlvid.h
+Inputs:     none
+Return:     see TCXLVID.H for return values
+
+
+                                      44   
+Also see:   mode videoinit
+Example:
+            int i;
+            i=vidtype();
+            if(i<=HGCPLUS) printf("A color adapter is installed\n");
+
+ 
+Name:       wactiv
+Purpose:    activates a currently open window
+Prototype:  int wactiv(int whandle);
+Header:     tcxlwin.h
+Inputs:     whandle     - the window handle returned from the wopen() function
+Return:     W_NOERROR   - no error
+            W_ALLOCERR  - memory allocation error
+            W_NOTFOUND  - window handle not found
+            W_NOACTIVE  - no open windows
+Also see:   wisactiv wopen
+Example:
+            int w1,w2;
+            w1=wopen(0,0,20,20,0,LMAGENTA|_RED);
+            waitkey();
+            w2=wopen(10,10,15,50,0,LGREEN|_BLUE);
+            waitkey();
+            wactiv(w1);
+            waitkey();
+            wactiv(w2);
+            waitkey();
+            wclose();
+            wclose();
+
+
+Name:       waitkey
+Purpose:    halts execution until a key is pressed, the keyboard buffer is
+            cleared first
+Prototype:  int waitkey(void);
+Header:     tcxlkey.h
+Inputs:     none
+Return:     the key pressed
+Also see:   clearkeys getchf waitkeyt
+Example:
+            printf("Press any key to continue...");
+            waitkey();
+
+ 
+Name:       waitkeyt
+Purpose:    halts execution until a key is pressed or the specified time limit
+            expires, the keyboard buffer is cleared first
+Prototype:  int waitkeyt(int duration);
+Header:     tcxlkey.h
+Inputs:     none
+Return:     the key pressed or -1 if time expired before a key was pressed
+Also see:   clearkeys delay_ getchf waitkey
+Example:
+            printf("Press any key to continue...");
+            waitkeyt(182);                  /* wait for a max of 10 seconds */
+
+ 
+
+
+                                      45   
+Name:       wcclear
+Purpose:    clears the currently active window using specified attribute
+Prototype:  int wclear(int attr);
+Header:     tcxlwin.h
+Inputs:     none
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+Also see:   wactiv wclear wclreol
+Example:
+            wopen(10,10,20,20,0,WHITE|_GREEN);
+            wprints(11,11,7,"Hello");
+            wclear();
+            waitkey();
+            wclose();
+
+
+Name:       wchgattr
+Purpose:    changes attribute of the active window, all text within the window
+            will be changed also
+Prototype:  int wchgattr(int newattr);
+Header:     tcxlwin.h
+Inputs:     newattr  - the attribute to make the window
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+Also see:   wactiv wtextattr
+Example:
+            wopen(0,0,10,10,0,LCYAN|_BLUE);
+            waitkey();
+            wchgattr(LMAGENTA|_RED);
+            waitkey();
+            wclose();
+
+
+Name:       wclear
+Purpose:    clears the currently active window
+Prototype:  int wclear(void);
+Header:     tcxlwin.h
+Inputs:     none
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+Also see:   wactiv wcclear wclreol
+Example:
+            wopen(10,10,20,20,0,WHITE|_GREEN);
+            wprints(11,11,7,"Hello");
+            wclear();
+            waitkey();
+            wclose();
+
+
+Name:       wclose
+Purpose:    closes the currently active window
+Prototype:  int wclose(void);
+Header:     tcxlwin.h
+Inputs:     none
+Return:     W_NOERROR   - no error
+            W_ALLOCERR  - memory allocation error
+            W_NOACTIVE  - no active window
+
+
+                                      46   
+Also see:   wactiv wcloseall wopen
+Example:
+            wopen(10,10,20,20,1,LCYAN|_BLUE);
+            waitkey();
+            wclose();
+
+ 
+Name:       wcloseall
+Purpose:    closes all open windows
+Prototype:  int wcloseall(void);
+Header:     tcxlwin.h
+Inputs:     none
+Return:     W_NOERROR   - no error
+            W_ALLOCERR  - memory allocation error
+            W_NOACTIVE  - no active window
+Also see:   wclose
+Example:
+            wopen(0,0,10,10,1,LCYAN|_BLUE);
+            wopen(5,5,15,15,0,LMAGENTA|_RED);
+            wopen(10,10,20,20,1,YELLOW|_GREEN);
+            waitkey();
+            wcloseall();
+
+ 
+Name:       wclreol
+Purpose:    clears to the end of the active window's line
+Prototype:  int wclreol(void);
+Header:     tcxlwin.h
+Inputs:     none
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+Also see:   wactiv wclear
+Example:
+            wopen(10,10,20,40,0,LMAGENTA|_RED);
+            wputs("Hello, world");
+            wgotoxy(0,5);
+            wclreol();
+            waitkey();
+            wclose();
+
+
+Name:       wcopy
+Purpose:    creates a new window duplicating the active window, the new window
+            becomes the active window
+Prototype:  int wcopy(int nsrow,int nscol);
+Header:     tcxlwin.h
+Inputs:     nsrow   - start row of the duplicate window
+            nscol   - start column of the duplicate window
+Return:     the handle of the new window or a zero if an error occurred, the
+            error code will be in the global variable _werrno, see TCXLWIN.H
+            for error codes
+Also see:   wactiv wmove
+Example:
+            wopen(11,11,20,40,0,LMAGENTA|_RED);
+            wputs("Hello, world");
+            waitkey();
+            wcopy(0,0);
+
+
+                                      47   
+            waitkey();
+            wclose();
+            wclose();
+
+
+Name:       werrmsg
+Purpose:    returns an error message from the last windowing function
+Prototype:  char *werrmsg(void);
+Header:     tcxlwin.h
+Inputs:     none
+Return:     the address of a static string containing an error message
+            corresponding to the error code from the last performed windowing
+            function
+Example:
+            wopen(0,0,10,10,0,LCYAN|_BLUE);
+            wgotoxy(255,255);
+            printf("Error msg = %s\n",werrmsg());
+
+
+Name:       wgetc
+Purpose:    gets a character from the keyboard within the active window, echos
+            character pressed to the screen in the attribute set by the
+            wtextattr() function
+Prototype:  int wgetc(void);
+Header:     tcxlwin.h
+Inputs:     none
+Return:     the ASCII value of the key pressed or a zero if an error occurred,
+            the error code will be in the global variable _werrno, see
+            TCXLWIN.H for error codes
+Also see:   wactiv wgetchf wtextattr
+Example:
+            wopen(0,0,5,30,0,LCYAN|_BLUE);
+            wputs("Press a key:  ");
+            wputs("\nYou pressed %c",wgetc());
+            waitkey();
+            wclose();
+
+
+Name:       wgetchf
+Purpose:    gets a character from the keyboard within the active window, allows
+            only characters listed in the string of valid characters.  Escape
+            checking is provided by default.  This can be turned off with the
+            wsetesc() function.  Selected character is echoed into the current
+            window using the attribute set by the wtextattr() function.
+Prototype:  int wgetchf(char *valid);
+Header:     tcxlwin.h
+Inputs:     valid   - address of the string containing the valid characters
+Return:     the ASCII value of the key pressed or a zero if an error occurred,
+            the error code will be in the global variable _werrno, see
+            TCXLWIN.H for error codes
+Also see:   wactiv wgetc wtextattr
+Example:
+            wopen(0,0,5,30,0,LCYAN|_BLUE);
+            wputs("Are you sure? ");
+            wputs("\nYou pressed %c",wgetchf("YyNn"));
+            waitkey();
+            wclose();
+
+
+                                      48   
+
+
+Name:       wgetns
+Purpose:    gets a string from the keyboard within active window, limits the
+            number of characters input to specified length.  Escape checking
+            is provided by default.  This can be turned off with the wsetesc()
+            function.  Entered characters will echo to the active window
+            in the attribute set by the wtextattr() function.
+Prototype:  int wgetns(char *str,int maxlen);
+Header:     tcxlwin.h
+Inputs:     str     - address of the allocated space to receive the input
+                      string
+            maxlen  - the maximum length of the input string
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+            W_ESCPRESS  - Escape key was pressed
+Also see:   wactiv wgets winputsf wscanf wtextattr
+Example:
+            char firstname[5];
+            wopen(0,0,5,60,1,LCYAN|_BLUE);
+            wputs("Enter your first name:  ");
+            wgetns(firstname,5);
+            wprintf("\nYour first name is:  %s",firstname);
+            waitkey();
+            wclose();
+
+
+Name:       wgets
+Purpose:    gets a string from the keyboard within active window, echos the
+            characters to the screen in the attribute set by the wtextattr()
+            function
+Prototype:  int wgets(char *str);
+Header:     tcxlwin.h
+Inputs:     str     - the address of the string to receive the input characters
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+Also see:   wactiv wgetns winputsf wscanf wtextattr
+Example:
+            char fname[20];
+            wopen(0,0,5,60,0,LCYAN|_BLUE);
+            wputs("Enter your first name:  ");
+            wgets(fname);
+            wputs("\nYour first name is:  %s",fname);
+            waitkey();
+            wclose();
+
+
+Name:       wgotoxy
+Purpose:    plots cursor coordinates within the currently active window
+Prototype:  int wgotoxy(int wrow,int wcol);
+Header:     tcxlwin.h
+Inputs:     wrow    - window row (Y coordinate)
+            wcol    - window column (X coordinate)
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+            W_INVCOORD  - invalid coordinates
+Also see:   wactiv wpgotoxy wreadcur
+
+
+                                      49   
+Example:
+            wopen(0,0,10,10,0,YELLOW|_BLUE);
+            wgotoxy(1,1);
+            wputs("Hello");
+
+
+Name:       whide
+Purpose:    hides a previously saved window
+Prototype:  int *whide(int **wbuf);
+Header:     tcxlwin.h
+Inputs:     wbuf    - address of the pointer to the window buffer to hide
+Return:     the address of the hidden window's buffer or a NULL if a memory
+            allocation error occurred
+Also see:   wsave wunhide
+Example:
+            wopen(0,0,15,50,0,LCYAN|_BLUE);
+            waitkey();
+            whide(&_wrecord[_wcurrent].wbuf);   /* hides active window */
+            waitkey();
+            wunhide(&_wrecord[_wcurrent].wbuf);
+            waitkey();
+            wclose();
+
+
+Name:       whline
+Purpose:    draws a horizontal text line in active window using characters
+            defined by given box type.  If horizontal line crosses a vertical
+            line of the same box type, an appropriate intersection or corner
+            will be used.
+Prototype:  int whline(int wsrow,int wscol,int count,int btype);
+Header:     tcxlwin.h
+Inputs:     wsrow   - window start row of line
+            wscol   - window start column of line
+            count   - number of line characters to display
+            btype   - box type (0-5)
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+            W_INVCOORD  - text line too long for window
+            W_INVBTYPE  - invalid box type
+Also see:   wtextattr wvline
+Example:
+            whline(2,5,7,3);
+
+
+Name:       winpdef
+Purpose:    defines an area of the active window for keyboard input.  See the
+            section on multi-field input for details.
+Prototype:  int winpdef(int wrow,int wcol,char *str,int ftype,int fattr);
+Header:     tcxlwin.h
+Inputs:     wrow    - start of input, window's row coordinate
+            wcol    - start of input, window's column coordinate
+            str     - address of string to input, must already be the length
+                      the input is to be.  The string can be sized with the
+                      strsetsz() function.  Contents of str will be displayed
+                      before keyboard input.
+            ftype   - input field type, must be a valid character type code,
+                      see the section on using window input functions for a
+
+
+                                      50   
+                      list of valid character type codes.
+            fattr   - field attribute
+Return:     W_NOERROR   - no error
+            W_ALLOCERR  - memory allocation error
+            W_NOACTIVE  - no active window
+Also see:   winpread winputsf winpxcel wscanf
+Example:
+            char *str1;
+            char *str2;
+            wopen(0,0,10,40,0,LCYAN|_BLUE);
+            wgotoxy(1,1);
+            wputs("Enter name:");
+            strsetsz(&str1,15);
+            winpdef(1,15,str1,'M');
+            wgotoxy(3,1);
+            wputs("Enter phone:");
+            strsetsz(&str2,7);
+            winpdef(3,15,str2,'#');
+            winpread();
+            wprintf("Name is %s, phone is %s\n",str1,str2);
+
+
+Name:       winpread
+Purpose:    processes keyboard input of all defined areas of active window
+            allowing editing back and forth between defined fields.  When
+            carriage return is pressed in the last field, all fields will be
+            processed. If the Escape key is pressed while Escape checking is
+            on, all defined fields will be cancelled and an error code will be
+            returned.  Valid editing keys are:  BackSpace, Ctrl-End,
+            Ctrl-Enter, Ctrl-Home, Del, End, Enter, Esc, Home, Ins, Shift-Tab,
+            Tab, and the arrow keys.
+Prototype:  int winpread(void);
+Header:     tcxlwin.h
+Inputs:     none
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+            W_ESCPRESS  - Escape key was pressed
+            W_NOINPDEF  - no inputs defined, see description for winpdef()
+Also see:   winpdef winpxcel wtextattr
+
+
+Name:       winputsf
+Purpose:    inputs a formatted string from the keyboard within a window
+Prototype:  int winputsf(char *str,char *fmt);
+Header:     tcxlwin.h
+Inputs:     str     - address of the allocated space to receive string
+            fmt     - address of the format string, see section on using format
+                      strings
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+            W_ESCPRESS  - Escape key was pressed
+            W_INVFORMT  - invalid format string
+Also see:   wgetns wgets winpdef wscanf wtextattr
+Example:
+            char str[255];
+            wopen(0,0,10,40,0,LMAGENTA|_RED);
+            winputsf(str,!RE!'Enter phone number:  ('###') '###'-'####");
+
+
+                                      51   
+            wputs("\nYour phone number is:  ");
+            wputs(str);
+
+
+Name:       winpxcel
+Purpose:    cancels keyboard of all defined areas of active window
+Prototype:  int winpxcel(void);
+Header:     tcxlwin.h
+Inputs:     none
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+Also see:   winpdef winpread
+Example:
+            char *str1="                    ";
+            wopen(0,0,10,40,0,LCYAN|_BLUE);
+            wgotoxy(1,1);
+            wputs("Enter name:");
+            winpdef(1,15,str1,'M');
+            winpxcel();
+            wgotoxy(3,1);
+            wputs("Enter phone:");
+            winpdef(3,15,str1,'#');
+            winpread();
+            wprintf("phone is %s\n",str1);
+
+
+Name:       wintodisk
+Purpose:    copies a screen window to a disk file
+Prototype:  int wintodisk(int srow,int scol,int erow,int ecol,char *fname);
+Header:     tcxlwin.h
+Inputs:     srow    - starting row
+            scol    - starting column
+            erow    - ending row
+            ecol    - ending column
+            fname   - address of the string containing file to write to
+Return:     a zero if no error
+Also see:   disktowin scrntodisk wsave
+Example:
+            if(wintodisk(10,10,20,20,"WINDOW.DAT")) {
+                printf("Error creating file\n");
+                exit(1);
+            }
+
+
+Name:       wisactiv
+Purpose:    determines if specified window handle is active
+Prototype:  int wisactiv(int whandle);
+Header:     tcxlwin.h
+Inputs:     whandle - the handle of the window to check
+Return:     a zero if handle is not active, a 1 if it is active
+Also see:   wactiv
+Example:
+            printf("handle 5 is %sactive\n",wisactiv(5)?"":"not ");
+
+
+Name:       wmbardef
+Purpose:    defines a window bar-selection menu option.  See the section on
+
+
+                                      52   
+            using bar selection menus for more information.
+Prototype:  int wmbardef(int wrow,int wcol,int attr,char *str,int tagchar);
+Header:     tcxlwin.h
+Inputs:     wrow    - window row to display option at
+            wcol    - window column to display option at
+            attr    - attribute to display option with
+            str     - address of the option string
+            tagchar - tag character to use for identification, must be
+                      alphanumeric, case is insensitive
+Return:     W_NOERROR   - no error
+            W_ALLOCERR  - memory allocation error
+            W_NOACTIVE  - no active window
+            W_INVTAGCH  - invalid tag character
+Also see:   wmbarget wmbarxcel
+Example:
+            if(wmbardef(2,3,LCYAN|_BLUE,"Add record",'A')) {
+                printf("Error:  %s\n",werrmsg());
+                exit(1);
+            }
+
+
+Name:       wmbarget
+Purpose:    gets a window bar-selection menu selection from the keyboard.  The
+            user is allowed to use the cursor keys or the specified tag
+            character to select the option.  After a selection is made, all
+            defined options are cleared.  Escape checking is on by default, but
+            can be turned off with the wsetesc() function.  See section on
+            using bar-selection menus for more details.
+Prototype:  int wmbarget(int barattr,int taginit,int pulldown);
+Header:     tcxlwin.h
+Inputs:     barattr   - the attribute to use for the selection bar
+            taginit   - tag character of initial selection bar position.  If an
+                        invalid tag character is specified, the position
+                        defaults to the upper left.
+            pulldown  - can one of the following values:
+                            0       - not part of a pull-down menu system
+                            PDMAIN  - main menu of a pull-down menu system
+                            PDPREV  - main menu, automatically select the
+                                      previous pull-down menu
+                            PDNEXT  - main menu, automatically select the next
+                                      pull-down menu
+                            PDMENU  - pull-down menu
+Return:     the tag character of the selected option or zero if an error.  If
+            error, the error code will be in the global variable _werrno.  See
+            TCXLWIN.H for error codes.  If PDMENU is specified for the pulldown
+            parameter, then this function will return PDPREV if LeftArrow is
+            pressed and PDNEXT if RightArrow is pressed.
+Also see:   wmbardef wmbarxcel
+Example:
+            option=wmbarget(LCYAN|_GREEN,'A',0);
+            switch(option) {
+                case 'A':
+                    ......
+                case 'D':
+                    ......
+                case 0:
+                    error_routine();
+
+
+                                      53   
+                etc.
+            }
+
+
+Name:       wmbarxcel
+Purpose:    cancels all window bar menu options defined before wmbarget() is
+            called.
+Prototype:  int wmbarxcel(void);
+Header:     tcxlwin.h
+Inputs:     none
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+Also see:   wmbardef wmbarget
+Example:
+            if(wmbarxcel()) {
+                printf("Error:  %s\n",werrmsg());
+                exit(1);
+            }
+
+
+Name:       wmove
+Purpose:    moves the currently active window to a new location
+Prototype:  int wmove(int nsrow,int nscol);
+Header:     tcxlwin.h
+Inputs:     nsrow   - new starting row of window
+            nscol   - new starting column of window
+Return:     W_NOERROR   - no error
+            W_ALLOCERR  - memory allocation error
+            W_NOACTIVE  - no active window
+Also see:   wcopy wsize
+Example:
+            wopen(10,10,20,20,2,LCYAN|_BLUE);
+            waitkey();
+            if(wmove(0,0)) {
+                printf("Error:  %s\n",werrmsg());
+                exit(1);
+            }
+
+
+Name:       wnopen
+Purpose:    returns the number of open windows
+Prototype:  int wnopen(void);
+Header:     tcxlwin.h
+Inputs:     none
+Return:     the number of open windows
+Also see:   wclose wcloseall wopen
+Example:
+            printf("There are %d windows open\n",wnopen());
+
+
+Name:       wopen
+Purpose:    opens a screen window and makes it active, the cursor location
+            will be initialized to window row 0, column 0, and the text
+            attribute will be initialized to the same attribute as the window
+Prototype:  int wopen(int srow,int scol,int erow,int ecol,int btype,int attr);
+Header:     tcxlwin.h
+Inputs:     srow    - starting row, upper left corner
+
+
+                                      54   
+            scol    - starting column, upper left corner
+            erow    - ending row, lower right corner
+            ecol    - ending column, lower right corner
+            btype   - box type (0-5)
+            attr    - attribute of window
+Return:     the window handle of the new window or a zero if an error occurred,
+            the error code will be in the global variable _werrno, see
+            TCXLWIN.H for error codes
+Also see:   videoinit wactiv wclose wcloseall wnopen
+Example:
+            wopen(10,10,20,20,0,LCYAN|_BLUE);
+
+
+Name:       wpgotoxy
+Purpose:    plots pseudo cursor coordinates within the currently active window
+            by wrapping around if coordinates are out of range
+Prototype:  int wpgotoxy(int wrow,int wcol);
+Header:     tcxlwin.h
+Inputs:     wrow    - window row (Y coordinate)
+            wcol    - window column (X coordinate)
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+            W_INVCOORD  - invalid coordinates
+Also see:   wactiv wgotoxy wreadcur
+Example:
+            wopen(0,0,10,10,0,YELLOW|_BLUE);
+            wpgotoxy(3,20);
+            wputs("Hello");
+
+
+Name:       wprintc
+Purpose:    prints a character in the currently active window, does not adjust
+            cursor position, recognizes no control codes
+Prototype:  int wprintc(int row,int col,int attr,int ch);
+Header:     tcxlwin.h
+Inputs:     row     - cursor row (of the window)
+            col     - cursor column (of the window)
+            attr    - character attribute
+            ch      - character
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+            W_INVCOORD  - invalid coordinates
+Also see:   wactiv wputc
+Example:
+            wopen(10,10,20,20,0,WHITE|_GREEN);
+            wprintc(11,11,7,"T");
+
+
+Name:       wprintf
+Purpose:    outputs a formatted string to active window, works just like
+            printf() does
+Prototype:  int wprintf(const char *format,...);
+Header:     tcxlwin.h
+Inputs:     format  - format string, refer to Turbo C manual under printf()
+            ...     - any additional arguments
+Return:     W_NOERROR   - no error
+            W_ALLOCERR  - memory allocation error
+
+
+                                      55   
+            W_NOACTIVE  - no active window
+Also see:   wactiv wputc wputns wputs wtextattr
+Example:
+            char str="world";
+            wopen(0,0,10,20,0,LMAGENTA|_RED);
+            wprintf("Hello, %s\n",str);
+
+
+Name:       wprints
+Purpose:    prints a string in the currently active window, does not adjust
+            cursor position, recognizes no control codes
+Prototype:  int wprints(int row,int col,int attr,char *str);
+Header:     tcxlwin.h
+Inputs:     row     - cursor row (of the window)
+            col     - cursor column (of the window)
+            attr    - attribute
+            str     - address of string
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+            W_INVCOORD  - invalid coordinates
+            W_STRLONG   - string too long for window
+Also see:   wactiv wprintf wputns wputs
+Example:
+            wopen(10,10,20,20,0,WHITE|_GREEN);
+            wprints(11,11,7,"Hello");
+            waitkey();
+            wclose();
+
+
+Name:       wputc
+Purpose:    prints a character in currently active window at current cursor
+            location, uses attribute set by the wtextattr() function,
+            recognizes the '\n', '\r', '\t', '\7' and '\b' control characters
+Prototype:  int wputc(int ch);
+Header:     tcxlwin.h
+Inputs:     ch  - the character to be printed
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+Also see:   wactiv wprintc wprintf wtextattr
+Example:
+            wopen(10,10,20,20,0,WHITE|_GREEN);
+            wgotoxy(5,5);
+            wtextattr(LMAGENTA|BLINK);
+            wputc('X');
+
+
+Name:       wputns
+Purpose:    prints a string in the active window, formatting width of output,
+            uses attribute set by the wtextattr() function, recognizes the
+            '\n', '\r', '\t', '\7' and '\b' control characters
+Prototype:  int wputns(char *str,int width);
+Header:     tcxlwin.h
+Inputs:     str     - address of the string to print
+            width   - width to display output string with
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+Also see:   wactiv wprintf wprints wputs wtextattr
+
+
+                                      56   
+Example:
+            wopen(10,10,20,20,2,WHITE|_GREEN);
+            wtextattr(LMAGENTA|BLINK);
+            wputns("Hello, world",5);
+
+
+Name:       wputs
+Purpose:    prints a string in currently active window at the current cursor
+            location, uses attribute set by the wtextattr() function,
+            recognizes the '\n', '\r', '\t', '\7' and '\b' control characters
+Prototype:  int wputs(char *str);
+Header:     tcxlwin.h
+Inputs:     str     - the address of the string to print
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+Also see:   wactiv wprintf wprints wputns wtextattr
+Example:
+            wopen(10,10,20,20,0,WHITE|_GREEN);
+            wgotoxy(1,1);
+            wtextattr(LMAGENTA|BLINK);
+            wputs("Hello, world");
+
+
+Name:       wrestore
+Purpose:    restores a previously saved window of screen memory
+Prototype:  void wrestore(int *wbuf);
+Header:     tcxlwin.h
+Inputs:     wbuf    - address of previously saved window
+Return:     none
+Also see:   srestore wsave wunhide
+Example:
+            int *wbuf;
+            wbuf=wsave(7,7,18,60);
+            clrscrn();
+            wrestore(wbuf);
+
+ 
+Name:       wsave
+Purpose:    saves a window of screen memory
+Prototype:  int *wsave(int srow,int scol,int erow,int ecol);
+Header:     tcxlwin.h
+Inputs:     srow    - starting row, upper left corner
+            scol    - starting column, upper left corner
+            erow    - ending row, lower right corner
+            ecol    - ending column, lower right corner
+Return:     address of newly created window buffer or NULL if a memory
+            allocation error occurred.
+Also see:   ssave videoinit whide wintodisk wrestore
+Example:
+            int *wbuf;
+            wbuf=wsave(7,7,18,60);
+            clrscrn();
+            wrestore(wbuf);
+
+
+Name:       wscanf
+Purpose:    inputs a formatted string from keyboard, works like scanf() does
+
+
+                                      57   
+Prototype:  int wscanf(const char *format,...);
+Header:     tcxlwin.h
+Inputs:     format  - format string, refer to Turbo C manual under scanf()
+            ...     - any additional arguments
+Return:     W_NOERROR   - no error
+            W_ALLOCERR  - memory allocation error
+            W_NOACTIVE  - no active window
+Also see:   wactiv wgetc wgets winpdef winputsf wtextattr
+
+
+Name:       wscroll
+Purpose:    scrolls text within the active window, up or down
+Prototype:  int wscroll(int count,int direction);
+Header:     tcxlwin.h
+Inputs:     count       - number of lines to scroll
+            direction   - a 0 to scroll down or non-zero to scroll up
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+Also see:   wactiv
+Example:
+            wopen(10,10,20,20,0,WHITE|_GREEN);
+            wprints(11,11,7,"Hello");
+            waitkey();
+            wscroll(2,DOWN);
+
+
+Name:       wsetesc
+Purpose:    sets the Escape checking for window keyboard input functions that
+            allow Escape checking
+Prototype:  void wsetesc(int option);
+Header:     tcxlwin.h
+Inputs:     option  - (0-1), 0 = turn Escape checking off, 1 = turn Escape
+                      checking on
+Return:     none
+Also see:   wgetchf wgetns winputsf wmbarread winpread
+Example:
+            wsetesc(ON);    /* turns Escape checking on */
+
+
+Name:       wsize
+Purpose:    adjusts the size of the active window
+Prototype:  int wsize(int nerow,int necol);
+Header:     tcxlwin.h
+Inputs:     nerow   - new end row of sized window
+            necol   - new end column of sized window
+Return:     W_NOERROR   - no error
+            W_ALLOCERR  - memory allocation error
+            W_NOACTIVE  - no active window
+            W_INVCOORD  - invalid coordinates
+Also see:   wactiv wcopy wmove
+Example:
+            wopen(10,10,20,20,0,WHITE|_GREEN);
+            waitkey();
+            wsize(23,40);
+            waitkey();
+            wsize(15,15);
+
+
+
+                                      58   
+
+Name:       wtextattr
+Purpose:    sets the default text attribute for text displayed in active window
+Prototype:  int wtextattr(int attr);
+Header:     tcxlwin.h
+Inputs:     attr    - the new text attribute
+Return:     a zero if no error, see TCXLWIN.H for error codes
+Also see:   attrib wchgattr
+Example:
+            wopen(10,10,20,20,0,WHITE|_GREEN);
+            wgotoxy(1,1);
+            wtextattr(LMAGENTA|BLINK);
+            wputs("Hello, world");
+
+
+Name:       wtitle
+Purpose:    gives active window a title and displays title on top border line
+            of window
+Prototype:  int wtitle(char *str,int tpos);
+Header:     tcxlwin.h
+Inputs:     str     - address of title string or NULL to delete title
+            tpos    - position of title:
+                        TDELETE - to delete title
+                        TLEFT   - left justified
+                        TCENTER - centered
+                        TRIGHT  - right justified
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+            W_TITLLONG  - title string too long for window
+            W_INVTPOS   - invalid title position argument
+Example:
+            wtitle("[ My Window ]",TCENTER);
+
+
+Name:       wunhide
+Purpose:    unhides a previously hidden window
+Prototype:  int *wunhide(int **wbuf);
+Header:     tcxlwin.h
+Inputs:     wbuf    - address of the pointer to the window buffer to unhide
+Return:     the address of the unhidden window's buffer or a NULL if a memory
+            allocation error occurred
+Also see:   whide wrestore
+Example:
+            wopen(0,0,15,50,0,LCYAN|_BLUE);
+            waitkey();
+            whide(&_wrecord[_wcurrent].wbuf);
+            waitkey();
+            wunhide(&_wrecord[_wcurrent].wbuf);
+
+
+Name:       wvline
+Purpose:    draws a vertical text line in active window using characters
+            defined by given box type.  If vertical line crosses a horizontal
+            line of the same box type, an appropriate intersection or corner
+            will be used.
+Prototype:  int wvline(int wsrow,int wscol,int count,int btype);
+Header:     tcxlwin.h
+
+
+                                      59   
+Inputs:     wsrow   - window start row of line
+            wscol   - window start column of line
+            count   - number of line characters to display
+            btype   - box type (0-5)
+Return:     W_NOERROR   - no error
+            W_NOACTIVE  - no active window
+            W_INVCOORD  - entire text line could not fit in window
+            W_INVBTYPE  - invalid box type
+Also see:   whline wtextattr
+Example:
+            wvline(3,9,14,1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      60   
+
+                              Global Variables
+                              ----------------
+
+Name:       _videoseg
+Purpose:    contains the current video RAM segment address used by direct
+            screen writes
+Type:       unsigned
+
+
+Name:       _wcurrent
+Purpose:    contains the array subscript of the window record that is currently
+            active
+Type:       int
+
+
+Name:       _werrno
+Purpose:    contains the error code from the most recently performed windowing
+            function.  See TCXLWIN.H for error codes.
+Type:       int
+
+
+Name:       _wesc
+Purpose:    Escape key checking flag.  This is set by the wsetesc() function
+            and used by several window keyboard input functions.
+Type:       int
+
+
+Name:       _whandle
+Purpose:    contains the last handle number given to a window
+Type:       int
+
+
+Name:       _winpcurr
+Purpose:    contains the subscript of the window input record array
+Type:       int
+
+
+Name:       _winprec
+Purpose:    a pointer to an array of defined window input records
+Type:       struct _winprec *  (see TCXLWIN.H for definition)
+
+
+Name:       _wmbarlast
+Purpose:    contains the array subscript of the highest defined bar-menu option
+Type:       int
+
+
+Name:       _wmbarrec
+Purpose:    a pointer to the array of defined bar-menu options
+Type:       struct _wmbarrec *  (See TCXLWIN.H for definition)
+
+
+Name:       _wrecord
+Purpose:    a pointer to an array of window records which contains window
+            handles and window buffer pointers
+Type:       struct _wrecord *  (see TCXLWIN.H for definition) 
+
+
+                                      61   

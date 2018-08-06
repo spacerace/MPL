@@ -1,0 +1,160 @@
+
+
+
+
+                          C STRUCTURE DOCUMENTATION
+                                     or
+                      Things Your Books Never Told You
+
+                              By Mark Grennan
+                             6204 Reeves Court
+                          Oklahoma City, Ok 73122
+                            (405) 728-2463 DATA
+                            (405) 728-9836 VOICE
+                                   7/3/85
+
+
+    If you are developing large applications in C and using lots of file
+structures there are a few things you should now, that I have not found
+and any of the books. These things may work differently in your compiler,
+but I feel you should make your self aware of them.
+
+    ITEM 1: When you declare a structure, its member names must be mutually
+	    distinct. This is documented in the K&R book pate 197, 
+	    paragraph four. But is easily overlooked. Let me give you
+	    an example....
+
+struct TESTA {
+	char fname[20];
+	char lname[20];
+	} member;
+
+struct TESTB {
+	char lname[20];
+	char fname[20];
+	} user;
+
+	    If your program declares two or more structers both with similar
+	    member names, your compiler (according to K&R) should give you
+	    a compiler error. Some compilers have gone beyond this, as K&R
+	    sagest in their book at later versions of C will do. If yours
+	    dos your lucky. 
+
+
+    ITEM 2: Lets say you declare you structures right and use unek names.
+	    But, you wish to have each of you records work out to be one
+	    of the magic numbers (8, 16, 32 ...) in size, so you throw in
+	    a filler[ variable ] to pad each each record with. Example...
+
+
+
+
+
+
+
+Š
+struct TESTA {
+        char filler[24];
+	char mem_fname[20];
+	char mem_lname[20];
+	} member;
+
+struct TESTB {
+        char filler[4];
+	char usr_fname[20];
+	char usr_lname[20];
+        char addr[20];
+	} user;
+
+	    Your compiler will probably not give you any error on this.
+	    Your member names are all either unek or your members have 
+	    the same name and offset. In this case the first member of 
+	    the structure (OFFSET 0). I use Computer Innovations C86 and 
+	    it doesn't give an error on these declaration.
+
+	    NOW THE RUB. As the compiler parses the code and creates
+	    space in memory for you structers it confuses usr.filler with
+	    member.filler and assigens the size of structer user to be 84
+	    bytes long. That is the 24 bytes from member and the rest of
+	    your structure. This is not a large problem, just wasteful
+	    you say. Ok, turn the structures over. Put user on top and
+	    member on bottom. Now what happens? Member.filler gets declared
+	    as a length of 4 not 24. So, you write you data into it and over
+	    write come piece of code lying after it in memory. OOOOOOHH!!!
+	    EXAMPLE..... (I ran this program threw my compiler, asking it
+	    it give me assembly code output)
+
+
+
+
+
+
+
+typedef struct TESTA {
+	char s1[128];
+	char s2[128];
+	};
+typedef struct TESTB {
+	char s1[16];
+	char s3[16];
+	};
+typedef struct TESTC {
+	char s1[32];
+	char s4[32];
+	};
+
+struct TESTA testa;
+struct TESTB testb;
+struct TESTC testc;
+int fp;Š
+main()
+{
+	int x;
+
+	strcpy(testb.s1,"123456789012345");
+	strcpy(testb.s2,"ABCDEFGHIJKLMNO");
+        
+	fp = fopen("example.txt","wr");
+        for(x=0; x<10; x++) {
+  	  fseek(fp,0L,2);
+	  printf("\nWritting record at file address %d",ftell(fp));
+	  fwrite(&testb,sizeof(struct TESTB),1,fp);
+	}
+}
+
+
+
+	    And here's what I got in my data segment.
+
+
+
+@DATAU	SEGMENT
+	db	562 DUP (?)
+
+	ORG	0		;Start of segement
+TESTA	LABEL	WORD		;create label for structure TESTA
+
+	public	TESTA
+	ORG	256		;Set address for next structure leaving
+TESTB	LABEL	WORD		; 256 bytes for the first (that's right)
+				;Now create space for the next structure
+	public	TESTB		;which should be 32 bytes long. SO 
+	ORG	400		; 256 + 32 = 288, But we have 400 that's
+TESTC	LABEL	WORD		; 256 + 128 + 16.
+
+	public	TESTC		; This should be 400 (it it was right) + 64
+	ORG	560		; but its 400 + 128 + 32.
+FP	LABEL	WORD
+
+	public	FP
+	public	MAIN
+@DATAU	ENDS
+
+
+
+	    So you can use similar member names in different structures IF
+	    they start in the same offset and have the same length.
+
+    I hope this will help you with your development. It took a while for me
+to get over my ignorance and get some of the programs I'm writing to work.
+Good luck with yours.

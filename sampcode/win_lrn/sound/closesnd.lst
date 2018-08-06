@@ -1,0 +1,149 @@
+ 
+
+                                                                       PAGE   1
+                                                                       06-24-88
+                                                                       14:11:06
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+      1  /*
+      2   *  Function Name:   CloseSound
+      3   *  Program Name:    CloseSnd.c
+      4   *  SDK Version:         2.03
+      5   *  Runtime Version:     2.03
+      6   *  Microsoft C Version: 5.0
+      7   *
+      8   *  Description:
+      9   *   CloseSound closes access to the play device and frees the device 
+         for
+     10   *   opening by other applications.  the CloseSound function flushes a
+         ll
+     11   *   voice queues and frees any buffers allocated for these queues.
+     12   */
+     13  
+     14  #include "windows.h"
+     15  #include "stdio.h"
+     16  
+     17  
+     18  long FAR PASCAL WndProc(HWND, unsigned, WORD, LONG);
+     19  
+     20  /*********************************************************************
+         **/
+     21  
+     22  void CALL_CloseSound(hWnd)
+     23  HWND hWnd;
+     24  
+     25  {   char szBuffer[30];
+     26      short nVoices; /* Specifies the number of voices available. */
+     27  
+     28      nVoices = OpenSound(); /* Opens access to play device, locks it fr
+         om  */
+     29                             /* further users, returns the number of voi
+         ces */
+     30                             /* available.                              
+             */
+     31      
+     32      if (nVoices == S_SERDVNA)
+     33      {MessageBox( NULL, (LPSTR) "Play device in use.",(LPSTR) "Error",M
+         B_OK);
+     34      } else if (nVoices == S_SEROFM)
+     35      {MessageBox( NULL, (LPSTR) "Insufficient memory available.",
+     36                         (LPSTR) "Error\0",MB_OK );
+     37      
+     38      
+     39      } else  
+     40      {sprintf(szBuffer,"%d voice(s) are available.",nVoices);
+     41       MessageBox( NULL, (LPSTR) szBuffer,
+     42                         (LPSTR)"Mission Accomplished\0", MB_OK);
+     43  
+     44  
+     45       CloseSound();    /* Closesnd closes the play device, allowing oth
+         er */
+     46                       /* applications to use the device.               
+           */
+     47      }
+ 
+
+                                                                       PAGE   2
+                                                                       06-24-88
+                                                                       14:11:06
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+     48      if ((nVoices!=S_SEROFM) && (nVoices!=S_SERDVNA))
+     49      {MessageBox( NULL, (LPSTR)"CloseSound complete, device available."
+         ,
+     50                         (LPSTR)"Mission Accomplished\0", MB_OK);
+     51      } else
+     52      {MessageBox( NULL, (LPSTR)"Device unavailable, try later",
+     53                         (LPSTR)"Mission Failed", MB_OK);
+     54  
+     55         }
+     56  
+     57  return;
+     58  }
+
+
+CALL_CloseSound  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+szBuffer. . . . . . . . . auto                             -0020 
+nVoices . . . . . . . . . auto                             -0002 
+hWnd. . . . . . . . . . . param                             0004
+
+     59  
+     60  /*********************************************************************
+         *****/
+     61  
+     62  int PASCAL WinMain( hInstance, hPrevInstance, lpszCmdLine, cmdShow )
+     63  HANDLE hInstance, hPrevInstance;
+     64  LPSTR lpszCmdLine;
+     65  int cmdShow;
+     66  {
+     67      MSG   msg;
+     68      HWND  hWnd;
+     69      HMENU hMenu;
+     70  
+     71      CALL_CloseSound(hWnd);
+     72      return 0;
+     73  }
+
+
+WinMain  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hMenu . . . . . . . . . . auto                             -0016 
+msg . . . . . . . . . . . auto                             -0014 
+hWnd. . . . . . . . . . . auto                             -0002 
+cmdShow . . . . . . . . . param                             0004
+lpszCmdLine . . . . . . . param                             0006
+hPrevInstance . . . . . . param                             000a
+hInstance . . . . . . . . param                             000c
+
+ 
+
+                                                                       PAGE   3
+                                                                       06-24-88
+                                                                       14:11:06
+
+                                              Microsoft C Compiler Version 5.10
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+CALL_CloseSound . . . . . global  near function      ***    0000
+CloseSound. . . . . . . . extern  far function       ***     ***
+MessageBox. . . . . . . . extern  far function       ***     ***
+OpenSound . . . . . . . . extern  far function       ***     ***
+WinMain . . . . . . . . . global  near function      ***    00d0
+pLocalHeap. . . . . . . . common  near pointer         2     ***
+sprintf . . . . . . . . . extern  near function      ***     ***
+
+Code size = 00f0 (240)
+Data size = 00db (219)
+Bss size  = 0000 (0)
+
+No errors detected

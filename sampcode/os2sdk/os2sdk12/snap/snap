@@ -1,0 +1,28 @@
+# Makefile for SNAP application
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC	= cl -c -G2s -Od -W3 -Zpei
+LF	= /align:16 /codeview /map /NOD
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) _TEXT $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+all: snap.exe
+
+# Dependencies
+#
+snap.res:	snap snap.rc snap.h snap.ico hand.ptr select.ptr snap.ptr
+
+snap.obj:	snap snap.c snap.h
+
+snap.exe:	snap snap.def snap.obj snap.res
+    link $(LF) snap, snap.exe, snap.map, os2 slibcep, snap.def
+    rc snap.res

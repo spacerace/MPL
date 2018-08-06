@@ -1,0 +1,13 @@
+
+isdlgmsg.res: isdlgmsg.rc isdlgmsg.h
+    rc -r isdlgmsg.rc
+
+isdlgmsg.obj: isdlgmsg.c
+   cl -c -W2 -AS -Gsw -Od -Zped isdlgmsg.c
+
+isdlgmsg.exe: isdlgmsg.obj isdlgmsg.def
+   link4 isdlgmsg,/align:16,/map/li,slibw/NOE,isdlgmsg.def
+   rc isdlgmsg.res
+
+isdlgmsg.exe: isdlgmsg.res
+    rc isdlgmsg.res

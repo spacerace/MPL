@@ -1,0 +1,151 @@
+Comments about FATPEL
+
+
+Note:
+-----
+
+You must run "make opendlg" and include the ..\dll directory in your
+libpath before attempting to make or execute this application.
+
+
+Description:
+------------
+
+FatPels displays a "magnified" coordinate space with some object
+rendered into it.
+
+This program illustrates the diamond metric, which is:
+
+    1) Round control points to the nearest integer.
+    2) Draw the mathematical object onto an imaginary grid where a diamond
+       surrounds each pel, the tips of which exactly touch the tips of
+       similar diamonds around each surrounding pel.
+    3) If the object drawn enters the diamond of a pel, turn on the pel.
+    4) In the case of a tie between pels, turn on the lower one
+       (in whichever dimension has the tie).
+
+Gpi actually restricts this rule by requiring that the object
+touch the cross drawn between opposing vertices of the diamond.
+
+To see the effect of rendering different objects, click in the window
+to add control points, or select a different output primitive from the
+Primitive menu.  You can add points by clicking with the left button,
+remove them by clicking on them with the right.  If you click on a point
+and hold the button down, you can drag the point around the window, with
+the mathematical and rendered curves following you.  You can insert
+points into a line segment by clicking on the line.
+
+To see the effect of rendering at different scales, resize the
+pels (menu command: PelSize Set pel size and shape ...).
+The dimensions of the target coordinate space are determined by how
+many pels of the given size will fit in the program's window.  The
+sample control points follow the corners of the target space.
+Resizing the window will cause a reevaluation of how many pels will fit.
+
+You can "touch up" a rendered object by entering "edit color" mode, by
+selecting "Colors Edit pel colors".  The cursor shape changes to a
+hollow diamond to let you know that mouse clicks will affect pel color
+rather than control point positions.  Click on the left button to set a
+pel to the foreground color (i.e. color of rendered object), or the
+right button for the background (i.e. field) color.
+
+You can see the true (subject to the resolution of your monitor)
+"mathematical" object by disabling rounding of control points.
+The control points must be rounded for the object to correspond to
+the rendered pels, according to rule (1), but it might interest you
+to see how your intended object is distorted.
+
+Note:  I repaint the window by drawing one pel into the lower left
+       corner, then calling GpiBitBlt to copy it up a column, then
+       copy the column across to the right.  If the lower left corner
+       is clipped, then whatever happens to be covering it will get
+       copied all over the window. This "feature" is for speeding
+       up the repaint.	To clean it up, bring the window to the top
+       and issue a redraw command.
+
+
+Program commands:
+-----------------
+
+File
+    Save bitmap ...
+	Allow current "fatpel" screen to be saved as a BMP format file.
+	Note:  this command reads the bits that are on the screen, so
+	if there's garbage in the window, it will be saved.
+
+    About ...
+	Show the credits and version number.
+
+Display
+    Rendered object
+	Display the mathematical object rendered into the small bitmap,
+	as fat pels.
+
+    Mathematical object
+	Display the "mathematical" object, i.e. drawn to the original
+	coordinates in the window, rather than the transformed down
+	coordinates in the small bitmap.
+
+    Control points
+	Display markers for the control points.
+
+    Crosshairs
+	Display the crosshairs in the center of each pel.
+
+    Pel borders
+	Draw a border (in the crosshair color) around each pel.
+
+    Rounded control points
+	Round the control points before drawing, to mimic the way
+	Gpi does it.  To see whether the curve follows the
+	diamond metric correctly, the mathematical object must be
+	drawn with its control points rounded to the nearest pel.
+	Note: Selecting control points is difficult with this option on,
+	because they are not displayed at their true locations.
+
+    Auto redraw after changes
+	Automatically redraw the image after any changes.
+
+Primitive
+    None
+	Don't draw anything on the grid.
+
+    GpiPolyline
+    GpiPolyFillet
+    GpiPolySpline
+    GpiPointArc
+	Draw with the given primitive.	In the case of primitives which
+	require points in groups of a given size (e.g. GpiPolySpline),
+	some points may be truncated when calling GPI.
+
+Colors
+    Set colors ...
+	Allows various colors used by the program to be changed.
+	In RGB mode, the color values are presented in hexadecimal
+	notation, since it's easier to see the different color
+	components that way.  You can still type in decimal numbers.
+	In RGB mode, dithering is allowed.  Note that when going
+	from RGB to non-RGB (default color index table) mode, the
+	values are mapped to their nearest equivalents on your
+	display device.
+
+    Edit pel colors
+	Sets the mouse pointer mode to "edit color".  The pointer shape
+	will change to a hollow diamond.  Click with the left button to
+	change a fat pel to the rendered object's color.  Click with the
+	right button to set a pel to the field color.  Select this command
+	again to return to "edit control point" pointer mode.
+
+PelSize
+    Set pel size and shape ...
+	Set the pel size to whatever is desired.
+
+    Drag pel size
+	Allows the pel size to be specified by dragging a rectangle on the
+	window.  The rectangle must be dragged from lower left to upper
+	right.	The cursor will change when a button is held down, and
+	a tracking rectangle will appear.  Clicking in the window with
+	this option on will cause the pel to be resized to 1 by 1.
+
+Redraw
+	Redraw the screen with the current selections.

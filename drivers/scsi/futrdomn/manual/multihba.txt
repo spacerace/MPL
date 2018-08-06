@@ -1,0 +1,38 @@
+      The  Toolkit can now  support more than  one Host Adapter on 
+      the  same  computer.   This  new  capability  should have no 
+      effect on current users of the Toolkit.  The high order four 
+      bits of the "scsiaddress" byte  in an oemtable structure are 
+      used to identify a specific Host Adapter.  Host Adapters are 
+      assigned  a  logical  adapter  number  by the Toolkit on the 
+      first call  to the Toolkit.   The numbers range from 0 to 7.
+      Four  TMC  style  adapters  can  be supported, and eight MCS 
+      style adapters.  The first adapter found is always number 0.
+      If this is the only adapter installed,  the Toolkit works as 
+      before with the high order bits of a "scsiaddress" set to 0.
+
+
+
+
+      You can  determine how many Host  Adapters are installed, as 
+      follows: 
+
+      a. Call  oemscsi with the  Host Adapter field  (high order 4 
+         bits) of  "scsiaddress" set to zero.   Test Unit Ready on 
+         SCSI address zero is a good request to use.
+
+      b. If  oemscsi  returns  an  "adaptererr"  of  -16,  no Host 
+         Adapter  is  installed.   Any  other  status  means  Host 
+         Adapter zero is installed.
+
+      c. Increment  the  number  in  the  Host Adapter  field, and 
+         repeat the  call.  When a status of  -16 is returned, the 
+         previous Host Adapter number is the last adpater.          
+
+      A  new  routine  has  been  added  to  reset a specific Host 
+      Adapter.  This  routine is  called with  a "scsiaddress"  as 
+      its only argument.  Again  the high order four bits  of this 
+      byte identify the Host Adapter.
+
+         scsiclear(scsiaddress) ;
+
+      unsigned char scsiaddress ;  

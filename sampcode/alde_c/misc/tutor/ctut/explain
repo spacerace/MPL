@@ -1,0 +1,539 @@
+.T
+    a DISPLAY program for text files    
+.R6C1
+    ~V                                                                     ~N
+    ~V If you have comments, criticisms, suggestions, etc. concerning this ~N
+    ~V               display program, please write to:                     ~N
+    ~V                                                                     ~N
+.b5-10
+.R12C3
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+University of Waterloo, Ontario N2L 3G1
+.K17,30
+[0;1mPonzoTUTOR
+.WN
+                               ~IPLEASE NOTE~N:
+~I~W
+.B
+~r          The DISPLAY program requires the ANSI.SYS device driver.          ~N
+
+
+
+   Be sure that there is a ~Iconfig.sys~N file on the disk, which contains:
+                        
+   ~Idevice = ansi.sys~N
+~I~W
+.B
+~r            and the IBM PC is turned on WITH THE DISK INSERTED!             ~N
+
+.R16C1
+    You may create such a ~Iconfig.sys~N by typing:
+
+ ~IA>copy con:config.sys~N
+ ~Idevice=ansi.sys~N
+  (now press F6 then Enter)
+
+   This will place the appropriate ~Iconfig.sys~N on your disk (which must
+   also have a copy of the DOS ~Iansi.sys~N device driver)
+.b15-24
+.WNT
+  How to use the DISPLAY program  
+
+    The program ~Idisplay~N is meant to be used in place of the DOS ~Itype~N 
+    command. To ~Idisplay~N a file called sam, just type: ~IA>display sam~N 
+
+    The features of ~Idisplay~N which make it different from ~Itype~N are: 
+
+1)  After each screen, the ~Idisplay~N will wait for you to press a key.  
+
+2)  If certain 'special commands' appear  in  the  file  to be ~Idisplay~Ned, this
+    will cause the ~Idisplay~N to give colours (foreground and/or background),
+    position the 'next line' at any specified row or column, clear the screen,
+    cause the ~Idisplay~N to pause until a key is pressed or print  the  'next
+    line' as a 'title' (centred, in intense white, surrounded by red bars).
+    You see an example of a 'title' line at the top of this  screen.  (Indeed,
+    ~Ithis~N explanation of ~Idisplay~N uses these features!)
+
+Now we will describe these 'special commands':
+.WNT
+ The DOT COMMANDS 
+    Certain DOT COMMANDS are available. They must appear on a line of their
+    own, beginning with a DOT in the first column, followed immediately by:
+    ~b~IT~N, ~b~IR~N, ~b~IC~N, ~b~IW~N, ~b~Iw~N, ~b~IN~N, ~b~IQ~N, ~b~IB~N , etc.
+    
+
+                 ~b~I           The DOT COMMAND .T                ~N
+
+ 
+    If a line of a file to be ~Idisplay~Ned begins ~b~I.T~N, it causes
+    ~Idisplay~N to print the 'next line' as a title, for example:
+
+~b~I.T~N
+~b~IChapter One~N
+
+    will cause 'Chapter One' to be ~Idisplay~Ned as a title:
+
+.T
+Chapter One
+.WN
+                ~b~I        The DOT COMMANDS .R and .C             ~N
+
+
+
+    If a line of a file to be ~Idisplay~Ned begins ~b~I.R15~N, it will cause
+    the cursor to move to ~b~IR~Now ~b~I15~N.
+
+    If a line of a file to be ~Idisplay~Ned begins ~b~I.C33~N, it will cause
+    the cursor to move to ~b~IC~Nolumn ~b~I33~N.
+
+~b~I.R20~N                               go to row 20.
+~b~I.T~N                                 prepare for title.
+~b~I I'm a title on row 20 ~N            this is the title.
+
+.R20
+.T
+ I'm a title on row 20 
+.WN
+               ~b~I   More on   DOT COMMANDS .R and .C            ~N
+
+
+
+    The sequence of DOT commands:
+
+~b~I.R20~N
+~b~I.C33~N
+~b~II'm on row 20, starting at column 33~N
+
+    will print (at row 20, column 33):
+.R20C33
+I'm on row 20, starting at column 33
+.WN
+            ~b~I         The DOT COMMANDS .W  .N  and  .q           ~N
+
+
+~b~I.W~N      will cause the message ~BPlease press the Enter key...(q=quit)~N
+              to appear at the bottom of the screen and further ~Idisplay~N
+              of the text file is suspended until a key is pressed.
+              (You will recognize this message at the bottom of ~Ithis~N
+              screen).  ~b~IW~N means ~b~IW~Nait.
+
+~b~I.N~N      will give you a ~b~IN~New screen (~b~I.N~N clears the screen).
+
+
+~b~I.q~N      will ~b~Iq~Nuit the ~Idisplay~N and return to DOS.
+.WN
+               ~b~I         The DOT COMMAND   .B                 ~N
+
+
+~b~I.B~N      will cause the NEXT LINE to be printed in a 'box'.
+                                                                
+              ~INOTE~N:You might use ~b~I.R~N and ~b~I.C~N to place the cursor
+                   at the appropriate place on the screen before you use
+                   the ~b~I.B~N command. The ~b~IR~Now and ~b~IC~Nolumn will
+                   define the top left corner of the box.
+              After using ~b~I.B~N, ~Ithe cursor is at the top right of~N
+              ~Ithe box~N. For example:
+~b~I.R20~N
+~b~I.C10~N
+~b~I.B~N
+~b~I    Jack-in-a-box    ~N   will give:
+.R20C10
+.B
+    Jack-in-a-box    
+.R19C10
+~I~Nrow 20,col 10 is here.
+.R20C34
+~IÛ~N cursor is left here (ready for another box!)
+.WN
+
+~b~I.R20~N                             
+~b~I.C10~N                             
+~b~I.B~N                               What will the combination of
+~b~Ifirst~N                            .commands (shown at left) do?
+~b~I.B~N
+~b~Isecond~N
+.W
+.R18C10
+.B
+first
+.B
+second
+.WN
+               ~b~I         The DOT COMMAND   .b                 ~N
+
+~b~I.b10-18~N        will put a screen-wide box, from row ~I10~N to row ~I18~N.
+.W
+.b10-18
+.W
+.R14C15
+~V  ...and, of course, you can now put text inside....~N
+.WNR10C2
+    ... or you can have a se~Ix~Ny box:
+
+
+~b~I.x9-12~N
+.Wx9-12
+.WNT
+    Another   DOT command   .Q   
+~b~I.Q~N                                  Will ask the following question:
+~b~IWho was buried in Grant's tomb?~N
+~b~IGrant~N                               ...and expect ~Ithis~N answer.
+
+    (You may use ~b~I.Q13~N to first place the cursor on row ~b~I13~N)
+
+    Let's try it out on ~IYOU~N!
+.K19,60
+!@#$%^&*!!
+.WN
+
+.Q
+Who was buried in Grant's tomb?
+Grant
+.K19,60
+cock who?
+.Q
+Who killed cock robin?
+I can't remember either!
+.K19,60
+  FOUR!
+.Q
+2+2=
+4
+.K19,60
+dumb!dumb!
+.WNT
+    The DOT COMMANDS  .s  and  .r   
+
+    When you use ~b~I.W~N (to ~b~IW~Nait) or ~b~I.K~N (the ~b~IK~Nartoon, explained shortly) the
+    cursor position is ~Isaved~N, the DOT COMMAND does its stuff, then the
+    cursor is ~Irestored~N.
+
+    When you use ~b~I.B~N (to ~b~IB~Nox the following line of text) the cursor
+    is left "suspended", ready for another ~b~I.B~Nox. If you don't want another
+    "boxed-text", move the cursor with ~b~I.R~N and ~b~I.C~N.
+
+    In order to facilitate moving around the screen, printing here and there,
+    there are two more DOT COMMANDS.
+
+~b~I.s~N         the ~b~Is~N will ~b~Is~Nave the current cursor position...
+~b~I.R10C2~N     now move to another ~b~IR~Now and ~b~IC~Nolumn...
+~b~Isome text~N  print something..
+~b~I.r~N         ~b~Ir~Nestore the ~b~Is~Naved cursor position.
+.WNT
+    the Komputer Kartoon    
+   
+    ...and, for Komic relief, you also have a Komputer Kartoon:
+
+    Just include the dot command:
+
+~b~I.K15,33~N            gives a Kartoon at row 15, column 33.
+~b~Imamma mia!~N         comment (by the Kartoon) ~Iwith 10 characters or less!~N
+
+    ...and you get:
+.W
+.K15,33
+mamma mia!
+.WNT
+ REVIEW of DOT COMMANDS 
+.R5C1
+~b~I.T~N      the 'next line' is printed as a ~b~IT~Nitle.
+~b~I.R12~N    moves to  ~b~IR~Now ~b~I12~N.
+~b~I.C22~N    moves to  ~b~IC~Nolumn ~b~I22~N.
+~b~I.W~N      ~b~IW~Naits for a key-press (automatic, after 22 lines).
+~b~I.w~N      sets (above) line count to zero (discussed later).               
+~b~I.N~N      gives a ~b~IN~New (clear) screen.
+~b~I.q~N      will ~b~Iq~Nuit (returning to DOS).
+~b~I.B~N      will print the 'next line' in a box (with ~Isuspended cursor!~N).
+~b~I.b5-13~N  will draw a screen-wide ~Ib~Nox from line ~b~I5~N to line ~b~I13~N.
+~b~I.x5-13~N  will draw a screen-wide se~Ix~Ny box (line ~b~I5~N to line ~b~I13~N).
+~b~I.Q~N      will ask ~b~IQ~Nuestion (on the following line) and expect the
+        answer (on the line following that).
+~b~I.s~N      will ~b~Is~Nave the current cursor position.
+~b~I.r~N      will ~b~Ir~Nestore the (saved) cursor position.
+~b~I.K19,60~N will print a ~b~IK~Nomputer ~b~IK~Nartoon at row ~b~I19~N and
+        column ~b~I60~N, with the ~b~IK~Nomment on the 'next line'.
+.WNT
+A final note about the DOT COMMANDS:
+
+    Because the ~b~IR~Now and ~b~IC~Nolumn specifications are often used
+    together, these DOT commands may be on the SAME LINE.
+
+~b~I.R20C30~N      moves to ~b~IR~Now ~b~I20~N and ~b~IC~Nolumn ~b~I30~N.
+
+    In fact, most of the DOT COMMANDS will work when strung out
+    on one line, after the initial DOT in column 1:
+
+~b~I.WNT~N    will ~b~IW~Nait, then provide a~b~IN~New screen, then a ~b~IT~Nitle.
+
+~b~I.R10C1B~N  will go to ~b~IR~Now ~b~I10~N, ~b~IC~Nolumn ~b~I1~N and get ready for a ~b~IB~Nox.
+
+    Not all DOT COMMANDS may be strung out on one line. The ~b~I.T~Nitle, ~b~I.B~Nox,
+    ~b~I.b~Nox and ~b~I.K~Nartoon want desperately to print something on the screen.
+    SO, ~Iafter these, everything on a DOT COMMAND line is ignored!~N
+
+~b~I.WNb5-7R10~N   will ~b~IW~Nait, ~b~IN~New screen, give a ~b~Ib~Nox from row
+             ~b~I5~N to ~b~I7~N, .... and ~Iignore~N ~b~IR10~N!
+.WNT
+  ...and yet another DOT COMMAND   
+      If you ~Idisplay~N an ASCII text file which is NOT especially written
+    with the 'special commands'...in particular, if there are no ~b~I.W~N
+    ~b~IW~Nait commands...then ~Idisplay~N will read 22 lines of text and
+    then will ~b~IW~Nait for the Enter key. ~IThe display program counts
+    the number of lines which are read from the text file and ~N~b~IW~N~Iaits
+    after 22 lines are read.~N However, in some cases, you may have a file
+    written with the 'special' ~Idisplay~N DOT COMMANDS which (of course)
+    are NOT printed on the screen but are instructions to the ~Idisplay~N
+    program. In this case, the text file may have 20 lines of text (which
+    are meant to be printed on the screen) and 5 DOT COMMANDS (each on its
+    own line!). That makes 25 lines from your text file of which 20 are
+    to be printed. Too bad !! ~Idisplay~N will ~b~IW~Nait after 22 lines are
+    read from the file. What you want is to have ~Idisplay~N read ALL 25
+    lines, and print the 20 which are NOT DOT COMMANDS, before ~b~IW~Naiting.
+    To achieve this you must tell ~Idisplay~N to set the line count back to 
+    zero. There is another DOT COMMAND for this:
+.WN
+
+
+
+
+~b~I.w~N      will set the line count to zero, and ~Idisplay~N will begin
+              counting lines from this point. A ~b~IW~Nait will occur after
+              the ~Rnext~N 22 lines (unless there is another ~b~I.w~N command)
+              or until a ~b~I.W~N command occurs).
+
+
+
+.WNT
+  The TILDE COMMANDS  
+    Whereas the DOT COMMANDS must have a line to themselves (beginning with
+    the DOT), there are  COLOUR  COMMANDS which may be embedded in the text
+    itself. Each time a TILDE appears in the text file, the  NEXT CHARACTER
+    has a special meaning for ~Idisplay~N.
+
+~b~IThe quick brown fox jumped over the lazy log.~N
+
+    The above piece of text will appear 'NORMAL' (white on black).
+    If you wish the word 'fox' to be in RED, precede it with ~b~I~~R~N.
+    After the ~b~I~~R~N, ALL subsequent text will be in RED!
+    To change to NORMAL text, insert ~b~I~~N~N. Hence the above line of
+    text would be rewritten as:
+
+~b~IThe quick brown ~~Rfox~~N jumped over the lazy log.~N
+
+    and would be ~Idisplay~Ned as:
+
+The quick brown ~Rfox~N jumped over the lazy log.
+.WN
+                  ~b~I           All the colours           ~N
+
+    Here are all the COLOUR COMMANDS for ~RTEXT~N:
+
+~b~I~~R~N     changes text to ~b~IR~Ned.............~Rthis is red~N
+~b~I~~Y~N     changes text to ~b~IY~Nellow..........~Ythis is yellow~N
+~b~I~~G~N     changes text to ~b~IG~Nreen...........~Gthis is green~N
+~b~I~~B~N     changes text to ~b~IB~Nlue............~Bthis is blue~N
+~b~I~~C~N     changes text to ~b~IC~Nyan............~Cthis is cyan~N
+~b~I~~M~N     changes text to ~b~IM~Nagenta.........~Mthis is magenta~N
+~b~I~~W~N     changes text to ~b~IW~Nhite...........~Wthis is white~N
+    and 
+~b~I~~I~N     changes text to ~b~II~Nntense.........~Ithis is intense~N
+~b~I~~F~N     changes text to ~b~IF~Nlash...........~Fthis is flash~N
+~b~I~~V~N     changes text to re~b~IV~Nerse video...~Vthis is reverse video~N
+~b~I~~N~N     changes text to ~b~IN~Normal again....~Nthis is normal~N
+
+    Guess what the following line of text will ~Idisplay~N:
+
+~b~I~~F~~Rr~~Ya~~Gi~~Bn~~Cb~~Mo~~Ww~N
+.W
+.R21C30
+~F~Rr~Ya~Gi~Bn~Cb~Mo~Ww~N
+.WN
+
+                    ~b~I          Coloured Background          ~N
+
+    In addition to embedding ~b~I~~R~N (to change to ~b~IR~Ned text), you
+    may change the background colour to ~b~Ir~Ned by inserting ~b~I~~r~N
+    in your text file.
+
+~b~I~~r~N     changes background to ~b~Ir~Ned.......~rthis is red~N
+~b~I~~y~N     changes background to ~b~Iy~Nellow....~ythis is yellow~N
+~b~I~~g~N     changes background to ~b~Ig~Nreen.....~gthis is green~N
+~b~I~~b~N     changes background to ~b~Ib~Nlue......~bthis is blue~N
+~b~I~~g~N     changes background to ~b~Ic~Nyan......~cthis is cyan~N
+~b~I~~m~N     changes background to ~b~Im~Nagenta...~mthis is magenta~N
+~b~I~~w~N     changes background to ~b~Iw~Nhite.....~V             ~N
+                                       (can ~Iyou~N see white-on-white?~N)
+    REMEMBER: ~b~I~~N~N returns (again) to ~b~IN~Normal white on black.
+
+    Guess what the following line of text will ~Idisplay~N:
+.R20C1
+~b~I~~w~~I~~MThis is a test~~N~N
+.W
+.R20C1
+~V~~w~N~b~I~~I~~MThis is a test~~N~N
+.R22C1
+    This gives a ~b~Iw~Nhite background.              
+.W
+.R20C1
+~b~I~~w~V~~I~~M~N~b~IThis is a test~~N~N
+.R22C1
+    This gives  ~b~II~Nntense ~b~IM~Nagenta text.
+.W
+.R20C1
+~b~I~~w~~I~~M~VThis is a test~N~b~I~~N~N
+.R22C1
+    This prints some text ( 'This is a test' ).                          
+.W
+.R20C1
+~b~I~~w~~I~~MThis is a test~V~~N~N
+.R22C1
+    This returns to ~b~IN~Normal text.                                  
+.W
+.R20C1
+~b~I~~w~~I~~MThis is a test~~N~N
+.R22C1
+    ...and the ~Idisplay~Ned result will be intense-magenta-on-white:        
+.W
+.R20C30
+~w~I~MThis is a test~N
+.WN
+
+    ...and you can have ~Icolour-in-a-box~N....
+
+
+~b~I~~I~~G~N                          intense green box.
+~b~I.B~N                            here comes the box...
+~b~I~~w~~Rred-on-white text~~N~N   and the stuff in the box.
+
+~I~G
+.B
+~w~Rred-on-white text~N
+.W
+.R15C10
+~V
+.B
+~N~I...or reverse video maybe ? ~N     (~Iyou~N figure this one out!)
+.WN
+
+
+
+             ~b~I       ...and how to print a TILDE on the screen?     ~N
+
+
+    ...just embed ~b~I~~~~~N in your text, and the TWO TILDES generate
+    a TILDE in your text!
+
+
+    One other point: for a ~Imonochrome monitor~N, choosing ~b~I~~B~N (to get
+    blue text) will give ~w~Bunderlined~N characters~I!!
+
+
+
+.WNR5C2
+ ... and you may change the (entire) background colour ...
+
+To get a screen full of ~Ib~Nlue background, just include:
+
+~b~I~~b~N
+
+ then ~Iclear the screen~N with:
+
+~b~I.N~N
+
+ then begin each line of your text with ~b~I~~b~N  
+
+ (to get blue background in the text too!)
+.W
+~b
+.N
+.R5C1
+~b ... ain't this nice (just start your text with ~~b)
+.R8C2
+~b~I~W ... or maybe "intense white on blue" text (using ~~b~~I~~W)
+.W
+~b~I~Y
+.x4-6 
+~b~I~G
+.x7-9
+~b~I~R
+.x10-12
+~b~I~Y
+.R11C2
+~b~I ... and sexy coloured boxes (using ~~b~~I~~Y then .x4-6  etc.)
+.W
+~b~I~W
+.K16,32
+lovely!
+.WN
+
+.T
+   MEMORY DISPLAY  
+
+
+    When you type  ~Idisplay memory~N the display program will look on the
+    disk for a file called ~Vmemory~N. If there is such a file, it will load
+    and ~Idisplay~N the file.
+
+    If, however, there is no such file on disk then ~Idisplay~N will ask
+    for ~VSEGMENT~N and ~VOFFSET~N and will display the contents of the ~IIBM~N
+    ~IPC~N MEMORY.
+
+    During the ~Idisplay~N, you may modify the contents of memory.
+
+    ( ...try SEGMENT ~Ib800~N and OFFSET ~I0~N to see ~Vscreen memory~N.)
+.WN
+.R2C32
+~r~I~Gas ~N
+.R2C32
+~r~I~Gmas ~N
+.R2C32
+~r~I~Gtmas ~N
+.R2C32
+~r~I~Gstmas ~N
+.R2C32
+~r~I~Gistmas ~N
+.R2C32
+~r~I~Gristmas ~N
+.R2C32
+~r~I~Ghristmas ~N
+.R2C32
+~r~I~GChristmas ~N
+.R2C32
+~r~I~G Christmas ~N
+.R2C32
+~r~I~Gy Christmas ~N
+.R2C32
+~r~I~Gry Christmas ~N
+.R2C32
+~r~I~Grry Christmas ~N
+.R2C32
+~r~I~Gerry Christmas ~N
+.R2C32
+~r~I~GMerry Christmas ~N
+.R2C32
+~r~I~G Merry Christmas ~N
+.R1C32
+~r~I~G                 ~N
+.R3C32
+~r~I~G      1985       ~N
+.wT
+  That's all folks!  
+
+
+
+P.S.
+
+    If you want to see an example of the use of ~Idisplay~N, just ~Itype~N
+    this ~Iexplain~N file (which has all the 'special commands' in it).
+    (Unlike ~Idisplay~N, the DOS ~Itype~N will not interpret the 'special'
+    commands, and you'll be able to see them all).
+
+~IA>type explain~N
+
+
+.q
+

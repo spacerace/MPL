@@ -1,0 +1,72 @@
+#
+# Makefile for OS/2
+#
+# The make command with OS/2 is really stupid.
+#
+
+LIBS = ..\regexp\regexp.obj ..\regexp\regsub.obj
+
+#
+# Compact model lets us edit large files, but keep small model code
+#
+MODEL= -AC
+CFLAGS = $(MODEL) -I..\regexp
+
+MACH=	os2.obj
+
+OBJ=	main.obj edit.obj linefunc.obj normal.obj cmdline.obj hexchars.obj \
+	misccmds.obj help.obj ptrfunc.obj search.obj alloc.obj \
+	mark.obj screen.obj fileio.obj param.obj $(MACH)
+
+main.obj:	main.c
+	cl -c $(CFLAGS) main.c
+
+alloc.obj : alloc.c
+	cl -c $(CFLAGS) alloc.c
+
+edit.obj : edit.c
+	cl -c $(CFLAGS) edit.c
+
+linefunc.obj : linefunc.c
+	cl -c $(CFLAGS) linefunc.c
+
+normal.obj : normal.c
+	cl -c $(CFLAGS) normal.c
+
+cmdline.obj : cmdline.c
+	cl -c $(CFLAGS) cmdline.c
+
+hexchars.obj : hexchars.c
+	cl -c $(CFLAGS) hexchars.c
+
+misccmds.obj : misccmds.c
+	cl -c $(CFLAGS) misccmds.c
+
+help.obj : help.c
+	cl -c $(CFLAGS) help.c
+
+ptrfunc.obj : ptrfunc.c
+	cl -c $(CFLAGS) ptrfunc.c
+
+search.obj : search.c
+	cl -c $(CFLAGS) search.c
+
+mark.obj : mark.c
+	cl -c $(CFLAGS) mark.c
+
+screen.obj : screen.c
+	cl -c $(CFLAGS) screen.c
+
+fileio.obj : fileio.c
+	cl -c $(CFLAGS) fileio.c
+
+param.obj : param.c
+	cl -c $(CFLAGS) param.c
+
+os2.obj : os2.c
+	cl -c $(CFLAGS) os2.c
+
+stevie.exe : $(OBJ)
+	cl $(MODEL) *.obj $(LIBS) -o stevie.exe
+	copy stevie.exe rstevie.exe
+	bind rstevie.exe \lib\api.lib \lib\doscalls.lib

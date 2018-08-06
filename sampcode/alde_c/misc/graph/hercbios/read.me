@@ -1,0 +1,63 @@
+
+                           H E R C U L E S
+                           ---------------
+
+This .ARC file contains two sets of information:
+
+
+      - HERCULES.PRG is a memo from Bob Morse and a note from me
+        explaining the programming parameters for the Hercules (and
+        clone) graphics board.  His information is especially useful
+        because he lists the internal parameters which must be
+        programmed into the 6845 chip to get graphics mode to work
+        correctly.  Please report any problems with this information to
+        me at DECWET::BROWN or Bob at LEWS2::MORSE.
+
+        HERCDEMO.COM (source included as HERCDEMO.ASM) is a quick and
+        dirty demo program I wrote to help me understand the way the
+        HERCULES card works, and use graphics character generation.
+
+
+      - HERCBIOS.COM plus support sofware.  HERCBIOS.COM is a terminate-
+        and-stay-resident program which takes over some functions from
+        ROM BIOS INT 10h, providing IBM-compatible graphics modes 6 (640
+        by 200) and 7 (monochrome text) and adding mode 8: Hercules
+        graphics (720 by 348).  Other functions are just passed through
+        to the existing ROM BIOS.
+
+        HERCBIOS was written by Dave Tutelman at AT&T in New Jersey, and
+        the software came to me via net.micro.pc, hot off the wire two
+        days ago.  I've included his note and banner as HERCBIOS.AUT.
+
+        HERCBIOS.DOC explains the operation of the program in detail.
+
+        HCHARSET.ASM is a simple test program to demonstate IBM and
+        HERCULES modes.
+
+        There is also a C program which gives a more extended demo of
+        the facility:  TESTPIX.C.  TESTPIX must be linked with another C
+        module, HERCPIXL, which provides the actual linkages to INT 10h.
+        Since system calls are implementation specific, there are two
+        versions of this module: HERCPIXL.DC and HERCPIXL.LC.
+        HERCPIXL.DC is DeSmet C compatible and HERCPIXL.LC is Lattice C
+        compatible.  I've included TESTPIX.EXE (build with Lattice) so
+        you can test the software if you don't have C.
+
+        Finally, there are two make files:  HERCMAKE.ATT and
+        HERCMAKE.LCM.  HERCMAKE.ATT is a make file for a make program
+        which looks UNIX compatible, so I called it ".ATT".
+        HERCMAKE.LCM is a make file for the Larry Campbell MAKE program
+        I use.  In either case, you will have to use the -f switch
+        invocation of MAKE.  E.g: MAKE -f HERCMAKE.LCM HERCBIOS.COM.
+
+        HERCBIOS.COM seems to work quite nicely as advertised, but I
+        must warn you that there are some functions which are not yet
+        implemented -- scrolling in graphics mode, for one.  I'm sure
+        Dave will continue to enhance it and hope to get future updates.
+        In the meantime, if anyone gets brave and tackles scrolling, put
+        the updates on PAR5!
+
+
+-Reid Brown
+ 6-Sep-1986
+ DECWET::BROWN

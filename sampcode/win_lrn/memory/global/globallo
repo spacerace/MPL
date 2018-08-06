@@ -1,0 +1,6 @@
+globalloc.obj: globalloc.c
+   cl -c -W2 -AS -Gsw -Od -Zped globalloc.c
+
+globalloc.exe: globalloc.obj globalloc.def
+   link4 globalloc,/align:16,/map/li,slibw,globalloc.def
+   mapsym globalloc

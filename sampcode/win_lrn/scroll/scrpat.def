@@ -1,0 +1,8 @@
+NAME           SCRPAT
+DESCRIPTION    'Sample Windows function demonstration'
+STUB           'WINSTUB.EXE'
+CODE           MOVEABLE
+DATA           MOVEABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        WndProc

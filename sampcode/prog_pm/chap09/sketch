@@ -1,0 +1,9 @@
+#------------------
+# SKETCH make file
+#------------------
+
+sketch.obj : sketch.c
+     cl -c -G2sw -W3 sketch.c
+
+sketch.exe : sketch.obj sketch.def
+     link sketch, /align:16, NUL, os2, sketch

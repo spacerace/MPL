@@ -1,0 +1,7 @@
+
+clipform.obj: clipform.c
+   cl -c -W2 -AS -Gsw -Od -Zped clipform.c
+
+clipform.exe: clipform.obj clipform.def
+   link4 clipform,/align:16,/map/li,slibw/NOE,clipform.def
+   mapsym clipform

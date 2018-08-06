@@ -1,0 +1,13 @@
+;------------------------------------
+; PMACCESS.DEF module definition file
+;------------------------------------
+
+NAME           PMACCESS  WINDOWCOMPAT
+
+DESCRIPTION    'VIO Application for PMServer / RHS, 1990'
+PROTMODE
+HEAPSIZE       10240
+STACKSIZE      4096
+EXPORTS
+
+

@@ -1,0 +1,757 @@
+Microsoft Systems Journal
+Volume 3; Issue 1; January, 1988
+
+Code Listings For:
+
+	LIM 4 Programs
+	pp. 67-80
+
+Author(s): Marion Hansen and John Driscoll
+Title:     LIM 4.0: A Definition For the Next Generation of Expanded Memory
+
+
+
+Figure 2
+========
+
+/* THIS IS THE MAIN PROGRAM FOR SAVSCR */
+
+#include <c:\msc\include\dos.h>
+#include <c:\msc\include\memory.h>
+#include <c:\msc\include\stdio.h>
+#include <c:\emm\demo\emm.h>
+
+/* set up size and base of video ram */
+#define VIDEO_RAM_SIZE 4000
+#define VIDEO_RAM_BASE 0XB8000000
+union REGS    inregs,    outregs;
+struct SREGS     segregs ;
+
+char far *video_ram_ptr =  {VIDEO_RAM_BASE}; /* video start 
+						address (CGA) */
+unsigned long int video_ram_size ={4000};    /* bytes in video ram */
+unsigned int emm_handle ;                    /* emm handle */
+char emm_device_name[] = "EMMXXXX0";         /* Device Nmae of EMM */
+char emm_handle_name[8] ="shared" ;          /* name for handle to 
+						be shared */
+char far *emm_ptr;                           /* pointer to page 
+                                                frame */
+char far *(*page_ptr) ;                      /* pointer to page in 
+						the frame */
+int pages_needed = 4;
+struct log_phys {
+  int log_page_number;
+  int phys_page_number;
+       } current_pages [4] ;
+struct log_phys far *map_unmap_ptr ;
+int  result ; 		/* result passed back from function calls */
+
+main ()
+{
+   /***************************************************************/
+   /* Check for a expanded memory manager of 4.0 or greater.      */
+   /***************************************************************/
+
+   check_emm_version_number();
+   
+   /***************************************************************/
+   /* Cet four pages of expanded memory.                          */
+   /***************************************************************/
+   result = get_expanded_memory(&emm_ptr, pages_needed, 
+	    &emm_handle, emm_handle_name);
+   if (result != 0) exit(1);
+   
+   /***************************************************************/
+   /* Map in needed pages                                         */
+   /***************************************************************/
+
+   result = map_unmap_multiple_pages (current_pages, emm_handle, 1);
+
+   /***************************************************************/
+   /* Copy video screen to logical page 0.                        */
+   /***************************************************************/
+
+   move_exchg_to_expanded(MOVE_MEMORY_REGION, /* Move to */
+                          video_ram_ptr,      /* conventional RAM */
+                          emm_handle,         /* handle number*/
+                          0,                  /* to physical page */
+                          video_ram_size);    /* the number bytes */
+   
+   /* make a null video screen at logical page 1 */
+   
+page_ptr = (emm_ptr + 0x4000);
+memset (page_ptr, 0, VIDEO_RAM_SIZE);
+
+   /***************************************************************/
+   /* Unmap all of the pages so that they are proteced.           */
+   /***************************************************************/
+
+   result = map_unmap_multiple_pages (current_pages, emm_handle, 0);
+
+   /* exit to Dos */
+   
+}
+
+
+Figure 3
+========
+
+
+/******************************************************************/
+/* This function checks to see if an expanded memory manager is   */
+/* and then checks to see if the version number is >= 4.0. It     */
+/* uses emm function GET VERSION NUMBER.                          */
+/******************************************************************/
+
+int check_emm_version_number()
+{  
+   char *emm_device_name_ptr ;
+   
+   /***************************************************************/
+   /* Use the dos get interrupt function (0x35) to get pointer    */
+   /* at interrupt vector 0x67, and check for emm device name.    */
+   /***************************************************************/
+
+   inregs.h.ah = 0x35;
+   inregs.h.al =EMM_INT;
+   intdosx(&inregs, &outregs, &segregs);
+   emm_device_name_ptr = (segregs.es * 65536) + 10;
+   if (memcmp(emm_device_name, emm_device_name_ptr,8) !=0)
+     {
+       printf("Expanded memory manager not present\n");
+       exit(1);
+     }
+
+   /***************************************************************/
+   /* Now check for version number >= 4.0                         */    
+   /***************************************************************/
+
+   inregs.h.ah = GET_VERSION ;  /* set funciton code */
+   int86(EMM_INT,&inregs,&outregs);
+   if (outregs.h.ah != 0) exit(1);
+   if ((outregs.h.ah == 0) & (outregs.h.al < 0x40))
+   {
+     printf("Expanded memory manager does not support LIM 4.0");
+     exit(1) ;
+   }  
+}
+
+
+Figure 4
+========
+
+
+/******************************************************************/
+/* This function gets the amount of exapnded memory needed and    */
+/* returns a pointer to the page from in emm_ptr_ptr.  It also    */
+/* assigns a name to the handle. It will return a result of 
+/* non-zero if it fails.                                          */
+/******************************************************************/
+
+int get_expanded_memory(emm_ptr_ptr, pages, emm_handle_ptr, name)
+
+char *(*emm_ptr_ptr);    /* pointer to expanded memory page frame */
+int pages;               /* number of pages to allocate */
+unsigned int *emm_handle_ptr;  /* pointer to emm handle */
+char *name;
+
+{
+   /* check for number of expanded memory pages requested */
+
+   inregs.h.ah = GET_UNALLOCATED_PAGE_COUNT ;
+   int86(EMM_INT, &inregs, &outregs);
+   if (outregs.h.ah != 0) return(1);
+   if (outregs.x.bx < pages) return(2);
+
+   /* allocate pages pages - Function */
+
+   inregs.h.ah = ALLOCATE_PAGES ;   /* Get a handle and allocate */
+   inregs.x.bx = pages;             /* 4 logical pages           */ 
+   int86(EMM_INT, &inregs, &outregs);
+   if (outregs.h.ah != 0) return(3);
+   *emm_handle_ptr = outregs.x.dx ;
+
+   /* get page frame segment address - Function 2 */
+
+   inregs.h.ah = GET_FRAME_ADDRESS;
+   int86(EMM_INT, &inregs, &outregs);
+   if (outregs.h.ah != 0) return(4);
+   *emm_ptr_ptr = (unsigned long int) (outregs.x.bx *65536);
+   
+
+   /* assign name to handle  - Function 20          */
+
+   inregs.x.ax = SET_HANDLE_NAME ;
+   inregs.x.dx = *emm_handle_ptr ;
+   inregs.x.si = FP_OFF(name) ;
+   segregs.ds  = FP_SEG(name);
+   int86x(EMM_INT, &inregs, &outregs, &segregs);
+   if (outregs.h.ah != 0) return(5);
+
+   return(0);
+
+}
+
+
+Figure 5
+========
+
+
+/******************************************************************/
+/* This function implements MAP/UNMAP MULTIPLE PAGES emm function */
+/******************************************************************/
+
+int map_unmap_multiple_pages (log_phys_pages,handle,map_unmap)
+
+struct log_phys *log_phys_pages ;  /* pointer to log_phys struct */
+unsigned int handle;               /* handle to map or unmap */
+unsigned int map_unmap;            /* 0 = map, 1 = unmap */
+{
+ int i ;
+ struct log_phys *temp_ptr;
+ 
+ /* Map mulitple logical pages 0 -3 to logical pages 0 - 3 */
+
+ temp_ptr = log_phys_pages;
+   
+ for (i=0 ; i<=3; i++) 
+ {
+   log_phys_pages->phys_page_number = i;
+   if (map_unmap == 1)
+    log_phys_pages->log_page_number = i;
+   else
+    log_phys_pages->log_page_number = 0xFFFF ; 
+
+   log_phys_pages++ ;
+       
+ }
+
+ inregs.x.ax = MAP_UNMAP_MULTIPLE_PAGES ;
+ inregs.x.dx = handle;
+ inregs.x.cx = 4;
+ inregs.x.si = FP_OFF(temp_ptr);
+ segregs.ds  = FP_SEG(temp_ptr);
+ int86x(EMM_INT,&inregs,&outregs,&segregs);
+ if (outregs.h.ah != 0) return(1);
+ return(0);
+} 
+
+
+Figure 6
+========
+
+
+
+
+/******************************************************************/
+/* This function implements MOVE or EXCHANGE MEMORY REGION        */
+/* function to move or exchange conventional memory with expanded */
+/* memory pages                                                   */
+/******************************************************************/
+
+int move_exchg_to_expanded(function_number, conv_buffer,  handle, 
+                           page, length)
+unsigned int function_number ; /* Move or Exchange*/
+char far *conv_buffer ;        /* conventional memory with */
+int handle;                    /* EMM memory associated with 
+                                  this handle */
+int page ;                     /* at this physical page */
+unsigned long int length;      /* and this many bytes */
+
+{
+struct move_exchg 
+ {
+   unsigned long int region_length;
+   char source_type ;
+   unsigned int source_handle ;
+   unsigned int source_offset ;
+   unsigned int source_seg_page;
+   char dest_type;
+   unsigned int dest_handle;
+   unsigned int dest_offset;
+   unsigned int dest_seg_page;
+  } move_exchg_struct;
+struct move_exchg *move_exchg_ptr;  
+
+  /* START OF FUNCTION CODE */
+
+  move_exchg_struct.region_length  = length ;
+  move_exchg_struct.source_type    = 0;
+  move_exchg_struct.source_handle  = 0;
+  move_exchg_struct.source_offset   = FP_OFF(conv_buffer);
+  move_exchg_struct.source_seg_page = FP_SEG(conv_buffer);
+  move_exchg_struct.dest_type      = 1;
+  move_exchg_struct.dest_handle    = handle;
+  move_exchg_struct.dest_offset    = 0 ;
+  move_exchg_struct.dest_seg_page  = page;
+
+  /* Setup structure to make int86x call */
+
+  inregs.x.ax = function_number;
+  move_exchg_ptr = &move_exchg_struct;
+  inregs.x.si = FP_OFF(move_exchg_ptr);
+  segregs.ds  = FP_SEG(move_exchg_ptr);
+  int86x(EMM_INT, &inregs, &outregs, &segregs);
+  if (outregs.h.ah != 0) exit(1);
+
+  return(outregs.x.ax) ;
+         
+}
+
+
+Figure 7
+========
+
+
+/* THIS IS THE MAIN PROGRAM FOR SWPSCR */
+
+#include <c:\msc\include\dos.h>
+#include <c:\msc\include\memory.h>
+#include <c:\msc\include\stdio.h>
+#include <c:\emm\demo\emm.h>
+
+/* set up size and base of video ram */
+
+#define VIDEO_RAM_SIZE 4000
+#define VIDEO_RAM_BASE 0XB8000000
+union REGS    inregs,    outregs;
+struct SREGS     segregs ;
+
+char far *video_ram_ptr =  {VIDEO_RAM_BASE}; /* video  start address
+                                                (CGA) */
+unsigned long int video_ram_size ={4000};    /* bytes in video ram */
+unsigned int emm_handle ;                    /* emm handle */
+char emm_device_name[] = "EMMXXXX0";         /* Device Nmae of EMM */
+char emm_handle_name[8] ="shared" ;          /* name for handle to be 
+                                                shared */
+char far *emm_ptr;                           /* pointer to page 
+                                                frame */
+char far *(*page_ptr) ;                      /* pointer to page in 
+                                                the frame */
+int pages_needed = 4;
+struct log_phys {
+  int log_page_number;
+  int phys_page_number;
+       } current_pages [4] ;
+struct log_phys far *map_unmap_ptr ;
+int  result ;  /* result passed back from function calls */
+
+main ()
+{
+   /***************************************************************/
+   /* Check for a expanded memory manager of 4.0 or greater.      */
+   /***************************************************************/
+
+   check_emm_version_number();
+   
+   /***************************************************************/
+   /* Cet four pages of expanded memory.                          */
+   /***************************************************************/
+
+   result = get_expanded_memory(&emm_ptr, pages_needed, &emm_handle, 
+                                emm_handle_name);
+   if (result != 0) exit(1);
+   
+   /***************************************************************/
+   /* Map in needed pages                                         */
+   /***************************************************************/
+
+   result = map_unmap_multiple_pages (current_pages, emm_handle, 1);
+
+   /***************************************************************/
+   /* Copy video screen to logical page 0.                        */
+   /***************************************************************/
+
+   move_exchg_to_expanded(MOVE_MEMORY_REGION, /* Move to convent- */
+                          video_ram_ptr,      /* ional ram area   */
+                          emm_handle,         /* handle number    */
+                          0,                  /* to physical page */
+                          video_ram_size);    /* the number bytes */
+   
+   
+
+   /* make a null video screen at logical page 1 */
+
+   page_ptr = (emm_ptr + 0x4000);
+   memset (page_ptr, 0, VIDEO_RAM_SIZE);
+
+   /***************************************************************/
+   /* Unmap all of the pages so that they are proteced.           */
+   /***************************************************************/
+
+   result = map_unmap_multiple_pages (current_pages, emm_handle, 0);
+
+   /* exit to Dos */
+   
+}
+
+
+Figure 8
+========
+
+
+/* THIS IS THE  MAIN PROGRAM FOR MAPCALL */
+
+#include <c:\msc\include\dos.h>
+#include <c:\msc\include\memory.h>
+#include <c:\msc\include\stdio.h>
+#include <c:\emm\demo\emm.h>
+
+/* set up size and base of video ram */
+
+union REGS    inregs,    outregs;
+struct SREGS     segregs ;
+
+unsigned int emm_handle ;
+char emm_device_name[] = "EMMXXXX0";      /* Device Name of EMM */
+char far emm_handle_name[8] ="mapcall";   /* name for handle */
+char far mod1_name[] =
+     "c:\\emm\\demo\\module1.exe\0";      /* name of modules to be */                                                      
+char far mod2_name[] =                    /* to be loaded */
+     "c:\\emm\\demo\\module2.exe\0";
+char far *emm_ptr ;
+char far *(*page_ptr) ;
+int pages_needed = 16 ;
+
+struct log_phys {
+  int log_page_number;
+  int phys_page_number;
+       } ;
+
+struct log_phys far current_pages[4];
+
+struct log_phys far map_call_pages ;
+
+int  result;      
+
+main ()
+{
+
+
+   /***************************************************************/
+   /* Check for a expanded memory manager of 4.0 or greater.      */
+   /***************************************************************/
+
+   check_emm_version_number();
+   
+   /***************************************************************/
+   /* Cet four pages of expanded memory.                          */
+   /***************************************************************/
+
+   result = get_expanded_meory(&emm_ptr, pages_needed, &emm_handle,
+                               emm_handle_name);
+   if (result != 0) exit(1);
+
+   /***************************************************************/
+   /* Map in needed pages                                         */
+   /***************************************************************/
+
+   result = map_unmap_multiple_pages (current_pages, emm_handle, 1);
+   
+   /***************************************************************/
+   /* Load map and calls executeables into expanded memory        */
+   /***************************************************************/
+
+   *page_ptr = emm_ptr;   /* Module 1 will be loaded into logical */
+   load_overlay(mod1_name, page_ptr, 0);   /* and physical page 0 */
+
+   /***************************************************************/
+   /* Load module 2 into logical page 1 and physical page 1.      */
+   /***************************************************************/
+
+   load_overlay(mod2_name, page_ptr, 1);
+   
+   /***************************************************************/
+   /* Unmap all pages. The map and call will map in the pages     */
+   /* requested and restore the present mapping.                  */
+   /***************************************************************/
+
+   result = map_unmap_multiple_pages (current_pages, emm_handle, 0);
+   
+   /***************************************************************/
+   /* Do map and call to module in logical page 1. Map logical    */
+   /* page to physical page 0 and have current mapping context    */
+   /* restored on the return from the map and call.               */
+   /***************************************************************/
+
+    map_call_pages.log_page_number  = 0;
+    map_call_pages.phys_page_number = 0;
+    
+    map_and_call(&map_call_pages, 1, &current_pages, 0, emm_handle);
+   
+   /***************************************************************/
+   /* release handle befor exiting.  This also ummaps any pages   */
+   /* that are mapped.                                            */
+   /***************************************************************/
+
+   inregs.h.ah = DEALLOCATE_PAGES ;
+   inregs.x.dx = emm_handle ;
+   int86(EMM_INT, &inregs, &outregs);
+   
+   exit(0);
+}
+
+
+Figure 9
+========
+
+
+/******************************************************************/
+/* This function implements ALTER PAGE MAP AND CALL  emm function */
+/******************************************************************/
+
+int map_and_call(new_map_ptr, new_length, old_map_ptr, 
+                 old_length, handle)
+struct log_phys *new_map_ptr;
+char new_length;
+struct log_phys *old_map_ptr;
+char old_length;
+unsigned int handle;
+{
+  struct map_call_struct {
+     unsigned int offset_target_address ;
+     unsigned int seg_target_address ;
+     char new_page_map_length ;
+     unsigned int offset_new_page_map;
+     unsigned int seg_new_page_map ;
+     char old_page_map_length ;
+     unsigned int offset_old_page_map;
+     unsigned int seg_old_page_map ;
+   } map_call; 
+   struct map_call_struct *map_call_ptr;  
+
+  map_call_ptr = &map_call ;
+  map_call.offset_target_address = 0 ;
+  map_call.seg_target_address    =0xd000;
+  map_call.new_page_map_length   = new_length;
+  map_call.offset_new_page_map   = FP_OFF(new_map_ptr);
+  map_call.seg_new_page_map      = FP_SEG(new_map_ptr);
+  map_call.old_page_map_length   = old_length;
+  map_call.offset_old_page_map   = FP_OFF(old_map_ptr);
+  map_call.seg_old_page_map      = FP_SEG(old_map_ptr);
+
+  /****************************************************************/
+  /* Set up for alter page map and call function                  */
+  /****************************************************************/
+
+  inregs.h.ah =0x56;
+  inregs.h.al = 0;
+  inregs.x.dx = handle ;
+  map_call_ptr = &map_call ;
+  inregs.x.si = FP_OFF(map_call_ptr);
+  segregs.ds = FP_SEG(map_call_ptr);
+  int86x(EMM_INT,&inregs,&outregs,&segregs);
+  if (outregs.h.ah != 0) return(1);
+
+  return(0) ;
+}
+
+
+Figure 10
+========
+
+
+/******************************************************************/
+/* This function implements the DOS load function 0x4b. It sets   */
+/* AL to 3 which cause the function to load the exe and apply a   */
+/* relocation factor to it, but it does not execute the file.     */
+/******************************************************************/
+
+int load_overlay(load_file_name,relocation_ptr,page)
+char *load_file_name ;
+char *(*relocation_ptr);
+unsigned int page; /* physical page at which to load */
+  
+{
+struct reloc {
+  unsigned int load_seg;
+  unsigned int reloc_factor;
+  } reloc_struct;
+  struct reloc *reloc_struct_ptr;
+
+  /* setup up structure to pass to load call */
+
+  reloc_struct.load_seg = FP_SEG(*relocation_ptr) + (page * 0x400);
+  reloc_struct.reloc_factor = FP_SEG(*relocation_ptr) + 
+                               (page * 0x400); 
+  
+  /* Set up register structures for Intdos call */
+
+  inregs.h.ah = 0x4B ;   /* Dos Exec function code */
+  inregs.h.al = 3;       /* load but do not execute */
+  inregs.x.dx  = FP_OFF(load_file_name);
+  segregs.ds   = FP_SEG(load_file_name);
+
+  reloc_struct_ptr = &reloc_struct ;
+  inregs.x.bx  = FP_OFF(reloc_struct_ptr);
+  segregs.es  = FP_SEG(reloc_struct_ptr);
+
+  intdosx(&inregs, &outregs, &segregs);
+
+}
+
+
+Figure 11
+========
+
+
+NAME start
+
+; Use the DOSSEG directive to insure that the code segment is the 
+; first segment in the module. Since this piece of code will be 
+; loaded in at the page frame at D000:0000H the map and call use 
+; D000:0000H as the entry point.
+
+DOSSEG
+
+data SEGMENT PUBLIC 'DATA'
+Data  ends
+
+CODE SEGMENT PUBLIC 'CODE'
+	ASSUME CS:CODE, DS:DATA
+start proc far
+     push    ds
+     PUSH    dx
+     mov     DX,data	           ; get my data seg into ds
+     mov     ds,dx
+     pop     dx
+     mov     ah, 09                ; set function for dos 
+                                   ; display string
+     mov     dx, offset enter_msg
+     int    21H
+
+;    Use search for handel to find handle
+
+     mov    si, offset handle_name
+     mov    ax, 5401H              ; set function to serch for 
+                                   ; named handle
+     int    67H                    ; invoke emm
+     or ah, ah
+     jnz exit
+
+; DX = handle number     
+;
+;  Set Register for map and call and call EMM with INT 67
+
+     mov     si, offset map_call  
+     mov     al, 0                 ; indicate that values are pages
+     mov     ah, 56H               ; set function to map and call
+     int     67H                   ; invoke emm 
+     or ah, ah
+     jnz exit
+     
+     mov     ah, 09                ; set function for dos 
+                                   ; display string
+     mov     dx, offset exit_msg
+     int 21H
+exit:
+     pop     ds
+     ret
+start endp
+CODE ENDS
+
+data SEGMENT PUBLIC 'DATA'
+
+; EQUATES
+
+cr    equ  0Dh
+lf    equ  0AH
+
+; Structures
+
+log_phys_map_struct      STRUC
+   log_page_number     DW ? 
+   phys_page_number    DW ? 
+log_phys_map_struct      ENDS
+
+map_call_struct      STRUC
+    target_address      DD ?       ; Pointer to which EMM will  
+                                   ; transfer control 
+    new_page_map_length DB ?       ; number new pages to be mapped 
+                                   ; on call
+    new_page_map_ptr    DD ?       ; pointer to array of 
+                                   ; log_phys_map_struc
+    old_page_map_length DB ?       ; number of pages to mapped on 
+                                   ; return
+    old_page_map_ptr    DD ?       ; pointer to array of 
+                                   ; log_phys_map_struc
+    reseved             DW 4 DUP (?)
+map_call_struct ENDS
+
+; Data decalrations
+
+new_map  log_phys_map_struct <1,1> ; maping befor call
+old_map  log_phys_map_struct <0,0> ; mapping after call
+
+map_call  map_call_struct <0D0004000H,1,new_map,1,old_map>
+
+handle_name db 'mapcall',0         ; handle name is asciz string                                            
+enter_msg   db 'Entering Module 1',cr,lf,'$'
+exit_msg    db 'Exiting Module 1',cr,lf,'$'
+
+Data  ends
+
+end  start
+
+
+Figure 12
+========
+
+
+NAME start
+DOSSEG
+
+data SEGMENT PUBLIC 'DATA'
+Data  ends
+
+CODE SEGMENT PUBLIC 'CODE'
+	ASSUME CS:CODE, DS:DATA
+start proc far
+     push    ds
+     PUSH    dx
+     mov     DX,data	           ; get my data seg into ds
+     mov     ds,dx
+     pop     dx
+     mov     ah, 09                ; set function for dos 
+                                   ; display string
+     mov     dx, offset enter_msg
+     int 21H
+     mov     ah, 09                ; set function for dos 
+                                   ; display string
+     mov     dx, offset exit_msg
+     int 21H
+     pop     ds
+     ret
+start endp
+CODE ENDS
+
+data SEGMENT PUBLIC 'DATA'
+cr    equ  0Dh
+lf    equ  0AH
+enter_msg   db 'Entering Module 2',cr,lf,'$'
+exit_msg    db 'Exiting Module 2',cr,lf,'$'
+
+Data  ends
+
+end  start
+
+
+Figure 13
+========
+
+
+/* emm.h */
+
+
+#define EMM_INT 0x67
+#define GET_UNALLOCATED_PAGE_COUNT 0x42
+#define ALLOCATE_PAGES             0x43
+#define DEALLOCATE_PAGES           0X45
+#define GET_VERSION                0x46
+#define GET_FRAME_ADDRESS          0x41
+#define SET_HANDLE_NAME            0x5301
+#define SEARCH_FOR_HANDLE_NAME     0x5401
+#define MOVE_MEMORY_REGION         0x5700
+#define EXCHANGE_MEMORY_REGION     0x5701
+#define MAP_UNMAP_MULTIPLE_PAGES   0x5000
+

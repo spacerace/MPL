@@ -1,0 +1,6 @@
+gmetafil.obj: gmetafil.c
+    cl -d -c -AS -Gsw -Os -Zpe gmetafil.c
+
+gmetafil.exe: gmetafil.obj gmetafil.def
+    link4 gmetafil,/align:16,/map,slibw/NOE,gmetafil.def
+    mapsym gmetafil

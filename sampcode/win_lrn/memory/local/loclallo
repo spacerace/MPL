@@ -1,0 +1,6 @@
+loclallo.obj: loclallo.c
+   cl -c -W2 -AS -Gsw -Od -Zped loclallo.c
+
+loclallo.exe: loclallo.obj loclallo.def
+   link4 loclallo,/align:16,/map/li,slibw/NOE,loclallo.def
+   mapsym loclallo

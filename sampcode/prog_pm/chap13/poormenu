@@ -1,0 +1,9 @@
+#--------------------
+# POORMENU make file
+#--------------------
+
+poormenu.obj : poormenu.c
+     cl -c -G2sw -W3 poormenu.c
+
+poormenu.exe : poormenu.obj poormenu.def
+     link poormenu, /align:16, NUL, os2, poormenu

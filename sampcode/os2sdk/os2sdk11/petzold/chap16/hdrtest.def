@@ -1,0 +1,14 @@
+;------------------------------------
+; HDRTEST.DEF module definition file
+;------------------------------------
+
+NAME           HDRTEST   WINDOWAPI
+
+DESCRIPTION    'Test Program for HDRLIB.DLL (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc
+IMPORTS        HDRLIB.HdrPuts
+               HDRLIB._HdrPrintf
+               HDRLIB.HdrEllipse

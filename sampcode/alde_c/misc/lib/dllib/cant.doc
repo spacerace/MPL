@@ -1,0 +1,39 @@
+
+
+        NAME
+                cant -- report inability to open a file and exit
+
+        SYNOPSIS
+                cant(name);
+                char *name;
+
+
+        DESCRIPTION
+        This function is used to report a failure to open a file of
+        "name", and then abort the program through the aabort() function
+        of this library.
+
+
+
+
+        EXAMPLE
+             cant("foo.bar");
+             cant(argv[1]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

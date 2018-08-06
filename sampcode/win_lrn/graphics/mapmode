@@ -1,0 +1,6 @@
+mapmode.obj: mapmode.c
+     cl  -d  -c  -Asnw	-Gsw  -Os  -Zdpe  mapmode.c
+
+mapmode.exe:  mapmode.obj mapmode.def
+     link4 mapmode,mapmode/align:16,mapmode/map,slibw,mapmode.def
+     mapsym mapmode

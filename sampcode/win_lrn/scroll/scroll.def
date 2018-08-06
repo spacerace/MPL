@@ -1,0 +1,10 @@
+NAME	       SCROLL
+DESCRIPTION    'Sample Scroll DC and Window program by Joseph A. Hayes'
+STUB           'WINSTUB.EXE'
+CODE           MOVEABLE
+DATA           MOVEABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        WndProc
+	       StopOne
+

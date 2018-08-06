@@ -1,0 +1,26 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+gsubmenu.obj: gsubmenu.c
+
+gsubmenu.res: gsubmenu.rc 
+    rc -r gsubmenu.rc
+
+gsubmenu.exe: gsubmenu.obj gsubmenu.res gsubmenu.def
+    link4 gsubmenu,/align:16,/map,slibw,gsubmenu.def
+    mapsym gsubmenu
+    rc gsubmenu.res

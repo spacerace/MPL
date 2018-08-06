@@ -1,0 +1,90 @@
+This disk contains the Mandelbrot demonstration program for OS/2 graphics.
+Features of OS/2 that are demonstrated are:
+        Use of 80287
+        Creating and using ring 2 IOPL segments
+        Ram semaphore usage
+        Thread creation and destruction
+        EGA screen save and restore (both text and graphics)
+
+The specific API entry points used are:
+        DOSALLOCSEG             Memory allocation
+        DOSCREATETHREAD         Thread creation
+        DOSSEMCLEAR             Ram semaphore management
+        DOSSEMREQUEST           Ram semaphore management
+        DOSSLEEP                Time delay
+        VIOGETCONFIG            Getting display configuration
+        VIOGETCURPOS            Getting cursor position
+        VIOGETCURTYPE           Getting cursor information
+        VIOGETMODE              Getting current screen mode
+        VIOGETPHYSBUF           Getting access to display memory
+        VIOMODEUNDO             Killing mode wait thread
+        VIOMODEWAIT             Initializing mode wait thread
+        VIOREADCELLSTR          Reading current display text
+        VIOSAVREDRAWUNDO        Killing redraw wait thread
+        VIOSAVREDRAWWAIT        Initializing screen redraw thread
+        VIOSCRLOCK              Locking screen for drawing
+        VIOSCRUNLOCK            Unlocking screen after drawing complete
+        VIOSETCURPOS            Setting cursor position
+        VIOSETCURTYPE           Setting cursor information
+        VIOSETMODE              Setting screen mode to character and graphics
+        VIOSETSTATE             Set EGA palette registers
+        VIOWRTCELLSTR           Writing text to display
+
+
+The files on this disk are listed below. Note only some of the CNT
+files are included on the sample disk due to space limits. You can
+generate the rest yourself.
+
+        readme.doc      This file
+
+        makefile        Make rules for generating the programs
+
+        m.bat           Batch file to generate zoom00.cnt and zoom01.cnt
+
+        cmacros.inc     Include file defining C and assembler interface
+
+        mandel.c        C routine to compute Mandelbrot set
+        manditer.asm    Assembler routine containing 80287 routine
+        mandel.rsp      Linker response file for linking mandel.exe
+        mandel.exe      Executable for above
+
+        mdraw.c         C routine to display Mandelbrot set
+        mdraw.h         Include file for display program
+        setscan.asm     Assembler routines for ring 2 EGA manipulation
+        ega.inc         Include file to define EGA registers
+        mdraw.rsp       Linker response file for linking mdraw.exe
+        mdraw.def       Linker definition file for mdraw.exe
+        mdraw.exe       Executable for above
+
+        mstat.c         C routine to display header information for .cnt file
+        mstat.rsp       Linker response file for linking mstat.exe
+        mstat.exe       Executable for above
+
+        zoom00.cnt      Count file for entire Mandelbrot set
+        zoom01.cnt      Count file for a small area near the Mandelbrot set
+        cd14.cnt        Count file for a small area near the Mandelbrot set
+
+For further information about the programs and how to use them, please read
+the program headers in:
+        mandel.c
+        mdraw.c
+        mstat.c
+
+Note that for a worst case (all screen points within the Mandelbrot set), the
+computation will require approximately 20 hours on an 8 mhz AT with a normal
+80287.  The program mandel is 80287 limited so that only faster 80287 chips
+will significantly speed up the computation.
+
+To display the included sets:
+        Boot MS OS/2
+        Start up a screen group
+        enter   mdraw zoom00
+        Switch to the session manager
+        Start another screen group
+        enter  mdraw zoom01
+
+You can now hot key switch between the two displays.
+
+MS C 5.0 compiler and runtime libraries and the MS assembler 4.00 are required
+to build these programs.
+

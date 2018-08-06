@@ -1,0 +1,595 @@
+
+
+
+
+        DATA FIELD UTILITIES                            LIBRARY FUNCTIONS
+
+
+        NAME
+
+        init_sread     Initialize data structures for screen package
+
+
+        SYNOPSIS
+
+        int init_sread()
+
+
+        FUNCTION
+
+        Initializes  the  data  structures and variables for  the  screen 
+        handling routines.  Writes 0 or blank strings to all data storage 
+        areas.   Must be called before  get_picture,  get_horizontal,  or 
+        sread are used.
+
+
+        RETURNS
+
+        Nothing.
+
+
+        EXAMPLE
+
+          {
+          char  data[4];
+
+          init_sread();      /* Initialize the data structure first */
+          strcpy(data,"   ");
+          get_picture(0,5,data,"999");
+          sread(0);
+          }
+
+             
+        SEE ALSO
+
+        get_picture, get_horizontal, sread
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        1
+
+
+
+
+
+
+
+
+        DATA FIELD UTILITIES                            LIBRARY FUNCTIONS
+
+
+        NAME
+
+        get_picture    set up for latter screen gathering of data
+
+
+        SYNOPSIS
+
+        int  get_picture(x,y,data,verify)
+        unsigned char x,    /* X coordinate for start of field */
+                      y;    /* Y coordinate for start of field */
+        char  *data,        /* pointer to where data is to be saved */
+              *verify;      /* pointer to verification string for data */
+
+
+        FUNCTION
+
+        Repeated  use of this function allows a "picture" to be built  up 
+        of how data fields should be collected from the screen.   Data is 
+        gathered  by  fields.   Each  use  of  the  get_picture  function 
+        describes  one  data  field.   This description tells  the  SREAD 
+        program where on the screen to gather that data,  where to  store 
+        the  data,  and  what to verify the data against AS IT  IS  BEING 
+        ENTERED.   Data is always gathered as strings of ASCII characters 
+        and fields look as follows:
+
+        [       ]
+
+        Thus to gather a 4 character data field will require 6 characters 
+        on the screen,  four for data and two delimiters "[" & "]".  Your 
+        data  storage  area  only sees the four data characters  (and  of 
+        course the standard C string delimiter 0).
+
+        When a data field is described an input string must be specified.  
+        This  string  will be used to store ASCII data input  during  the 
+        SREAD  function.   This  string MUST be initialized to  the  same 
+        length  as  the verification string.   The length  of  the  input 
+        string  is  used to determine the width of the data  field.   ANY 
+        data  in the data field will be displayed and preserved by  SREAD 
+        unless new data is entered over it.   Thus default values can  be 
+        initialized in variables and will remain there unless changed.
+
+        Cursor  positioning begins in the upper left hand corner  of  the 
+        screen.  This position is 0,0 (X,Y).  The horizontal position can 
+        range  from 0 to 79,  while the vertical can go from 0 to 24.   A 
+        maximum  of 50 data fields may be specified with the  get_picture 
+        command before an sread() command must be issued.
+
+        Sub-field  separators are possible with this  function.   Special 
+        characters used in the verification string such as / - : etc will 
+        not  actually be verified.   They indicate a sub-field separation 
+        and  do  not need to be typed by the person entering  data  under 
+        SREAD.  Thus a date might have a verification string of MM/DD/YY.  
+
+
+                                        2
+
+
+
+
+
+
+
+
+        DATA FIELD UTILITIES                            LIBRARY FUNCTIONS
+
+
+        The  operator enters only the MM,  DD,  & YY  numbers.   The  "/" 
+        character  is  displayed and stored in the data string but  typed 
+        automatically  by  the  program not  the  operator.   The  rubout 
+        command  recognizes these special characters and deals with  them 
+        accordingly.   NOTES: No verification field may start or end with 
+        a  sub-field separator.   No two sub-field separators can  appear 
+        consecutively.
+
+        A   great   deal  of  normal  data  verification  can   be   done 
+        automatically  under  the control of  the  SREAD  program.   This 
+        verification  must  be  specified in  the  GET_PICTURE  function.  
+        There  are  two general types of data verification.   These  are: 
+        single character, and double character.  The following two tables 
+        list the verification characters and their uses:
+
+
+                                Verify Characters
+                 Doubles                           Singles
+        =================================================================
+             MM  month (1 - 12)            |    9  numeric only
+             DD  day (1 - 31)              |    X  alpha-numeric
+             YY  year (70 - 99)            |    A  alpha only
+             HH  hour (1 - 12)             |    U  convert to upper case
+             SS  seconds (0 - 59)          |    L  logical (Y,N,T,F)
+             PP  AM or PM (M automatic)    |   " " anything 
+                                           |    I  invisible (password)
+
+
+        Verification strings are normally fed to the GET_PICTURE function 
+        through the use of a permanent data string.   This makes  reading 
+        the  program code easier.   The string "MM/DD/YY" forces SREAD to 
+        only allow the entry of valid months,  days,  and years as  data.  
+        In  a  similar fashion the other verification characters  can  be 
+        used  to ensure proper data entry with little need for extra data 
+        checks.
+
+
+        RETURNS
+
+        TRUE  (!0)  if  information  entered  into  structure  for  later 
+        collection.  FALSE (0) if structure is full error.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        3
+
+
+
+
+
+
+
+
+        DATA FIELD UTILITIES                            LIBRARY FUNCTIONS
+
+
+        EXAMPLE
+
+          {
+          char  data5[4],data6[4],data7[4],data8[4];
+
+          strcpy(data5,"   ");  /* data fields must be initialized */
+          strcpy(data6,"   ");  /* before they are used.  Must be  */
+          strcpy(data7,"   ");  /* same length as verify string    */
+          strcpy(data8,"   ");
+
+          get_picture(10,10,data5,"UUU");  /* define data field 1 */
+          get_picture(10,13,data6,"999");  /* this is field 2     */
+          get_picture(10,15,data7,"SS");   /* now for field 3     */
+          get_picture(10,17,data8,"XXX");  /* last field in num 4 */
+          sread(0);                        /* go get all fields   */
+          }
+
+
+        SEE ALSO
+
+        init_sread, get_horizontal, sread
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        4
+
+
+
+
+
+
+
+
+        DATA FIELD UTILITIES                            LIBRARY FUNCTIONS
+
+
+        NAME
+
+        get_horizontal      set up multiple data field collection
+
+
+        SYNOPSIS
+
+        int  get_horizontal(x,y,num_entries,spacing,data,verify)
+        unsigned char x,    /* X coordinate for start of field */
+                      y,    /* Y coordinate for start of field */
+                      num_entries,  /* number of entries to get */
+                      spacing;  /* space to be left between fields */
+        char  *data[],      /* array of pointers to data to be saved */
+              *verify;      /* pointer to verification string for data */
+
+
+        FUNCTION
+
+        This  command  performs  a  function  very  similar  to  that  of 
+        GET_PICTURE.   All  explanations of data entry  and  verification 
+        under  the  GET_PICTURE  command  apply  here  and  will  not  be 
+        repeated.
+
+        GET_HORIZONTAL  is  used  when a number of data  fields  must  be 
+        entered  on  a single line and their data  saved.   The  function 
+        offers  the added feature that when data is entered  under  SREAD 
+        and  a field is left blank then all following fields on this line 
+        will  be skipped.   Thus a variable number of data fields can  be 
+        collected and still use the full editing features of SREAD.
+
+        A typical use might be as follows:
+
+
+        get_horizontal(10,5,4,2,data,"999");
+
+
+        Which would display four fields in the form:
+
+
+                  [   ]  [   ]  [   ]  [   ]
+
+
+        If two data fields are entered,  the operator only needs to hit a 
+        return  on  the  third field to skip to the next  line  of  data: 
+        bypassing the fourth and any successive fields.
+
+        The  GET_PICTURE and GET_HORIZONTAL commands may be intermixed in 
+        any  manner you please.   The only limitations are on  the  total 
+        number of data fields allowed,  typically 50 fields.
+
+
+
+
+
+                                        5
+
+
+
+
+
+
+
+
+        DATA FIELD UTILITIES                            LIBRARY FUNCTIONS
+
+
+        RETURNS
+
+        TRUE  (!0)  if  information  entered  into  structure  for  later 
+        collection.  FALSE (0) if structure is full error.
+
+
+        EXAMPLE
+
+          {
+          char  *pointer[];
+          char  dat1[4],dat2[4],dat3[4],dat4[4];
+
+          strcpy(dat1,"   ");  /* initialize data strings first */
+          strcpy(dat2,"   ");
+          strcpy(dat3,"   ");
+          strcpy(dat4,"   ");
+
+          pointer[0] = dat1;  /* initialize array of pointers */
+          pointer[1] = dat2;
+          pointer[2] = dat3;
+          pointer[3] = dat4;
+
+          init_sread();
+          get_horizontal(0,20,4,5,pointer,"999");
+          sread(0);
+
+          }
+
+        This  example  will  input up to four numeric  strings  of  three 
+        digits each.  All are verified against the same string "999".
+
+        SEE ALSO
+
+        init_sread, get_picture, sread
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        6
+
+
+
+
+
+
+
+
+        DATA FIELD UTILITIES                            LIBRARY FUNCTIONS
+
+
+        NAME
+
+        sread     (screen read)  Go get all PREVIOUSLY requested data
+
+
+        SYNOPSIS
+
+        int  sread(where)
+        int  where       /* What field to start reading data from */
+
+         
+        FUNCTION
+
+        Collect  all  data  fields previously  specified  by  either  the 
+        get_picture or get_horizontal commands.  This includes all fields 
+        specified  by  get_picture or get_horizontal commands  since  the 
+        last issue of an init_sread command.
+
+        Input   variable  WHERE  controls  where,   (what  field),   data 
+        collection  will start and whether the exit data collection  key, 
+        ctrl-W,  functions.  (You can thus force all data to be entered.)  
+        No check is made on WHERE to see if it is larger that the  number 
+        of fields requested.
+
+
+        WHERE     May range from 0 to N, where N is the maximum number of 
+                  data fields requested.
+
+        WHERE = 0      Specifies  start at data field 1,  disable  ctrl-W 
+                       (exit all data collection)
+
+        WHERE = 1 - N  Start data collection at specified data field  and 
+                       enable the ctrl-W function.
+
+
+        While  the  SREAD  command is functioning the  following  control 
+        characters will operate as follows:
+
+
+        ctrl-A    Move  the cursor one field backward.   Not possible  is 
+                  data  has  already been entered in this field or if  at 
+                  first field.  Beep error message then.
+
+        ctrl-F    Move  the cursor one field forward,  and on last  field 
+                  exit.   Not  possible if data already entered  in  this 
+                  field,  (beep error message).  Acts exactly the same as 
+                  a carriage return.
+
+        ctrl-W    If  this  function  is enabled,  (by passing 1  - n  to 
+                  SREAD)  and no data has yet been entered in this  field 
+                  will cause SREAD to terminate operations with  whatever 
+                  data has already been collected.
+
+
+                                        7
+
+
+
+
+
+
+
+
+        DATA FIELD UTILITIES                            LIBRARY FUNCTIONS
+
+
+
+        CR        Carriage return- Enter all data in this field,  move to 
+                  next field.   Data must pass verification.   If no data 
+                  entered  CR  will  reenter old data and  move  to  next 
+                  field.
+
+        RUB       Delete  last character entered unless at  beginning  of 
+                  field.   Beeps  on error.   Will automatically back  up 
+                  across "neutral" data, ( / - , . ).
+
+
+        RETURNS
+
+        TRUE  (!0)  if  premature  exit  through  the  use  of  control-W 
+        function,  FALSE  (0) otherwise.   NOTE:  If sread is called  and 
+        passed a 0 this disables the ctrl-W function, thus only FALSE may 
+        be returned in this case.
+
+
+        EXAMPLE
+
+          {
+
+          get_picture(5,5,data,"L");
+          get_picture(5,6,data2,"AA");
+          sread(0);    /* Start reading in field 1, NO ctrl-W allowed */
+
+          get_picture(0,1,data3,"999");
+          get_picture(0,3,data4,"999");
+          sread(1);    /* Start reading in field 1, ctrl-W allowed */
+
+          get_picture(10,10,data5,"999");
+          get_picture(10,13,data6,"999");
+          get_picture(10,15,data7,"999");
+          get_picture(10,17,data8,"999");
+          sread(2);    /* Start reading in field 2, ctrl-W allowed    */
+                       /* Field 1 has been skipped, may be reached by */
+                       /* ctrl-A key (back up a field)                */
+
+
+        SEE ALSO
+
+        init_sread, get_picture, get_horizontal
+
+
+
+
+
+
+
+
+
+
+
+                                        8
+
+
+
+
+
+
+
+
+        DATA FIELD UTILITIES                            LIBRARY FUNCTIONS
+
+
+                                Lattice Utilities
+
+        These object file utilities are being distributed at no charge to 
+        all people who are interested in obtaining them.  The BBS form of 
+        these files includes only the large code - large data model (-ml) 
+        object  files  and matching documentation.   If  these  utilities 
+        sound  interesting try them out.   We will supply the source code 
+        on an IBM PC DSDD disk to these utilities,  so you can use any of 
+        the four memory models, for a price of $25.00.
+
+        Users  of this software may incorporate it into any product  they 
+        desire.   There  is no charge for this.   You may NOT  sell  this 
+        package by itself in any form what so ever.   The only exceptions 
+        to  this  are a limited distribution fee for Clubs and  or  Users 
+        Groups not to exceed $10.00 per disk.
+
+
+                                    Warranty
+
+        NONE!   We  are not responsible or liable for any damages  either 
+        real  or consequential.   This package is free after  all.   Note 
+        that   this  software  has  been  running  in  several  different 
+        commercial  packages for three years now so it must do  something 
+        right.
+
+
+             Copyright 1983, 1984, 1985 by Elfring Consulting, Inc.
+
+                               All rights reserved
+
+
+
+        Full source code is available for $25.00 from:
+
+             Elfring Consulting, Inc.
+             4N899 W. Mary Drive
+             St. Charles, Illinois
+             60174
+
+             312-377-3520
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        9
+
+
+
+
+

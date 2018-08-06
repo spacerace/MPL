@@ -1,0 +1,25 @@
+#   Define the dependencies
+
+stock.obj : stock.c
+    cl -c -Gsw -Od -W2 -Zdpi -AS stock.c
+
+tick.obj : tick.c
+    cl -c -Gsw -Od -W2 -Zdpi -AS tick.c
+
+graph.obj : graph.c
+    cl -c -Gsw -Od -W2 -Zdpi -AS graph.c
+
+db.obj : db.c
+    cl -c -Gsw -Od -W2 -Zdpi -AS db.c
+
+fileopen.obj : fileopen.c
+    cl -c -Gsw -Od -W2 -Zdpi -AS fileopen.c
+
+stock.res : stock.rc
+    rc -r stock.rc
+
+stock.exe: stock.obj tick.obj db.obj fileopen.obj graph.obj \
+           stock.def stock.res
+    d:\msc6\link /nod /co stock tick db fileopen graph, stock.exe, /map/li, slibcew libw, stock
+    rc stock.res
+

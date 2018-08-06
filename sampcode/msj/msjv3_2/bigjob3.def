@@ -1,0 +1,9 @@
+;------------------------------------
+; BIGJOB3.DEF module definition file
+;------------------------------------
+
+NAME           BIGJOB3
+DESCRIPTION    'BigJob Demo Program No. 3 (C) Charles Petzold, 1988'
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

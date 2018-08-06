@@ -1,0 +1,6 @@
+framergn.obj: framergn.c
+    cl -d -c -AS -Gsw -Os -Zpe framergn.c
+
+framergn.exe: framergn.obj framergn.def
+    link4 framergn,/align:16,/map,slibw/NOE,framergn.def
+    mapsym framergn

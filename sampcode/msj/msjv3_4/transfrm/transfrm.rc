@@ -1,0 +1,68 @@
+/*----------------------------------
+   TRANSFRM.RC resource script file
+  ----------------------------------*/
+
+#include <os2.h>
+#include "transfrm.h"
+
+MENU ID_RESOURCE
+     {
+     SUBMENU "~Transform",                   -1
+          {
+          MENUITEM "~Select...",             IDM_SELECT
+          MENUITEM SEPARATOR
+          MENUITEM "E~xit",                  SC_CLOSE, MIS_SYSCOMMAND
+          MENUITEM "A~bout Transfrm...",     IDM_ABOUT
+          }
+     }
+
+DLGTEMPLATE IDD_ABOUTBOX
+  {
+  DIALOG "", 0, 10, 20, 160, 100, WS_SAVEBITS | FS_DLGBORDER
+    {
+    CTEXT "Transfrm"                            -1,  10, 72, 140, 10
+    CTEXT "GPI Transformation Demo"             -1,  10, 46, 140, 10
+    CTEXT "Copyright (C) Charles Petzold, 1988" -1,  10, 30, 140, 10
+    DEFPUSHBUTTON "OK"            DID_OK,  64,  8,  32, 14, WS_GROUP
+    }
+ }
+
+#define XFORMULA "x' = (fxM11) x + (fxM21) y + (lM31)" 
+#define YFORMULA "y' = (fxM12) x + (fxM22) y + (lM32)" 
+
+DLGTEMPLATE IDD_MATRIXBOX
+  {
+  DIALOG "", 0, 8, 72, 176, 140, WS_SAVEBITS | FS_DLGBORDER
+    {
+    LTEXT    "fxM11 (x scale):"        -1,  32, 122,  80, 10,
+    EDITTEXT ""                 IDD_FXM11, 116, 122,  32,  8, ES_MARGIN
+    LTEXT    "fxM12 (y shear):"        -1,  32, 108,  80, 10,
+    EDITTEXT ""                 IDD_FXM12, 116, 108,  32,  8, ES_MARGIN
+    LTEXT    "fxM21 (x shear):"        -1,  32,  94,  80, 10,
+    EDITTEXT ""                 IDD_FXM21, 116,  94,  32,  8, ES_MARGIN
+    LTEXT    "fxM22 (y scale):"        -1,  32,  80,  80, 10,
+    EDITTEXT ""                 IDD_FXM22, 116,  80,  32,  8, ES_MARGIN
+    LTEXT    "lM31 (x translate):"     -1,  32,  66,  80, 10,
+    EDITTEXT ""                  IDD_LM31, 116,  66,  32,  8, ES_MARGIN
+    LTEXT    "lM32 (y translate):"     -1,  32,  52,  80, 10,
+    EDITTEXT ""                  IDD_LM32, 116,  52,  32,  8, ES_MARGIN
+    CTEXT    XFORMULA                  -1,   8,  36, 160, 10
+    CTEXT    YFORMULA                  -1,   8,  26, 160, 10
+    PUSHBUTTON    "Angle..." IDD_ANGLEPOP,   8,   8,  48, 14, WS_GROUP
+    DEFPUSHBUTTON "Ok"             DID_OK,  64,   8,  48, 14, WS_GROUP 
+    PUSHBUTTON    "Esc=Cancel" DID_CANCEL, 120,   8,  48, 14, WS_GROUP
+    }
+  }
+
+DLGTEMPLATE IDD_ANGLEBOX
+  {
+  DIALOG "", 0, 4, -64, 176, 64, WS_SAVEBITS | FS_DLGBORDER
+    {
+    LTEXT    "Angle in degrees:"       -1,  32,  46,  80, 10,
+    EDITTEXT "0.00"             IDD_ANGLE, 116,  46,  32,  8, ES_MARGIN
+    LTEXT    "Scaling factor:"         -1,  32,  32,  80, 10,
+    EDITTEXT "1.00"             IDD_SCALE, 116,  32,  32,  8, ES_MARGIN
+    DEFPUSHBUTTON "Ok"             DID_OK,  24,   8,  48, 14, WS_GROUP 
+    PUSHBUTTON    "Esc=Cancel" DID_CANCEL, 104,   8,  48, 14, WS_GROUP
+    }
+  }

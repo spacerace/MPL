@@ -1,0 +1,19 @@
+#-------------------
+# CPUmeter make file
+#-------------------
+
+cpumeter.obj : cpumeter.c cpumeter.h histgram.h
+     cl -c -MT -G2sw -W3 cpumeter.c
+
+histgram.obj : histgram.c histgram.h
+     cl -c -MT -G2sw -W3 histgram.c
+
+cpumeter.res : cpumeter.rc cpumeter.h
+     rc -r cpumeter
+
+cpumeter.exe : cpumeter.obj histgram.obj cpumeter.def
+     link cpumeter+histgram, /align:16, NUL, /nod llibcmt os2, cpumeter
+     rc cpumeter.res cpumeter.exe
+
+cpumeter.exe : cpumeter.res
+     rc cpumeter.res cpumeter.exe

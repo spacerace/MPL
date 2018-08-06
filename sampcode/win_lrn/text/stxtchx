@@ -1,0 +1,22 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+stxtchx.obj: stxtchx.c
+
+stxtchx.exe: stxtchx.obj stxtchx.def
+    link4 stxtchx,/align:16,/map,slibw/NOE,stxtchx.def
+    mapsym stxtchx

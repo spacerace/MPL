@@ -1,0 +1,12 @@
+setprop.obj: setprop.c 
+  cl -c -W2 -AS -Gsw -Od -Zped setprop.c
+
+setprop.res: setprop.rc setprop.ico
+  rc -r setprop.rc
+
+setprop.exe: setprop.obj setprop.def setprop.res 
+    link4 setprop,/align:16,,slibw,setprop.def
+    rc setprop.res
+    del setprop.obj
+    del setprop.map
+

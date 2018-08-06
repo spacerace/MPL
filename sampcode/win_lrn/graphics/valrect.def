@@ -1,0 +1,14 @@
+NAME	Valrect
+
+DESCRIPTION 'Demonstrate the use of the ValidateRect function'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  4096
+STACKSIZE 5000
+
+EXPORTS
+    ValrectWndProc @1

@@ -1,0 +1,39 @@
+#===================================================================
+#
+#   hanoi Application Make file
+#
+#===================================================================
+#
+# Default compilation macros
+#
+
+CC = cl -Alfw -Zi -W3 -DLINT_ARGS -c -G2sw -Od -Zped
+
+#===================================================================
+#
+# Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+all: hanoi.exe
+#===================================================================
+#
+# Dependencies
+#
+#===================================================================
+
+hanoi.res: hanoi.rc hanoi.h hanoi.ico
+
+hanoi.obj: hanoi.c hanoi.h
+
+hanoi.exe: hanoi.obj hanoi.res hanoi.def
+ link hanoi,hanoi/codeview ,hanoi/map, os2 llibcmt llibcep/nod, hanoi.def
+    rc hanoi.res
+
+

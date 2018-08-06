@@ -1,0 +1,93 @@
+CDP ----- Generic Compact Disc player program  ---------------- Aug 15, 1988
+
+CDP is a program that allows your CD-ROM drive to play standard
+CD audio discs.  You can use CDP as either a standard DOS program
+or as a Windows application.
+
+In order to use CDP, your CD-ROM drive software must support audio commands.
+Some versions do not.  Please contact your CD-ROM drive manufacturer to
+obtain an update.
+
+
+USING CDP FROM DOS
+
+To run  CDP under DOS, call it with command line options like this:
+
+            CDP /D:<driver> /a /s <Track>
+
+
+Options:           What the option means:
+--------           ---------------------
+/D:<driverName>    Name of the CD-ROM driver to be used (the same as found 
+                   in config.sys)
+                   --Use ONLY if the CD-ROM Extensions are not already loaded.
+                   --CDP will use the current CD-ROM drive if the MS CD-ROM 
+                     Extensions are loaded.  Otherwise it will load the driver 
+                     specified with the /D: option.
+   
+/a                 Don't assume CDP is the only Audio program (slow!)
+                   --Use if your drive doesn't seem to be getting track
+                     information correctly.  
+
+/s                 Stop the CD
+                   --Use if disc is playing.
+
+<Track>            Start Track Number
+                   --Use to indicate at which track your compact disc should
+                     start playing.
+
+An example command line call would be this:
+
+            CDP 1
+
+This will call up CDP, and have it start playing Track 1 of your CD Disc.
+
+            CDP /s
+
+This will stop your CD Disc playing.
+
+	    CDP /D:MSCD001 4
+
+This will start playing the CD Disc on the drive named 'MSCD001' at track 4.
+
+
+USING CDP UNDER WINDOWS
+
+CDP Requires Windows 2.0 or higher
+
+	    WIN CDP /D:name
+
+The driver name need only be specified if the CD-ROM Extentions are not loaded
+You only need to specifed the driver name the first time CDP is run, it is saved
+in WIN.INI for future reference.
+
+
+If you see the message "Can not find CD-ROM drive", you should:
+
+         1) Make sure the CD-ROM extensions are loaded
+
+         -- and --
+
+         2) Double check that the driver name option parameter matches your 
+            CD-ROM driver name.
+
+
+CDP CONTROL BUTTONS
+
+Running under Windows, CDP will display a control panel with standard
+CD audio buttons.  From left to right these are:
+
+Play   Pause  Stop  Back-Track  Forward-Track   Rewind   Fast forward   Eject
+
+You may cause your compact disc to repeat play by typing <Alt>-<R> at any
+time CDP is the active application.
+
+
+ERRATIC MOUSE ACTION
+
+Occasionally, your mouse will behave erratically while CDP is the active
+application.  If so, change the CD-ROM drive I/O port number assignment.
+For more information, please see your CD-ROM drive documentation.
+
+Certain CDROM drivers will disable interrupts while accesing the CDROM, this
+will cause the mouse cursor to "freeze" until the operation is done.

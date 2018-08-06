@@ -1,0 +1,5 @@
+signal.obj : signal.asm
+ masm signal;
+
+signal.exe : signal.obj signal.def
+ link signal,,,os2,signal

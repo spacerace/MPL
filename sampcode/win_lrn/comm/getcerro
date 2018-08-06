@@ -1,0 +1,6 @@
+getcerro.obj: getcerro.c
+    cl -d -c -AS -Gsw -Os -Zpe getcerro.c
+
+getcerro.exe: getcerro.obj getcerro.def
+    link4 getcerro,/align:16,/map,slibw/NOE,getcerro.def
+    mapsym getcerro

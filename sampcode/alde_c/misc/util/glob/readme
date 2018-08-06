@@ -1,0 +1,40 @@
+  Here is a routine which does wildcard expansion for MS-DOS.
+It could be spiffed up by using the regex routines by Henry Spencer, but
+for now it expands DOS style wildcards (*,?):  (This is also found in
+the file example.c)
+
+
+ #include "glob.h"
+ main() {
+ 	char **names;
+ 	names = glob("*.c");
+ 	if (names)
+ 	    printf("The first file which matches the wildcard: %s\n",names[0]);
+ 	else
+ 	    printf("glob() error number %d\n",globerror);
+ }
+
+It also handles the case of "/usr/pl*/bin/*.exe" where "/usr/pl*/bin" is unique.
+Unfortunately, the code does not handle "/*/*/*.c" type expansions.  This is
+an arbitrary limitation which is left to the student to implement. :-)))))
+
+It also does not handle "C:/bin/*.exe"  - the drive spec fouls it up,
+MS-DOS seems to have problems with the find first/next functions in the
+root directory so "/*.c" may give you problems.
+
+The shar which follows contains:
+	glob.c  glob.h		- the actual wildcard expansion routines
+	example.c		- a very simple example of its usage
+	chd.c			- a more complex example - implements chdir
+	chd.exe (uuencoded)	- compiled version of chd.c
+	glob.obj (uuencoded)	- linkable module containing glob()
+
+Have fun, mail me if you have problems...
+
+(PS I am not actively using MS-DOS for now, so this code has been sitting 
+"on the shelf" for a bit.  I saw a few comments in comp.sys.ibm.pc concerning
+Turbo C and its lack of wildcard support, so I figured I'd send this out.)
+
+ John Plocher		UUCP: <backbone>!uwvax!geowhiz!uwspan!plocher
+==============      Internet: plocher%uwspan.UUCP@uwvax.cs.Wisc.EDU
+FidoNet: 121/0	      BITNET: uwvax!geowhiz!uwspan!plocher@psuvax1

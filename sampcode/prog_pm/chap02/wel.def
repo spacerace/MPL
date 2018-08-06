@@ -1,0 +1,10 @@
+;--------------------------------
+; WEL.DEF module definition file
+;--------------------------------
+
+NAME           WEL       WINDOWAPI
+
+DESCRIPTION    'Welcome to PM -- Program No. 3 (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      2048

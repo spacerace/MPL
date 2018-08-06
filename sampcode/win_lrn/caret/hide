@@ -1,0 +1,6 @@
+hide.obj: hide.c
+   cl -c -W2 -AS -Gsw -Od -Zped hide.c
+
+hide.exe: hide.obj hide.def
+   link4 hide,/align:16,/map/li,slibw,hide.def
+   mapsym hide

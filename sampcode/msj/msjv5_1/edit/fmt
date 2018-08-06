@@ -1,0 +1,13 @@
+OBJS = fmt.obj
+
+fmt.exe: $(OBJS) fmt.def fmt.res
+	link /co $(OBJS), /align:16, nul, os2, fmt.def
+	rc fmt.res
+
+
+fmt.obj:  fmt.c
+	cmd /c mcc fmt
+
+fmt.res: fmt.rc
+	rc -r fmt.rc
+

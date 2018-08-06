@@ -1,0 +1,25 @@
+/*--------------------------------
+   FILEDLG.DLG dialog definitions
+  --------------------------------*/
+
+FileOpen DIALOG 10, 10, 148, 116
+     STYLE WS_POPUP | WS_DLGFRAME
+     {
+     LTEXT   "Open File &Name:", -1,    2,  4,  76, 10
+     EDITTEXT             IDD_FNAME,    2, 18, 100, 12, ES_AUTOHSCROLL
+     LTEXT   "&Files in",        -1,    2, 40,  38, 10
+     LTEXT   "",          IDD_FPATH,   44, 40,  98, 12
+     LISTBOX              IDD_FLIST,    2, 54,  70, 58, WS_TABSTOP | WS_VSCROLL
+     DEFPUSHBUTTON "&Open",  IDOK,     88, 62,  50, 14, WS_GROUP
+     PUSHBUTTON    "Cancel", IDCANCEL, 88, 86,  50, 14, WS_GROUP
+     }
+
+FileSave DIALOG 10, 10, 180, 54
+     STYLE WS_POPUP | WS_DLGFRAME
+     {
+     LTEXT "Save File &Name As:", -1,       6,  4,  84, 12
+     LTEXT          "",       IDD_FPATH,   90,  4,  78, 12
+     EDITTEXT                 IDD_FNAME,    6, 20, 104, 12, ES_AUTOHSCROLL
+     DEFPUSHBUTTON  "OK",     IDOK,       124, 20,  50, 14, WS_GROUP
+     PUSHBUTTON     "Cancel", IDCANCEL,   124, 36,  50, 14, WS_GROUP
+     }

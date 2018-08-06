@@ -1,0 +1,93 @@
+/***	stock.rc
+*
+*/
+
+#define	 INCL_WIN
+#include <os2.h>
+#include "ids.h"
+#include "fileid.h"
+
+POINTER IDR_APP	 stock.ico
+
+menu IDR_APP
+{
+    submenu	"~File",	    IDM_FILE
+    {
+	menuitem    "~Open...",		IDM_FILE_OPEN
+	menuitem    "~Close",		IDM_FILE_CLOSE
+	menuitem   SEPARATOR
+	menuitem    "~Save",		IDM_FILE_SAVE
+	menuitem   SEPARATOR
+	menuitem    "~Print...",	IDM_FILE_PRINT
+	menuitem    "P~rinter Setup...",IDM_FILE_PRINTER_SETUP
+	menuitem   SEPARATOR
+	menuitem    "E~xit",		IDM_FILE_EXIT
+    }
+    submenu	"~Options",	    IDM_OPTIONS
+    {
+	menuitem    "Draw to fit",	IDM_OPTIONS_ORIGIN
+    }
+    submenu	"~Help",	    IDM_HELP
+    {
+	menuitem    "~About...",	IDM_ABOUT
+    }
+}
+
+dlgtemplate IDD_ABOUT
+{
+    DIALOG "",0, 20,20, 190,100, WS_SAVEBITS | FS_DLGBORDER
+    {
+    CTEXT "Stock Viewer"		      -1,  20,75, 150, 8
+    ICON  IDR_APP			      -1,  20,75,   0, 0
+    CTEXT "Chart stock data"		      -1,  20,58, 150, 8
+    CTEXT "Version 0.31 - 7 June 1990"	      -1,  20,50, 150, 8
+    CTEXT "(c)1990, Microsoft Corporation"    -1,  20,42, 150, 8
+    CTEXT "by Benjamin W. Slivka"	      -1,  20,32, 150, 8
+    DEFPUSHBUTTON   "~OK"		  DID_OK,  70,10,  50,14, WS_GROUP
+    }
+}
+
+dlgtemplate IDD_FILE loadoncall moveable discardable
+{
+    DIALOG	"",		    IDD_FILE,	  10, 10, 250,115,
+		FS_DLGBORDER | FS_BORDER | WS_CLIPSIBLINGS | WS_SAVEBITS,
+		FCF_TITLEBAR
+    {
+	ltext	    "Drives:",	    -1,		  10, 95,  30,	8
+	listbox			    IDL_DRIVE,	  10, 55,  30, 40, WS_TABSTOP
+	ltext	    "Directories:", -1,		  50,103,  90,	8
+	listbox			    IDL_DIR,	  50, 55,  90, 48, WS_TABSTOP
+	ltext	    "Files:",	    -1,		 150,103,  90,	8
+	listbox			    IDL_FILE,	 150, 55,  90, 48, WS_TABSTOP
+
+	ltext	    "",		    IDC_CURDIR,	  10, 40, 230,	8
+
+	ltext	    "File:",	    -1,		  10, 25,  40,	8
+	entryfield  "",		    IDC_TEXT,	  60, 25, 160,	8, ES_MARGIN
+
+	/* put cancel here so it is hard for user to make it
+	 * become the default button.  Since most users will tab,
+	 * (not back tab), they will always leave OK as default.
+	 */
+
+	pushbutton	"Cancel"    DID_CANCEL,	 130,  5,  40,14, WS_GROUP
+	defpushbutton	"OK"	    DID_OK,	  80,  5,  40,14, WS_GROUP
+    }
+}
+
+
+dlgtemplate IDD_PRINTER_SETUP loadoncall moveable discardable
+{
+    DIALOG  "Printer Setup",  IDD_PRINTER_SETUP,  10, 10, 196, 90,
+		FS_DLGBORDER | FS_BORDER | WS_CLIPSIBLINGS | WS_SAVEBITS,
+		FCF_TITLEBAR
+    {
+	ltext		"Printer:"  -1	       ,  10, 76,  48,	8
+	listbox 		    IDL_PRINTER,  10,  8, 120, 64, WS_TABSTOP
+
+	defpushbutton	"OK"	    DID_OK     , 138, 72,  50, 14, WS_GROUP | WS_TABSTOP
+	pushbutton	"Cancel"    DID_CANCEL , 138, 56,  50, 14
+	pushbutton	"~Setup..." IDB_SETUP  , 138, 24,  50, 14
+	pushbutton	"~Reset"    IDB_RESET  , 138,  8,  50, 14
+    }
+}

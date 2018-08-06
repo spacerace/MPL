@@ -1,0 +1,28 @@
+#
+# FORM VIEWER - MAKE FILE
+#
+# LANGUAGE      : Microsoft C 5.1
+# MODEL         : medium
+# ENVIRONMENT   : Microsoft Windows 3.0 SDK
+# STATUS        : operational
+#
+#    Eikon Systems, Inc.
+#    989 East Hillsdale Blvd, Suite 260
+#    Foster City, California 94404
+#    415-349-4664
+#
+# 07/12/90 1.00 - Kevin P. Welch - initial creation.
+#
+
+viewer.res: viewer.rc viewer.h viewer.ico
+   rc -r viewer.rc
+
+viewer.obj: viewer.c viewer.h
+	cl -c -AM -Gsw -Os -W3 -Zp -D_WINDOWS viewer.c
+
+viewer.exe: viewer.obj viewer.res viewer.def
+   link viewer, viewer /AL:16, , mlibcaw libw /NOD, viewer
+   rc viewer.res
+
+viewer.exe: viewer.res
+	rc viewer.res

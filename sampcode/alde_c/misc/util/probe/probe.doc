@@ -1,0 +1,163 @@
+				PROBE
+				=====
+
+				  By
+			  Colin J. Stearman
+			     [71036,256]
+
+PURPOSE
+
+	To analyze the performance of a program to determine where
+optimization will be of the most benefit.
+
+FEATURES
+
+	* Samples user program 55 times a second
+	* Monitors routine currently being executed
+	* Displays results to screen or file
+	* Displays results by address and by decending use frequency
+	* Works with all memory model types
+	* Independent of source language type
+
+OPERATION
+
+	PROBE is invoked with the following command:
+
+	PROBE PROG_NAME.[EXE|COM] PROG_ARG1 ... PROG_ARGn
+
+It is essential that the program to be probed be given with its full
+extension. Any arguments it requires can then follow. The simplest
+form of command line is:
+
+	PROBE PRTEST.EXE
+
+This will analyze PRTEST.EXE which does not require any arguments. This
+happens to be a test program included with this package.
+
+PROBE must have available to it the follwing files in the default
+directory:
+
+	COMLOAD.COM
+	EXELOAD.EXE
+	progname.MAP
+
+The first 2 are used to determine where DOS will load the program to
+be probed. The last is a map file created by the Microsoft linker
+LINK. The "/m" switch must be used when linking the program to
+provide a full map of the program. For example, the PRTEST program
+was linked with:
+
+	LINK PRTEST/m;
+
+As PROBE runs it first determines where the user program will be
+loaded and reports this to the user. Then it asks for the destination
+of the resulting data. This can be a file or the CRT screen.
+
+PROBE then runs the user program and passes it any supplies arguments.
+As the program runs, PROBE is activated by the system clock and a
+note is made every 18mS of the routine or module currently being executed.
+
+When the user program terminates, the PROBE results are written to
+the chosen output. First a table of results is generated in address
+order and then another table in decreasing count frequency order.
+
+	One temporary file is created by PROBE. It is name "REGISTER"
+and is deleted when PROBE terminates normally. Also various
+self-expanatory error message may be issued during abnormal PROBE
+operation.
+
+
+ANALYZING RESULTS
+
+	The routines or modules at the top of the second table are
+there because PROBE found them active more frequently then those
+below them.  This suggests that improving their efficiency will have
+the most effect on overall program performance.
+
+	Beware of input/output routines when analyzing results. If
+the program waits for user input, PROBE will obviously find the
+program frequently in the associated routines. Thus these results can
+be misleading.  Routines which deliberately waste time should also be
+indentified when analyzing results.
+
+EXAMPLE PROGRAM
+
+	The program PRTEST supplied in this package was used to test
+PROBE. It is written in C and calls 5 routines each which "waste"
+twice as much time as the previous. A sixth routine is included (but
+never called) to check for bugs in identifying probed routines.
+
+The typical results from the command:
+
+	PROBE PRTEST.EXE
+
+are:
+
+PROBE: Program's base code segment is 69e7
+PROBE: Enter results filename (CR for screen)? (<CR> or filename)
+test1				(these lines output by PRTEST)
+test2				(  "     "      "   "     "  )
+test3				(  "     "      "   "     "  )
+test4				(  "     "      "   "     "  )
+test5				(  "     "      "   "     "  )
+
+
+PRTEST.EXE           Page 1         04-23-1986   05:51:32pm
+
+		PROBE results by SYMBOL ADDRESS
+
+  ADDRESS  |             SYMBOL                | COUNT
+===========|===================================|========
+0000:005D  |  _test1                           |       8
+0000:008E  |  _test2                           |      14
+0000:00BF  |  _test3                           |      23
+0000:00F0  |  _test4                           |      29
+0000:0121  |  _test5                           |      37
+========================================================
+
+
+PRTEST.EXE           Page 2         04-23-1986   05:51:32pm
+
+		PROBE results by COUNT
+
+  COUNT    |             SYMBOL                |PERCENT
+===========|===================================|========
+      37   |  _test5                           |  33.33%
+      29   |  _test4                           |  26.13%
+      23   |  _test3                           |  20.72%
+      14   |  _test2                           |  12.61%
+       8   |  _test1                           |   7.21%
+========================================================
+
+
+End of PROBE analysis report
+
+As expected, the second report indicates that most time was spent in
+"_test5" with decreasing amounts through to "_test1".  As "_test6"
+was not called it does not appear.
+
+CONCLUSION
+
+	You should have the following files in the ARC file:
+
+		PROBE.EXE
+		COMLOAD.COM
+		EXELOAD.EXE
+		PRTEST.C
+		PRTEST.EXE
+		PRTEST.MAP
+		PROBE.DOC
+
+If you find this program useful I would be pleased to hear from you. Leave
+me some EMAIL. Any comments on improvements or changes would be
+welcome.
+
+ACKNOWLEDGEMENTS
+
+	PROBE is based on a program I found on CompuServe called
+PROFILE. I do not know the name of the author but wish to acknowledge
+his efforts.
+
+COLIN STEARMAN [71036,256]
+
+			    ====*****====

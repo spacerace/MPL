@@ -1,0 +1,41 @@
+#===================================================================
+#
+#  Standard command line definitions
+#
+#===================================================================
+
+cp=cl -c -W3 -Alfw -G2sw -Os -Zpei
+
+#===================================================================
+#
+#  Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(cp) $*.c
+
+.asm.obj:
+    masm $*.asm;
+
+.rc.res:
+    rc -r $*.rc
+
+#===================================================================
+#
+#  Dependencies
+#
+#===================================================================
+
+tracer.obj: tracer.c tracer.h
+
+tracerp.obj: tracerp.c tracer.h
+
+tracerd.obj: tracerd.c tracer.h
+
+tracer.res: tracer.rc tracer.ico tracer.h
+
+tracer.exe: tracer.obj tracerp.obj tracerd.obj tracer.res tracer.lnk tracer.def
+    link @tracer.lnk
+    rc tracer.res
+

@@ -1,0 +1,14 @@
+NAME        clipvg
+
+DESCRIPTION 'Test GetClipboardViewer function.'
+
+STUB        'WINSTUB.EXE'
+
+CODE        MOVEABLE
+DATA        MOVEABLE MULTIPLE
+
+HEAPSIZE    1024
+STACKSIZE   8096
+
+EXPORTS
+   WndProc  @1

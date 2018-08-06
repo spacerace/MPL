@@ -1,0 +1,128 @@
+
+
+
+        V 2.0 lzwcom.exe and lzwunc.exe                             
+
+
+
+                                Description
+
+
+
+
+        This  is  a  new  version of my file compressor/uncompressor
+        based on the  lempel-zev  data  compression  algorithm.   An
+        earlier version is on the Computer Language BBS.
+        
+        lempel-zev data compression builds a table of strings on the
+        fly during compression, where each string has the property
+
+                If  <string><char>  is in the table then 
+                        <string>  is also in the table.
+
+        The compressed file consists, therefore, of the indexes into
+        the  string  table,  rather  than  the  strings  themselves,
+        resulting in very good compression rates.
+        
+        Decompression builds the same table from the input data that
+        the compressor built during compression.  There is  no  data
+        table  transmitted  first,  as  with  Huffman encoding.  The
+        algorithm is (I hope) fairly clear in the source code.
+        
+        Compression rates vary according to data, but are  generally
+        better  than Huffman encoding.  For example, COMPRESS.LBR is
+        31K, but the same library after all files are compressed  is
+        only 21K.
+        
+        Note  well,  however,  that  the algorithm stops adapting to
+        input data once the table is filled.  If the nature  of  the
+        data  changes  after  the table is filled, compression rates
+        will suffer.  When  I  compressed  the  whole  COMPRESS.LBR,
+        rather  than  each file within it, it came out to 26K.  This
+        is because it 'adapted' to the data at the head of  the  LBR
+        file  which  was   C source code, and then tried to compress
+        the EXE files, that contain entirely different data.
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -1-                             
+
+
+
+        V 2.0 lzwcom.exe and lzwunc.exe                             
+
+
+
+                            Implementation Notes
+
+
+
+
+        For this  version,  I  started  embedding  crc-16's  in  the
+        compressed   files  every  1K,  and  checking  them  when  I
+        uncompress.  2 characters per 1K  overhead  seemed  a  small
+        price  to pay for data integrity, and it didn't seem to slow
+        things down any.
+        
+        These programs were compiled w/MANX Aztec C86 - they  should
+        be  portable across their entire compiler family.  They will
+        also compile under Xenix 286 without change -  and  probably
+        any other unix system.  If you go to Unix, you might want to
+        play  some  games  with  file permissions, etc., so they get
+        preserved across compression/uncompression.
+        
+        Beware of compiling with Lattice - I use regular  FILEs  and
+        getc  and  putc  for  I/O, and Lattice has some non-portable
+        open modes that must be dealt with.  If you use "rb" instead
+        of "r" for the input file and "wb" instead of "w".
+        
+        any questions or comments to
+        Kent Williams
+        NORAND Inc.
+        550 2nd St. S.E.
+        Cedar Rapids, IA 52401
+        (319) 369-3131 (work) (319) 338-6053 (home)
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -2-                             
+
+

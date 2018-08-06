@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "GlobComp.h"
+
+GlobComp MENU
+    BEGIN
+        POPUP "Menu"
+           BEGIN
+              MENUITEM "&GlobalCompact",                    IDM_GLOBALCOMPACT
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

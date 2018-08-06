@@ -1,0 +1,16 @@
+#include <windows.h>
+#include  "GetMod.h"
+
+GetMod MENU
+    BEGIN
+        POPUP "&Menu"
+           BEGIN
+              MENUITEM "&GetModuleUsage",                   IDM_GETMODU
+              MENUITEM "Get&ModuleFileName",                IDM_GETMODF
+              MENUITEM "GetModule&Handle",                  IDM_GETMODH
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

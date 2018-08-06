@@ -1,0 +1,6 @@
+break.obj : break.asm
+ masm /Mx break;
+
+trybreak.exe : trybreak.c break.obj
+ cl trybreak.c break.obj
+

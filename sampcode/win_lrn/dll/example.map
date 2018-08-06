@@ -1,0 +1,37 @@
+
+ EXAMPLE
+
+ Start     Length     Name                   Class
+ 0001:0000 0124FH     _TEXT                  CODE
+ 0002:0000 00010H     NULL                   BEGDATA
+ 0002:0010 001D2H     _DATA                  DATA
+ 0002:01E2 0000EH     CDATA                  DATA
+ 0002:01F0 00000H     XIB                    DATA
+ 0002:01F0 00002H     XI                     DATA
+ 0002:01F2 00000H     XIE                    DATA
+ 0002:01F2 00000H     XPB                    DATA
+ 0002:01F2 00000H     XP                     DATA
+ 0002:01F2 00000H     XPE                    DATA
+ 0002:01F2 00000H     XCB                    DATA
+ 0002:01F2 00000H     XC                     DATA
+ 0002:01F2 00000H     XCE                    DATA
+ 0002:01F2 00018H     CONST                  CONST
+ 0002:0210 000EAH     _BSS                   BSS
+
+ Origin   Group
+ 0002:0   DGROUP
+
+ Address   Export                  Alias
+
+ 0001:02A0 ChangeK                 ChangeK
+ 0001:023C TestAddK                TestAddK
+ 0001:0010 TestBool                TestBool
+ 0001:0098 TestByte                TestByte
+ 0001:0186 TestByteBuff            TestByteBuff
+ 0001:0058 TestChar                TestChar
+ 0001:002E TestDouble              TestDouble
+ 0001:00E2 TestFloatBuff           TestFloatBuff
+ 0001:0202 TestInt                 TestInt
+ 0001:021C TestLong                TestLong
+ 0001:01E8 TestUInt                TestUInt
+ 0001:011C TestZBuff               TestZBuff

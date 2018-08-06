@@ -1,0 +1,238 @@
+Coronado Enterprises Turbo C TUTOR (ver 1.50)      Feb 1, 1988
+
+COMPILER.DOC file
+
+This tutorial is written specifically for the Turbo-C compiler
+by Borland International.  It is written for the first release
+of that particular compiler, and many of the topics discussed
+refer to the User's Guide and Reference Guide for that particular
+release.  For that reason, when Borland releases a new version,
+some of the page numbers may be in error for the new release, but
+the topics will still be useable and valid.  It is written to
+teach you how to read and write Turbo C programs but even more
+important, it is intended to teach you the vocabulary of the C
+language so that you can intelligently read the literature about C.
+
+Due to the ease of use of the Integrated Environment version of
+Turbo C, It will be used exclusively by this tutorial.  You can
+use the Command Line version of Turbo C with this tutorial, but
+all notes in the tutorial will describe use of the Integrated
+Environment version.
+
+
+
+******** Note - Note - Note - Note - Note - Note - Note *********
+
+All of the files in the Coronado Enterprises Turbo C tutorial are
+designed to work with the Turbo C compiler with all options left
+in the default mode (ie - the way the compiler comes from the
+factory), and any changes may affect the way some of the example
+programs work.  For example, if you were to change the number of
+significant characters used for an identifier to 4, the program
+named SCOPE.C in chapter 5, would have all 3 functions named the
+same, namely "head", and the program would not work.  You would
+actually have other problems with this change, but they will not
+be commented on here.  Other kinds of errors are also possible, so
+it would be best that you simply use the Borland defaults for the
+duration of the tutorial and when you have gained experience with
+C, customize your compiler to suit your own taste.
+
+
+
+
+****************** Suggested Hard Disk Setup *********************
+The Turbo C User's Guide has complete instructions describing
+how to set up your system for proper use.  Following the direc-
+tions given will result in the following directory setup if you
+are using a hard disk.  Some of the files have been omitted in
+this suggested setup to reduce the clutter in the TURBOC directory.
+This will reduce the confusion over extra files as you work your
+way through the tutorials.
+
+Note that there are slight differences in using version 1.0 and
+1.5 of TURBO C.  The differences will be pointed out in the follow-
+ing descriptions of setup and use.
+
+      ********* TURBO C version 1.0 **********
+   TURBO C disk 1 - Integrated Development Env.
+   TURBO C disk 2 - Command Line/Utilities
+   TURBO C disk 3 - Header Files/Libraries/Examples
+   TURBO C disk 4 - Libraries/Examples
+
+      ********* TURBO C version 1.5 **********
+   TURBO C disk 1 - Integrated Development Env.
+   TURBO C disk 2 - Command Line/Utilities
+   TURBO C disk 3 - Header Files/Libraries
+   TURBO C disk 4 - Libraries
+   TURBO C disk 5 - Examples
+
+
+C:\TURBOC\
+    TC.EXE                  /* From Turbo C disk 1              */
+    TCCONFIG.TC             /* You make this file - See below   */
+    TCHELP.TCH              /* From Turbo C disk 1 (ver 1.0)    */
+    TCHELP.TCH              /* From Turbo C disk 5 (ver 1.5)    */
+    *.*                     /* From Turbo C Tutor SOURCE disk   */
+
+C:\TURBOC\INCLUDE\
+    *.H                     /* From Turbo C disk 3              */
+
+C:\TURBOC\INCLUDE\SYS\
+    STAT.H                  /* From Turbo C disk 3 \SYS\ subdir.*/
+
+C:\TURBOC\LIB\
+    *.OBJ                   /* From Turbo C disk 3              */
+    *.LIB                   /* From Turbo C disk 3              */
+    *.OBJ                   /* From Turbo C disk 4 - optional   */
+    *.LIB                   /* From Turbo C disk 4 - optional   */
+
+The *.OBJ and *.LIB files from disk 4 are needed only if you wish
+to use additional memory models.  You only need the "Small" memory
+model to run all of the programs included in the Coronado Enter-
+prises Turbo C tutorial.
+
+After creating the subdirectories listed above and loading them
+with the files listed, change to the TURBOC directory and create
+the TCCONFIG.TC file by following these instructions (note that
+the instructions are given on page 16 of the Turbo C User's guide
+but they are somewhat cryptic for the beginner).
+
+1.   TC<return>                  This loads the TURBO-C compiler
+2.   O                           Selects "Options"
+3.   E   (version 1.0)           Selects "Environment"
+3.   D   (version 1.5)           Selects "Directories"
+4.   I                           Selects "Include directories"
+5.   \TURBOC\INCLUDE<return>     Sets directory for include files
+6.   L                           Selects "Library directory"
+7.   \TURBOC\LIB<return>         Sets directory for library files
+8.   <Esc>                       Returns to "Options" menu
+9.   S                           Selects "Store options"
+10.  <return>                    Stores file named "TCCONFIG.TC"
+11.  <Esc>                       Return to the TURBO-C main menu
+
+
+
+
+To run your first program.  (This assumes FIRSTEX.C has been copied
+into the \TURBOC\ directory from the tutorial SOURCE disk.)
+
+1.   TC<return>                  Loads the Turbo C compiler
+2.   F                           Selects "Files"
+3.   L                           Selects "Load"
+4.   <return>                    Lists all files *.C
+5.   Position cursor on FIRSTEX.C
+6.   <return>                    Loads FIRSTEX.C
+7.   Alt-R                       Compiles and runs FIRSTEX
+
+
+
+
+
+**************** Suggested Dual Floppy Disk Setup *****************
+
+The Turbo C User's Guide has very sketchy information on how to set
+up the system for use from two floppies so the following information
+is given to get you started.  As you gain experience with the C lan-
+guage, you can add features and move files around to make it more
+convenient to use.  The setup given here will result in the source
+files and executable files residing on drive B.  You will develop a
+more convenient system soon, but this setup will get you started.
+You will find that you will have to stop often and erase the *.OBJ
+and the *.EXE files that are generated by Turbo C or your disk will
+fill up with these extra files.
+
+Format a disk with the system on it (ie - FORMAT A:/S) and put the
+following files on it for your drive A disk.
+
+    TC.EXE                  /* From Turbo C disk 1              */
+    TCCONFIG.TC             /* You make this file - see below   */
+    TCHELP.TCH              /* From Turbo C disk 1 (ver 1.0)    */
+    TCHELP.TCH              /* From Turbo C disk 5 (ver 1.5)    */
+                            /* Note - You will probably have    */
+                            /* room for an AUTOEXEC.BAT file on */
+                            /* this disk also.                  */
+
+
+Format a disk without the system, make the following directories
+on it, and add the following files to it in their respective dir-
+ectories. This will be the disk for drive B.  You will put a few
+of the source files from the Coronado Enterprises tutorial on this
+disk in the root directory.
+
+\
+    *.C                     /* From the Turbo C Tutor SOURCE disk */
+
+\INCLUDE\
+    *.H                     /* From Turbo C disk 3                */
+
+\INCLUDE\SYS\
+    STAT.H                  /* From Turbo C disk 3                */
+
+\LIB\
+    COS.OBJ                 /* From Turbo C disk 3                */
+    CS.LIB                  /* From Turbo C disk 3                */
+    EMU.LIB                 /* From Turbo C disk 3                */
+    FP87.LIB                /* From Turbo C disk 3                */
+    MATHS.LIB               /* From Turbo C disk 3                */
+
+
+After creating the disks as listed above, install the disks in
+drive A and drive B and boot up the computer on drive A.  You
+must then create the TCCONFIG.TC file by following these instruc-
+tions (note that the instructions are given on page 14 of the Turbo
+C User's guide but they are somewhat cryptic for the beginner).
+
+
+1.   TC<return>                  This loads the TURBO-C compiler
+2.   O                           Selects "Options"
+3.   E  (version 1.0)            Selects "Environment"
+3.   D  (version 1.5)            Selects "Directories"
+4.   I                           Selects "Include directories"
+5.   B:\INCLUDE<return>          Sets directory for include files
+6.   O                           Selects "Output directory"
+7.   B:\<return>                 Sets directory for output files
+8.   L                           Selects "Library directory"
+9.   B:\LIB<return>              Sets directory for library files
+10.  <Esc>                       Returns to "Options" menu
+11.  S                           Selects "Store options"
+12.  <return>                    Stores file named "TCCONFIG.TC"
+13.  <Esc>                       Return to the TURBO-C main menu
+14.  F                           Selects the "File" menu
+15.  L                           Selects the "Load" submenu
+16.  B:*.C<return>               Selects the B drive for files
+17.  <Esc>                       Return to the "File" menu
+18.  <Esc>                       Return to the TURBO-C main menu
+
+Note that steps 14 through 16 must be performed once each time the
+Turbo C system is started to tell the system where to find the
+working files.
+
+To run your first program.  (This assumes FIRSTEX.C has been copied
+into the root directory from the tutorial SOURCE disk.)  Load the
+two disks into the computer and boot up the system.
+
+1.   TC<return>                  Loads the Turbo C compiler
+2.   F                           Selects "Files"
+3.   L                           Selects "Load"
+4.   B:*.C<return>               Lists all files *.C
+5.   Position cursor on FIRSTEX.C
+6.   <return>                    Loads FIRSTEX.C
+7.   Alt-R                       Compiles and runs FIRSTEX
+
+
+
+
+**************** Suggested Single Floppy Disk Setup ****************
+
+In order to use the Turbo C compiler with a single floppy disk,
+set up two disks as noted for the Dual Floppy Disk system.  Use the
+disk designated for drive A above to boot up the computer and perform
+steps 1 through 13 given above, leaving off the drive designation for
+drive B in steps 5, 7, 9, and 16.
+
+To run the system, use the disk designated for drive A for booting
+and loading the TC system, then install the other disk as the work-
+ing disk.  You will have all of the capabilities of the dual drive
+system except for the "HELP" facility and the ability to run an oper-
+ating system shell from within the Turbo C Integrated environment.
+

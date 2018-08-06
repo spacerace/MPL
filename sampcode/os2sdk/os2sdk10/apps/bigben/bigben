@@ -1,0 +1,9 @@
+# This file is used to build bigben.exe using Microsoft make.exe.
+
+LIB=..\..\..\lib
+INCLUDE=..\..\..\include
+CFLAGS=-Lp -Ox -I$(INCLUDE)
+
+bigben.exe: bigben.c
+	cl $(CFLAGS) bigben.c
+	bind bigben $(LIB)\api.lib $(LIB)\doscalls.lib

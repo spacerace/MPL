@@ -1,0 +1,66 @@
+
+
+
+     BeyondCompare File Comparator   Version 2.00            15-Aug-87
+     Copyright (C) Stepping Stone Software 1987.  All rights reserved.
+     
+     Requirements:  PC-DOS / MS-DOS 2.0 or later, 192K RAM available.
+     
+     
+     INTRODUCTION
+     
+     BeyondCompare is a line-by-line file comparator.  It compares two text
+     files and then shows you the differences.  BeyondCompare is particularly
+     useful for comparing two source code files or two textual documents.
+     BeyondCompare accepts the names of two files as input.  Typically, the two
+     files are actually different versions of the same file - an old version and
+     a new version.
+     
+     In comparing two files, BeyondCompare repeatedly looks for consecutive
+     lines of text that are identical in both files (matching sections), and
+     then reports the lines between the matching sections as differences.  The
+     differences are expressed as the changes, insertions, and deletions that
+     can be applied to the old version to make it identical to the new version.
+     BeyondCompare was designed to produce an excellent report of the
+     differences while keeping the execution time to a minimum.
+     
+     The "recursive longest matching sequence" algorithm, which was pioneered by
+     BeyondCompare, is described in the September, 1987 issue of Dr. Dobb's
+     Journal.
+     
+     
+     SHAREWARE
+     
+     BeyondCompare is NOT a public domain program, it is a ShareWare product.
+     If you choose to use BeyondCompare, please send $30 to:
+        
+        Stepping Stone Software
+        P.O. Box 2887
+        Ann Arbor, MI   48106
+        
+     Once this fee is received by Stepping Stone Software:
+        1) You will receive a BeyondCompare manual.
+        2) You will be registered as a licensee of BeyondCompare.
+        3) You may submit enhancement requests and problem reports to Stepping
+           Stone Software.
+        4) You will be notified of product enhancements and upgrades.
+     
+     BeyondCompare is a ShareWare product, and may be distributed from person to
+     person, subject to the following restrictions.
+       1) The software must be supplied in its original and unmodified form,
+          including this documentation file.
+       2) No fee may be charged.
+     
+     Feel free to give a copy of BeyondCompare to friends and colleagues to try.
+     Please remind them that, if they choose to use BeyondCompare, they must
+     send a $30 fee to Stepping Stone Software.
+     
+     
+     Thank you for supporting ShareWare!
+     
+     Sincerely,
+     Tom Steppe
+
+
+
+

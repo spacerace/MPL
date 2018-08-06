@@ -1,0 +1,9 @@
+#-------------------
+# DEVCAPS make file
+#-------------------
+
+devcaps.obj : devcaps.c devcaps.h
+     cl -c -G2sw -W3 devcaps.c
+
+devcaps.exe : devcaps.obj devcaps.def
+     link devcaps, /align:16, NUL, os2, devcaps

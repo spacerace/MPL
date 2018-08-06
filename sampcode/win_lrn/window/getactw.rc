@@ -1,0 +1,9 @@
+#include <style.h>
+#include "getactw.h"
+
+getactw MENU
+BEGIN
+  MENUITEM "&Active Window", IDM_GETACTIVEW
+END
+
+

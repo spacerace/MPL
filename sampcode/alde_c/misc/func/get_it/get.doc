@@ -1,0 +1,242 @@
+   This program and documentation was typed from Micro Cornucopia magazine
+and is authored by Jack Purdum. It is from the March/April 1988, No. 40
+issue and is on page 20. The title of the article is "PROGRAMMING FOR CHANGE:
+Using Data Files In Lieu Of Program Data". See the file READ.GET in this 
+archive for some descrepencies I found. The text from the magazine follows:
+*******************************************************************************
+
+   I guess I'm pretty lucky: my family has progressed from tolerating my
+computer activities to participating in them. My wife does most of her reports 
+and my daughter does her homework on my system. That's the good part.
+   On the down side, I really don't want them playing around with the stuff
+I'm working on, even accidentally. So I created a directory for each of them 
+to use. That's where the problem begins.
+
+THE PROBLEM
+   My hard disk has a directory structure that's confusing to anyone,including 
+myself. One of these days, of course, I'm going to get organized. But in the 
+meantime, I shouldn't be too surprised that neither wife nor daughter are 
+excited about learning how neat the MS-DOS hierarchical directouy structure 
+is.
+   We programmers, in general, assume it's obvious to everyone (including non-
+programmers) how to move between directories on a hard disk. Not so. Although 
+learning to run a word processor was easy enough for my family, getting to the 
+correct directory was a boggle, confusing. I kept telling them how easy it 
+was: all they had to remember was to type:
+D:
+cd\family\words\name
+
+where name is either Karol or Katie.
+   In their defense, I'll admit there is an incredible number of combinations
+in the above sequence. What the problem called for was a programming solution: 
+a tool to simplify moving among directories.
+   The more I thought about it, the more I was convinced I wouldn't mind an
+easier way to move between directories and subdirectories myself. Maybe I 
+COULD get organized.
+   It's not uncommon for me to have a pathname something like:
+
+C:\eco88\tools\source\project1
+
+   I know i'm working on project1, but I'm not always sure which subdirect-
+ory holds it. Also, it's a hassle to type in the pathname for project1. Yet, I 
+don't want to move the project from its (logical?) place.
+
+DESIGNING A SOLUTION
+   When I first started thinking about how to address the problem, several
+solutions seemed feasible. The most direct is a batch file for each user that 
+contains the sequence of MS-DOS commands that would place the user in the 
+proper directory. That's the easiest solution.
+   It would solve my family's immediate problem, but we'd need a batch file
+for each directory pathname we wanted to use. Again some form of program 
+seemed to be the answer.
+   First, what information does MS-DOS need to chamge directories ?
+   MS-DOS needs to know only two things: 1) the full pathname, and 2) possibly
+a drive name. Given what I wanted to do, I needed a third piece of 
+information, an abbreviation for the full pathname, as well. For the 
+pathname mentioned earlier, the information might be:
+(1)\eco88\tools\source\project1
+(2)C:
+(3)project1
+
+   Therefore, if I type in "project1" from any directory on any drive in my
+system, I should end up in the directory C:\eco88\tools\source\project1.
+   Second, how can I access the program from anywhere on the disk ?
+   Most programmers are familiar with the "environment" area available in
+MS-DOS. It's a small area of memory that MS-DOS can examine for information to 
+be used with MS-DOS commands. Of interest to us is the PATH command which 
+tells MS-DOS which pathnames to search if a file isn't in the current working 
+directory.
+   The PATH environment variable lets us make a single copy of a program ac-
+cessible from any directory on the disk. This saves disk space.
+   At present, my path is set to:
+
+E:;C:\bin;C:\;
+
+which says: Search drive "E:" (a RAM disk) first, and if you don't find the 
+file there, try "C:\bin". If that fails, try "C:\". If all three path names 
+fail, MS-DOS gives up and issues an error message. Notice that each path name 
+in the PATH environment area is separated by a semicolon.
+   To set the PATH environment variable, all you do is type in:
+
+C>PATH=E:;C:\bin;C:\;
+
+   If you type:
+
+C>set
+
+and press ENTER, you'll see the status of your environment variables. The use 
+of the PATH environment variable solves one of our design problems: accessing
+the program from any place in the system. I use the "bin" directory off the 
+root directory to hold all of my executable files, so that's where I'll store 
+the directory program. (When I finish writing it.)
+
+DATA ALTERNATIVES
+   Next, how do I want to access the information needed for each directory
+entry ?
+   My first thought was to code the directory paths as a series of pointers to
+chars, something like:
+
+char *paths[] = {
+   "Karol D: \family\words\karol",
+   "Katie D: \family\words\katie",
+   "project C: \eco88\source\project1",
+   0
+};
+
+   This data structure would work okay, but I'd have to recompile the prog-
+ram each time I want to add to, or otherwise change, the abbreviations for a 
+directory path. (The last entry is zero so I would be able to sense the end of 
+the list easily.)
+   By now, the final solution should be obvious. Because we need a flexible 
+means of storing directory path names, we'll use a text file.
+   Now that we know: 1) the data requirements for the program, 2) how to
+access that data from any point on the disk, and 3) how the data will be 
+stored, writing the program is fairly easy.
+
+THE SOLUTION
+   The program supplied in the archive file is the solution to the problem. I
+wrote it with the Eco-C88 Rel. 4.0 C compiler, but it should be compatible 
+with almost any MS-DOS C compiler. (( TYPIST'S NOTE: I compiled the program 
+with Microsoft's Quick C Ver. 1.0 compiler and it compiled fine.))  I've used 
+prototyping in the program, but you can easily change the prototypes to the 
+standard K&R format.
+   The program begins with header files and definitions. Note that "get_dat"
+is the data file.
+
+FINDING THE DATA
+   Once in main(), the program makes sure there are two arguments on the com-
+mand line. Therefore, if I want to go to my test project, I would enter:
+
+C>get project1
+
+   If I'd just entered "get" the program would quit with an error message.
+Note: the program assumes that MS-DOS's PATH environment variable points to 
+the program(get.exe) and the data file(get.dat).
+   The call to open_data_file() does more than simply open the data file. As
+I mentioned above, the PATH variable can have multiple paths. Therefore, it is 
+necessary to read, or parse, the PATH environment data to find which path 
+holds the data file we need.
+   Inside open_data_file(), the call to getenv() returns a pointer to the 
+PATH environment variable. If PATH is not set, a NULL pointer returns and the 
+program ends. Assiming that PATH has been set, the pointer will be non-NULL. 
+On my ststem, ptr would point to:
+
+E:;C:\bin;C:\;
+
+   The problem now is to separate the paths to find which one holds our data
+file. To do this, we copy the PATH information from ptr into the p[] character 
+array by a call to strcpy().
+   Next, we use strtok() to break the PATH string into its sub-parts (watch-
+ing for the semicolon delimiter). We won't use strtok() that often, but it's 
+wonderful when we need it. It's also part of the (proposed) ANSI and UNIX 
+System V standard libraries.
+   In short, strtok() searches a string (the first argument of the function) 
+using a list of one or more characters from the second string. Our first call 
+to strtok() searches p[] using the semicolon as a delimiter. If strtok() finds 
+a semicolon, it forms a string of what was read up to that point and returns a 
+pointer to it.
+   If a non-null pointer is returned from strtok() it will have returned a
+pointer to a string. In our case, it would be:
+
+ptr = "E:"
+
+   This is copied into temp[] by a call to strcpy() and a backslash is them
+appended to it. The second call to strcat() adds the data file name to the 
+string with the result:
+
+temp[] = E:\get.dat
+
+   We then try to open a file using the full pathneme just built. If we're in
+the wrong directory for the get.dat data file, a NULL pointer is returned. 
+Since we may still have more PATH directories to examine, we clear out temp[] 
+and call strtok() again.
+   Because the first argument to strtok() is cast to a NULL character pointer,
+strtok() continues to parse the previous string. If you follow through the 
+second pass, temp[] will hold:
+
+temp[] = C:\bin\get.dat
+
+and the third pass would be:
+
+temp[] = C:\get.dat
+
+   Assuming that one of the PATH strings does hold the get.dat data file, 
+FILE pointer fpin will be non-NULL and we break out of the while loop. (If we 
+exhaust the PATH possibilities, strtok() will return a NULL pointer and the 
+while loop ends. The next if test would find a NULL in fpin and the program 
+would end.)
+   Assuming open_data_file() returns a valid FILE pointer, the call to 
+search_file() passes the FILE pointer and the command line abbreviation for 
+the directory path wanted by the user (e.g., "project1"). The search_file() 
+function reads the get.dat data file one line at a time, using the newline 
+character ('\n') to sense the end of each directory name. The program assumes 
+the data is stored in the form:
+
+abbreviation  drive-name
+directory-pathname
+
+or
+
+"project C: \eco88\tools\source\project1"
+
+with one blank space between each of the three data items. Note that we use
+strtok() again to parse the string read from the data file, using a blank 
+space as the delimiter this time. After the first call, ptr would point to 
+"project1".
+   In the if statement, strcmp() checks ptr against "where" for a match. Since
+"where" is the command line abbreviation for the directory path wanted by the 
+user, we're checking to see if the abbreviation exists in the get.dat data 
+file. If we find a match, further calls to strtok() break the string up into 
+the drive (drive[]) and path (path[]) information and return a MATCH flag. If 
+no match is found, the FAIL flag gets set.
+   If MATCH is found, we call do_switch(). The system() function performs a 
+command.com-type directive to MS-DOS. Therefore, if drive[] contains "D:", 
+it's as if that were typed in at the keyboard, thus moving control to drive D.
+   The chdir() function changes the current working directory to the one spec-
+ified by the argument passed to chdir(). Since path[] has the full path name 
+for our desired directory, chdir() puts us in that directory and returns 
+control to main(). If chdir() doesn't find the directory, it displays an error 
+message. A successful chdir() ends the program and you're in the desired 
+directory.
+
+PARSING THOUGHTS
+   Although the problem itself is useful, the idea of replacing program data
+with a data file is particularly interesting. Not too long ago, I wanted to 
+write a CAI (computer aided instruction) on the C language.
+   I started out writing printf()'s but Tim Leslie, a colleague and friend,
+convinced me that a better approach would be to write a Pilot-like interpreter 
+instead. He was right.
+   While the initial costs were higher (it took almost a month to write the
+interpreter), the result is a program that lets me write and test new CAI's in 
+weeks rather than months.
+   The interpreter is very similar to what I've presented here; parsing prog-
+ram lines, finding out what was read in the parse, and then acting on it. (If 
+you think about it, interpreters are little more than parsers with a symbol 
+table.)
+   Usint ASCII text files for storing data shouldn't be limited to large
+database-type projects either. Tim used this approach to write a simple 
+metric-to-decimal conversion program for his father.
+   Then when his father wanted to add new conversions, he used his word pro-
+cessor to add them. Try that when the data is buried inside the program code.
+**************************  END OF TEXT *************************************
+

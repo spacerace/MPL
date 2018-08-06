@@ -1,0 +1,4 @@
+This directory should contain:
+
+	opendlg.dll		The File...Open... dialog box standard
+	spyhook.dll		Global input hook interface library

@@ -1,0 +1,39 @@
+
+
+
+
+        NAME
+                vmode -- set video mode
+
+        SYNOPSIS
+                void vmode(mode);
+                int mode;
+
+
+        DESCRIPTION
+        This function sets the video mode from 0 - 7.  Modes are
+        as specified in the DOS manual.  The most common is
+        Black & White 80 column mode, which is mode 2.
+        This library package includes screen.h which defines
+        video modes.
+
+
+
+        EXAMPLE
+             #include <screen.h>
+             vmode(BW80);
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

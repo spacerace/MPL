@@ -1,0 +1,113 @@
+
+
+        NAME
+                readchar -- read a character from serial port
+                ready_rcv -- check for character availability
+                ready_xmt -- check if port can accept a char to send
+                setport -- set port configuration
+                writechar -- send a char to the serial port
+
+        SYNOPSIS
+                r = readchar(port);
+                x = ready_rcv(port);
+                x = ready_xmt(port);
+                (void)setport(port, r);
+                (void)writechar(port, r);
+                unsigned char r;   character to send or receive
+                int port;          port number
+                int x;             TRUE if condition exists, else FALSE (0)
+
+
+        DESCRIPTION
+           These are very low level (direct port access) subroutines
+           to enable I/O through COM1 through COM4.  Only setport() uses
+           BIOS int 14H.  These functions are not intended to be the
+           ultimate in async functions, but a starting point for an
+           integrated set of async functions, and a means of getting at
+           the serial port directly for speed and to work around the
+           problems that some "clone" BIOS routines have in returning
+           proper status values.  File "smdefs.h" contains #defines
+           to handle these ports mnemonically.
+
+           The value to use for the setport() function is an 8-bit
+           value, bitwise organized as follows:
+                 bits 1,0:     10 = 7-bit data, 11 = 8-bit data
+                 bit  2:        0 = 1 stop bit, 1 = 2 stop bits
+                 bits 4,3:     x0 = No Parity, 01 = odd, 11 = even
+                 bits 7,6,5:   baud rate:
+                               000 = 110 baud (use 2 stop bits)
+                               001 = 150 baud
+                               010 = 300 baud
+                               011 = 600 baud
+                               100 = 1200 baud
+                               101 = 2400 baud
+                               110 = 4800 baud
+                               111 = 9600 baud
+
+           ready_rcv() returns a TRUE condition if a character is
+           waiting to be read, but no error conditions are returned.
+           ready_xmt() returns a TRUE condition if the transmit
+           holding register is empty; i.e., the transmitter can accept
+           a character to send.  In both these functions, the status
+           returned is a result of reading the port status and masking
+           all but the relevant bit.  These routines will NOT return
+           errors such as overrun or parity.
+
+        async functions,      page 2
+
+
+
+
+           readchar() will return the character waiting in the receiver
+           register of the port.  It is returned as an unsigned char
+           to facilitate 8-bit binary transfer protocols.
+           writechar() will place the specified unsigned char into the
+           transmitter buffer register where it will be sent.
+
+           If the program "loop" is short and fast enough, these functions
+           will be ample to allow communications at up to 9600 baud.
+           A program has already been implemented to communicate with a
+           prom programmer at this rate, so it can be done.  However,
+           when the program does not poll the receiver fast enough it
+           is likely that characters may be lost and the maximum usable
+           baud rate will be lower.  It is highly unlikely that baud rates
+           less than 2400 baud will be necessary if the program is properly
+           structured.
+
+
+
+        EXAMPLE
+
+           /* this routine receives characters from COM1 at one
+           ** speed and resends them to COM2 at another speed */
+
+            unsigned char i;
+
+            setport(SER1, 0xe3);  /* set COM1 to 9600 baud, No parity,
+                                  ** 8-bits, 1 stop bit */
+            setport(SER2, 0xc3);  /* set COM2 the same, except 4800 baud */
+
+            while(TRUE) {
+               if(!ready_rcv(SER1)) continue;  /* wait for a char */
+               i = readchar(SER1);     /* fetch it */
+               while(!ready_xmt(SER2));/* wait for transmitter to be ready */
+               writechar(SER2, i);  /* then send it */
+               }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

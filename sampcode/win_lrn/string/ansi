@@ -1,0 +1,6 @@
+ansi.obj: ansi.c
+    cl -c -W2 -AS -Gsw -Od -Zped ansi.c
+
+ansi.exe: ansi.obj ansi.def
+    link4 ansi,/align:16,/map/li, slibw, ansi.def
+    mapsym ansi

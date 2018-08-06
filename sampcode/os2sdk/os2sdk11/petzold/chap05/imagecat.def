@@ -1,0 +1,11 @@
+;-------------------------------------
+; IMAGECAT.DEF module definition file
+;-------------------------------------
+
+NAME           IMAGECAT  WINDOWAPI
+
+DESCRIPTION    'Cat Drawn Using GpiImage (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

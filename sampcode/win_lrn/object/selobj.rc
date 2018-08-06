@@ -1,0 +1,7 @@
+#include <style.h>
+#include "selobj.h"
+
+Select MENU
+    BEGIN
+         MENUITEM  "&Select",     IDM_SELECT
+    END

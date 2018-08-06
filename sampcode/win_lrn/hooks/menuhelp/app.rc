@@ -1,0 +1,33 @@
+#include "style.h"
+#include "APP.h"
+
+APP  ICON    APP.ico
+
+STRINGTABLE
+BEGIN
+    IDSNAME,    "APP"
+    IDSABOUT,   "About..."
+    IDSTITLE,   "APP Skeleton"
+END
+
+ABOUTBOX DIALOG 22, 17, 154, 75
+STYLE WS_POPUP | WS_DLGFRAME
+BEGIN
+    CTEXT "Microsoft Windows"                   -1, 0,  5, 154, 8
+    ICON  "APP"                                 -1,  9, 23,  0, 0
+    CTEXT "Skeleton application"                -1,  0, 14, 154, 8
+    CTEXT "by Eric Fogelin"                     -1, 30, 34, 94, 8
+    CTEXT "Copyright © 1987, Microsoft Corp."   -1,  0, 47,154, 9
+    DEFPUSHBUTTON "Ok"                        IDOK, 61, 59, 32, 14, WS_GROUP
+END
+
+APP menu
+begin
+    POPUP "&Menu"
+       begin
+          MENUITEM "Item &1"     , IDAPPMENU
+          MENUITEM "Item &2"     , IDAPPMENU+1, GRAYED
+          MENUITEM "Item &3"     , IDAPPMENU+2, CHECKED
+       end
+    MENUITEM "\aF1=HELP"                , IDHELP, HELP
+end

@@ -1,0 +1,4 @@
+Code 13                                  -Request Sense
+
+This is the same as code 01.
+

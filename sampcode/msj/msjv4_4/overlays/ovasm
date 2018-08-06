@@ -1,0 +1,35 @@
+ovasm.obj: ovasm.asm 
+  masm /mx ovasm.asm;
+
+p1asm.obj: p1asm.asm
+  masm /mx p1asm;
+
+p2asm.obj: p2asm.asm
+  masm /mx p2asm;
+
+ovrmgr.obj: ovrmgr.asm
+  masm /MX ovrmgr.asm;
+
+rdovly.asm : rdovly.c exehdr.h
+# /c compile only  
+# /Fa create .ASM output 
+# /Fonul don't create object (leave that for MASM)
+# /Al large model
+# /Gs no stack checking
+# /Zl no default library search
+# /Od no optimization (for code clarity)
+  cl /c /Fa /Fonul /Od /AL /Gs /Zl rdovly.c 
+  smerge rdovly.asm rdovly.c rdovly.mrg
+  del rdovly.asm
+  ren rdovly.mrg rdovly.asm
+
+rdovly.obj : rdovly.asm
+  masm /mx rdovly;
+
+support.obj : support.asm
+  masm /mx support;
+
+ovasm.exe : ovasm.obj support.obj rdovly.obj ovrmgr.obj p1asm.obj p2asm.obj ovrmgr.obj
+  link /m/li ovasm+support+rdovly+(p1asm)+(p2asm)+ovrmgr,ovasm,ovasm.map;
+
+

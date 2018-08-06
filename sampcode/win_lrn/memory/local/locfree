@@ -1,0 +1,6 @@
+locfree.obj: locfree.c
+    cl -c -W2 -AS -Gsw -Od -Zped locfree.c
+
+locfree.exe: locfree.obj locfree.def
+    link4 locfree,/align:16,/map/li, slibw, locfree.def
+    mapsym locfree

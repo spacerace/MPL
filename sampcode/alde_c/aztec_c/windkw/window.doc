@@ -1,0 +1,45 @@
+                     Window Library Documentation
+			     (FIDO-10)
+                    George Sanderson 22 Jan. 1985
+                            St.Louis, MO
+                          (314) 234-3310
+  WINDOW.C -
+Window.c ia a simple window management library based in part on the 
+article "A Simple Window Package" by Edward Mitchell in the January
+1984 issue of Dr. Dobb's Journal.  Ray L. McVay of Arlington, TX 
+on 30 August, 1984, entered and made some modifications to the original
+code.  The window module was largly rewritten and again made available.
+The code may be freely copied at ones own risk and the code can not
+be claimed or in any other manner restricted from public access.
+This implementation uses dynamically allocated buffers for window 
+control blocks and screen save buffers instead of the fixed arrays 
+used by Mitchell. This library is written to be  used with the 
+Lattice C compiler.  This module was largly rewritten and includes 
+a number of new functions.
+
+  VLIB.A -
+  An assembly  language  support  library  called  VLIB  is  used  to
+interface the  Lattice C  compiler  with  the  IBM  ROM  BIOS  video
+routines.  VLIB will undoubtedly have to be rewritten if the window
+package  is   to  be  used  with  other  compilers.  The  following
+paragraphs should  be of  help to  those folks  who must tread this
+path.
+  The calling  convention for  Lattice is to push parameters rightmost
+first then do an intrasegment call to the function. In other words,
+functions are NEAR procedures. Some compilers do intersegment (FAR)
+calls to assembly language functions so their parameters will be two
+bytes farther away on the stack.
+  Functions return  char's and  int's in  the AX register.
+
+  WNDEMO.C -
+  Just what it says. WNDEMO shows how to open windows, write strings
+in them and close 'em and use some of the other functions.
+
+  FINALLY -
+  Since all  the windowing  functions go  through the  standard  BIOS
+calls, any display mode can be accommodated. The graphic modes will
+require more  attention from  the host  program than  was  paid  in
+WNDEMO, but  that (as is so often said) is left as an excercise for
+the reader (programmer).
+
+

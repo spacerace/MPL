@@ -1,0 +1,19 @@
+cs sdb cre err iex int cmd com mth scn sel srt tbl io pcjunk
+sdb
+sdb.map /map
+mcs
+del sdb.obj
+del cre.obj
+del err.obj
+del iex.obj
+del int.obj
+del cmd.obj
+del com.obj
+del mth.obj
+del scn.obj
+del sel.obj
+del srt.obj
+del tbl.obj
+del io.obj
+del pcjunk.obj
+

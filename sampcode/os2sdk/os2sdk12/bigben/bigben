@@ -1,0 +1,17 @@
+# This file is used to build bigben.exe using Microsoft nmake.exe.
+
+# Created by Microsoft Corp. 1986
+
+INC=..\..\..\include
+LIB=..\..\..\lib
+CFLAGS=-Ox -Zi -I$(INC) -c
+
+.c.obj :
+    cl $(CFLAGS) $*.c
+
+all: bigben.exe
+
+bigben.obj: bigben.c
+
+bigben.exe: bigben.obj
+    link bigben,,,/nod:slibce slibcep;

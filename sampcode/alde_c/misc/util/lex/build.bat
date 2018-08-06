@@ -1,0 +1,1 @@
+bind base dfa eclosu lex impure min out1 out2 lexsrt ytab lexlib.s -Olex -Plex.map

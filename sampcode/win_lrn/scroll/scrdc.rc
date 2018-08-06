@@ -1,0 +1,7 @@
+#include <style.h>
+#include "scrdc.h"
+
+SCR MENU
+    BEGIN
+         MENUITEM  "&Box",    IDM_BOX
+    END

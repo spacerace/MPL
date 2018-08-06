@@ -1,0 +1,6 @@
+proto.obj : proto.asm
+  masm /T proto;
+
+proto.exe : proto.obj proto.def
+  link proto,,,os2,proto;
+

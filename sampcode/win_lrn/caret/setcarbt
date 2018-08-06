@@ -1,0 +1,12 @@
+setcarbt.obj: setcarbt.c 
+  cl -c -W2 -AS -Gsw -Od -Zped setcarbt.c
+
+setcarbt.res: setcarbt.rc setcarbt.ico
+  rc -r setcarbt.rc
+
+setcarbt.exe: setcarbt.obj setcarbt.def setcarbt.res 
+    link4 setcarbt,/align:16,,slibw,setcarbt.def
+    rc setcarbt.res
+    del setcarbt.obj
+    del setcarbt.map
+

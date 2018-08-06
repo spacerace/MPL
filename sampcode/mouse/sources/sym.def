@@ -1,0 +1,184 @@
+BEGIN lb,rb,bb,lm,rm,um,dm,32,16
+
+;********************************************************************
+;*          Microsoft Mouse definition file for Symphony            *
+;*          Revised 6/25/86                                         *
+;********************************************************************
+
+;------------------------------BOTH BUTTONS--------------------------
+bb:   EXECUTE ESCAPE
+;------------------------------LEFT BUTTON---------------------------
+lb:   MATCH 10,2,," ",MAIN,lb1
+lb1:  MATCH 10,3,," ",MAIN,lb2
+lb2:  MATCH 10,4,," ",MAIN,lb3
+lb3:  MATCH 10,5,," ",MAIN,lb4
+lb4:  MATCH 10,6,," ",MAIN,lb5
+lb5:  MATCH 23,76,," ",MAIN,lb6
+lb6:  MATCH 23,77,," ",MAIN,lb7
+lb7:  MATCH 23,78,," ",MAIN,lb8
+lb8:  MATCH 23,79,," ",MAIN,lb9
+lb9:  MATCH 24,76,," ",MAIN,lb10
+lb10: MATCH 24,77,," ",MAIN,lb11
+lb11: MATCH 24,78,," ",MAIN,lb12
+lb12: MATCH 24,79,," ",MAIN,SLASH  ;In Graphics mode, pop sym menu
+
+;------------------------------RIGHT BUTTON--------------------------
+rb:   MATCH 1,76,,"SHEET",SLASH,RETURN
+;------------------------------LEFT MOTION---------------------------
+lm:   MATCH 1,76,,"ERROR",NUL,lm1
+lm1:  MATCH 23,3,,"[ESCAPE]",NUL,lm2        ;Install
+lm2:  MATCH 2,35,,"Help Screen",NUL,lm3     ;Install Help
+lm3:  MATCH 6,24,,"translate",NUL,LEFT      ;Translate
+
+;------------------------------RIGHT MOTION--------------------------
+rm:   MATCH 1,76,,"ERROR",NUL,rm1
+rm1:  MATCH 23,3,,"[ESCAPE]",NUL,rm2        ;Install
+rm2:  MATCH 2,35,,"Help Screen",NUL,rm3     ;Install Help
+rm3:  MATCH 6,24,,"translate",NUL,RIGHT     ;Translate
+
+;------------------------------UP MOTION-----------------------------
+um:   MATCH 1,76,,"ERROR",NUL,um1
+um1:  MATCH 1,76,,"MENU",NUL,um2
+um2:  MATCH 1,77,,"MENU",NUL,um4
+um4:  MATCH 3,3,,"Symphony",NUL,um5         ;Access title menu
+um5:  MATCH 2,35,,"Help Screen",NUL,UP      ;Install Help
+
+;------------------------------DOWN MOTION---------------------------
+dm:  MATCH 1,76,,"ERROR",NUL,dm1
+dm1: MATCH 1,76,,"MENU",NUL,dm2
+dm2: MATCH 1,77,,"MENU",NUL,dm4
+dm4: MATCH 3,3,,"Symphony",NUL,dm5         ;Access title menu
+dm5: MATCH 2,35,,"Help Screen",NUL,DOWN    ;Install Help
+
+;------------------------------MENUS---------------------------------
+
+MAIN: popup 23,1,NORMAL
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+text "MAIN: Cancel Help Menu Service Anchor NxtWin Zoom Change Switch Update SHEET DOC"
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+select 2,7,6,CANCEL
+select 2,14,4,F1
+select 2,19,4,F10
+select 2,24,7,F9
+select 2,32,6,PERIOD
+select 2,39,6,F6
+select 2,46,4,ALTF6
+select 2,51,6,ALTF10
+select 2,58,6,ALTF9
+select 2,65,6,ALTF8
+select 2,72,5,SHEET
+select 2,78,3,DOC
+pend
+
+SHEET: popup 23,1,NORMAL
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+text "SHEET: MAIN Menu Services Anchor @Sum( ) ( + - * / Abs Edit Recalc Name Home End"
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+select 2,8,4,MAIN
+select 2,13,4,F10
+select 2,18,8,F9
+select 2,27,6,PERIOD
+select 2,34,5,SUM
+select 2,40,1,RGTPRAN
+select 2,42,1,LFTPRAN
+select 2,44,1,ADD
+select 2,46,1,SUB
+select 2,48,1,MUL
+select 2,50,1,DIV
+select 2,52,3,F3
+select 2,56,4,F2
+select 2,61,6,F8
+select 2,68,4,RENAME
+select 2,73,4,HOME
+select 2,78,3,END
+pend
+
+DOC: popup 23,1,NORMAL
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+text "DOC: MAIN Menu Services I? Align Split Center Indent Erase Compose GoTo End MOVE"
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+select 2,6,4,MAIN
+select 2,11,4,F10
+select 2,16,8,F9
+select 2,25,2,ALTF2
+select 2,28,5,F2
+select 2,34,5,ALTF3
+select 2,40,6,ALTF4
+select 2,47,6,F3
+select 2,54,5,F4
+select 2,60,7,ALTF1
+select 2,68,4,F5
+select 2,73,3,END
+select 2,77,4,MOVE
+pend
+
+MOVE: popup 23,1,NORMAL
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+text "MOVE: Left Right Ln_Start Ln_End Par_Start Par_End PgUp PgDn Doc_Start Doc_End  "
+text "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
+select 2,7,4,CTLLEFT
+select 2,12,5,CTLRGHT
+select 2,18,8,ENDLEFT
+select 2,27,6,ENDRGHT
+select 2,34,9,ENDUP
+select 2,44,7,ENDDOWN
+select 2,52,4,PGUP
+select 2,57,4,PGDN
+select 2,62,9,HOME
+select 2,72,7,ENDHOME
+pend
+
+;------------------------------KEYS----------------------------------
+NUL:       NOTHING
+RETURN:    TYPE 13
+RENAME:    TYPE "/","R","N"
+ESCAPE:    TYPE 27
+SLASH:     TYPE "/"
+CANCEL:    TYPE 27,27,27,27,27,27,27,27
+PERIOD:    TYPE "."
+COMMA:     TYPE ","
+F1:        TYPE 0,59
+F2:        TYPE 0,60
+F3:        TYPE 0,61
+F4:        TYPE 0,62
+F5:        TYPE 0,63
+F6:        TYPE 0,64
+F7:        TYPE 0,65
+F8:        TYPE 0,66
+F9:        TYPE 0,67
+F10:       TYPE 0,68
+ALTF1:     TYPE 0,104
+ALTF2:     TYPE 0,105
+ALTF3:     TYPE 0,106
+ALTF4:     TYPE 0,107
+ALTF5:     TYPE 0,108
+ALTF6:     TYPE 0,109
+ALTF7:     TYPE 0,110
+ALTF8:     TYPE 0,111
+ALTF9:     TYPE 0,112
+ALTF10:    TYPE 0,113
+HOME:      TYPE 0,71
+END:       TYPE 0,79
+ENDUP:     TYPE 0,79,0,72
+ENDDOWN:   TYPE 0,79,0,80
+ENDLEFT:   TYPE 0,79,0,75
+ENDRGHT:   TYPE 0,79,0,77
+ENDHOME:   TYPE 0,79,0,71
+CTLLEFT:   TYPE 0,115
+CTLRGHT:   TYPE 0,116
+BKTB:      TYPE 0,15         ;BACK TAB
+TB:        TYPE 9
+PGUP:      TYPE 0,73
+PGDN:      TYPE 0,81
+LEFT:      TYPE 0,75
+RIGHT:     TYPE 0,77
+UP:        TYPE 0,72
+DOWN:      TYPE 0,80
+SPACE:     TYPE 32
+LFTPRAN:   TYPE "("
+RGTPRAN:   TYPE ")"
+MUL:       TYPE "*"
+ADD:       TYPE "+"
+SUB:       TYPE "-"
+DIV:       TYPE "/"
+SUM:       TYPE "@Sum("

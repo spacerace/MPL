@@ -1,0 +1,19 @@
+#
+# Terminal emulator makefile.
+#
+INC=..\..\..\..\include
+CFLAGS=-Zip -G2 -Ox -I$(INC) -c
+
+.c.obj:
+        cl $(CFLAGS) $*.c
+
+all:terminal.exe
+
+terminal.obj: terminal.c terminal.def
+
+modem.obj:    modem.c
+
+options.obj:  options.c
+
+terminal.exe: terminal.obj modem.obj options.obj
+	      link /nod /codeview terminal modem options,,,slibcep os2;

@@ -1,0 +1,12 @@
+setbkmd.obj: setbkmd.c 
+  cl -c -W2 -AS -Gsw -Od -Zped setbkmd.c
+
+setbkmd.res: setbkmd.rc setbkmd.ico
+  rc -r setbkmd.rc
+
+setbkmd.exe: setbkmd.obj setbkmd.def setbkmd.res 
+    link4 setbkmd,/align:16,,slibw,setbkmd.def
+    rc setbkmd.res
+    del setbkmd.obj
+    del setbkmd.map
+

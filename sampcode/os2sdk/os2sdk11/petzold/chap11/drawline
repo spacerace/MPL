@@ -1,0 +1,9 @@
+#--------------------
+# DRAWLINE make file
+#--------------------
+
+drawline.obj : drawline.c
+     cl -c -G2sw -W3 drawline.c
+
+drawline.exe : drawline.obj drawline.def
+     link drawline, /align:16, NUL, os2, drawline

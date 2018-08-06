@@ -1,0 +1,10 @@
+
+updtwin.obj: updtwin.c
+   cl -Fs -c -W2 -AS -Gsw -Od -Zped updtwin.c
+
+updtwin.exe: updtwin.obj updtwin.def
+   link4 updtwin,/align:16,/M,slibw/NOE,updtwin.def
+   mapsym updtwin
+   del *.obj
+   del *.sym
+   del *.map

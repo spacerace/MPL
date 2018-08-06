@@ -1,0 +1,194 @@
+      List of Changes for CTask 0.1 to 1.1
+      ====================================
+
+The main changes are
+
+   - Support for named control blocks
+   - Support for dynamic allocation of control blocks and
+     buffers
+   - Task state display support (snapshot dump)
+   - More flexible timer handling, interrupt disable times
+     reduced
+   - SIO support extended for shared IRQ's and on-line
+     definition of ports; save and restore of control
+     registers
+   - Bug fixes for known bugs
+
+
+TSKCONF.H
+
+This is a new file, containing configuration options. See the
+reference manual for an explanation of the #defines.
+
+
+TSK.H
+
+Using dynamic allocation and named structures requires
+additional optional fields in most control structures.
+
+The timer queue structure has been changed completely, it is
+now called tlink instead of the previous dlink to avoid
+confusion. 
+
+Additional #defines were necessary to support name and timer
+control blocks.
+
+The tsk_inp, tsk_outp, tsk_dis_int, and tsk_ena_int functions
+are now defined as intrinsics.
+
+
+TSKMAIN.C
+
+The main change is the handling of the timeout queue, which
+is now singly linked, and may contain other elements than
+task control blocks. This had consequences for the kill
+functions, and required two new functions to create and
+change timeout control blocks.
+
+The chaining to the system tick interrupt has been separated
+from the processing of the timeout queue.
+
+Minor changes were necessary to accommodate named and dynamic
+structures.
+
+
+TSKSUB.C
+
+The rewrite of the timer handling required changes to the
+timeout-functions. 
+
+New routines are included for managing named structures.
+
+
+TSKSIO.C
+
+Support for shared IRQ lines and for dynamic definition of
+ports was added. Ports are checked (with a simple check,
+might be fooled) for existence so the installation doesn't
+hang.
+
+The complete status of the port is now saved before
+initialising, and optionally restored on removal of the
+driver. This should avoid problems in interaction with exotic
+hardware or resident drivers. A parameter has been added to
+v24_remove to allow specification of control register
+restoration.
+
+You can now specify that the values of the modem control,
+line control, and baud rate registers should not be tampered
+with on initialisation (in 0.1 they were always initialised
+to #defined values) with an additional parameter to
+v24_install.
+
+If the port number for v24_install is ORed with 0x80, the
+port is *relative*. This means that the entry in the BIOS
+table for COM-Ports is used to search the tables internal to
+the driver for the port information, instead of using the
+table entry directly. If the port address cannot be found,
+the driver returns with an error code. Note that ports are
+numbered from 0, so to specify COM1, pass 0x80 as parameter.
+
+The return value for successful installation is now a pointer
+to the sio control block. This pointer has to be passed to
+all other functions instead of the port number. This change
+was necessitated by the addition of dynamically defined
+ports.
+
+Since I/O routines are now implemented as intrinsics, the
+insertion of tsk_nop()-calls between successive inp/outp
+calls was necessary to provide the I/O-settle delay for AT's.
+
+Minor changes were necessary to accommodate named and dynamic
+structures.
+
+
+TSKPRT.C
+
+If the port number for prt_install is ORed with 0x80, the
+port is *relative*. This means that the entry in the BIOS
+table for LPT-Ports is used to search the tables internal to
+the driver for the port information, instead of using the
+table entry directly. If the port address cannot be found,
+the driver returns with an error code. Note that ports are
+numbered from 0, so to specify LPT1, pass 0x80 as parameter.
+
+The return value for successful installation is now the
+internal port number, since relative port numbers have to be
+translated on installation.
+
+Minor changes were necessary to accommodate named and dynamic
+structures.
+
+
+TSKFLG.C
+TSKCNT.C
+TSKPIP.C
+TSKMSG.C
+
+Minor changes were necessary to accommodate named and dynamic
+structures.
+
+
+TSKBUF.C
+
+The return values and the bug that caused the message counter
+to be decreased on write and increased on read were corrected.
+
+Minor changes were necessary to accommodate named and dynamic
+structures.
+
+
+TSKALLOC.C
+
+This file is new. It is needed if dynamic structures are used
+(option TSK_DYNAMIC is enabled) to provide the interface to
+the C-allocation functions. Note that this file is model
+dependent, and is not included in the pre-compiled libraries.
+
+
+TSKSNAP.C
+
+This file is new. It provides a function to write a snapshot
+display of the CTask system status to a file handle. Note
+that this file is model dependent, and is not included in the
+pre-compiled libraries. It can only be used if the option
+TSK_NAMED is enabled.
+
+
+TSK.MAC
+
+Some changes were necessary to accommodate named and dynamic
+structures and the changed structure of the timer queue
+link.
+
+
+TSKASM.ASM
+
+Removal of the idle task required changes in the scheduler.
+Since parts of the scheduler now run with interrupts enabled,
+a re-entry flag was introduced to avoid multiple entries into
+the scheduler.
+
+The local routines for variable priorites and enqueue are now
+macros. Some superfluous statements were eliminated.
+
+
+TSKTIM.ASM
+
+The separation of timer chain and timeout task required
+introduction of an additional counter. The logic has been
+cleaned up, and some comments were added.
+
+Minor changes were necessary to accommodate named structures.
+
+
+TSKDOS.ASM
+
+Minor changes were necessary to accommodate named structures.
+
+
+TSKBIOS.ASM
+
+This is a new module that handles the AT BIOS wait/post
+calls.
+

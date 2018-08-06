@@ -1,0 +1,73 @@
+
+6-23-88, Peter Nelson
+
+
+These are BYTE magazines new benchmark programs.  The source code
+for these programs is written in the small-c language.  Small-c was
+originally written for CP/M by J.E Hendrix.  BYTE magazine has re-
+written it for improvements.  If you are interested in 'C' programming,
+download the file SMALL-C2.ARC.  Both the benchmark programs and
+the small-c compiler are explained in the June, 1988 issue of BYTE
+magazine.  Basically speaking, these are the only benchmarks that 
+really work.  The others are all seriously flawed, even the old 
+BYTE magazine benchmarks are no good!
+
+Note: there were minor typographical errors in MATRIX.C and SCDSSK.C.
+One had a misspelled variable, the other an un-closed comment.  These
+have been corrected.  Four of the .C files are not meant to be programs,
+but are meant to be linked with the others to provide necessary routines.
+I have left the .OBJ files for these, otherwise each .C source file has a
+corresponding .EXE program.
+
+What follows is the original text of the README file as it came
+from BYTE magazine.  Have fun and learn 'C'!
+
+Finis, Mongo
+
+
+----------------------------------------------------------------------
+
+
+BYTE Low-leve Benchmarks for IBM PC, XT, AT, and compatibles.
+April, 1988
+
+Written in BYTE Small-C.
+BYTE Small-C is adapted from Small-C created by Ron Cain and extended by
+J.E. Hendrix.
+
+Files in this archive:
+
+SIEVE.C - The Sieve of Eratosthenes
+SORT.C - The Sort benchmark; includes algorithms for Quicksort, Shellsort, and
+         Heapsort.
+MATRIX.C - The Matrix benchmark.  Adds two matrices, multiplies two matrices,
+           and takes the transpose of a matrix.  Assumes square matrices.
+MOVE88.C - String move benchmark.  Moves a block of bytes from a source to
+           a destination.  The move is done byte-wide and word-wide.  The
+           word-wide move is done on even- and odd-byte boundaries.
+FLOAT88.C - Floating-point coprocessor benchmark.  Two phases: (1) tests
+            fundamental math operations (add, subtract, multiply, divide) and
+            (2) tests transcendental functions sin(x) and e^x by performing
+            a trapezoidal integration.
+SCFM87.C - 8087 Floating-point library.  Used by FLOAT88.C.
+GRAPH88.C  - Low-leve graphics benchmark for CGA, EGA, MCGA, VGA, MDA and
+                Hercules monochrome modes.
+TEXT.C - Text display benchmark.
+VIDEO.C - Video support library used by GRAPHICS88.C and TEXT.C.
+SCFILEIO.C - File I/O benchmark.  Tests disk throughput at the filesystem
+             level.
+SCDSSK.C - DOS-level disk test.  Benchmarks disk throughput at the DOS level...
+           beneath the filesystem.
+SCHDSEEK.C - Hard disk seek benchmark.  Reads raw disk sectors.
+SCBIGWT.C - Write a 1,000,000-byte file and time the results.
+SCBIGRD.C - Read a 1,000,000-byte file and time the results.
+SCRAND.C - Random number generator.
+SCSW88.C - Two routines for creating a software stopwatch.
+
+--Richard Grehan
+  BYTE Senior Technical Editor
+
+  Thanks to:
+  Tom Thompson and Curt Franklin
+  BYTE Magazine
+

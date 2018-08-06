@@ -1,0 +1,30 @@
+#
+#   FDIR Application Make file
+#
+
+#
+# Default compilation macros
+#
+
+CC= cl -Zi -W3 -DLINT_ARGS -c -G2sw -Od -Zped -AL
+
+#
+# Default inference rules
+#
+
+.c.obj:
+    $(CC) $*.c
+
+all: fdir.exe
+
+fdir.obj : fdir.c
+
+#
+# Dependencies
+#
+
+fdir.exe: fdir.obj
+    link fdir, fdir/codeview, fdir/map, os2 llibcep/nod,nul.def
+    markexe lfns fdir.exe
+
+

@@ -1,0 +1,196 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.x4-24R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,32
+[1mPonzoTUTOR
+.WNT
+   TABLE of CONTENTS   
+.R5C1
+                                    ~ILESSON1~N
+~V
+.b4-6
+~N
+.R8C1
+       Getting Started in C : INPUT and OUTPUT   
+       More on printf  
+       A look at DATA TYPES  
+       Declaring the DATA TYPE  
+       INTEGERS and FLOATS
+       INPUT from the KEYBOARD with scanf()  
+       About Memory Locations...and the & prefix    
+       What's wrong with the following program? 
+       REVIEW of printf() and scanf()  
+       some final comments about printf() and scanf()  
+       ... and then there's CAST
+       a final note on DATA TYPES       
+.b7-20
+.WN
+.R3C1
+                                    ~ILESSON2~N
+~V
+.b2-4
+~N
+.R6C1
+       STRINGS 'N' THINGS   
+       Double Quotes and Strings : Single Quotes and Characters  
+       how does a string end?  
+       just one word about 'string arrays'  
+       Other special characters like \0  
+       SPECIAL \CHARACTERS  
+       Other 'format' info you can give to printf()  
+       good form .. bad form  
+       A note on format specifications   
+       More notes on format specifications    
+       and some final notes on format     
+.b5-17
+.WN
+.R3C1
+                                    ~ILESSON3~N
+~V
+.b2-4
+~N
+.R6C1
+       FUNCTIONS()  
+       writing the function average()    
+       How to COMPILE   
+       FUNCTIONS HAVE A PRIVATE COPY OF THEIR ARGUMENTS    
+.b5-10
+.R14C1
+                                    ~ILESSON4~N
+~V
+.b13-15
+~N
+.R17C1
+       FOR WHILE and other good stuff   
+       PRETTY PROGRAMS  
+       now DO this for a WHILE
+       a REVIEW 
+.b16-21
+.WN
+.R3C1
+                                    ~ILESSON5~N
+~V
+.b2-4
+~N
+.R6C1
+       let's try IF FOR a WHILE   
+       IF (this) do that ELSE IF (this) do that ELSE do that
+       More stuff like i++   
+       and tests for EQUALITY && INEQUALITY etc.  
+.b5-10
+.R13C1
+                                    ~ILESSON6~N
+~V
+.b12-14
+~N
+.R16C1
+       POINTERS and ARRAYS  
+       VARIABLES and their HOMES in MEMORY   
+       hip hip ARRAYS    
+       More POINTERS and ARRAYS   
+       Be kind to your compiler  
+       STRINGS and 1-dimensional CHAR ARRAYS
+       more and more ARRAYS   
+       What's in a name ? (of an ARRAY)
+.b15-24
+.WN
+.R3C1
+                                    ~ILESSON7~N
+~V
+.b2-4
+~N
+.R6C1
+        More FUNCTIONS, including main()   
+        don't forget STDIO.H   
+        The main() arguments   
+        Some SUM programming ...
+.b5-10
+.R14C1
+                                    ~ILESSON8~N
+~V
+.b13-15
+~N
+.R17C1
+        FILES FILES FILES   
+        counting from 'a to 'z'   
+.b16-19
+.WN
+.R3C1
+                                    ~ILESSON9~N
+~V
+.b2-4
+~N
+.R6C1
+        the big SWITCH
+        more SWITCHing
+        CALL BY VALUE  and  CALL BY REFERENCE
+        passing FUNCTIONS to FUNCTIONS
+.b5-10
+.R14C1
+                                    ~ILESSON10~N
+~V
+.b13-15
+~N
+.R17C1
+        the C PREPROCESSOR
+        #define THIS and THAT
+        #include <stdio.h> and #include <math.h>
+        even sexier #definitions
+        SUGAR for the kids
+         notes from the author
+        typedefinitions
+.b16-24
+.WN
+.R3C1
+                                    ~ILESSON11~N
+~V
+.b2-4
+~N
+.R6C1
+        a little STRUCTURE
+        inside a STRUCTure
+        defining a STRUCTure
+        STRUCTures within STRUCTures ??
+.b5-10
+.R14C1
+                                    ~ILESSON12~N
+~V
+.b13-15
+~N
+.R17C1
+        FIELDS
+        UNIONS
+.b16-19
+.WN
+.R3C1
+            ~ITEST1-5~N        A TEST on lessons 1 to 5
+~V
+.b2-4
+~N
+.R8C1
+            ~ITEST6-8~N        A TEST on lessons 6 to 8
+~V
+.b7-9
+~N
+.W
+.q
+
+

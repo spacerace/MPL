@@ -1,0 +1,237 @@
+
+ DEMO
+
+ Start     Length     Name                   Class
+ 0001:0000 00778H     _TEXT                  CODE
+ 0002:0000 00010H     NULL                   BEGDATA
+ 0002:0010 00070H     _DATA                  DATA
+ 0002:0080 0000EH     CDATA                  DATA
+ 0002:008E 00000H     XIB                    DATA
+ 0002:008E 00000H     XI                     DATA
+ 0002:008E 00000H     XIE                    DATA
+ 0002:008E 00000H     XPB                    DATA
+ 0002:008E 00000H     XP                     DATA
+ 0002:008E 00000H     XPE                    DATA
+ 0002:008E 00000H     XCB                    DATA
+ 0002:008E 00000H     XC                     DATA
+ 0002:008E 00000H     XCE                    DATA
+ 0002:008E 00000H     XIFB                   DATA
+ 0002:008E 00000H     XIF                    DATA
+ 0002:008E 00000H     XIFE                   DATA
+ 0002:008E 00000H     XCFB                   DATA
+ 0002:008E 00000H     XCF                    DATA
+ 0002:008E 00000H     XCFE                   DATA
+ 0002:008E 00000H     CONST                  CONST
+ 0002:0090 00000H     _BSS                   BSS
+ 0002:0090 00000H     XOB                    BSS
+ 0002:0090 00000H     XO                     BSS
+ 0002:0090 00000H     XOE                    BSS
+ 0002:0090 00004H     c_common               BSS
+
+ Origin   Group
+ 0002:0   DGROUP
+
+ Address   Export                  Alias
+
+ 0001:0192 DemoDlg                 DemoDlg
+ 0001:00FC DemoWndProc             DemoWndProc
+
+  Address         Publics by Name
+
+ 0001:02B0       chkstk
+ 0000:0000  Imp  CREATEWINDOW         (USER.41)
+ 0000:0000  Imp  DEFWINDOWPROC        (USER.107)
+ 0001:0192       DemoDlg
+ 0001:00FC       DemoWndProc
+ 0000:0000  Imp  DIALOGBOX            (USER.87)
+ 0000:0000  Imp  DISPATCHMESSAGE      (USER.114)
+ 0000:0000  Imp  ENDDIALOG            (USER.88)
+ 0000:0000  Imp  FATALEXIT            (KERNEL.1)
+ 0000:0000  Imp  FREEPROCINSTANCE     (KERNEL.52)
+ 0000:0000  Imp  GETMESSAGE           (USER.108)
+ 0000:0000  Imp  GETSTOCKOBJECT       (GDI.87)
+ 0000:0000  Imp  GLOBALALLOC          (KERNEL.15)
+ 0000:0000  Imp  GLOBALFREE           (KERNEL.17)
+ 0000:0000  Imp  INITAPP              (USER.5)
+ 0000:0000  Imp  INITTASK             (KERNEL.91)
+ 0000:0000  Imp  LOADCURSOR           (USER.173)
+ 0000:0000  Imp  LOADSTRING           (USER.176)
+ 0000:0000  Imp  LOCALALLOC           (KERNEL.5)
+ 0000:0000  Imp  LOCALFREE            (KERNEL.7)
+ 0000:0000  Imp  LOCALREALLOC         (KERNEL.6)
+ 0000:0000  Imp  MAKEPROCINSTANCE     (KERNEL.51)
+ 0000:0008  Abs  pAtomTable
+ 0000:0006  Abs  PLOCALHEAP
+ 0000:0000  Imp  POSTQUITMESSAGE      (USER.6)
+ 0000:000E  Abs  pStackBot
+ 0000:000C  Abs  pStackMin
+ 0000:000A  Abs  pStackTop
+ 0000:0000  Imp  REGISTERCLASS        (USER.57)
+ 0002:0004       rsrvptrs
+ 0000:0000  Imp  SENDDLGITEMMESSAGE   (USER.101)
+ 0000:0000  Imp  SHOWWINDOW           (USER.42)
+ 0002:0020       STKHQQ
+ 0000:0000  Imp  TRANSLATEMESSAGE     (USER.113)
+ 0000:0000  Imp  UPDATEWINDOW         (USER.124)
+ 0000:0000  Imp  WAITEVENT            (KERNEL.30)
+ 0001:0010       WINMAIN
+ 0001:02B0       _chkstk
+ 0001:014E       _DemoCommand
+ 0002:0090       _edata
+ 0000:0000  Abs  _end
+ 0002:006E       _environ
+ 0002:0047       _errno
+ 0001:04D0       _exit
+ 0001:036D       _free
+ 0002:0090       _hInstDemo
+ 0002:0092       _hWndDemo
+ 0001:0360       _malloc
+ 0001:037A       _realloc
+ 0002:002E       __acfinfo
+ 0000:9876  Abs  __acrtused
+ 0000:9876  Abs  __acrtused2
+ 0002:003B       __aintdiv
+ 0002:002C       __amblksiz
+ 0001:02D6       __amsg_exit
+ 0001:02E4       __astart
+ 0001:02CD       __astkovr
+ 0002:0076       __child
+ 0001:02B0       __chkstk
+ 0001:040C       __cinit
+ 0001:02D0       __cintDIV
+ 0001:052C       __ctermsub
+ 0002:0052       __doserrno
+ 0002:004F       __dosvermajor
+ 0002:0050       __dosverminor
+ 0001:04E7       __exit
+ 0002:003F       __fac
+ 0001:03FC       __ffree
+ 0001:03D0       __fmalloc
+ 0002:0082       __fpinit
+ 0000:9876  Abs  __fptaskdata
+ 0001:02D3       __fptrap
+ 0002:0079       __intno
+ 0001:0346       __myalloc
+ 0002:0054       __nfile
+ 0001:03C1       __nfree
+ 0001:039C       __nmalloc
+ 0001:02DF       __NMSG_TEXT
+ 0001:02DF       __NMSG_WRITE
+ 0001:035E       __nullcheck
+ 0002:0052       __oserr
+ 0002:0056       __osfile
+ 0002:004F       __osmajor
+ 0002:0050       __osminor
+ 0002:0051       __osmode
+ 0002:004F       __osversion
+ 0002:0078       __ovlflag
+ 0002:007A       __ovlvec
+ 0002:0070       __pgmptr
+ 0002:004D       __psp
+ 0002:004B       __pspadr
+ 0001:057C       __setargv
+ 0001:070A       __setenvp
+ 0002:0049       __umaskval
+ 0002:006A       ___argc
+ 0002:006C       ___argv
+
+  Address         Publics by Value
+
+ 0000:0000  Abs  _end
+ 0000:0000  Imp  ENDDIALOG            (USER.88)
+ 0000:0000  Imp  FATALEXIT            (KERNEL.1)
+ 0000:0000  Imp  LOADCURSOR           (USER.173)
+ 0000:0000  Imp  LOCALFREE            (KERNEL.7)
+ 0000:0000  Imp  WAITEVENT            (KERNEL.30)
+ 0000:0000  Imp  GLOBALFREE           (KERNEL.17)
+ 0000:0000  Imp  CREATEWINDOW         (USER.41)
+ 0000:0000  Imp  DIALOGBOX            (USER.87)
+ 0000:0000  Imp  INITTASK             (KERNEL.91)
+ 0000:0000  Imp  REGISTERCLASS        (USER.57)
+ 0000:0000  Imp  POSTQUITMESSAGE      (USER.6)
+ 0000:0000  Imp  INITAPP              (USER.5)
+ 0000:0000  Imp  GLOBALALLOC          (KERNEL.15)
+ 0000:0000  Imp  GETSTOCKOBJECT       (GDI.87)
+ 0000:0000  Imp  SENDDLGITEMMESSAGE   (USER.101)
+ 0000:0000  Imp  TRANSLATEMESSAGE     (USER.113)
+ 0000:0000  Imp  LOCALALLOC           (KERNEL.5)
+ 0000:0000  Imp  UPDATEWINDOW         (USER.124)
+ 0000:0000  Imp  LOCALREALLOC         (KERNEL.6)
+ 0000:0000  Imp  LOADSTRING           (USER.176)
+ 0000:0000  Imp  SHOWWINDOW           (USER.42)
+ 0000:0000  Imp  DEFWINDOWPROC        (USER.107)
+ 0000:0000  Imp  MAKEPROCINSTANCE     (KERNEL.51)
+ 0000:0000  Imp  FREEPROCINSTANCE     (KERNEL.52)
+ 0000:0000  Imp  GETMESSAGE           (USER.108)
+ 0000:0000  Imp  DISPATCHMESSAGE      (USER.114)
+ 0000:0006  Abs  PLOCALHEAP
+ 0000:0008  Abs  pAtomTable
+ 0000:000A  Abs  pStackTop
+ 0000:000C  Abs  pStackMin
+ 0000:000E  Abs  pStackBot
+ 0000:9876  Abs  __acrtused
+ 0000:9876  Abs  __acrtused2
+ 0000:9876  Abs  __fptaskdata
+ 0001:0010       WINMAIN
+ 0001:00FC       DemoWndProc
+ 0001:014E       _DemoCommand
+ 0001:0192       DemoDlg
+ 0001:02B0       _chkstk
+ 0001:02B0       __chkstk
+ 0001:02B0       chkstk
+ 0001:02CD       __astkovr
+ 0001:02D0       __cintDIV
+ 0001:02D3       __fptrap
+ 0001:02D6       __amsg_exit
+ 0001:02DF       __NMSG_WRITE
+ 0001:02DF       __NMSG_TEXT
+ 0001:02E4       __astart
+ 0001:0346       __myalloc
+ 0001:035E       __nullcheck
+ 0001:0360       _malloc
+ 0001:036D       _free
+ 0001:037A       _realloc
+ 0001:039C       __nmalloc
+ 0001:03C1       __nfree
+ 0001:03D0       __fmalloc
+ 0001:03FC       __ffree
+ 0001:040C       __cinit
+ 0001:04D0       _exit
+ 0001:04E7       __exit
+ 0001:052C       __ctermsub
+ 0001:057C       __setargv
+ 0001:070A       __setenvp
+ 0002:0004       rsrvptrs
+ 0002:0020       STKHQQ
+ 0002:002C       __amblksiz
+ 0002:002E       __acfinfo
+ 0002:003B       __aintdiv
+ 0002:003F       __fac
+ 0002:0047       _errno
+ 0002:0049       __umaskval
+ 0002:004B       __pspadr
+ 0002:004D       __psp
+ 0002:004F       __osversion
+ 0002:004F       __osmajor
+ 0002:004F       __dosvermajor
+ 0002:0050       __osminor
+ 0002:0050       __dosverminor
+ 0002:0051       __osmode
+ 0002:0052       __oserr
+ 0002:0052       __doserrno
+ 0002:0054       __nfile
+ 0002:0056       __osfile
+ 0002:006A       ___argc
+ 0002:006C       ___argv
+ 0002:006E       _environ
+ 0002:0070       __pgmptr
+ 0002:0076       __child
+ 0002:0078       __ovlflag
+ 0002:0079       __intno
+ 0002:007A       __ovlvec
+ 0002:0082       __fpinit
+ 0002:0090       _hInstDemo
+ 0002:0090       _edata
+ 0002:0092       _hWndDemo
+
+Program entry point at 0001:02E4

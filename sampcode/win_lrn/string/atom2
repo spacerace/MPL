@@ -1,0 +1,6 @@
+atom2.obj: atom2.c
+    cl -c -W2 -AS -Gsw -Od -Zped atom2.c
+
+atom2.exe: atom2.obj atom2.def
+    link4 atom2,/align:16,/map/li, slibw, atom2.def
+    mapsym atom2

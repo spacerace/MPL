@@ -1,0 +1,12 @@
+NAME           RECT
+DESCRIPTION    'Sample Program, Andrew Krois 1988'
+STUB           'WINSTUB.EXE'
+CODE           MOVEABLE
+DATA           MOVEABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        WndProc		      @1
+               GetRadiusDlgProc       @2
+               EnterPointDlgProc      @3
+               NewEnterPointDlgProc   @4
+

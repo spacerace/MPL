@@ -1,0 +1,21 @@
+# Makefile for BROWSE (VIO) Utility
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC	=	cl -c -G2ws -Od -Zpei -W3
+LF	=	/align:16 /codeview /map /NOD
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+# Dependencies
+#
+browse.obj:	browse browse.c browse.h
+
+browse.exe:	browse browse.def browse.obj
+    link $(LF) browse, browse.exe, browse.map, slibce os2, browse.def
+    mapsym browse

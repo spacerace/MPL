@@ -1,0 +1,12 @@
+#include "style.h"
+#include "dlgtext.h"
+
+WindowIcon ICON  dlgtext.ico
+
+DIALOGMENU MENU
+BEGIN
+  MENUITEM "Start Dialog Box...", ID_DIALOG
+END
+      
+RCINCLUDE DLGTEXT.DLG
+

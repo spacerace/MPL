@@ -1,0 +1,6 @@
+clipbox.obj: clipbox.c
+    cl -d -c -AS -Gsw -Os -Zpe clipbox.c
+
+clipbox.exe: clipbox.obj clipbox.def
+    link4 clipbox,/align:16,/map,slibw/NOE,clipbox.def
+    mapsym clipbox

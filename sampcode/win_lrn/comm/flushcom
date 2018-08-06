@@ -1,0 +1,6 @@
+flushcom.obj: flushcom.c
+    cl -d -c -AS -Gsw -Os -Zpe flushcom.c
+
+flushcom.exe: flushcom.obj flushcom.def
+    link4 flushcom,/align:16,/map,slibw/NOE,flushcom.def
+    mapsym flushcom

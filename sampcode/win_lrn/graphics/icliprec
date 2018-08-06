@@ -1,0 +1,5 @@
+icliprec.obj: icliprec.c
+     cl  -d  -c  -Asnw	-Gsw  -Os  -Zdpe  icliprec.c
+
+icliprec.exe:  icliprec.obj icliprec.def
+     link4 icliprec,icliprec/align:16,icliprec,slibw/NOE,icliprec.def

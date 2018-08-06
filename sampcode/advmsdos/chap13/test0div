@@ -1,0 +1,17 @@
+test0div.obj : test0div.asm
+  masm test0div;
+
+test0div.com : test0div.obj
+  link test0div;
+  exe2bin test0div.exe test0div.com
+  del test0div.exe
+
+zerodiv.obj : zerodiv.asm
+  masm zerodiv;
+
+zerodiv.com : zerodiv.obj
+  link zerodiv;
+  exe2bin zerodiv.exe zerodiv.com
+  del zerodiv.exe
+
+

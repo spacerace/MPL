@@ -1,0 +1,16 @@
+;----------------------------------
+;   TED module defintion file
+;
+;   Created by Microsoft Corporation, IBM Corporation 1989
+;----------------------------------
+
+NAME        TED WINDOWAPI
+
+DESCRIPTION 'Tiny Editor (C) Copyright Microsoft Corp., 1989'
+PROTMODE
+HEAPSIZE    1024
+STACKSIZE   8192
+EXPORTS     ClientWndProc
+            FrameWndProc
+            FindDlgProc
+            AboutDlgProc

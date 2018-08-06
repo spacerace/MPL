@@ -1,0 +1,22 @@
+;
+; FORM VIEWER - MODULE DEFINITION FILE
+;
+; 07/12/90 1.00 - Kevin P. Welch - initial creation.
+;
+
+NAME         VIEWER
+EXETYPE      WINDOWS
+STUB         'WINSTUB.EXE'
+DESCRIPTION  'Form Viewer Application - by Kevin P. Welch'
+
+CODE         MOVEABLE DISCARDABLE SHARED PRELOAD
+DATA         MOVEABLE MULTIPLE PRELOAD
+
+HEAPSIZE     2048
+STACKSIZE    2048
+
+EXPORTS
+ OpenDlgFn   @1
+ AboutDlgFn  @2
+ ViewerWndFn @3
+

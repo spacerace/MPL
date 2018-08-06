@@ -1,0 +1,38 @@
+#include <pmwin.h>
+#include "hanoi.h"
+
+POINTER BMP_HANOI hanoi.ico
+
+MENU ID_MAINMENU
+BEGIN
+   SUBMENU  "~Action", -1
+      BEGIN
+         MENUITEM "~Start", IDM_START
+         MENUITEM "S~top",  IDM_STOP,, MIA_DISABLED
+      END
+   SUBMENU  "~Options",-2
+      BEGIN
+         MENUITEM "~Set \tAlt s",    IDM_SET
+      END
+END
+
+ACCELTABLE ID_MAINMENU
+BEGIN
+    "s", IDM_SET       , ALT
+END
+
+DLGTEMPLATE ID_SETCOUNT LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+   DIALOG "", 0, 23, 75, 195, 58, FS_NOBYTEALIGN | FS_DLGBORDER |
+              WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS
+   BEGIN
+      CONTROL "Enter the number of disks desired:", 0, 2, 41, 163, 8,
+              WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+      CONTROL "", ID_ENTRYFLD, 158, 41, 23, 8, WC_ENTRYFIELD,
+              ES_LEFT | ES_MARGIN | WS_TABSTOP | WS_VISIBLE
+      DEFPUSHBUTTON "OK",     DID_OK,      90,12, 38,12, WS_GROUP
+      PUSHBUTTON    "Cancel", DID_CANCEL, 140,12, 38,12, WS_GROUP
+   END
+END
+
+

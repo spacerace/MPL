@@ -1,0 +1,9 @@
+#--------------
+# WE make file
+#--------------
+
+we.obj : we.c
+     cl -c -G2 -W3 we.c
+
+we.exe : we.obj we.def
+     link we, /align:16, NUL, os2, we

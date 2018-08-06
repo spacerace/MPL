@@ -1,0 +1,11 @@
+;------------------------------------
+; CPUMET.DEF module definition file
+;------------------------------------
+
+NAME           CPUMET   WINDOWAPI
+
+DESCRIPTION    'CPUmet (C) Chiverton Graphics, Inc., 1990'
+PROTMODE
+HEAPSIZE      10240
+STACKSIZE     4096
+EXPORTS       ClientWndProc

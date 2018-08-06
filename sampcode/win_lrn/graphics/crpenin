@@ -1,0 +1,6 @@
+
+crpenin.obj: crpenin.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 crpenin.c
+
+crpenin.exe: crpenin.obj crpenin.def
+    link4 /align:16 crpenin,,nul,slibw/NOE,crpenin.def

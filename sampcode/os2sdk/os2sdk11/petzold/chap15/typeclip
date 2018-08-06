@@ -1,0 +1,16 @@
+#--------------------
+# TYPECLIP make file
+#--------------------
+
+typeclip.obj : typeclip.c typeclip.h
+     cl -c -G2sw -W3 typeclip.c
+
+typeclip.res : typeclip.rc typeclip.h
+     rc -r typeclip
+
+typeclip.exe : typeclip.obj typeclip.def
+     link typeclip, /align:16, NUL, os2, typeclip
+     rc typeclip.res
+
+typeclip.exe : typeclip.res
+     rc typeclip.res

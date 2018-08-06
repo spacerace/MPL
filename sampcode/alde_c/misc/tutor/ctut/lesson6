@@ -1,0 +1,667 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24
+.R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,30
+[1mPonzoTUTOR
+.WNT
+  POINTERS and ARRAYS  
+.R4C1
+    Recall that, when we refer to ~b~I&x~N, ~IC~N will interpret this as the
+    ~Iaddress~N in memory of the variable ~b~Ix~N. Here ~b~I&x~N is a ~w~Rpointer~N.
+
+    If we set ~b~Iy=&x~N, in our program, then ~b~Iy~N ~w~Rpoints~N to the 
+    variable ~b~Ix~N  ( ~b~Iy~N is now an address, in memory ).
+
+.b9-11
+.R10C17
+~V    HOW DO WE DECLARE A POINTER VARIABLE ?    ~N
+.W
+.R10C17
+~V                    patience                  ~N
+
+    In addition to the ~b~I&~N ~Ioperator~N (which returns the ~Iaddress~N of
+    the variable which follows it), there is the C ~Ioperator~N ~b~I*~N.
+
+    If ~b~Iy~N points to ~b~Iint x~N, then ~b~I*y~N is the ~Icontents of memory~N
+    ~Ilocation y~N. When a program refers to ~b~I*y~N, the C compiler will go
+    to the address given by the ~w~Rpointer~N ~b~Iy~N, extract the ~b~Iint~Neger
+    it finds there, and use this ~b~Iint~Neger in place of ~b~I*y~N.
+
+    This poses a problem.....
+.K19,60
+a problem?
+.WN
+
+    How is the compiler to know whether the contents of the address ~b~Iy~N,
+    (which we refer to as ~b~I*y~N, in our program) is an ~b~Iint~Neger or a
+    ~b~Ifloat~Ning point number or a ~b~Ichar~Nacter variable  ???
+
+    Since an ~b~Iint~Neger occupies ~I2~N bytes ( usually ..depending upon the
+    computer you are using) and a single ~b~Ichar~Nacter variable occupies
+    just ~I1~N byte and a ~b~Ifloat~N occupies ~I4~N bytes ...etc. etc...then
+    it's clearly important that the compiler KNOW that ~b~Iy~N is pointing to
+    an ~b~Iint~N or a ~b~Ichar~N or a ~b~Ifloat~N ...etc.
+
+   ~ISO ... we must declare the type of variable that ~b~Iy~N points to !~N
+
+    To do this we declare ~Ithe contents of y~N, namely ~b~I*y~N !!
+.K19,60
+ example?
+.WN
+1 ~b~Imain() {                                                    ~N
+2 ~b~I    int *y;                                                 ~N
+3 ~b~I    int x=123;                          /* x=integer 123  */~N
+4 ~b~I    y=&x;                               /* y=address of x */~N
+5 ~b~I    printf("The value of x is %d",*y);                      ~N
+6 ~b~I}                                                           ~N
+    This program will (correctly) print: ~r~IThe value of x is 123~N
+.K19,60
+ int *y;
+
+    Note that, in line 4, ~b~Iy~N is made a ~w~Rpointer~N, pointing to ~b~Ix~N
+    and ~b~Ix~N is an ~b~Iint~N .... ~ISO~N  ... in line 2 we declare our
+    ~w~Rpointer~N ~b~Iy~N as:  ~b~I  int *y  ~N  since it points to an ~b~Iint~N.
+.K19,60
+all clear?
+.WN
+
+       ~V                                                        ~N
+       ~V   REMEMBER!! IF  sam  IS A POINTER TO SOME  VARIABLE,  ~N
+       ~V              THEN BE SURE TO DECLARE *sam AS THE SAME  ~N
+       ~V              TYPE AS THE VARIABLE TO WHICH sam POINTS! ~N
+       ~V                                                        ~N
+.b1-7
+.K19,32
+mamma mia!
+.R10C1
+    If ~b~Ix~N is an ~Iint~N  and ~b~Iy=&x~N then declare : ~b~Iint *y~N
+    If ~b~Ix~N is a  ~Ichar~N and ~b~Iy=&x~N then declare : ~b~Ichar *y~N
+    If ~b~Ix~N is a ~Ifloat~N and ~b~Iy=&x~N then declare : ~b~Ifloat *y~N
+.WNT
+   VARIABLES and their HOMES in MEMORY   
+    We've mentioned that the ~b~Ichar c~N occupies ~I1~N byte of memory, and 
+    that ~b~Iint i~N occupies ~I2~N bytes and ~b~Ifloat f~N occupies ~I4~N bytes.
+
+    Suppose ~b~Ipc=&c~N is a ~w~Rpointer~N to ~b~Ic~N, and ~b~Ipi=&i~N and ~b~Ipf=&f~N.
+
+        ~V  WHERE DOES pc+1 POINT TO ?  ~N
+
+   and  ~V  WHERE DOES pi+1 POINT TO ?  ~N
+
+   and  ~V  WHERE DOES pf+1 POINT TO ?  ~N
+.K16,32
+I give up!
+.WN
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.R4C2
+pc-2 pc-1 pc   pc+1 pc+2 pc+3 pc+4 pc+5 pc+6 pc+7 pc+8
+
+
+    If the boxes are each ~I1~N byte of memory, and ~b~Ipc~N points to one
+    such byte, then the scheme shown above indicates where ~b~Ipc-2~N, etc.
+    point to.
+
+    The fact that ~b~Ipc~N is a ~w~Rpointer~N to a ~b~Ichar~N (because we would 
+    (should?) have declared it with ~b~Ichar *pc~N) and because a ~b~Ichar~N
+    only occupies ~I1~N byte, then ~IC~N is smart enough to know that ~b~Ipc-2~N
+    is the address of the memory location 2 bytes below ~b~Ipc~N.
+.K16,32
+ try int!
+.WN
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.R4C2
+pi-1       pi         pi+1       pi+2       pi+3       pi+4
+
+    Now ~b~Ipi~N points to a (~I2~N byte) ~b~Iint~N, so ~IC~N (whatta guy!)
+    arranges that ~b~Ipi-1~N points ~I2~N bytes earlier than ~b~Ipi~N ...that
+    way it will point to the IMMEDIATELY PRECEDING ~b~Iint~N.
+
+    (...of course, who knows if there IS an ~b~Iint~N stored at ~b~Ipc-1~N ?!)
+.W
+.K16,32
+[0;1;5mTRY FLOAT![0m
+.WN
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.B
+    
+.R4C2
+            pf                     pf+1                    pf+2
+
+    You guessed it! ~b~Ipf+1~N will point to the VERY NEXT ~b~Ifloat~N, 
+    ~I4~N bytes past where ~b~Ipf~N points.
+
+    (...ain't ~Iaddress arithmetic~N wonderful ? )
+
+    NOTE:If we have ~b~Imain() {           ~N
+                    ~b~I    float f, *pf;  ~N
+                    ~b~I    f=12.3;        ~N
+                    ~b~I    pf=&f;         ~N
+
+         then what IS ~I4~N bytes past the address of ~b~If~N ???
+
+    There is one circumstance where we WILL know "what comes after".
+.K19,60
+  GUESS!
+.WNT
+    hip hip ARRAYS    
+.R4C1
+    You may recall, from an earlier lesson, that we defined a string by
+    declaring it to be an ARRAY of (single) ~b~Ichar~Nacters.
+
+    We'll reproduce it here:
+
+~b~Ichar x[10];~N                 defines an ~IARRAY~N of ~b~I10~N elements.
+~b~Ix[0]='A';~N                   the first element is the character ~b~IA~N.
+~b~Ix[1]='b';~N                   the second element is the character ~b~Ib~N.
+~b~Ix[2]='{';~N                   the third element is the character ~b~I{~N.
+~b~Ix[3]='\0';~N                  the last element is the 'number' ~I0~N!!!!
+~b~Iprintf("the string is %s",x);~N    print the string, up to the ~I0~N.
+
+    ...and the printout would be: ~r~Ithe string is Ab{~N
+.K19,60
+remember?
+.WN
+~b~Imain() {                          ~N
+~b~I    char x[10], *px;              ~N
+~b~I    x[0]='A';                     ~N
+~b~I    x[1]='b';                     ~N
+~b~I    x[2]='{';                     ~N
+~b~I    x[3]='\0';                    ~N
+~b~I    printf("the string is %s",x); ~N
+
+
+    NOW, if we define ~b~Ipx=&x[0]~N, a ~w~Rpointer~N to the first element in
+    the ARRAY ~b~Ix[]~N, then:
+.W
+.Q
+What character does px+2 point to ?
+{
+~b~Iprintf("%c%c%c",*px,*(px+1),*(px+2));~N
+.Q
+What will the above print?
+Ab{
+
+    ~b~Iprintf("%c",*px);~N would print the contents of memory location
+    ~b~Ipx~N, namely ~r~IA~N, and ~b~Iprintf("%c",*(px+1));~N prints ~r~Ib~N,
+    and ~b~Iprintf("%c",*(px+2));~N prints ~r~I{~N, and ALL THREE GIVE: ~r~IAb{~N.
+
+                   ( ...a-a-a-h, C is ~Iso~N clever ...)
+.K2,60
+whatta gal
+.WN
+1 ~b~I    char x[4];                    ~N
+2 ~b~I    x[0]='A';                     ~N
+3 ~b~I    x[1]='b';                     ~N
+4 ~b~I    x[2]='{';                     ~N
+5 ~b~I    x[3]='\0';                    ~N
+    In this program excerpt, we defined some elements of the ARRAY ~b~Ix[10]~N
+    by saying ( laboriously ):~b~Ix[0]='A'; x[1]='b'; x[2]='{'; x[3]='\0';~N  
+
+    For a ~b~Ichar~N ARRAY we can also say:
+
+~b~Ichar x[4]={ 'A','b','{','\0' };~N
+
+    making Lines 2-5 unnecessary.
+
+    For an ~b~Iint~N ARRAY we can say:
+
+~b~Iint x[3]={11,12,13};~N
+
+    Under certain conditions, all ARRAYS may be ~Iinitialized~N (defined as they
+    are declared).  We'll talk about this later ...
+.K10,60
+ curly {
+.WNT
+   More POINTERS and ARRAYS   
+.R4C1
+    When we define an ARRAY, say:  ~b~I int s[10];~N  then each of ~b~Is[0]~N,
+    ~b~Is[1]~N, etc are (~I2~N byte) ~b~Iint~Negers.
+
+                   ~I...and here's something special:~N 
+.b6-8
+.R10C1
+               ~b~Is~N, all by itself, is a ~w~Rpointer~N to ~b~Is[0]~N
+.b9-11
+.K19,60
+  WHAT!
+.W
+.R12C1                                                           
+1 ~b~Imain() {                                                     ~N
+2 ~b~I    int s[3];                    /* define integer array  */ ~N
+3 ~b~I    s[0]=11; s[1]=12; s[2]=13;   /* define members of s[] */ ~N
+4 ~b~I    printf("%d",s[0]);           /* print first integer   */ ~N
+5 ~b~I    printf("\n%d",*s);           /* print what s points to*/ ~N
+6 ~b~I}                                                            ~N
+    Line 4 will print ~r~I11~N and line 5 will print ~r~I11~N    !!!
+    ..proving that s[0] and *s are the same, right?
+    ..so ~Is is a pointer to s[0]~N, right?
+.K19,60
+RIGHT!
+.W
+    Of course it would have been easier to say:
+2 ~b~Iint s[3]={11,12,13};~N and omit Line 3!
+.WN
+    NOW, since an ARRAY (~Iany~N ARRAY, whether ~b~Iint~Ns or ~b~Ichar~Ns or ~b~Ifloats~N)
+    ~Vhas its name as a pointer~N (..think about that! ), then not only will ~b~Is[2]~N
+    give the 3rd element in the ARRAY, ~Ibut so will *(s+2) give the 3rd element!~N
+
+    Here's a program you've seen in an earlier lesson (on STRINGS):
+
+1 ~b~Imain() {                                                     ~N
+2 ~b~I    char s;                      /* declare a char        */ ~N
+3 ~b~I    s="I am a string";           /* make it a string      */ ~N
+4 ~b~I    printf("%s",s);              /* print the string      */ ~N
+5 ~b~I    printf("\n%s",s+2);          /*       what ?????      */ ~N
+6 ~b~I}                                                            ~N
+
+    Line 2 declares ~b~Is~N to be of type ~b~Ichar~N.
+    Line 3 defines  ~b~Is~N to be a string ( double quotes, remember?).
+    Line 4 prints the ~b~I%s~Ntring, giving ~r~II am a string~N        
+    Line 5 prints ....  ~r~Iam a string~N
+.W
+
+    Here, just as for an ARRAY, ~b~Is~N is a ~w~Rpointer~N to the string
+    ~b~I"I am a string"~N. In fact, ~b~Is~N points to the first element: ~b~II~N.
+    HENCE, ~b~Is+2~N points to the ~I3rd element~N (~b~Ia~N) and ~b~Iprintf()~N will
+    (upon receipt of a ~b~I%s~Ntring address) print everything from that
+    address up to the special terminating ~I'\0'~N   ( ...remember him?).
+.WK7,32
+magnifico!
+.WN
+
+
+
+
+
+
+ ~ITHE NAME OF A STRING VARIABLE IS A POINTER TO THE FIRST ELEMENT IN THE STRING!
+
+ ~ITHE NAME OF AN ARRAY VARIABLE IS A POINTER TO THE FIRST ELEMENT IN THE ARRAY !
+.b5-11
+~I
+.K16,32
+REMEMBER!
+.WR3C1
+                   ...and ~r~Ipointer~N arithmetic is wonderful...
+.b2-4
+.WNT
+  Be kind to your compiler  
+.R4C1
+    Now, if we declare ~b~Ichar a[30];~N the C-compiler knows that ~b~Ia~N refers
+    to a collection of ~I30~N ~b~Ichar~Ns ...and it knows this even before we define
+    the elements ~b~Ia[0]~N, ~b~Ia[1]~N, etc.
+
+    BUT, if we declare ~b~Ichar s;~N, how is the compiler to know whether ~b~Is~N
+    if a single ~b~Ichar~N or a string of ~b~Ichar~Ns. If, subsequently, we say
+    ~b~Is="I am a string"~N then ~b~Is~N IS a string ..but if we say ~b~Is='A'~N
+    then ~b~Is~N is just one ~b~Ichar~N ...but should we REALLY make the compiler
+    figure this out? After all, the compiler would reserve a single byte in
+    memory for just one ~b~Ichar~N but may have to reserve dozens of bytes for
+    a string of ~b~Ichars~N!
+
+    ~VMORAL~N:     DECLARE A SINGLE CHARACTER AS ~b~Ichar s;~N
+               DECLARE A STRING OF CHARS  AS ~b~Ichar *s;~N
+.b15-18
+
+    Since we (and the compiler) know that the name of a string is a ~w~Rpointer~N
+    then the declaration ~b~Ichar *s;~N (followed perhaps by ~b~Is="I'm a string"~N)
+    just anticipates the subsequent use of ~b~Is~N as the name of a string (as
+    opposed to a single character).
+.WNR3
+~b~I                         ~N
+~b~I    char s;              ~N
+~b~I    s="I am a string";   ~N
+~b~I    printf("%s",s);      ~N
+~b~I                         ~N
+
+    Although we have used the above format in earlier lessons .....
+
+.B
+IT MAY NOT COMPILE!
+.R14C1
+ ...and if it does 
+
+.B
+IT MAY NOT WORK!  
+.WR4C40
+~b~I    char *s;             ~N
+.R21B
+     If we use ~b~Ichar *s~N then ALL compilers will accept it.    
+.WN
+    We have:
+
+    If ~b~Is~N is the name of a string (defined with ~Idouble quotes~N) then
+    ~b~Is~N ~b~Is+1~N ~b~Is+2~N etc ~w~Rpoint~N to the ~I1st~N ~I2nd~N ~I3rd~N etc.
+    members of the string.
+.b2-6 
+.R8C1
+    If ~b~Is~N is the name of an ARRAY (defined with ~b~Is[0]=...~N etc.) then
+    ~b~Is~N ~b~Is+1~N ~b~Is+2~N etc ~w~Rpoint~N to the ~I1st~N ~I2nd~N ~I3rd~N etc.
+    members of the ARRAY. 
+.b7-11 
+.K17,60
+hmmmmmm...
+.WN
+    Now, don't think that strings and ARRAYs are the same ...after all a string
+    is only an ~IARRAY of (single) ~bchar~N~I variables~N whereas we can also have
+    ARRAYs of ~b~Iint~Ns or ~b~Ifloats~N or other interesting ~Idata types~N.
+.W
+
+    Further, the name of a string pointer is a VARIABLE:
+
+1 ~b~Imain()  {                                            ~N
+2 ~b~I   char *x, *y, *z;   /* 3 pointers to strings    */ ~N
+3 ~b~I   x="ABC";           /* x points to string ABC   */ ~N
+4 ~b~I   y="DEF";           /* y points to string DEF   */ ~N
+5 ~b~I   z=x;               /* z points to string ABC   */ ~N
+6 ~b~I   printf(" The x-string is %s",z);                  ~N
+7 ~b~I   z=y;               /* z points to string DEF   */ ~N
+8 ~b~I   printf(" The y-string is %s",z);                  ~N
+9 ~b~I                                                     ~N
+    In line 5 we make ~b~Iz~N point to the same thing that ~b~Ix~N points to
+    ...and line 6 prints: ~r~I The x-string is ABC~N
+
+    In line 7 we make ~b~Iz~N point to the same thing that ~b~Iy~N points to 
+    ...and line 8 prints: ~r~I The y-string is DEF~N
+.W
+    BUT, we could also say: ~b~Ix=y;~N and make ~b~Ix~N point to the y-string!
+.WNT
+    STRINGS and 1-dimensional CHAR ARRAYS   
+.R4C1
+    Suppose we may declare strings ~b~Ic~N and ~b~Ix~N by using:
+
+    1   ~b~Ichar c[9]={'c','-','s','t','r','i','n','g','\0'}; ~N 
+    2   ~b~Ichar *x="x-string";                               ~N
+
+    In the first instance, ~b~Ic~N is a ~r~Ipointer~N to an ARRAY of ~b~Ichar~Nacter
+    variables (8 ~b~Ichar~Ns: ~Ic-string~N , plus the terminating '\0').
+
+    In the second instance, ~b~Ix~N is ~Ialso~N a ~r~Ipointer~N, but now it's a
+    ~r~Ipointer~N to a ~Istring~N: ~b~Ix-string~N with (again) the terminating
+    '\0' (which ~IC~N looks after appending).
+
+    SO WHAT'S THE DIFFERENCE BETWEEN    char c[]   and   char *x ???
+.K19,60
+I give up
+.WN
+    1   ~b~Ichar c[9]={'c','-','s','t','r','i','n','g','\0'}; ~N 
+    2   ~b~Ichar *x="x-string";                               ~N
+
+    In the first case, ~b~Ic~N is a ~ICONSTANT POINTER~N to the first element of
+    the ARRAY ...and ~Icannot be changed~N.
+    In the second case, ~b~Ix~N is a ~IVARIABLE POINTER~N to the first element of
+    the string ...and ~ICAN~N be changed!
+.K19,32
+  WHAT!
+.WN
+1 ~b~Ichar c[9]={'c','-','s','t','r','i','n','g','\0'};               ~N 
+2 ~b~Ichar *x="x-string";                                             ~N
+3 ~b~Iprintf("  %s   %s ",c,x);     /* print %strings  c and x    */  ~N
+4 ~b~Ix=c;                          /* make x point to c          */  ~N
+5 ~b~Iprintf("  %s   %s ",c,x);     /* print %strings  c and x    */  ~N
+
+    Just to show that it is ~b~Ix~N (and ~INOT~N ~b~Ic~N) which is a VARIABLE,
+    we declare/define them both in Lines 1 and 2.
+    Then print them both in Line 3. We would get:
+
+~r~I  c-string   x-string~N
+
+    Then we ~Ichange x~N, in Line 4, so it points to the same thing as ~b~Ic~N does,
+    then print them both again, in Line 5. We'd get:
+
+~r~I  c-string   c-string~N
+
+    You must not try:  ~b~Ic=x;~N    because it won't compile!
+
+    ARRAY names point (ALWAYS and FOREVER) to the first element of the ARRAY!
+.b19-21
+.WNT
+   more and more ARRAYS   
+.R4C1
+    In addition to an ARRAY such as ~b~Ix[10]~N (with 10 elements,
+    which may be char,int,float,etc.),here's a ~Idouble ARRAY~N:
+
+~b~Ifloat x[5][7];~N   This declares an ARRAY of 5*7=~I35~N
+                 floating point numbers. We may define any or all
+                 of them (for example we may write ~b~Ix[2][1]=1.5~N).
+                 We think of this ARRAY as being arranged like so:
+.R12C1
+           x[0][0] x[0][1] x[0][2] x[0][3] x[0][4] x[0][5] x[0][6]
+           x[1][0] x[1][1] x[1][2] x[1][3] x[1][4] x[1][5] x[1][6]
+           x[2][0] x[2][1] x[2][2] x[2][3] x[2][4] x[2][5] x[2][6]
+           x[3][0] x[3][1] x[3][2] x[3][3] x[3][4] x[3][5] x[3][6]
+           x[4][0] x[4][1] x[4][2] x[4][3] x[4][4] x[4][5] x[4][6]
+.b11-17
+.K4,66
+x[i][j][k]
+.WR4C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R4C1
+    Now, if we define ~b~Ix[2][1]=1.5~N, the number 1.5 goes here!
+.sR14C20
+~Fx[2][1]~N
+.r
+
+    ...and, as you might expect, we can have ~I3-dimensional~N ARRAYS, etc.
+.rK4,66
+[0;1mx[i][j][k][0m
+.WN
+~V  x[0][0] x[0][1] x[0][2] x[0][3] x[0][4] x[0][5] x[0][6]  ~N
+~V  x[1][0] x[1][1] x[1][2] x[1][3] x[1][4] x[1][5] x[1][6]  ~N
+~V  x[2][0] x[2][1] x[2][2] x[2][3] x[2][4] x[2][5] x[2][6]  ~N
+~V  x[3][0] x[3][1] x[3][2] x[3][3] x[3][4] x[3][5] x[3][6]  ~N
+~V  x[4][0] x[4][1] x[4][2] x[4][3] x[4][4] x[4][5] x[4][6]  ~N
+    When we declare a multi-dimensional ARRAY, as in ~b~Ifloat x[5][~F7~N~b~I]~N, the
+    C-compiler knows that each element occupies ~I4 bytes~N in memory (because
+    it's an ARRAY of ~b~Ifloat~Ns) ..hence it knows not only how much memory
+    is needed but where each element is. Starting at the ~Iaddress~N of the first
+    element, ~b~I&x[0][0]~N, we find the ~Iaddress~N of ~b~Ix[~F2~N~b~I][~F1~N~b~I]~N by moving
+    ~F~I7~N*~F~I2~N+~F~I1~N=15 elements along the ARRAY ...and at 4-bytes-per-element
+    that means moving 4*15=60 bytes through memory.
+
+    Notice how important the number of ~Icolumns~N is to the C-compiler (in the
+    declaration ~b~Ifloat x[5][7]~N
+    Without this dimension the compiler wouldn't know how to get to ~b~Ix[2][1]~N!
+
+    In fact, ~IYOU MAY LEAVE OUT THE NUMBER OF ROWS IN DECLARING THIS ARRAY!~N
+
+    (and use ~b~Ifloat x[][7]~N instead!)
+.WR6C1s
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.r
+    A 2-dimensional ARRAY is treated (by ~IC~N) as a 1-dimensional ARRAY each
+    of whose elements is a 1-dimensional ARRAY.
+
+    The ARRAY ~b~Ifloat x[5][7]~N consists of ~I5~N 1-dimensional ARRAYS, called
+    (in C-speak), ~b~Ix[0]~N, ~b~Ix[1]~N, ~b~Ix[2]~N, etc. and each of these
+    1-dimensional ARRAYS has ~I7~N elements.
+
+    Since (for example) the element 3  of an ARRAY ~b~Isam~N is called ~b~Isam[3]~N
+    then element 3 of the (1-dimensional) ARRAY ~b~Ix[2]~N is called ~b~Ix[2][3]~N
+    ... which explains the C-notation for 2-dimensional ARRAYS,
+    x[i][j], rather than (the more usual) x[i,j].
+
+    In fact, you may refer to ~b~Ix[2][3]~N as ~b~I(x[2])[3]~N ... meaning 
+    element 3 of the (1-dimensional) ARRAY x[2] (actually the 4th element
+    since the first is element 0 !!!@#$*).
+.WR3C1
+~V  x[2][0] x[2][1] x[2][2] ~Fx[2][3]~N~V x[2][4] x[2][5] x[2][6]  ~N
+.WN
+
+
+    If ~IC~N regards ~b~Ix[5][7]~N as consisting of ~I5~N 1-dimensional ARRAYS
+    ~b~Ix[0]~N, ~b~Ix[1]~N, ~b~Ix[2]~N, ~b~Ix[3]~N, and ~b~Ix[4]~N then what
+    does (for example) ~b~Ix[2]~N refer to ?  What happens if we printf() ~b~Ix[2]~N?
+    Is ~b~Ix[2]~N just a notation or does it refer to one of the ~I5*7=35~N members
+    of ~b~Ix[5][7]~N ?
+.b2-8
+.K10,32
+I give up!
+.WN
+
+    Actually, ~IC~N is very clever. ~b~Ix[2]~N (all by itself) is a ~r~Ipointer~N to the
+    first element in the 1-dimensional ARRAY ~b~Ix[2]~N, namely  ~b~Ix[2][0]~N !
+
+    ~IREMEMBER~N: Although ~b~Ix[2][0]~N gives the ~Ivalue~N of element ~b~Ix[2][0]~N,
+              ~b~Ix[2]~N gives the ~Iaddress~N of ~b~Ix[2][0]~N!!
+
+    Since ~b~Ix[2]~N is a ~r~Ipointer~N to ~b~Ix[2][0]~N, then ~Iaddress arithmetic~N
+    can be used to obtain the ~Iaddress~N of any element in the 1-dimensional
+    ARRAY ~b~Ix[2]~N.
+
+    That means that we could identify the element ~b~Ix[i][j]~N
+    by pointing just ~Ij~N elements past the address of ~b~Ix[i][0]~N.
+
+    That means that ~b~Ix[i]+j~N is a ~r~Ipointer~N to ~b~Ix[i][j]~N
+
+    That means that the 'value' of this element is ~b~I*(x[i]+j)~N.
+
+    ~IREMEMBER~N: If x[i]+j is a pointer, then *(x[i]+j) is what it points to!
+.b4-7
+.b18-20
+.WK8,32
+MAMMA MIA!
+.R23C1
+          ~Iand that means that *(x[2]+3) and x[2][3] are EQUIVALENT~N
+.b22-24
+.WNT
+    What's in a name ? (of an ARRAY)  
+.R6C1
+  ~V                                                                    ~N
+  ~V             The  name  of a  1-dimensional  ARRAY is a             ~N
+  ~V             POINTER to the first element of the ARRAY!             ~N
+  ~V                                                                    ~N
+.b5-10
+
+    SO, if ~b~Ix~N is an ARRAY, declared as ~b~Iint x[10]~N, then ~b~Ix~N
+    is a ~r~Ipointer~N to ~b~Ix[0]~N (since ~b~Ix~N is 1-dimensional).
+
+    AND, if ~b~Ix~N is an ARRAY, declared as ~b~Iint x[10][15]~N, then ~b~Ix[7]~N
+    is a ~r~Ipointer~N to ~b~Ix[7][0]~N (since ~b~Ix[7]~N is 1-dimensional).
+.K19,32
+sounds OK!
+.WN
+.R10C1
+    ...and finally, we may ~b~Iprintf("%d",x[7][2]);  ~N to print the value of
+
+    the element, OR we may ~b~Iprintf("%d",*(x[7]+2));~N.
+.b8-14
+.K19,32
+beautiful!
+.WN
+
+
+.T
+   That's all folks!   
+.K16,32
+au revoir!
+
+
+.q
+

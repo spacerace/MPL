@@ -1,0 +1,15 @@
+#include "style.h"
+#include "gdlgitmt.h"
+
+textmenu MENU
+BEGIN
+    MENUITEM "&Dialog...", ID_TEXTBOX
+END
+
+TEXTBOX DIALOG LOADONCALL MOVEABLE DISCARDABLE 84, 46, 122, 78
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+  CONTROL "DONE" ID_OK, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 36, 47, 41, 22
+  CONTROL "" EDIT_CONTROL, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 13, 21, 88, 14
+  CONTROL "Enter text in edit field" -1, "static", SS_LEFT | WS_CHILD, 8, 9, 105, 10
+END

@@ -1,0 +1,7 @@
+This Pascal-To-C translator is a free program that was originally
+posted to Usenet in C source form.  This package contains an MS-DOS
+binary version of it that I obtained from Usenet.  I fixed
+non-MS-DOS characters in the manuals and reformatted them slightly to
+be readable online.
+
+R. Dhesi 1988/02/20

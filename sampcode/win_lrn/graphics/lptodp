@@ -1,0 +1,6 @@
+
+lptodp.obj: lptodp.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 lptodp.c
+
+lptodp.exe: lptodp.obj lptodp.def
+    link4 /align:16 lptodp,,nul,slibw/NOE,lptodp.def

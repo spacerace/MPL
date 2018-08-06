@@ -1,0 +1,11 @@
+;------------------------------------
+; BIGJOB3.DEF module definition file
+;------------------------------------
+
+NAME           BIGJOB3   WINDOWAPI
+
+DESCRIPTION    'BigJob Program No. 3 (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

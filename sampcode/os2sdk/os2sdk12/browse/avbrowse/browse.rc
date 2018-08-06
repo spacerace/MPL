@@ -1,0 +1,46 @@
+#include <os2.h>
+#include "browse.h"
+
+#define TABGRP  WS_TABSTOP|WS_GROUP
+
+POINTER ID_RESOURCE	browse.ico
+
+MENU ID_RESOURCE PRELOAD
+BEGIN
+    SUBMENU  "~File", IDM_FILE
+        BEGIN
+	    MENUITEM "~Open...\t^O",	IDM_OPEN,	MIS_TEXT
+	    MENUITEM "Change ~Font",	IDM_FONT,	MIS_TEXT
+	    MENUITEM SEPARATOR
+	    MENUITEM "E~xit",		SC_CLOSE,	MIS_SYSCOMMAND
+            MENUITEM "A~bout...",	IDM_ABOUT,	MIS_TEXT
+        END
+END
+
+ACCELTABLE ID_RESOURCE
+BEGIN
+    "^O",	IDM_OPEN
+END
+
+STRINGTABLE
+BEGIN
+    IDS_TITLE,		"PM Browser Demo"
+    IDS_ABOUT,		"About ..."
+    IDS_DEFAULT,	"Default"
+    IDS_CONTENT,	"Text content"
+    IDS_CLOSE,		"Browser: Close"
+    IDS_OKCLOSE,	"Ok to close window?"
+    IDS_SAVE,		"Browser: End Session"
+    IDS_OKSAVE,		"Save files before ending?"
+END
+
+DLGTEMPLATE IDD_ABOUT {
+    DIALOG "", 0, 10, 60, 160, 75, WS_SAVEBITS | FS_DLGBORDER {
+	CTEXT	"OS/2 Presentation Manager"	   -1, 10, 60, 140, 10
+	CTEXT	"Browse Utility"		   -1, 10, 50, 140, 10
+	ICON	ID_RESOURCE		 	   -1,  8, 40,   0,  0
+	CTEXT	"Version 1.0"			   -1, 10, 30, 140, 10
+	CTEXT	"Created by Microsoft Corp., 1989" -1, 10, 20, 140, 10
+	DEFPUSHBUTTON "Ok"		   DID_OK, 64,  4, 32,  14, WS_GROUP
+    }
+}

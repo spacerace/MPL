@@ -1,0 +1,394 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,32
+[1mPonzoTUTOR
+.WNT
+    the big SWITCH    
+.R5C1
+    You may recall, from an earlier lesson, that we checked various cases by
+    using the ~Iif-else if~N construction:
+1 ~b~I         if ( such-and-such)    {     ~N
+2 ~b~I              ----do this-----        ~N
+3 ~b~I         }                            ~N
+4 ~b~I         else if (this-or-that) {     ~N
+5 ~b~I              ----do this-----        ~N
+6 ~b~I         }                            ~N
+7 ~b~I         else if ( whatever )   {     ~N
+8 ~b~I              ----do this-----        ~N
+9 ~b~I         }                            ~N
+10~b~I         else {                       ~N
+11~b~I              ----do this-----        ~N
+12~b~I         }                            ~N
+13~b~I         ----continuation of program  ~N
+.R20C1
+    Realize that ~Ionly one~N of the statements 2, 5, 8, 11 will be 
+    executed, depending upon which of the conditions 1, 4, 7, 10 is satisfied
+    first. (If none of 1,4 or 7 are satisfied, then 10 ~IIS~N satisfied and
+    11 will be executed).
+.w
+.WR20C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R20C1
+    Even if the conditions 1 ~Iand~N 4 ~Iand~N 7 are all satisfied, only 
+    statement(s) 2 will be executed, then the program will continue with
+    statement 13, etc.
+.WR20C1
+                                                                              
+                                                                              
+                                                                              
+.R20C1
+    (There's a MORAL here. To speed up execution, put the ~Imost probable~N
+     condition first ... then the program won't have to do so much checking).
+.WN
+
+    But there's another (more natural) way of checking a number of cases in C.
+
+.R5C1
+~b~I     switch (x)  {       /* Begin the SWITCH on the integer x.   */  ~N
+~b~I     case 1:             /* If x is the integer 1, then          */  ~N
+~b~I          do this;       /*   execute this statement ...         */  ~N
+~b~I          and this;      /*   and this too.                      */  ~N
+~b~I     case 2:             /* If x is the integer 2, then          */  ~N
+~b~I          do this;       /*   execute this statement ...         */  ~N
+~b~I          and this;      /*   and this too.                      */  ~N
+~b~I     case 3:             /* If x is the integer 3, then          */  ~N
+~b~I          do this;       /*   execute this statement ...         */  ~N
+~b~I          and this;      /*   and this too.                      */  ~N
+~b~I          and this;      /*   and this too.                      */  ~N
+~b~I          and this;      /*   and this too.                      */  ~N
+~b~I     case 4:             /* If x is the integer 4, then          */  ~N
+~b~I          do this;       /*   execute this statement ...         */  ~N
+~b~I     default:            /* If x is none of the above, then      */  ~N
+~b~I          do this;       /*   execute this statement ...         */  ~N
+~b~I     }                                                               ~N
+.w
+.W
+    Notice the opening and closing brackets for the SWITCH!
+.R5C1
+~b~I     switch (x)  ~F{~N
+.R21C1
+~b~I     ~F}~N
+.WN
+    ... and here's a variation ...
+.R5C1
+1 ~b~I     switch (x)  {       /* Begin the SWITCH on the integer x.   */  ~N
+2 ~b~I     case 1:             /* If x is the integer 1, then          */  ~N
+3 ~b~I     case 2:             /* If x is the integer 2, then          */  ~N
+4 ~b~I     case 3:             /* If x is the integer 3, then          */  ~N
+5 ~b~I          do this;       /*   execute this statement ...         */  ~N
+6 ~b~I          and this;      /*   and this too.                      */  ~N
+7 ~b~I          and this;      /*   and this too.                      */  ~N
+8 ~b~I          and this;      /*   and this too.                      */  ~N
+9 ~b~I     case 4:             /* If x is the integer 4, then          */  ~N
+10~b~I          do this;       /*   execute this statement ...         */  ~N
+11~b~I     default:            /* If x is none of the above, then      */  ~N
+12~b~I          do this;       /*   execute this statement ...         */  ~N
+13~b~I     }                                                               ~N
+    If the ~b~Iint~Neger ~b~Ix~N is equal to ~I1 or 2 or 3~N then statements
+    5 to 8 will be executed! (...so the SWITCH will NOT STOP with the first
+    case that is satisfied, but will check ALL SUBSEQUENT CASES!)
+.W
+    If you don't want that to happen, then you may terminate a case with
+    a ~Fbreak~N.
+.K5,32
+ a WHO ?
+.WN
+1 ~b~I     switch (x)  {       /* Begin the SWITCH on the integer x.   */  ~N
+2 ~b~I     case 1:             /* If x is the integer 1, then          */  ~N
+3 ~b~I     case 2:             /* If x is the integer 2, then          */  ~N
+4 ~b~I     case 3:             /* If x is the integer 3, then          */  ~N
+5 ~b~I          do this;       /*   execute this statement ...         */  ~N
+6 ~b~I          and this;      /*   and this too.                      */  ~N
+7 ~b~I          and this;      /*   and this too.                      */  ~N
+8 ~b~I          and this;      /*   and this too.                      */  ~N
+9 ~b~I          ~Fbreak;~N~b~I         /*   and now BREAK OUT OF THE SWITCH!   */  ~N
+10~b~I     case 4:             /* If x is the integer 4, then          */  ~N
+11~b~I          do this;       /*   execute this statement ...         */  ~N
+12~b~I     default:            /* If x is none of the above, then      */  ~N
+13~b~I          do this;       /*   execute this statement ...         */  ~N
+14~b~I     }                                                               ~N
+    Now, if ~b~Ix~N is a ~I1 or 2 or 3~N, the statements 5 to 8 will be 
+    executed and (because of the ~b~Ibreak;~N in line 9) we leave the SWITCH
+    and continue beyond line 14.
+    If, however ~b~Ix~N is a ~I4~N, then only the statement(s) for this case
+    are executed (line 11, in this example).
+    ~IOnly if all cases fail will the default statement(s) be executed~N
+    (for example, if ~b~Ix~N is a ~I6~N then statement 13 is executed).
+.WNT
+     more SWITCHing    
+.R4C1
+    You may switch on any type of variable (not just ~b~Iint~Negers).
+    For example you may have declared ~b~Ix~N to be a ~b~Ichar~N, so ...
+1 ~b~I     switch (x)  {       /* Begin the SWITCH on the char x.      */  ~N
+2 ~b~I     case 'A':           /* If x is the character 'A', then      */  ~N
+3 ~b~I     case 'u':           /* If x is the character 'u', then      */  ~N
+4 ~b~I     case '#':           /* If x is the character '#', then      */  ~N
+5 ~b~I          do this;       /*   execute this statement ...         */  ~N
+6 ~b~I          and this;      /*   and this too.                      */  ~N
+7 ~b~I          and this;      /*   and this too.                      */  ~N
+8 ~b~I          and this;      /*   and this too.                      */  ~N
+9 ~b~I          break;         /*   and now BREAK OUT OF THE SWITCH!   */  ~N
+    Note that the ~Icase~N comparison must be consistent with the variable
+    type.
+    If ~b~Ix~N is an ~b~Iint~N   then you may use ~b~Icase 7:~N
+    If ~b~Ix~N is a  ~b~Ichar~N  then you may use ~b~Icase '+':~N
+    If ~b~Ix~N is a  ~b~Ifloat~N then you may use ~b~Icase -1.234:~N
+.W
+    Think of the ~Icase~N comparisons as being equivalent to:
+    ~b~I if (x==7)~N  or  ~b~Iif (x=='+')~N  or  ~b~I if (x==-1.234)~N  etc.
+
+    ... ~Iand you may leave out the ~Idefault~N if you wish!~N
+.WNT
+    CALL BY VALUE  and  CALL BY REFERENCE  
+
+
+    We mentioned in an earlier lesson that a ~Ifunction call~N, in which you
+    pass certain parameters ( like ~b~Iaverage(a,b)~N ), gives to the function
+    ~Icopies~N of the parameters. The function may change these copies but
+    the "originals" won't be changed. This is CALL BY VALUE.
+
+    You may, however, WANT to have a function change the originals. In this
+    case you must tell the function where, in memory, the "originals" live.
+    To do this you may pass the ~Iaddresses~N of the parameters ( or ~r~Ipointers~N
+    to the parameters). This is CALL BY REFERENCE.
+
+    Knowing where the "original" parameters are, in memory, a function may
+    now modify them.
+.WN
+    Suppose you want to ~b~Iexchange()~N the values of two ~b~Ifloat~Ning
+    point numbers, say ~b~Ix~N and ~b~Iy~N, by calling upon a function
+    ~b~Iexchange()~N :
+
+~b~Iexchange(&x,&y);          /* call the function, give it addresses of x,y*/~N
+
+    The exchange funtion may look like:
+
+~b~Iexchange(u,v)            /* this function exchanges two "floats".       */~N
+~b~Ifloat *u, *v;            /* declare u and v as pointers to "floats".    */~N
+~b~I{                        /* the opening bracket for exchange().         */~N
+~b~I    float temp;          /* declare a temporary float.                  */~N
+~b~I    temp=*u;             /* make it equal to "what u points to".        */~N
+~b~I    *u=*v;               /* place the contents of v into u.             */~N
+~b~I    *v=temp;             /* place the "temp"orary float into v.         */~N
+~b~I    return;              /* return ... no need to return anything!      */~N
+~b~I}                        /*    the floats have been exchanged !!        */~N
+.WN
+    You can try it out with:
+~b~Imain()    {
+~b~I     float x=1.23, y=4.56;         /* declare and define two floats     */~N
+~b~I     printf("\nx=%f, y=%f",x,y);   /* printf their values.              */~N
+~b~I     exchange(&x,&y);              /* call the exchange program.        */~N
+~b~I     printf("\nx=%f, y=%f",x,y);   /* printf their values again!        */~N
+~b~I}                                  /* that's the end of main().         */~N
+~b~Iexchange(u,v)            /* this function exchanges two "floats".       */~N
+~b~Ifloat *u, *v;            /* declare u and v as pointers to "floats".    */~N
+~b~I{                        /* the opening bracket for exchange().         */~N
+~b~I    float temp;          /* declare a temporary float.                  */~N
+~b~I    temp=*u;             /* make it equal to "what u points to".        */~N
+~b~I    *u=*v;               /* place the contents of v into u.             */~N
+~b~I    *v=temp;             /* place the "temp"orary float into v.         */~N
+~b~I    return;              /* return ... no need to return anything!      */~N
+~b~I}                        /*    the floats have been exchanged !!        */~N
+    Now exit the text editor, saving the above with the name ~Isam.c~N, then
+    compile using ~Icc sam~N, then link using ~Ilink sam~N, then execute via:
+    ~Isam~N, and get:
+~r~Ix=1.230000, y=4.560000~N
+~r~Ix=4.560000, y=1.230000~N
+.WK10,60
+ LOVELY!
+.WN
+    Here's the ~b~Iexchange()~N function again:
+
+~b~Iexchange(u,v)            /* this function exchanges two "floats".       */~N
+~b~Ifloat *u, *v;            /* declare u and v as pointers to "floats".    */~N
+~b~I{                        /* the opening bracket for exchange().         */~N
+~b~I    float temp;          /* declare a temporary float.                  */~N
+~b~I    temp=*u;             /* make it equal to "what u points to".        */~N
+~b~I    *u=*v;               /* place the contents of v into u.             */~N
+~b~I    *v=temp;             /* place the "temp"orary float into v.         */~N
+~b~I    return;              /* return ... no need to return anything!      */~N
+~b~I}                        /*    the floats have been exchanged !!        */~N
+    Here's another variation:
+~b~Iexchange(u,v)            /* this function exchanges two "floats"~F?~N~b~I       */~N
+~b~Ifloat *u, *v;            /* declare u and v as pointers to "floats".    */~N
+~b~I{                        /* the opening bracket for exchange().         */~N
+~b~I    float *temp;         /* declare a temporary ~Fpointer~N~b~I.                */~N
+~b~I    temp=u;              /* make it equal to the pointer "u".           */~N
+~b~I    u=v;                 /* make "u" point to what "v" points to.       */~N
+~b~I    v=temp;              /* make "v" point to what "temp" points to.    */~N
+~b~I    return;              /* return ... no need to return anything!      */~N
+~b~I}                        /*    the floats have been exchanged ~F?????~N~b~I     */~N
+    Why won't the latter function work???
+.WK6,32
+I give up!
+.WN
+
+~b~Iexchange(u,v)            ~V/* this function does NOT exchange floats!     */~N
+~b~Ifloat *u, *v;            /* declare u and v as pointers to "floats".    */~N
+~b~I{                        /* the opening bracket for exchange().         */~N
+~b~I    float *temp;         /* declare a temporary pointer.                */~N
+~b~I    temp=u;              /* make it equal to the pointer "u".           */~N
+~b~I    u=v;                 /* make "u" point to what "v" points to.       */~N
+~b~I    v=temp;              /* make "v" point to what "temp" points to.    */~N
+~b~I    return;              /* return.                                     */~N
+~b~I}                        ~V/*    the floats have not been exchanged!      */~N
+
+    In this variation, the pointers ~b~Iu~N and ~b~Iv~N are ~Icopies~N and,
+    although this function does change these copies of the pointers, their 
+    contents do ~INOT~N change! ( so the ~b~Ifloat~Ns never do get exchanged! ).
+.WK16,32
+ BEWARE!
+.WNT
+   passing FUNCTIONS to FUNCTIONS   
+.R5C1
+    In an earlier lesson we computed the roots of some equation x=f(x),
+    with f(x)=2*sin(x).
+
+1 ~b~I    double x=1.0, y, e;       /* double precision  ! */ ~N
+2 ~b~I    do  {                     /* start of the do-loop*/ ~N
+3 ~b~I        y=2.0*sin(x);         /* calculate y         */ ~N
+4 ~b~I        e=fabs(y-x);          /* calculate error     */ ~N
+5 ~b~I        x=y;                  /* change x to y       */ ~N
+6 ~b~I    }   while (e>.0000005);   /* end condition       */ ~N
+7 ~b~I    printf("x-2sin(x)=%f when x=%f",e,x);               ~N
+    Now suppose we turn this piece of code into a function, ~b~Isolve()~N
+    which we call via:
+
+~b~Iroot=solve(f,x,e);~N
+
+    where we pass to ~b~Isolve()~N the function ~b~If(x)~N, and some initial
+    guess of the root, namely ~b~Ix~N, and an error specification ~b~Ie~N.
+
+    We expect ~b~Isolve(f,x,e)~N to return a root (which, naturally, we call
+    root!).
+.WN
+    We may write ~b~Isolve()~N like so:
+
+1 ~b~Ifloat solve(fcn,x,error)      /* returns a FLOAT!                */ ~N
+2 ~b~Ifloat (*fcn)();               /*     !!!!!!!!!!!!!!!!!!!!!!!!!   */ ~N
+3 ~b~Ifloat x, error;               /* x-value & error are floats.     */ ~N
+4 ~b~I{                                                                   ~N
+5 ~b~I    float y, e;               /* declares 2 floats.              */ ~N
+6 ~b~I    do  {                     /* start of the do-loop.           */ ~N
+7 ~b~I        y=(*fcn)(x);          /* calculates y.                   */ ~N
+8 ~b~I        e=fabs(y-x);          /* calculate absolute value of y-x.*/ ~N
+9 ~b~I        x=y;                  /* change x to y.                  */ ~N
+10~b~I    }   while (e>error);      /* check error if e is too large.  */ ~N
+11~b~I    return(x);                /* return x=root if e<=error.      */ ~N
+12~b~I}                                                                   ~N
+
+    Line 2 has the curious declaration of ~b~Ifcn()~N as a ~r~Ifunction pointer~N.
+    The ~b~I (*fcn) ~N says it's a pointer, and the ~b~I()~N says it points
+    to a function and the ~b~Ifloat~N says this fcn returns a ~Ifloat~N!
+    Note too, in line 7, that whereas ~b~Ifcn~N is a pointer, ~b~I*fcn~N ~IIS~N
+    the function! ( The parentheses are necessary ).
+.WN
+.R1C1
+~b~Imain()    {
+~b~I     float f1(), f2(), f3(), solve();        /* declare functions used.*/~N
+~b~I     printf("\nA root of x=f1(x) is %f",     /* printf the root ...    */~N
+~b~I         solve(f1,1,.00005));                /* solve x=f1(x).         */~N
+~b~I     printf("\nA root of x=f2(x) is %f",     /* printf the root ...    */~N
+~b~I         solve(f2,-1,.00005));               /* solve x=f2(x).         */~N
+~b~I     printf("\nA root of x=f3(x) is %f",     /* printf the root ...    */~N
+~b~I         solve(f3,2,.00005));                /* solve x=f3(x).         */~N
+~b~I}                                                                        ~N
+~b~Ifloat f1(x)                                                              ~N
+~b~Ifloat x;                                                                 ~N
+~b~I{  return(2.*sin(x)); }                      /* f1(x) = 2 sin(x)       */~N
+~b~Ifloat f2(x)                                                              ~N
+~b~Ifloat x;                                                                 ~N
+~b~I{  return(2.-x/2.); }                        /* f2(x) = 2-x/2          */~N
+~b~Ifloat f3(x)                                                              ~N
+~b~Ifloat x;                                                                 ~N
+~b~I{  return(1.+1./x); }                        /* f3(x) = 1+1/x          */~N
+.w
+.R2C1
+~V     float f1(), f2(), f3(), solve();        /* declare functions used.*/~N
+.R19C1
+    Here we declare all the functions we use ( they all return a float).
+.WR2C1
+~b~I     float f1(), f2(), f3(), solve();        /* declare functions used.*/~N
+~V     printf("\nA root of x=f1(x) is %f",     /* printf the root ...    */~N
+~V         solve(f1,1,.00005));                /* solve x=f1(x).         */~N
+.R19C1
+    Here we print (after a ~b~I\n~Newline) ~r~IA root of x=f1(x) is ~N              
+    followed by the ~b~I%f~Nloat ~Ireturned~N by solve(f1,1,.00005)~N.        
+    Note that we pass the ~Ipointer  f1~N, a starting value ~I1~N             
+    and an error specification of .00005                                      
+.WR3C1
+~b~I     printf("\nA root of x=f1(x) is %f",     /* printf the root ...    */~N
+~b~I         solve(f1,1,.00005));                /* solve x=f1(x).         */~N
+.R19C1
+.w
+    ... then we continue with two more functions f2(x) and f3(x), each time   
+    specifying not only the ~r~Ipointer~N to the function but also a starting 
+    value and error specification.                                            
+                                                                              
+.WN
+.R3C2
+REMEMBER: To pass the function ~b~Isam(a,b,c)~N as an argument to another
+
+          function ~b~Igeorge(sam,x,y)~N, then include the declaration
+
+          ~b~Ifloat (*sam)()~N ( make this declaration within ~b~Igeorge()~N )
+
+          and use it ( within ~b~Igeorge()~N ) as ~b~I(*sam)(a,b,c)~N.
+
+          If ~b~Isam()~N returns an ~b~Iint~N or ~b~Ichar~N then (of course)
+
+          it should be declared as ~b~Iint (*sam)()~N or ~b~Ichar (*sam)()~N!
+.b2-14
+.K16,32
+mamma mia!
+.WN
+
+~r~IA root of x=f1(x) is 1.895475~N              Here's
+~r~IA root of x=f2(x) is 1.333324~N               our
+~r~IA root of x=f3(x) is 1.618026~N              output.
+
+    and (because we use only ~Ifloat~N and not ~Idouble~N, and we gave
+    an error specification of .00005) we get (roughly) 4 decimal place
+    accuracy.
+
+.W
+    Well, the programming ain't too sexy ( how useful are these 3 built-in
+    functions, f1(x), f2(x) and f3(x) ? ) and the mathematics is even worse
+    (you can't guarantee that the program won't get stuck in the ~b~Isolve()~N
+    function ... forever trying to reduce a growing error!), BUT ... we get
+    the idea ... right?
+.WK16,32
+ RIGHT!!  
+.WN
+
+
+.T
+   That's all folks!   
+.K16,32
+au revoir!
+
+
+.q
+

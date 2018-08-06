@@ -1,0 +1,17 @@
+LIBFLAGS=-c -u -Asnw -FPa -Gsw -Os -W2 -Zep
+
+prtsc.res: prtsc.rc prtsc.h 
+   rc -r prtsc.rc
+
+prtsc1.obj: prtsc1.asm
+   masm prtsc1;
+   
+prtsc2.obj: prtsc2.c
+   cl $(LIBFLAGS) prtsc2.c
+   
+prtsc.exe: prtsc1.obj prtsc2.obj prtsc.def
+   link4 prtsc1+prtsc2,prtsc.exe,,swinlibc+slibw,prtsc.def /AL:16
+   rc prtsc.res
+
+prtsc.exe: prtsc.res
+   rc prtsc.res

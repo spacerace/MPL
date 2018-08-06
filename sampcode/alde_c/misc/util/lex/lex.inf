@@ -1,0 +1,50 @@
+
+                     Lexical Analyser Generator
+
+This is an implementation of the Unix program LEX, which generates
+lexical analysers from regular expression grammars.  It was originally
+written by Charles Forsyth.  It has been serially adapted as follows:
+
+	Martin Minnow	PDP-11 DECUS (DEC Users Society) C package
+	Robert Denny	RT-11, RSX, and VAX/VMS operating systems
+	Scott Guthery	DeSmet C on IBM PC/DOS
+
+Because the Decus C compiler does not seperate I and D space, LEX
+cannot be used to build very large grammars.   There are several
+possibilities:
+
+        1.      Remove the dfa/nfa print routines, which are needed
+                for debugging.
+
+        2.      Use I/O redirection to read the grammar source from
+                stdin.  This will save 1/4 K-word or so.
+
+        3.      Overlay the parser phases.
+
+*** 3-Dec-80  ***
+
+I (Bob Denny) have overlaid things, after some reorganization, at least
+for RT-11. Also changed the allocation (static) for move vectors down to
+1500. It easily processes the lex for C (CLEX.LXI), as the program top
+is at 17K or so.
+
+*** 7-Feb-81 ***
+
+Bob Denny...
+Increased the NFA's for RT-11 to 600, DFA's to 300. Now about 20K
+
+*** 28-May-81 ***
+
+Bob Denny...
+More fiddling with the allocations. Check out on RSX. This is how
+it's going into the DECUS library.
+
+*** 20-Nov-83 ***
+
+Scott Guthery...
+Removed VAX/VMS conditionals. Made up LEXDEFS.H for use by LEX (the old
+put the externals in a generally useful header file and then try to
+initialize 'em problem).  Added some routines which were in Decus library
+but not in DeSmet library.
+
+************************

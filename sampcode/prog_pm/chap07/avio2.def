@@ -1,0 +1,10 @@
+;----------------------------------
+; AVIO2.DEF module definition file
+;----------------------------------
+
+NAME           AVIO2     WINDOWAPI
+
+DESCRIPTION    'Advanced VIO Display of Text (C) Charles Petzold, 1988'
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc

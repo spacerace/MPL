@@ -1,0 +1,29 @@
+BeyondCompare is a Line by Line File Comparator.
+
+Command Format is:
+
+	BC	[options] oldfile newfile [outputfile]
+
+List Options by:
+
+	BC ?
+
+BeyondCompare is NOT a public domain program.  BeyondCompare is a
+shareware product and may be distributed from person to person,
+subject to the following restrictions.
+
+	1) The software must be supplied in its original
+	   and unmodified form.
+
+	2) No fee may be charged.
+
+Feel free to give a copy of BeyondCompare to friends and colleagues
+to try.  Please remind them, if they choose to use BeyondCompare,
+they must send a $30 registration fee to:
+
+	Stepping Stone Software
+	P.O. Box 2887
+	Ann Arbor, MI 48106
+
+TEF.
+

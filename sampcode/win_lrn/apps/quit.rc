@@ -1,0 +1,6 @@
+#include "windows.h"
+
+QuitMenu     MENU
+BEGIN
+    MENUITEM  "&Quit",      100
+END

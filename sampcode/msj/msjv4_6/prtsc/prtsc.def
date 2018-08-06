@@ -1,0 +1,11 @@
+LIBRARY           PRTSC
+STUB              'WINSTUB.EXE'
+DESCRIPTION       'PrtSc Library - (C) Kevin P. Welch, 1988.'
+
+CODE              MOVEABLE SHARED
+DATA              MOVEABLE SINGLE PRELOAD
+
+EXPORTS
+   PrtScHook         @1
+   PrtScDlgFn        @2
+   PrtScFilterFn     @3

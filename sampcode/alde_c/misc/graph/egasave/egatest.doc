@@ -1,0 +1,39 @@
+     MSC v5.0 comes with a graphics library that is very nice, but does
+     not support the saving of the EGA screen.  Because of that I have
+     written a fast and not very fancy program to save and retrieve the
+     EGA 640X350 16 color page 1 screen.  Please see the C code for the
+     routines for details.  The routines were written for the small
+     model, but they can be easily changed for the other models.  If you
+     are using a model with a large data area, then the routines become
+     simple because you can read and write directly to the video memory
+     without any difficultly.  
+
+
+
+
+
+     get_screen(filename);    returns integer indicating error status
+     save_screen(filename);   as above
+
+     See the C code for more details on the routines.
+
+     To compile test program using MSC 5.0:
+
+     cl  testega.c gtscreen.c svscreen.c
+
+
+
+     Testega puts two colored squares on EGA 350x640 screen, saves
+     screen to file and retrieves it.
+
+     EGA screens take about 128K of disk space, so be ready.
+
+     There is no checking of hardware, EGA with 128K assumed.
+     There is no checking of EGA page, Page 1 is saved and retrieved.
+     There is no packing of screen image, working on that.  
+
+
+     January 9, 1988
+     R W Simpson 
+     937-2235 (home)
+     932-5290 (work)

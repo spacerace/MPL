@@ -1,0 +1,309 @@
+			KERMIT IN WINDOWS
+
+			 William S. Hall
+		     3665 Benton Street, #66
+		      Santa Clara, CA 95051
+
+
+			  Introduction
+
+     The following explains how to use the Kermit features
+provided to a Windows terminal emulator by the WNKERM.LIB module.
+
+     The Kermit protocol was originally developed by the Center
+for Computing Activities at Columbia University.  Kermit provides
+a way to effect an error-free file transfer files between two,
+possibly very different computers provided each is capable of
+running Kermit.  
+
+     If you are a regular user of Windows, then there are several
+advantages to using a version of Kermit directly from Windows.
+First, since Windows is multitasking, you can run simultaneous
+transfers from all available communications ports (but, see the
+warnings below) and continue to use other applications. 
+Additionally, transfers continue even when the window is iconic.
+
+     This version of Windows Kermit can send and receive text and
+binary files over seven- and eight-bit wide data paths while
+using run-length encoding to achieve file compression.  One-,
+two-, and three-byte CRC checksums can be selected.  A number of
+packet and protocol parameters can be set by the user, and
+wild-card file names can be used to send or receive a group of
+files.  At any time, the transfer can be aborted in one of four
+ways.
+
+     The program currently has no remote or server features and
+does not have sliding windows nor long packets.  Also, there is
+no turnaround character mechanism, so certain IBM mainframe
+Kermits may not work with this implementation.
+
+     There are currently no DOS services allowing you to change
+directory, display a directory, type a file, etc.  However, you
+can easily use the MSDOS.EXE window or the File Manager to show
+the files in a given directory.  And, you can take advantage of
+some features in the SEND dialog box to help you move to another
+directory and to list the files there.  After you are done, just
+push the CANCEL button.  For information on using SEND, see
+below.
+
+			   Basic Usage
+
+     Kermit is very easy to use.  To send a file from the local
+computer (usually the controlling microcomputer) to the remote
+(host) machine the steps are:
+
+	1.  Run Kermit on the host and choose 'receive'
+
+	2.  Choose the 'send' option on the local machine, select
+the files, and confirm the selection.  The transfer will begin
+and continue until all files selected have arrived at the host or
+the transfer is canceled.
+
+     To receive a file:
+
+	1.  Run Kermit on the host and give the 'send' command
+along with the target file names.
+
+	2.  Select 'receive' on the local machine.  The files
+will continue to arrive until the transfer is complete or is
+canceled.
+
+     If verbose mode has been selected, statistics about the
+transfer are displayed.  At the end of the transaction, a dialog
+box appears announcing success or failure.  The display may be
+obscured by the box, but it can always be moved out of the way. 
+However, once 'OK' has been pressed, the terminal display window
+is restored and the transfer information is lost.
+
+     Once a file transfer has begun, you can minimize the window
+and have the transfer continue 'in the background'.  The icon
+will display the current packet count, rolling over every
+10000 packets.
+
+
+			    Warnings
+
+     File transfers usually fail because of differences between
+the local and remote parity and word size.  If you cannot get
+even the first packet across, then try changing these parameters.
+
+     Windows is multitasking and you can run several instances of
+the same program.  If you are running more than one instance of a
+terminal emulator using Kermit, watch out for possible file
+conflicts such as trying to transfer files to the SAME file from
+two different remote Kermits.  The DOS file system does not
+always protect you from this kind of error.  It can happen that
+while you are receiving a file from one source, the same file can
+be successfully opened for sending.  It usually means disaster
+for the incoming file.
+
+     Similarly, if the target file is a floppy disk, do not
+remove the disk until the transfer has completed. 
+
+
+		       The Kermit Commands
+
+     All commands for Kermit are on the 'Kermit' menu.  They are
+given below along with their corresponding accelerator
+keystrokes.  Commands having dialog boxes are explained in more
+detail in subsequent paragraphs.  
+
+     Before a transfer begins, you can access the following
+commands:
+
+	Receive (ALT-K-R):  If the Receive menu item is chosen,
+then the program enters a state where it is awaiting the arrival
+of one or more files from the remote host.
+
+	Send...(ALT-K-S):  Displays a dialog box from which
+one or more files can be selected and sent to the remote host.
+
+	Set Protocol...(ALT-K-P):  Displays a dialog box in
+which the user can set various protocol parameters.
+
+	Set Packets...(ALT-K-K):  Displays a dialog box in which
+the user can set parameters for incoming and outgoing packets.
+
+     After a file transfer begins, you can cancel the
+operation in any of four ways:
+
+	Cancel file (ALT-K-F):  Signals the remote Kermit to
+discard the file currently being transferred.  The session
+continues with the next file in the batch, if any.  Note that if
+you have elected to keep partial files, then the current file
+will NOT be deleted if you are receiving.
+
+	Cancel batch (ALT-K-B):  Signals the remote Kermit to
+terminate the session.  Only the current and the files remaining
+to be transferred are affected.  The comment about partial files
+in the paragraph above also applies.
+
+	Cancel nicely (ALT-K-N): Terminates the session with an
+error packet to the remote Kermit.  Incomplete files are
+discarded (or saved, if the partial file flag is set).  Use this
+method to cleanly terminate a transaction once the exchange has
+started.
+
+	Cancel abruptly (ALT-K-A):  Terminates the session with
+no signal to the remote Kermit.  This selection is most useful as
+a way to cancel a transaction before any exchange of packets has
+begun.  Note that the remote Kermit will attempt to continue if
+it has already started and you will may have to use other means
+to terminate the remote program or you can simply let it time
+out.
+
+     Following is some detail on the commands having dialog
+boxes.
+
+
+		      The Send Files Dialog
+
+     When Send is selected, a dialog box with several controls
+appears.  Two are list boxes; the one on the left contains all
+files matching the search specification shown in the edit box at
+the top; this list box functions in Extended Selection mode.  The
+right list box contains a list of paths and disk drives which can
+be accessed.  The push buttons allow you to select a list of
+files based on the search specification, send the selected files,
+or cancel the operation.
+
+     The basic principle is:  a file name must be highlighted in
+the list box to be sent.  You may send several files.  However,
+you may select only those files from the current directory. 
+Hence files from more than one directory cannot be sent during
+one transaction.
+
+     A file can be selected in several ways.  The usual method is
+to click on the name with the mouse.  More than one file can be
+highlighted by holding down the control key during selection. 
+You can also deselect one of several highlighted items in the
+list by again depressing the control key and clicking on the
+item.  If you do not hold down the control key, all items will be
+deselected except the one to which the mouse is pointing.
+
+     To select a range of files, select the first one, then move
+to the second one and click on it while holding down the shift
+key.  You can also use the arrow keys together with the shift key
+to highlight contiguous items in the list.
+
+     If you do not have a mouse, then selection is made easier by
+switching the list box into Multiple Selection mode.  Use Shift
+F8 to toggle between the two modes.
+
+     The default search specification is "*.*".  You can choose
+another string to limit the files displayed in the list box.  For
+example, if you tab to the edit box (or point to it with the
+mouse), type "*.txt", and press the RETURN key or the SELECT
+push-button.  Not only will all files having that extension be
+displayed, but they will be selected as well.  You can then send
+the entire list by activating the SEND button.
+
+     At any time, you can deselect all files but one in the list
+box by simply pointing and clicking on that file.  You can
+deselect all files in the box by deleting the contents of the
+edit box and pressing RETURN.
+
+     You can move to another drive or directory by typing it into
+the edit box and pressing RETURN or double-clicking on the
+corresponding item in the directory list box.  The current search
+specification is appended to the path, the program moves to the
+new directory, and all matching files are displayed.  A second
+RETURN or a push of the SELECT button then highlights the files
+list. 
+
+     Finally, at any time, a single file located anywhere in the
+system can be selected and sent.  Simply type its name, along
+with any required drive and/or path information, and hit RETURN.
+If the file can be found, then a switch is made to that directory
+and the file name is displayed and selected.  If the file cannot
+be found,  no action takes place.
+
+     You may cancel the operation at any time by pressing the
+CANCEL button.  Pushing SEND with no files highlighted has the
+same effect.
+
+
+		      The Set Protocol Menu
+
+     Currently you may select the following items:
+
+	Timer (ALT-T):  If this item is checked, then after a
+certain number of seconds have elapsed with no packets received,
+a retry will be attempted.  If the number of retries exceed a
+given threshold, then the protocol exits.  The elapsed time and
+the number of retries can be set.
+
+	Warning bell (ALT-W):  If checked, the bell sounds when a
+transaction is complete or canceled.
+
+	Verbose Mode (ALT-V):  If checked, statistics of the
+transfer are shown in a modeless dialog box.  This box also has a
+Cancel button which will generate a dialog box having the same
+cancel options as the Kermit menu.
+
+	Discard partial file (ALT-P):  If checked, then any file
+being received in which the protocol has been interrupted by an
+error condition or by the user will be deleted.
+
+	Duplicate file warning (ALT-D):  If checked, then an
+incoming file with the same name as an existing one will be
+renamed so as not to overwrite the old one.  The new name appends
+or replaces part of the old name with a unique generation number.
+
+	1-Byte Checksum (ALT-1):  Selects the standard Kermit
+1-byte checksum computation.  This has proved to be quite robust
+in practice.
+
+	2-Byte Checksum (ALT-2):  Selects the standard Kermit
+2-byte checksum computation.
+
+	3-Byte CRC Checksum (ALT-3):  Selects a cyclic redundancy
+checksum computation.  This is most useful when transferring long
+packets or when operating on noisy lines.
+
+	Send delay for first packet:  Sets the elapsed time in
+seconds before the first packet is sent when sending a file.  It
+is mainly used to give the receiver time to get ready before the
+initialization packet arrives.
+
+	Retry limit:  Sets the number of retries in reading a
+packet before the protocol gives up.
+
+	Save setting (ALT-S):  If this box is checked, then
+win.ini will be modified to reflect the new defaults under
+[Kermit]. 
+
+		     The Set Packets Dialog
+
+     Inbound and outbound packets have a number of parameters
+which can be altered for varying circumstances.  You may set the
+following for each type.  Note that you may also have to set the
+corresponding values on the remote Kermit as well for
+communications to take place.
+
+	Start of packet:  The character which is used to mark the
+start of a Kermit packet.  The default is SOH (CTRL-A).  You
+would change this character if the remote machine intercepts SOH.
+
+	Timeout:  The number of seconds that the remote Kermit
+should wait before timing out.  The default is 5 seconds.
+
+	Padding count:  The number of padding characters to send
+before a packet.  The default is 0.
+
+	Padding character:  The character to use for padding. The
+default is NUL (CTRL-@).
+
+	End of line character:  The character which terminates a
+packet.  The default is a carriage return (CTRL-M).
+
+	Quote character:  The character used to signal that the
+next character is in the range 0 - 31, 128 - 159, or is a delete
+character (127).  The default is '#'.
+
+	Packet size:  The maximum length of a packet in bytes
+from the sequence number byte and including the checksum
+characters.  The default is 94.
+
+     If you check Save Settings (ALT-S), then the new values will
+be written to win.ini under the heading [Kermit].

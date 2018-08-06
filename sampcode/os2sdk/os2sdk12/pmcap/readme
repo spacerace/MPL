@@ -1,0 +1,21 @@
+Comments about PMCAP
+
+This utility is very useful for snapshotting screen images into bitmaps,
+and, more especially, for seeing how a screen will look in black and
+white (select the Monochrome option).  Monochrome bitmaps can be saved
+to a Windows Paint file; however, this option only works with EGA displays.
+Full color shots can be saved as bitmaps.
+
+Limitations:  This utility only snaps full screens.  To snap partial areas,
+please refer to the SNAP utility, or to the sample in Chapter 15 of Charles
+Petzold's book (BLOWUP), which snaps to the clipboard.
+
+
+File List:
+PMCAP		Makefile
+PMCAP.C		Window and Dialog Procedures
+PMCAP.DEF	Definition file
+PMCAP.H		Resource ID header
+PMCAP.RC	Resources
+PMCAP2.C	General routines to capture screen, etc...
+README		This file

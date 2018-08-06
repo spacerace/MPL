@@ -1,0 +1,13 @@
+;---------------------------------------------------
+; CHECKERS.DEF module definition file, version 0.10
+;---------------------------------------------------
+
+NAME           CHECKERS  WINDOWAPI
+
+DESCRIPTION    'Checkers Version 0.10 (c) 1990, Charles Petzold'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc
+               AboutDlgProc
+               ColorDlgProc

@@ -1,0 +1,39 @@
+
+
+        NAME
+                kbhit -- check keyboard (stdin) for character available
+
+        SYNOPSIS
+                r = kbhit();
+                int r;
+
+
+        DESCRIPTION
+        This function returns TRUE (not 0) if a character is available
+        from keyboard (stdin).  This function will not recognize a character
+        which was replaced with ungetc().  If stdin is redirected from
+        a file, this function will likely always return TRUE.
+
+
+
+
+        EXAMPLE
+
+                if(kbhit()) puts("There is a character waiting");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

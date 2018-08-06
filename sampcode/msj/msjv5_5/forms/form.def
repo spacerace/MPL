@@ -1,0 +1,25 @@
+;
+; FORM LIBRARY - MODULE DEFINITION FILE
+;
+; 07/12/90 1.00 - Kevin P. Welch - initial creation.
+;
+
+LIBRARY        FORM
+EXETYPE        WINDOWS
+DESCRIPTION    'Form Library - Kevin P. Welch'
+STUB           'WINSTUB.EXE'
+
+CODE           MOVEABLE DISCARDABLE SHARED PRELOAD
+DATA           MOVEABLE SINGLE PRELOAD
+
+HEAPSIZE       2048
+
+IMPORTS
+ Page.PageInit
+
+EXPORTS
+   WEP         @1 RESIDENTNAME
+ FormInit      @2
+ FormEdit      @3
+ FormPrint     @4
+

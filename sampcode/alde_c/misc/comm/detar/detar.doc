@@ -1,0 +1,101 @@
+
+			      Detar Documentation
+
+				23 January 1988
+
+   The Unix(tm) Forum has decided to archive its uploads in the compressed
+TAR format.  The 'detar' program is meant to provide you with a method of
+bursting the files on an MS-DOS(tm) computer.  Additionally the source code
+in 'C' is included so others can use it as a base for porting to other
+computers.  As a disclaimer: not a lot of planning went into the program.
+I basically rounded up some code laying around and threw it together.
+
+   In order to make the program useful to MS-DOS computers some features
+of TAR format had to be worked around.  For instance: filenames.  The solution
+was simple, reduce to 3 characters after the first dot '.'.  Reduce to eight
+characters before the dot.  Multiple dots are changed to dash '-' after the
+first dot is found.  (Run this program on smail.tar for a good example).
+
+The directory 'd' option shows all the filenames in their original state.
+
+   The 'detar' program has exactly two options.  One is to perform a direct-
+ory, and the second is to extract files.  There is no TAR create routines.
+The directory output can be redirected to a file or a printer.  The best
+method of using the extraction option is as follows:
+
+	1.	Put the detar.exe file in the \bin directory.  Set your path
+		command to search the \bin.
+
+	2.	Create a working directory, such as:  'MD TMP'.
+
+	3.	Change to the temporary directory:  'CD TMP'.
+
+	4.	Execute detar:  'detar ../smail.tar'
+
+		This will begin building files in the TMP directory based
+		on the naming algorithm above.  This is the simplest method
+		and you will determine your best procedure after working with
+		the program for awhile.
+
+   A sample of the output received when executing the 'directory' option:
+
+	C>detar d ../smail
+	
+	-rw-r--r-- 102/10  1006 Aug 27 21:42 1987 src/Makefile
+	-rw-r--r-- 102/10  9875 Aug 27 21:42 1987 src/alias.c
+	-rw-r--r-- 102/10  9983 Aug 27 21:43 1987 src/defs.h
+	-rw-r--r-- 102/10 10007 Aug 28 14:39 1987 src/defs.h.kk
+	-rw-r--r-- 102/10 12008 Aug 27 21:42 1987 src/deliver.c
+	-rw-r--r-- 102/10  2533 Aug 27 21:42 1987 src/getopt.c
+	-rw-r--r-- 102/10  2218 Aug 27 21:42 1987 src/getpath.c
+
+	...
+
+The first column is the protection bits.  It is Unix specific.  As is
+the next column which is the user and group number of the person who made
+the archive.  Absolutely no use at all in MSDOS.  The third column is the file
+size in bytes.  The fourth column is the date, and the fifth is the complete
+filename.
+
+   If you make a mistake on the detar command line, three error messages are
+output:
+
+	C>detar g ..\smail
+
+1.	Usage: detar [d] filename[.tar]
+	Where d means directory only
+
+	C>detar ..\smale
+
+2.	Tar File '..\SMALE.TAR' Not Found
+
+	C>detar ..\detar.c
+
+3.	File '..\DETAR.C' not a TAR archive
+
+The brackets ('[', ']') shown on the "Usage" line mean that the information
+contained within them are optional.
+
+   A sample output from the extraction option follows:
+
+	C>detar smail
+	Extracting: Makefile
+	Extracting: alias.c
+	Extracting: defs.h
+	Extracting: defs.h-k
+	Extracting: deliver.c
+	Extracting: getopt.c
+	Extracting: getpath.c
+
+	...
+
+----------------
+23 Jan 88 - First bugs fixed.  Insufficient testing.  Names without a pathname
+	    were munged.
+----------------
+
+If you have any further questions or comments (especially improvements)
+feel free to contact me.
+
+Steve R. Sampson, Compuserve(tm): 75136,626, Usenet: sampson@killer.UUCP
+

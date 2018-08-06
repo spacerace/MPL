@@ -1,0 +1,52 @@
+# Make file for Kermit library
+
+# Copyright (c) 1990 by
+# William S. Hall
+# 3665 Benton Street #66
+# Santa Clara, CA 95051
+
+# The library created must be linked to the terminal modules
+
+# compile macro for Microsoft 6.0 compiler
+cp=cl -c -AM -Ghsw -Osler -Zpe -W3
+
+# compile macro for Microsoft 5.1
+# cp=cl -c -AM -Gsw -Os -Zpe -W3
+
+all : wart.exe wnkerm.lib
+
+#
+# make the Wart state builder
+#
+wart.exe : ckwart.c ckcdeb.h
+    cl -Fewart.exe ckwart.c 
+    del ckwart.obj
+
+#
+# make the protocol module
+#
+wnkerm.c : wnkerm.w
+    wart wnkerm.w wnkerm.c
+
+#
+# Make the Kermit module .OBJ files
+#
+wnkerm.obj : wnkerm.c wnkerm.h
+    $(cp) -NT KRM_WNKERM wnkerm.c
+
+wnkfns.obj : wnkfns.c wnkerm.h wnkdlg.h ascii.h
+    $(cp) -NT KRM_WNKERM wnkfns.c
+
+wnkmsc.obj : wnkmsc.c wnkerm.h wnkdlg.h ascii.h
+    $(cp) -NT KRM_WNKMSC wnkmsc.c
+
+wnkint.obj : wnkint.c wnkerm.h ascii.h
+    $(cp) -NT KRM_WNKINT wnkint.c
+
+#
+# make the library
+#
+
+wnkerm.lib: wnkerm.obj wnkfns.obj wnkmsc.obj wnkint.obj
+   lib wnkerm-+wnkerm-+wnkfns-+wnkmsc-+wnkint;
+   del wnkerm.bak

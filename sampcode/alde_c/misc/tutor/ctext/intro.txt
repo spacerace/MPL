@@ -1,0 +1,190 @@
+
+                   Introduction to the Turbo C Tutorial
+
+
+             The programming language C, was originally developed by
+        Dennis  Ritchie of Bell Laboratories and was designed to run
+        on a PDP-11 with a UNIX operating system.   Although it  was
+        originally  intended  to run under UNIX,  there has  been  a
+        great  interest  in  running it under the  MS-DOS  operating
+        system and specifically on the IBM PC and  compatibles.   It
+        is an excellent language for this environment because of the
+        simplicity of expression,  the compactness of the code,  and
+        the wide range of applicability.
+
+             It  is  not a good "beginning" language because  it  is
+        somewhat cryptic in nature.  It allows the programmer a wide
+        range of operations from high level down to a very low level
+        approaching the level of assembly language.   There seems to
+        be no limit to the flexibility available.  One experienced C
+        programmer made the statement,  "You can program anything in
+        C", and the statement is well supported by my own experience
+        with  the  language.    Along  with  the  resulting  freedom
+        however,  you take on a great deal of responsibility because
+        it is very easy to write a program that destroys itself  due
+        to  the  silly little errors that the Pascal  compiler  will
+        flag  and call a fatal error.   In C,  you are very much  on
+        your own as you will soon find.
+
+             Since C is not a beginners language,  I will assume you
+        are  not a beginning programmer,  and I will not attempt  to
+        bore you by defining a constant and a variable.  You will be
+        expected to know these basic concepts.   You will,  however,
+        be  expected to know nothing of the C programming  language.
+        I  will begin with the most basic concepts of C and take you
+        up  to  the  highest level of C  programming  including  the
+        usually intimidating concepts of pointers,  structures,  and
+        dynamic allocation.   To fully understand these concepts, it
+        will  take a good bit of time and work on your part  because
+        they  not  particularly easy to grasp,  but  they  are  very
+        powerful tools.   Enough said about that, you will see their
+        power when we get there,  just don't allow yourself to worry
+        about them yet.
+
+             Programming  in C is a tremendous asset in those  areas
+        where you may want to use Assembly Language but would rather
+        keep it a "simple to write" and "easy to maintain"  program.
+        It  has  been said that a program written in C  will  pay  a
+        premium  of  a  50 to 100% increase in  runtime  because  no
+        language  is  as  compact  or  fast  as  Assembly  Language.
+        However, the time saved in coding can be tremendous,  making
+        it the most desirable language for many programming  chores.
+        In  addition, since most programs spend 90 percent of  their
+        operating time in only 10 percent or less of the code, it is
+        possible  to  write  a program in C, then  rewrite  a  small
+        portion  of the code in Assembly Language and  approach  the
+
+
+                                  Page 1
+
+
+
+
+
+
+
+
+
+                   Introduction to the Turbo C Tutorial
+
+
+        execution  speed  of  the same program if  it  were  written
+        entirely in Assembly Language.
+
+             Even  though the C language enjoys a good  record  when
+        programs are transported from one implementation to another,
+        there  are differences in compilers as you will find anytime
+        you  try to use another compiler.   Most of the  differences
+        become apparent when you use nonstandard extensions such  as
+        calls  to  the DOS BIOS,  but even these differences can  be
+        minimized  by careful choice of programming means.  Turbo  C
+        follows  the  developing  ANSI standard so  well  that  your
+        programs  developed with Turbo C should be very portable  if
+        you should decide to use a different ANSI standard compiler.
+
+             Throughout this tutorial, every attempt will be made to
+        indicate  to  you what constructs are available in  every  C
+        compiler  because they are part of the accepted standard  of
+        programming practice.  Most of those constructs will use the
+        generic  name "C", such as in the statement, "writing  to  a
+        file is easy in C after you master a few fundamentals."   If
+        a  particular  construct  is  a  Borland  extension  to  the
+        language, it will be pointed out as such as an indication to
+        you that it may not be available on other compilers.
+
+             Turbo  C  is a very capable compiler, but  due  to  the
+        tremendous  versatility of this compiler, it could  be  very
+        difficult  for you to learn how to use it  effectively.   If
+        you are a complete novice to programming, you will  probably
+        find the installation instructions somewhat confusing.   The
+        file on the SOURCE disk named COMPILER.DOC is provided  just
+        for  you  since it will take you step by  step  through  the
+        installation procedure and even show you how to compile  and
+        run  your  first program.  You should print out  a  copy  of
+        COMPILER.DOC at this time and use it as an aid to installing
+        Turbo C on your system.
+
+             This  tutorial cannot cover all aspects of  programming
+        in C, simply because there is too much to cover, but it will
+        instruct  you  in  all you need for  the  majority  of  your
+        programming  in C.  You will receive instruction in  all  of
+        the  programming constructs in C, but what must  be  omitted
+        are  methods of programming since these can only be  learned
+        by  experience.   More importantly, it will  teach  you  the
+        vocabulary  of C so that you can go on to the more  advanced
+        techniques of using the programming language C.
+
+             It  would definitely be to your advantage to study  the
+        Turbo C User's Guide at this point to gain experience in how
+        to  edit,  compile, and run a C program.   You  should  read
+        chapter  2  to  familiarize  yourself  with  the  Integrated
+        Environment and learn how to use it, and to learn how to use
+
+
+                                  Page 2
+
+
+
+
+
+
+
+
+
+                   Introduction to the Turbo C Tutorial
+
+
+        the  full  screen  editor which is a part  of  the  Turbo  C
+        Integrated Environment.
+
+             Remember  to read the file COMPILER.DOC To aid  you  in
+        compiling your first program.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  Page 3

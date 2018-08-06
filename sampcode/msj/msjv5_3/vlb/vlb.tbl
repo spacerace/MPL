@@ -1,0 +1,72 @@
+****************************************************************************************
+TABLE 1     VLB procedure messages to the VLB callback function
+
+Message          Description                  LONG FAR *     LPSTR     Return Value
+========================================================================================
+1. Initialization
+----------------------------------------------------------------------------------------
+VCB_CREATE      VLB has just been created         N/A        N/A          N/A
+VCB_DESTROY     VLB is going to be destroyed      N/A        N/A          N/A
+VCB_SETFOCUS    VLB has just received focus       N/A        N/A          N/A
+VCB_KILLFOCUS   VLB is going to lose focus        N/A        N/A          N/A
+----------------------------------------------------------------------------------------
+2. Virtual Limits
+----------------------------------------------------------------------------------------
+VCB_LENGTH      request total virtual strings     N/A        N/A          Total Strings
+VCB_WIDTH       request virtual string width      N/A        N/A          String Width
+----------------------------------------------------------------------------------------
+3. String Retrieval
+----------------------------------------------------------------------------------------
+VCB_FULLSTRING  get full string by String ID   StringID    String Buffer  TRUE/FALSE
+VCB_STRING      get string by String ID        StringID    String Buffer  TRUE/FALSE
+VCB_VTHUMB      get string by thumb pos.       Thumb Pos.  String Buffer  TRUE/FALSE
+VCB_SEARCH      get string by search string    StringID    String Buffer  TRUE/FALSE
+VCB_FIRST       get first display string       StringID    String Buffer  TRUE/FALSE
+VCB_LAST        get last display string        StringID    String Buffer  TRUE/FALSE
+VCB_NEXT        get next display string        StringID    String Buffer  TRUE/FALSE
+VCB_PREV        get previous display string    StringID    String Buffer  TRUE/FALSE
+----------------------------------------------------------------------------------------
+4. Horizontal Scrolling
+----------------------------------------------------------------------------------------
+VCB_HTHUMB      new start of display string    Thumb Pos.  N/A            N/A
+VCB_LEFT        new start of display string    N/A         N/A            N/A
+VCB_RIGHT       new start of display string    N/A         N/A            N/A
+VCB_PAGELEFT    new start of display string    N/A         N/A            N/A
+VCB_PAGERIGHT   new start of display string    N/A         N/A            N/A
+========================================================================================
+
+
+****************************************************************************************
+TABLE 2      application messages to the VLB procedure
+
+Message             wParam         lParam          Return Value
+========================================================================================
+VLB_GETCOUNT         N/A           N/A             total virtual strings
+VLB_GETSELCOUNT      N/A           N/A             total selected strings
+VLB_GETSTRLEN        N/A           N/A             virtual string width
+VLB_GETSELSTR
+   Single Select     N/A           N/A             pointer to selected String
+   Multiple Select   String #      N/A             pointer to selected String
+VLB_GETSELID 
+   Single Select     N/A           N/A             selected String ID
+   Multiple Select   N/A           N/A             handle to array of selected string ID's
+VLB_SETCURSEL        N/A           StringID        N/A
+VLB_SETSEL        TRUE/FALSE       StringID        N/A
+VLB_RELOAD      RELOAD_STRINGS     N/A             N/A
+                RELOAD_STRINGPOS   String pos.     N/A
+                RELOAD_STRINGID    String ID       N/A
+
+
+
+
+****************************************************************************************
+TABLE 3       VLB procedure notifications to the Dialog procedure
+
+Message             wParam      lParam       Return Value
+========================================================================================
+VLBN_DBLCLK         N/A         N/A          N/A
+VLBN_ERRSPACE       N/A         N/A          N/A
+VLBN_SELCHANGE      N/A         N/A          N/A
+
+
+

@@ -1,0 +1,89 @@
+/*
+ *     An example of LEX and YACC working together
+ */
+
+letter = [A-Za-z_$];
+digit  = [0-9];
+white  = [\n\r\t ];
+
+%{
+#include "std.h"		/* Standard C conventions */
+#include "landy.h"		/* %term definitions from YACC, i.e. -h output file */
+
+char yytext[100];		/* Communication with YACC actions */
+int yyival;				/*       "        "    "      "    */
+float yyfval;			/*       "        "    "      "    */
+%}
+
+%%
+
+letter(letter|digit)*		{gettoken(yytext, sizeof(yytext));
+							 printf("LEX/TCON: %s\n", yytext);
+							 return(TCON);}
+
+[-]*(digit)*(digit) {{
+	        register char *p = yytext; BOOLEAN minus = FALSE;
+		gettoken(yytext, sizeof(yytext));
+		yyival = 0;
+		if(*p == '-') {
+		    ++p;
+		    minus = TRUE;
+		}
+		do {
+		    if(*p != ',')
+			yyival = 10*yyival + (*p - '0');
+		} while(*++p);
+		if(minus) yyival = -yyival;
+	    printf("LEX/ICON: %d\n", yyival);
+		return(ICON);
+	    }}
+
+[-]*(digit)*"."(digit)* {{
+        register char *p = yytext; long decimal = 0; BOOLEAN minus = FALSE;
+		gettoken(yytext, sizeof(yytext));
+		yyfval = 0.0;
+		if(*p == '-') {
+		    ++p;
+		    minus = TRUE;
+		}
+		do {
+		    switch(*p) {
+		    case ',':       break;
+		    case '.':       decimal = 10; break;
+		    default :       if(!decimal) {
+					yyfval = 10. * (yyfval) + (*p - '0');
+					break;
+				    } else {
+					yyfval = yyfval + (*p - '0')/((float) decimal);
+					decimal *= 10;
+					break;
+				    }
+		    }
+		} while (*++p);
+		    if(minus) yyfval = -yyfval;
+			printf("LEX/FCON: %f\n", yyfval);
+		    return(FCON);
+	    }}
+
+white(white)*	{return(LEXSKIP);}
+
+%%
+
+/*
+ * Hand-crafted lexgetc to give newline prompt.
+ */
+
+lexgetc(){
+	static BOOLEAN newline = TRUE;
+	register int c;
+
+	if(newline)
+	    printf(">");
+
+	if((c = getc(lexin)) == '\n')
+	    newline = TRUE;
+	else
+	    newline = FALSE;	
+
+	return(c);
+}

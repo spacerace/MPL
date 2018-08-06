@@ -1,0 +1,6 @@
+globhand.obj: globhand.c
+   cl -c -W2 -AS -Gsw -Od -Zped globhand.c
+
+globhand.exe: globhand.obj globhand.def
+   link4 globhand,/align:16,/map/li,slibw,globhand.def
+   mapsym globhand

@@ -1,0 +1,107 @@
+/*
+ * WINDOWS CLIPBOARD VIEWER - RESOURCE FILE
+ *
+ * LANGUAGE      : Microsoft C5.1
+ * ENVIRONMENT   : Microsoft Windows 2.1 SDK
+ * STATUS        : operational
+ *
+ * 1.01 - Kevin P. Welch - make listboxes unsorted.
+ *
+ */
+
+#include <style.h>
+#include "viewer.h"
+
+ViewerIcon       ICON        Viewer.ico
+
+ViewerMenu       MENU
+BEGIN
+  POPUP          "&Options"
+  BEGIN
+     MENUITEM    "&Status",              IDM_STATUS
+     MENUITEM    SEPARATOR
+     MENUITEM    "&Add Format...",       IDM_ADDFMT
+     MENUITEM    "&Remove Format...",    IDM_REMFMT
+     MENUITEM    SEPARATOR
+     MENUITEM    "E&xit",                IDM_EXIT
+     MENUITEM    "A&bout...",            IDM_ABOUT
+  END
+  POPUP          "&Display"
+  BEGIN
+     MENUITEM    "&Erase...",            IDM_ERASE,GRAYED
+     MENUITEM    SEPARATOR
+     MENUITEM    "&1. (Empty)",          IDM_FORMATS,GRAYED
+  END
+END
+
+ViewerAbout DIALOG LOADONCALL MOVEABLE DISCARDABLE 32, 32, 200, 92
+CAPTION "About Clipboard Viewer..."
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_POPUP | WS_VISIBLE
+BEGIN
+     CONTROL "&Ok", IDOK, "button", BS_DEFPUSHBUTTON | WS_TABSTOP |
+             WS_GROUP | WS_CHILD, 164, 4, 32, 14
+     CONTROL "Extensible Clipboard Viewer", -1, "static", SS_LEFT |
+             WS_GROUP | WS_CHILD, 4, 6, 144, 8
+     CONTROL "Microsoft Systems Journal", -1, "static", SS_LEFT |
+             WS_CHILD, 4, 14, 144, 8
+     CONTROL "March 1990", -1, "static", SS_LEFT | WS_CHILD,
+             4, 22, 144, 8
+     CONTROL "Designed && Developed by:", -1, "static", SS_LEFT |
+             WS_CHILD, 4, 38, 144, 8
+     CONTROL "Kevin P. Welch", -1, "static", SS_LEFT | WS_CHILD,
+             4, 54, 144, 8
+     CONTROL "Eikon Systems, Inc.", -1, "static", SS_LEFT | WS_CHILD,
+             4, 62, 144, 8
+     CONTROL "989 East Hillsdale Blvd, Suite 260", -1, "static",
+             SS_LEFT | WS_CHILD, 4, 70, 144, 8
+     CONTROL "Foster City, California 94404", -1, "static",
+             SS_LEFT | WS_CHILD, 4, 78, 136, 8
+     CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD,
+             160, 0, 1, 92
+     CONTROL "ViewerIcon", -1, "static", SS_ICON | WS_CHILD,
+             180, 56, 16, 32
+END
+
+ViewerAdd DIALOG LOADONCALL MOVEABLE DISCARDABLE 32, 32, 172, 86
+CAPTION "Add Format to Viewer..."
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_POPUP
+BEGIN
+     CONTROL "", IDFORMAT, "edit", ES_LEFT | ES_AUTOHSCROLL |
+             WS_BORDER | WS_TABSTOP | WS_CHILD, 38, 4, 90, 12
+     CONTROL "", IDLIBRARY, "edit", ES_LEFT | ES_AUTOHSCROLL |
+             WS_BORDER | WS_TABSTOP | WS_CHILD, 38, 18, 90, 12
+     CONTROL "&Add", IDADD, "button", BS_DEFPUSHBUTTON | WS_GROUP |
+             WS_TABSTOP | WS_CHILD, 136, 4, 32, 14
+     CONTROL "&Cancel", IDCANCEL, "button", BS_PUSHBUTTON |
+             WS_CHILD, 136, 22, 32, 14
+     CONTROL "&Format :", -1, "static", SS_LEFT | WS_GROUP |
+             WS_CHILD, 4, 6, 32, 8
+     CONTROL "&Library:", -1, "static", SS_LEFT | WS_CHILD,
+             4, 20, 32, 8
+     CONTROL "To add a format to the viewer", -1, "static",
+             SS_LEFT | WS_CHILD, 4, 40, 124, 8
+     CONTROL "you must enter the name of the", -1, "static",
+             SS_LEFT | WS_CHILD, 4, 48, 120, 8
+     CONTROL "clipboard format, followed by", -1, "static",
+             SS_LEFT | WS_CHILD, 4, 56, 120, 8
+     CONTROL "the name of the dynamic library", -1, "static",
+             SS_LEFT | WS_CHILD, 4, 64, 126, 8
+     CONTROL "that will support the format.", -1, "static",
+             SS_LEFT | WS_CHILD, 4, 72, 120, 8
+     CONTROL "Text", -1, "static", SS_BLACKFRAME | WS_CHILD,
+             132, 0, 1, 86
+END
+
+ViewerRemove DIALOG LOADONCALL MOVEABLE DISCARDABLE 32, 32, 216, 84
+CAPTION "Remove Format from Viewer..."
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_POPUP
+BEGIN
+     CONTROL "", IDLIBLIST, "listbox", LBS_NOTIFY | LBS_STANDARD |
+     WS_BORDER | WS_VSCROLL | WS_TABSTOP | WS_CHILD, 4, 4, 168, 74
+     CONTROL "&Remove", IDREMOVE, "button", BS_DEFPUSHBUTTON |
+             WS_GROUP | WS_TABSTOP | WS_CHILD, 180, 4, 32, 14
+     CONTROL "&Cancel", IDCANCEL, "button", BS_PUSHBUTTON |
+             WS_CHILD, 180, 22, 32, 14
+     CONTROL "Text", -1, "static", SS_BLACKFRAME | WS_CHILD,
+             176, 0, 1, 85
+END

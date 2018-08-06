@@ -1,0 +1,15 @@
+   The programs in this arc file were typed from "Microsoft C Programming
+for the IBM" by Robert Lafore. These files are from chapters 12 thru 15 and 
+most of the programs listed in these chapters are here. Also the programs
+from Appendix B are included except for the WORDSTAR program.
+They all compile and run with Quick C in the command line mode. I never tried 
+them in the Quick C environment. My compile command is:
+        C>qcl /Zi /c filename.c     (Default is small mem model)
+and my link command is:
+        C>link /CO filename;
+The /Zi switch is to enable debugging with the CODEVIEW Ver 2.0 debugger, 
+likewise for the /CO switch. These switches (all), I believe ARE case 
+sensitive. I was mistaken in the R_LA4_01.ARC READ.ME file. I thought the
+medium memory model was necessary for debugging with CODEVEIW but it's not.
+The /c switch tells the compiler to put the OBJ file on disk.
+

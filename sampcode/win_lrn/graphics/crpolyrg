@@ -1,0 +1,6 @@
+
+crpolyrg.obj: crpolyrg.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 crpolyrg.c
+
+crpolyrg.exe: crpolyrg.obj crpolyrg.def
+    link4 /align:16 crpolyrg,,nul,slibw/NOE,crpolyrg.def

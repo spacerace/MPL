@@ -1,0 +1,16 @@
+; Figure 4w
+; =========
+
+
+;-------------------------------------------------------
+; HEXCALCW.DEF module definition file (Windows version)
+;-------------------------------------------------------
+
+NAME           HexCalcW
+DESCRIPTION    'Hexadecimal Calculator (C) Charles Petzold 1987'
+STUB           'WINSTUB.EXE'
+CODE           MOVEABLE
+DATA           MOVEABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        WndProc

@@ -1,0 +1,44 @@
+/*
+	HEADER:		CUG236;
+	TITLE:		Portable TEE Documentation;
+	DATE:		05/23/87;
+	FILENAME:	TEE.DOC;
+	SEE-ALSO:	TEE.C;
+	AUTHORS:	Michael M. Yokoyama;
+*/
+
+-------------------------------------------------------------------------------
+ TEE
+-------------------------------------------------------------------------------
+
+Format:
+
+     tee filename
+
+Purpose:
+
+TEE is a text filter that passes the standard input to a designated file (or 
+MS-DOS device) in addition to passing it unchanged to the standard output.
+
+Examples:
+
+Copy the file named original to two new files, newfile1 and newfile2.
+
+     tee newfile1 <original >newfile2
+
+Echo what is typed at the keyboard onto the screen, while saving the characters
+to a file named record.
+
+     tee record                         
+
+Copy the file named original to a new file (newfile), while printing the 
+contents of original on the printer.
+
+     tee newfile <original >prn 
+
+Take the directory, display it on the screen, save the directory to the file 
+named dirlist, sort the directory, and place the sorted directory in the file 
+named dirsort.
+
+     dir | tee con | tee dirlist | sort > dirsort
+

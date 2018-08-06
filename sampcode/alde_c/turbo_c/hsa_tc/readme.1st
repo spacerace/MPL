@@ -1,0 +1,21 @@
+                        HSA_GRAF - Graphics CRT Control
+                        -------------------------------
+
+HSA_GRAF is a graphics crt control library designed and developed by  Hardwood
+Software  Associates.  HSA_GRAF  is  a library of C functions that provide fast
+flexible control of a graphics screen using Hercules, CGA, or EGA.
+
+A demo  program  is  included,  with C source file, to demonstrate the of this
+library.  It is named GR_DEMO.EXE.  We suggest that you run this and carefully
+examine the source code.
+
+The full documentation for HSA_GRAF is contained in "HSA_GRAF.DOC".
+
+If  you  have  any  questions  and/or comments regarding this software,  please
+contact: 
+                Richard Evans
+                Hardwood Software Associates
+                364 Benson Road
+                Northbridge, MA 01534
+                CompuServe [75026,3604]
+

@@ -1,0 +1,18 @@
+/*--------------------------------
+   cpumeter.RC resource script file
+  --------------------------------*/
+
+#include <os2.h>
+#include "cpumeter.h"
+
+POINTER ID_ICON00  gauge00.ico
+POINTER ID_ICON10  gauge10.ico
+POINTER ID_ICON20  gauge20.ico
+POINTER ID_ICON30  gauge30.ico
+POINTER ID_ICON40  gauge40.ico
+POINTER ID_ICON50  gauge50.ico
+POINTER ID_ICON60  gauge60.ico
+POINTER ID_ICON70  gauge70.ico
+POINTER ID_ICON80  gauge80.ico
+POINTER ID_ICON90  gauge90.ico
+POINTER ID_ICON100 gauge100.ico

@@ -1,0 +1,9 @@
+#--------------------
+# WELCOME1 make file
+#--------------------
+
+welcome1.obj : welcome1.c
+     cl -c -G2sw -W3 welcome1.c
+
+welcome1.exe : welcome1.obj welcome1.def
+     link welcome1, /align:16, NUL, os2, welcome1

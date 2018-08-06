@@ -1,0 +1,141 @@
+/*
+Microsoft Systems Journal
+Volume 2; Issue 1; March, 1987
+
+Code Listings For:
+
+	FREEMEM
+	pp. 33-40
+
+Author(s): Charles Petzold
+Title:     Keep Track of Your Windows Memory With FREEMEM
+
+
+
+==============================================================================
+==============================================================================
+Figure 1: WinMain Function of FREEMEM.C
+
+==============================================================================
+*/
+
+/*  FreeMem.C -- Windows application that displays free memory */
+
+#include <windows.h>    /* all Windows functions */
+#include <stdlib.h>     /* itoa */
+#include <string.h>     /* strcat & strlen */
+
+long FAR PASCAL WndProc (HWND, unsigned, WORD, LONG) ;
+
+int PASCAL WinMain (hInstance, hPrevInstance, lpszCmdLine, nCmdShow)
+    HANDLE  hInstance, hPrevInstance ;
+    LPSTR   lpszCmdLine ;
+    int     nCmdShow ;
+    {
+    static  char szAppName [] = "FreeMem" ;
+    WNDCLASS WndClass ;
+    HWND    hWnd ;
+    MSG     msg ;
+
+    if (hPrevInstance) 
+        return FALSE ;
+
+    WndClass.hCursor       = LoadCursor (NULL, IDC_ARROW) ;
+    WndClass.hIcon         = NULL ;
+    WndClass.cbClsExtra    = 0 ;
+    WndClass.cbWndExtra    = 0 ;
+    WndClass.lpszMenuName  = NULL ;
+    WndClass.lpszClassName = (LPSTR) szAppName ;
+    WndClass.hbrBackground = (HBRUSH) GetStockObject (WHITE_BRUSH) ;
+    WndClass.hInstance     = hInstance ;
+    WndClass.style         = CS_HREDRAW | CS_VREDRAW;
+    WndClass.lpfnWndProc   = WndProc ;
+
+    if (!RegisterClass ((LPWNDCLASS) &WndClass))
+        return FALSE ;
+
+    hWnd = CreateWindow ((LPSTR) szAppName,
+            (LPSTR) szAppName,
+            WS_TILEDWINDOW,
+            0, 0, 0, 0,
+            (HWND)   NULL,
+
+            (HMENU)  NULL,
+            (HANDLE) hInstance,
+            (LPSTR)  NULL) ;
+
+    if (!SetTimer (hWnd, 1, 1000, NULL))
+        return FALSE ;
+
+    ShowWindow (hWnd, SHOW_ICONWINDOW) ;
+    UpdateWindow (hWnd) ;
+
+    while (GetMessage ((LPMSG) &msg, NULL, 0, 0))
+        {
+        TranslateMessage ((LPMSG) &msg) ;
+        DispatchMessage ((LPMSG) &msg) ;
+        }
+    return (int) msg.wParam ;
+    }
+
+/*
+==============================================================================
+==============================================================================
+Figure 2: WndProc Function of FREEMEM.C
+
+==============================================================================
+*/
+
+long FAR PASCAL WndProc (hWnd, message, wParam, lParam)
+    HWND    hWnd ;
+    unsigned message ;
+    WORD    wParam ;
+    LONG    lParam ;
+    {
+    static  int mem, lastmem ;
+    char    buffer [20] ;
+    PAINTSTRUCT ps ;
+    RECT    rect ;
+
+    switch (message)
+        {
+        case WM_TIMER:
+            mem = (int) (GlobalCompact (0L) / 1024) ;
+            if (mem != lastmem)
+                InvalidateRect (hWnd, NULL, TRUE) ;
+            lastmem = mem ;
+            break ;
+
+        case WM_PAINT:
+            BeginPaint (hWnd, (LPPAINTSTRUCT) &ps) ;
+            GetClientRect (hWnd, (LPRECT) &rect) ;
+            DrawText (ps.hdc, (LPSTR) buffer,
+                strlen (strcat (itoa (mem, buffer, 10), "K Free")),
+                (LPRECT) &rect, DT_WORDBREAK) ;
+            EndPaint (hWnd, (LPPAINTSTRUCT) &ps) ;
+            break ;
+
+        case WM_DESTROY:
+            KillTimer (hWnd, 1) ;
+            PostQuitMessage (0) ;
+            break ;
+
+        default:
+            return DefWindowProc (hWnd, message, wParam, lParam) ;
+        }
+    return (long) 0 ;
+    }
+
+/*
+==============================================================================
+==============================================================================
+Figure 3: Alternate SetTimer Logic
+
+==============================================================================
+*/
+
+if (!SetTimer (hWnd, 1, 1000, NULL)
+     {
+     MessageBox (hWnd, "Hey! Too many timers!", NULL, MB_OK) ;
+     return FALSE ;
+     }

@@ -1,0 +1,2180 @@
+
+                KyCorp Memory Resident Library Version 2.01
+            Copyright (C) 1987, KyCorp Information Group, Inc.
+
+                             Table of Contents
+
+Create a blinking color attribute  . . . . . . . . . . . . . . . . . . .  2
+Set the video border color . . . . . . . . . . . . . . . . . . . . . . .  3
+Draw a box . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  4
+Create a high intensity attribute  . . . . . . . . . . . . . . . . . . .  5
+Check the display in 80 column mode  . . . . . . . . . . . . . . . . . .  6
+Create a color attribute byte  . . . . . . . . . . . . . . . . . . . . .  7
+Change the cursor size . . . . . . . . . . . . . . . . . . . . . . . . .  8
+Send a character directly to the screen  . . . . . . . . . . . . . . . .  9
+Send a string directly to the screen . . . . . . . . . . . . . . . . . . 10
+Remove your program from memory  . . . . . . . . . . . . . . . . . . . . 11
+Erase a section of the screen  . . . . . . . . . . . . . . . . . . . . . 12
+Exchange a portion of the screen and a window  . . . . . . . . . . . . . 13
+Get the current cursor position  . . . . . . . . . . . . . . . . . . . . 14
+Have the program go memory resident  . . . . . . . . . . . . . . . . . . 15
+Hide the cursor  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+Change a section of the screen's attributes  . . . . . . . . . . . . . . 17
+Draw a horizontal line . . . . . . . . . . . . . . . . . . . . . . . . . 18
+Check to is if a color card is being used  . . . . . . . . . . . . . . . 19
+Pass a string to the keyboard buffer . . . . . . . . . . . . . . . . . . 20
+Move a window with the keypad  . . . . . . . . . . . . . . . . . . . . . 21
+Check to see if the routine is already memory resident . . . . . . . . . 22
+Create a window  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 23
+Move a window directly . . . . . . . . . . . . . . . . . . . . . . . . . 24
+Set the cursor to default size . . . . . . . . . . . . . . . . . . . . . 25
+Save a portion of the screen in a window buffer  . . . . . . . . . . . . 26
+Set the amount of acceptable screen "flicker"  . . . . . . . . . . . . . 27
+Set the cursor position  . . . . . . . . . . . . . . . . . . . . . . . . 28
+Produce a sound through the speaker  . . . . . . . . . . . . . . . . . . 29
+Set the size of the stack  . . . . . . . . . . . . . . . . . . . . . . . 30
+Check to see if another program is loaded on top of yours  . . . . . . . 31
+Create and underline attribute . . . . . . . . . . . . . . . . . . . . . 32
+Draw a vertical line . . . . . . . . . . . . . . . . . . . . . . . . . . 33
+Window definition  . . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+
+Appendix A:  Warrantee . . . . . . . . . . . . . . . . . . . . . . . . . 35
+
+Appendix B:  Instructions for compiling & linking TEST.C . . . . . . . . 36
+
+Appendix C:  License for use . . . . . . . . . . . . . . . . . . . . . . 37
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            1
+                KyCorp Memory Resident Library Version 2.01
+
+int blinking (attribute)
+   int attribute;                   Attribute to be modified to blinking
+
+Description:   This function can be used to modify either monochrome or
+               color display attributes to cause a blinking color.
+
+Return Value:  (attribute | 0x80)
+
+#include <resident.h>
+main ()
+   {
+      int dis_color = MONOCHROME; /* assume monochrome */
+
+      if (iscolor ())
+         dis_color = color (YELLOW, BLUE);
+      dis_color = blinking (dis_color);
+      dis_str (10, 20, "This display is blinking", dis_color);
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            2
+                KyCorp Memory Resident Library Version 2.01
+
+void border (color)
+   int color;                    Color attribute for the display border
+
+Description:   Changes the border of the display to "color" attribute.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      border (BLUE);
+   }
+
+SEE ALSO: color
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            3
+                KyCorp Memory Resident Library Version 2.01
+
+void box (upper_row, left_column, lower_row, right_column, type, color)
+   int upper_row, left_column    Upper left corner of the box
+   int lower_row, right_column   Lower right corner of the box
+   int type                      Type of box to draw
+   int color                     Color attribute of the box
+
+Description:   Draws a particular "type" of box.
+               "type" NULL uses the SPACE character to draw the box (for
+                      erasing a box).
+               "type" 1 uses all double lines.
+               "type" 2 uses all single lines.
+               "type" 3 draws the vertical lines double and the horizontal
+                      lines single.
+               "type" 4 draws the vertical lines single and the horizontal
+                      lines double.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      dis_str (11, 21, "This box is a blinking", color (YELLOW, BLUE));
+      while (!kbhit ()) {
+         box (10, 20, 12, 43, 1, color (YELLOW, BLUE));
+         sound (0, 18); /* one second delay */
+         box (10, 20, 12, 43, 0, color (YELLOW, BLUE));
+         sound (0, 18);
+      }
+   }
+
+SEE ALSO: hor_line, ver_line, make_window, WINDOW
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            4
+                KyCorp Memory Resident Library Version 2.01
+
+int bright (attribute)
+   int attribute;                   Attribute to be modified to bright
+
+Description:   This function changes a display attribute to high intensity. 
+               On colors that are already at high intensity, such as YELLOW
+               and WHITE, this function has no effect.
+
+Return Value:  (attribute | 8)
+
+#include <resident.h>
+main ()
+   {
+      int dis_color = MONOCHROME;
+
+      if (iscolor ())
+         dis_color = color (RED, BLACK);
+      dis_str (10, 20, "This is bright & blinking", 
+               bright (blinking (dis_color)));
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            5
+                KyCorp Memory Resident Library Version 2.01
+
+int chk_video ()
+
+Description:   A macro function which returns TRUE if the video is in 80
+               character display mode (modes 2, 3, or 7).  This function
+               should be used in conjunction with the window features since
+               they will not operate correctly with the display in a
+               graphics mode.
+
+Return Value:  TRUE if the video is in mode 2, 3, or 7, and FALSE for any
+               other video mode.
+
+#include <resident.h>
+main ()
+   {
+      if (chk_video ())
+         printf ("The display is in an 80 column mode");
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            6
+                KyCorp Memory Resident Library Version 2.01
+
+int color (letters, background)
+   int letters;                  Color byte for the characters
+   int background;               Color byte for the background
+
+Description:   A function to combine two colors into an attribute byte for
+               the video display functions.
+
+Return Value:  (background << 4 | letters)
+
+#include <resident.h>
+main ()
+   {
+      dis_str (10, 20, "On a color display this is yellow on blue",
+               color (YELLOW, BLUE));
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            7
+                KyCorp Memory Resident Library Version 2.01
+
+void cursize (top_line, bottom_line)
+   int top_line;                 Cursor top scan line
+   int bottom_line;              Cursor bottom scan line
+
+Description:   The "cursize" function makes a call to the video bios to
+               change the size of the cursor.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      cursize (11, 12); /* normal cursor size for monochrome display */
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            8
+                KyCorp Memory Resident Library Version 2.01
+
+void dis_chr (row, column, character, color)
+   int row, column;              Position on the screen to put the character
+   int character;                Character to be displayed
+   int color;                    Color attribute of the character
+
+Description:   Displays the "character" at position "row" and "column" with
+               the "color" attribute.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      dis_str (10, 20, "This is a right arrow:  ", color (YELLOW, BLUE));
+      dis_chr (10, 43, 26, color (YELLOW, BLUE));
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            9
+                KyCorp Memory Resident Library Version 2.01
+
+void dis_str (row, column, string, color)
+   int row, column;              Position on the screen to display
+   char *string;                 String to be displayed
+   int color;                    Color attribute of the display
+
+Description:   Displays the "string" at position "row" and "column" with the
+               "color" attribute.
+
+               See SCREEN_SPEED for setting either very fast display time or
+               a "snow free" display.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      dis_str (10, 20, "Hi there!", MONOCHROME);
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           10
+                KyCorp Memory Resident Library Version 2.01
+
+int drop_tsr (void)
+
+Description:   Check's to see if a resident program is loaded on top of your
+               routine and if there isn't it will remove the program from
+               memory and immediately exited.
+
+Return Value:  TRUE if a resident program loaded on top and unable to remove
+               the program from memory.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           11
+                KyCorp Memory Resident Library Version 2.01
+
+void erase (row, column, length, color)
+   int row, col;                 Position on screen to start erasing
+   int length;                   Number of characters to erase
+   int color;                    Color attribute of erase section.
+
+Description:   This function will replace "length" number of characters with
+               the SPACE character starting at position "row" and "column"
+               using the "color" attribute.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      while (!kbhit ()) {
+         dis_str (10, 20, "This slowly blinks", color (YELLOW, BLUE));
+         sound (0, 18);   /* one second delay */
+         erase (10, 20, 19, color (YELLOW, BLUE));
+         sound (0, 18);
+      }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           12
+                KyCorp Memory Resident Library Version 2.01
+
+void exch_window (window)
+   struct WINDOW *window;        Structure defining the window
+
+Description:   The "exch_window" function exchanges the characters and color
+               attributes of the area of the display screen (as defined by
+               the appropriate members of the "window" structure) with those
+               in "(*window).buffer".
+
+Return Value:  None.
+
+For an example of proper usage, see the TEST.C file.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           13
+                KyCorp Memory Resident Library Version 2.01
+
+int getcur ()
+
+Description:   Returns the position of the cursor on page zero as a
+               hexadecimal number RRCC where RR is the row and CC is the
+               column.
+
+Return Value:  The cursor position on page zero.
+
+#include <resident.h>
+main ()
+   {
+      int position;
+
+      position = getcur ();
+      printf ("Cursor position on page zero is row %d, column %d",
+               position / 256, position % 256);
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           14
+                KyCorp Memory Resident Library Version 2.01
+
+int go_resident (routine, scan1, scan2, scan3)
+   void (*routine) ();              Routine to be called from the keyboard
+   int scan1;                       Primary key to activate routine
+   int scan2;                       Modifier key
+   int scan3;                       Modifier key
+
+Description:   The "go_resident" function first checks to ensure "routine"
+               has not already been made resident by calling "loaded",
+               closes all open files, resets the stack to STACK_SIZE, sets
+               up the system to execute the function "routine" whenever
+               "scan1", "scan2", and "scan3" are held down at the same time,
+               and then exits to DOS.
+
+               If you wish to have "routine" called up on only two keys then
+               set either "scan2" or "scan3" to NULL.   Likewise if you wish
+               it to call up on only one key set both "scan2" and "scan3" to
+               NULL.  "scan1" must always be set.
+
+               Note that the primary key ("scan1") is never seen by the
+               system so keys such as KEY_NUM_LOCK can be used without
+               changing the status of the system.  However, the modifier
+               keys ("scan2" & "scan3") are seen by the system and must be
+               held down before the primary key is press.
+
+Return Value:  Returns (1) if "routine" has already been made resident or if
+               "go_resident" is called during the execution of "routine". 
+               Returns (0) if "scan1" is set to zero.
+
+#include <resident.h>
+void resident_function ()
+   {
+      sound (440, 2);
+   }
+
+main ()
+   {
+      go_resident (resident_function, KEY_CAPS_LOCK, KEY_ALT, 
+                   KEY_LEFT_SHIFT);
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           15
+                KyCorp Memory Resident Library Version 2.01
+
+void hidecur ()
+
+Description:   This function is a macro which causes the cursor to
+               disappear.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      hidecur ();
+      display_routine ();
+      normalcur ();
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           16
+                KyCorp Memory Resident Library Version 2.01
+
+void hilight (row, column, length, color)
+   int row, column;              Position on screen to start hilighting
+   int length;                   Number of characters to hilight
+   int color;                    Color attribute to change characters to
+
+Description:   Changes the color attributes of a section of the display
+               screen.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      int low_color = MONOCHROME, hi_color;
+      int row = 10, column = 20;
+      static char string [] = "This is blinking in intensity";
+
+      if (iscolor ())
+         low_color = color (RED, BLACK);
+      hi_color = bright (low_color);
+      dis_str (row, column, string, low_color);
+      while (!kyhit ()) {
+         sound (0, 9); /* half second delay */
+         hilight (row, column, strlen (string), hi_color);
+         sound (0, 9);
+         hilight (row, column, strlen (string), low_color);
+      }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           17
+                KyCorp Memory Resident Library Version 2.01
+
+void hor_line (row, column, length, character, color)
+   int row, column;              Position on screen to start drawing
+   int length;                   Length of the line to draw
+   int character;                Character to use for the line
+   int color;                    Color attribute of the line
+
+Description:   Draws a horizontal line starting at position "row" and
+               "column" by displaying "length" number of "character" onto
+               the screen with the "color" attribute.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      hor_line (10, 20, 20, 205, color (YELLOW, BLUE));
+      /* draws a double line horizontally that is 20 characters long */
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           18
+                KyCorp Memory Resident Library Version 2.01
+
+int iscolor ()
+
+Description:   This function returns TRUE if a color display mode is being
+               used.
+
+Return Value:  Returns FALSE if the display is not in mode 7.
+
+#include <resident.h>
+main ()
+   {
+      int low_color = MONOCHROME;
+
+      if (iscolor ())
+         low_color = color (YELLOW, BLUE);
+      dis_str (10, 20, "Hi there!", low_color);
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           19
+                KyCorp Memory Resident Library Version 2.01
+
+void keystrokes (string, int_array)
+   char string [];          String to be passed 
+   int int_array [];        Storage space for scan code conversion 
+
+Description:   When control is given back to the host program "string" is
+               passed into the keyboard buffer via the storage space
+               "int_array".  "int_array" should be large enough to hold the
+               same number of elements as "string" plus one, i.e. if
+               "string" is 10 characters then "int_array" should be able to
+               hold at least 11 elements.
+
+               Note that "int_array" must global since local variables are
+               not preserved beyond the lifetime of their associated
+               functions.
+
+Return Value:  None
+
+
+#include <resident.h>
+
+int int_array [ 11 ];
+void resident_function ()
+   {
+      static char string [] = "0123456789";
+
+      keystrokes (string, int_array);
+   }
+
+main ()
+   {
+      go_resident (resident_function, KEY_RIGHT_SHIFT, KEY_ALT, KEY_CTRL);
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           20
+                KyCorp Memory Resident Library Version 2.01
+
+void key_window (key, window);
+   int key;                            Scan code for keypad key
+   struct WINDOW *window;              Structure defining the window
+
+Description:   The "key_window" function uses the scan code for a particular
+               key on the keypad to move a window.  For example, if "key" is
+               equal to KEY_PGUP then the window defined by the structure
+               "*window" is moved to the upper right-hand corner of the
+               screen.  Similarly, if "key" is equal to KEY_UP the window is
+               moved up one row.
+
+               Note that by using "key_window" the window will not be moved
+               outside the boundaries of the screen.  Also, if "key" is not
+               equal to a scan code corresponding to the keypad (i.e. not an
+               arrow or paging key) no action is taken.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      struct WINDOW window_one;
+      int window_one_buffer [ (37 + 2) * (3 + 5) ];
+
+      window_one.row = 10;
+      window_one.col = 20;
+      window_one.hlen = 37;
+      window_one.vlen = 3;
+      window_one.color = color (YELLOW, BLUE);
+      window_one.buffer = window_one_buffer;
+      window_one.vtype = DOUBLE_LINE;
+      window_one.htype = DOUBLE_LINE;
+
+      make_window (&window_one);  /* makes a window at 10, 20 */
+      while (!getch ()) 
+         key_window (getch (), &window_one)
+      /* moves "window_one" around the screen so until a key is press
+         that does not produce a two byte code (NULL then scan code). */
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           21
+                KyCorp Memory Resident Library Version 2.01
+
+int loaded (void)
+
+Description:   The "loaded" function polls the chain of memory resident
+               functions in the system to see if any have a function call
+               equal to the function pointer "routine".  If one responds
+               then the function returns TRUE; if there is no response the
+               return is FALSE.
+
+Return Value:  TRUE if "routine" already loaded.
+               FALSE if no memory resident function responds to the
+               "routine" pointer poll.
+
+#include <resident.h>
+void resident_function ()
+   {
+      sound (440, 5);
+   }
+
+main ()
+   {
+      if (loaded ())
+         printf ("The resident function has already been loaded.");
+      go_resident (resident_function, KEY_R, KEY_LEFT_SHIFT,
+                   KEY_RIGHT_SHIFT);
+      /* note that the "go_resident" function also checks to see if
+         "resident_function" is loaded and does nothing if it is */
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           22
+                KyCorp Memory Resident Library Version 2.01
+
+void make_window (window)
+   struct WINDOW *window;              Structure defining the window
+
+Description:   The "make_window" function saves the video characters and
+               color attributes where the window is to be made into
+               "(*window).buffer", erases that section of the screen, and
+               draws the appropriate box based on "(*window).vtype" and
+               "(*window).htype".
+
+               Note that "(*window).vlen" and "(*window).hlen" refer to the
+               inside dimensions of the box, therefore the size of
+               (*window).buffer should be the horizontal length plus two
+               multiplied by the vertical length plus two.  The plus two is
+               to account for the borders of the box.  For example, a window
+               with inside dimensions of 3 by 10 should have a buffer of
+               "int window_buffer [ (3 + 2) * (10 + 2) ]".
+
+               Also note that "(*window).row" and "(*window).col" refer to
+               the position of the upper left-hand corner of the window box.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      struct WINDOW window_one;
+      int window_one_buffer [ (37 + 2) * (3 + 5) ];
+
+      window_one.row = 10;
+      window_one.col = 20;
+      window_one.hlen = 37;
+      window_one.vlen = 3;
+      window_one.color = MONCHROME;
+      window_one.buffer = window_one_buffer;
+      window_one.vtype = DOUBLE_LINE;
+      window_one.htype = DOUBLE_LINE;
+
+      if (iscolor ())
+         window_one.color = color (YELLOW, BLUE);
+      make_window (&window_one);  /* makes a window at 10, 20 */
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           23
+                KyCorp Memory Resident Library Version 2.01
+
+void move_window (window, row, column)
+   struct WINDOW *window;              Structure defining the window
+   int row, column;                    Position where window is to be moved
+
+Description:   The "move_window" function moves a window by first exchanging
+               the display with "(*window).buffer", then setting
+               "(*window).row" and "(*window).col" to the new values, and
+               finally exchanging the display again with "(*window).buffer".
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      struct WINDOW window_one;
+      int window_one_buffer [ (37 + 2) * (3 + 5) ];
+
+      window_one.row = 10;
+      window_one.col = 20;
+      window_one.hlen = 37;
+      window_one.vlen = 3;
+      window_one.color = color (YELLOW, BLUE);
+      window_one.buffer = window_one_buffer;
+      window_one.vtype = DOUBLE_LINE;
+      window_one.htype = DOUBLE_LINE;
+
+      make_window (&window_one);  /* makes a window at 10, 20 */
+      move_window (&window_one, 0, 0);
+      /* moves "window_one" to the upper left-hand corner of the screen */
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           24
+                KyCorp Memory Resident Library Version 2.01
+
+void normalcur ()
+
+Description:   This is a macro function to cause the cursor to return to its
+               default size.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      hidecur ();
+      display_routine ();
+      normalcur ();
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           25
+                KyCorp Memory Resident Library Version 2.01
+
+void save_window (window)
+   struct WINDOW *window;              Structure defining the window
+
+Description:   The "save_window" function saves the characters and color
+               attributes of the area of the display screen (as defined by
+               the appropriate members of the "window" structure) in
+               "(*window).buffer".
+
+               Note that this function in conjunction with "move_window" can
+               be used to copy sections of the screen from one location to
+               another.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      struct WINDOW window_one;
+      int window_one_buffer [ (37 + 2) * (3 + 2) ];
+
+      window_one.row = 10;
+      window_one.col = 20;
+      window_one.hlen = 37;
+      window_one.vlen = 3;
+      window_one.color = MONOCHROME;
+      window_one.buffer = window_one_buffer;
+      window_one.vtype = NO_LINES;
+      window_one.htype = NO_LINES;
+
+      save_window (&window_one);
+      move_window (&window_one, 0, 0);
+      /* copies the section of the screen defined by the structure
+         "window_one" to the upper left-hand corner of the screen */
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           26
+                KyCorp Memory Resident Library Version 2.01
+
+int SCREEN_SPEED
+
+Description:   SCREEN_SPEED is a global variable which determines how the
+               video routines send there data to the screen.  With some
+               video cards, if the CPU and the video card are trying to
+               access the video memory at the same time you will get snow on
+               the display screen.
+
+               Setting SCREEN_SPEED to SCREEN_SLOW causes the video routines
+               to check to ensure the raster is in a vertical retrace
+               (sometimes referred to as a vertical blank) before sending a
+               piece of data to the screen.  While the raster is in vertical
+               retrace the video card is not accessing memory and the video
+               memory can be changed without any snow on the screen.
+
+               Setting SCREEN_SPEED to SCREEN_FAST causes the video routines
+               to just check to ensure the video card is not accessing
+               memory, such as when the raster is in horizontal retrace. 
+               There is a small amount of overlap when data is sent to
+               display memory right before the raster has completed it's
+               horizontal retrace.  This sometimes results in a small amount
+               of snow in the first 4 or 5 columns on the left side of the
+               screen.
+
+               Setting SCREEN_SPEED to SCREEN_DIRECT causes the video
+               routines to ignore the state of the video display which could
+               result in snow in various places on the screen depending on
+               the type of display card used.  Some of the newer cards do
+               not have problems with snow.
+
+               SCREEN_SPEED has no effect if the display is monochrome.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           27
+                KyCorp Memory Resident Library Version 2.01
+
+void setcur (position)
+   int position;                 Hexadecimal cursor position
+
+Description:   Places the cursor at a particular location on the screen.
+
+Return Value:  None.
+
+example1 ()
+   {
+      int   row = 10;
+      int   col = 20;
+
+      setcur (row * 256 + col);
+   }
+
+example2 ()
+   {
+      int   save_position;
+
+      save_position = getcur ();
+      display_routine ();
+      setcur (save_position);
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           28
+                KyCorp Memory Resident Library Version 2.01
+
+void sound (frequency, duration)
+   int frequency;                Frequency in cycles per second
+   int duration;                 18.6 duration units per second
+
+Description:   The "sound" function will cause the speaker to emit a tone at
+               the pitch specified by "frequency" for "duration" / 18.6
+               seconds.  Passing a "frequency" of NULL produces no tone, but
+               halts execution of the program for "duration".
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      sound (440, 5);
+      sound (0, 2);
+      sound (220, 5);
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           29
+                KyCorp Memory Resident Library Version 2.01
+
+unsigned int STACK_SIZE;
+
+Description:   STACK_SIZE is a global variable used to set the size of the
+               stack when the "go_resident" function is executed.  The
+               default value is 2000.  Changing the value of STACK_SIZE to
+               something larger before the "go_resident" function is execute
+               creates a bigger stack - and a bigger program in memory.  The
+               default value should be sufficient for most needs unless you
+               are using large local variables or routines that are heavily
+               recursive.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           30
+                KyCorp Memory Resident Library Version 2.01
+
+int top_tsr (void)
+
+Description:   Returns TRUE if the program is currently the topmost resident
+               program.  This is done by checking that all the interupt
+               vectors modified by GO_RESIDENT are still set to their
+               original values.
+
+Return Value:  Returns FALSE if another resident program is loaded on top,
+               i.e. an interupt vector has been changed.
+
+#include <resident.h>
+test ()
+   {
+      if (!top_tsr ())
+         dis_str (10, 20, "This is not the top-most resident program",
+                  bright (MONOCHROME));
+   }
+
+main ()
+   {
+      go_resident (test, KEY_T, KEY_CTRL, KEY_ALT);
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           31
+                KyCorp Memory Resident Library Version 2.01
+
+int underlined (attribute)
+   int attribute;                Monochrome attribute underline
+
+Description:   Modifies a monochrome attribute to one that is underlined. 
+               If used on a color attribute the color will be changed to
+               either a BLUE or LT_BLUE character with the background color
+               left unchanged.
+
+Return Value:  ((attribute | 1) & 0xf9)
+
+#include <resident.h>
+main ()
+   {
+      dis_str (10, 20, "This is underlined, bright, & blinking",
+               underlined (bright (blinking (MONOCHROME))));
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           32
+                KyCorp Memory Resident Library Version 2.01
+
+void ver_line (row, column, length, character, color)
+   int row, column;              Position on screen to start drawing
+   int length;                   Length of the line to draw
+   int character;                Character to use for the line
+   int color;                    Color attribute of the line
+
+Description:   Draws a vertical line starting at position "row" and "column"
+               by displaying "length" number of "character" onto the screen
+               with the "color" attribute.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      ver_line (10, 20, 10, 186, color (YELLOW, BLUE));
+      /* draws a double line vertically that is 10 characters long */
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           33
+                KyCorp Memory Resident Library Version 2.01
+
+struct WINDOW
+   {
+      unsigned int row, col;           Upper left-hand corner position
+      unsigned int hlen, vlen;         Window's inside dimensions
+      unsigned int color;              Window's color attribute
+      int *buffer;                     Storage space
+      unsigned int vtype, htype;       Window line types
+   };
+
+Description:   This structure should be used to define a window which can be
+               easily passed to other functions such as "make_window" and
+               "move_window".
+
+               Note that if either "vtype" or "htype" is set to NO_LINES
+               then a type NULL box is drawn with the MAKE_WINDOW function. 
+               Otherwise these members should be set to either SINGLE_LINE
+               or DOUBLE_LINE.
+
+Return Value:  None.
+
+#include <resident.h>
+main ()
+   {
+      struct WINDOW window_one;
+      int window_one_buffer [ (37 + 2) * (3 + 2) ];
+         /* allocate enough storage space for all characters & color 
+            attributes for a window with inside dimensions of
+            3 rows by 37 columns */
+
+      window_one.row = 10;
+      window_one.col = 20;
+         /* put upper left-hand corner of the window at 10, 20 */
+
+      window_one.hlen = 37;
+      window_one.vlen = 3;
+         /* make inside dimensions 3 rows by 37 columns */
+
+      window_one.color = color (YELLOW, BLUE);
+         /* make color attribute yellow characters on a blue background */
+
+      window_one.buffer = window_one_buffer;
+         /* use window_one_buffer as the storage space */
+
+      window_one.vtype = SINGLE_LINE;
+      window_one.htype = DOUBLE_LINE;
+      /* draw the box using single lines for the vertical sides and
+         double lines for the top and bottom */
+
+      make_window (&window_one);  /* makes a window at 10, 20 */
+   }
+
+
+
+
+
+
+                                           34
+                KyCorp Memory Resident Library Version 2.01
+
+                          Appendix A:  Warrantee
+
+This software and instructions are provided "as is" without warranty of any
+kind either expressed or implied including but not limited to fitness for a
+particular purpose. The entire risk as to the results and performance of the
+software is assumed by the user.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           35
+                KyCorp Memory Resident Library Version 2.01
+
+                  Appendix B:  Compiling & Linking TEST.C 
+
+The only requirement while compiling and linking with these library modules
+is to use the small memory model and suppress the stack checking.  For Turbo
+C this is the default model.
+
+   tcc test tbres201.lib
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           36
+                KyCorp Memory Resident Library Version 2.01
+
+                       Appendix C:  License for Use
+
+These KyCorp Memory Resident Library modules may be copied, distributed
+(free of charge), and used non-commercially provided that they are not
+modified in any way.
+
+If you would like to use these routines in a program to be distributed for
+profit (this includes shareware programs) then send a check or money order
+for $65 to the mailing address below.
+
+Send all electronic correspondence to:
+   KYMASTER on Genie
+   70441,3353 on CompuServe
+
+Mailing Address:
+   KyCorp Information Group, Inc.
+   725 Market Street
+   Wilmington, DE 19801
+
+If you find these routines useful, please do me a favor and let me know what
+you think of them.  As a fellow programmer you probably know how I love to
+get constructive feedback on my work almost as much as getting paid for it. 
+Remember, I said almost.
+
+Happy Programming!
+
+                           - Mark C. Peterson
+                             Programmer and Chief Bottle Washer
+                             KyCorp Information Group, Inc.
+
+P.S. That's pronounced "KEY-corp"!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           37
+

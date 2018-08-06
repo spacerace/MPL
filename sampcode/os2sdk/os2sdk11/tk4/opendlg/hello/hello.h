@@ -1,0 +1,14 @@
+/*
+    HELLO header file
+    Created by Microsoft Corporation, 1989
+*/
+#define ID_RESOURCE 1
+#define IDM_FILE    10
+#define IDM_OPEN    100
+#define IDM_SAVE    101
+#define IDM_ABOUT   102
+#define IDD_ABOUT   1
+
+MRESULT CALLBACK HelloWndProc(HWND, USHORT, MPARAM, MPARAM);
+MRESULT CALLBACK AboutDlgProc(HWND, USHORT, MPARAM, MPARAM);
+int cdecl main(void);

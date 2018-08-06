@@ -1,0 +1,39 @@
+
+
+        NAME
+                getpath -- retrieve the PATH variable and parse
+
+        SYNOPSIS
+                c = getpath(string);
+                int c;          count of characters returned in string
+                char *string[]; destination for parsed string. Minimum 128
+                                bytes, but longer paths could clobber this.
+
+        DESCRIPTION
+        This function extracts the PATH variable (if it exists) and makes
+        a "pseudo-array" at destination string.  All semi-colon separators
+        are replaced by NULL bytes.  The returned integer count totals
+        all characters inserted into the string including NULLS, and
+        should be used to determine the exact end of the string, since
+        a NULL byte will not determine this.
+
+        EXAMPLE
+                char *string[135];
+                int count;
+                count = getpath(string);
+
+         count will return as zero if no PATH is found.
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

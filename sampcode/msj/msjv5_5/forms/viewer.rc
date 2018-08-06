@@ -1,0 +1,69 @@
+/*
+ * FORM VIEWER - SOURCE CODE
+ *
+ * 07/12/90 1.00 - Kevin P. Welch - initial creation.
+ *
+ */
+
+#include <windows.h>
+#include "viewer.h"
+
+ViewerIcon     ICON        Viewer.ico
+
+ViewerMenu     MENU
+BEGIN
+ POPUP       "&Form"
+ BEGIN
+   MENUITEM    "&Open...",         IDM_OPEN
+   MENUITEM    "&Edit...",         IDM_EDIT, GRAYED
+   MENUITEM    "&Print...",        IDM_PRINT, GRAYED
+   MENUITEM    SEPARATOR
+   MENUITEM    "E&xit",            IDM_EXIT
+   MENUITEM    "&About...",        IDM_ABOUT
+ END
+END
+
+ViewerOpen DIALOG LOADONCALL MOVEABLE DISCARDABLE 32, 32, 202, 48
+CAPTION "Open Form Library..."
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_SYSMENU | WS_POPUP
+BEGIN
+    CONTROL "", ID_FORM, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP |
+ WS_CHILD, 36, 4, 116, 12
+    CONTROL "OK", ID_OK, "button", BS_PUSHBUTTON | WS_GROUP |
+ WS_TABSTOP | WS_CHILD | WS_DISABLED, 164, 4, 32, 12
+    CONTROL "Cancel", ID_CANCEL, "button", BS_PUSHBUTTON |
+            WS_CHILD, 164, 18, 32, 12
+    CONTROL "&Library:", -1, "static", SS_LEFT | WS_GROUP |
+            WS_CHILD, 6, 6, 28, 8
+    CONTROL "To open a form library you must enter the", -1,
+            "static", SS_LEFT | WS_CHILD, 4, 20, 146, 8
+    CONTROL "full path name of the dynamic-link library", -1,
+            "static", SS_LEFT | WS_CHILD, 4, 28, 146, 8
+    CONTROL "that supports the specific form.", -1, "static",
+            SS_LEFT | WS_CHILD, 4, 36, 146, 8
+    CONTROL "Text", -1, "static", SS_BLACKFRAME | WS_CHILD,
+            158, 0, 1, 48
+END
+
+ViewerAbout DIALOG LOADONCALL MOVEABLE DISCARDABLE 32, 32, 202, 64
+CAPTION "About Form Viewer..."
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_SYSMENU | WS_POPUP
+BEGIN
+    CONTROL "OK", ID_OK, "button", BS_PUSHBUTTON | WS_GROUP |
+WS_TABSTOP | WS_CHILD, 164, 4, 32, 12
+    CONTROL "Developed for the Microsoft Systems Journal", -1,
+            "static", SS_LEFT | WS_CHILD, 4, 16, 146, 8
+    CONTROL "by Kevin P. Welch", -1, "static", SS_LEFT | WS_CHILD,
+            4, 24, 146, 8
+    CONTROL "Text", -1, "static", SS_BLACKFRAME | WS_CHILD,
+            159, 0, 1, 64
+    CONTROL "Form Viewer Application", -1, "static",
+            SS_LEFT | WS_CHILD, 4, 4, 146, 8
+    CONTROL "Eikon Systems, Inc.", -1, "static",
+            SS_LEFT | WS_CHILD, 4, 36, 146, 8
+    CONTROL "989 East Hillsdale Blvd, Suite 260", -1, "static",
+            SS_LEFT | WS_CHILD, 4, 44, 146, 8
+    CONTROL "Foster City, California 94404", -1, "static",
+            SS_LEFT | WS_CHILD, 4, 52, 146, 8
+END
+

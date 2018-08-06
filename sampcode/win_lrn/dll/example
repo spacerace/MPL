@@ -1,0 +1,8 @@
+example.lib : example.def
+	implib example.lib example.def
+
+example.obj : example.c
+	cl -c -Gsw -Asnw example.c
+
+example.exe : example.obj example.lib
+	link4 /a:16 example.obj, example.exe,, swinlibc slibw, example.def

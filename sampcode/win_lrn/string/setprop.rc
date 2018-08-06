@@ -1,0 +1,4 @@
+#include <style.h>
+
+WindowIcon ICON setprop.ico
+

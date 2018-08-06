@@ -1,0 +1,27 @@
+    The following are the most significant programming differences between
+    SDK 1.05 and SDK 1.1.
+
+    1.  Proportional fonts.
+
+        This change involves recompilation, and changing the sizes of
+        text fields to accomodate the new text widths.
+
+    2.  FCF flags.
+
+        The flags FCF_SHELLPOSITION, FCF_ICON, FCF_ACCELTABLE, FCF_TASKLIST
+        were added to FCF_STANDARD (they used to be FS_ style flags).
+
+        The problems which arise now are that applications that do not
+        have either icons or accelerator tables, but use FCF_STANDARD,
+        GP fault for no apparent reason.
+
+        Also, if FCF_SHELLPOSITION is not specified, since you have not
+        told the system to set the default size/position of your window,
+        it does not appear (either it's hidden, or has no size)
+
+    3.  MenuItem syntax changed in resource files.
+
+        The MIS_ and MIA_ flags are now separate in the MENUITEM statement.
+
+            Old:    MENUITEM "X", IDM_X, MIS_TEXT | MIA_DISABLED
+            New:    MENUITEM "X", IDM_X, MIS_TEXT, MIA_DISABLED

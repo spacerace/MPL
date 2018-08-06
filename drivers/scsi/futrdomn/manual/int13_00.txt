@@ -1,0 +1,17 @@
+Code 00                                  Initialize the System
+
+Input registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    The SCSI Reset line is asserted and deasserted followed by a delay of 
+    about 2 seconds. After the delay, each drive that was recognized during 
+    the boot operation is issued a Recalibrate command, and if an error is 
+    returned, the status is read via a Request Sense Command. This clears out
+    any error status that  may have been caused by the reset.
+
+    The status from the request sense command is not returned to the caller 
+    as this is done for every disk connected to the adapter.
+    

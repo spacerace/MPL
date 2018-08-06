@@ -1,0 +1,17 @@
+#
+# make file	for	kmstatus.c
+#
+
+INCLUDE=c:\os2\include\mt
+LIB=c:\os2\lib
+#COPT=/Lp /W3 /Zp /Zl /G2s /Ox /I$(INCLUDE)	/Alfw
+COPT=/Lp /W3 /Zp /Zie /Zl /G2s /I$(INCLUDE)	/Alfw
+
+kmstatus.exe: kmstatus.c kmstatus
+	cl $(COPT) kmstatus.c /link	/co	/noi llibcmt
+	markexe	windowcompat kmstatus.exe
+
+
+
+
+

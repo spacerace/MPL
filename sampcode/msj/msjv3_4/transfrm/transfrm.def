@@ -1,0 +1,12 @@
+;-------------------------------------
+; TRANSFRM.DEF module definition file
+;-------------------------------------
+
+NAME           TRANSFRM  WINDOWAPI
+DESCRIPTION    'Demonstrates GPI Transforms (C) Charles Petzold, 1988'
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc
+               MatrixDlgProc
+               AngleDlgProc
+               AboutDlgProc

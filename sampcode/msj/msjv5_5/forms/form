@@ -1,0 +1,34 @@
+#
+# FORM LIBRARY - MAKE FILE
+#
+# LANGUAGE      : Microsoft C5.1
+# MODEL         : medium
+# ENVIRONMENT   : Microsoft Windows 3.0 SDK
+# STATUS        : operational
+#
+# 07/12/90 1.00 - Kevin P. Welch - initial creation.
+#
+
+form.res: form.rc form.h
+   rc -r form.rc
+
+form0.obj: form0.asm
+   masm /MX form0.asm;
+
+form1.obj: form1.c form.h
+   cl -c -u -Alnw -Gsw -Os -W3 -Zp -D_WINDOWS -D_WINDLL form1.c
+
+form2.obj: form2.c form.h
+   cl -c -u -Alnw -Gsw -Os -W3 -Zp -D_WINDOWS -D_WINDLL form2.c
+
+form3.obj: form3.c form.h
+   cl -c -u -Alnw -Gsw -Os -W3 -Zp -D_WINDOWS -D_WINDLL form3.c
+
+form.dll: form0.obj form1.obj form2.obj form3.obj form.def
+   link4 form0+form1+form2+form3, form.dll /AL:16, , \
+         mdllcaw libw /NOD, form
+   rc form.res form.dll
+
+form.dll: form.res
+   rc form.res form.dll
+

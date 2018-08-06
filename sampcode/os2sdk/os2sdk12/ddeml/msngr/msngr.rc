@@ -1,0 +1,32 @@
+#include "pmwin.h"
+#include "msngr.h"
+rcinclude msngr.dlg
+
+ICON  IDR_MSNGR2 msngr2.ico
+ICON  IDR_MSNGR1 msngr1.ico
+ICON  IDR_SELBMAP selbmap.ico
+ICON  IDD_LINK link.ico
+ICON  IDD_GETBITMAP getbmp.ico
+
+
+MENU    IDR_MSNGR1      PRELOAD
+BEGIN
+    SUBMENU     "~Send", IDM_SEND
+    BEGIN
+        MENUITEM    "~Text\tCtrl-T",    IDM_DOSENDTEXT
+/*        MENUITEM    "~Song\tCtrl-S",    IDM_DOSENDSONG,     MIA_DISABLED */
+        MENUITEM    "~Bitmap\tCtrl-B",  IDM_DOSENDBITMAP,   MIA_DISABLED
+    END
+    MENUITEM    "~Link", IDM_INITLINK
+/*    MENUITEM    "~Update", IDM_UPDATE */
+END
+
+
+
+ACCELTABLE IDR_MSNGR1   PRELOAD
+BEGIN
+    "t",    IDM_DOSENDTEXT,     CONTROL
+/*    "s",    IDM_DOSENDSONG,     CONTROL */
+    "b",    IDM_DOSENDBITMAP,   CONTROL
+    "l",    IDM_INITLINK,       CONTROL
+END

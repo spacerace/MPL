@@ -1,0 +1,29 @@
+;**************************************************************************
+;*
+;*       GENAPP.DEF - Module definition file for GENAPP
+;*
+;**************************************************************************
+
+NAME    GENAPP
+DESCRIPTION 'GENAPP'	; This appears in Title Bar
+
+
+CODE    PRELOAD MOVEABLE        ; Code is all resident but may be moved.
+DATA    PRELOAD FIXED MULTIPLE  ; Data may be partitioned and moved.
+
+HEAPSIZE    2048
+STACKSIZE   4096
+
+STUB 'WINSTUB.EXE'      ; This informs an attempted DOS invocation that
+                        ; This needs Windows to run.
+
+EXPORTS                 ; These need to made available externally.
+
+    win_MainWndProc		@1
+    win_ChildWndProc		@2
+    dlg_AboutBoxProc		@3
+
+;    DebugWndProc		@4
+
+
+

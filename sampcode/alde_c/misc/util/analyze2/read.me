@@ -1,0 +1,27 @@
+        Newest news about the C_SM ANALYZE and MAINTENANCE package
+
+                The analyze utility included in this package is
+        version 2.0.  It fixes some deficiencies in version 1.1
+        and adds some command options.
+
+                Version 1.1 included in its output two kinds of
+        declarations which were undesirable.
+
+           1) Forward or external function declarations were seen
+              as function calls.
+           2) Manifest constant definitions were seen as macros if
+              the value was contained in parenthesis.
+              ie: #define CONSTANT   (-1)
+
+        Version 2.0 fixes both of these conditions.
+
+
+        Version 2.0 adds the following command options:
+           1) -m option to analyze the 'dependant files' in the
+                 specified 'make' file.
+           2) -s option to print out the statistical analysis. This
+                 was always printed in version 1.1.
+           3) -b option to print out any unbalanced conditions found.
+                 This too was always printed in version 1.1
+
+

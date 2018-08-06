@@ -1,0 +1,6 @@
+linefrac.obj lfcmd.obj lfdlg.obj lfdraw.obj lffile.obj+ 
+lfinit.obj lfps.obj lfthread.obj lfutil.obj lfxform.obj 
+linefrac.exe 
+linefrac.map 
+llibcmt opendlg os2 
+linefrac.def 

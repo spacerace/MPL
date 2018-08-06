@@ -1,0 +1,65 @@
+#--------------------
+# VECTFONT make file
+#--------------------
+
+# Abbreviations
+#
+CC	=	cl -c -G2s -W3 -Zi
+LF	=	/align:16 /codeview /map /NOD
+
+# Inference Rules
+#
+.c.obj:
+	$(CC) $*.c
+
+all: vectfont.exe
+
+# Dependencies
+#
+vectfont.obj:	vectfont vectfont.c vectfont.h
+
+vf00.obj:	vectfont vf00.c vectfont.h
+
+vf01.obj:	vectfont vf01.c vectfont.h
+
+vf02.obj:	vectfont vf02.c vectfont.h
+
+vf03.obj:	vectfont vf03.c vectfont.h
+
+vf04.obj:	vectfont vf04.c vectfont.h
+
+vf05.obj:	vectfont vf05.c vectfont.h
+
+vf06.obj:	vectfont vf06.c vectfont.h
+
+vf07.obj:	vectfont vf07.c vectfont.h
+
+vf08.obj:	vectfont vf08.c vectfont.h
+
+vf09.obj:	vectfont vf09.c vectfont.h
+
+vf10.obj:	vectfont vf10.c vectfont.h
+
+vf11.obj:	vectfont vf11.c vectfont.h
+
+vf12.obj:	vectfont vf12.c vectfont.h
+
+vf13.obj:	vectfont vf13.c vectfont.h
+
+vf14.obj:	vectfont vf14.c vectfont.h
+
+vf15.obj:	vectfont vf15.c vectfont.h
+
+vectfont.res:	vectfont vectfont.rc vectfont.h
+     rc -r vectfont
+
+vectfont.exe:	vectfont.obj vf00.obj vf01.obj vf02.obj vf03.obj \
+                            vf04.obj vf05.obj vf06.obj vf07.obj \
+                            vf08.obj vf09.obj vf10.obj vf11.obj \
+                            vf12.obj vf13.obj vf14.obj vf15.obj \
+                            vectfont.def
+     link $(LF) @vectfont.lnk
+     rc vectfont.res
+
+vectfont.exe: vectfont.res
+     rc vectfont.res

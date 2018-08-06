@@ -1,0 +1,10 @@
+#include  "SetCl.h"
+#include  <windows.h>
+
+SetCl MENU
+    BEGIN
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

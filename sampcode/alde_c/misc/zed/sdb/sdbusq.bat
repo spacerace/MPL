@@ -1,0 +1,25 @@
+usq cmd.cq
+del cmd.cq
+usq com.cq
+del com.cq
+usq cre.cq
+del cre.cq
+usq err.cq
+del err.cq
+usq iex.cq
+del iex.cq
+usq int.cq
+del int.cq
+usq io.cq
+del io.cq
+usq mth.cq
+del mth.cq
+usq scn.cq
+del scn.cq
+usq sel.cq
+del sel.cq
+usq srt.cq
+del srt.cq
+usq tbl.cq
+del tbl.cq
+

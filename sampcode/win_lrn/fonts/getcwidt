@@ -1,0 +1,6 @@
+getcwidt.obj: getcwidt.c
+    cl -d -c -AS -Gsw -Os -Zpe getcwidt.c
+
+getcwidt.exe: getcwidt.obj getcwidt.def
+    link4 getcwidt,/align:16,/map,slibw/NOE,getcwidt.def
+    mapsym getcwidt

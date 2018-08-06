@@ -1,0 +1,16 @@
+#include "style.h"
+#include "qchecked.h"
+
+qchecked MENU
+    BEGIN
+	MENUITEM "DIALOG", 80
+    END
+
+EXAMPLEBOX DIALOG LOADONCALL MOVEABLE DISCARDABLE 50, 40, 200, 65
+    STYLE WS_DLGFRAME | WS_POPUP
+    BEGIN
+	   CONTROL "OKAY" ID_OK, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD,75, 38, 41, 22
+
+	   CONTROL "Click here to see if this control is checked" TOP_CONTROL, "button", BS_CHECKBOX | WS_TABSTOP | WS_CHILD, 6, 4, 264, 12
+	   CONTROL "Click here to see if this control is checked" BOTTOM_CONTROL, "button", BS_CHECKBOX | WS_TABSTOP | WS_CHILD, 6, 21, 275, 14
+    END

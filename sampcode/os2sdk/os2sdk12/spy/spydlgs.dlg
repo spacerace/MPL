@@ -1,0 +1,221 @@
+/*
+	Dialog box templates for the SPY application
+	Created by Microsoft Corporation, 1989
+*/
+DLGTEMPLATE MessagesDlg LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Spy Message List", IDD_DLGOPTIONS, 30, 20, 283, 158,
+                FS_DLGBORDER | WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS,
+                FCF_TITLEBAR
+    BEGIN
+        CONTROL "~Message", -1, 6,144, 45, 8, WC_STATIC, SS_TEXT |
+                DT_LEFT | DT_TOP | DT_MNEMONIC | WS_GROUP | WS_VISIBLE
+
+        EDITTEXT "", DID_MSGEDIT,  52, 144, 200,8, ES_MARGIN
+
+        LISTBOX DID_OMSGLIST, 6, 20, 150,118, WS_VISIBLE | LS_MULTIPLESEL
+        PUSHBUTTON "~All",       DID_MALL, 165,  120, 52, 18
+        PUSHBUTTON "~None",      DID_MNONE, 225, 120, 52, 18
+
+        PUSHBUTTON "Char On",   DID_MCON, 165,  100, 52, 18
+        PUSHBUTTON "Char Off",  DID_MCOFF, 225, 100, 52, 18
+
+        PUSHBUTTON "Mouse On",  DID_MMON, 165,   80, 52, 18
+        PUSHBUTTON "Mouse Off", DID_MMOFF, 225,  80, 52, 18
+
+        PUSHBUTTON "Freq On",   DID_MFON, 165,   60, 52, 18
+        PUSHBUTTON "Freq Off",  DID_MFOFF, 225,  60, 52, 18
+
+        AUTOCHECKBOX "~Input Hook", DID_OINPUT, 165, 44, 60, 10
+        AUTOCHECKBOX "~SendMsg Hook",DID_OSENDMSG, 165, 32, 80, 10
+        AUTOCHECKBOX "~Display undefined msgs",DID_OTHERMSGS, 165, 20,110, 10
+
+        CONTROL "OK", DID_OK, 6, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                BS_DEFAULT | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel", DID_CANCEL, 56, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                WS_TABSTOP | WS_VISIBLE
+    END
+END
+
+
+
+DLGTEMPLATE OutputsDlg LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Spy Output Options", IDD_DLGOPTIONS, 30, 20, 193, 56,
+                FS_DLGBORDER | WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS,
+                FCF_TITLEBAR
+    BEGIN
+        CONTROL "~Screen Lines:", DID_WINDOW, 6, 40, 72, 10, WC_BUTTON,
+                BS_AUTOCHECKBOX | WS_TABSTOP | WS_VISIBLE
+        CONTROL "~File Name:", DID_FILE, 6, 24, 62, 10, WC_BUTTON, BS_AUTOCHECKBOX |
+                WS_TABSTOP | WS_VISIBLE
+        CONTROL "Text", DID_WINDOWLINES, 92, 40, 32, 8, WC_ENTRYFIELD,
+                ES_LEFT | ES_MARGIN | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Text", DID_FILENAME, 92, 24, 95, 8, WC_ENTRYFIELD, ES_LEFT |
+                ES_MARGIN | WS_TABSTOP | WS_VISIBLE
+
+        CONTROL "OK", DID_OK, 6, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                BS_DEFAULT | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel", DID_CANCEL, 56, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                WS_TABSTOP | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE WindowsDlg LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Spy Windows", IDD_DLGWINDOWS, 20, 30, 278, 194,
+                FS_DLGBORDER | WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS,
+                FCF_TITLEBAR
+    BEGIN
+        LISTBOX DID_WINDOWLIST, 2, 20, 132, 170, WS_VISIBLE | LS_MULTIPLESEL
+
+        LTEXT   "Window Handle:", -1, 137, 180, 74, 8
+        LTEXT   "Text:",          -1, 137  170, 26, 8
+        LTEXT   "Class:",         -10,137, 160, 30, 8
+        LTEXT   "Parent:",        -2, 137, 150, 34, 8
+        LTEXT   "Child:",         -3, 137, 140, 28, 8
+        LTEXT   "Owner:",         -4, 137, 130, 32, 8
+        LTEXT   "Rect:",          -5, 137, 120, 24, 8
+        LTEXT   "id:",            -6, 137, 110, 16, 8
+        LTEXT   "Style:",         -7, 137, 100, 28, 8
+        LTEXT   "CStyle:",        -7, 137,  90, 34, 8
+        LTEXT   "Pfnwp:",         -8, 137,  80, 28, 8
+        LTEXT   "Hmq:",           -9, 137,  70, 28, 8
+        LTEXT   "PID:",           -9, 137,  60, 20, 8
+        LTEXT   "TID:",           -9, 210,  60, 20, 8
+
+
+        LTEXT   "",               DID_WTEXT   , 164, 170,100, 8
+        LTEXT   "",               DID_WCLASS  , 169, 160, 88, 8
+        LTEXT   "",               DID_WPARENT , 173, 150, 34, 8
+        LTEXT   "",               DID_WCHILD  , 167, 140, 34, 8
+        LTEXT   "",               DID_WOWNER  , 171, 130, 34, 8
+        LTEXT   "",               DID_WRECT   , 165, 120, 98, 8
+        LTEXT   "",               DID_WID     , 155, 110, 60, 8
+        LTEXT   "",               DID_WSTYLE  , 167, 100, 60, 8
+        LTEXT   "",               DID_WCSTYLE , 171,  90, 60, 8
+        LTEXT   "",               DID_WPFNWP  , 165,  80, 60, 8
+        LTEXT   "",               DID_WHMQ    , 165,  70, 60, 8
+        LTEXT   "",               DID_WPID    , 160,  60, 30, 8
+        LTEXT   "",               DID_WTID    , 232,  60, 30, 8
+
+        LTEXT   "",               DID_WOLINE1 , 137,  50, 135,8
+        LTEXT   "",               DID_WOLINE2 , 137,  40, 135,8
+        LTEXT   "",               DID_WOLINE3 , 137,  30, 135,8
+        LTEXT   "",               DID_WOLINE4 , 137,  20, 135,8
+
+        CONTROL "OK", DID_OK, 6, 4, 38, 14, WC_BUTTON, BS_PUSHBUTTON |
+                BS_DEFAULT | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel", DID_CANCEL, 56, 4, 38, 14, WC_BUTTON, BS_PUSHBUTTON |
+                WS_TABSTOP | WS_VISIBLE
+        PUSHBUTTON "~All", DID_WSELALL, 106, 4, 38, 14
+        PUSHBUTTON "~None", DID_WUNSELALL, 156, 4, 38, 14
+        PUSHBUTTON "~Mouse", DID_WSELMOUSE, 206, 4, 38, 14
+
+        /* Want to be before listbox to user, but have listbox be default */
+        EDITTEXT "",               DID_WHANDLE , 213, 180, 54, 8, ES_MARGIN
+    END
+END
+
+
+DLGTEMPLATE MsgQueueDlg LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Spy Message Queues", IDD_DLGWINDOWS, 20, 30, 278, 124,
+                FS_DLGBORDER | WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS,
+                FCF_TITLEBAR
+    BEGIN
+        LISTBOX DID_WINDOWLIST, 2, 20, 132, 100, WS_VISIBLE | LS_MULTIPLESEL
+
+        LTEXT   "Hmq:",           -9, 137, 110, 28, 8
+        LTEXT   "Top HWND:", -1, 137, 100, 74, 8
+        LTEXT   "Text:",          -1, 137   90, 26, 8
+        LTEXT   "PID:",           -9, 137,  80, 20, 8
+        LTEXT   "TID:",           -9, 210,  80, 20, 8
+
+
+        LTEXT   "",               DID_WHANDLE , 213, 100, 54, 8
+        LTEXT   "",               DID_WTEXT   , 164,  90,100, 8
+        LTEXT   "",               DID_WPID    , 160,  80, 30, 8
+        LTEXT   "",               DID_WTID    , 232,  80, 30, 8
+
+        CONTROL "OK", DID_OK, 6, 4, 38, 14, WC_BUTTON, BS_PUSHBUTTON |
+                BS_DEFAULT | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel", DID_CANCEL, 56, 4, 38, 14, WC_BUTTON, BS_PUSHBUTTON |
+                WS_TABSTOP | WS_VISIBLE
+        PUSHBUTTON "~All", DID_WSELALL, 106, 4, 38, 14
+        PUSHBUTTON "~None", DID_WUNSELALL, 156, 4, 38, 14
+        PUSHBUTTON "~Mouse", DID_WSELMOUSE, 206, 4, 38, 14
+
+        /* Want to be before listbox to user, but have listbox be default */
+        EDITTEXT   "",            DID_WHMQ    , 165, 110, 80, 8, ES_MARGIN
+    END
+END
+
+DLGTEMPLATE SaveListDlg LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Spy Save List to File", IDD_DLGSAVELIST, 30, 20, 136, 60,
+                FS_DLGBORDER | WS_VISIBLE |
+                WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR
+    BEGIN
+        LTEXT   "File:",        -1,             6, 42, 20, 8
+        EDITTEXT "",            DID_FILENAME,  30, 42, 100,8, ES_MARGIN
+
+        AUTOCHECKBOX "Append", DID_APPEND, 6, 24, 48, 10
+
+        DEFPUSHBUTTON "Ok",     DID_OK, 6, 4, 38, 14, WS_GROUP
+        PUSHBUTTON "Cancel",    DID_CANCEL, 56, 4, 38, 14,
+                WS_TABSTOP | WS_VISIBLE
+    END
+END
+
+
+DLGTEMPLATE AboutDlg LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "", 1, 10, 12, 290, 184, FS_DLGBORDER
+    BEGIN
+        CTEXT "OS/2 Presentation Manager", 0, 65, 172, 160, 8
+        CTEXT "Created by Microsoft Corp., 1989", 0, 65, 164, 160, 8
+        CTEXT "Window Spy application", 0, 65, 150, 160, 8
+        DEFPUSHBUTTON "OK", DID_OK, 6, 156, 38, 12
+
+        LTEXT "Spy displays messages that are sent to one or more", 0, 4, 136, 270, 8
+        LTEXT "windows by hooking the HK_INPUT and HK_SENDMSG hooks", 0, 4, 128, 270, 8
+
+        LTEXT "Spy Active: Toggle spy on or off.", 0, 10, 114, 270, 8
+        LTEXT "Clear Window: Clears the listbox.", 0, 10, 106, 270, 8
+        LTEXT "Save Window: Save listbox contents to file.", 0, 10, 98, 270, 8
+        LTEXT "Exit: Exit from Spy", 0, 10, 90, 270, 8
+        LTEXT "About Spy: Displays this dialog.", 0, 10, 82, 270, 8
+        LTEXT "Window List...: Select windows from list.", 0, 10, 74, 270, 8
+        LTEXT "Mouse Select: Select/Deselect window with mouse, holding", 0, 10, 66, 270, 8
+        LTEXT "Mouse Unselect: Ctrl key down will select frame.", 0, 10, 58, 270, 8
+        LTEXT "Dump One Window: Display information about mouse window.", 0, 10, 50, 270, 8
+        LTEXT "Dump All Windows: Display information about all windows.", 0, 10, 42, 270, 8
+        LTEXT "Message List...: Select messages from list.", 0, 10, 34, 270, 8
+        LTEXT "Disable Message: Disable/Enable processing of message", 0, 10, 26, 270, 8
+        LTEXT "Enable Message: selected in the output listbox.", 0, 10, 18, 270, 8
+        LTEXT "Outputs...: Select where output should go.", 0, 10, 10, 270, 8
+    END
+END
+
+DLGTEMPLATE ListNearDlg LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "List Near Symbol", IDD_DLGLISTNEAR, 30, 20, 250, 92,
+                FS_DLGBORDER | WS_VISIBLE |
+                WS_CLIPSIBLINGS | WS_SAVEBITS,
+                FCF_TITLEBAR | FCF_SIZEBORDER | FCF_SYSMENU
+    BEGIN
+        LTEXT   "Address:",     DID_ADDRLABEL, 4, 64, 40, 8
+        EDITTEXT "",            DID_ADDR,  50, 64, 100,8, ES_MARGIN
+
+        LISTBOX DID_SYMLIST, 4, 20, 242, 40
+
+        DEFPUSHBUTTON "Ok",     DID_OK, 4, 4, 38, 14, WS_GROUP
+        PUSHBUTTON "Cancel",    DID_CANCEL, 56, 4, 38, 14,
+                WS_TABSTOP | WS_VISIBLE
+
+        LTEXT   "PID:",  DID_PIDLABEL, 4, 78, 20, 8
+        EDITTEXT "",     DID_PID,  30, 78, 100,8, ES_MARGIN
+
+    END
+END

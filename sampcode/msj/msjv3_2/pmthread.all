@@ -1,0 +1,1108 @@
+Microsoft Systems Journal
+Volume 3; Issue 2; March, 1988
+
+Code Listings For:
+
+	BIGJOB1 ... BIGJOB5
+	pp. 11-27
+
+Author(s): Charles Petzold
+Title:     Utilizing Os/2 Multithread Techniques in Presentation Manager
+           Applications
+
+
+
+Figure 1  
+========
+
+
+/*--------------------------------
+   BIGJOB.RC resource script file
+  --------------------------------*/
+
+#include <os2.h>
+#include "bigjob.h"
+
+MENU ID_RESOURCE
+     {
+     SUBMENU "~Repetitions",  IDM_REPS
+          {
+          MENUITEM "     10", IDM_10,    MIA_CHECKED
+          MENUITEM "    100", IDM_100
+          MENUITEM "   1000", IDM_1000
+          MENUITEM "  10000", IDM_10000
+          }
+     SUBMENU "~Action",       IDM_ACTION
+          {
+          MENUITEM "~Start",  IDM_START
+          MENUITEM "~Abort",  IDM_ABORT, MIA_DISABLED
+          }
+     }
+
+
+==============================================================================
+
+
+/*----------------------
+   BIGJOB.H header file
+  ----------------------*/
+
+#define ID_RESOURCE 1
+
+#define IDM_REPS    1
+#define IDM_ACTION  2
+
+#define IDM_10      10
+#define IDM_100     100
+#define IDM_1000    1000
+#define IDM_10000   10000
+
+#define IDM_START   20
+#define IDM_ABORT   21
+
+     /*-----------------------------------------------------
+        Definitions, functions, and variables for BIGJOBx.C
+       -----------------------------------------------------*/
+
+#ifndef RC_INVOKED       /* This stuff not needed for .RC file */
+
+#define STATUS_READY     0
+#define STATUS_WORKING   1
+#define STATUS_DONE      2
+
+ULONG EXPENTRY ClientWndProc (HWND, USHORT, ULONG, ULONG) ;
+
+HAB  hab ;
+
+double Savage (double A)
+     {
+     return tan (atan (exp (log (sqrt (A * A))))) + 1.0 ;
+     }
+
+VOID CheckMenuItem (HWND hwnd, SHORT iMenuItem, BOOL bCheck)
+     {
+     HWND hwndParent = WinQueryWindow (hwnd, QW_PARENT, FALSE) ;
+     HWND hwndMenu   = WinWindowFromID (hwndParent, FID_MENU) ;
+
+     WinSendMsg (hwndMenu, MM_SETITEMATTR, MAKEULONG (iMenuItem, TRUE),
+                 MAKEULONG (MIA_CHECKED, bCheck ? MIA_CHECKED : 0)) ;
+     }
+
+VOID EnableMenuItem (HWND hwnd, SHORT iMenuItem, BOOL bEnable)
+     {
+     HWND hwndParent = WinQueryWindow (hwnd, QW_PARENT, FALSE) ;
+     HWND hwndMenu   = WinWindowFromID (hwndParent, FID_MENU) ;
+
+     WinSendMsg (hwndMenu, MM_SETITEMATTR, MAKEULONG (iMenuItem, TRUE),
+                 MAKEULONG (MIA_DISABLED, bEnable ? 0 : MIA_DISABLED)) ;
+     }
+
+VOID PaintWindow (HWND hwnd, SHORT iStatus, SHORT iRep, LONG lTime)
+     {
+     static CHAR *szMessage [3] = { "Ready", "Working ...",
+                                    "%d repetitions in %ld msec." } ;
+     CHAR        szBuffer [60] ;
+     HPS         hps ;
+     WRECT       wrc ;
+
+     hps = WinBeginPaint (hwnd, NULL, NULL) ;
+     GpiErase (hps) ;
+
+     WinQueryWindowRect (hwnd, &wrc) ;
+
+     sprintf (szBuffer, szMessage [iStatus], iRep, lTime) ;
+
+     WinDrawText (hps, -1, szBuffer, &wrc, DT_CENTER | DT_VCENTER) ;
+     WinEndPaint (hps) ;
+     }
+
+#endif
+
+=============================[ End Figure 1 ]=================================
+
+
+
+Figure 2 
+========
+
+
+
+#-------------------
+# BIGJOB1 make file
+#-------------------
+
+bigjob1.obj : bigjob1.c bigjob.h
+     cl -c -FPa -G2sw -W3 -Zp bigjob1.c
+
+bigjob.res : bigjob.rc bigjob.h
+     rc -r bigjob.rc
+
+bigjob1.exe : bigjob1.obj bigjob1.def bigjob.res
+     link bigjob1, /align:16, /map, /nod slibc slibcp slibfa os2, bigjob1
+     rc bigjob.res bigjob1.exe
+unCrunching: <to console> BIGJOB1.C
+
+==============================================================================
+
+
+;------------------------------------
+; BIGJOB1.DEF module definition file
+;------------------------------------
+
+NAME           BIGJOB1
+DESCRIPTION    'BIGJOB Demo Program No. 1 (C) Charles Petzold, 1988'
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc
+
+
+
+==============================================================================
+
+
+/*-------------------------------------------------------
+   BIGJOB1.C -- Naive approach to lengthy processing job
+ --------------------------------------------------------*/
+
+#define INCL_WIN
+
+#include <os2.h>
+#include <math.h>
+#include <stdio.h>
+#include "bigjob.h"
+
+INT main (VOID)
+     {
+     static CHAR szClassName [] = "BigJob1" ;
+     HMQ         hmq ;
+     HWND        hwndFrame, hwndClient ;
+     QMSG        qmsg ;
+
+     hab = WinInitialize (0) ;
+     hmq = WinCreateMsgQueue (hab, 0) ;
+
+     WinRegisterClass (hab, szClassName, ClientWndProc,
+                            CS_SYNCPAINT | CS_SIZEREDRAW, 0, NULL) ;
+
+     hwndFrame = WinCreateStdWindow (HWND_DESKTOP,
+                    WS_VISIBLE | FS_SIZEBORDER | FS_TITLEBAR
+                               | FS_SYSMENU    | FS_MINMAX   | FS_MENU,
+                    szClassName, "BIGJOB Demo No. 1",
+                    0L, NULL, ID_RESOURCE, &hwndClient) ;
+
+     while (WinGetMsg (hab, &qmsg, NULL, 0, 0))
+          WinDispatchMsg (hab, &qmsg) ;
+
+     WinDestroyWindow (hwndFrame) ;
+     WinDestroyMsgQueue (hmq) ;
+     WinTerminate (hab) ;
+
+     return 0 ;
+     }
+
+ULONG EXPENTRY ClientWndProc (HWND hwnd, USHORT msg, ULONG mp1,
+                                                     ULONG mp2)
+     {
+     static SHORT iCalcRep, iCurrentRep = IDM_10 ;
+     static SHORT iStatus = STATUS_READY ;
+     static ULONG lElapsedTime ;
+     double       A ;
+     SHORT        i ;
+
+     switch (msg)
+          {
+          case WM_COMMAND:
+
+               switch (LOUSHORT (mp1))
+                    {
+                    case IDM_10:
+                    case IDM_100:
+                    case IDM_1000:
+                    case IDM_10000:
+                         CheckMenuItem (hwnd, iCurrentRep, FALSE) ;
+                         iCurrentRep = LOUSHORT (mp1) ;
+                         CheckMenuItem (hwnd, iCurrentRep, TRUE) ;
+                         break ;
+
+                    case IDM_START:
+                         EnableMenuItem (hwnd, IDM_START, FALSE) ;
+                         EnableMenuItem (hwnd, IDM_ABORT, TRUE) ;
+
+                         iStatus = STATUS_WORKING ;
+                         WinInvalidateRect (hwnd, NULL) ;
+
+                         iCalcRep = iCurrentRep ;
+                         lElapsedTime = WinGetCurrentTime (hab) ;
+
+                         for (A = 1.0, i = 0 ; i < iCalcRep ; i++)
+                              A = Savage (A) ;
+
+                         lElapsedTime = WinGetCurrentTime (hab) -
+                                        lElapsedTime ;
+
+                         iStatus = STATUS_DONE ;
+                         WinInvalidateRect (hwnd, NULL) ;
+
+                         EnableMenuItem (hwnd, IDM_START, TRUE) ;
+                         EnableMenuItem (hwnd, IDM_ABORT, FALSE) ;
+                         break ;
+
+                    case IDM_ABORT:
+
+                              /* Not much we can do here */
+
+                         break ;
+
+                    default:
+                         break ;
+                    }
+               break ;
+
+          case WM_PAINT:
+               PaintWindow (hwnd, iStatus, iCalcRep, lElapsedTime) ;
+               break ;
+
+          default:
+               return WinDefWindowProc (hwnd, msg, mp1, mp2) ;
+          }
+     return 0L ;
+     }
+
+
+=============================[ End Figure 2 ]=================================
+
+
+
+Figure 3 
+========
+
+
+
+
+#-------------------
+# BIGJOB2 make file
+#-------------------
+
+bigjob2.obj : bigjob2.c bigjob.h
+     cl -c -FPa -G2sw -W3 -Zp bigjob2.c
+
+bigjob.res : bigjob.rc bigjob.h
+     rc -r bigjob.rc
+
+bigjob2.exe : bigjob2.obj bigjob2.def bigjob.res
+     link bigjob2, /align:16, /map, /nod slibc slibcp slibfa os2, bigjob2
+     rc bigjob.res bigjob2.exe
+
+
+==============================================================================
+
+
+;------------------------------------
+; BIGJOB2.DEF module definition file
+;------------------------------------
+
+NAME           BIGJOB2
+DESCRIPTION    'BIGJOB Demo Program No. 2 (C) Charles Petzold, 1988'
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc
+
+
+==============================================================================
+
+
+/*-------------------------------------------------------
+   BIGJOB2.C -- Timer approach to lengthy processing job
+ --------------------------------------------------------*/
+
+#define INCL_WIN
+
+#include <os2.h>
+#include <math.h>
+#include <stdio.h>
+#include "bigjob.h"
+
+#define ID_TIMER 1
+
+INT main (VOID)
+     {
+     static CHAR szClassName [] = "BigJob2" ;
+     HMQ         hmq ;
+     HWND        hwndFrame, hwndClient ;
+     QMSG        qmsg ;
+
+     hab = WinInitialize (0) ;
+     hmq = WinCreateMsgQueue (hab, 0) ;
+
+     WinRegisterClass (hab, szClassName, ClientWndProc,
+                            CS_SYNCPAINT | CS_SIZEREDRAW, 0, NULL) ;
+
+     hwndFrame = WinCreateStdWindow (HWND_DESKTOP,
+                    WS_VISIBLE | FS_SIZEBORDER | FS_TITLEBAR
+                               | FS_SYSMENU    | FS_MINMAX   | FS_MENU,
+                    szClassName, "BigJob Demo No. 2",
+                    0L, NULL, ID_RESOURCE, &hwndClient) ;
+
+     while (WinGetMsg (hab, &qmsg, NULL, 0, 0))
+          WinDispatchMsg (hab, &qmsg) ;
+
+     WinDestroyWindow (hwndFrame) ;
+     WinDestroyMsgQueue (hmq) ;
+     WinTerminate (hab) ;
+
+     return 0 ;
+     }
+
+ULONG EXPENTRY ClientWndProc (HWND hwnd, USHORT msg, ULONG mp1,
+                                                     ULONG mp2)
+     {
+     static double A ;
+     static SHORT  i, iCalcRep, iCurrentRep = IDM_10 ;
+     static SHORT  iStatus = STATUS_READY ;
+     static ULONG  lElapsedTime ;
+
+     switch (msg)
+          {
+          case WM_COMMAND:
+
+               switch (LOUSHORT (mp1))
+                    {
+                    case IDM_10:
+                    case IDM_100:
+                    case IDM_1000:
+                    case IDM_10000:
+                         CheckMenuItem (hwnd, iCurrentRep, FALSE) ;
+                         iCurrentRep = LOUSHORT (mp1) ;
+                         CheckMenuItem (hwnd, iCurrentRep, TRUE) ;
+                         break ;
+
+                    case IDM_START:
+
+                         if (!WinStartTimer (hab, hwnd, ID_TIMER, 1))
+                              {
+                              WinAlarm (HWND_DESKTOP, WA_ERROR) ;
+                              break ;
+                              }
+
+                         EnableMenuItem (hwnd, IDM_START, FALSE) ;
+                         EnableMenuItem (hwnd, IDM_ABORT, TRUE) ;
+
+                         iStatus = STATUS_WORKING ;
+                         WinInvalidateRect (hwnd, NULL) ;
+
+                         iCalcRep = iCurrentRep ;
+                         lElapsedTime = WinGetCurrentTime (hab) ;
+
+                         A = 1.0 ;
+                         i = 0 ;
+          
+                         break ;
+
+                    case IDM_ABORT:
+                         WinStopTimer (hab, hwnd, ID_TIMER) ;
+
+                         iStatus = STATUS_READY ;
+                         WinInvalidateRect (hwnd, NULL) ;
+
+                         EnableMenuItem (hwnd, IDM_START, TRUE) ;
+                         EnableMenuItem (hwnd, IDM_ABORT, FALSE) ;
+                         break ;
+     
+                    default:
+                         break ;
+                    }
+               break ;
+
+          case WM_TIMER:
+
+               A = Savage (A) ;
+
+               if (++i == iCalcRep)
+                    {
+                    lElapsedTime = WinGetCurrentTime (hab) -
+                                        lElapsedTime ;
+
+                    WinStopTimer (hab, hwnd, ID_TIMER) ;
+
+                    iStatus = STATUS_DONE ;
+                    WinInvalidateRect (hwnd, NULL) ;
+
+                    EnableMenuItem (hwnd, IDM_START, TRUE) ;
+                    EnableMenuItem (hwnd, IDM_ABORT, FALSE) ;
+                    }
+               break ;
+
+          case WM_PAINT:
+               PaintWindow (hwnd, iStatus, iCalcRep, lElapsedTime) ;
+               break ;
+
+          default:
+               return WinDefWindowProc (hwnd, msg, mp1, mp2) ;
+          }
+     return 0L ;
+     }
+
+
+=============================[ End Figure 3 ]=================================
+
+
+
+
+Figure 4 
+========
+
+
+
+#-------------------
+# BIGJOB3 make file
+#-------------------
+
+bigjob3.obj : bigjob3.c bigjob.h
+     cl -c -FPa -G2sw -W3 -Zp bigjob3.c
+
+bigjob.res : bigjob.rc bigjob.h
+     rc -r bigjob.rc
+
+bigjob3.exe : bigjob3.obj bigjob3.def bigjob.res
+     link bigjob3, /align:16, /map, /nod slibc slibcp slibfa os2, bigjob3
+     rc bigjob.res bigjob3.exe
+
+
+==============================================================================
+
+
+;------------------------------------
+; BIGJOB3.DEF module definition file
+;------------------------------------
+
+NAME           BIGJOB3
+DESCRIPTION    'BigJob Demo Program No. 3 (C) Charles Petzold, 1988'
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc
+
+
+==============================================================================
+
+
+
+/*--------------------------------------------------------------
+   BIGJOB3.C -- Peek Message approach to lengthy processing job
+ ---------------------------------------------------------------*/
+
+#define INCL_WIN
+
+#include <os2.h>
+#include <math.h>
+#include <stdio.h>
+#include "bigjob.h"
+
+INT main (VOID)
+     {
+     static CHAR szClassName [] = "BigJob3" ;
+     HMQ         hmq ;
+     HWND        hwndFrame, hwndClient ;
+     QMSG        qmsg ;
+
+     hab = WinInitialize (0) ;
+     hmq = WinCreateMsgQueue (hab, 0) ;
+
+     WinRegisterClass (hab, szClassName, ClientWndProc,
+                            CS_SIZEREDRAW, 0, NULL) ;
+
+     hwndFrame = WinCreateStdWindow (HWND_DESKTOP,
+                    WS_VISIBLE | FS_SIZEBORDER | FS_TITLEBAR
+                               | FS_SYSMENU    | FS_MINMAX   | FS_MENU,
+                    szClassName, "BigJob Demo No. 3",
+                    0L, NULL, ID_RESOURCE, &hwndClient) ;
+
+     while (WinGetMsg (hab, &qmsg, NULL, 0, 0))
+          WinDispatchMsg (hab, &qmsg) ;
+
+     WinDestroyWindow (hwndFrame) ;
+     WinDestroyMsgQueue (hmq) ;
+     WinTerminate (hab) ;
+
+     return 0 ;
+     }
+	
+ULONG EXPENTRY ClientWndProc (HWND hwnd, USHORT msg, ULONG mp1,
+                                                     ULONG mp2)
+     {
+     static BOOL   bContinueCalc = FALSE ;
+     static SHORT  iStatus = STATUS_READY ;
+     static SHORT  iCalcRep, iCurrentRep = IDM_10 ;
+     static ULONG  lElapsedTime ;
+     double        A ;
+     SHORT         i ;
+     QMSG          qmsg ;
+
+     switch (msg)
+          {
+          case WM_COMMAND:
+
+               switch (LOUSHORT (mp1))
+                    {
+                    case IDM_10:
+                    case IDM_100:
+                    case IDM_1000:
+                    case IDM_10000:
+                         CheckMenuItem (hwnd, iCurrentRep, FALSE) ;
+                         iCurrentRep = LOUSHORT (mp1) ;
+                         CheckMenuItem (hwnd, iCurrentRep, TRUE) ;
+                         break ;
+
+                    case IDM_START:
+                         EnableMenuItem (hwnd, IDM_START, FALSE) ;
+                         EnableMenuItem (hwnd, IDM_ABORT, TRUE) ;
+
+                         iStatus = STATUS_WORKING ;
+                         WinInvalidateRect (hwnd, NULL) ;
+
+                         iCalcRep = iCurrentRep ;
+                         bContinueCalc = TRUE ;
+                         lElapsedTime = WinGetCurrentTime (hab) ;
+
+                         qmsg.msg = WM_NULL ;
+
+                         for (A = 1.0, i = 0 ; i < iCalcRep ; i++)
+                              {
+                              A = Savage (A) ;
+
+                              while (WinPeekMsg (hab, &qmsg, NULL, 0, 0,
+                                                  PM_NOREMOVE))
+                                   {
+                                   if (qmsg.msg == WM_QUIT)
+                                        break ;
+
+                                   WinGetMsg (hab, &qmsg, NULL, 0, 0) ;
+                                   WinDispatchMsg (hab, &qmsg) ;
+
+                                   if (!bContinueCalc)
+                                        break ;
+                                   }
+
+                              if (!bContinueCalc || qmsg.msg == WM_QUIT)
+                                   break ;
+                              }
+                         lElapsedTime = WinGetCurrentTime (hab) - 
+                                                  lElapsedTime ;
+
+                         if (!bContinueCalc || qmsg.msg == WM_QUIT)
+                              iStatus = STATUS_READY ;
+                         else
+                              iStatus = STATUS_DONE ;
+
+                         WinInvalidateRect (hwnd, NULL) ;
+
+                         EnableMenuItem (hwnd, IDM_START, TRUE) ;
+                         EnableMenuItem (hwnd, IDM_ABORT, FALSE) ;
+                         break ;
+
+                    case IDM_ABORT:
+                         bContinueCalc = FALSE ;
+                         break ;
+     
+                    default:
+                         break ;
+                    }
+               break ;
+
+          case WM_PAINT:
+               PaintWindow (hwnd, iStatus, iCalcRep, lElapsedTime) ;
+               break ;
+
+          default:
+               return WinDefWindowProc (hwnd, msg, mp1, mp2) ;
+          }
+     return 0L ;
+     }
+
+
+=============================[ End Figure 4 ]=================================
+
+
+
+
+Figure 5 
+========
+
+
+
+
+#-------------------
+# BIGJOB4 make file
+#-------------------
+
+bigjob4.obj : bigjob4.c bigjob.h
+     cl -c -FPa -G2sw -W3 -Zp bigjob4.c
+
+bigjob.res : bigjob.rc bigjob.h
+     rc -r bigjob.rc
+
+bigjob4.exe : bigjob4.obj bigjob4.def bigjob.res
+     link bigjob4, /align:16, /map, /nod slibc slibcp slibfa os2, bigjob4
+     rc bigjob.res bigjob4.exe
+
+
+==============================================================================
+
+
+;------------------------------------
+; BIGJOB4.DEF module definition file
+;------------------------------------
+
+NAME           BIGJOB4
+DESCRIPTION    'BigJob Demo Program No. 4 (C) Charles Petzold, 1988'
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc
+
+
+==============================================================================
+
+
+
+/*---------------------------------------------------------------
+   BIGJOB4.C -- Second thread approach to lengthy processing job
+ ----------------------------------------------------------------*/
+
+#define INCL_WIN
+#define INCL_DOS
+
+#include <os2.h>
+#include <math.h>
+#include <stdio.h>
+#include "bigjob.h"
+
+#define WM_CALC_DONE     (WM_USER + 0)
+#define WM_CALC_ABORTED  (WM_USER + 1) 
+
+VOID FAR SecondThread (VOID) ;
+
+BOOL  bContinueCalc = FALSE ;
+HWND  hwndClient ;
+SHORT iCalcRep ;
+LONG  lSemTrigger ;
+TID   idThread ;
+UCHAR cThreadStack [4096] ;
+
+INT main (VOID)
+     {
+     static CHAR szClassName [] = "BigJob4" ;
+     HMQ         hmq ;
+     HWND        hwndFrame ;
+     QMSG        qmsg ;
+
+     hab = WinInitialize (0) ;
+     hmq = WinCreateMsgQueue (hab, 0) ;
+
+     WinRegisterClass (hab, szClassName, ClientWndProc,
+                            CS_SIZEREDRAW, 0, NULL) ;
+
+     hwndFrame = WinCreateStdWindow (HWND_DESKTOP,
+                    WS_VISIBLE | FS_SIZEBORDER | FS_TITLEBAR
+                               | FS_SYSMENU    | FS_MINMAX   | FS_MENU,
+                    szClassName, "BigJob Demo No. 4",
+                    0L, NULL, ID_RESOURCE, &hwndClient) ;
+
+     while (WinGetMsg (hab, &qmsg, NULL, 0, 0))
+          WinDispatchMsg (hab, &qmsg) ;
+
+     DosSuspendThread (idThread) ;
+
+     WinDestroyWindow (hwndFrame) ;
+     WinDestroyMsgQueue (hmq) ;
+     WinTerminate (hab) ;
+
+     return 0 ;
+     }
+	
+ULONG EXPENTRY ClientWndProc (HWND hwnd, USHORT msg, ULONG mp1,
+                                                     ULONG mp2)
+     {
+     static SHORT iCurrentRep = IDM_10 ;
+     static SHORT iStatus = STATUS_READY ;
+     static ULONG lElapsedTime ;
+
+     switch (msg)
+          {
+          case WM_CREATE:
+
+               DosSemSet (&lSemTrigger) ;
+
+               if (DosCreateThread (SecondThread, &idThread,
+                                    cThreadStack + sizeof cThreadStack))
+
+                    WinAlarm (HWND_DESKTOP, WA_ERROR) ;
+
+               break ;
+
+          case WM_COMMAND:
+
+               switch (LOUSHORT (mp1))
+                    {
+                    case IDM_10:
+                    case IDM_100:
+                    case IDM_1000:
+                    case IDM_10000:
+                         CheckMenuItem (hwnd, iCurrentRep, FALSE) ;
+                         iCurrentRep = LOUSHORT (mp1) ;
+                         CheckMenuItem (hwnd, iCurrentRep, TRUE) ;
+                         break ;
+
+                    case IDM_START:
+                         iStatus = STATUS_WORKING ;
+                         WinInvalidateRect (hwnd, NULL) ;
+
+                         iCalcRep = iCurrentRep ;
+                         bContinueCalc = TRUE ;
+                         DosSemClear (&lSemTrigger) ;
+          
+                         EnableMenuItem (hwnd, IDM_START, FALSE) ;
+                         EnableMenuItem (hwnd, IDM_ABORT, TRUE) ;
+                         break ;
+
+                    case IDM_ABORT:
+                         bContinueCalc = FALSE ;
+
+                         EnableMenuItem (hwnd, IDM_ABORT, FALSE) ;
+                         break ;
+     
+                    default:
+                         break ;
+                    }
+               break ;
+
+          case WM_CALC_DONE:
+
+               iStatus = STATUS_DONE ;
+               lElapsedTime = mp1 ;
+               WinInvalidateRect (hwnd, NULL) ;
+
+               EnableMenuItem (hwnd, IDM_START, TRUE) ;
+               EnableMenuItem (hwnd, IDM_ABORT, FALSE) ;
+               break ;
+
+          case WM_CALC_ABORTED:
+
+               iStatus = STATUS_READY ;
+               WinInvalidateRect (hwnd, NULL) ;
+
+               EnableMenuItem (hwnd, IDM_START, TRUE) ;
+               break ;
+
+          case WM_PAINT:
+               PaintWindow (hwnd, iStatus, iCalcRep, lElapsedTime) ;
+               break ;
+
+          default:
+               return WinDefWindowProc (hwnd, msg, mp1, mp2) ;
+          }
+     return 0L ;
+     }
+
+VOID FAR SecondThread ()
+     {
+     double A ;
+     int    i ;
+     LONG   lTime ;
+     
+     while (1)
+          {
+          DosSemWait (&lSemTrigger, -1L) ;
+
+          lTime = WinGetCurrentTime (hab) ;
+
+          for (A = 1.0, i = 0 ; i < iCalcRep ; i++)
+               {
+               if (!bContinueCalc)
+                    break ;
+
+               A = Savage (A) ;
+               }
+
+          lTime = WinGetCurrentTime (hab) - lTime ;
+          
+          DosSemSet (&lSemTrigger) ;
+
+          if (bContinueCalc)
+               WinPostMsg (hwndClient, WM_CALC_DONE, lTime, 0L) ;
+          else
+               WinPostMsg (hwndClient, WM_CALC_ABORTED, 0L, 0L) ;     
+          }
+     }
+
+
+=============================[ End Figure 5 ]=================================
+
+
+
+
+Figure 6
+========
+
+
+
+#-------------------
+# BIGJOB5 make file
+#-------------------
+
+bigjob5.obj : bigjob5.c bigjob.h
+     cl -c -FPa -G2sw -W3 -Zp bigjob5.c
+
+bigjob.res : bigjob.rc bigjob.h
+     rc -r bigjob.rc
+
+bigjob5.exe : bigjob5.obj bigjob5.def bigjob.res
+     link bigjob5, /align:16, /map, /nod slibc slibcp slibfa os2, bigjob5
+     rc bigjob.res bigjob5.exe
+
+
+==============================================================================
+
+
+;------------------------------------
+; BIGJOB5.DEF module definition file
+;------------------------------------
+
+NAME           BIGJOB5
+DESCRIPTION    'BigJob Demo Program No. 5 (C) Charles Petzold, 1988'
+HEAPSIZE       1024
+STACKSIZE      8192
+EXPORTS        ClientWndProc
+               ObjectWndProc
+
+
+
+==============================================================================
+
+
+
+
+/*---------------------------------------------------------------
+   BIGJOB5.C -- Object window approach to lengthy processing job
+ ----------------------------------------------------------------*/
+
+#define INCL_WIN
+#define INCL_DOS
+
+#include <os2.h>
+#include <math.h>
+#include <stdio.h>
+#include "bigjob.h"
+
+#define WM_OBJECT_CREATED     (WM_USER + 0)
+#define WM_START_CALC         (WM_USER + 1)
+#define WM_ABORT_CALC         (WM_USER + 2)
+#define WM_CALC_DONE          (WM_USER + 3)
+#define WM_CALC_ABORTED       (WM_USER + 4)
+#define WM_OBJECT_DESTROYED   (WM_USER + 5)
+
+VOID  FAR SecondThread (VOID) ;
+ULONG EXPENTRY ObjectWndProc (HWND, USHORT, ULONG, ULONG) ;
+
+HWND  hwndClient, hwndObject ;
+UCHAR cThreadStack [8192] ;
+
+INT main (VOID)
+     {
+     static CHAR szClassName [] = "BigJob5" ;
+     HMQ         hmq ;
+     HWND        hwndFrame ;
+     QMSG        qmsg ;
+     TID         idThread ;
+
+     hab = WinInitialize (0) ;
+     hmq = WinCreateMsgQueue (hab, 0) ;
+
+     WinRegisterClass (hab, szClassName, ClientWndProc,
+                            CS_SIZEREDRAW, 0, NULL) ;
+
+     hwndFrame = WinCreateStdWindow (HWND_DESKTOP,
+                    WS_VISIBLE | FS_SIZEBORDER | FS_TITLEBAR
+                               | FS_SYSMENU    | FS_MINMAX   | FS_MENU,
+                    szClassName, "BigJob Demo No. 5",
+                    0L, NULL, ID_RESOURCE, &hwndClient) ;
+
+     EnableMenuItem (hwndClient, IDM_START, FALSE) ;
+
+     if (DosCreateThread (SecondThread, &idThread,
+                          cThreadStack + sizeof cThreadStack))
+
+          WinAlarm (HWND_DESKTOP, WA_ERROR) ;
+
+     while (WinGetMsg (hab, &qmsg, NULL, 0, 0))
+          WinDispatchMsg (hab, &qmsg) ;
+
+     WinDestroyWindow (hwndFrame) ;
+     WinDestroyMsgQueue (hmq) ;
+     WinTerminate (hab) ;
+
+     return 0 ;
+     }
+
+ULONG EXPENTRY ClientWndProc (HWND hwnd, USHORT msg, ULONG mp1,
+                                                     ULONG mp2)
+     {
+     static SHORT iCalcRep, iCurrentRep = IDM_10 ;
+     static SHORT iStatus = STATUS_READY ;
+     static ULONG lElapsedTime ;
+
+     switch (msg)
+          {
+          case WM_OBJECT_CREATED:
+
+               EnableMenuItem (hwnd, IDM_START, TRUE) ;
+               break ;
+
+          case WM_COMMAND:
+
+               switch (LOUSHORT (mp1))
+                    {
+                    case IDM_10:
+                    case IDM_100:
+                    case IDM_1000:
+                    case IDM_10000:
+                         CheckMenuItem (hwnd, iCurrentRep, FALSE) ;
+                         iCurrentRep = LOUSHORT (mp1) ;
+                         CheckMenuItem (hwnd, iCurrentRep, TRUE) ;
+                         break ;
+
+                    case IDM_START:
+                         EnableMenuItem (hwnd, IDM_START, FALSE) ;
+                         EnableMenuItem (hwnd, IDM_ABORT, TRUE) ;
+
+                         iStatus = STATUS_WORKING ;
+                         WinInvalidateRect (hwnd, NULL) ;
+
+                         iCalcRep = iCurrentRep ;
+                         WinPostMsg (hwndObject, WM_START_CALC,
+                                   MAKEULONG (iCalcRep, 0), 0L) ;
+                         break ;
+
+                    case IDM_ABORT:
+                         WinPostMsg (hwndObject, WM_ABORT_CALC,
+                                                 0L, 0L) ;
+
+                         EnableMenuItem (hwnd, IDM_ABORT, FALSE) ;
+                         break ;
+     
+                    default:
+                         break ;
+                    }
+               break ;
+
+          case WM_CALC_DONE:
+
+               iStatus = STATUS_DONE ;
+               lElapsedTime = mp1 ;
+               WinInvalidateRect (hwnd, NULL) ;
+
+               EnableMenuItem (hwnd, IDM_START, TRUE) ;
+               EnableMenuItem (hwnd, IDM_ABORT, FALSE) ;
+               break ;
+
+          case WM_CALC_ABORTED:
+
+               iStatus = STATUS_READY ;
+               WinInvalidateRect (hwnd, NULL) ;
+
+               EnableMenuItem (hwnd, IDM_START, TRUE) ;
+               break ;
+
+          case WM_PAINT:
+
+               PaintWindow (hwnd, iStatus, iCalcRep, lElapsedTime) ;
+               break ;
+
+          case WM_CLOSE:
+
+               if (hwndObject)
+                    WinPostMsg (hwndObject, WM_QUIT, 0L, 0L) ;
+               else
+                    WinPostMsg (hwnd, WM_QUIT, 0L, 0L) ;
+               break ;
+
+          case WM_OBJECT_DESTROYED:
+
+               WinPostMsg (hwnd, WM_QUIT, 0L, 0L) ;
+               break ;
+
+          default:
+               return WinDefWindowProc (hwnd, msg, mp1, mp2) ;
+          }
+     return 0L ;
+     }
+
+VOID FAR SecondThread ()
+     {
+     static CHAR szClassName [] = "BigJob5.Object" ;
+     HMQ         hmq ;
+     QMSG        qmsg ;
+
+     hmq = WinCreateMsgQueue (hab, 0) ;
+
+     WinRegisterClass (hab, szClassName, ObjectWndProc, 0L, 0, NULL) ;
+
+     hwndObject = WinCreateWindow (HWND_OBJECT, szClassName,
+                    NULL, 0L, 0, 0, 0, 0, NULL, NULL, 0, NULL, NULL) ;
+
+     WinPostMsg (hwndClient, WM_OBJECT_CREATED, 0L, 0L) ;
+
+     while (WinGetMsg (hab, &qmsg, NULL, 0, 0))
+          WinDispatchMsg (hab, &qmsg) ;
+
+     WinDestroyWindow (hwndObject) ;
+     WinDestroyMsgQueue (hmq) ;
+
+     WinPostMsg (hwndClient, WM_OBJECT_DESTROYED, 0L, 0L) ;
+
+     DosExit (0, 0) ;
+     }
+
+ULONG EXPENTRY ObjectWndProc (HWND hwnd, USHORT msg, ULONG mp1,
+                                                     ULONG mp2)
+     {
+     double A ;
+     SHORT  i, iCalcRep ;
+     LONG   lQueueStatus, lTime ;
+
+     switch (msg)
+          {
+          case WM_START_CALC:
+
+               iCalcRep = LOUSHORT (mp1) ;
+               lTime = WinGetCurrentTime (hab) ;
+
+               for (A = 1.0, i = 0 ; i < iCalcRep ; i++)
+                    {
+                    lQueueStatus = WinQueryQueueStatus (HWND_DESKTOP) ;
+
+                    if (lQueueStatus & QS_POSTMSG)
+                         break ;
+
+                    A = Savage (A) ;
+                    }
+
+               if (lQueueStatus & QS_POSTMSG)
+                    break ;
+
+               lTime = WinGetCurrentTime (hab) - lTime ;
+
+               WinPostMsg (hwndClient, WM_CALC_DONE, lTime, 0L) ;
+               break ;
+
+          case WM_ABORT_CALC:
+
+               WinPostMsg (hwndClient, WM_CALC_ABORTED, 0L, 0L) ;
+               break ;
+
+          default:
+               return WinDefWindowProc (hwnd, msg, mp1, mp2) ;
+          }
+     return 0L ;
+     }
+
+
+=============================[ End Figure 6 ]=================================

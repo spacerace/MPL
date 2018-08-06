@@ -1,0 +1,5 @@
+asmhelp.obj : asmhelp.asm
+  masm /T asmhelp.asm;
+
+asmhelp.dll : asmhelp.obj asmhelp.def
+  link asmhelp,asmhelp.dll,,os2,asmhelp

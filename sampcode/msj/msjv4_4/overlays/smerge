@@ -1,0 +1,3 @@
+smerge.exe : smerge.c
+   cl smerge.c
+

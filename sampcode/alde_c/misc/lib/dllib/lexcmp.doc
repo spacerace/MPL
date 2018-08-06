@@ -1,0 +1,39 @@
+
+
+        NAME
+                lexcmp -- perform comparison on two strings, case independent
+
+        SYNOPSIS
+                r = lexcmp(str1, str2);
+                BOOL r;
+                char str1, str2;
+
+
+        DESCRIPTION
+        This function compares two strings for exactness through each
+        string's NULL terminator.  Case is ignored, but the strings must be
+        an exact match in all other respects, including length.  Returns
+        FALSE (0) if not the same, and TRUE if the same.
+
+
+        EXAMPLE
+             char *str1[] = "FOObar";
+             char *str2[] = "fooBAR";
+             if(lexcmp(str1, str2)) printf("Strings match\n");
+             else printf("Strings do not match\n");
+
+             In this example, the strings match, because upper and
+             lower case are considered equal.
+
+
+
+
+
+
+
+
+
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

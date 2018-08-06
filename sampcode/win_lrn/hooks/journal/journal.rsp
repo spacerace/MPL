@@ -1,0 +1,5 @@
+JOURNAL+libinit
+JOURNAL.EXE/align:16
+JOURNAL/map
+swinlibc slibw
+JOURNAL.def

@@ -1,0 +1,17 @@
+
+NAME    WhatSize
+
+DESCRIPTION 'A Windows Application'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  1024
+STACKSIZE 4096
+
+EXPORTS
+        MainWndProc     @1
+        AboutWndProc    @2
+        UnitsWndProc    @3

@@ -1,0 +1,49 @@
+#include "ddemlp.h"
+
+/* DMG DLL resource file */
+
+STRINGTABLE FIXED
+BEGIN
+        DMGERR_POSTMSG_FAILED           ,"A call to WinDdePostMsg failed."
+        DMGERR_DLL_NOT_INITIALIZED      ,"A call was made the the DLL before it was initialized or while processing the callback function."
+        DMGERR_PMWIN_ERROR              ,"A Window Manager call failed."
+        DMGERR_NO_CONV_ESTABLISHED      ,"No conversation was established."
+        DMGERR_TIMEOUT                  ,"No response within a timeout."
+        DMGERR_REENTRANCY               ,"Reentrency error."
+        DMGERR_DLL_USAGE                ,"Incorrect DLL usage by multiple threads."
+        DMGERR_BAD_APP_NAME             ,"Bad application name passed in."
+        DMGERR_DOS_ERROR                ,"A DOS call failed."
+        DMGERR_SYSTOPIC_NOT_SUPPORTED   ,"No system topic support by this app."
+        DMGERR_INVALID_HDMGDATA         ,"Invalid hDmgData handle."
+        DMGERR_BUSY                     ,"Client request made while client or server was busy."
+        DMGERR_NOTPROCESSED             ,"Message not processed by receiver."
+        DMGERR_INVALIDPARAMETER         ,"Bad parameter to Ddeml call."
+        DMGERR_MEMORY_ERROR             ,"Memory Failure."
+        DMGERR_POKEACKTIMEOUT           ,"Poke Acknowledge not received in time."
+        DMGERR_EXECACKTIMEOUT           ,"Execute Acknowledge not received in time."
+        DMGERR_DATAACKTIMEOUT           ,"Data Acknowledge not received in time."
+        DMGERR_SERVER_DIED              ,"A Server window has been destroyed."
+        DMGERR_ADVACKTIMEOUT            ,"Advise Acknowledge not received in time."
+        DMGERR_UNADVACKTIMEOUT          ,"Unadvise Acknowledge not received in time."
+        DMGERR_ACCESS_DENIED            ,"Memory access denied."
+        DMGERR_UNFOUND_QUEUE_ID         ,"Queue ID not found."
+        DMGERR_NOT_IMPLEMENTED          ,"Not yet implemented."
+END
+
+
+STRINGTABLE FIXED
+BEGIN
+        WM_DDE_INITIATE                 ,"Initiate"
+        WM_DDE_REQUEST                  ,"Request"
+        WM_DDE_ACK                      ,"Ack"
+        WM_DDE_DATA                     ,"Data"
+        WM_DDE_ADVISE                   ,"Advise"
+        WM_DDE_UNADVISE                 ,"Unadvise"
+        WM_DDE_POKE                     ,"Poke"
+        WM_DDE_EXECUTE                  ,"Execute"
+        WM_DDE_TERMINATE                ,"Terminate"
+        WM_DDE_INITIATEACK              ,"InitiateACK"
+END
+
+
+

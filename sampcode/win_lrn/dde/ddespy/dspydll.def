@@ -1,0 +1,19 @@
+LIBRARY     DspyDLL
+
+DESCRIPTION 'Windows 2.1 DDE Spy Hook DLL'
+
+STUB    'WINSTUB.EXE'
+
+CODE    FIXED
+DATA    MOVEABLE SINGLE
+
+HEAPSIZE  8192
+
+EXPORTS
+    MsgHook1       @1
+    MsgHook2       @2
+    InitHook       @3
+    KillHook       @4
+    PassFileToDLL  @5
+    DebugWndProc   @6
+    CreateDebugWin @7

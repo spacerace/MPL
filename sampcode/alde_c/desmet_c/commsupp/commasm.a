@@ -1,0 +1,440 @@
+;
+; commasm.a
+;
+;   Tom Poindexter, March 1984
+;
+;   assembler routines for commsupp.c
+;
+;   int_c_handlr - handle interrupts for IRQ4 - com1:
+;   int_b_handlr - handle interrupts for IRQ3 - com2:
+;   sysint       - call a system interrupt
+;   inb          - input a byte from a hardware port
+;   inw          - input a word from a hardware port
+;   outb         - output a byte to a hardware port
+;   outw         - output a word to a hardware port
+;   cli          - clear interrupts (cli)
+;   sti          - set interrupts   (sti)
+;
+;
+; ***************************************************************************
+;
+; int_c_handlr/int_b_handlr - get character from comm port and stuff into
+;                             buffer; check if XOFF should be sent if
+;                             buffer is more than 3/4 when enabled.
+;
+; notes:
+; determination of port to send XOFF and values of end-of-interrupt is from
+; the offset of the comm parms saved in BX at the start of the interrupt handlr
+; hence, the code only supports 2 (and only 2) comm ports as written
+;
+; the C data segment is inserted into the code segment by init_com
+; so that the interrupt handler will have access to the _com_parms
+; control block
+;
+;
+;
+C8259_1 equ 20h
+EOI_IRQ4 equ 64h
+EOI_IRQ3 equ 63h
+XON     equ 11h
+XOFF    equ 13h
+TRUE    equ 1
+FALSE   equ 0
+;
+; offsets for _com_parms structure elements
+PORT    equ 0
+B_ADDR  equ 2
+B_LEN   equ 4
+B_HEAD  equ 6
+B_TAIL  equ 8
+B_CNT   equ 10
+X_STATE equ 12
+X_RECD  equ 14
+X_SENT  equ 16
+ORG_OFF equ 18
+ORG_SEG equ 20
+ON_COM  equ 22
+;
+; _com_parms structure length (sizeof(_com_parms))
+STRUCT_LEN equ 24
+;
+;
+        dseg
+        public _com_parms_:word
+;
+;  _com_parms[2] declared in commsupp.c
+;
+;
+        cseg
+        public int_c_handlr_
+        public int_b_handlr_
+        public outp_char_               ;C routine to send a char
+        public sysint_
+        public inb_
+        public inw_
+        public outb_
+        public outw_
+        public cli_
+        public sti_
+;
+; ****************************************************************************
+;
+; prologue for IRQ4 - com1 interrupt
+;
+int_c_handlr_:
+        jmp start_c     ;jump around storage for C data seg
+c_ds:   dw 0            ;this is filled in by init_com, loction known in
+                        ;init_com is "(unsigned) &int_c_handlr + 2"
+com1on  db 0            ;flag to see if on_com routine in progress-com1
+com2on  db 0            ;flag to see if on_com routine in progress-com2
+start_c:
+        push ax          ;save regs
+        push bx
+        push cx
+        push dx
+        push si
+        push di
+        push ds
+        push es
+        push bp
+        mov ax,cs:c_ds  ;get the C data segment..
+        mov ds,ax       ;..and establish addressability
+        mov es,ax       ;...
+        mov bx,offset _com_parms_       ;_com_parms offset for com1:
+        mov ah,EOI_IRQ4 ;EOI value when exiting this routine
+        jmp get_char
+;
+;
+; prologue for IRQ3 - com2 interrupt
+int_b_handlr_:
+        push ax         ;save regs
+        push bx
+        push cx
+        push dx
+        push si
+        push di
+        push ds
+        push es
+        push bp
+        mov ax,cs:c_ds  ;get the C data segment
+        mov ds,ax       ;and establish addressability
+        mov es,ax       ;...
+        mov bx,offset _com_parms_       ;_com_parms offset for com1:
+        add bx,STRUCT_LEN               ; and adjust for com2:
+        mov ah,EOI_IRQ3 ;EOI value when exiting this routing
+;
+;
+; get the char held in the receive register
+;
+get_char:
+        mov dx,[bx+PORT]        ;get port address
+        in  al,dx               ;get the byte from the serial card
+;
+; check to see if XON/XOFF protocol enabled;
+; if enabled and buffer 3/4, send XOFF
+;
+        cmp word [bx+X_STATE],FALSE     ;are we interested in XON/XOFF?
+        je  store               ;no, bypass XOFF and buffer full check
+        cmp al,XOFF             ;did we receive XOFF
+        jne no_xoff             ;no, go on to check our buffer
+        mov word [bx+X_RECD],TRUE       ;yes, set XOFF received flag
+        jmp leave               ;and leave this place
+no_xoff:
+        mov dx,[bx+B_LEN]       ;see if our buffer is 3/4 full
+        shr dx,1                ;divide by 2 so that we have 1/2 of buffer len
+        shr dx,1                ;divide by 2 again for 1/4 of buffer len
+        neg dx                  ;set negative so that we can add it
+        add dx,[bx+B_LEN]       ;now we have 3/4 of the buffer len
+        cmp [bx+B_CNT],dx       ;is buffer 3/4 full?
+        jle store               ;no, go on to store
+        cmp word [bx+X_SENT],TRUE   ;have we already sent XOFF
+        je store                ;yes, save char
+        mov word [bx+X_SENT],TRUE       ;no, set XOFF sent flag and send
+        push ax                 ;save the char and EOI
+        push bx                 ;save parm block offset
+        mov dx,XOFF             ;send XOFF
+        push dx                 ;save the XOFF as argrument to routine
+        mov dx,1                ;setup for port 1
+        cmp bx,offset _com_parms_       ;is this really com1: ?
+        je  portarg             ;yup, save it
+        mov dx,2                ;no, it's really com2:
+portarg:
+        push dx                 ;save port as argument
+        call outp_char_         ;call C routine to send it
+        add sp,4                ;get rid of arguments
+        pop bx                  ;restore parm block
+        pop ax                  ;restore char and EOI
+;
+; store the char in buffer, if we wrap around, drop the incoming char
+;
+store:
+        mov dx,[bx+B_CNT]       ;check to see if buffer is full
+        cmp dx,[bx+B_LEN]       ;are we full? CNT = LEN
+        je  leave               ;yup, sorry Charlie
+        mov si,[bx+B_HEAD]      ;get offset to store char
+        mov byte [si],al        ;store the char in the buffer..
+        inc word [bx+B_CNT]     ;..and increment the count of chars in buffer
+        inc word [bx+B_HEAD]    ;increment buffer head for next char
+        mov dx,[bx+B_ADDR]      ;now get buffer start..
+        add dx,[bx+B_LEN]       ;..and see if we are at the end of the buffer
+        cmp [bx+B_HEAD],dx      ;head > end of buffer?
+        jl  leave               ;no, continue
+        mov dx,[bx+B_ADDR]      ;yes, circle buffer to beginning
+        mov [bx+B_HEAD],dx      ;start buffer head at beginning of buffer
+;
+; signal end-of-interrupt, and return
+;
+leave:
+        mov al,ah               ;setup for specific EOI(determined in prologue)
+        out C8259_1,al          ;send the EOI command to the 8259 int ctlr.
+        sti                     ;enable interrupts again
+;
+; if on_com routine valid and not active, then call routine
+;
+        cmp word [bx+ON_COM],FALSE ;routine there?
+        je done                 ;no, finished
+        cmp bx,offset _com_parms_ ;is this com1?
+        je com1flag             ;yes, go on to com1 logic
+        cmp byte cs:com2on,TRUE ;is com2 routine active?
+        je done                 ;yes, finished
+        mov byte cs:com2on,TRUE ;set the flag on and...
+        call word [bx+ON_COM]   ;call the routine
+        mov byte cs:com2on,FALSE ;now reset it
+        jmp done                ;com2 routine done
+com1flag:
+        cmp byte cs:com1on,TRUE ;no, is com1 routine active?
+        je done                 ;yes, finished
+        mov byte cs:com1on,TRUE ;no, set the flag on and...
+        call word [bx+ON_COM]   ;call the routine
+        mov byte cs:com1on,FALSE ;now reset it
+done:
+        pop bp                  ;restore everything
+        pop es
+        pop ds
+        pop di
+        pop si
+        pop dx
+        pop cx
+        pop bx
+        pop ax
+        iret                    ;back to where we came
+;
+; end of int_a_handlr and int_b_handlr
+;
+; ***************************************************************************
+;
+;
+; sysint.a -- system interupt call
+;         returns: flags
+;
+;
+; usage:  struct regval {int ax, bx, cx, dx, si, di, ds, es;};
+;         struct regval input_regs, output_regs;
+;         int int_vec;
+;         ....
+;         sysint(int_vec, &input_regs, &output_regs);
+;
+;
+;
+;       cseg                    ;remove comment if you want to use
+;       public sysint_          ;sysint alone
+;
+; prologue
+;
+sysint_:
+        push    bp              ;save calling bp
+        mov     bp,sp           ;addr args thru bp
+;
+;save all regs except ax and dx for parm return
+;
+        push    bx
+        push    cx
+        push    si
+        push    di
+        push    ds
+        push    es
+;
+;get interrupt number
+;
+        mov     ax,[bp+4]       ;get interrupt number
+        mov     ah,0            ;zero high byte
+        mov     cs:intcal+1,al  ;insert interrupt in code
+;
+;get input regs
+;
+        push    bp              ;save for after int call
+        mov     bp,[bp+6]       ;set-up bp for input reg values
+        mov     ax,[bp+00]      ;ax
+        mov     bx,[bp+02]      ;bx
+        mov     cx,[bp+04]      ;cx
+        mov     dx,[bp+06]      ;dx
+        mov     si,[bp+08]      ;si
+        mov     di,[bp+10]      ;di
+        mov     ds,[bp+12]      ;ds
+        mov     es,[bp+14]      ;es
+;
+;call the interupt
+;
+intcal:
+        int     255             ;call the interupt
+;                               ;255 is just a placeholder for the byte
+;                               ;inserted from above
+;
+;put output regs
+;
+        pop     bp              ;get bp from our save
+        pushf                   ;save flags for return
+        push    ax              ;save ax for outregs
+        mov     bp,[bp+8]       ;point to output regs struct
+        mov     [bp+14],es      ;es
+        mov     [bp+12],ds      ;ds
+        mov     [bp+10],di      ;di
+        mov     [bp+08],si      ;si
+        mov     [bp+06],dx      ;dx
+        mov     [bp+04],cx      ;cx
+        mov     [bp+02],bx      ;bx
+        pop     ax              ;get ax again
+        mov     [bp+00],ax      ;ax
+;
+; restore all except ax which will contain flags
+        pop     ax              ;flags into ax
+        mov     dx,0            ;dx:ax return value
+        pop     es
+        pop     ds
+        pop     di
+        pop     si
+        pop     cx
+        pop     bx
+;
+;epilogue
+        pop     bp              ;restore calling bp
+        ret                     ;so-long
+;
+;
+; end of sysint
+;
+; ***************************************************************************
+;
+;
+; portio.a -- I/O for hardware ports
+;
+;   inb - input one byte
+;   inw - input one word
+;  outb - output one byte
+;  outw - output one word
+;
+; usage:  int addr, val;
+;         addr = 0x0379;
+;         val = inb(addr);
+;         outb(addr,val);
+;
+;
+;
+;       cseg                            ;remove comments if you want to use
+;       public inb_,inw_,outb_,outw_    ;portio alone
+;
+; inb
+; prologue
+;
+inb_:
+        push    bp              ;save calling bp
+        mov     bp,sp           ;addr args thru bp
+;
+;get port address
+        mov     dx,[bp+4]       ;port address
+;
+;get port value
+        mov     ax,0            ;clear reg
+        in      al,dx           ;get it
+;
+;epilogue
+        pop     bp              ;restore calling bp
+        ret                     ;so-long
+;
+;
+; inw
+; prologue
+;
+inw_:
+        push    bp              ;save calling bp
+        mov     bp,sp           ;addr args thru bp
+;
+;get port address
+        mov     dx,[bp+4]       ;port address
+;
+;get port value
+        mov     ax,0            ;clear reg
+        in      ax,dx           ;get it
+;
+;epilogue
+        pop     bp              ;restore calling bp
+        ret                     ;so-long
+;
+; outb
+; prologue
+;
+outb_:
+        push    bp              ;save calling bp
+        mov     bp,sp           ;addr args thru bp
+;
+;get port address
+        mov     dx,[bp+4]       ;port address
+;
+;get value
+        mov     ax,[bp+6]
+;
+;output it
+        out     dx,al           ;send it
+;
+;epilogue
+        pop     bp              ;restore calling bp
+        ret                     ;so-long
+;
+; outw
+; prologue
+;
+outw_:
+        push    bp              ;save calling bp
+        mov     bp,sp           ;addr args thru bp
+;
+;get port address
+        mov     dx,[bp+4]       ;port address
+;
+;get value
+        mov     ax,[bp+6]
+;
+;output it
+        out     dx,ax           ;send it
+;
+;epilogue
+        pop     bp              ;restore calling bp
+        ret                     ;so-long
+;
+;
+; end of portio
+;
+; ****************************************************************************
+;
+;
+; clisti.a - disable/enable system interrupts
+;
+;
+;       cseg                            ;remove comments if you want to use
+;       public cli_,sti_                ;clisti alone
+;
+;
+cli_:   cli
+        ret
+;
+;
+sti_:   sti
+        ret
+;
+; end of clisti.a
+;
+; ***************************************************************************
+;
+; end of commasm.a
+;
+
+                                                                                                                                                 

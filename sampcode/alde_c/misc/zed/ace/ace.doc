@@ -1,0 +1,726 @@
+
+
+
+
+
+
+
+             ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+             º±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±º
+             º±±±±±±±±±±±±±±±±±±±±±±±±±ACE±±±±±±±±±±±±±±±±±±±±±±±±±±±±º
+             º±±±±±±±±±±±±±±±±±±±±±±(Ver 1.24)±±±±±±±±±±±±±±±±±±±±±±±±º
+             º±±±±±±±±±±±±±±±±±±±±Ú------------¿±±±±±±±±±±±±±±±±±±±±±±º
+             º±±±±±±±±±±±±±±±±±±±±Ã     BY     ´±±±±±±±±±±±±±±±±±±±±±±º
+             º±±±±±±±±±±±±±±±±±±±±À------------Ù±±±±±±±±±±±±±±±±±±±±±±º
+             º±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±º
+             º±±±±±±±±±±±±±±±±±±±±Patrick Bennett±±±±±±±±±±±±±±±±±±±±±º
+             º±±±±All rights reserved, Copyright 1985 C-STUFF co.±±±±±º
+             º±±±R.R.#12  Box #19  Muncie, IN  47302 (317)288-7547±±±±º
+             º±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±º
+             º±   If you are using this program, find it of value,   ±º
+             º±        and would like for me to write more,          ±º
+             º±your contribution ($35 suggested) will be appreciated.±º
+             º±read documentation for info. on contribution benefits.±º
+             º±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±º
+             º±You are encouraged to copy and share this program with±º
+             º±other users, on the conditions that the program is not±º
+             º±     distributed in modified form, that no fee or     ±º
+             º± consideration is charged and that this notice is not ±º
+             º±                 bypassed or removed.                 ±º
+             º±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±º
+             ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
+
+     Loading ACE...
+
+     You can load ACE four different ways:
+     1. Type "ace" on the A> prompt.  This will load the editor and then ask for
+        the file you wish to edit.
+
+     2. Type "ace" followed by a space and the name of the file you wish to load,
+        e.g.  A>ace example.c.  This example would load the editor, then load the
+        file "example.c" into its buffer.
+
+     3. Type "ace/l" which will load the last file you edited automatically
+        without displaying the logo.
+
+     4. When you become a registered user, you will be able to bypass the logo.
+
+     Using ACE...
+
+                                   MOVING THE CURSOR
+
+     To move the cursor up, down, left, and right use the arrow keys.  To move the
+  cursor one word to the left hit the Ctrl key then the left arrow key.  To move
+  the cursor one word at a time to the right press the Ctrl key then the right
+  arrow key.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ACE  Ver 1.24                                                         - Page 2 -
+
+
+     To go to the beginning of a line press the Home key.  To go to the end of a
+  line press the End key.  To go to the top of the window press the Ctrl key then
+  the Home key.  To get to the bottom of the window press the Ctrl key then the
+  End key.  To scroll a page up towards the beginning of the file press the PgUp
+  key.  To scroll a page down towards the end of the file press the PgDn key.  To
+  go to the beginning of the file press the Ctrl key then PgUp key.  To go to the
+  end of the file press the Ctrl key then the PgDn key.
+
+     When you look at the left side of the screen, you will see a marker.  This
+  marker shows you where you are in your document relative to the beginning and
+  end of the current file.  If the marker is in the middle of the screen, you are
+  around the middle of the document.
+
+     Press the Scroll Lock key and "SCRL" will appear at the top of the screen,
+  indicating that you are in a special mode.  When in this mode, some of the keys'
+  meanings change.  The Home key now will move the cursor to the left side of the
+  screen (as opposed to the start of a line).  The End key will go move it to the
+  right side of the screen.  The up arrow will scroll up a half screen.  The down
+  arrow will scroll down half a screen.  The left arrow will scroll left 4 times
+  the tab size.  The right arrow will scroll right 4 times the tab size.
+
+     Also, you may move the cursor beyond the end of a line.  When you are beyond
+  the end of a line, as soon as you press a character key ACE will automatically
+  pad spaces from the end of the line to the cursor. It then inserts the
+  character.  This padding also works for block moves, copies, etc.  When you are
+  beyond the end of the line the destructive backspace acts just like the left
+  arrow, and the delete key is disabled.
+
+                                    INSERTING TEXT
+
+     Whenever the cursor is a large block, you are in insert mode.  If it is
+  small, you are in overtype mode.  When you are in insert mode, each time you
+  press a key all the text from the cursor on is moved over a character and the
+  key you pressed is inserted in the new space.  When you are in overtype mode,
+  the character you press replaces whatever is under the cursor.  If you want to
+  toggle the insert and overtype modes, you just press the Ins key.
+
+                                     DELETING TEXT
+
+     If you want to delete text you can use the backspace key, the delete key,
+  block delete, or a line delete.  The backspace key when in insert mode, takes
+  all the text from the cursor on and moves it one character to the left,
+  replacing the character to the left of the cursor.  The Del key takes the text
+  next to the cursor and moves it over so that it replaces the character beneath
+  the cursor.
+
+     Before you can do a block delete you must DEFINE A BLOCK.  To do this place
+  the cursor at the beginning or ending of the text you want to define as a block.
+  Press the F6 key.  This starts the definition of a block, now move the cursor
+  you will see the text highlighted as you move along.  When you finish marking
+  off the text you want defined as a block press the F6 key again.  This stops the
+  definition.  Now if you want to delete the block press Alt and D for delete and
+  the block will be deleted.  Other uses for the blocks are explained below.
+
+
+
+
+
+
+
+
+
+
+ACE  Ver 1.24                                                         - Page 3 -
+
+
+     To automatically delete a line without having to define it as a block just
+  press Alt and the E key for erase.  This will delete the line that the cursor is
+  on.
+
+                                     USING BLOCKS
+
+     Block operations are powerful; they allow you to easily make large changes
+  which would otherwise be tedious and time consuming.  An example is Copy Block.
+  To do this, define a block (see above), then just press the Alt key then the C
+  key (for "copy") and a copy of the block will be inserted at the cursor
+  position.  You can also move a block, which means delete it then place it at the
+  cursor position.  To do this press the Alt key then the M key.  ACE makes
+  changing whole chunks of code easier by combining deleting and changing into one
+  operation.  You can press the Alt key and the L key to delete the line the
+  cursor is on and replace it with the block.  Press the Alt key and the B key to
+  delete everything within the nearest braces { } and insert a copy of the block.
+
+     After you define a block and the highlight bothers you, you may press the Alt
+  key then the F6 key to undefine the block.
+
+  NOTE:
+  You may not you use the Alt C, M, L, or B commands while the cursor is in the
+  block.  But you may use the Alt D command while the cursor is in the block.
+
+                            MISCELLANEOUS EDITING FEATURES
+
+     Sometimes you may need to place SPECIAL CHARACTERS in the text that ACE
+  normally will not let you use (ASCII codes 216-255).  To do this press the Alt
+  Key then the X key.  ACE will then prompt you at the top of the screen.  Type in
+  the code you would like to insert or overtype (depending on the mode you're in)
+  and press the return key.  That character will then be placed in the text.
+  (Note: you may not insert code 254*!).
+
+     ACE contains special functions to help you in writing programs, C programs in
+  particular.  One of these is the Alt R command; this places at the cursor a */
+  then scans the line and figures out what kind of line it is (code, comment, or
+  code with a comment at the end).  It then places at the appropriate place a /*.
+  It will also if you have defined a block and the cursor is within the block,
+  place remarks around the block.  This is helpful when you want the compiler to
+  ignore a whole section of code.
+
+     In the options menu, there is an option called "automatic indent".  This
+  feature when active, will automatically, when you press enter, space the
+  inserted line over so that it starts below the first non-space character in the
+  line above.
+
+
+
+  ____________________
+
+  * - When you load or are editing a file, all ASCII character 174's are displayed
+      as 254's.  When you save the file all the 254's are converted back to 174's.
+      So even though an ASCII code 254 may be on the screen, it actually in the
+      end will be a 174.
+
+
+
+
+
+
+
+
+
+ACE  Ver 1.24                                                         - Page 4 -
+
+
+     There is also an option called "indent after {".  This feature when active,
+  will automatically, when you press enter, scan the line for a {.  If it finds
+  one it will insert a tab in the new line.
+
+     The option called "Automatic remarks" when active will after you press enter,
+  scan the line and determine if it is a line of code.  If it is it will insert a
+  /* and place the cursor after it.  At this point you may type in a remark, or
+  you may press enter, which erase the /* and goes to the next line.  If you typed
+  in a remark and you are finished, press enter and ACE will insert a */ and go on
+  to the next line.  This feature is great for commenting your program for others
+  to see.
+
+                                USER DEFINABLE WINDOWS
+
+     When programming, there always seem to be things which you need periodically
+  but not often enough to commit to memory.  Wouldn't it be handy if, instead of
+  getting out K&R or some other book or document, and looking up something in the
+  index, finding the correct page, etc., you could create help windows, callable
+  from inside your editor?
+
+     Ace gives you this capability by allowing you to open a window in the top
+  half of the screen into which you can load any maximum 3K file.  You may only
+  scroll through this file; you may not edit it.  To open this window press the
+  Alt key then F2 this will give you a choice between opening or closing the
+  window.  Select Open, then type in the name of the file to load.  If you want to
+  close it just select Close.  When you are in the help window the you can use the
+  normal scroll keys to scroll.  When you want to switch between windows, press
+  Alt F1.  You can tell which window you're in by where the ACE sign is.
+
+     Some sample help files (with the extension ".hlp") have been included.  Of
+  course, help files are only one possible use for the window; any type of file
+  may be loaded into it.
+
+     If you wish you may change the size of the help window once it is loaded.
+  For information read about the Utilities menu.
+
+                                    USING THE MENUS
+
+     To access the main menu press the Esc key.  You will be shown a list of
+  options.  To select one, just press the capitalized letter you see in that
+  option.  The main menu options are:
+
+     Files - This takes you to the Files submenu which is:
+       * Load   - Allows you to load a file.
+       * Save   - Allows you to save the current file with the same name or with a
+                  different name.  To save it with the same name just press enter
+                  when it asks you for the filename, otherwise type in the name of
+                  the file and press return.
+       * Rename - Allows you to change the name of a file on disk.  If you want
+                  the name of the file you are working on to be changed just press
+                  enter for the old filename prompt then type in the new name for
+                  the new name prompt and it will be changed.
+       * Erase  - This allows you to delete the file you specify from the disk.
+
+
+
+
+
+
+
+
+
+
+ACE  Ver 1.24                                                         - Page 5 -
+
+
+       * Block  - This takes you to the Block submenu which looks like this:
+          - Load   - Allows you to load a file which is then marked as a block and
+                     placed at the end of the current file.
+          - Save   - Allows you to take a block you have defined and save it to a
+                     file.
+       * Print  - Allows you to print the file or block out on a printer with or
+                  without line numbers.  It will print out the block if the cursor
+                  is within the block otherwise it will print the entire file.
+       * sTatus - Shows you the file you are working on and the length of it in
+                  bytes.
+       * Quit   - Allows you to quit the editor.
+       * Dos    - Allows you to exit to dos and run another program or execute dos
+                  commands while keeping ACE in memory.  Type EXIT at the dos
+                  prompt to return to ACE.  (You must be using dos 2.0 or higher
+                  to use this function.)
+     Search     - Takes you to a sub-menu where you instruct ACE to search for a
+                  string.
+     Replace    - Sub-menu to search for a string and replace it with another
+                  string.
+     Goto       - Allows you to go to a line number or to a tagged position.
+     Tag        - Allows you to tag a line so that you can later go to it without
+                  having to remember line numbers.
+     Version    - Shows the name of the user and serial number.
+     Attributes - Allows you to change the attributes of the editor, color, block
+                  color, border color, etc.
+     Options    - Allows you to change the tab size, column starting position,
+                  automatic indentation, indent after left brace, automatic
+                  remarks and the drive that ACE goes to for DOS.
+     Utilities  - Takes you the Utilities sub-menu where you can have ACE convert
+                  all the tab characters (ASCII 9's) to spaces, where you can
+                  change the size of the help window, or where you can have ACE
+                  scan your program for errors, nested comments, missing braces,
+                  etc.
+
+                                     USING SEARCH
+
+     When you select the search command your screen should look like this:
+
+  Search string:
+  DIRECTION: Up  Down  CASE: Yes  No
+
+     Some of the options should also be inside parentheses, meaning they are
+  selected.  The direction field is just the direction the search goes from the
+  cursor.  The case field specifies whether a string found in the text has to
+  match the search string exactly or if they can be somewhat different, for
+  example.  If you searched for Int with case set to yes, it would only find Int
+  not int.  If the case was set to no, it could find Int, int, iNt, INT, inT, etc.
+  Also you may place a question mark in the search field to represent any
+  character.  If you were to search for i?t it could find int, ibt, ict, izt, etc.
+
+     To set a field, press ALT 1 before you type in any search text.  Now press
+  the capitalized letter(s) of the options you wish to select, and then press the
+  Esc key to resume typing the search text.
+
+
+
+
+
+
+
+
+
+
+ACE  Ver 1.24                                                         - Page 6 -
+
+
+                                     USING REPLACE
+
+     When you select the replace command your screen should look like this:
+
+  Search string:
+  DIRECTION: Up Down  CASE: Yes  No  CONVERT TO: uPper  Lower  nEither
+  CONFIRM: yeS  nO
+
+     The direction and case fields are the same as in search, but Convert and
+  Confirm are different.  Convert is used to change the case of letters.  If you
+  place a question mark in the replace text, then when ACE finds match, it will
+  convert the character in the same position of the question mark to upper case,
+  lower case, or not convert at all.  If you were to search for ? and replace with
+  ? and have convert set to upper case it would convert all the characters it
+  found to upper case.  If you have selected Confirm, ACE will ask you in each
+  instance whether or not to perform the replace before actually doing it.
+
+                                CHANGING THE ATTRIBUTES
+
+     The attributes window can be opened by selecting Attributes from the main
+  menu, or by pressing the F5 key.  After loading in the data file it should look
+  something like this:
+
+  ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+  º1) NORMAL TEXT COLOR                       Ú0) Black      8) Gray         º
+  º2) BLOCK COLOR                           C ³1) Blue       9) Light Blue   º
+  º3) END OF FILE COLOR                     O ³2) Green     10) Light Green  º
+  º4) CARRIAGE RETURN COLOR                 L-´3) Cyan      11) Light Cyan   º
+  º5) BORDER COLOR                          O ³4) Red       12) Light Red    º
+  º6) CARRIAGE RETURN CHARACTER             R ³5) Magenta   13) Light Magentaº
+  º7) THUMB CHARACTER            ×          S ³6) Brown     14) Yellow       º
+  º8) END OF FILE CHARACTER                  À7) White     15) Intense Whiteº
+  ºEnter the number of the option you wish to change, or -Ù to quit:        º
+  ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
+
+     Shown are the default values for ACE.  The top five options are displayed in
+  their perspective colors; these options let you set the colors that you see on
+  your screen.  The next three options are characters that ACE will display on
+  different parts of the screen.
+
+     To change an option, just press the number of that option.  If it is a color
+  option it will ask you for the foreground color number (0-15), then the
+  background color number (0-7), then if you want it to blink.  If it is a
+  character option, ACE will ask you for the new character.  To enter the
+  character just press the key, or press the Alt key, then the number of the
+  character on the keypad.  The character can be any value from 0 through 255.
+
+     The first option, text color, defines what normal text looks like.  The
+  second option, block color, defines what color blocks will be.  The third, end
+  of file color, defines what color the end of file mark will be.  The fourth,
+  carriage return color, defines what color the end of line mark will be. The
+  fifth option, border color, defines what color the border will be.
+
+
+
+
+
+
+
+
+
+
+
+ACE  Ver 1.24                                                         - Page 7 -
+
+
+     The character attributes can be any one character.  The carriage return
+  character is what appears at the end of every line.  The thumb character is the
+  character ACE uses at the side of the window to represent your position in the
+  document.  The end of file character is the character that you see at the end of
+  the document.
+
+     When you finish typing in all the new values and press enter, they are all
+  automatically saved in a data file that will be loaded whenever you enter ACE.
+
+                                   THE OPTIONS MENU
+
+     The options menu can be opened by selecting Options from the main menu.
+  After loading the data file it should look something like this:
+
+  ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+  ºTAB SIZE          (0-8)  8                                                º
+  ºCOLUMN START POS  (0/1)  1                                                º
+  ºAUTOMATIC INDENT  (Y/N)  Y                                                º
+  ºINDENT AFTER {    (Y/N)  Y                                                º
+  ºAUTOMATIC REMARKS (Y/N)  N                                                º
+  ºDRIVE WITH \COMMAND.COM  A                                                º
+  ÈPress the ESC key before the first option to exit.ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
+
+                         Shown are the default values for ACE.
+
+     In this menu you go through the options all at once, one at a time.  To
+  change a fields value just type in the new value and the cursor will
+  automatically go to the next field.
+
+     The first option, tab size, defines how large your tabs will be, if you enter
+  a 0 for tab size the tab key will insert ASCII 9's instead of spaces.  The
+  second option, column start position, defines what line and row number ACE
+  displays at the top of the file, either a 1 or a 0.  The third option allows you
+  to specify whether automatic indentation will take place after you press enter
+  at the end of each line.  The fourth option allows you to specify if the line is
+  tabbed over an extra tab if a left brace is found in the line when enter is
+  pressed.  The fifth option specifies whether ACE will automatically remark your
+  program.  The sixth option specifies where ACE will look for command.com when
+  you execute the DOS command.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ACE  Ver 1.24                                                         - Page 8 -
+
+
+                                THE UTILITIES SUB-MENU
+
+     The utilities menu can be opened by selecting utilities from the main window.
+  The utilities sub-menu should look like this:
+
+  Convert all tabs to spaces    Window resize    Scan for errors
+
+     If you select the convert function all the tabs (ASCII 9's) in the file or
+  block (depending where the cursor is) will be expanded to its appropriate number
+  of spaces.
+
+     The window resize allows you to change the size of the help window to make it
+  larger or smaller.  (you can only do this when the help file is opened)
+
+     The scan for errors allows you to check your program for minor errors, like
+  nested comments, to many left or right braces, missing quotes, or missing single
+  quotes.  It would be wise to run this function before you compile your program,
+  for it could save you a lot of time in the end.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ACE  Ver 1.24                                                         - Page 9 -
+
+
+                            WHAT THE CONTRIBUTION GETS YOU
+
+     When you make a contribution of $35 or more you will become a registered
+  user, receive  the latest  version,  the  latest documentation, and notices of
+  new software and revisions from C-STUFF that can be sent to you upon request.
+  (Make sure to send your name, address, and phone number.)
+
+     You may for $10 have me rewrite ACE for your particular language  (please
+  include details about your language, such as what remarks are delimited by, what
+  functions are delimited by, etc).  Right now doing this would change the Alt R,
+  and the Alt B functions.  If you think this isn't worth the 10 dollars wait
+  until an upcoming version!  It will have many, awesome, excellent and fantastic
+  features to help you with your programming.  It's your choice though, to wait,
+  or do it now.  It's only 10 dollars!
+
+     If you have any ideas or have found some bugs, please call or write me.  If I
+  like your idea or you have found a true bug, I will send you the latest public
+  version.  You may only get the LATEST version if you are a registered user, for
+  I will only upload a new version to bulletin boards once every 6 months, and
+  after a version has been time tested, NEVER.  So register now, and be supported.
+
+     Note:  When you wish to have an update, send your name, address, serial
+  number and $10 to cover for the disk and mailing.  You may only send ACE in for
+  rewriting if you are a registered user.
+
+                                 COMMAND & KEY SUMMARY
+
+  F1 - Repeats the last search or replace.
+     Alt F1 - Switches between windows.
+  F2 - Takes you to the Files option.
+     Alt F2 - Allows you to open or close a help window.
+  F3 - Search option.
+  F4 - Replace option.
+  F5 - Attributes option.
+  F6 - Starts/stops defining of block.
+     Alt F6 - Undefines the block.
+  F7 - ** reserved for future use **
+  F8 - Print option.
+  F9 - Goto option.
+  F10 - Tag option.
+  
+  Alt E - Deletes the line that the cursor is on.
+  Alt X - Allows you to enter any ASCII code.
+  Alt R - Places remarks around a block or a line.
+  Alt C - Copies the block to the cursor position.
+  Alt D - Deletes the block.
+  Alt M - Moves the block to the cursor position.
+  Alt L - Deletes the line the cursor is on and inserts the block.
+  Alt B - Deletes everything inside the nearest braces and inserts the block.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ACE  Ver 1.24                                                        - Page 10 -
+
+
+  Cursor keys:           With 'SCRL' off            With 'SCRL' on
+
+                        - Cursor up.               Scroll up 11 lines.
+  -->                    - Cursor right.            Move right 4 x the tabsize.
+                        - Cursor down.             Scroll down 11 lines.
+  <--                    - Cursor left.             Move left 4 x the tabsize.
+  Home                   - Beginning of line.       Left side of window.
+  End                    - End of line.             Right side of window.
+  PgUp                   - Page up.                 SAME.
+  PgDn                   - Page Down.               SAME.
+  Ctrl Home              - Top of window.           SAME.
+  Ctrl End               - Bottom of window.        SAME.
+  Ctrl PgUp              - Top of file.             SAME.
+  Ctrl PgDn              - Bottom of file.          SAME.
+  -³                    - Tab right.               SAME.
+  Shift -³              - Tab left.                SAME.
+  --                    - Destructive backspace.   SAME.
+  Ins                    - Toggle insert/overtype.  SAME.
+  Del                    - Delete character.        SAME.
+
+  Cursor keys:.......... When in help window
+
+                        - Scroll up one line.
+  -->                    - Scroll right one character.
+                        - Scroll down one line.
+  <--                    - Scroll left one character.
+  PgUp                   - Scroll up one screen.
+  PgDn                   - Scroll down one screen
+  Ctrl PgUp              - Top of help file.
+  Ctrl PgDn              - Bottom of help file.
+                                          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ACE  Ver 1.24                                                        - Page 11 -
+
+
+                                       NOTE:
+  This version (1.24) of ACE, depending on how much memory you have, has a maximum
+  buffer of 62K with a maximum of 3000 lines.  The more memory you have the larger
+  the buffer is.  You can find out how large a buffer you have, by going to the
+  files menu and selecting sTatus.  It will show you the length of your file, and
+  the space left.  Make sure you do not go past the buffer length, if you do the
+  results could be fatal.  This will be prevented in later versions.
+
+     If you have any questions, bug reports, comments, etc. call or write me at
+  the following address:
+       R.R. #12  Box #19
+       Muncie, IN  47302
+       Phone: (317)288-7547
+                                               thank you,
+                                               Patrick Bennett
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

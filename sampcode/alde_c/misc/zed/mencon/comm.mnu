@@ -1,0 +1,23 @@
+>cc *** comm.mnu ***
+>cc
+>cc toggle transmit/receive file menu for ibmtty.c - terminal emulation
+>cc
+>fr 0 0 23 79
+>rp 01 04
+>st 07
+>da 02 70
+>ti 03 70
+                      Please select one of the following :
+
+                         1. Toggle receive file
+
+                         2. Toggle transmit file
+
+                         3. Toggle local echo
+
+                         4. Return to terminal mode
+
+                        99. Exit program
+
+                      Please enter your choice here [  ]
+

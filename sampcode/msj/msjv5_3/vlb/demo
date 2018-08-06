@@ -1,0 +1,32 @@
+#
+#  demo make file
+#
+COM   = cl -c -AM -Gsw -Oas -Zlpe -W2 $*.c
+CVCOM = cl -c -AM -Gsw -Od -Zilpe -W2 $*.c
+LNK   = link4 demo vlb /align:16,,, lmem mlibw mlibcew, demo.def
+CVLNK = link4 demo vlb /align:16,,, lmem mlibw mlibcew, demo.def /CO
+ASM   = MASM $*.ASM;
+LIB   = lib lmem -+ $*;
+
+.c.obj:
+   $(COM)
+
+.asm.obj:
+   $(ASM)
+   $(LIB)
+
+demo.res:   demo.dlg demo.rc demo.h
+  rc -r demo.rc
+
+demo.obj:   demo.c demo.h vlb.h
+
+vlb.obj:    vlb.c vlb.h
+
+lmemmove.obj:    lmemmove.asm  setup.h
+
+lmemset.obj:     lmemset.asm   setup.h
+
+demo.exe:   demo.obj demo.res vlb.obj
+   $(LNK)
+   rc demo.res
+

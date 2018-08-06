@@ -1,0 +1,32 @@
+# Makefile for ACCEL.EXE
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC	=	cl -c -W3 -Asnd -G2sc -Od -Zip
+LF	=	/codeview /NOD /align:16 /map
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+all: accel.exe
+
+# Resources
+#
+accel.res:	accel accel.h accel.ico accel.rc
+
+# C files
+#
+accel.obj:	accel accel.c accel.h
+
+# Main files:  ACCEL.EXE, ACCEL.SYM
+#
+accel.exe:	accel accel.def accel.obj accel.res
+    link $(LF) accel.obj, accel.exe, accel.map, os2 slibcep, accel.def
+    rc accel.res accel.exe

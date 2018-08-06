@@ -1,0 +1,27 @@
+# Makefile for DLGSAMP.EXE
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC	=	cl -c -G2s -Od -Zpei -W3
+LF	=	/align:16 /codeview /map /NOD
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+# Dependencies
+#
+dlgsamp.res:	dlgsamp dlgsamp.dlg dlgsamp.h dlgsamp.ico dlgsamp.rc
+
+dlgsamp.obj:	dlgsamp dlgsamp.c dlgsamp.h dlgsamp1.h
+
+dlgsamp.exe:	dlgsamp dlgsamp.def dlgsamp.obj dlgsamp.res
+    link $(LF) dlgsamp, dlgsamp.exe, dlgsamp.map, os2 slibce, dlgsamp.def
+    rc dlgsamp.res
+    mapsym dlgsamp

@@ -1,0 +1,6 @@
+
+ellipse.obj: ellipse.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 ellipse.c
+
+ellipse.exe: ellipse.obj ellipse.def
+    link4 /align:16 ellipse,,nul,slibw/NOE,ellipse.def

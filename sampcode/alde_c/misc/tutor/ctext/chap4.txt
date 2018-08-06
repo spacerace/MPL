@@ -1,0 +1,717 @@
+
+                 Chapter 4 - Assignment & Logical compares
+
+
+                       INTEGER ASSIGNMENT STATEMENTS
+
+             Load the file INTASIGN.C and display it for an  example
+        of  assignment statements.   Three variables are defined for
+        use  in the program and the rest of the program is merely  a
+        series of illustrations of various assignments.   The  first
+        two  lines  of  the assignment statements  assign  numerical
+        values  to "a" and "b",  and the next five lines  illustrate
+        the  five  basic arithmetic functions and how to  use  them.
+        The  fifth is the modulo operator and gives the remainder if
+        the two variables were divided.   It can only be applied  to
+        "int"  or  "char"  type  variables,   and  of  course  "int"
+        extensions such as "long",  "short",  etc.  Following these,
+        there  are two lines illustrating how to combine some of the
+        variables  in  some complex math expressions.   All  of  the
+        above examples should require no comment except to say  that
+        none  of  the equations are meant to be particularly  useful
+        except  as illustrations.  The "char" type variable will  be
+        defined in the description of the next example program.
+
+             The  expressions  in  lines 17  and  18  are  perfectly
+        acceptable  as given, but we will see later in this  chapter
+        that  there is another way to write these for  more  compact
+        code.
+
+             This leaves us with the last two lines which may appear
+        to  you  as being very strange.   The C compiler  scans  the
+        assignment  statement from right to left,  (which may seem a
+        bit odd since we do not read that way),  resulting in a very
+        useful construct,  namely the one given here.   The compiler
+        finds the value 20, assigns it to "c", then continues to the
+        left finding that the latest result of a calculation  should
+        be  assigned to "b".   Thinking that the latest  calculation
+        resulted in a 20,  it assigns it to "b" also,  and continues
+        the leftward scan assigning the value 20 to "a" also.   This
+        is a very useful construct when you are initializing a group
+        of  variables.   The last statement illustrates that  it  is
+        possible  to actually do some calculations to arrive at  the
+        value  which  will be assigned to all three  variables.   In
+        fact,  the rightmost expression can contain variables,  even
+        "a", "b", & "c".
+
+             The  program has no output, so compiling and  executing
+        this  program  will be very uninteresting.  Since  you  have
+        already  learned how to display some integer  results  using
+        the "printf" function, it would be to your advantage to  add
+        some output statements to this program to see if the various
+        statements do what you think they should do.
+
+             This would be a good time for a preliminary  definition
+        of  a  rule to be followed in C.   The data definitions  are
+
+
+                                  Page 20
+
+
+
+
+
+
+
+
+
+                 Chapter 4 - Assignment & Logical compares
+
+
+        always given before any executable statements in any program
+        block.   This is why the variables are defined first in this
+        program and in every C program.  If you try to define a  new
+        variable  after  executing  some  statements,  the  Turbo  C
+        compiler, and every other C compiler will issue an error.
+
+                           ADDITIONAL DATA TYPES
+
+             Loading and editing MORTYPES.C will illustrate how some
+        additional  data  types can be used.   Once  again  we  have
+        defined  a  few integer type variables which you  should  be
+        fairly  familiar  with  by now,  but we have added  two  new
+        types, the "char", and the "float".
+
+             The  "char"  type  of data is nearly the  same  as  the
+        integer  except that it can only be assigned values  between
+        -128 to 127, since it is stored in only one byte of  memory.
+        The "char" type of data is usually used for ASCII data, more
+        commonly  known  as  text.  The text  you  are  reading  was
+        originally written on a computer with a word processor  that
+        stored the words in the computer one character per byte.  In
+        contrast,  the integer data type is stored in two  bytes  of
+        computer memory on microcomputers using Turbo C.
+
+                              DATA TYPE MIXING
+
+             It  would be profitable at this time to discuss the way
+        C handles the two types "char" and "int".  Most functions in
+        C  that are designed to operate with integer type  variables
+        will work equally well with character type variables because
+        they  are a form of an integer variable.   Those  functions,
+        when called on to use a "char" type variable,  will actually
+        promote  the "char" data into integer data before using  it.
+        For this reason, it is possible to mix "char" and "int" type
+        variables in nearly any way you desire.   The compiler  will
+        not get confused,  but you might.  It is good not to rely on
+        this too much, but to carefully use only the proper types of
+        data where they should be used.
+
+              The second new data type is the "float" type of  data,
+        commonly  called floating point data.  This is a  data  type
+        which  usually  has a very large range, a  large  number  of
+        significant digits, and a large number of computer words are
+        required  to store it.  The "float" data type has a  decimal
+        point  associated with it and, in Turbo C, has an  allowable
+        range of from 3.4E-38 to 3.4E+38, and is composed of about 7
+        significant digits.
+
+                       HOW TO USE THE NEW DATA TYPES
+
+             The  first three lines of the program assign values  to
+
+
+                                  Page 21
+
+
+
+
+
+
+
+
+
+                 Chapter 4 - Assignment & Logical compares
+
+
+        all nine of the defined variables so we can manipulate  some
+        of the data between the different types.
+
+             Since,  as  mentioned above,  a "char" data type is  in
+        reality  an "integer" data type,  no special  considerations
+        need be taken to promote a "char" to an "int",  and a "char"
+        type data field can be assigned to an "int" variable.   When
+        going the other way, there is no standard, so you may simply
+        get garbage if the value of the integer variable is  outside
+        the  range of the "char" type variable.   It will  translate
+        correctly if the value is within the range of -128 to 127.
+
+             The   third   line   illustrates  the   simplicity   of
+        translating an integer into a "float",  simply assign it the
+        new  value  and the system will do  the  proper  conversion.
+        When  going  the  other  way  however,  there  is  an  added
+        complication.   Since  there may be a fractional part of the
+        floating  point number,  the system must decide what  to  do
+        with it.  By definitions , it will truncate it.
+
+             This program produces no output, and we haven't covered
+        a way to print out "char" and "float" type variables, so you
+        can't  really  get  in  to this program and  play  with  the
+        results, but the next program will cover this for you.
+
+             Compile  and  run  this program, then go  back  to  the
+        Edit/Message  screen (by pressing any key) and  observe  the
+        message  window.   Notice  that there  are  several  warning
+        messages telling you that 6 variables were assigned a  value
+        and  never  used.   These  warning  messages  are  for  your
+        benefit,  so  it would pay you to keep a close  eye  on  the
+        message window when writing and debugging a program.
+
+                          LOTS OF VARIABLE TYPES
+
+             Load the file LOTTYPES.C and display it on your screen.
+        This  file contains nearly every standard simple  data  type
+        available  in the programming language C.  There  are  other
+        types,  but  they are the compound types (ie  -  arrays  and
+        structures) that we will cover in due time.
+
+             Observe  the  file.  First we define  a  simple  "int",
+        followed by a "long int" which has a range of -2147483648 to
+        2147483647  in Turbo C, and a "short int" which has a  range
+        that is identical to that for the "int" variable in Turbo C,
+        namely  -32768  to  32767. The "unsigned"  is  next  and  is
+        defined as the same size as the "int" but with no sign.  The
+        "unsigned" then will cover a range of 0 to 65535 in Turbo C.
+        It  should be pointed out that when the "long", "short",  or
+        "unsigned" is desired, the "int" is optional and is left out
+        by  most experienced programmers.  We have  already  covered
+
+
+                                  Page 22
+
+
+
+
+
+
+
+
+
+                 Chapter 4 - Assignment & Logical compares
+
+
+        the "char" and the "float", which leaves only the  "double".
+        The "double" covers a greater range than the "float" and has
+        more  significant digits for more precise calculations.   It
+        also  requires more memory to store a value than the  simple
+        "float". The "double" in Turbo C covers a range of  1.7E-308
+        to 1.7E+308.
+
+             Note  that other compounding of types can be done  such
+        as "long unsigned int", "unsigned char", etc.  See pages  84
+        to 86 of the TURBO C version 1.0 User's Guide.
+
+             Another  diversion  is in order at  this  point.   Your
+        Turbo  C  compiler,  like  most other  C  compilers  has  no
+        provisions for floating point math, but only double floating
+        point math.  It will promote a "float" to a "double"  before
+        doing calculations and therefore only one math library  will
+        be  needed.  Of course, this is totally transparent to  you,
+        so  you don't need to worry about it.  Because of this,  you
+        may  think  that  it would be best to  simply  define  every
+        floating  point variable as double, since they are  promoted
+        before  use in any calculations, but that may not be a  good
+        idea.  A "float" variable requires 4 bytes of storage and  a
+        "double" requires 8 bytes of storage, so if you have a large
+        volume  of floating point data to store, the  "double"  will
+        obviously require much more memory.
+
+             After  defining  the data types in  the  program  under
+        consideration, a numerical value is assigned to each of  the
+        defined  variables  in  order to demonstrate  the  means  of
+        outputting each to the monitor.
+
+                            THE CONVERSION CHARACTERS
+
+             Following   is  a  list  of  some  of  the   conversion
+        characters  and  the  way  they are  used  in  the  "printf"
+        statement.   A  complete  list  of  all  of  the  conversion
+        characters  is  given  on page 171 to 178  of  the  Turbo  C
+        Reference Guide.
+
+             d    decimal notation
+             o    octal notation
+             x    hexadecimal notation
+             u    unsigned notation
+             c    character notation
+             s    string notation
+             f    floating point notation
+
+             Each  of  these  is used following a  percent  sign  to
+        indicate  the type of output conversion,  and between  those
+        two characters, the following  fields may be added.
+
+
+
+                                  Page 23
+
+
+
+
+
+
+
+
+
+                 Chapter 4 - Assignment & Logical compares
+
+
+             -    left justification in its field
+             (n)  a number specifying minimum field width
+             .    to separate n from m
+             (m)  significant fractional digits for a float
+             l    to indicate a "long"
+
+             These  are all used in the examples which are  included
+        in the program presently displayed on your monitor, with the
+        exception of the string notation which will be covered later
+        in  this tutorial. Note especially the variable field  width
+        specification  demonstrated in lines 33 to 36.  This is  not
+        part of the original definition of C, but it is included  in
+        the  proposed  ANSI standard and will become part of  the  C
+        language.   Compile and run this program to see what  effect
+        the various fields have on the output.
+
+             You  now  have the ability to display any of  the  data
+        fields  in  the  previous programs and it would be  to  your
+        advantage to go back and see if you can display some of  the
+        fields anyway you desire.
+
+                              LOGICAL COMPARES
+
+             Load  and  view  the file  named  COMPARES.C  for  many
+        examples  of compare statements in C.   We begin by defining
+        and  initializing  nine variables to use  in  the  following
+        compare  statements.   This initialization is new to you and
+        can be used to initialize variables while they are defined.
+
+             The  first  group of compare statements represents  the
+        simplest  kinds  of compares since they simply  compare  two
+        variables.    Either  variable  could  be  replaced  with  a
+        constant and still be a valid compare,  but two variables is
+        the general case.  The first compare checks to see if "x" is
+        equal  to  "y"  and it uses the double equal  sign  for  the
+        comparison.   A single equal sign could be used here but  it
+        would have a different meaning as we will see shortly.   The
+        second  comparison checks to see if "x" is greater than "z".
+
+             The  third compare introduces the "NOT"  operator,  the
+        exclamation,  which can be used to invert the result of  any
+        logical  compare.   The fourth checks for "b" less  than  or
+        equal to "c", and the last checks for "r" not equal to  "s".
+        As  we  learned in the last chapter, if the  result  of  the
+        compare  is  true, the statement following the  "if"  clause
+        will be executed and the results are given in the  comments.
+        Note  that  "less than" and "greater than or equal  to"  are
+        also available, but are not illustrated here.
+
+             It  would be well to mention the different format  used
+        for the "if" statement in this example program.   A carriage
+
+
+                                  Page 24
+
+
+
+
+
+
+
+
+
+                 Chapter 4 - Assignment & Logical compares
+
+
+        return  is  not  required as a statement  separator  and  by
+        putting the conditional clause on the same line as the "if",
+        it adds to the readability of the overall program.
+
+                               MORE COMPARES
+
+             The  compares  in  the  second group  are  a  bit  more
+        involved.  Starting with the first compare, we find a rather
+        strange  looking set of conditions in the  parentheses.   To
+        understand  this  we must understand just what a  "true"  or
+        "false"  is in the C language.   A "false" is defined  as  a
+        value  of zero,  and "true" is defined as a non-zero  value.
+        Any  integer  or char type of variable can be used  for  the
+        result of a true/false test, or the result can be an implied
+        integer or char.
+
+             Look  at  the  first  compare of the  second  group  of
+        compare statements.   The expression "r != s" will  evaluate
+        as  a "true" since "r" was set to 0.0 above,  so the  result
+        will be a non-zero value.  In Turbo C, it seems to always be
+        a  1,  but you could get in trouble if you wrote  a  program
+        that depended on it being 1 in all cases.  Good  programming
+        practice  would  be  to  not use  the  resulting  1  in  any
+        calculations.   Even  though  the  two  variables  that  are
+        compared  are "float" variables, the result will be of  type
+        "integer".   There is no explicit variable to which it  will
+        be  assigned  so  the result of the compare  is  an  implied
+        integer.   Finally the resulting number, probably 1 in  this
+        case,  is assigned to the integer variable "x".   If  double
+        equal signs were used, the phantom value, namely 1, would be
+        compared  to  the value of "x", but since the  single  equal
+        sign  is  used, the value 1 is simply assigned  to  "x",  as
+        though  the  statement were not  in  parentheses.   Finally,
+        since  the result of the assignment in the  parentheses  was
+        non-zero, the entire expression is evaluated as "true",  and
+        "z" is assigned the value of 1000.  Thus we accomplished two
+        things  in  this  statement, we assigned "x"  a  new  value,
+        probably  1,  and  we assigned "z" the value  of  1000.   We
+        covered a lot in this statement so you may wish to review it
+        before  going on.  The important things to remember are  the
+        values  that  define "true" and "false", and the  fact  that
+        several  things can be assigned in a conditional  statement.
+        The  value  assigned to "x" was probably a 1,  but  remember
+        that the only requirement is that it is nonzero.
+
+             The next example should help clear up some of the above
+        in your mind.  In this example, "x" is assigned the value of
+        "y",  and since the result is 11, the condition is non-zero,
+        which is true,   and the variable "z" is therefore  assigned
+        222.
+
+
+
+                                  Page 25
+
+
+
+
+
+
+
+
+
+                 Chapter 4 - Assignment & Logical compares
+
+
+             The third example, in the second group, compares "x" to
+        zero.   If  the result is true,  meaning that if "x" is  not
+        zero,  then "z" is assigned the value of 333,  which it will
+        be.   The  last  example in this group illustrates the  same
+        concept,  since the result will be true if "x" is  non-zero.
+        The compare to zero is not actually needed and the result of
+        the compare is true.   The third and fourth examples of this
+        group are therefore identical.
+
+                        ADDITIONAL COMPARE CONCEPTS
+
+             The   third  group  of  compares  will  introduce  some
+        additional  concepts,  namely  the  logical  "AND"  and  the
+        logical  "OR".   We  assign  the value of 77  to  the  three
+        integer  variables  simply to get started  again  with  some
+        defined  values.   The  first  compare of  the  third  group
+        contains  the new control "&&",  which is the logical "AND".
+        The  entire statement reads,  if "x" equals "y" AND  if  "x"
+        equals  77 then the result is "true".   Since this is  true,
+        the variable z is set equal to 33.
+
+             The  next  compare  in this group introduces  the  "||"
+        operator which is the "OR".   The statement reads, if "x" is
+        greater  than  "y"  OR if "z" is greater than  12  then  the
+        result is true.   Since "z" is greater than 12,  it  doesn't
+        matter  if "x" is greater than "y" or not,  because only one
+        of  the  two conditions must be true for the  result  to  be
+        true.  The result is true, so therefore "z" will be assigned
+        the value of 22.
+
+                             LOGICAL EVALUATION
+
+             When a compound expression is evaluated, the evaluation
+        proceeds from left to right and as soon as the result of the
+        outcome is assured,  evaluation stops.   Namely, in the case
+        of  an "AND" evaluation,  when one of the terms evaluates to
+        "false",  evaluation is discontinued because additional true
+        terms  cannot make the result ever become  "true".   In  the
+        case of an "OR" evaluation,  if any of the terms is found to
+        be  "true",  evaluation stops because it will be  impossible
+        for additional terms to cause the result to be "false".   In
+        the case of additionally nested terms,  the above rules will
+        be applied to each of the nested levels.
+
+                          PRECEDENCE OF OPERATORS
+
+             The  question will come up concerning the precedence of
+        operators.   Which  operators are evaluated first and  which
+        last?   There are many rules about this topic, but  I  would
+        suggest  that  you  don't  worry about  it  at  this  point.
+        Instead,  use  lots  of  parentheses  to  group   variables,
+
+
+                                  Page 26
+
+
+
+
+
+
+
+
+
+                 Chapter 4 - Assignment & Logical compares
+
+
+        constants,  and  operators  in  a  way  meaningful  to  you.
+        Parentheses always have the highest priority and will remove
+        any  question of which operations will be done first in  any
+        particular statements.
+
+             Going  on to the next example in group three,  we  find
+        three  simple variables used in the conditional part of  the
+        compare.   Since  all  three  are non-zero,  all  three  are
+        "true",  and therefore the "AND" of the three variables  are
+        true,  leading  to  the result being "true",  and "z"  being
+        assigned  the value of 11.   Note that since the  variables,
+        "r", "s", and "t" are "float" type variables, they could not
+        be  used this way,  but they could each be compared to  zero
+        and the same type of expression could be used.
+
+             Continuing on to the fourth example of the third  group
+        we  find three assignment statements in the compare part  of
+        the "if" statement.  If you understood the above discussion,
+        you  should have no difficulty understanding that the  three
+        variables are assigned their respective new values,  and the
+        result  of  all three are non-zero,  leading to a  resulting
+        value of "TRUE".
+
+                        THIS IS A TRICK, BE CAREFUL
+
+             The last example of the third group contains a bit of a
+        trick, but since we have covered it above, it is nothing new
+        to you.  Notice that the first part of the compare evaluates
+        to  "FALSE".   The  remaining parts of the compare  are  not
+        evaluated,  because it is an "AND" and it will definitely be
+        resolved as a "FALSE" because the first term is  false.   If
+        the program was dependent on the value of "y" being set to 3
+        in  the  next  part of the compare,  it  will  fail  because
+        evaluation  will  cease following the "FALSE" found  in  the
+        first  term.   Likewise,  "z" will not be set to 4,  and the
+        variable "r" will not be changed.
+
+                          POTENTIAL PROBLEM AREAS
+
+             The   last   group   of   compares   illustrate   three
+        possibilities for getting into a bit of trouble.   All three
+        have  the  common  result that "z" will not get set  to  the
+        desired value,  but for different reasons.   In the case  of
+        the  first  one,  the compare evaluates as "true",  but  the
+        semicolon  following the second parentheses  terminates  the
+        "if"  clause,  and the assignment statement involving "z" is
+        always executed as the next statement.   The "if"  therefore
+        has  no  effect  because of the  misplaced  semicolon.   The
+        second  statement is much more straightforward  because  "x"
+        will  always  be equal to itself,  therefore the  inequality
+        will never be true, and the entire statement will never do a
+
+
+                                  Page 27
+
+
+
+
+
+
+
+
+
+                 Chapter 4 - Assignment & Logical compares
+
+
+        thing, but is wasted effort.  The last statement will always
+        assign  0  to "x" and the compare will therefore  always  be
+        "false",  never  executing the conditional part of the  "if"
+        statement.
+
+             The  conditional  statement is extremely important  and
+        must be thoroughly understood to write efficient C programs.
+        If  any  part of this discussion is unclear  in  your  mind,
+        restudy  it  until you are confident that you understand  it
+        thoroughly before proceeding onward.
+
+             Compile and run this program and once again, return  to
+        the  Edit/Message  screen to observe the  warning  messages.
+        The Turbo C compiler is warning us that we have a  "possibly
+        incorrect assignment in function main" because we have  used
+        an  assignment statement within the conditional part of  the
+        "if" statements.  Once again, the warnings are for our  aid,
+        and  should  be carefully attended to.  In  this  case,  the
+        assignments   were  purposely  inserted  for   instructional
+        purposes  but assignments are not generally used in  compare
+        statements  and  Turbo C is warning you that  you  may  have
+        intended to use the double equal sign.
+
+             Compile and run this program, then add some printout to
+        see the results of some of the comparisons.
+
+                           THE CRYPTIC PART OF C
+
+             There are three constructs used in C that make no sense
+        at   all  when  first  encountered  because  they  are   not
+        intuitive,  but they greatly increase the efficiency of  the
+        compiled  code  and  are used extensively by  experienced  C
+        programmers.   You  should therefore be exposed to them  and
+        learn to use them because they will appear in most,  if  not
+        all,  of the programs you see in the publications.  Load and
+        examine  the file named CRYPTIC.C for examples of the  three
+        new constructs.
+
+             In  this  program,   some  variables  are  defined  and
+        initialized in the same statements for use below.  The first
+        executable statement simply adds 1 to the value of "x",  and
+        should come as no surprise to you.   The next two statements
+        also  add one to the value of "x",  but it is not  intuitive
+        that this is what happens.   It is simply by definition that
+        this is true.  Therefore, by definition of the C language, a
+        double   plus  sign  either  before  or  after  a   variable
+        increments  that variable by 1.   Additionally,  if the plus
+        signs are before the variable,  the variable is  incremented
+        before  it  is used,  and if the plus signs  are  after  the
+        variable,  the variable is used,  then incremented.   In the
+        next statement, the value of "y" is assigned to the variable
+
+
+                                  Page 28
+
+
+
+
+
+
+
+
+
+                 Chapter 4 - Assignment & Logical compares
+
+
+        "z",  then  "y"  is incremented because the plus  signs  are
+        after  the  variable  "y".   In the last  statement  of  the
+        incrementing  group of example statements,  the value of "y"
+        is  incremented then its value is assigned to  the  variable
+        "z".
+
+             The  next group of statements illustrate decrementing a
+        variable by one.   The definition works exactly the same way
+        for decrementing as it does for incrementing.   If the minus
+        signs are before the variable,  the variable is decremented,
+        then  used,  and if the minus signs are after the  variable,
+        the variable is used, then decremented.
+
+                      THE CRYPTIC ARITHMETIC OPERATOR
+
+             Another  useful but cryptic operator is the  arithmetic
+        operator.   This operator is used to modify any variable  by
+        some constant value.  The first statement of the "arithmetic
+        operator" group of statements simply adds 12 to the value of
+        the variable "a".   The second statement does the same,  but
+        once again, it is not intuitive that they are the same.  Any
+        of the four basic functions of arithmetic, "+", "-", "*", or
+        "/",  can  be handled in this way,  by putting the  function
+        desired  in  front  of the equal sign  and  eliminating  the
+        second  reference to the variable name.   It should be noted
+        that  the  expression on the right side  of  the  arithmetic
+        operator can be any valid expression,  the examples are kept
+        simple for your introduction to this new operator.
+
+             Just  like the incrementing and decrementing operators,
+        the arithmetic operator is used extensively by experienced C
+        programmers and it would pay you well to understand it.
+
+                         THE CONDITIONAL EXPRESSION
+
+             The  conditional expression is just as cryptic  as  the
+        last  two,  but once again it can be very useful so it would
+        pay you to understand it.   It consists of three expressions
+        within parentheses separated by a question mark and a colon.
+        The  expression prior to the question mark is  evaluated  to
+        determine  if it is "true" or "false".   If it is true,  the
+        expression  between  the  question mark  and  the  colon  is
+        evaluated,  and if it is not true,  the expression following
+        the  colon  is evaluated.   The result of the evaluation  is
+        used for the assignment.   The final result is identical  to
+        that  of an "if" statement with an "else" clause.   This  is
+        illustrated  by  the  second example  in  this  group.   The
+        conditional  expression  has  the added  advantage  of  more
+        compact code that will compile to fewer machine instructions
+        in the final program.
+
+
+
+                                  Page 29
+
+
+
+
+
+
+
+
+
+                 Chapter 4 - Assignment & Logical compares
+
+
+             The  final two lines of this example program are  given
+        to  illustrate  a very compact way to assign the greater  of
+        two variables "a" or "b" to "c", and to assign the lessor of
+        the  same two variables to "c".   Notice how  efficient  the
+        code is in these two examples.
+
+             Compile and run this program and notice that once again
+        we  get  a few warning to take heed to.  Since we  are  only
+        demonstrating how to do these things, they are not  actually
+        a problem but in a real program, these assignments would  be
+        wasted code.
+
+                     TO BE CRYPTIC OR NOT TO BE CRYPTIC
+
+             Several students of C have stated that they didn't like
+        these  three  cryptic constructs and that they would  simply
+        never  use  them.  This will be fine if they never  have  to
+        read  anybody  else's  program, or use  any  other  programs
+        within their own.  I have found many functions that I wished
+        to  use within a program but needed a small modification  to
+        use  it, requiring me to understand another  person's  code.
+        It  would therefore be to your advantage to learn these  new
+        constructs, and use them. They will be used in the remainder
+        of this tutorial, so you will be constantly exposed to them.
+
+             This has been a long chapter but it contained important
+        material  to  get  you  started in using  C.   In  the  next
+        chapter,  we  will go on to the building blocks  of  C,  the
+        functions.  At that point, you will have enough of the basic
+        materials to allow you to begin writing meaningful programs.
+
+        PROGRAMMING EXERCISES
+
+        1.   Write  a program that will count from 1 to 12 and print
+             the count, and its square, for each count.
+                  1    1
+                  2    4
+                  3    9   etc.
+
+        2.   Write a program that counts from 1 to 12 and prints the
+             count  and  its  inversion  to  5  decimal  places  for
+             each count. This will require a floating point number.
+                  1    1.00000
+                  2     .50000
+                  3     .33333
+                  4     .25000
+                  etc.
+
+        3.   Write a program that will count from 1 to 100 and print
+             only those values between 32 and 39, one to a line.
+
+
+                                  Page 30

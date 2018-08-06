@@ -1,0 +1,45 @@
+#include "style.h"
+#include "biff.h"
+#include "bigg.h"
+
+biffICON  ICON    biff.ico
+
+STRINGTABLE
+BEGIN
+    IDSNAME,    "Biff"
+    IDSABOUT,   "&About..."
+    IDSTITLE,   "Biff Generator"
+END
+
+ABOUTBOX DIALOG 22, 17, 154, 75
+STYLE WS_POPUP | WS_DLGFRAME
+BEGIN
+    CTEXT "Microsoft Windows"                   -1,  0,  5,154, 8
+    CTEXT "Biff application"                    -1,  0, 14,154, 8
+    CTEXT "Version 2.10"                        -1, 30, 34, 94, 8
+    ICON  BIFFICON                              -1,  8, 14,  0, 0
+    CTEXT "Copyright © 1989 Don Hasson"         -1,  0, 47,154, 9
+    DEFPUSHBUTTON "Ok"                        IDOK, 61, 59, 32, 14, WS_GROUP
+END
+#define   CTRL   CONTROL
+#define   BS_RB  BS_RADIOBUTTON
+
+BIFFDLG  DIALOG LOADONCALL MOVEABLE DISCARDABLE 8, 12, 176, 100
+STYLE    WS_DLGFRAME | WS_POPUP
+BEGIN
+  CTRL "&Row",       -1      , "static", SS_RIGHT | WS_CHILD, 8, 8, 16, 8
+  CTRL "&Column",    -1      , "static", SS_RIGHT | WS_CHILD, 52, 8, 24, 8
+  CTRL "&Text",      -1      , "static", SS_LEFT  | WS_CHILD, 8, 24, 20, 12
+  CTRL "1",         IDROW    , "edit",   ES_LEFT  | WS_BORDER | WS_TABSTOP | WS_CHILD, 32, 8, 12, 12
+  CTRL "1",         IDCOLUMN , "edit",   ES_LEFT  | WS_BORDER | WS_TABSTOP | WS_CHILD, 84, 8, 12, 12
+  CTRL "Test",      IDTEXT   , "edit",   ES_LEFT  | WS_BORDER | WS_TABSTOP | WS_CHILD, 32, 24, 92, 12
+  CTRL "Data type", 108      , "button", BS_GROUPBOX | WS_CHILD, 8, 40, 116, 48
+  CTRL "&Blank",    IDBLANK  , "button", BS_RB    | WS_TABSTOP | WS_CHILD, 12, 52, 32, 12
+  CTRL "&Label",    IDLABEL  , "button", BS_RB    | WS_TABSTOP | WS_CHILD, 12, 68, 32, 12
+  CTRL "B&OOL",     IDBOOL   , "button", BS_RB    | WS_TABSTOP | WS_CHILD, 48, 52, 28, 12
+  CTRL "&Int",      IDINT    , "button", BS_RB    | WS_TABSTOP | WS_CHILD, 48, 68, 28, 12
+  CTRL "&Number",   IDNUMBER , "button", BS_RB    | WS_TABSTOP | WS_CHILD, 80, 52, 40, 12
+  CTRL "&Formula",  IDFORMULA, "button", BS_RB    | WS_TABSTOP | WS_CHILD, 80, 68, 40, 12
+  CTRL "OK",        IDOK     , "button", BS_DEFPUSHBUTTON | WS_TABSTOP | WS_CHILD, 136, 8, 28, 14
+  CTRL "Cancel",    IDCANCEL , "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 136, 28, 28, 14
+END

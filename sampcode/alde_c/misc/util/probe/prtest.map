@@ -1,0 +1,208 @@
+
+
+ Start  Stop   Length Name                   Class
+ 00000H 013A5H 013A6H _TEXT                  CODE
+ 013A6H 013A6H 00000H C_ETEXT                ENDCODE
+ 013B0H 013FEH 0004FH NULL                   BEGDATA
+ 01400H 015DDH 001DEH _DATA                  DATA
+ 015DEH 015EBH 0000EH CDATA                  DATA
+ 015ECH 015ECH 00000H XIB                    DATA
+ 015ECH 015ECH 00000H XI                     DATA
+ 015ECH 015ECH 00000H XIE                    DATA
+ 015ECH 015ECH 00000H XCB                    DATA
+ 015ECH 015ECH 00000H XC                     DATA
+ 015ECH 015ECH 00000H XCE                    DATA
+ 015ECH 015ECH 00000H CONST                  CONST
+ 015ECH 0160DH 00022H _BSS                   BSS
+ 01610H 01A13H 00404H c_common               BSS
+ 01A20H 0221FH 00800H STACK                  STACK
+
+ Origin   Group
+ 013B:0   DGROUP
+ 0000:0   IGROUP
+
+  Address         Publics by Name
+
+ 013B:0074       STKHQQ
+ 0000:129A       _brkctl
+ 0000:115E       _clearerr
+ 013B:023C       _edata
+ 013B:0670       _end
+ 013B:01BE       _environ
+ 013B:01B2       _errno
+ 0000:0528       _exit
+ 0000:0E9C       _fflush
+ 0000:0F07       _flushall
+ 0000:0F5B       _free
+ 013B:0660       _i
+ 0000:0F3B       _isatty
+ 0000:0010       _main
+ 0000:0F69       _malloc
+ 0000:0325       _printf
+ 0000:0FAF       _strlen
+ 0000:0FC8       _strncmp
+ 0000:005D       _test1
+ 0000:008E       _test2
+ 0000:00BF       _test3
+ 0000:00F0       _test4
+ 0000:0121       _test5
+ 0000:0152       _test6
+ 0000:1009       _ultoa
+ 0000:116A       _write
+ 013B:00CE       __abrkp
+ 013B:007E       __abrktb
+ 013B:00CE       __abrktbe
+ 0000:0001  Abs  __acrtused
+ 013B:0076       __aintdiv
+ 0000:1014       __amalloc
+ 0000:113F       __amallocbrk
+ 013B:0214       __amblksiz
+ 0000:10E3       __amexpand
+ 0000:111D       __amlink
+ 013B:020E       __aseg1
+ 013B:0204       __asegds
+ 013B:0210       __asegn
+ 013B:0212       __asegr
+ 013B:007A       __asizds
+ 0000:0196       __astart
+ 0000:02FE       __astkovr
+ 013B:007C       __atopsp
+ 013B:0460       __bufin
+ 013B:0260       __bufout
+ 0000:0E6A       __cfltcvt
+ 013B:01EA       __child
+ 0000:0182       __chkstk
+ 0000:04BA       __cinherit
+ 0000:123D       __cltoasub
+ 0000:0E74       __cropzeros
+ 013B:01EC       __csigtab
+ 0000:124B       __cxtoa
+ 013B:01B6       __cyfunc
+ 013B:01C0       __doserrno
+ 0000:135E       __dosret0
+ 0000:1366       __dosretax
+ 013B:01B8       __dosvermajor
+ 013B:01B9       __dosverminor
+ 013B:01C2       __eofflag
+ 0000:035B       __exit
+ 013B:01A8       __fac
+ 0000:0E88       __fassign
+ 0000:0D6A       __flsbuf
+ 0000:0E7E       __forcdecpt
+ 013B:0230       __fpinit
+ 0000:031E       __fptrap
+ 0000:0421       __ftbuf
+ 013B:00D0       __iob
+ 013B:0170       __iob2
+ 013B:0198       __lastiob
+ 0000:1372       __maperror
+ 0000:0F5B       __nfree
+ 0000:0F69       __nmalloc
+ 0000:047F       __nullcheck
+ 013B:01C0       __oserr
+ 013B:01D6       __osfile
+ 013B:01B8       __osmajor
+ 013B:01B9       __osminor
+ 0000:0540       __output
+ 0000:0E92       __positive
+ 013B:01B0       __psp
+ 0000:0C0A       __setargv
+ 0000:0D0E       __setenvp
+ 0000:039F       __stbuf
+ 013B:01B4       __umaskval
+ 013B:01BA       ___argc
+ 013B:01BC       ___argv
+
+  Address         Publics by Value
+
+ 0000:0001  Abs  __acrtused
+ 0000:0010       _main
+ 0000:005D       _test1
+ 0000:008E       _test2
+ 0000:00BF       _test3
+ 0000:00F0       _test4
+ 0000:0121       _test5
+ 0000:0152       _test6
+ 0000:0182       __chkstk
+ 0000:0196       __astart
+ 0000:02FE       __astkovr
+ 0000:031E       __fptrap
+ 0000:0325       _printf
+ 0000:035B       __exit
+ 0000:039F       __stbuf
+ 0000:0421       __ftbuf
+ 0000:047F       __nullcheck
+ 0000:04BA       __cinherit
+ 0000:0528       _exit
+ 0000:0540       __output
+ 0000:0C0A       __setargv
+ 0000:0D0E       __setenvp
+ 0000:0D6A       __flsbuf
+ 0000:0E6A       __cfltcvt
+ 0000:0E74       __cropzeros
+ 0000:0E7E       __forcdecpt
+ 0000:0E88       __fassign
+ 0000:0E92       __positive
+ 0000:0E9C       _fflush
+ 0000:0F07       _flushall
+ 0000:0F3B       _isatty
+ 0000:0F5B       __nfree
+ 0000:0F5B       _free
+ 0000:0F69       _malloc
+ 0000:0F69       __nmalloc
+ 0000:0FAF       _strlen
+ 0000:0FC8       _strncmp
+ 0000:1009       _ultoa
+ 0000:1014       __amalloc
+ 0000:10E3       __amexpand
+ 0000:111D       __amlink
+ 0000:113F       __amallocbrk
+ 0000:115E       _clearerr
+ 0000:116A       _write
+ 0000:123D       __cltoasub
+ 0000:124B       __cxtoa
+ 0000:129A       _brkctl
+ 0000:135E       __dosret0
+ 0000:1366       __dosretax
+ 0000:1372       __maperror
+ 013B:0074       STKHQQ
+ 013B:0076       __aintdiv
+ 013B:007A       __asizds
+ 013B:007C       __atopsp
+ 013B:007E       __abrktb
+ 013B:00CE       __abrktbe
+ 013B:00CE       __abrkp
+ 013B:00D0       __iob
+ 013B:0170       __iob2
+ 013B:0198       __lastiob
+ 013B:01A8       __fac
+ 013B:01B0       __psp
+ 013B:01B2       _errno
+ 013B:01B4       __umaskval
+ 013B:01B6       __cyfunc
+ 013B:01B8       __dosvermajor
+ 013B:01B8       __osmajor
+ 013B:01B9       __osminor
+ 013B:01B9       __dosverminor
+ 013B:01BA       ___argc
+ 013B:01BC       ___argv
+ 013B:01BE       _environ
+ 013B:01C0       __doserrno
+ 013B:01C0       __oserr
+ 013B:01C2       __eofflag
+ 013B:01D6       __osfile
+ 013B:01EA       __child
+ 013B:01EC       __csigtab
+ 013B:0204       __asegds
+ 013B:020E       __aseg1
+ 013B:0210       __asegn
+ 013B:0212       __asegr
+ 013B:0214       __amblksiz
+ 013B:0230       __fpinit
+ 013B:023C       _edata
+ 013B:0260       __bufout
+ 013B:0460       __bufin
+ 013B:0660       _i
+ 013B:0670       _end
+
+Program entry point at 0000:0196

@@ -1,0 +1,194 @@
+                                                         June 01, 1987
+
+                      MULTI-LEVEL WINDOWS and Q UTILITIES
+                               TURBO-C Version 1.0
+
+        PURPOSE:
+
+        This utility creates incredibly quick multi-level windows as
+        library calls in Turbo-C programs for IBM PC/XT/AT compati-
+        bles.  They work on MDA, CGA, and EGA adapters in any column mode
+        (40/80/etc.).  This utility uses the quick screen writing utilities,
+        also in library form.  Users are encouraged to participate in the free
+        Teamware concept with the release of these functions. As of this 
+        release all of the functions are available in WINDOW10.LIB. Once the
+        library functions are commented they will be released as teamware.
+        The Q utilities were transformed from TURBO PASCAL inline to
+        external assembly using BORLAND's rules.asi macro assembler header
+        file.
+
+
+        TEST DRIVE:
+
+        Compile and run the tutoring program WTUTOR10.C to get a feeling
+        for features and speed. Also QDEMO10.C can be compiled to give the
+        user a feel for features of the Q UTILITIES. The library functions
+        and demos were compiled with the SMALL model and all ERRROR checking
+        on.
+
+
+        FILES:
+                                                     
+        In this version, WINDOW10.ARC contains:
+
+           !_read.me!  :  File that insists you get a copy of WINDOW10.ARC.
+           wtutor10.c  :  Demo of WINDOW10.LIB which also gives a tutorial
+                          of user instructions.
+           qdemo10.c   :  Demo of the Q UTILITIES also in WINDOW10.LIB.
+           qbench10.c  :  A timing program that shows "screens/second" for
+                          the Q utilities.
+           wtutor10.exe:  Executable version of windowing demo 
+           qdemo10.exe :  Executable version of Q UTILITIES
+           qbench10.exe : Executable version of timing program
+           qdemo10.prj :  Project file used to build qdemo10.exe
+           wtutor10.prj:  Project file used to build wtutor10.exe
+           qbench10.prj:  Project file used to build qbench10.exe
+           window10.doc:  This document.
+           qutil10.doc :  Document on Q UTILITIES
+           wind10s.lib:  Library of window functions and Q UTILITIES.
+                          WINDOW FUNCTIONS:  (see appendix)
+                             wiattr(); creates color attribute on fore/back
+                             initwindow(): initilizes window environment
+                             makewindow(): makes a window on the screen 
+                             titlewindow(): title a window with text
+                             removewindow(); removes last window by make
+                             scrollwindow(): scrolls a window up or down
+                             qinit(): intialize Q utilities, DO not call
+                                      if you call initwindow();
+                         Q UTILITIES: (see qutil.doc)
+           windprot.h  :  Header file with prototypes for all of the
+                          functions in window10.lib.
+           w1.h        :  Header file with type definitions.
+           color.h     :  Header file with color definitions.
+
+        IMPROVEMENTS:
+
+       extern licurrent. -- Keeps track of the window currently being used.
+       If you have more than one window displayed and want to swap the active
+       window without removing it, two indexes are then required.
+       licurrent can be changed by the user; li should not be changed.
+
+
+        TEAMWARE:
+
+        With the release of this utility, I hope to introduce the concept
+        of Teamware.  These utilities are FREE, so don't worry.  Many pro-
+        grammers have done some superior individual efforts and have
+        benefited many.  But the problem is just that - they are individual
+        efforts that as packages are not compatible with other individual
+        efforts.  And many of the programs are released as copyrighted so
+        that others cannot use them in certain contexts.  It seems that if
+        users have other expertise and discover ways to combine each others
+        utilities, the benefits can improve greatly.  This is what these
+        utilities have done.
+
+        As Teamware, users CAN and are encouraged to:
+
+           1. Use the utilities to enhance their programs and applications
+              in both private and commercial contexts.
+           2. Combine, create, and edit other utilities and re-release them
+              as Teamware by permission of the previous author(s)/editor(s).
+           3. Enhance shareware programs provided they are applications that
+              in no way represent or advertise the power of the utilities
+              themselves, but shall credit the use of Teamware.
+           4. Ask about questionable use of the utility.
+
+        As Teamware, users CANNOT:
+
+           1. Distribute the utilities for profit.
+           2. Combine, create, and edit other utilities and re-release them
+              as Shareware or for any profit as enhanced utilities.
+
+
+        ADDITIONAL NOTES:
+
+        Actual window routines are to be commented and released at a later
+        date by the author.
+
+***     Global variables zoomeffect and shadoweffect can be changed at any
+        time to either zoom (explode) the window or put up a shadow. The
+        shadow as of this version can either be left or rigt.
+
+        WTUTOR10.C covers most of the instructions for use. For instance
+        the window functions can work on up to 8 display pages depending
+        on your video card.  Turbo-C functions only work on the first
+        page, page 0.  This is where Q screen utilities come in.  They will
+        work on any page.  Even though the window functions will seem to make
+        a Turbo-C window on say page 3, the standard procedures of printf,
+        fputf,puts, etc. will not work there.  You must then use Q
+        screen utilities for those pages.
+
+        There may be later versions of WINDOW1x.LIB, so use the latest one.
+
+       Remember that a Turbo-C window cannot have less than 2 rows or
+       columns.
+
+
+        LIABILITY:
+
+        No liabilities are assumed if the user misuses these utilities.
+
+
+        CREDITS:
+
+        The initial program was developed by Michael Burton in his copy
+        of WINDO.INC, ver 2.4.  The program was edited by permission and
+        re-released as WINDOW30.ARC (TURBO PASCAL).
+
+        Copyright (c) 1986 by James H. LeMay, Michael Burton (TURBO PASCAL)
+        Copyright (c) 1987 by Michael G. MLachak (TURBO-C)
+
+        These procedures are public domain under the Teamware concept.
+        If there are any problems, please let me know.
+         --------------------------------------------------------------
+                           T U R B O   ----    C
+          Michael G. Mlachak, 4318 Stewart Court, East Chicago, IN 46312
+            1-(219)-397-8952 (after 6:00 PM CST) CIS: 76327,4210
+         --------------------------------------------------------------
+                          T U R B O  ---- P A S C A L
+          Jim LeMay, 6341 Klamath Rd., Ft. Worth, TX  76116
+            1-(817) 732-7150 (after 1730 PST), CIS 76011,217
+
+          Michael Burton, 15540 Boot Hill Rd., Hayden Lake, ID 83835
+            1-(208)-772-9347 (after 1800 PST)
+        ---------------------------------------------------------------
+        Special effects concepts were graciously suggested by:
+
+          Rick Fothergill, 141 Oak Hill Road, Pittsfield, MA 01201
+            Data: 1-(413)-499-7245, CIS 76210,443
+            GEnie Mail:  R.FOTHERGILL
+
+        APPENDIX:
+
+                       Functions and there parameters:
+             Refer to <WINDPROT.H> for prototypes and W1.H for type
+             defintions.
+
+                   wattr,battr,attribute: is any color attribute <=255;
+                              wiattr() may be called to create an attribute
+                              based on foreground and background.
+                   fcolor,bcolor: any color defined in COLOR.H
+                   begrow,endrow,row,rows: any legal row 1 -25
+                   col,cols: any legal column 1 -80
+                   direction : any direction defined in W1.h (DIRTYPE)
+                   st : any string of type str80
+                   justify : can be (left, center,right) -- for top of window
+                                    (bottom) -- for bottom center
+                                    (nodir) -- restores bottom line of window
+                    btype: can be any border type defined in W1.h (BORDERS).
+
+          int wiattr(fcolor,bcolor);
+          void initwindow(attribute);
+          void makewindow(row,col,rows,cols,wattr,battr,btype);
+          void removewindow(void);
+          void scrollwindow(int begrow,endrow,direction);
+          void titlewindow(justify, st);
+
+        REVISIONS:
+
+         Version 1.0 (6-1-87)
+          .  Initial routines
+          .  Released under the teamware concept.
+
+
+

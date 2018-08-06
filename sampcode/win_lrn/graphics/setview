@@ -1,0 +1,5 @@
+setview.obj: setview.c
+     cl  -d  -c  -Asnw	-Gsw  -Os  -Zdpe  setview.c
+
+setview.exe:  setview.obj setview.def
+     link4 setview,setview/align:16,setview/map,slibw,setview.def

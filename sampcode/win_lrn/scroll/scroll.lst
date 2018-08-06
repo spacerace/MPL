@@ -1,0 +1,481 @@
+ 
+
+                                                                       PAGE   1
+                                                                       07-18-88
+                                                                       16:13:30
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+      1  /* SCROLL.C							 */
+      2  /* This program illistrates the use of ScrollDC and ScrollWindow */
+      3  /* as well as many other Windows functions. ScrollDC is used to  */
+      4  /* "Bounce" individual balls, one at a time, from the top of the */
+      5  /* display to the bottom of the display. ScrollWindow is used to */
+      6  /* "Raise" all the balls from the bottom of the display to the	 */
+      7  /* top of the display. This program gets the resolution of the	 */
+      8  /* screen to determine what would be a good shape for the ball	 */
+      9  /* as well as to deternime how fast to scroll the ball. We also  */
+     10  /* get the size of the client area so that we can deternime how  */
+     11  /* many balls to draw on the screen. I decided the height of the */
+     12  /* ball should be 1/10 the height of the client area and the it  */
+     13  /* should be drawn 1/10 of the way down the client area and the  */
+     14  /* same distance over on the client area. The other balls are	 */
+     15  /* drawn similarly. Enjoy .....................................  */
+     16  
+     17  #include <windows.h>
+     18  #include "scroll.h"
+     19  
+     20  
+     21  long FAR PASCAL WndProc (HWND, unsigned, WORD, LONG) ;
+     22  
+     23  static char szAppName [] = "Scroll" ;
+     24  
+     25  int PASCAL WinMain (hInstance, hPrevInstance, lpszCmdLine, nCmdShow)
+     26       HANDLE      hInstance, hPrevInstance ;
+     27       LPSTR       lpszCmdLine ;
+     28       int         nCmdShow ;
+     29       {
+     30  
+     31       HWND        hWnd ;
+     32       MSG         msg ;
+     33       WNDCLASS	 wndclass ;
+     34  
+     35       if (!hPrevInstance) 
+     36            {
+     37            wndclass.style         = CS_HREDRAW | CS_VREDRAW ;
+     38            wndclass.lpfnWndProc   = WndProc ;
+     39            wndclass.cbClsExtra    = 0 ;
+     40            wndclass.cbWndExtra    = 0 ;
+     41            wndclass.hInstance     = hInstance ;
+     42  	  wndclass.hIcon	 = LoadIcon (hInstance, szAppName) ;
+     43            wndclass.hCursor       = LoadCursor (NULL, IDC_ARROW) ;
+     44            wndclass.hbrBackground = GetStockObject (WHITE_BRUSH) ;
+     45  	  wndclass.lpszMenuName  = szAppName;
+     46            wndclass.lpszClassName = szAppName ;
+     47  
+     48            if (!RegisterClass (&wndclass))
+     49                 return FALSE ;
+     50            }
+     51  
+     52       hWnd = CreateWindow (szAppName,	     /* window class		*/
+     53  		    "Scroll",	 /* window caption	    */
+     54                      WS_OVERLAPPEDWINDOW,     /* window style          
+           */
+     55                      CW_USEDEFAULT,           /* initial x position    
+ 
+
+                                                                       PAGE   2
+                                                                       07-18-88
+                                                                       16:13:30
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+           */
+     56                      0,                       /* initial y position    
+           */
+     57                      CW_USEDEFAULT,           /* initial x size        
+           */
+     58                      0,                       /* initial y size        
+           */
+     59                      NULL,                    /* parent window handle  
+           */
+     60                      NULL,                    /* window menu handle    
+           */
+     61                      hInstance,               /* program instance handl
+         e */
+     62                      NULL) ;                  /* create parameters     
+           */
+     63  
+     64       ShowWindow (hWnd, nCmdShow) ;
+     65       UpdateWindow (hWnd) ;
+     66  
+     67       while (GetMessage (&msg, NULL, 0, 0))
+     68            {
+     69            TranslateMessage (&msg) ;
+     70            DispatchMessage (&msg) ;
+     71            }
+     72       return msg.wParam ;
+     73       }
+
+
+WinMain  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+wndclass. . . . . . . . . auto                             -002e 
+msg . . . . . . . . . . . auto                             -0014 
+hWnd. . . . . . . . . . . auto                             -0002 
+nCmdShow. . . . . . . . . param                             0004
+lpszCmdLine . . . . . . . param                             0006
+hPrevInstance . . . . . . param                             000a
+hInstance . . . . . . . . param                             000c
+
+     74  
+     75  void FAR PASCAL StopOne(){
+     76      return;
+     77      }
+     78  
+     79  
+     80  long FAR PASCAL WndProc (hWnd, iMessage, wParam, lParam)
+     81       HWND	    hWnd ;
+     82       unsigned	    iMessage ;
+     83       WORD	    wParam ;
+     84       LONG	    lParam ;
+     85       {
+     86       static int   xClient, yClient ;
+     87       static int   xScreen, yScreen ;
+     88       static short   numBalls , bounced ;
+     89       static short   ScrollRate ;
+ 
+
+                                                                       PAGE   3
+                                                                       07-18-88
+                                                                       16:13:30
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+     90       HDC	    hDC ;
+     91       PAINTSTRUCT    ps ;
+     92       RECT	    ClientRect ;
+     93       RECT	    DcRect ;
+     94       RECT	    Ball ;
+     95       RECT	    NewBall ;
+     96       RECT	    ScrollBox ;
+     97       short	    i, j, up, down ;
+     98       char szBuffer[80] ;
+     99  
+    100       switch (iMessage)
+    101  	  {
+    102  	  case WM_CREATE:
+    103  
+    104  /* Get the resolution of the Screen */
+    105  
+    106  	       xScreen = GetSystemMetrics (SM_CXSCREEN) ;
+    107  	       yScreen = GetSystemMetrics (SM_CYSCREEN) ;
+    108  
+    109  /* Get the size of the client area initially */
+    110  
+    111  	       GetClientRect (hWnd, &ClientRect) ;
+    112  
+    113  /* and save it in static variables */
+    114  
+    115  	       yClient = ClientRect.bottom - ClientRect.top ;
+    116  	       xClient = ClientRect.right - ClientRect.left  ;
+    117  
+    118  /* Set scroll speed for different resolutions */
+    119  
+    120  	       if (yClient <= 50) ScrollRate = 1 ;
+    121  	       if (yClient > 100)  ScrollRate = 3 ;
+    122  	       if (yClient > 175)  ScrollRate = 5 ;
+    123  
+    124  	       break ;
+    125  
+    126  
+    127  	  case WM_SIZE:
+    128  
+    129  /* Update the size of the client area */
+    130  
+    131  	       yClient = HIWORD (lParam) ;
+    132  	       xClient = LOWORD (lParam) ;
+    133  
+    134  /* Set scroll speed for different resolutions */
+    135  
+    136  	       if (yClient <= 50) ScrollRate = 1 ;
+    137  	       if (yClient > 100)  ScrollRate = 3 ;
+    138  	       if (yClient > 175)  ScrollRate = 5 ;
+    139  
+    140  	       break ;
+    141  
+    142  
+    143  	       break ;
+    144  
+    145  	  case WM_PAINT:
+ 
+
+                                                                       PAGE   4
+                                                                       07-18-88
+                                                                       16:13:30
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+    146  
+    147  /* Begin to paint the client area and redraw the balls */
+    148  
+    149  	       BeginPaint (hWnd, &ps);
+    150  
+    151  /* Initialize the size of the ball */
+    152  
+    153  	       Ball.top    = ( yClient / 10) ;
+    154  	       Ball.bottom = ( yClient / 5) ;
+    155  	       Ball.left   = ((Ball.bottom - Ball.top) * (xScreen / yScreen))
+          ;
+    156  	       Ball.right  = 2 * Ball.left ;
+    157  
+    158  /* Determine the number of balls that can fit on the screen */
+    159  
+    160  	       numBalls = ( xClient - (Ball.right - Ball.left) ) /
+    161  			      ( 2 * (Ball.right - Ball.left)) ;
+    162  
+    163  /* And use this as a standard for drawing the balls */
+    164  
+    165  	       NewBall = Ball ;
+    166  
+    167  	       for (i = 0 ; i < numBalls; i ++ ) {
+    168  
+    169  		 Ellipse (ps.hdc, NewBall.left, NewBall.top,
+    170  				NewBall.right, NewBall.bottom);
+    171  
+    172  /* Update the position of the new ball */
+    173  
+    174  		 NewBall.left = NewBall.left +	2 * (Ball.right - Ball.left);
+    175  		 NewBall.right = NewBall.right + 2 * (Ball.right - Ball.left);
+    176  
+    177  	       }
+    178  
+    179  	       EndPaint (hWnd, &ps);
+    180  
+    181  /* Set bounced to false, signifing that the balls are on the
+    182  		  top of the display */
+    183  
+    184  	       bounced = 0 ;
+    185  
+    186  	       break ;
+    187  
+    188  	  case WM_COMMAND:
+    189  
+    190  	       switch (wParam)
+    191  		     {
+    192  		     case IDM_DC:
+    193  
+    194  			  if (!bounced) {
+    195  
+    196  /* Initialize the size of the ball */
+    197  
+    198  			     Ball.top	 = ( yClient / 10) ;
+    199  			     Ball.bottom = ( yClient / 5) ;
+    200  			     Ball.left	 = ((Ball.bottom - Ball.top) * (xScreen / yScreen)) 
+ 
+
+                                                                       PAGE   5
+                                                                       07-18-88
+                                                                       16:13:30
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+         ;
+    201  			     Ball.right  = 2 * Ball.left ;
+    202  
+    203  /* Initialize the scrolling area for one ball */
+    204  
+    205  			     ScrollBox.top = 1 ;
+    206  			     ScrollBox.left = Ball.left / 2 ;
+    207  			     ScrollBox.bottom = yClient ;
+    208  			     ScrollBox.right = ScrollBox.left + (2 * Ball.left) ;
+    209  
+    210  			     hDC = GetDC (hWnd) ;
+    211  			     for (i = 0 ; i < numBalls; i ++ ) {
+    212  
+    213  			       up = Ball.bottom ;
+    214  			       down = yClient - (2 * ScrollRate) ;
+    215  
+    216  /* Until the ball is done bouncing */
+    217  
+    218  			       while (up < down ) {
+    219  
+    220  /* It goes down */
+    221  
+    222  				 for (j = up ; j <= down ; j += ScrollRate ) {
+    223  				   ScrollDC (hDC,0, ScrollRate,
+    224  					       &ScrollBox,&ScrollBox,
+    225  					       NULL,NULL);
+    226  				 }
+    227  
+    228  /* and won't go up quit so high */
+    229  				 up = up + ((down - up) / 3) + 1 ;
+    230  			     /*  MessageBeep (0); */
+    231  
+    232  
+    233  /* and now it bounces up */
+    234  				 for (j = up ; j <= down ; j += ScrollRate ) {
+    235  				   ScrollDC (hDC,0, - ScrollRate,
+    236  					       &ScrollBox,&ScrollBox,
+    237  					       NULL,NULL);
+    238  				 }
+    239  			       }
+    240  
+    241  /* and bounces down for the last time */
+    242  
+    243  			       for (j = up ; j <= down ; j += ScrollRate ) {
+    244  				 ScrollDC (hDC,0, 1,&ScrollBox,&ScrollBox,
+    245  					     NULL,NULL);
+    246  			       }
+    247  
+    248  /* Move to the next scrolling area */
+    249  
+    250  			       ScrollBox.left = ScrollBox.left + ( 2 * Ball.left) ;
+    251  			       ScrollBox.right = ScrollBox.right + (2 * Ball.left);
+    252  			     }
+    253  
+    254  			     ReleaseDC (hWnd, hDC) ;
+    255  			     bounced = 1 ;
+ 
+
+                                                                       PAGE   6
+                                                                       07-18-88
+                                                                       16:13:30
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+    256  			  }
+    257  
+    258  			  break ;
+    259  
+    260  		     case IDM_WIN:
+    261  
+    262  /* If the balls are at the bottom of the display then */
+    263  
+    264  			  if (bounced) {
+    265  
+    266  /* Initialize how far they need to rise */
+    267  
+    268  			    down = yClient - (2 * ScrollRate);
+    269  			    up = (yClient / 5) ;
+    270  
+    271  /* And raise them to the top */
+    272  
+    273  			    for (j = up ; j <= down ; j += ScrollRate ) {
+    274  			      ScrollWindow (hWnd, 0,- ScrollRate,
+    275  					       NULL, NULL) ;
+    276  			    }
+    277  
+    278  			    MessageBeep (0);
+    279  
+    280  /* Set bounced to false, signifing the balls are at the top of the dis
+         play */
+    281  
+    282  			    bounced = 0 ;
+    283  
+    284  			  }
+    285  
+    286  			  break ;
+    287  
+    288  		     case IDM_EXIT:
+    289  
+    290  			  SendMessage (hWnd, WM_CLOSE, 0, 0L);
+    291  			  break;
+    292  
+    293  		     case IDM_HELP:
+    294  
+    295  			  MessageBox (hWnd, "Try Scrolling the DC ...",
+    296  			       szAppName, MB_ICONASTERISK | MB_OK) ;
+    297  			  break;
+    298  		     case IDM_ABOUT:
+    299  
+    300  			  MessageBox (hWnd, "SCROLL DEMO.",
+    301  			       szAppName, MB_ICONASTERISK | MB_OK) ;
+    302  		     default:
+    303  			  break;
+    304  		     }
+    305  	       break;
+    306  
+    307            case WM_DESTROY:
+    308                 PostQuitMessage (0) ;
+    309                 break ;
+    310  
+ 
+
+                                                                       PAGE   7
+                                                                       07-18-88
+                                                                       16:13:30
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+    311            default:
+    312                 return DefWindowProc (hWnd, iMessage, wParam, lParam) ;
+         
+    313            }
+    314       return 0L ;
+    315       }
+
+
+WndProc  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hDC . . . . . . . . . . . auto                             -00a4 
+ClientRect. . . . . . . . auto                             -00a2 
+Ball. . . . . . . . . . . auto                             -009a 
+j . . . . . . . . . . . . auto                             -0092 
+i . . . . . . . . . . . . auto                             -0090 
+ScrollBox . . . . . . . . auto                             -008e 
+down. . . . . . . . . . . auto                             -0086 
+szBuffer. . . . . . . . . auto                             -0084 
+DcRect. . . . . . . . . . auto                             -0034 
+NewBall . . . . . . . . . auto                             -002c 
+up. . . . . . . . . . . . auto                             -0024 
+ps. . . . . . . . . . . . auto                             -0022 
+lParam. . . . . . . . . . param                             0006
+wParam. . . . . . . . . . param                             000a
+iMessage. . . . . . . . . param                             000c
+hWnd. . . . . . . . . . . param                             000e
+bounced . . . . . . . . . static  int                  2    0000
+xClient . . . . . . . . . static  int                  2    0002
+xScreen . . . . . . . . . static  int                  2    0004
+yClient . . . . . . . . . static  int                  2    0006
+yScreen . . . . . . . . . static  int                  2    0008
+ScrollRate. . . . . . . . static  int                  2    000a
+numBalls. . . . . . . . . static  int                  2    000c
+
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+BeginPaint. . . . . . . . extern  far function       ***     ***
+CreateWindow. . . . . . . extern  far function       ***     ***
+DefWindowProc . . . . . . extern  far function       ***     ***
+DispatchMessage . . . . . extern  far function       ***     ***
+Ellipse . . . . . . . . . extern  far function       ***     ***
+EndPaint. . . . . . . . . extern  far function       ***     ***
+GetClientRect . . . . . . extern  far function       ***     ***
+GetDC . . . . . . . . . . extern  far function       ***     ***
+GetMessage. . . . . . . . extern  far function       ***     ***
+GetStockObject. . . . . . extern  far function       ***     ***
+GetSystemMetrics. . . . . extern  far function       ***     ***
+LoadCursor. . . . . . . . extern  far function       ***     ***
+LoadIcon. . . . . . . . . extern  far function       ***     ***
+MessageBeep . . . . . . . extern  far function       ***     ***
+MessageBox. . . . . . . . extern  far function       ***     ***
+ 
+
+                                                                       PAGE   8
+                                                                       07-18-88
+                                                                       16:13:30
+
+                                              Microsoft C Compiler Version 5.10
+
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+PostQuitMessage . . . . . extern  far function       ***     ***
+RegisterClass . . . . . . extern  far function       ***     ***
+ReleaseDC . . . . . . . . extern  far function       ***     ***
+ScrollDC. . . . . . . . . extern  far function       ***     ***
+ScrollWindow. . . . . . . extern  far function       ***     ***
+SendMessage . . . . . . . extern  far function       ***     ***
+ShowWindow. . . . . . . . extern  far function       ***     ***
+StopOne . . . . . . . . . global  far function       ***    00e7
+TranslateMessage. . . . . extern  far function       ***     ***
+UpdateWindow. . . . . . . extern  far function       ***     ***
+WinMain . . . . . . . . . global  near function      ***    0000
+WndProc . . . . . . . . . global  far function       ***    00fa
+pLocalHeap. . . . . . . . common  near pointer         2     ***
+szAppName . . . . . . . . static  struct/array         7    0008
+
+Code size = 04e2 (1250)
+Data size = 0035 (53)
+Bss size  = 000e (14)
+
+No errors detected

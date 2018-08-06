@@ -1,0 +1,18 @@
+CC	=	cl -c -AS -G2sw -Od -W3 -Zpei
+LF	=	/align:16 /codeview /map /NOD
+
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+
+typer.obj:	typer.c typer.h
+
+typer.res:	typer.rc typer.h
+
+typer.exe: typer.obj typer.res typer.def typer.lnk
+    link $(LF) typer, , , os2 slibcep, typer.def
+    rc typer.res
+    mapsym typer

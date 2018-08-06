@@ -1,0 +1,11 @@
+bit.obj: bit.c
+    cl -c -W2 -AS -Gsw -Od -Zped bit.c
+
+bit.res: bit.rc
+     rc -r bit.rc
+
+bit.exe: bit.obj bit.res bit.def
+    link4 bit,/align:16,/map/li, slibw slibc libh/NOD, bit.def
+    mapsym bit
+    RC BIT.RES
+

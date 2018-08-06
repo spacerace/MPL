@@ -1,0 +1,12 @@
+#-----------------
+# FONTS make file
+#-----------------
+
+fonts.obj : fonts.c easyfont.h
+     cl -c -G2sw -W3 fonts.c
+
+easyfont.obj : easyfont.c
+     cl -c -G2sw -W3 easyfont.c
+
+fonts.exe : fonts.obj easyfont.obj fonts.def
+     link fonts easyfont, /align:16, NUL, os2, fonts

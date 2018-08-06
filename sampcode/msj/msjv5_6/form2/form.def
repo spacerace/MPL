@@ -1,0 +1,37 @@
+;
+; FORM LIBRARY - MODULE DEFINITION FILE
+;
+; LANGUAGE      : Microsoft C 5.1
+; MODEL         : medium
+; ENVIRONMENT   : Microsoft Windows 3.0 SDK
+; STATUS        : operational
+;
+;    Eikon Systems, Inc.
+;    989 East Hillsdale Blvd, Suite 260
+;    Foster City, California 94404
+;    415-349-4664
+;
+; 07/12/90 1.00 - Kevin P. Welch - initial creation.
+;
+
+LIBRARY              FORM
+EXETYPE              WINDOWS        
+DESCRIPTION          'Form Library - Kevin P. Welch'
+STUB                 'WINSTUB.EXE'
+
+CODE                 MOVEABLE DISCARDABLE SHARED PRELOAD
+DATA                 MOVEABLE SINGLE PRELOAD
+
+HEAPSIZE             4096
+
+IMPORTS
+   Page.PageInit
+
+EXPORTS
+   WEP               @1 RESIDENTNAME
+   FormInit          @2
+   FormEdit          @3
+   FormPrint         @4
+   FormEditDlgFn     @5
+   FormPrintDlgFn    @6
+   FormMsgHookFn     @7

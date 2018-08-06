@@ -1,0 +1,394 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24
+.R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,30
+[1mPonzoTUTOR
+.WNT
+   STRINGS 'N' THINGS   
+
+    When we declare ~b~Ichar x;~N we tell the C compiler that ~b~Ix~N is a
+    ~b~Ichar~Nacter variable (so we may define ~b~Ix='Z';~N for example).
+
+    But what if we wish to assign to ~b~Ix~N the ~Istring~N: 'hello' ?
+    In order to identify a string (as opposed to a single character) we write:
+    ~b~Ix="hello";~N  using the ~Idouble quote~N and we tell ~b~Iprintf()~N
+    to print ~b~Ix~N using a ~b~Is~Ntring format, ~b~I%s~N:
+
+~b~Imain() {~N
+~b~Ichar x;~N                         declare ~b~Ichar x;~N as usual.
+~b~Ix="hello";~N                      use ~Idouble quotes~N to define ~b~Ix~N.
+~b~Iprintf("string x is %s",x);~N     use ~b~I%s~N to printf a ~b~Is~Ntring.
+~b~I}~N
+.W
+.R20C1
+    The above program (when ~Icompiled~N and ~Irun~N) prints:
+
+~r~Istring x is hello~N
+.K19,60
+  hello!
+.WN
+
+
+~b~Imain() {~N
+~Vchar x;         ~N
+~b~Ix="hello";~N                      use ~Idouble quotes~N to define ~b~Ix~N.
+~b~Iprintf("string x is %s",x);~N     use ~b~I%s~N to printf a ~b~Is~Ntring.
+~b~I}~N
+
+.R9
+  ~IThis declaration of a string ~b~Ix~N~I may NOT be acceptable to your C-compiler!~N
+.b8-10
+
+
+
+(It has the SAME format as the declaration of a single ~b~Ichar~Nacter variable!)
+
+                            Lesson6 will explain .....
+.K17,32
+patience!
+.WNT
+  Double Quotes and Strings : Single Quotes and Characters  
+    Consider the following:
+
+~b~Imain() {~N
+~b~Ichar x,y;~N                             ~b~Ix~N, ~b~Iy~N both ~b~Ichar~N.
+~b~Ix="A";~N                                ~b~Ix~N is in ~Idouble~N quotes.
+~b~Iy='A';~N                                ~b~Iy~N is in ~Isingle~N quotes.
+~b~Iprintf("x is %s and y is %s",x,y);~N    BOTH printed as a ~b~I%s~Ntring!
+~b~I}~N
+
+    What do you think will be printed?
+.W
+.R15C1
+~r~Ix is A and y is  ~N                     ~Ithe x-string is OK..but NOT the y!~N
+.W
+.R17C1
+    If ~b~Ix~N is defined as a string (using the ~Idouble quotes~N) and
+    is printed (via ~b~Iprintf()~N) using the ~b~I%s~Ntring format, then the
+    printout is OK. BUT if ~b~Iy~N is defined as a ~Isingle character~N (using
+    ~Isingle quotes~N) but is printed using the ~b~I%s~Ntring format then
+    ~b~Iprintf()~N gets confused (..or maybe it's ~IWE~N who are confused!).
+    ~w~BThis says something interesting about printf()!~N
+.W
+.N
+
+    When we tell ~b~Iprintf()~N to print a ~b~I%s~Ntring (either ~b~Ix~N
+    or ~b~Iy~N) ~b~Iprintf()~N expects the ~Iaddress~N of the first
+    character of the string. When we ask to ~b~Iprintf()~N a ~b~I%c~Nharacter
+    it expects the actual character itself.
+
+    We normally don't worry about this...just define the variable ~b~Ix~N 
+    as a ~Istring~N (using ~Idouble quotes~N) and ask ~b~Iprintf()~N for the
+    ~b~I%s~N format and - ~Iautomatically~N - the ~Iaddress~N of ~b~Ix~N is
+    given to ~b~Iprintf()~N and printing begins with the first character
+    found at that ~Iaddress~N and continues until the ~Ilast~N character 
+    (...and how does ~b~Iprintf()~N  know when it has reached the ~Ilast~N
+    character ?? ... patience ...).
+
+    If  we define ~b~Iy~N using ~Isingle quotes~N and use the ~b~I%c~N
+    format in ~b~Iprintf()~N that's OK too. The C language looks after 
+    giving the ~Iactual character~N to ~b~Iprintf()~N (rather than the
+    ~Iaddress~N).
+.K19,60
+let C doit
+.WN
+
+~b~Ix="Z";~N                            ~b~Ix~N is in ~Idouble quotes~N.
+~b~Iprintf("x is %s",x);~N   
+~r~Ix is Z~N                            this is the printout..~IOK~N!
+
+    If ~b~I%s~N is used in the ~b~Iprintf()~N statement, and if ~b~Ix~N is
+    declared and defined as a ~Istring~N, then C will look after giving to
+    ~b~Iprintf()~N the address where ~b~Ix~N is stored.
+~b                                                                        ~N
+    Now consider:
+
+~b~Iy='Z';~N                            ~b~Iy~N is in ~Isingle quotes~N.
+~b~Iprintf("y is %c",y);~N   
+~r~Iy is Z~N                            this is the printout..~IOK~N!
+
+    Here ~b~Iy~N is in ~Isingle quotes~N (hence a ~Isingle~N character) and
+    the ~b~I%c~N tells ~b~Iprintf()~N that the 'value' of ~b~Iy~N which it
+    receives is to be interpreted as the actual character itself (in this
+    example, the character ~b~IZ~N), so a ~r~IZ~N is (correctly) printed.
+.WN
+
+
+    Now consider:
+
+~b~Iy='Z';~N                            ~b~Iy~N is in ~Isingle quotes~N.
+~b~Iprintf("y is %s",y);~N   
+~r~Iy is ~N                             this is the printout ~INOT OK!~N.
+
+    NOW ~b~Iy~N is a ~Isingle~N character (~b~IZ~N, in ~Isingle quotes~N)  but
+    because we asked to have it printed as a ~b~I%s~Ntring, ~b~Iprintf()~N
+    goes to the ~Imemory address~N given by the 'value' of ~b~Iy~N and prints
+    characters on the screen (according to the numbers it finds in memory)!
+    The 'value' given to ~b~Iprintf()~N was used as a ~w~Rpointer~N instead
+    of the actual character to be printed...and ~b~Iprintf()~N went to some
+    strange ~Iaddress~N in memory to find the ~b~I%s~Ntring to print!!
+
+    Even if we do it right and define a string with ~Idouble quotes~N
+    and use ~b~I%s~N in the ~b~Iprintf()~N format (so the ~Iaddress~N of the
+    beginning of our string is passed to ~b~Iprintf()~N) ~ITHEN~N....
+    ~w~Bhow does printf() know when it has come to the end of our string??~N
+.WNT
+ ..how does a string end?  
+
+    When we say ~b~Ix="hello";~N the C compiler will put the correct 'values'
+    for the characters ~b~Ih~N, ~b~Ie~N, ~b~Il~N, ~b~Il~N, ~b~Io~N into memory
+    and add, ~Iat the end~N (after the ~b~Io~N) the 'value' ~I0~N.
+    It is this 'value' ~I0~N which signals the end of the string!
+
+    NOTE: Every character such as ~b~Ia~N, ~b~Ib~N, ~b~IZ~N, ~b~I{~N, etc.
+    has a certain 'value' (or 'number') associated with it. In ~IASCII~N
+    (~IA~Nmerican ~IS~Ntandard ~IC~Node for ~II~Nnformation ~II~Nnterchange)
+    the 'value' or 'number' associated with ~b~IA~N is ~I65~N (in decimal) and
+    the 'value' or 'number' associated with ~b~I0~N is ~I48~N (in decimal).
+    Notice that it is NOT the 'number' ~I0~N which is associated with the
+    character ~b~I0~N but rather the 'number' ~I48~N! ~ISO~N...the ~I0~N which
+    terminates strings cannot be confused with the character ~b~I 0~N.
+    After all, the string may, in fact, be defined by: ~b~Ix="10"~N which
+    will be stored in memory as the two 'numbers' associated with the two
+    characters ~b~I1~N and ~b~I0~N (namely the two 'numbers' ~I49~N ~I48~N)
+    followed by the terminating number ~I0~N
+.WN
+
+
+
+
+
+    It is possible to define a string by defining an ~Iarray of single~N
+    ~Icharacters~N. Although we will talk (later) about ~Iarrays~N, now is
+    an opportune time to talk briefly about such a definition of a string
+    because, in this instance, we must ~Idefine the last single character~N
+    ~Iin the array as the special terminating character, 0~N.
+.K18,30
+special 0
+.WNT
+  ...just one word about 'string arrays'  
+
+~b~Ichar x[10];~N                 defines an ~Iarray~N of ~b~I10~N elements.
+~b~Ix[0]='A';~N                   the first element is the character ~b~IA~N.
+~b~Ix[1]='b';~N                   the second element is the character ~b~Ib~N.
+~b~Ix[2]='{';~N                   the third element is the character ~b~I{~N.
+~b~Ix[3]='\0';~N                  the last element is the 'number' ~I0~N!!!!
+~b~Iprintf("the string is %s",x);~N    print the string, up to the ~I0~N.
+
+    ...and the printout would be: ~r~Ithe string is Ab{~N
+
+   ~w~B                                                           ~N
+   ~w~B but note the strange way we had to define the terminating ~N
+   ~w~B element  so that C would  recognize it as the 'number' 0  ~N
+   ~w~B and not the 'character' 0 ... we used  ~b~W\0~w~B  inside  single ~N
+   ~w~B quotes in the statement: ~b~Wx[3]='\0';~w~B                       ~N
+   ~w~B                                                           ~N
+.WNT
+  Other special characters like \0  
+
+    In order to define the special character ~I0~N which terminates a string
+    we referred to it as ~b~I\0~N. The ~Ibackslash~N ~b~I\~N notifies C that
+    the VERY NEXT CHARACTER is to be interpreted in a SPECIAL manner. (We've
+    seen this kind of thing before: ~b~I%~N means the NEXT CHARACTER(s)
+    is 'special' in a ~b~Iprintf()~N format....as in ~b~I%s~N).
+
+    There are other ~b~I\character~N combinations in C. In each case they 
+    are used to define a character which cannot (normally) be typed into
+    your text. For example you may have noticed that the statements:
+
+~b~Ichar x,y;~N
+~b~Ix="Z"; y='Z';~N
+~b~Iprintf("x is %s y is %c",x,y);~N
+
+    will print: 
+
+~r~Ix is Z y is Z~N 
+.K19,60
+ZZZZZZZZZZ
+.WN
+
+
+
+
+    Now suppose we wanted to print:~r~Ix is Z~N and ~r~Iy is Z~N    
+    on two separate lines! Then we tell ~b~Iprintf()~N to print a 'special'
+    character, ~b~I\n~N, meaning a ~b~In~New line:
+
+~b~Ichar x,y;~N
+~b~Ix="Z"; y='Z';~N
+~b~Iprintf("x is %s ~N~V\n~b~I~W y is %c",x,y);~N   notice the ~V\n~N!
+
+~r~Ix is Z ~N           this is the printout,
+~r~I y is Z~N           notice the spaces.
+.K19,60
+\n=newline
+.WNT
+  SPECIAL \CHARACTERS  
+
+    We have the following 'special' characters:
+
+~b~I\n~N      the ~In~New line.
+~b~I\t~N      the ~It~Nab character.
+~b~I\0~N      the ~I0~N terminator (NULL character), ASCII 'value' ~I0~N.
+~b~I\b~N      the ~Ib~Nackspace.
+~b~I\"~N      the double quote.
+~b~I\\~N      the backslash character.
+
+    What would the following print?
+
+~b~Iint age;~N
+~b~Iage=100;~N
+~b~Iprintf("\"Sam\" is %d years old\t\ttoday",age);~N
+.W
+.R21C1
+~r~I"Sam" is 100 years old          today~N          Notice the ~Iquotes~N
+                                                     and the ~Itabs~N.
+.R23C1
+~b~Iprintf("~N~V\"~b~I~WSam~N~V\"~b~I~W is %d years old~N~V\t\t~b~I~Wtoday",age);~N
+.WNT
+  Other 'format' info you can give to printf()  
+    We've seen the ~b~I%d~N (for ~b~Id~Necimal number printouts) and we've
+    seen ~b~I%f~N (for ~b~If~Nloating point numbers), and ~b~I%c~N and ~b~I%s~N
+    for ~b~Ic~Nharacters and ~b~Is~Ntrings, but we have also ~b~I%o~N (for 
+    ~b~Io~Nctal numbers) and ~b~I%x~N (for he~b~Ix~Nadecimal numbers) and 
+    ~b~I%e~N (numbers ~b~Ie~Nxponential format, such as ~r~I-7.001100E+03~N).
+    In each case you may qualify the above ~Iformat~N instruction with a
+    ~Ifield width~N specification, such as:
+.w
+~b~Iint a=123;printf("%6d",a);~N         ~V   123~N
+
+~b~Ifloat b=123;printf("%6.3f",b);~N     ~V123.000~N
+
+~b~Ichar c='1';printf("%6c",c);~N        ~V     1~N
+
+~b~Ichar d="123";printf("%6s",d);~N      ~V   123~N
+
+~b~Iint e=123;printf("%6o",e);~N         ~V   173~N
+
+~b~Ifloat f=123;printf("%6e",f);~N       ~V1.230000E+02~N
+
+~b~Iint g=123;printf("%6x",g);~N         ~V    7B~N      in HEXADECIMAL
+.K16,60
+[41;1;37m173[0m=[1mo[0mctal
+.WNT
+  good form .. bad form  
+
+.K5,60
+bad form?!
+
+
+    You may have noticed, in the compound statement:
+
+~b~Ifloat b=123;printf("%6.3f",b);~N     ~V123.000~N
+
+    that we declared ~b~Ib~N to be a ~b~Ifloat~N and, ~Iat the same time~N, we
+    defined it to be ~b~I123~N (as in ~b~Ifloat b=123;~N). ~IThat's legal~N.
+
+    BUT we also added ~b~Iprintf("%6.3f",b);~N ~Ion the same line~N. That's
+    considered ~Ibad form~N (...but sure convenient if you want to see as
+    much of your program as possible on a 25-line screen!)
+
+    Note: for ~b~Ib=123~N, ~b~I6.~N~V3~b~I~Wf~N doesn't provide enough ~Ifield~N
+    ~Iwidth~N (if we want ~V3~N decimal places) so ~b~Iprintf()~N expands
+    the field width to ~b~I7~N (as required to accommodate ~V123.000~N).
+.WN
+
+    You will also have noticed that the statement:
+
+~b~Ichar d="123";printf("%6s",d);~N      ~V   123~N
+
+    ~Iright justified~N the ~r~I123~N in a ~Ifield width~N of 6. You may
+    ask ~b~Iprintf()~N to ~Ileft-justify~N the ~r~I123~N by specifying:
+
+~b~Ichar d="123";printf("%-6s",d);~N     ~V123   ~N
+
+    (Notice the format specification ~b~I%-6s~N with ~b~I-~N meaning
+     ~Ileft-justify~N).
+
+    If ~b~Ib="1234567";~N then (as expected) ~b~Iprintf()~N will make the
+    ~Ifield width~N ~b~I7~N (to accommodate ~r~I1234567~N)...even if we
+    asked for ~b~I%6s~N! If you ~IREALLY MEAN 6~N (and want to cut off the 
+    string) then use the specification: ~b~I%.6s~N
+
+~b~Ichar d="1234567";printf("%.6s",d);~N     ~V123456~N  note the ~b~I.6~N.
+.WNT
+    A note on format specifications   
+
+
+
+    If ~b~Is~N has been declared and defined as a string: ~b~Is="I'm a string"~N
+    ( with 12 characters ) then we may select any number of characters and
+    print then in a specified field width:
+
+~b~Iprintf("%s",s);~N         gives   ~VI'm a string~N
+
+~b~Iprintf("%20.12s",s);~N    gives   ~V        I'm a string~N
+
+~b~Iprintf("%-20.12s",s);~N   gives   ~VI'm a string        ~N
+
+~b~Iprintf("%20.10s",s);~N    gives   ~V          I'm a stri~N
+
+~b~Iprintf("%-20.10s",s);~N   gives   ~VI'm a stri          ~N
+                               field width = 20 
+           print only 10 characters
+.WNT
+    More notes on format specifications    
+
+    If ~b~Ix~N has been declared and defined as an int: ~b~Ix=123~N
+    then we have:
+
+~b~Iprintf("%d",x);~N        gives   ~V123~N
+
+~b~Iprintf("%10d",x);~N      gives   ~V       123~N
+
+~b~Iprintf("%-10d",x);~N     gives   ~V123       ~N
+
+~b~Iprintf("%010d",x);~N     gives   ~V0000000123~N
+
+~b~Iprintf("%010x",x);~N     gives   ~V000000007B~N   in HEXADECIMAL
+                              width=10
+       this ~I0~N pads with 0's
+.WNT
+    ...and some final notes on format     
+
+    If ~b~Ix~N has been declared and defined as an float: ~b~Ix=123.456~N
+    then we have:
+
+~b~Iprintf("%f",x);~N        gives   ~V123.456000~N
+
+~b~Iprintf("%10.4f",x);~N    gives   ~V  123.4560~N
+
+~b~Iprintf("%-10.2f",x);~N   gives   ~V123.46    ~N
+.WN
+
+
+
+
+.T
+    That's all folks!    
+
+.K16,32
+au revoir!
+
+.q
+
+

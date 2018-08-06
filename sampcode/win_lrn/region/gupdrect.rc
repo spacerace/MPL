@@ -1,0 +1,7 @@
+#include <style.h>
+#include "gupdrect.h"
+
+GUDR MENU
+    BEGIN
+         MENUITEM  "&Start",    IDM_BOX
+    END

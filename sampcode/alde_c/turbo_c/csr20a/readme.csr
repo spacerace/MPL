@@ -1,0 +1,137 @@
+December 5, 1986
+----------------
+
+Hello, and welcome.  This archive contains Version 2.0 of the C Spot Run
+C Add-On Library.  If you have a copy of version 1.0 you are excused from
+the following explanatory paragraph.
+
+C Spot Run is a collection of routines, utilities, and programming aids
+for C programmers, and is centered around MS/PC-DOS, IBM-PC's, and
+compatibles.  The collection is rather well documented and is distributed,
+for the most part, in OBJect code form.  (Source code is available in 
+exchange for a $50 dollar contribution.)  A more complete description of
+the library can be found in the beginning of the manual.
+
+This release of the library has a quite a few new functions, an improved
+CheckC, a new manual, quite a few bug fixes (which doesn't say much for
+the first version), a new issue of the support newsletter, and a slightly
+better educated author.  However, contrary to what I was so naive as to 
+believe when I released the first version, I have discovered that the library
+is not now and never will be complete.  The possibilities are endless, and
+I hope some of you can help me explore them.
+
+Most of my comments and 'news' can be found in the newsletter, but as I've
+been writing it for so long I don't remember what all I said there, nor do
+I feel like reading it, which would tempt me to rewrite it.  Regardless, I
+have some comments I can share here.
+
+Concerning the Manual:  Writing the descriptions for all of the routines
+in the library is a VERY boring job, involving lots of referece to printouts,
+file dates, argument sequence, etc.  Thus you may find the descriptions weak,
+and very often the example will show little more than the calling sequence.
+(When I work on the manual I'm rarely in the mood to write 25 individual
+example programs.)  So, if anyone of you would like to improve the examples 
+significantly, you are welcome to try, and if you succeed I'll register you
+and send you the source code.  (It's incredibly easy to give this stuff 
+away when the cost to mail a disk is around $1.50....)  I suggest you call
+me first so someone doesn't beat you to it and waste your time.  (But then
+I can't imagine why anyone would want to do it after the third example....)
+
+Concerning User Response:  I was pleasantly suprised at the number of
+responses, by phone, mail, and BBS, and I welcome many more.  However, I
+didn't get ANY 'User Response Forms' in return.  I appreciate all the people
+who called with comments, and those who answered the BBS questionaire, but
+I can't seem to keep track of the comments and other data.  Thus, now that
+I am reasonably organized, (I now keep the source code disk apart from the
+working subdirectory on the HD so I can respond to orders immediately, and
+I use a data base to track 'contact' names and addresses), I will place
+anyone who sends in a User Response Form, or calls voice and leaves a name,
+address, and comments, onto a mailing list.  (And anyone who includes a stamp
+(I use mailing labels, so I don't need SASEs) will have my sincerest
+grattitude.  I'm only a hobbiest, you know....)
+
+Concerning this Package Remaining Shareware:  I've heard horror stories of
+shareware authors who made 45 cents in 3 years, and dream stories about guys
+who went full time making thousands.  I've made more than 45 cents, but not
+quite thousands.  The point is that I want to keep this package shareware, 
+I think the reasons are in the newsletter, but I don't want to pour hundreds
+of hours of work down the drain.  This package will remain shareware as long
+as somebody new registers once in a while, to pay for my phone bill and 
+compiler updates. 
+
+
+
+
+
+
+
+
+Concerning Other Compilers:  Not now, but soon.  Get on the mailing list and
+you'll hear about it.  (I already have people volunteered to do it for most
+major PC compilers.)  Also, this version is compiled with MSC 3.0.  I already
+have 4.0, which the next version will be compiled with, but I am not quite 
+ready to recompile the entire package.  Microsoft assures me that 4.0 users
+will be able to use the library as it is now, compiled with 3.0.
+
+Concerning a Screen Editor/Code Generator:  After I get this released and off
+of my back I will be working with Dennis L. Raney (author of SE, more info 
+to follow) on this program.  Suggestions welcomed.  
+
+For those of you wondering what SE is, it is a Turbo Pascal program that
+generates source code for colorful screens in ANSI, Turbo Pascal, BASIC,
+and C (using CSR's screen routines.)  The input functions are severely
+limited, and don't work at all with C.  However the program is great for 
+designing title screens or prototypes, and is lots of fun to play with.  It
+is available for download on various BBSs in addition to the Pinelands.
+(Look for Screen Edit version 2.0, SE20.ARC.)
+
+
+January 10, 1987
+----------------
+
+Ok, I think its good enough to release.  (In other words, I don't want to
+type another function description or line of code for a year.)  Some final
+comments....  This is version 2.0 because due to the large number of new
+functions there may be some structural bugs I don't know of in the input or
+something.  (I hope not.)  A version number like 1.1 gives the impression that
+all the bugs of 1.0 were fixed, but there are so many new things here that
+totally new bugs could have arrived....  I think I mentioned above that I've
+been writing this for a long time.  I believe I started the newsletter in 
+August, not to mention that modifications to the source started within weeks
+of the first release.  The result is a little overlap with function duty,
+some outdated news both here and in the newsletter, and a few weak spots 
+in documentation and overall design.  (I made some bad choices in the
+original design, and the correction strategy involves new functions to
+do mostly the same things as the old ones, which will remain in the library
+for compatibility.)....  I'm planning on attending a Microsoft Windows
+Developers Seminar at the end of this month, and I'm anticipating some of
+the rumored C compilers 'for the masses,' like 'Turbo C' or 'Quick C.'  I 
+feel that these new 'frontiers' will present a need for specialized routines
+and tools.  However this is just speculation, I don't know what they will
+involve.  If anyone would like to discuss it, feel free to call me.
+
+In conclusion, I suggest you read the newsletter enclosed, and print out the
+documentation with the command COPY CSPOTRUN.DOC PRN.  (Note:  You may
+consider looking at the docs with a DOS program before printing them if you
+are not sure you'll be using the library.  Also, when printing be sure you
+are at the top of a page before starting, and have enough paper for the 
+documentation which is about 210+ pages long.  (I suggest a three ring
+binder.))  Feel free to contact me as follows for discussion of CSR, the C
+language, your favorite compiler, or pizza toppings.
+
+  Bob Pritchett
+  New Dimension Software
+  23 Pawtucket Dr.
+  Cherry Hill, NJ 08003
+  Voice: (609) 424-2595
+   Data: (609) 354-9259 (300-2400B)
+
+
+January 15, 1987
+----------------
+
+Oh no!  The CheckC and FLine utilities were accidentally excluded from
+version 2.0!  They are included in this, version 2.0a, and are distributed
+in CSRUPDT1.ARC.  (The documentation does not change.)  My apologies for
+the inconvenience.
+

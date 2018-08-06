@@ -1,0 +1,12 @@
+#--------------------
+# TYPEAWAY make file
+#--------------------
+
+typeaway.obj : typeaway.c easyfont.h
+     cl -c -G2sw -W3 typeaway.c
+
+easyfont.obj : easyfont.c easyfont.h
+     cl -c -G2sw -W3 easyfont.c
+
+typeaway.exe : typeaway.obj easyfont.obj typeaway.def
+     link typeaway easyfont, /align:16, NUL, os2, typeaway

@@ -1,0 +1,144 @@
+
+
+
+                     CXREF - C Program Cross Reference Generator
+                            Version: 2.00     June 24, 1986
+          
+          
+              CXREF produces a cross-reference listing for a C program  and 
+          optional  graphical  representation of the block structure of the 
+          program.  Occurrences only are listed.  No  distinction  is  made 
+          between  definitions  and  references.  Version 2.00 of CXREF has 
+          been converted from Turbo Pascal source  into  C  source.  The  C 
+          compiler  used  was  Datalight's small model compiler however the 
+          source appears to be reasonably standard and little effort should 
+          be required to convert it to any other C.  
+          
+          
+          USAGE:
+          
+              The command line for CXREF has the following format:
+          
+                  CXREF input_file_name [output_file_name] [options]
+          
+              Both the input_file_name and the output_file_name may be full 
+          PC/MS-DOS path names.  The output_file_name is  optional.  If  is 
+          is  not  supplied,  the output file will be created with the same 
+          name as the input file but  with  an  extension  of  LST.  If  no 
+          extension  is  specified  for the input file,  an extension of .C 
+          will be assumed.  If an output file name is specified but without 
+          an extension, an extension of LST will be assumed.  
+          
+              The current version of CXREF supports three flag options and 
+          two options that require an additional parameter.
+          
+              Flag Options:
+          
+                  -NL  - Suppress  the  graphical  representation  of   the 
+                         program  and  the  line  numbered  listing  of the 
+                         program.  
+          
+                  -NS  - Suppress cross-referencing of C keywords.
+          
+                  -NI  - Suppress analysis of #include files.
+          
+              Value Options:
+          
+                  -I <path>  - Supplies the path for  #include  <file_name> 
+                               files.  Must b followed by the pathname.  
+          
+                  -T <n>     - Sets  the  tab stop value for tab expansion.  
+                               The default value is 4.  
+          
+              The  default  condition  is  to  produce  the  line  numbered 
+          listing,   including  all  #include  files,   showing  the  block 
+          structure and to cross-reference all symbols.  
+          
+              If executed with  no  command  line  parameters,  CXREF  will 
+          display a brief summary of its usage.  
+          
+
+
+
+          
+          INCLUDE FILES:
+          
+              This version of CXREF will process single level include files 
+          of  either  the  quote  delimited  or the angle bracket ['<','>'] 
+          forms.  Quote delimited include files are  located  in  the  same 
+          directory  as  the  input  program  and  angle  bracket delimited 
+          include   files   are   located   in   a   "system"    directory.  
+          Unfortunately,  there  is  no  standard  "system" directory under 
+          PC/MS-DOS and the various C compilers use a number  of  different 
+          mechanisms  to  provide  a  "system"  directory.  To  handle  the 
+          different "system" directories, CXREF provides the "-I" option on 
+          the command line,  allowing the user to provide a  path  for  all 
+          angle bracket delimited include files.  
+          
+              CXREF can handle up to 26 include files, distinguished by the 
+          letters  A  through  Z  following  the  line  numbers in both the 
+          listing and the cross-reference.  The line numbers shown, both on 
+          the listing and in the cross-reference,  are  true  line  numbers 
+          within  the  file  making the cross-reference without the listing 
+          useful.  
+          
+          
+          
+          HISTORY OF DEVELOPMENT:
+          
+              This program has  had  a  long  history.  It  was  originally 
+          written  for  Pascal  programs  by N.  Wirth using the "quadratic 
+          quotient" hash method.  It was adapted for UCSD Pascal (1.4 - the 
+          public  domain  version)  by  Shawn   Fanning   (in   1978)   and 
+          subsequently  adapted  for  Pascal/MT+  by Mike Lehman (in 1981).  
+          This version was then modified by Warren A.  Smith to try to  get 
+          back  to ISO standard Pascal and to add the additional feature of 
+          mapping out the compound statements.  It was modified  for  Turbo 
+          Pascal  by  Ron  Finger in July,  1984.  This last version of the 
+          program, at least, was named XLIST.  
+           
+              Further modifications were made by Larry Dodson in September, 
+          1985.   These  include  the  ability  to  handle  Include  files, 
+          expansion   of   the   identifier  field  from  eight  to  twelve 
+          characters,  optional  suppression  of  the  output  of  standard 
+          identifiers,  a margin on the left of the output to provide space 
+          to punch holes for a three-ring binder, and a compile time option 
+          of 66 or 88 lines per page.  In addition,  several comments  were 
+          added,  blocking  (for  readability)  was improved,  the name was 
+          changed from XLIST  to  XREF,  and  several  other  less  evident 
+          corrections  and  modifications were incorporated.  These changes 
+          were made and tested using Turbo Pascal (Version 2.0 for CP/M 80) 
+          on a Kaypro II with an Okidata 82 printer.  
+          
+              NXREF was then produced by  Don  Williams  as  practically  a 
+          complete  rewrite  of  XREF.  Binary  trees  were  used  for  the 
+          references rather than the 'quadratic quotient' used by XREF (the 
+          binary tree routines used,  however,  are simple  adaptations  of 
+          those  presented  by  N.  Wirth  in  his  excellent  book,  "Data 
+          Structures + Algorithms = Programs".) The program was modified to 
+          take advantage of the Turbo Pascal  3.0  Command  Line  parameter 
+          features.  The  case  structure  of  the  first  occurrence of an 
+          identifier  was  preserved  (XREF   and   XLIST   converted   all 
+          identifiers to upper case in the cross-reference.  
+
+
+
+          
+              Use  of  the  binary  tree  routines  and  dynamic allocation 
+          allowed the maximum length of an identifier to be increased to 29 
+          bytes.  In NXREF,  this length  is  determined  by  the  printout 
+          format rather than the structure that holds the references.  
+          
+              Upon realizing that a similar facility would be useful for C 
+          programs, I modified NXREF into CXREF.  Since, from the viewpoint 
+          of structure and cross-reference, the differences between Pascal 
+          and C are slight, it was a relatively simple modification.
+          
+              CXREF200 and beyond have been converted to  C  with  CXREF200 
+          being  in Datalight C.  Future releases of this program may be in 
+          some other C source.  
+          
+          
+          
+          
+

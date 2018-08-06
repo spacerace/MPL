@@ -1,0 +1,11 @@
+Comments about OPENDLG
+
+
+OPENDLG is a dll which is copied to the ..\dll directory.  Programs
+which use OPENDLG will need the files OPENDLG.LIB and OPENDLG.H, which
+are placed in the ..\lib and ..\include directories, respectively.
+
+OPENDLG contains the code for two dialog boxes, one for opening files
+for reading, and the other for opening/creating files for writing (saving).
+
+HELLO is a sample app which illustrates each kind of dialog box.

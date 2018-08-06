@@ -1,0 +1,6 @@
+gbruorg.obj: gbruorg.c
+    cl -d -c -AS -Gsw -Os -Zpe gbruorg.c
+
+gbruorg.exe: gbruorg.obj gbruorg.def
+    link4 gbruorg,/align:16,/map,slibw/NOE,gbruorg.def
+    mapsym gbruorg

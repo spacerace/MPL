@@ -1,0 +1,39 @@
+
+
+        NAME
+                eraok -- ask permission before overwriting existing file
+
+        SYNOPSIS
+                eraok(filename);
+                char *filename  filename to test
+
+        DESCRIPTION
+        This function checks for the existance of the specified filename
+        and if it exists, will ask the user (through stderr) if the file
+        can be lost.  If the user responds Y or y, the file is lost and
+        return is made to the caller.  If the response is anything else,
+        the program aborts immediately, and the routine does NOT return
+        to the caller.  Exit is via the aabort() function of this library.
+
+        EXAMPLE
+             (assume argv[1] is string "foobar.com")
+
+             eraok(argv[1]);
+             printf("File %s has been deleted", argv[1]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

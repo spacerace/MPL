@@ -1,0 +1,6 @@
+lc.obj : lc.asm
+  masm lc;
+
+lc.exe : lc.obj lc.def
+  link lc,,,os2,lc;
+

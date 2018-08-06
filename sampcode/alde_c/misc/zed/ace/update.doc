@@ -1,0 +1,209 @@
+                  New Version of ACE coming soon!!!
+
+   A new version of ACE (1.25P [Public version]) will be finished
+soon.  This new version is unbelievably better.  It has TONS of new
+stuff, like:
+
+             If you have a color graphics adapter, screen display is
+          much faster...
+
+             You may specify the character that takes the place of
+          ASCII 174, instead of it always being 254.
+
+             There is a function that will list all the functions in
+          the current file (Up to 176) and allow you to position a
+          cursor on the one you would like to go to.  When you press
+          enter ACE will place you on the line of the declaration.
+
+             You may also with a different function type in the name,
+          and have it (using the above search method) place you on the
+          line of the function declaration.
+
+             There is now an UndoRemark function to remove remarks
+          from a block or line.
+
+             There is a function to jump to the end of the code on a
+          line.  This is useful when you have remarks after your lines
+          and you want to add some code to the end of the line without
+          having to cursor past your remark to the end of your code.
+
+             Search and replace now support wild cards.  Below are the
+          newly added characters you can use in a search string:
+
+               *  -  This functions like dos's asterisk.  It specifies
+                     that any number of character can fill it's
+                     position.
+               ?  -  This also operates like the dos question mark.
+                     It signifies that any one character can take its
+                     place.
+               ^1 -  This search's for the ASCII 1 char, that is normally
+                     used to tell ACE you want to change search or replace
+                     parameters.
+               ^* -  This lets you search for an actual asterisk.
+               ^? -  This lets you search for an actual question mark.
+               ^^ -  This lets you search for a ^ character.
+               ^C -  This lets you search for a carriage
+                     return/linefeed combo.
+               ^E -  This lets you search for an escape character.
+                     (ASCII 27)
+               ^F -  This tells ACE to take the information following
+                     the ^F and ending with a ^F as a function name,
+                     and to search for it appropriately.  Using this
+                     is essentially the same as using the function
+                     mentioned above where you type in a function
+                     name for ACE to go to.  Using ^F^F would go to
+                     the next function declaration.
+                     
+             The replace string supports all these new functions
+          except for the ^F function.  In the replace string you
+          may replace with an asterisk field or a question mark
+          field from the search string.  So for example, in the file
+          you had a bunch of function calls like this:
+               hello(10,20);
+               hello(5,14);
+               hello(1,2);
+               hello(99,145);
+               hello(12,38);
+               etc..
+          Well, you want to insert the number 5 after the first
+          number in that call, what a pain...  No more..  You would
+          just specify for the search string:
+               hello(*,*);
+          and for the replace string:
+               hello(*1,5,*2);
+          this would insert the string found for the first asterisk
+          field then a five then the string found for the second
+          asterisk field.  Understand?  I hope so..  Anyway you
+          could use this for alot of stuff, like for a replace string:
+               printf("*1",*5,*4,*3,*2);
+          This would reverse the four asterisk fields found in the file.
+          So if the file contained this:
+               printf("%d %d %d %d",a,b,c,d);
+          it would now contain:
+               printf("%d %d %d %d",d,c,b,a);
+          pretty cool, eh?
+             
+             There is also a new Go To function.  Thumb position.  So
+          now when you select go to.  You can type in the line number,
+          tag char, or T for thumb position.  This function allows you
+          to use the cursor keys to move the thumb at the left side of
+          the window.  So if you place the thumb in the middle of the
+          window and press enter it will take you to the middle of the
+          file.
+          
+             There is a new utility function:  Comment align.  This
+          new utility has you enter a column number where it then
+          takes the entire file or a block and right align's the
+          remarks with that column.  So, if you have lines like this:
+                main()  /* main... */
+                { /* beginning of main. */
+                    int h; /* define loops variable as int. */
+                etc..
+          then having it line up with whatever column will make it
+          look something like this:
+                main()                                 /* main... */
+                {                           /* beginning of main. */
+                        int h;   /* define loops variable as int. */
+
+             The Scan for errors function has been revamped.  Some
+          bugs in it have been fixed, it is faster, and it is a little
+          friendlier.
+
+             The option "Indent after {" has been changed to "Indent
+          aft. { and }".  You ask why?  Well, when this option is
+          active, each time you enter a line containing a left brace,
+          ACE stores the beginning indent of that line.  Then whenever
+          you type in a right brace and there are no character besides
+          spaces/tabs in front of it, ACE will automatically indent
+          that line so that it matches with the correct starting left
+          brace line.
+
+             ACE also now, finally correctly supports tabs!!!  You
+          remember how before, the tab key inserted hard spaces...
+          That took up tons of space as you knew.  But now ACE in
+          memory has each tab as an ASCII 9 (The way it should be) and
+          just displays the appropriate number of spaces...  So in
+          effect changing ACE in this way lets you edit larger files,
+          and also got rid of the convert utility.
+
+             ACE manages itself better...  There is no longer a limit
+          on the number of lines you may have, well almost...  You
+          can't go beyond 32,000, but at this time that is far beyond
+          what anyone will be able to go with ACE's current buffer
+          size.  This new revamp also has speeded up all the block
+          operations.  No more waiting a sec/or two...  Just  WHAM!
+          it's there...
+
+   I believe that is all for 1.25P, but following is a list of some of
+the things ACE's registered users can expect in version 1.26 which
+will be done a few months after 1.25P is released:
+
+             ACE will allow you to edit two separate files at once.
+          They will be in two separate windows that the user can
+          resize, copy to/from, edit, everything!
+
+             It will have an expanded Scan for errors function.  It
+          will do lint type analysis...
+
+Possibilities:  (Not for sure, but likely to be there)
+             ACE will have an option that when on will allow ACE to
+          load Very Large files, up to ACE's max. line limit, which by
+          then will be around 65,000.  Using this method ACE would
+          store a 40 or so K section of that file in memory, and as
+          the user would scroll through the file ACE would load in the
+          required section of that file.  All editing while in this
+          mode would be stored in a duplicate file, and later when you
+          save your file ACE would delete the old file, and rename the
+          duplicate file that had been changed to the old file name.
+          If the option is set to off, then ACE will act as it does
+          now...  Fast but smaller files...
+
+             ACE might have some kind of a macro language in 1.26.
+          With this language you would have full control over ACE,
+          so you could say....  Ok when I press Ctrl F1, I want
+          you to tell me if the current line has a certain string in
+          it, if it does then oh....  Remark it with a special kind of
+          indent, Or if it has this other string then uh.... copy that
+          and the next 20 lines into a file...  Things like this could
+          be possible...  With this new language many of ACE's current
+          functions like ALT R, ALT U, ALT J (last two in 1.25P), etc..
+          Could be replaced with macros!!  So with these macros you
+          could essentially customize ACE!
+
+             There will probably be an awesome new print
+          function.  It was written by a friend of mine, and it is
+          NICE...  It prints an index containing all the functions
+          page #'s, keeps functions with their describing remarks,
+          etc....  It has a few bugs in it at this time, but one of us
+          plan to have it fixed by ACE's new version.
+          
+             There might be some kind of automated Compile option
+          that after you defined what programs it would run along
+          with parameters, and what kind of erorr output the program
+          displayed. (like:   Line number   error message...)  You
+          would just specify File Compile and ACE would automatically
+          run your compilor, linker, whatever and route their output
+          to a ACE file.  It would then scan this file for messages
+          that matched your definition for errors.  It would then
+          open the second window with the error messages from this
+          file and highlight the first one.  ACE would also in the
+          first window place the cursor on the line specified in
+          the error message above.  By pressing a key ACE would
+          automatically highlight the next error message above and
+          again place the cursor on the appropriate line for editing.
+
+   I think that's about it, but PLEASE if you have any
+ideas/comments/suggestions...  Anything!  (Ver. 1.26 is not totally
+thought out, so if you want something added, speak up!)
+Call me or Write, but it's easier if you call...
+
+   The address/number is:
+
+          R.R.#12 Box#19
+          Muncie, IN  47302
+          (317)288-7547 After 3:30 p.m.
+
+          Compuserve ID#: 70167,1123
+  R.R.#12 Box#19
+          Muncie, IN  47302
+ 

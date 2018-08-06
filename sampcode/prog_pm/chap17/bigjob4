@@ -1,0 +1,19 @@
+#-------------------
+# BIGJOB4 make file
+#-------------------
+
+bigjob4.obj : bigjob4.c bigjob.h
+     cl -c -Alfw -G2sw -W3 bigjob4.c
+
+bigjobmt.obj : bigjobmt.c
+     cl -c -Alfw -G2sw -W3 bigjobmt.c
+
+bigjob.res : bigjob.rc bigjob.h
+     rc -r bigjob
+
+bigjob4.exe : bigjob4.obj bigjobmt.obj bigjob4.def
+     link bigjob4 bigjobmt, /align:16, NUL, /nod llibcmt os2, bigjob4
+     rc bigjob.res bigjob4.exe
+
+bigjob4.exe : bigjob.res
+     rc bigjob.res bigjob4.exe

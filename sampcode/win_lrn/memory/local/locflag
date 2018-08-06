@@ -1,0 +1,6 @@
+locflag.obj: locflag.c
+    cl -c -W2 -AS -Gsw -Od -Zped locflag.c
+
+locflag.exe: locflag.obj locflag.def
+    link4 locflag,/align:16,/map/li, slibw, locflag.def
+    mapsym locflag

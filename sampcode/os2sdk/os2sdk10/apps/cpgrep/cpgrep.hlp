@@ -1,0 +1,35 @@
+CPGREP.EXE
+
+This program is compatible with Xenix fgrep.  It supports a subset
+of the fgrep options and has a couple of extensions.  It is tailored
+to the 286 (though it will run on an 8086) and DOS.  It is a family
+API application, so it will run in both real and protected modes.
+When running in protected mode, it uses three threads in order to
+do asynchronous I/O.  It is pretty fast.
+
+cpgrep -? produces the following usage message:
+
+usage: CPGREP [-?BElnvxy][-e][-f <file>][-i <file>][<strings>][<files>]
+-? - print this message
+-B - match pattern if at beginning of line
+-E - match pattern if at end of line
+-l - print only file name if file contains match
+-n - print line number before each matching line
+-v - print only lines not containing a match
+-x - print lines that match exactly (-BE)
+-y - treat upper and lower case as equivalent
+-e - treat next argument as the search string
+-f - read search strings from file named by next argument
+-i - read file list from file named by next argument
+
+Extensions are -B, -E, and -i.  Multiple search strings can be
+specified on the command line, though the rules for doing so
+vary slightly from those of Xenix fgrep because of differences
+between sh and command.com.  With cpgrep.exe, any white space
+character acts as a separator in the strings argument on the
+command line; on Xenix with fgrep, only a newline will work.
+If one wishes to search for a pattern containing white space,
+use the -e switch.  When search strings are being read from
+a file, however, newline is the only separator, just as it is
+with fgrep on Xenix.
+					Pete Stewart

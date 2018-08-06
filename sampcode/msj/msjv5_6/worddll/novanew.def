@@ -1,0 +1,20 @@
+LIBRARY           NovaNew
+
+EXETYPE           WINDOWS
+
+DESCRIPTION       'Replacement for Winword FileNew'
+STUB              'WINSTUB.EXE'
+
+CODE              PRELOAD MOVEABLE DISCARDABLE
+DATA              PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+       _ROOTRTN   MOVEABLE DISCARDABLE SHARED
+
+HEAPSIZE            0
+STACKSIZE           0
+
+EXPORTS           NovaNew                 @1
+                  fnNew                   @2
+                  WEP                     @3 RESIDENTNAME
+

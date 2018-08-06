@@ -1,0 +1,22 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+getmsg.obj: getmsg.c
+
+getmsg.exe: getmsg.obj getmsg.def
+    link4 getmsg,/align:16,/map,slibw,getmsg.def
+    mapsym getmsg

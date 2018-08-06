@@ -1,0 +1,146 @@
+		      Differences Document for the
+                  Microsoft (R) CodeView (R) Debugger
+			    for Version 2.3
+
+                 (C) Copyright Microsoft Corporation, 1989
+
+
+This file contains release notes for the Microsoft (R) CodeView (R),
+and notes differences between Version 2.3 and 2.2 of the debugger.
+
+
+===========================< Contents >==========================
+
+This file has two parts.
+
+    Part    Note
+    ----    ----
+    1       Improved general capabilities of the debugger
+    2       Debugging child processes
+    3       Viewing process status
+    4       Switching to a child processes
+
+
+=========< Part 1: Improved Capabilities of the Debugger >=======
+
+
+While running under Version 2.3 of CodeView the program being debugged
+has complete access to environment variables, including the PATH
+variable. Previous versions of CodeView did not guarantee access to the
+environment.
+
+Version 2.3 of CodeView is VIO-window compatible, and can therefore
+run as a Presentation Manager application under OS/2 systems.
+
+
+============< Part 2: Debugging Multiple Processes >=============
+
+
+To enable debugging of multiple processes, you must first start up 
+CodeView with the /O (offspring) option. The syntax of this option 
+is simple, as it takes no arguments.
+
+If you do not use the /O option, CodeView lets your program spawn new
+processes, but you will not be able to view or trace through these
+processes. They run in the background as far as CodeView is concerned.
+
+For example, to debug multiple processes of the program SPACEMAN.EXE you
+would use the following command:
+
+CVP /O SPACEMAN
+
+The /O option has two limitations:
+
+1. You must have OS/2 Version 1.1 or later to use it.
+
+2. This option is incompatible with the /2 option.
+
+The rest of this section assumes that you have successfully started 
+CodeView with the /O option.
+
+Every time your program executes a line of code that spawns a child
+process, CodeView responds by displaying the process ID number (Pid) and
+asking if you wish to debug the child process. The message displayed is
+similar to the following:
+
+Pid 24 started. Do you wish to debug (y/n)?
+
+To debug the child process, type Y and then press ENTER. Type any other
+letter for no. CodeView takes a different course of action depending on
+your response:
+
+1. If you respond yes (Y), CodeView spawns a new CodeView process. This
+   process controls execution of your program's child process. Each
+   instance of CodeView spawned in this way becomes a separate debugging
+   session.
+
+   A new process runs in the same screen group as its parent process
+   (unless you call the DosStartSession system function). Using CodeView
+   does not change this. However, each new instance of CodeView always
+   runs in its own screen group. Since OS/2 supports a maximum of 16
+   screen groups, the number of child processes that you can debug at
+   one time is limited.
+
+2. If you respond no (N), CodeView lets the program spawn the child process.
+   However, you will not be able to control or trace the child process
+   with CodeView. The child process is active but not accessible to
+   CodeView commands.
+
+You can move between different CodeView processes in the following two
+ways: by using the OS/2 Session Manager or the Process command (|). The
+Process command, in turn, has two forms. You can use this command to
+view status of child processes or to switch directly to the debugging
+session of the child process.
+
+You may need to make note of process ID numbers when CodeView spawns a
+process. CodeView identifies multiple processes only by their ID
+numbers.
+
+
+==============< Part 3: Viewing Process Status >================
+
+
+To view the status of the child processes (of the current process), 
+enter the Process command followed by no arguments:
+
+|
+
+CodeView responds by displaying three fields: process ID number, session 
+(screen group) ID number, and yes or no, depending on whether or not 
+each process has its own instance of CodeView. The following example 
+shows a sample process status for a process with three children:
+
+001>|
+ProcessID   SessionID   Debugging
+00024       00006       Yes
+00026       00006       Yes
+00028       00006       No
+
+In the example above, only processes 24 and 26 can be debugged. Each 
+of these processes corresponds to a different instance of CodeView, 
+and each instance runs in a separate screen group. Process 28 is active 
+but cannot be debugged.
+
+
+============< Part 4: Debugging Multiple Processes >=============
+
+
+If a child process can be debugged, you can switch to that process 
+directly by using the Process command. Use of this command accomplishes 
+the same end as using the Session Manager but is more direct.
+
+To switch to the debugging session for a child process, enter the 
+Process command with the following syntax:
+
+| <processID>
+
+in which <processID> is the process ID (Pid) of the process you wish to
+debug.
+
+The Process command only works with direct children. In other words, you
+can spawn a child which in turns spawns another child. The Process
+command does not give you direct access to the <169>grandchild.<170>
+Instead, you must switch to the intermediate parent.
+
+To return to debugging a parent or grandparent, you must use the OS/2
+Session Manager.

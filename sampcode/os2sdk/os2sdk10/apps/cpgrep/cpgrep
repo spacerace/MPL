@@ -1,0 +1,20 @@
+# The following variables must be filled in with
+# appropriate paths.
+
+LIB=..\..\..\lib
+INC=..\..\..\include
+CFLAGS=-Ox -Zp
+OBJS=cpgrep cpgrepsb $(LIB)\binmode $(LIB)\setargv
+
+cpgrep.obj: cpgrep.c cpgrep
+	cl $(CFLAGS) -c cpgrep.c
+
+cpgrepsb.obj: cpgrepsb.asm cpgrep
+	masm /Mx cpgrepsb.asm;
+
+stubs.obj: stubs.asm cpgrep
+	masm /Mx stubs.asm;
+
+cpgrep.exe: cpgrep.obj cpgrepsb.obj cpgrep.def stubs.obj cpgrep
+	link /noe $(OBJS)/m,,,$(LIB)\slibcp $(LIB)\doscalls,cpgrep
+	bind cpgrep stubs.obj $(LIB)\doscalls.lib $(LIB)\api.lib

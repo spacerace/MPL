@@ -1,0 +1,22 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+gtxtface.obj: gtxtface.c
+
+gtxtface.exe: gtxtface.obj gtxtface.def
+    link4 gtxtface,/align:16,/map,slibw/NOE,gtxtface.def
+    mapsym gtxtface

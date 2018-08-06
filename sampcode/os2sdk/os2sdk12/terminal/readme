@@ -1,0 +1,7 @@
+Terminal is a simple terminal emulator for use with direct
+connection lines or Hayes compatible modems. It works in
+protected mode, and requires COM.SYS to be loaded. It has
+a configuration screen on startup, and can save the configuration
+parameters in a file.
+
+Usage:	terminal [configfile]

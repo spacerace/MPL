@@ -1,0 +1,9 @@
+NAME     fmt WINDOWAPI
+DESCRIPTION  'Formatting Test'
+PROTMODE
+HEAPSIZE  1024
+STACKSIZE 8192
+EXPORTS   ClientWndProc
+          FmtDlgProc
+          FmtWndProc
+          MonoStaticWndProc

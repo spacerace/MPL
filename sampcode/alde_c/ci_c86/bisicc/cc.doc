@@ -1,0 +1,61 @@
+cc     sortof a unix cc command to compile/assemble and link sources.
+     
+    !(c) 1985 James Montebello (not copyrighted, no need to reproduce 
+              this anywhere, do with the code what you will)
+
+     this version of cc is intended to work with the Computer Innovations
+     C86 compiler, IBM's MASM and IBM's LINK. 
+     it shouldn't be too big a deal to get it to work with any c compiler.
+
+     usage: cc [flags] file...
+        file(s) can be .c's, .asm's, or .obj's. if
+        no extension is given, .c is assumed. wildcards ok.
+
+        flags:
+        -ofile    file is where the linked output will be
+                  placed. the 1st file in the list is the
+                  assumed output if no -o present
+        -lpath    path is the full path/filename of a 
+                  library to be included in the list,
+                  multiple libs can be in path, or several
+                  -l's can be given
+        -c    compile only, skip link step
+        -C    regular C86 -c flag.
+        all other c86 flags passed thru directly.
+        most assembler and linker flags passed thru as well,
+        do cc{ret} for these flags, most are simply capitalized.
+
+        if no -h (c86 flag, path for includes) is given, the
+        contents of the environment variable, CCINCLUDES
+        will be used [note: like the c86 flag, this path
+        must have an ending '\' or '/'.    If neither is present,
+        /lib/include/ is assumed.
+
+        the environment variables CCSLIB and CCBLIB should
+        contain the path/filename of the small and big 
+        libraries to be used for link. If the environment 
+        variables are not present, /lib/c86s2s.lib and 
+        /lib/c86b2s.lib are assumed.
+
+        if you run out of environment space (only 128 bytes, indeed!),
+        there is a public-domain program available widely called
+        BOOT.EXE that allows you to increase your system environment
+        up to 32K (theoretically). I wished I could remember the 
+        name of the guy who wrote it and/or where I got it. Its
+        really a swell utility.
+
+        There is a bug someplace in the code that appears 
+        intermittantly. cc may issue an error compiling
+        a file when no error has occurred. Quite often it
+        will appear before the command is issued. I can't seem
+        to track it down; its driving me crazy. 
+
+	any suggestions, fixes (see above) or whatever, send me a
+	message through either of the two boards listed below, or
+        write me at:
+
+	James Montebello
+        Bridge Investment Systems, inc.
+        10050 Manchester Rd.
+        St. Louis, MO 63122
+

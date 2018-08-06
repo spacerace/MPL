@@ -1,0 +1,61 @@
+/*
+    Resource file for SNAP application
+    Created by Microsoft Corporation, 1989
+*/
+#define  INCL_WIN
+#include "snap.h"
+#include <os2.h>
+
+POINTER IDR_ICON_SNAP  snap.ico
+POINTER IDR_PTR_SNAP   snap.ptr
+POINTER IDR_PTR_HAND   hand.ptr
+POINTER IDR_PTR_SELECT select.ptr
+
+STRINGTABLE
+BEGIN
+    IDS_SNAP,       "Snap"
+END
+
+MENU   1
+BEGIN
+    SUBMENU "~Options", 99
+    BEGIN
+        MENUITEM "~Hide snap when snapping",		IDM_HIDE
+        MENUITEM "Select ~region when snapping",	IDM_REGION
+        MENUITEM "Select ~window when snapping",	IDM_WINDOW
+        MENUITEM "~Exclude frame",			IDM_NCAREA
+	MENUITEM "~Save window contents...",		IDM_SAVE
+        MENUITEM "", 99, MIS_SEPARATOR
+        MENUITEM "E~xit",		SC_CLOSE,	MIS_SYSCOMMAND	
+        MENUITEM "A~bout Snap...",			IDM_ABOUT
+    END
+    MENUITEM "S~nap!",					IDM_SNAP
+END
+
+
+DLGTEMPLATE IDD_INFO
+BEGIN
+    DIALOG "", 1, 10, 12, 230, 123, FS_DLGBORDER
+    BEGIN
+        CTEXT "OS/2 Presentation Magager", 0, 46, 108, 150, 8
+        CTEXT "Created by Microsoft Corp., 1989", 0, 46, 98, 150, 8
+        CTEXT "Window Snapshot application", 0, 46, 84, 150, 8
+        DEFPUSHBUTTON "OK", DID_OK, 4, 90, 36, 14
+        LTEXT " SNAP copies bitmaps of windows to the clipboard.", 0, 4, 66, 220, 10
+        LTEXT " There are 2 selection modes: Window and Region.", 0, 4, 56, 220, 10
+        LTEXT " Window - click on the window you want copied.", 0, 4, 41, 220, 10
+        LTEXT " Region - click & drag the mouse to select the", 0, 4, 31, 220, 10
+        LTEXT "           region you want copied.", 0, 4, 21, 220, 10
+    END
+END
+
+DLGTEMPLATE IDD_SAVEFILE
+BEGIN
+    DIALOG "", 2, 0, 0, 132, 60, FS_DLGBORDER | FS_MOUSEALIGN
+    BEGIN
+        CTEXT "Save File", 0, 4, 45, 124, 8
+        CTEXT "Enter the file name to save", 0, 4, 30, 124, 8
+        CTEXT "or leave empty to cancel.", 0, 4, 20, 124, 8
+        ENTRYFIELD "", ID_FILEENTRY, 4, 5, 124, 8, ES_AUTOSCROLL | ES_LEFT | ES_MARGIN
+    END
+END

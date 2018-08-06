@@ -1,0 +1,12 @@
+Code 12                                  -Drive Stop
+
+Input registers - none.
+
+Special output registers - none.
+
+Operation:
+
+    A SCSI stop (1Bh) command is issued to the specified disk. Some 
+    manufacturers use this command to park the heads in preparation for 
+    moving.
+

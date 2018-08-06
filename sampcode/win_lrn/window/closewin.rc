@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "CloseWin.h"
+
+CloseWin MENU
+    BEGIN
+        POPUP "&Menu"
+           BEGIN
+              MENUITEM "&CloseWindow",                      IDM_CLOSEWINDOW
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

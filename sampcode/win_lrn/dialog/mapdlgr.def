@@ -1,0 +1,17 @@
+NAME    MapDlgR
+
+DESCRIPTION 'Sample Microsoft Windows Application'
+
+STUB    'WINSTUB.EXE' ; Generates error message if application
+                      ; is run without Windows
+
+CODE    MOVEABLE      ; code can be moved in memory
+
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  1024
+STACKSIZE 4096  ; recommended minimum for Windows applications
+
+EXPORTS
+    MapDlgRectWndProc   @1  ; name of window processing function
+    About            @2  ; name of "About" processing function

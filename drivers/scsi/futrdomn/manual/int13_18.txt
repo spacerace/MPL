@@ -1,0 +1,37 @@
+Code 18                             Identify ROM
+
+Input registers - none.
+
+Special output registers -
+
+         AX  - 4321h. This code identifies this as a Future Domain ROM BIOS.
+
+         BH  - Number of disks being supported by this ROM BIOS.
+
+         BL  - Index number for this SCSI disk.
+
+         CH  - ROM Firmware version number. This is 4 for Host adapters using BIOS 
+              1.0-1.2, 4.0 or 6.0, and 5 for host adapters using BIOS 5.0-5.2.
+
+         CL  - Drive type code. This is 10 for host adapters using BIOS 1.0-1.2, 4.0 or 6.0 
+              and 13 for host adapters using BIOS 5.0-5.2.
+
+Operation:
+
+    The purpose of this command is to locate and identify the address codes 
+    that are required for use of the SCSI disks. The Int 13 calls for the SCSI 
+    drives are addressed to the hard drives, i.e., disk 0 is 80h, disk 1 is 
+    81h,...Note that this addressing includes internal IBM disks as well as 
+    the SCSI disks. This command identifies what the base address is for SCSI
+    disks.
+
+    Assume that there is one internal hard disk and four SCSI disks. 
+    Addressing this command to hard disk address 82h would result in BH=4 
+    and BL=1. That means that there are 4 SCSI  disks and that this is the 
+    second disk, i.e., they are numbered 1, 1,... The base address for the 
+    SCSI disks is therefore 82h-1=h1h, or SCSI disk 0 is address 81h, SCSI 
+    disk 1 address is  82h,....
+
+    If this command is issued to an IBM disk controller, it will return an 
+    error code.
+

@@ -1,0 +1,21 @@
+NAME    APP
+
+DESCRIPTION 'Fundamental Microsoft Windows Application'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  128
+STACKSIZE 4096
+
+EXPORTS
+    WndProc      @1
+    About        @2
+
+IMPORTS
+    StartRecord = JOURNAL.StartRecord
+    StopRecord  = JOURNAL.StopRecord
+    StartPlay   = JOURNAL.StartPlay
+    StopPlay    = JOURNAL.StopPlay

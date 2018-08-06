@@ -1,0 +1,62 @@
+/*************************************************************************/
+/*                                                                       */
+/*  FMT.RC   resource file for the formatted edit control test program   */
+/*                                                                       */
+/*************************************************************************/
+
+#include <os2.h>
+#include "fmt.h"
+
+#define FLD_HASPICTURE    1
+#define FLD_AUTONEXT      2
+#define FLD_NOECHO        4
+#define FLD_PROTECT       8
+#define FLD_IGNORE        16
+#define FLD_REQUIRED      32
+#define FLD_TOUPPER       64
+#define FLD_TOLOWER       128
+#define FLD_CENTER        256
+#define FLD_RJUST         512
+#define FLD_NUMERIC       1024
+#define FLD_SIGNEDNUMERIC 2048
+#define FLD_ALPHA         4096
+#define FLD_ALPHANUMERIC  8192
+#define FLD_LOGICAL       16384
+
+
+MENU DLG_FORMAT
+{
+  SUBMENU  "~File", 1
+  { 
+    MENUITEM "~Test...", ID_DLG
+    MENUITEM "E~xit", ID_EXIT
+  }
+}
+
+
+DLGTEMPLATE DLG_FORMAT LOADONCALL MOVEABLE DISCARDABLE 
+BEGIN
+    DIALOG "FORMATTING", DLG_FORMAT, 92, 90, 213, 75, FS_NOBYTEALIGN | 
+                FS_DLGBORDER | WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS, 
+                FCF_TITLEBAR
+    BEGIN
+        CONTROL "NUMERIC", 256, 11, 49, 50, 8, "MonoStatic", SS_TEXT | 
+                DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "ALPHA", 257, 12, 29, 29, 8, "MonoStatic", SS_TEXT | DT_LEFT | 
+                DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "ALNUM", 258, 10, 11, 37, 8, "MonoStatic", SS_TEXT | DT_LEFT | 
+                DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "(999) 999-9999", ID_NUMERIC, 65, 49, 96, 8, "Formatted", ES_LEFT | 
+                ES_MARGIN | WS_TABSTOP | WS_VISIBLE
+                CTLDATA 0
+        CONTROL "AAAAAAAA", ID_ALPHA, 64, 29, 67, 8, "Formatted", ES_LEFT | ES_MARGIN | 
+                WS_TABSTOP | WS_VISIBLE
+                CTLDATA FLD_TOUPPER
+        CONTROL "", ID_ALNUM, 64, 10, 71, 8, "Formatted", ES_LEFT | ES_MARGIN | 
+                WS_TABSTOP | WS_VISIBLE
+                CTLDATA FLD_ALPHANUMERIC /* | FLD_REQUIRED */
+        CONTROL "OK", ID_OK, 159, 9, 38, 12, WC_BUTTON, BS_PUSHBUTTON | 
+                BS_DEFAULT | WS_TABSTOP | WS_VISIBLE
+    END
+END
+

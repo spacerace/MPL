@@ -1,0 +1,271 @@
+
+
+                             Unicorn Library 4.0
+                                for Turbo C
+                              Quick Reference in
+                          Function Prototype Format
+                    Copyright (c) 1987 by David A. Miller
+
+                        
+
+
+
+
+atsay(int row, int column, int fore_clr, int back_clr);
+backclr(int color);
+beepsp();
+box(int up_lft_row, int up_lft_col, int low_r_row, int low_r_col, int color);
+box1(int up_lft_row, int up_lft_col, int low_r_row, int low_r_col, int color);
+box2(int up_lft_row, int up_lft_col, int low_r_row, int low_r_col, int color);
+boxfill(int y1, int x1, int y1, int x1, int color);
+burble(int 1/pitch, int timer);
+button();
+circle(int r_cent, int c_cent, int radius, int n_aspt, int d_aspt, int color);
+cls();
+CM_INCH(double inches);
+countch(char *string, char ch);
+ctone(int freq, int duration);
+DEG_RAD(double radians);
+delay(int millisecs);
+drawrow(int row, int column, int attribute+ch);
+dwarn2()
+dwarn3();
+dx120bs();
+dxback();
+dxbi();
+dxboldst();    
+dxbs();
+dxbsend();
+dxchwide(int width_in_120ths);
+dxclrtb();
+dxclrtab();
+dxcr();
+dxdefwid();
+dxeject();
+dxff();
+dxfor();
+dxhlf();
+dxht();
+dxinit();
+dxlf();
+dxlinsp(int line_sp_in_48ths);
+dxlmarg();
+dxpglen(int length);
+dxhlf();
+dxrlf();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+dxsetht();
+dxshast();
+dxundend();
+dxundlst();
+dxuni();
+ellipser(int cent_r, int cent_c, int rot_ang, int hlf_x, int hlf_y, int color);
+equipchk();
+flagdec();
+flaginc();
+forward(int distance_in_pixels);
+GAL_LT(double liters);
+gcomtype();
+gcurpos(int row, int col, int page);
+getbcnt(int number);   {0- left mouse button // 1 - right}
+getbrcnt(int which);
+getbstat();
+getchne();
+getctype(int start_line, int end_line, int page);
+getcurp(int &column, int &row, int &type);
+getdmaj();
+getdmin();
+getdver();
+gethpos();
+getkey();
+getkeycd();
+getscode();
+getstate();
+getvpos();
+get_page();
+gliss(int start_freq, int end_freq, int rate);
+GM_OZ(double ounces);
+gothic(char ch, int row, int col, int color);
+gscrcurp();
+hollow(char ch, int row, int column, int color);
+INCH_CM(double centimeters);
+indexch(char *string, char ch);
+indexr(char *string, char ch);
+iskey();
+kbstat();
+keystat();
+KG_LB(double pounds);
+LB_KG(double kilograms);
+lhjoystk();
+lightpen(int &row, int &column, int &rasline, int &rascolumn);
+line(int y1, int x1, int y2, int x2, int color);
+locate(int row, int column);
+lprintf(char *string);
+lputch(char ch);
+lsthpos(int number);
+lsthrpos(int number);
+lstvpos(int number);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+lstvrpos(int number);
+LT_GAL(double gallons);
+lvjoystk();
+memsize();
+mgun();
+moveto(int row, int column);
+mreset();
+msize();
+OZ_GM(double grams);
+paint(int row, int column, int bndry, int color);
+palette(int number, int mode, int color);
+pcurpos(int &row, int &column, int &page);
+pencolor(int color);
+pendown();
+penup();
+playibm(int note, int octave, int time);
+point(int row, int column, int color);
+prtbs();
+prtbuzz();
+prtcan();
+prtcomof();
+prtcomon();
+prtcr();
+prtdubof();
+prtdubon();
+prtempof();
+prtempon();
+prtesc();
+prtff();
+prtlf();
+prttab();
+prtwidof();
+prtwidon();
+RAD_DEG(double degrees);
+raschar(char ch, int row, int col, int y_mag, int x_mag, int color);
+rdhcount();
+rdvcount();
+readkey();
+redalert();
+replacech(char *strint, char old, char new);
+rhjoystk();
+rvjoystk();
+scankey();
+script(char ch, int row, int column, int color);
+setcallm(int call_mask, int addr_offset);
+setcur(int hor_hot_spot, int ver_hot_spot, int *cur_array);
+setcurp(int row, int column);
+setcurt(int start, int end);
+sethor(int min, int max);
+setmode(int mode);
+setpage(int page);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+setpal(int palette);
+setpos(int hor, int vertical);
+settxtc(int type, int screenmask/1st line, int curmask/2nd line);
+setver(int min, int max);
+set_page(int page);
+sm(int vid_mode);
+spalreg(int reg_number, int color);  { Tandy only}
+spratio(int hor_ratio, int ver_ratio);
+sscrcurp(int row, int col);
+strclr(int foreground, int back, char *string);
+strdel(char *string, int first, int number);
+strpad(char *string, int number);
+strtolow(char *string);
+strtoup(char *string);
+turnleft( int angle);
+turnright(int angle);
+usrfont(char ch, int row, int col, int h_mag, int v_mag, int color, int numb);
+wac(char ch, int color/attribute);
+waitkey();
+wbackclr(int id, int val);
+wbdot(int color, int row, int column);
+wco(char ch, int color);
+wgbdot(int dummy, int row, int column);
+wgetca();
+wgetcurp(int page);
+wgetpen(int buffer);
+wnaddrow(int wn);
+wnbndry(int wn);
+wnceol(int wn);
+wnclose(WINDOW *wn);
+wncls(int wn);
+wncur(int wn, int cursor_control);
+wndelch(int wn);
+wndelrow(int wn);
+wngcurp(int wn);
+wngetca(int page);
+wngetch(int wn);
+wngets(int wn, char *string, int count);
+wngetstr(int wn. char *string, int count);
+wninsch(int wn, char ch);
+wnoise(int low, int high, int duration);
+wnopen(BORDER *bdr, int row, int col, int width, int height, int attribute);
+wnpchar(int wn, char ch);
+wnprinta(int row, int col, int wn, char *format, parameters ...);
+wnprintf(int wn, char *format, parameters ...);
+wnputch(int wn, char ch);
+wnputs(int wn char *string);
+wnscroll(int wn);
+wnscurp(int wn, int row, int col);
+wnstrprt(int wn, char *string);
+wnwac(int row, int col, int attribute*256+ch);
+wscrldn(int wn, int count, int attribute);
+wscrlup(int wn, int count, int attribute);
+wsetcurp(int row, int column, int page);
+wsetcurt(int start, int end);
+wsetpage(int page);
+wsm(int vid_mode);
+wtty(char ch, int color);
+wwac(char ch, int page, int count);
+wwco(char ch, int page, int count);
+
+
+
+
+
+
+
+
+
+
+

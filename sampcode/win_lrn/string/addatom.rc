@@ -1,0 +1,7 @@
+#include <style.h>
+#include "addatom.h"
+
+OurMenu MENU
+BEGIN
+  MENUITEM "&Execute", IDM_EXECUTE
+END

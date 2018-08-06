@@ -1,0 +1,133 @@
+
+
+
+     PPPPAAAARRRREEEENNNN((((1111LLLL))))           UUUUNNNNIIIIXXXX SSSSYYYYSSSSTTTTEEEEMMMM VVVV ((((OOOOSSSS LLLLooooccccaaaallll))))            PPPPAAAARRRREEEENNNN((((1111LLLL))))
+
+
+
+     NNNNAAAAMMMMEEEE
+          paren - C program checker
+
+     SSSSYYYYNNNNOOOOPPPPSSSSIIIISSSS
+          paren [-adfv] [-t tabsize] file ...
+
+     DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
+          Several common bugs in C language programs are  not  flagged
+          by  the  C  compiler  (cc) and static analyzer (lint).  Some
+          versions of lint flag some of these errors.  Paren helps  to
+          find some of these common errors.  These include:
+
+              Comparison taking precedence over assignment
+
+              Comparison taking precedence over bitwise operators
+
+              Assignment in a conditional context
+
+              Bitwise or in a conditional context
+
+              Inappropriate operator usage
+
+              Use of =op instead of op=
+
+              Unusual operator adjacency
+
+              Extra semicolons after else if for and while
+
+              Dangling else
+
+              Nesting comments and
+
+              EOF before end of comments or strings
+
+          The -a (assignment) option will flag possible errors  caused
+          by  assignments  in  conditionals (if, while, and for).  For
+          example:
+
+                  if (*cp = 'Z')
+
+          Unfortunately that the widely used idiom:
+
+                  while (*p1++ = *p2++);
+
+          will also be flagged as a possible error.
+
+          The -d (debug) option is available only if paren is compiled
+          with -DDEBUG.
+
+          The -f (fortran) option recognizes the comparison  operators
+          LT  LE  LEQ  GT  GE GEQ EQ NEQ, the logical operators OR and
+          AND, and the keywords CASE DO ELSE IF FOR SWITCH WHILE.
+
+
+
+     Page 1                                          (printed 3/27/87)
+
+
+
+
+
+
+     PPPPAAAARRRREEEENNNN((((1111LLLL))))           UUUUNNNNIIIIXXXX SSSSYYYYSSSSTTTTEEEEMMMM VVVV ((((OOOOSSSS LLLLooooccccaaaallll))))            PPPPAAAARRRREEEENNNN((((1111LLLL))))
+
+
+
+          The -t tabsize option defines the number of  characters  per
+          tabstop.  The default tabsize is 8.
+
+          The -v (verbose) option forces some possible  errors  to  be
+          flagged  even  when they do not occur in parenthesis.  These
+          are probably not errors so the default is to not flag them.
+
+          Paren is fast so it could be called from lint without  great
+          penalty.  If you are examining a large volume of code try:
+
+                  find directory -name '*.[ch]' -a -print |
+                          xargs paren [-afv] [-t tabsize]
+
+
+     SSSSEEEEEEEE AAAALLLLSSSSOOOO
+          lint, "The C Programming Language" by Kernighan and Ritchie.
+
+     DDDDIIIIAAAAGGGGNNNNOOOOSSSSTTTTIIIICCCCSSSS
+          Self explanatory.
+
+     BBBBUUUUGGGGSSSS
+          Some possible errors are not detected, in particular:
+
+                  x = (struct X *) p + 1;
+
+          probably ought to be:
+
+               x = (struct X *)(p + 1);
+
+          and
+
+               a = i << j + k;
+
+          probably ought to be:
+
+               a = (i << j) + k;
+
+          Programs with gross syntactic  errors  may  cause  paren  to
+          abort.
+
+          Since preprocessor  expansion  is  not  done  some  possible
+          errors won't be detected, while others are detected that the
+          preprocessor would remove.
+
+          The error messages can be misleading, and the  line  printed
+          may not be the one the error actually occurred on.
+
+          Paren does not know about the ?: operator.
+
+          Paren can't fix your programs.
+
+
+
+
+
+     Page 2                                          (printed 3/27/87)
+
+
+
+

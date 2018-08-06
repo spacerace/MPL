@@ -1,0 +1,61 @@
+/*
+   Resource file for DLGSAMP
+   Created by Microsoft Corp., 1989
+*/
+ 
+#include "os2.h"
+#include "dlgsamp.h"
+
+rcinclude dlgsamp.dlg
+ 
+POINTER ID_MAINWND dlgsamp.ico
+ 
+STRINGTABLE
+BEGIN
+  LBI_1, "Alpha"
+  LBI_2, "Beta"
+  LBI_3, "Gamma"
+  LBI_4, "Delta"
+  LBI_5, "Epsilon"
+  LBI_6, "Zeta"
+  LBI_7, "Eta"
+  LBI_8, "Theta"
+  LBI_9, "Iota"
+  LBI_10, "Kappa"
+  LBI_11, "Lambda"
+  LBI_12, "Mu"
+  LBI_13, "Nu"
+  LBI_14, "Xi"
+  LBI_15, "Omicron"
+  LBI_16, "Pi"
+  LBI_17, "Rho"
+  LBI_18, "Sigma"
+  LBI_19, "Tau"
+  LBI_20, "Upsilon"
+  LBI_21, "Phi"
+  LBI_22, "Chi"
+  LBI_23, "Psi"
+  LBI_24, "Omega"
+  ERR_EFINVALID, "Enter an integer in the range 1-100"
+END
+ 
+MENU    ID_MAINWND PRELOAD
+BEGIN
+  SUBMENU  "~Dialogs", ID_NULL
+  BEGIN
+    MENUITEM "~Entry field example",  MI_ENTRYFIELDEXAMPLE,  MIS_TEXT
+    MENUITEM "~Auto Radio button example", MI_AUTORADIOBUTTONEXAMPLE, MIS_TEXT
+    MENUITEM "~Check box example",    MI_CHECKBOXEXAMPLE,    MIS_TEXT
+    MENUITEM "~List box example",     MI_LISTBOXEXAMPLE,     MIS_TEXT
+    MENUITEM SEPARATOR
+    MENUITEM "E~xit",		      SC_CLOSE, MIS_SYSCOMMAND
+    MENUITEM "A~bout...",      	      MI_ABOUTBOX, MIS_TEXT
+  END
+ 
+  SUBMENU "~Modality", MI_MODALITY
+  BEGIN
+    MENUITEM "Mo~dal",          MI_MODAL,       MIS_TEXT, MIA_CHECKED
+    MENUITEM "Mode~less",       MI_MODELESS,    MIS_TEXT
+  END
+ 
+END

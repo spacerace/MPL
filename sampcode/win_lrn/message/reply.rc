@@ -1,0 +1,9 @@
+#include  "Reply.h"
+#include  <windows.h>
+
+Reply MENU
+    BEGIN
+        MENUITEM "\a&Help",                                 IDM_HELP  HELP
+    END
+
+

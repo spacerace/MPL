@@ -1,0 +1,13 @@
+;----------------------------------
+; ORGAN.DEF module definition file
+;----------------------------------
+
+NAME           ORGAN     WINDOWAPI
+
+DESCRIPTION    'Play Organ from Keyboard (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192
+SEGMENTS       SPEAKER_TEXT   IOPL
+EXPORTS        ClientWndProc
+               Speaker        1

@@ -1,0 +1,6 @@
+clipown.obj: clipown.c
+    cl -c -d -AS -Gsw -Od -Zped clipown.c
+
+clipown.exe: clipown.obj clipown.def
+    link4 clipown,/align:16,/map/li, slibw/NOE, clipown.def
+    mapsym clipown

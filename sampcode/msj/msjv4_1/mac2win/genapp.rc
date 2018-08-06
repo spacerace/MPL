@@ -1,0 +1,108 @@
+#define AS
+/*************************************************************************
+
+       GENAPP.RC - Resource File for GENAPP
+
+*************************************************************************/
+
+
+#include "windows.h" 
+#include "wgenapp.h" 
+#include "dispatch.h"
+
+/****************************************************************/
+
+GENAPP		CURSOR  GENAPP.CUR
+GENAPP		ICON    GENAPP.ICO
+
+/*PUTRECT		CURSOR  PUTRECT.CUR*/
+
+/****************************************************************/
+
+IDD_ABOUT_BOX 
+	DIALOG 22, 17, 144, 75
+	STYLE WS_POPUP | WS_DLGFRAME
+BEGIN
+    CTEXT " Example Generic "                   -1, 37,  5, 68, 8
+    ICON  "Text"                                -1,  9, 20,  0, 0
+    CTEXT "Application Prog"                    -1, 37, 14, 68, 8
+    CTEXT "SAPPHIRE SOFTWARE"                   -1, 38, 25, 64, 8
+    CTEXT "Version 0.000 Large Model"            -1, 38, 34, 64, 8
+    CTEXT "This version created on 17 Oct 88"   -1,  5, 47,132, 9
+    DEFPUSHBUTTON "Ok"                        IDOK, 53, 59, 32, 14, WS_GROUP
+END
+
+/****************************************************************/
+GENAPP 
+	MENU 
+BEGIN
+    POPUP "File"
+    BEGIN
+	MENUITEM	"New",			FILE_MENU + FILE_CMD_NEW
+	MENUITEM	"Open",			FILE_MENU + FILE_CMD_OPEN
+	MENUITEM	"Close",		FILE_MENU + FILE_CMD_CLOSE
+	MENUITEM	"Save",			FILE_MENU + FILE_CMD_SAVE
+	MENUITEM	"Save As...",		FILE_MENU + FILE_CMD_SAVE_AS
+	MENUITEM	"Revert",		FILE_MENU + FILE_CMD_REVERT
+	MENUITEM  SEPARATOR
+	MENUITEM	"Page Setup...", FILE_MENU + FILE_CMD_PAGE_SETUP
+	MENUITEM	"Print",		FILE_MENU + FILE_CMD_PRINT
+	MENUITEM	"Quit",			FILE_MENU + FILE_CMD_QUIT
+    END		
+
+    POPUP "Edit"
+    BEGIN
+	MENUITEM	"Undo"			EDIT_MENU + EDIT_CMD_UNDO
+	MENUITEM SEPARATOR
+	MENUITEM	"Cut",			EDIT_MENU + EDIT_CMD_CUT
+	MENUITEM	"Copy",			EDIT_MENU + EDIT_CMD_COPY
+	MENUITEM	"Paste",		EDIT_MENU + EDIT_CMD_PASTE
+	MENUITEM	"Clear",		EDIT_MENU + EDIT_CMD_CLEAR
+    END		
+
+    POPUP "View"
+    BEGIN
+	MENUITEM	"New Graphics View",VIEW_MENU + VIEW_CMD_GRAPHICS_VIEW
+	MENUITEM	"New Text View", VIEW_MENU + VIEW_CMD_TEXT_VIEW
+    END		
+
+    POPUP "Palette"
+    BEGIN
+	MENUITEM	"Selection Tool",PALETTE_MENU + PALETTE_SELECTION_MODE
+	MENUITEM	"Create Rect Tool",  PALETTE_MENU + PALETTE_CREATE_RECT_MODE
+    END		
+
+#ifdef AS
+#else
+    POPUP "DEBUG"
+    BEGIN
+	MENUITEM	"Set Print OFF", 	DEBUG_MENU + 0
+	MENUITEM	"Set Print ON", 	DEBUG_MENU + 1
+	MENUITEM	"Toggle File Output",	DEBUG_MENU + 2
+	MENUITEM	"Mark Place in File",	DEBUG_MENU + 3
+	MENUITEM	"Close Log File",	DEBUG_MENU + 4 
+	MENUITEM SEPARATOR
+	MENUITEM	"SML Messages",		DEBUG_MENU + 5
+	MENUITEM	"AS Messages",		DEBUG_MENU + 6
+	MENUITEM	"DS Messages",		DEBUG_MENU + 7
+	MENUITEM	"RV Messages",		DEBUG_MENU + 8
+	MENUITEM	"Common Messages",	DEBUG_MENU + 9
+	MENUITEM	"All Messages",		DEBUG_MENU + 10
+	MENUITEM SEPARATOR
+	MENUITEM	"Memory Mgr",		DEBUG_MENU + 11
+	MENUITEM	"Main Loop",		DEBUG_MENU + 12
+	MENUITEM	"QuickDraw",		DEBUG_MENU + 13
+    END		
+#endif
+
+END
+
+/****************************************************************/
+
+STRINGTABLE
+BEGIN
+	IDS_ABOUT,   	"About ..."
+END
+
+
+

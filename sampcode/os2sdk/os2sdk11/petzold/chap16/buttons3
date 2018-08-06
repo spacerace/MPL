@@ -1,0 +1,9 @@
+#--------------------
+# BUTTONS3 make file
+#--------------------
+
+buttons3.obj : buttons3.c sqbtnlib.h
+     cl -c -G2sw -W3 buttons3.c
+
+buttons3.exe : buttons3.obj buttons3.def sqbtnlib.lib
+     link buttons3, /align:16, NUL, os2 sqbtnlib, buttons3

@@ -1,0 +1,9 @@
+#-----------------
+# CLOCK make file
+#-----------------
+
+clock.obj : clock.c
+     cl -c -G2sw -W3 clock.c
+
+clock.exe : clock.obj clock.def
+     link clock, /align:16, NUL, os2, clock

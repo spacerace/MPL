@@ -1,0 +1,21 @@
+HAB APIENTRY WinInitialize( fOptions )
+    USHORT      fOptions;
+{
+    /* Static initialization - less hassle this way? */
+
+    _pps1 = &_ps1;
+    _hps1 = (HPS)&_pps1;
+
+    /* Macintosh memory management initialization */
+
+    MaxApplZone();
+    MoreMasters();
+    MoreMasters();
+    MoreMasters();
+
+    /* Open resource file - TEMP */
+
+    OpenResFile( "\pMacPM.rsrc" );
+    
+    return (HAB)1;
+}

@@ -1,0 +1,112 @@
+
+
+        NAME
+                criterr -- critical error handler installer
+
+        SYNOPSIS
+                r = criterr(addr, ds);
+                int r;        returns 0 for success
+                int *func;    function address to execute
+                unsigned ds;  value of DS register for any common variables
+
+
+        DESCRIPTION
+        This function is used to install a user-written handler
+        on INT 24H, the critical error handler.  The original
+        handler is the one which gives the "Abort, Retry, Ignore"
+        error message.  This interrupt needs to be taken over by
+        a program whenever other interrupts, such as the timer
+        interrupt 1CH, are installed.  This allows the programmer
+        the ability to make a graceful exit from a program.  The
+        installed interrupt should return:
+            0 - ignore error
+            1 - retry operation
+            2 - abort program uncleanly through original INT 23H *
+            3 - fail system call (DOS version 3.x only)
+        The installed function must execute rapidly and not make
+        any calls to other DOS functions.  The behavior of INT 24H
+        leaves much to be desired.  Only a very limited set of DOS
+        functions are allowed from within the interrupt.  Since it is
+        hard to predict what a compiler will do, it is safest to not
+        attempt any I/O operations to disk, keyboard, or console from
+        within the INT 24H handler.  The safest thing to do is
+        simply modify a variable and return.  Passing a NULL parameter
+        will re-install the original interrupt handler.  This is not
+        necessary upon program exit since DOS will re-install the
+        original vector automatically.
+
+        Since the Data Segment register will probably not be correct when
+        this interrupt occurs, it is necessary for criterr to have the
+        proper DS value of any variables it needs to access.  For the
+        small data models (S and P) this is automatic, and the second
+        parameter to the criterr() call may be omitted or simply made
+        NULL.  For the large data models (D and L) it is necessary to
+        pass this segment value so that it may be used when the interrupt
+        actually occurs.  Be sure to pass the DS value appropriate to the
+        variables which will be used during the interrupt.
+
+        * Returning a value of 2 calls the original INT 23H handler
+        routine.  If a user-installed handler has been installed (see
+        ctlbrk() ) it is NOT called.
+
+
+        criterr()                                page 2
+
+        EXAMPLE
+          
+              int errflag;
+
+              errhand() {
+                 errflag = 1;
+                 return(3);      /* tell DOS to fail function */
+                 }
+
+              main() {
+                   unsigned off, seg;    /* D and L models only */
+
+                   errflag = 0;   /* init flag to O.K. condition */
+                   criterr(&errhand);   /* S and P models only */
+
+                   get_data_adr(&errhand, &seg, &off);  /* D and L models */
+                   criterr(&errhand, seg);              /* D and L Models */
+
+                   fopen("a:trash", "r");
+                   if(errflag == 1) {
+                       puts("Fatal error occurred");
+                       cleanupneatly();
+                       exit(1);
+                       }
+                   else dowork();
+                   cleanupneatly();
+                   }
+                   
+
+        CAVEATS:
+        The operation of DOS error returns is not documented as
+        thoroughly as could be desired.  For example, virtually
+        all books on the subject indicate that a return of 2
+        will exit through INT 23H, yet none say that the ORIGINAL
+        vector will be used, not the vector installed by the
+        program.  This is an important thing to remember.  In
+        addition, a return code of 1 should retry the operation.
+        If the operation fails, the error handler should again
+        be called.  However, empirical tests have shown that
+        the retry return (value of 1) appears to cause an infinite
+        retry, since the error handler is not called again and the
+        system hangs until the error is cleared. For this reason, use
+        a return value of 1 with great care.  If you wish to
+        always abort the program through your interrupt handler,
+        be sure to perform any cleanup operations not involving
+        DOS calls before returning a value of 2, since the return
+        of 2 will NOT return to the running program but exit to
+        DOS rather uncleanly.  A return value of 3 is allowable
+        under DOS versions 3.0 and above, but should be avoided
+        to allow the program to be downward compatible to 2.11.
+        As an alternative, the getver() call can be used during
+        program initialization to see if version 3 is running and
+        the program can then respond accordingly.  Do NOT use getver()
+        within the error handler itself, since DOS is not re-entrant!
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

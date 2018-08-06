@@ -1,0 +1,10 @@
+;-------------------------------
+; WE.DEF module definition file
+;-------------------------------
+
+NAME           WE        WINDOWCOMPAT
+
+DESCRIPTION    'Welcome to PM -- Program No. 2 (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      2048

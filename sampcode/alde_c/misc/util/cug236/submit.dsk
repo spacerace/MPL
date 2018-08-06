@@ -1,0 +1,94 @@
+The C Users' Group welcomes submissions for inclusion in the
+C public domain library. Please sign and return the following information
+with your submission. Thank you.
+
+     AUTHOR'S RELESAE FORM FOR CUG LIBRARY
+
+NAME ...........................DATE..../..../....
+
+ADDRESS ..........................................
+
+CITY .......................STATE .....ZIP .......
+
+COUNTRY ..........................................
+
+PHONE .....................AFFILIATION ...........
+
+DESCRIPTION OF SUBMITTED MATERIALS (Include development machine,
+memory required, basic attributes, etc.):
+
+
+
+
+
+
+
+
+
+
+
+THE SUBMITTED FILES ARE IN THEIR PRESENT REVISION LEVEL,
+
+       ....      TO THE BEST OF MY KNOWLEDGE CURRENTLY IN PUBLIC DOMAIN
+
+       ....      UNDER MY DIRECT CONTROL HEREBY PLACED INTO PUBLIC
+                 DOMAIN. PERMISSION IS HEREBY GRANTED THE C USERS' GROUP TO
+                 DISTRIBUTE THE SUBMITTED MATERIALS
+                 FREELY FOR NON-COMMERCIAL
+                 PERSONAL USE.
+
+
+    SIGNED...........................................
+
+    DATE.............................................
+
+-------------------------------------------------------------------------
+
+SUBMISSION GUIDELINES
+
+Please avoid sub-directories, squeezed files, library files or other
+compacted formats. CUG appreciates and prefers submissions with
+cataloging headers on all text files (See sample below and refer
+to CUG Newsletter II #6, March, 1985 for more details.)
+
+SAMPLE HEADER
+/*
+HEADER:		;
+TITLE:		Diskette sector editor;
+VERSION:	1.4;
+
+DESCRIPTION:	"Lets you view, edit and write back a diskette sector.
+
+		It needs a 24*80 cursor-addressable terminal, and requires
+		your custom CLRSCREEN() and GOTOXY() functions.  The
+		definitions of these functions appear early in SE.C.
+
+		Compiling requires SENTER.C, included on the diskette.
+		Also included are SE.DOC and SE.SUB.";
+
+KEYWORDS:	Disk, utility, editor, sector;
+SYSTEM:		CP/M-80, V2.2;
+FILENAME:	SE.C;
+WARNINGS:	"Requires Version 2.x of CP/M.
+		SE is not designed to work with systems using the DEBLOCK
+		routine in the BIOS to handle physical sectors larger than
+		128 bytes, so if you have such a system, and want to use SE,
+		you must modify the routines in SE which write back the edited
+		sector.  The BitMap command is not implemented.";
+
+SEE-ALSO:	SE.DOC, SENTER.C;
+AUTHORS:	Jan Larsson;
+COMPILERS:	BDS C, v1.43 and 1.5a;
+*/
+
+The C Users' Group (CUG) collects, maintains and distributes
+public domain C source code, publishes a quarterly newsletter
+and serves as a resource for C users. Several vendors have named
+CUG as the official users group for their implementation of C.
+For membership and subscription information contact
+
+	The C Users' Group
+	PO Box 97
+	McPherson, KS 67460
+	(316)241-1065
+

@@ -1,0 +1,78 @@
+
+        NAME
+                enterdata -- enter a string of data from keyboard
+                disp_enterdata -- same, use direct video access
+
+        SYNOPSIS
+                r = enterdata(dest, qty, row, col, mode);
+                r = disp_enterdata(dest, qty, row, col, mode);
+                int r;          returns TRUE or FALSE
+                char *dest;     destination for string
+                int qty;        maximum allowable chars + 1
+                int row, col;   row and column of string start*
+                int mode;       mode for character checking
+
+        DESCRIPTION
+        These routines are essentially the same, except that
+        disp_enterdata uses the Datalite direct video access
+        functions.  enterdata() provides a convenient method
+        for entering character strings from the keyboard and
+        verifying the character syntax.  Line editing is
+        supported to enhance user input.  Entry is as follows:
+           Carriage Return terminates input and returns TRUE.
+             If no other data was entered, destination string
+             is NULLed in the first position. CR is not placed
+             into destination.
+           ESCape terminates entry at once, NULLs destination,
+             clears screen field, and returns FALSE.
+           HOME clears field, and restarts entry without returning.
+           BACKSPACE and Cursor Left will destructively backspace
+             up to beginning of field.
+           Only qty - 1 characters will be accepted.
+           Any error sounds console BELL.
+        Various modes allow for checking of syntax and mapping
+        of characters:
+           Mode 0:   allow any printable character (ASCII 20H - 7FH)
+           Mode 1:   allow only alphabetics (A-Z, a-z)
+           Mode 2:   allow alphabetics and numerals only
+           Mode 3:   allow numerials only
+           Mode 4:   allow hexadecimal characters only (0-9, A-F, a-f)
+        Modes 0, 1, and 2 will map lower case to upper case if
+        decimal 128 (80H) is OR'd with the mode.
+
+
+
+        * for enterfn only: If row = -1, then current cursor position
+          will be used, and col value is ignored.
+
+Page 2   enterdata()
+
+
+        EXAMPLE
+
+           char string[31];
+           unsigned int num;
+
+           d_pos(10, 20, 0);      /* cursor to row 10, column 20 */
+           fputs("Enter an alphabetic string: ", stdout);
+           if(!enterdata(string, 31, 10, 48, 1)) {
+              fputs("\nESCape was pressed");
+              }
+           else printf("\nString entered is %s\n", string);
+
+           fputs("Enter hex value at current cursor position: ", stdout);
+           if(!enterdata(string, 5, -1, 0, 4)) {
+              fputs("\nESCape was pressed");
+              }
+           else {
+              num = atoi(string);
+              printf("Number entered was %4x", num);
+              }
+
+
+
+
+
+           
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

@@ -1,0 +1,7 @@
+#include "icontest.h"
+ 
+icontest  MENU
+  BEGIN
+    MENUITEM "&GetIcon", CMD_GETICON
+  END
+ 

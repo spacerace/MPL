@@ -1,0 +1,39 @@
+
+
+        NAME
+                common_exit -- terminate a program
+
+        SYNOPSIS
+                common_exit(code);
+                int code;     exit error code
+
+
+        DESCRIPTION
+        The program is terminated with the standard exit() function using
+        the specified code.  The advantage of using this function is that
+        the installable exit handler "exeunt()" is called before exit().
+
+
+
+
+
+        EXAMPLE
+
+                common_exit(0);
+
+
+
+        SEE ALSO:
+                onexit() function to install a common exit routine.
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

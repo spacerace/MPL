@@ -1,0 +1,26 @@
+/*
+Figure 6.
+=========
+
+
+Caption: RC File for TILER.EXE
+
+
+
+
+TILER.RC
+*/
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
+
+/* Tiler.RC - resource file for TILER.EXE */
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
+
+#include <style.h>
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
+
+Tiler!  ICON    tiler.ico
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/

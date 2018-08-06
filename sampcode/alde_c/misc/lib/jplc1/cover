@@ -1,0 +1,93 @@
+.op
+.cw10
+.po17
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  PORTABLE C SUBROUTINE LIBRARY
+
+                            Volume I
+
+                       PROGRAMMER'S MANUAL
+
+
+                          January 1986
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    JET PROPULSION LABORATORY
+               California Institute of Technology
+                      Pasadena, California
+Š
+                           TRADEMARKS
+
+Severaì  commerciaì  softwarå  productó arå  referenceä  iî  thió 
+document®  Foò thå record¬ UNIØ ió á registereä trademarë oæ AT&Ô 
+Laboratories® CP/Í ió á registereä trademarë oæ Digitaì Research¬ 
+Inc.¬  oæ Pacifiã Grove¬  California® AZTEC-IÉ ió á tradå namå oæ 
+Manø Softwarå Systems¬  Shrewsbury¬  Ne÷ Jersey® Eco-Ã ió á tradå 
+namå oæ Ecosoft¬ Inc.¬ oæ Indianapolis,Indiana
+
+
+                           DISCLAIMER
+
+Informatioî iî thió documenô ió subjecô tï changå withouô notice¬ 
+anä  doeó  noô  represenô  á commitmenô oî thå parô  oæ  thå  Jeô 
+Propulsioî  Laboratorù  (JPL©  noò thå  Californiá  Institutå  oæ 
+Technology®   Nï  waranteeó arå herebù madå witè respecô  tï  thå 
+contentó  hereoæ  oò  thå operatioî oæ  thå  distributeä  librarù 
+functions®   JPÌ  specificallù disclaimó anù implieä waranteeó oæ 
+fitnesó  foò anù particulaò purpose®   JPÌ reserveó thå righô  tï 
+reviså thió publicatioî anä tï makå changeó froí timå tï timå  iî 
+thå  contenô  hereoæ withouô obligatioî tï notifù anù  persoî  oæ 
+sucè revisioî oò change.
+
+
+                            COPYRIGHT
+
+Thå  materialó describeä iî thió documenô werå implementeä bù thå 
+Jeô  Propulsioî  Laboratorù undeò á contracô  witè  thå  Nationaì 
+Aeronauticó  anä  Spacå  Administration¬  anä arå iî  thå  publiã 
+domain®   Reproduction¬ transmission¬ transcription¬ anä transla
+permitted®    Usagå  oæ  theså  materialó  shoulä  citå  thå  Jeô 
+Propulsioî Laboratory¬ Californiá Institutå oæ Technology¬ aó thå 
+source.
+.paŠ
+

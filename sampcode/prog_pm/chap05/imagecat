@@ -1,0 +1,9 @@
+#--------------------
+# IMAGECAT make file
+#--------------------
+
+imagecat.obj : imagecat.c
+     cl -c -G2sw -W3 imagecat.c
+
+imagecat.exe : imagecat.obj imagecat.def
+     link imagecat, /align:16, NUL, os2, imagecat

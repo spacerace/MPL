@@ -1,0 +1,506 @@
+------------------------------------------------------------------------
+README.DOC            Microsoft Programmer's Library          March 1991
+                            Volume #2   Issue #1
+------------------------------------------------------------------------
+
+  This document covers topics not discussed in the Programmer's Library
+  printed documentation.  Please read it -- and your manual -- in their
+  entirety.
+
+
+************************************************************************
+Programmer's Library Contents are detailed in the CONTENTS.DOC file
+  (in this directory).
+************************************************************************
+
+SETUP
+=====
+1.  Set default to the CD-ROM drive.   [Example:  d:]
+2.  Type SETUP                         [          SETUP]
+
+
+OS/2 CD-ROM SUPPORT
+===================
+Microsoft Corporation has developed an installable file system for
+OS/2 (version 1.2), which is compatible with CD-ROM drives.  The
+operation of a CD-ROM drive also requires a device driver compatible
+with the device controller of your specific model, as well as your
+specific drive.  For availability of both components, please contact
+your CD-ROM drive manufacturer.
+
+
+For specific technical questions relating to device drivers, you may
+contact:
+
+LASER MAGNETIC STORAGE (L.M.S.I.)
+           (800) 777-LMSI
+
+ONLINE Corporation
+        Cheryl McGarry
+        Account Representative
+           (301) 601-2227
+           (800) 922-9204
+
+SONY Corporation
+        Jacquie Cao
+           (408) 944-4118
+        Mike Yokoyama
+           (408) 944-4344
+	
+
+DO NOT PASTE WHEN "UNKNOWN" IS DISPLAYED
+========================================
+Programmer's Library can be run as a memory-resident T.S.R., which
+will pop-up for easy reference while you are in a text editor.  In
+many cases, you can also PASTE selected material from Programmer's
+Library into your editor.
+
+If Programmer's Library is popped up over some text-editors, Pro-
+grammer's Library may enter "Unknown" mode (the word "Unknown" appears
+on the Programmer's Library title bar, above the Main menu bar).
+
+In "Unknown" mode, paste and date stamp are enabled; however, WE
+STRONGLY RECOMMEND THAT YOU REFRAIN FROM PASTING WHENEVER "Unknown"
+IS DISPLAYED.  This condition can easily lead to a system crash.
+
+In such cases, you can still collect material in the Programmer's
+Library clipboard.  Use the SAVE CLIPBOARD command (in the OPTIONS
+menu) to export the clipboard contents to an ASCII file, which can
+be easily imported by your program editor.  This practice also
+provides the advantage of being able to store various content in
+separate files, for easier inclusion in different parts of the
+program you are currently editing.
+
+
+PASTING IN MICROSOFT EDITORS FROM THE T.S.R.
+============================================
+The following shows which Microsoft language editing environments
+support direct paste from Programmer's Library in T.S.R. mode:
+
+Supported
+---------
+  Microsoft-C Professional Development System (v6.0) using Programmer's
+     Work Bench.
+  Microsoft QuickC version 2.0
+  BASIC Professional Development System (v7.1) using PROGRAMMER's WORK
+     BENCH.  (Versions 7.0 and 7.1 using the QBX editor do not support
+     TSR-mode PASTE).
+  QuickBASIC version 4.5
+  QuickPASCAL version 1.0
+  Microsoft "M" Editor
+
+
+Known to Cause Problems (Does not support direct PASTE)
+-----------------------
+  Microsoft QuickC version 2.5
+  BASIC Professional Development System, v7.0 and v7.1 using QBX
+
+
+
+GENERAL NOTES
+=============
+
+Text Editors Only!
+------------------
+Although you can use Microsoft Programmer's Library with almost any type
+of software, it is designed so that you can copy and paste into text
+editor and word-processor software ONLY.  If you try to copy and paste
+sample code or text into other types of software (for example, CAD pro-
+grams, software tutorials) that expect specific keystroke responses, you
+will likely experience problems.
+
+
+MS-DOS 4.x
+----------
+If you intend to use Microsoft Library products with MS-DOS 4.x, you must
+use the MS-DOS CD-ROM Extensions version 2.1 (or higher).  To upgrade your
+version of the MS-DOS CD-ROM Extensions:
+	- Contact the manufacturer of your CD-ROM drive
+	- Call Meridian Data at (408) 476-5858.
+
+
+Sample Code
+-----------
+Programmer's Library sample code is contained in ASCII text files in the 
+\SAMPCODE directory on the Programmer's Library CD-ROM disc.  You can use 
+your editor to copy and paste any of these directly into your program's 
+source code independent of Programmer's Library.  Sample program subdir-
+ectories are explained in the CONTENTS.DOC file in the CD-ROM's root
+directory.   Sample code is provided for your convenience and education;
+but is not warrantied by Microsoft.
+
+
+Stand-alone operation
+---------------------
+You can use Programmer's Library as a stand-alone program and still
+incorporate its text and sample code into your own programs.  To do so,
+copy the data you need into the Programmer's Library Clipboard (appending
+as necessary), and save the Clipboard data as an ASCII text file.  Later,
+you can call the ASCII text file you saved into your text editor.
+
+
+TSR operation
+-------------
+If you use Programmer's Library as a memory-resident program, load it
+into memory before loading your text editor or any other application and
+unload it only after exiting any other programs that were subsequently
+started.
+
+Programmer's Library may behave erratically if it is popped up after
+another memory-resident program that was also popped up over your text
+editor.  For best results, pop up only one memory-resident program at a
+time.
+
+Load keyboard enhancement programs BEFORE loading Programmer's Library.
+Load other memory-resident programs AFTER Programmer's Library.
+
+We recommend that you edit your CONFIG.SYS file so that it assigns values
+of at least:
+         files = 15
+         buffers = 20
+
+
+Microsoft CD-ROM Extensions
+---------------------------
+For the most efficient interaction between Programmer's Libarary and the
+MS CD-ROM Extensions, set the MSCDEX /M: buffers option to 10 (at a
+minimum) or 12 (for best effect).  The following is a sample command line
+that starts the Extensions with buffers set to 12:
+	C:\> MSCDEX /D:MSCD001 /M:12
+
+
+
+
+SPECIFIC TEXT EDITOR AND WORD PROCESSOR NOTES
+=============================================
+
+Brief
+-----
+When Brief starts up, the default line length is 144 characters.  If the
+cursor is at the beginning of an 80-character line and if another 80-
+character line is pasted into Brief from Programmer's Library, then the
+last 16 characters to be pasted will be lost.  We recommend that when
+you start Brief you use the -lxxx switch to alter its default line
+length.  An example command-line call is: b -p -c1,1,3,3 -l160 <Enter>
+
+Be sure to start Brief with the "-p" command line switch (as shown above).
+Doing so ensures that Programmer's Library and Brief do not try to write
+to the same video page at the same time.
+
+
+Microsoft QuickC
+----------------
+-Version 2.5:
+ Programmer's Library can be run as a T.S.R. over QuickC 2.5; but does
+ not support direct paste operations.  Instead, select the text you wish
+ to save, COPY or APPEND to the Programmer's Library clipboard; and
+ use the Save Clipboard command (OPTIONS menu) to store the clipboard
+ contents in an ASCII file.  Return to QuickC and use the FILE OPEN
+ to include the ASCII file contents in your edit environment.
+
+-Version 2.0:
+ Turn on insert mode before pasting sample code into your program.
+
+ If you use the /h option with QC and are running Programmer's Library
+ in TSR mode, run the 43.COM program in the CD-ROM's \MSLIB directory
+ before starting QC.
+
+
+Microsoft QuickBASIC and Microsoft QuickPASCAL
+----------------------------------------------
+Turn off syntax checking AND turn on insert mode before pasting sample
+code into your program.  To pop up Programmer's Library, press the
+shift key and THEN the Alt key.
+
+If you use the /h option with QB and are running Programmer's Library
+in TSR mode, run the 43.COM program in the CD-ROM's \MSLIB directory
+before starting QB.
+
+
+Microsoft Programmer's Workbench, 'M' Editors
+---------------------------------------------
+Turn on insert mode before pasting contents into your program.
+
+
+Microsoft BASIC: QBX Editor
+---------------------------
+Programmer's Library can be run as a T.S.R. over QBX; but does
+not support direct paste operations.  Instead, select the text you wish
+to save, COPY or APPEND to the Programmer's Library clipboard; and
+use the Save Clipboard command (OPTIONS menu) to store the clipboard
+contents in an ASCII file.  Return to QBX and use the FILE LOAD
+to include the ASCII file contents in your edit environment.
+
+
+Microsoft Word
+--------------
+Versions 2.0 and 3.0
+  --Graphics mode not supported.  A beep sounds if you attempt to pop up
+    Programmer's Library over graphics mode.
+Versions 3.1, 3.2, and 4.0
+  --Programmer's Library will temporarily turn off graphics mode while it
+    is popped up.  Graphics mode will be turned on again when it is popped
+    down.
+Version 5.0
+  --Graphics mode not supported.  Before popping up Programmer's Library
+    over graphics mode, use the Alt-F9 key or the Options command to
+    switch to text mode.  The Alt-F9 key will return you to your previous
+    mode when Programmer's Library is popped down.
+  --When setting up Word 5.0, you must choose the "safe keyboard support"
+    option.
+
+
+Microsoft Works
+---------------
+When pasting whole paragraphs into the header/footer, you must delete hard
+carriage returns (<Enter>) and insert soft carriage returns (<Shift>-
+<Enter>) in their place.
+
+
+WordPerfect
+-----------
+Version 4.2
+--Pasting lines that extend into the "hot zone" can cause WordPerfect to
+  prompt you for hyphen placement, and can cause the rest of the "to-be-
+  pasted" text to be "lost."  To avoid this situation, set your margins or
+  columns at least 80 characters apart.
+Version 5.0
+--Programmer's Library will not pop up when you are in Print Preview mode.
+
+--If you redefine your default BLOCK mode toggle key default <Alt>-<F4>,
+  Programmer's Library will not know that BLOCK mode has been toggled, and
+  WordPerfect will ignore your paste.
+
+
+XyWrite III
+-----------
+Follow the instructions that accompany the XyWrite documentation for
+setting up XyWrite to run with memory-resident programs.  If you don't,
+you will likely experience serious problems.
+
+You must use the default command prompt "CM" in order for Programmer's
+Library to "know" that it is to work with XyWrite III. For this reason,
+we recommend that you don't reconfigure the XyWrite III command prompt.
+
+Don't pop up Programmer's Library over XyWrite III help screens.
+
+
+Wordstar Professional Releases 4.0 & 5.0
+----------------------------------------
+Turn off Wordstar's special character-formatting symbols (^b, for bold,
+for example) before Programmer's Library is popped up.
+
+Paste from Programmer's Library only when Wordstar is in insert mode.
+
+You must be using help levels 1, 2, or 3 for Programmer's Library to
+"know" that it is working with Wordstar.
+
+
+DisplayWrite 3 version 1.10 and DisplayWrite 4 version 1.0
+----------------------------------------------------------
+Supported by Programmer's Library in their default configurations
+
+
+
+VIDEO DISPLAY NOTES
+===================
+To correctly use a Hercules graphics adapter with Microsoft Word and
+Programmer's Library, the environment variable HERCGB102 must be set
+to TRUE.  Place the following entry in your AUTOEXEC.BAT file:
+           SET HERCGB102 = TRUE 
+
+If you have a Hercules graphics adapter and you use Microsoft Word, you
+must use Word in character mode (all versions) if you intend to use
+Programmer's Library.
+
+If you are using a monochrome monitor driven by a graphics video card, or
+a gas plasma display, start Programmer's Library using the /b command line
+switch.
+
+Programmer's Library uses the current video page to display data.
+Occasionally, less well-behaved software will not inform the bios of what
+video page it is using.  This may cause a conflict with Programmer's
+Library, and Programmer's Library may appear not to be working.  If this
+is true with your software, please check the manual for instruction on how
+to make the first video page (page 0) the default.
+
+If you have any difficulty using Programmer's Library in 43- or 50-line
+video modes, run the 43.COM program in the CD-ROM's \MSLIB directory be-
+fore popping up Programmer's Library.
+
+
+USING PROGRAMMER'S LIBRARY WITH A MOUSE
+=======================================
+
+Occasionally, your text editor's mouse cursor will be "frozen" on your
+screen when you call up Programmer's Library.  In that case, you will see
+another mouse cursor, which Programmer's Library controls, and which will
+work properly.  When you pop out of Programmer's Library, your text editor's
+mouse cursor will be "unfrozen," and the Programmer's Library mouse cursor
+will disappear.
+
+
+Microsoft
+---------
+If you use a Microsoft Mouse, we recommend that you upgrade your Microsoft
+Mouse driver IF it is a version earlier than 6.25.  If you upgrade and if
+you use the MOUSE.SYS driver, delete your earlier version of MOUSE.SYS and
+replace it with the MOUSE.SYS driver that resides on the Programmer's
+Library CD-ROM disc.  Likewise, if you use MOUSE.COM, delete your earlier
+version and replace it with the MOUSE.COM that resides on the Programmer's
+Library CD-ROM disc.
+
+Note: The 6.25 driver on the CD-ROM is NOT the latest mouse software
+version.  The latest software is available from your computer software
+supplier.
+
+
+Mouse Systems
+-------------
+If you use the Mouse Systems PC Mouse and have problems with mouse behavior
+in Programmer's Library, be sure you are using an MSMOUSE driver version
+later than 4.70.  We recommend that you always use the latest mouse driver
+software.  Check with your mouse manufacturer about getting an update.
+
+(Mouse Systems and PC Mouse are trademarks of Mouse Systems Corporation).
+
+
+
+USING PROGRAMMER'S LIBRARY WITH MULTIPLE CD-ROM DRIVES
+======================================================
+Programmer's Library setup creates a file called MSL.INI.  This file
+contains paths for each Microsoft Library product.  The paths assume that
+each product is in the same logical disk drive as it was when you first
+ran setup.
+
+If you change the drive in which Microsoft Library products are found,
+you must also change the appropriate path names in MSL.INI.
+
+
+MANUAL SETUP PROCEDURES
+=======================
+If you encounter problems with the setup program or if you simply prefer
+to set up manually, follow the procedures below, which assume the
+following about your system configuration:
+        Hard Drive is drive C:
+        CD-ROM Drive is drive D:
+
+  1. On your hard drive, create a subdirectory called "MSLIB".
+                C:\>md MSLIB <Enter>
+
+  2. Change to the MSLIB subdirectory by typing "cd MSLIB" and ENTER.
+                C:\>cd MSLIB <Enter>
+
+  3. Place the Programmer's Library CD-ROM disc in your D: drive.
+
+  4. Copy all files in the MSLIB directory on drive D: (your CD-ROM
+     drive) to the MSLIB directory on drive C.
+                C:\MSLIB>copy d:\MSLIB\*.* <Enter>
+
+  5. With your text editor, create an ASCII text file named MSL.INI, which
+     should look like this:
+
+[msl]
+        os2,     OS/2 References,     D:\BOOKS, 2011
+        windows, Windows References,  D:\BOOKS, 2012
+        net,     Network References,  D:\BOOKS, 2013
+        msdos,   MS-DOS References,   D:\BOOKS, 2014
+        msj,     MS Systems Journal,  D:\BOOKS, 4015
+        hw,      Hardware References, D:\BOOKS, 4016
+        c,       C References,        D:\BOOKS, 2017
+        masm,    MASM References,     D:\BOOKS, 2018
+        basic,   BASIC References,    D:\BOOKS, 2019
+        pascal,  Pascal References,   D:\BOOKS, 2020
+        fortran, FORTRAN References,  D:\BOOKS, 2021
+
+  6. From the MSLIB directory on drive C:, type "MSL" to load Programmer's 
+     Library and to run it as a standalone application.
+                C:\MSLIB>msl <Enter>
+
+     To load Programmer's Library and run it as a memory-resident program,
+     type:
+             C:\MSLIB>msl -t <Enter>
+
+
+  See Appendix A in the User's Manual for more information on the individual
+  fields and format of the MSL.INI file.
+
+
+ERROR MESSAGES
+==============
+When you use the following commands, your work may be interrupted by an
+error message.  If so, the following instructions will help you deal with
+its associated problem.
+
+
+CROSSREF, FIND, AND QUICKREF ERROR MESSAGES
+-------------------------------------------
+Error message: "Too many cross-references"
+--Choose the OK button or press <Enter>.
+--You have exceeded cross-reference capacity.  Save your current cross-
+  reference location with a bookmark, choose View Bookmark, and then select
+  the bookmark you just created.  This procedure clears the previous cross-
+  references you've viewed.
+
+Error message: "Unable to find datafiles"
+--Choose the OK button or press <Enter>.
+--Be sure the Programmer's Library disc is in your CD-ROM drive.
+
+
+SEARCH ERROR MESSAGES
+---------------------
+Error message: "No terms specified in search"
+--Choose the OK button or press <Enter>.
+--Enter the word or phrase you want to search for in the Term box 
+  and restart your search.
+
+
+Error message: "Too many high frequency words.  Search canceled"
+--Choose the OK button or press <Enter>.  
+--Try redefining your search by using either fewer words in the Term 
+  boxes or by using more specific words.
+
+
+BOOKMARKS ERROR MESSAGES
+------------------------
+Error message: "Can't save updated bookmark list"
+  "      "   : "Can't open bookmark file for updating"
+  "      "   : "Can't add any more bookmarks, delete one first" 
+  "      "   : "Couldn't save bookmark file" 
+  "      "   : "Couldn't open bookmark file"
+  "      "   : "Bookmark not saved"
+
+--Choose the OK button or press <Enter>.
+
+  If any of the above messages appears, one of the following problems
+  exists:
+  --You have reached the bookmark capacity limit.  Delete unnecessary 
+    bookmarks.
+  --You have insufficient disk space on your computer.  Exit
+    Programmer's Library and delete unnecessary files on your disk.
+  --You have made your bookmark file (BKMARKS.INF) read-only.  Exit
+    Programmer's Library, be sure you are in your \MSLIB directory,
+    and then type:
+         Attrib -r bkmarks.inf <Enter>
+
+  --You do not have enough files specified in your CONFIG.SYS file.
+    Exit Programmer's Library, and edit CONFIG.SYS to specify a larger
+    "FILES =" value.
+
+Error message: "Product not found"
+--Choose the OK button or press <Enter>.
+--Be sure an installed Microsoft CD-ROM Library disc is inserted in your
+  CD-ROM drive.
+
+
+"RE-RUN SETUP" 
+--------------
+When a file necessary to Programmer's Library operation is corrupted or
+deleted, an error message prompts you to rerun setup.  First, delete the
+file "MSL.VER", and then rerun setup for the product that was being used
+when the error message was produced.  If you are using more than one
+CD-ROM disc (for example, Programmer's Library, Small Business Consultant, and
+Stat Pack) and you encounter another "rerun setup" error message, then
+repeat the procedure for the disc that you were using when you encountered
+the message.
+

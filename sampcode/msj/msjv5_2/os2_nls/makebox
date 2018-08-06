@@ -1,0 +1,69 @@
+#======================= MAKEBOX ================================
+#
+#   make file for VIO DBCS SAMPLE
+#
+#   Assumes:  MAKEBOX.C
+#             MAKEBOX.H
+#             SLIBCE.LIB
+#             SLICEP.LIB
+#             DOSCALLS.LIB
+#             plus OS/2 1.2 include files
+#
+#   Generates:MAKEBOX.LNK
+#             MAKEBOX.OBJ
+#             MAKEBOX.EXE
+#             MAKEBOX.MAP
+#             MAKEBOX.SYM
+#
+#================================================================
+#
+# Default compilation macros
+#
+
+CC  = cl -W2 -c -AS -G2sw -Od -Zpe
+ASM = masm
+MKMSG = mkmsgf
+
+#================================================================
+#
+# Default inference rules
+#
+#================================================================
+.c.obj:
+    $(CC) $*.c
+
+.asm.obj:
+    $(ASM) $*.asm;
+
+.txt.msg:
+    $(MKMSG) $*.txt $*.msg
+
+#==============================================================
+#
+#   A list of all of the object files
+#
+#==============================================================
+ALL.OBJ = makebox.obj
+
+#==============================================================
+#
+# Dependencies
+#
+#==============================================================
+makebox.lnk: makebox
+    echo $(ALL.OBJ) >> makebox.lnk
+    echo makebox.exe >> makebox.lnk
+    echo makebox.map/map >> makebox.lnk
+    echo /nod:slibce slibcep doscalls >> makebox.lnk
+    echo NUL.DEF >> makebox.lnk
+
+
+makebox.obj: makebox.c
+
+makebox.msg: makebox.txt
+
+makebox.exe: $(ALL.OBJ) makebox.lnk
+    link @makebox.lnk
+    mapsym makebox
+
+

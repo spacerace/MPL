@@ -1,0 +1,65 @@
+# Makefile for LINEFRAC.EXE
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+BMPS	=	koch.bmp saw.bmp shark.bmp square.bmp stove.bmp
+CC	=	cl -c -W3 -Alfw -G2sc -Od -Zpei
+LF	=	/align:16 /codeview /map /NOD
+LIBS	=	llibcmt opendlg os2
+OBJS	=	linefrac.obj lfcmd.obj lfdlg.obj lfdraw.obj lffile.obj
+OBJ2	=	lfinit.obj lfps.obj lfthread.obj lfutil.obj lfxform.obj
+PTRS	=	koch0.ptr koch1.ptr koch2.ptr koch3.ptr paste.ptr track.ptr
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+# Resources
+#
+linefrac.res:	linefrac linefrac.dlg linefrac.h linefrac.rc $(BMPS) $(PTRS)
+
+
+# C files
+#
+linefrac.obj:	linefrac linefrac.h lffuncs.h linefrac.c
+
+lfcmd.obj:	linefrac linefrac.h lffuncs.h lfcmd.c
+
+lfdlg.obj:	linefrac linefrac.h lffuncs.h lfdlg.c
+
+lfdraw.obj:	linefrac linefrac.h lffuncs.h lfdraw.c
+
+lffile.obj:	linefrac linefrac.h lffuncs.h lffile.c
+
+lfinit.obj:	linefrac linefrac.h lffuncs.h lfinit.c
+
+lfps.obj:	linefrac linefrac.h lffuncs.h lfps.c
+
+lfthread.obj:	linefrac linefrac.h lffuncs.h lfthread.c
+
+lfutil.obj:	linefrac linefrac.h lffuncs.h lfutil.c
+
+lfxform.obj:	linefrac linefrac.h	      lfxform.c
+
+# Linker file
+#
+linefrac.lnk:	linefrac
+    echo $(OBJS)+	> linefrac.lnk
+    echo $(OBJ2)	>>linefrac.lnk
+    echo linefrac.exe	>>linefrac.lnk
+    echo linefrac.map	>>linefrac.lnk
+    echo $(LIBS)	>>linefrac.lnk
+    echo linefrac.def	>>linefrac.lnk
+
+# Files:  LINEFRAC.EXE, LINEFRAC.SYM
+#
+linefrac.exe:	$(OBJS) $(OBJ2) linefrac.def linefrac.lnk linefrac.res
+    link $(LF) @linefrac.lnk
+    rc linefrac.res
+    mapsym linefrac

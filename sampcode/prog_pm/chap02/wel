@@ -1,0 +1,9 @@
+#---------------
+# WEL make file
+#---------------
+
+wel.obj : wel.c
+     cl -c -G2s -W3 wel.c
+
+wel.exe : wel.obj wel.def
+     link wel, /align:16, NUL, os2, wel

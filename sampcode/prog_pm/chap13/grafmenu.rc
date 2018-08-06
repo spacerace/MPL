@@ -1,0 +1,22 @@
+/*----------------------------------
+   GRAFMENU.RC resource script file
+  ----------------------------------*/
+
+#include <os2.h>
+#include "grafmenu.h"
+
+BITMAP IDB_BIGHELP bighelp.bmp
+
+MENU ID_RESOURCE
+     {
+     SUBMENU "~File",         IDM_FILE
+          {
+          MENUITEM "~New",              IDM_NEW
+          MENUITEM "~Open...",          IDM_OPEN
+          MENUITEM "~Save",             IDM_SAVE
+          MENUITEM "Save ~As...",       IDM_SAVEAS
+          MENUITEM SEPARATOR
+          MENUITEM "A~bout GrafMenu...",IDM_ABOUT
+          MENUITEM "",                  IDM_HELP
+          }
+     }

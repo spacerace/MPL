@@ -1,0 +1,85 @@
+Legal DDE transactions:
+
+C       S       C       S       C       S       C       S       C       S
+----initiation variations-----------------------------------
+Initiate(app, topic)
+        InitiateAck(app, topic)
+Initiate(app, wild topic)
+        InitiateAck(app, topic1),InitiateAck(app, topic2).....
+                Terminate(app, topic2),Terminate(app, topic3).....
+Initiate(wild app, topic)
+        InitiateAck(app1, topic),InitiateAck(app2, topic).....
+                Terminate(app2, topic),Terminate(app3, topic).....
+Initiate(wild app, wild topic)
+        InitiateAck(app1, topic1),InitiateAck(app2, topic1).....
+                Terminate(app2, topic1),Terminate(app1, topic2).....
+C       S       C       S       C       S       C       S       C       S
+----request variations--------------------------------------
+request(item, fmt)
+        Ack(item, fmt, DDE_NOTPROCESSED)
+        Ack(item, fmt, DDE_FBUSY)
+        data(item, fmt, data, DDE_FRESPONSE)
+        data(item, fmt, data, DDE_FACKREQ | DDE_FRESPONSE)
+                Ack(item, fmt, DDE_FACK)
+C       S       C       S       C       S       C       S       C       S
+----advise variations---------------------------------------
+advise(item, fmt)
+        Ack(item, fmt, DDE_FACK)
+                        data(item, fmt, data)
+        Ack(item, fmt, DDE_NOTPROCESSED)
+        Ack(item, fmt, DDE_FBUSY)
+C       S       C       S       C       S       C       S       C       S
+advise(item, fmt, FNODATA)
+        Ack(item, fmt, DDE_FACK)
+                        data(item, fmt, FNODATA)
+        Ack(item, fmt, DDE_NOTPROCESSED)
+        Ack(item, fmt, DDE_FBUSY)
+C       S       C       S       C       S       C       S       C       S
+advise(item, fmt, DDE_FACKREQ)
+        Ack(item, fmt, DDE_NOTPROCESSED)
+        Ack(item, fmt, DDE_FBUSY)
+        Ack(item, fmt, DDE_FACK)
+                        data(item, fmt, data, DDE_FACKREQ)
+                                Ack(item, fmt, DDE_FACK)
+C       S       C       S       C       S       C       S       C       S
+advise(item, fmt, DDE_FACKREQ | DDE_FNODATA)
+        Ack(item, fmt, DDE_NOTPROCESSED)
+        Ack(item, fmt, DDE_FBUSY)
+        Ack(item, fmt, DDE_FACK)
+                        data(item, fmt, DDE_FNODATA | DDE_FACKREQ)
+                                Ack(item, fmt, DDE_FACK)
+C       S       C       S       C       S       C       S       C       S
+----unadvise variations-------------------------------------
+unadvise(item, fmt)
+        Ack(item, DDE_NOTPROCESSED)
+        Ack(item, DDE_FBUSY)
+        Ack(item, DDE_FACK)
+unadvise(wild item)
+        Ack(wild item, DDE_NOTPROCESSED)
+        Ack(item, DDE_FBUSY)
+        Ack(wild item, DDE_FACK)
+C       S       C       S       C       S       C       S       C       S
+----exec variations-----------------------------------------
+execute(item, fmt, DDE_FACKREQ, data)
+        Ack(item, DDE_NOTPROCESSED)
+        Ack(item, fmt, DDE_FBUSY)
+        Ack(item, DDE_FACK)
+execute(item, fmt, data)
+C       S       C       S       C       S       C       S       C       S
+----poke variations-----------------------------------------
+poke(item, fmt, data)
+        Ack(item, DDE_NOTPROCESSED)
+        Ack(item, fmt, DDE_FBUSY)
+        Ack(item, DDE_FACK)
+----Terminate variations------------------------------------
+        Terminate
+                Terminate
+                        END OF CONVERSATION!
+Terminate
+        Terminate
+                END OF CONVERSATION!
+------------------------------------------------------------
+
+
+
+

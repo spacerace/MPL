@@ -1,0 +1,6 @@
+
+crhabrus.obj: crhabrus.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 crhabrus.c
+
+crhabrus.exe: crhabrus.obj crhabrus.def
+    link4 /align:16 crhabrus,,nul,slibw/NOE,crhabrus.def

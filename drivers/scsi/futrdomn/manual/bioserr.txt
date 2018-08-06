@@ -1,0 +1,50 @@
+o- Error Code Return
+
+The returned error codes are those used by the Int 13h conventions. The 
+recommended mapping to DOS error codes is also given.
+
+
+Returned                                                              Recommended Mapping
+BIOS Code     Error                DOS Code    DOS Error
+
+-05h         Bad Reset                OC      General Failure
+-03H         Write Protect            00      Write Protect
+-20h         Bad Controller           01      Unknown Unit
+-FFh         Sense Fail               02      Not Ready
+-80h         Timeout                  02      Not Ready
+-01h         Bad Command              03      Unknown Command
+-10h         Bad ECC                  04      CRC Error
+-BBh         Undefined Error          05      Bad Drive Request
+-40h         Bad Seek                 06      Seek Error
+-04h         Record Not Found         08      Sector Not Found
+-0Bh         Bad Track                0A      Write Fault
+-02h         Bad Address Mark         0B      Read Fault
+-07h         Drive Parameter Failure  0C      General Failure
+-11h         Data corrected           -       No Error
+-06h         Media changed            0F      Media changed
+ 
+When an error status is returned to the ROM, it will attempt to perform a 
+request sense command to determine the error. The additional sense information 
+byte in the returned sense information is then mapped to one of the BIOS codes 
+above. If no additional sense information is provided, the sense key field is
+mapped to a BIOS error code.
+        
+The error codes returned from the SCSI disks are not consistent. As a result,
+the error codes cannot accurately reflect all drives. If more detailed 
+information is required for a specific operation, use the Int 13h code 1Bh to
+locate the Sense Bytes for further analysis.
+
+If there is an error on any request, one of the above BIOS error codes is 
+returned in AH/AL and the carry flag is set. If there is not error, AH=AL=0 
+and the carry flag is cleared.
+
+Later versions use the extended request sense format and return the following bytes in the data 
+table:
+
+    Byte Number              Description
+
+         0                   Additional Sense Code
+         1                   Reserved
+         2                   Sense Key
+         3                   Reserved
+

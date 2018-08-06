@@ -1,0 +1,5 @@
+#include "style.h"
+#include "novanew.h"
+
+rcinclude novanew.dlg
+

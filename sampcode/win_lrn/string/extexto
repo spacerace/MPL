@@ -1,0 +1,6 @@
+
+extexto.obj: extexto.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 extexto.c
+
+extexto.exe: extexto.obj extexto.def
+    link4 /align:16 extexto,,nul,slibw/NOE,extexto.def

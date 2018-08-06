@@ -1,0 +1,12 @@
+#-------------------
+# KEYLOOK make file
+#-------------------
+
+keylook.obj : keylook.c easyfont.h
+     cl -c -G2sw -W3 keylook.c
+
+easyfont.obj : easyfont.c easyfont.h
+     cl -c -G2sw -W3 easyfont.c
+
+keylook.exe : keylook.obj easyfont.obj keylook.def
+     link keylook easyfont, /align:16, NUL, os2, keylook

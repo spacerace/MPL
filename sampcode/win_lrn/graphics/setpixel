@@ -1,0 +1,12 @@
+setpixel.obj: setpixel.c 
+  cl -c -W2 -AS -Gsw -Od -Zped setpixel.c
+
+setpixel.res: setpixel.rc setpixel.ico
+  rc -r setpixel.rc
+
+setpixel.exe: setpixel.obj setpixel.def setpixel.res 
+    link4 setpixel,/align:16,,slibw,setpixel.def
+    rc setpixel.res
+    del setpixel.obj
+    del setpixel.map
+

@@ -1,0 +1,6 @@
+clipopen.obj: clipopen.c
+    cl -c -d -AS -Gsw -Od -Zped clipopen.c
+
+clipopen.exe: clipopen.obj clipopen.def
+    link4 clipopen,/align:16,/map, slibw/NOE, clipopen.def
+    mapsym clipopen

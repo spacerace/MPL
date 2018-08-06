@@ -1,0 +1,22 @@
+; Figure 3pm
+; =========
+
+
+; SWP.DEF - Module definition file for SAYWHAT (PM version)
+
+NAME    SayWhat
+
+DESCRIPTION 'Say What!'
+
+STUB    'OS2STUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  128
+STACKSIZE 8192
+
+EXPORTS
+    SayAboutDlgProc     @1
+    SayWhatDlgProc      @2
+    SayWhatWndProc      @3

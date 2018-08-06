@@ -1,0 +1,53 @@
+/* ED1.CCC */
+
+#define	SETNORMAL	0
+#define	SETREVERSE	1
+#define	SETINTENSE	2
+#define	SETFAINT	3
+#define	SETBLINK	4
+#define	NOBLINK		5 
+#define UP1	10
+#define DOWN1	13
+#define UP2	21
+#define DOWN2	4
+#define LEFT1	25	/* new code assignment */
+#define RIGHT1	18
+#define INS1	14
+#define EDIT1	5
+#define ESC1	27
+#define DEL1	8
+#define ZAP1	26
+#define ABT1	24
+#define SPLT1	19
+#define JOIN1	16
+#define DTOCH	1	/* kill mode in edit */
+#define GTOCH	2	/* search mode in edit */
+#define HOME	6	/* home cursor or to bottom of screen */
+#define DSCROL	7	/* scroll down */
+#define GOTO	17	/* go to line */
+#define LSTRT	11	/* go to beginning of line */
+#define LEND	12	/* go to end of line */
+#define USCROL	15	/* scroll up */
+#define ERASE	20	/* erase to end of line */
+#define SCRNW	80	/* screen width */
+#define SCRNW1	79	/* SCRNW-1 */
+#define SCRNL	25	/* screen length */
+#define SCRNL1	24	/* SCRNL-1 */
+#define SCRNL2	23	/* SCRNL-2 */
+#define SCRNL3	13	/* half a screen length */
+#define LISTW	80	/* width of listing */
+#define LFTDEL	127	/* delete to left of cursor */
+#define BEGINPL 200	/* set beginning line of buffer*/
+#define ENDPL 201	/* set ending line of buffer */
+#define PUTIT 202	/* put buffer before current line */
+#define PUTBUFLN 2000	/*buffer length for pick and put */
+#define PICKIT 203	/* pick lines to pick buffer */
+#define RECORD 204	/* record macro */
+#define REPLAY 205	/* replay macro */
+#define MAXKEY 200	/* length of macro buffer */
+#define MAXKEY1 198	/* usable length of macro buffer */
+#define ABSLEFT 206	/* cursor left 1 column */
+#define ABSRGHT 207	/* cursor right 1 column */
+#define PAGEUP 208	/* up 20 lines */
+#define PAGEDN 209	/* down 20 lines */
+

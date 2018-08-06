@@ -1,0 +1,7 @@
+openfile.obj: openfile.c
+  cl -c -Fs -W3 -AS -Gsw -Od -Zped openfile.c
+
+openfile.exe: openfile.obj openfile.def
+    link4 openfile,/align:16,,slibw/NOE,openfile.def
+    del openfile.obj
+    del openfile.map

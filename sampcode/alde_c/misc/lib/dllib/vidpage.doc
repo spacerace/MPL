@@ -1,0 +1,39 @@
+
+
+
+
+
+        NAME
+                vidpage -- set a video page as active page
+
+        SYNOPSIS
+                void vidpage(page);
+                int page;      0-7 depending upon mode
+
+
+        DESCRIPTION
+        This function sets the video display page to any page 0-7
+        subject to the effective video mode.  Note that the 
+        monochrome card does not support video pages and therefore
+        this function will have no effect.
+
+
+
+        EXAMPLE
+
+             vidpage(0);    default lowest page
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

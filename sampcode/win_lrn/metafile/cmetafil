@@ -1,0 +1,6 @@
+cmetafil.obj: cmetafil.c
+    cl -d -c -AS -Gsw -Os -Zpe cmetafil.c
+
+cmetafil.exe: cmetafil.obj cmetafil.def
+    link4 cmetafil,/align:16,/map,slibw/NOE,cmetafil.def
+    mapsym cmetafil

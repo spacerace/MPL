@@ -1,0 +1,54 @@
+STEVIE Source Release
+
+This is a source release of the STEVIE editor, a public domain clone
+of the UNIX editor 'vi'. The program was originally developed for the
+Atari ST, but has been ported to UNIX and OS/2 as well.
+
+To compile STEVIE, you'll also need Henry Spencer's regular expression
+library.
+
+The files included in this release are:
+
+README
+	This file.
+
+stevie.doc
+	Reference manual for STEVIE. Assumes familiarity with vi.
+
+source.doc
+	Quick overview of the major data structures used.
+
+porting.doc
+	Tips for porting STEVIE to other systems.
+
+makefile.os2
+makefile.usg
+makefile.tos
+	Makefiles for OS/2, UNIX System V, and the Atari ST respectively.
+
+os2.c
+unix.c
+tos.c
+	System-dependent routines for the same.
+
+alloc.c ascii.h cmdline.c edit.c fileio.c help.c hexchars.c
+keymap.h linefunc.c main.c mark.c misccmds.c normal.c param.c
+param.h ptrfunc.c screen.c search.c stevie.h term.h
+
+	C source and header files for STEVIE.
+
+To compile STEVIE for one of the provided systems:
+
+	1. Compile the regular expression library and install as
+	   appropriate for your system.
+
+	2. Edit the file 'stevie.h' to set the system defines as needed.
+
+	3. Check the makefile for your system, and modify as needed.
+
+	4. Compile.
+
+Good Luck...
+
+Tony Andrews
+3/12/88

@@ -1,0 +1,28 @@
+This disk contains demostration programs that parallel the Kernighan and
+Ritchie book: The C Programming Language.  The programs are grouped by
+chapter (C-CH.1 thru C-CH.7). Each chapter contains various examples or
+C programs that demostrate a function or method.  These programs are not
+meant to be finished C programs, rather they were created for classroom
+use as an aide.  Most of these programs are in general C libraries although
+generally in a greatly enhanced form.
+
+One warning.
+These programs were created on a UNIX system, an AT&T 3B20s and a
+Digital VAX 11/70.  Keep this in mind while using the files.
+
+The file 'C-FUNCT', is a collection of more usable function calls that
+may be used and called within a C program.
+
+The file 'C-PRG.LS', is the complete listing of programs included on this
+disk.  For information, the listing is the output from the UNIX version
+of the DOS 'dir' command.  The first column, mostly -rw-r--r-- is the file
+permissions.  The first (-) is the directory place, the letter 'd', denotes
+that this entry is a directory, the hyphen, denotes that the entry is a file.
+The next 3 positions (rw-), show the permissions for the owner of the file.
+Read and Write permissions are in force here.  The hyphen in the 3rd position
+denotes that the 'execute' permission is not in force.  In the last 6
+positions, the first 3 are for the group permissions and the last 3 are for
+the public permissions.  In this example, the group and public have only
+read permissions.  The next three columns, mostly (1 cp18     cp), indicate
+quanity of links and owners (cp18 is the login).  The rest is roughly
+the same as 'dir'.

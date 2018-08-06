@@ -1,0 +1,803 @@
+Microsoft Systems Journal
+Volume 3; Issue 3; May, 1988
+
+Code Listings For:
+
+	DLL_CHAT; DLL_LIB; CHATMEM
+	pp. 27-48
+
+
+Author(s): Ross M. Greenberg
+Title:     Design Concepts and Considerations in Building an OS/2
+           Dynamic-Link Library
+
+
+
+Figure 7
+========
+
+DLL_CHAT DEF File
+=================
+
+
+IMPORTS CHATLIB.login
+IMPORTS CHATLIB.get_msg_cnt
+IMPORTS CHATLIB.send_msg
+IMPORTS CHATLIB.logout
+IMPORTS CHATLIB.get_msg
+
+
+==============================================================================
+
+
+
+
+
+/* Header file for CHAT */
+
+struct gdtinfoarea{
+        unsigned long   time;
+        unsigned long   milliseconds;
+        unsigned char   hours;
+        unsigned char   minutes;
+        unsigned char   seconds;
+        unsigned char   hundreths;
+        unsigned        timezone;
+        unsigned        timer_interval;
+        unsigned char   day;
+        unsigned char   month;
+        unsigned        year;
+        unsigned char   day_of_week;
+        unsigned char   major_version;
+        unsigned char   minor_version;
+        unsigned char   revision_number;
+        unsigned char   current_screen_group;
+        unsigned char   max_num_of_screengrps;  
+        unsigned char   huge_selector_shift_count;
+        unsigned char   protect_mode_indicator;
+	unsigned	foreground_process_id;
+        unsigned char   dynamic_variation_flag;
+        unsigned char   maxwait;
+        unsigned        minimum_timeslice;
+        unsigned        maximum_timeslice;
+	unsigned	boot_drive;
+	unsigned char	reserved[32];
+ };
+
+
+ struct ldtinfoarea{
+        unsigned        current_process_pid;
+        unsigned        parent_pid;
+        unsigned        priority_of_current_thread;
+        unsigned        thread_id_of_current_thread;
+        unsigned        screen_group;
+        unsigned        subscreen_group;
+        unsigned        current_process_is_in_fg;
+ };
+
+
+==============================================================================
+
+
+/********************************************************************
+*	DLL_CHAT.C  - A demonstration program using a demo DLL
+*
+*	(C) 1988, By Ross M. Greenberg for Microsoft Systems Journal
+*
+*	This is the main body of the CHAT program, interfacing with
+*	and calling the DLL as if it were a bunch of routines 
+*	available with a far call:  which it is!
+*
+*	Compile with:
+*	cl /c chat.c
+*	link chat,chat,,slibce+doscalls,chat
+*
+*	Remember: move the DLL itself into your DLL library directory
+*
+********************************************************************/
+
+#include	<stdio.h>
+#include	<stdlib.h>
+#include	"chat.h"
+
+#define	TRUE	1
+#define	FALSE	0
+#define	OK	TRUE
+#define	NOT_OK	FALSE
+
+#define	MAX_MSG		100
+#define	MAX_MSG_LEN	80
+#define	NULLP		(void *)NULL
+
+/* The following OS/2 system calls are made in this module: */
+
+extern far pascal dosexitlist();
+extern far pascal dossleep();
+
+
+/* The following DLL system calls are made in this module: */
+
+extern far _loadds pascal login();
+extern far _loadds pascal logout();
+extern far _loadds pascal get_msg_cnt();
+extern far _loadds pascal get_msg();
+extern far _loadds pascal send_msg();
+
+
+/********************************************************************
+*	This is where the messages are stored, once received and 
+*	formatted. This could probably be replaced easily with a call 
+*	to calloc(), but then we wouldn't have to block on being a 
+*	background process
+********************************************************************/
+
+char	msg_array[MAX_MSG + 1][MAX_MSG_LEN];
+
+/* Must be global so that before_death() can access it to logout */
+
+int	my_id = 0;
+
+#define	MAX_SLEEP	2
+
+/********************************************************************
+*	before_death()
+*
+*	Called the coins are lowered onto the eyes of this invokation 
+*	of CHAT. Any exit will cause this routine to be called. After 
+*	this routine calls the DLL logout procedure, it removes calls 
+*	the next exitroutine in the exit list.
+********************************************************************/
+
+void	far	before_death()
+{
+	logout(my_id);
+	dosexitlist(3, before_death);
+}
+
+/********************************************************************
+*	main()
+*
+*	After logging in (which returns a unique login id), the 
+*	before_death() routine is added onto the exitlist.  Then the 
+*	main loop:
+*
+*	If there are any messages, read them into out memory buffer 
+*	(provided there is room) and kick up the count.  After 
+*	retrieving all the msgs which will fit, call the display 
+*	routine for each msg. Zero the count of messages when done.
+*
+*	Every couple of seconds, sleep for a little while (as if a 
+*	human typing on a keyboard), then send the message to all 
+*	other members of CHAT.
+*
+*	CHAT can only be exited (in its current form) with a 
+*	control-C or error condition.
+********************************************************************/
+
+main()
+{
+int	msg_cnt = 0;
+int	msg_id = 0;
+int	lp_cnt;
+char	tmp_buf[MAX_MSG_LEN];
+int	m_cnt;
+
+	printf("Logged into CHAT as user:%d\n", my_id = login());
+
+	dosexitlist(1, before_death);
+
+	while	(TRUE)
+	{
+		for (m_cnt = get_msg_cnt(my_id); m_cnt ; m_cnt--)
+		{
+			get_msg(my_id, (char far *)tmp_buf);
+ 			if	(msg_cnt <= MAX_MSG)
+				sprintf(msg_array[msg_cnt++],"(%d)%s",my_id,tmp_buf);
+	}
+
+		if	(ok_to_disp())
+		{
+			for (lp_cnt = 0 ; lp_cnt < msg_cnt; lp_cnt++)
+				disp_msg(msg_array[lp_cnt]);
+			if	(msg_cnt > MAX_MSG)
+				disp_msg("Looks like you might have lost some") 
+				disp_msg(" messages while you were away\n");
+			msg_cnt = NULL;
+		}
+
+		if	(rand() % (my_id + 1))
+		{
+			dossleep((long)(rand() % MAX_SLEEP) * 1000L);
+			sprintf(tmp_buf, "Test message #%d from Session #%d\n", 
+					msg_id++, my_id);
+			if	(send_msg(my_id, (char far *)tmp_buf) == NOT_OK)
+				printf("?Can't send a message....\n");
+		}
+	}
+}
+
+disp_msg(ptr)
+char	*ptr;
+{
+	printf("%s", ptr);
+	fflush(stdout);
+}
+
+extern far pascal dosgetinfoseg();
+
+ok_to_disp()
+{
+struct gdtinfoarea far *gdt;
+struct ldtinfoarea far *ldt;
+unsigned	gseg;
+unsigned	lseg;
+
+	dosgetinfoseg((char far *)&gseg, (char far *)&lseg);
+	gdt = (struct gdtinfoarea far *)((long)gseg << 16);
+	ldt = (struct ldtinfoarea far *)((long)lseg << 16);
+
+	return( gdt->foreground_process_id == ldt->parent_pid);
+}
+
+
+
+
+
+Figure 8
+========
+
+
+CHATLIB DEF File
+================
+
+
+LIBRARY CHATLIB INITGLOBAL
+
+DATA SINGLE SHARED
+
+EXPORTS login
+EXPORTS get_msg_cnt
+EXPORTS send_msg
+EXPORTS logout
+EXPORTS get_msg
+
+
+==============================================================================
+
+
+
+/********************************************************************
+*	CHATLIB.C  - A demonstration Dynamic Link Library
+*
+*	(C) 1988, By Ross M. Greenberg for Microsoft Systems Journal
+*
+*	This DLL, when used with the CHAT program acts as a central
+*	repository for all messages being passed
+*
+*	Compile with:
+*
+*	cl /AL /Au /Gs /c chatlib.c
+*
+*	Note -	Though broken here the following two lines are entered
+*			as one line:
+*
+*	link startup+chatlib+chatmem,chatlib.dll,,llibcdll+doscalls,
+*	chatlib/NOE
+*
+*	Remember to move the DLL itself into your DLL library directory
+*
+********************************************************************/
+
+#include	<stdio.h>
+#include	<stdlib.h>
+#include	<malloc.h>
+#include	<dos.h>
+
+#define	TRUE	1
+#define	FALSE	0
+#define	OK	TRUE
+#define	NOT_OK	FALSE
+
+#define	NULLP	((char *)NULL)
+#define	GET_SEM	(dossemrequest(&semaphore, -1L))
+#define	RLS_SEM	(dossemclear(&semaphore))
+
+/* The following OS/2 system calls are made in this module: */
+
+extern far pascal dossemrequest();
+extern far pascal dossemclear();
+
+
+/* The following external calls are made in this module: */
+
+char *my_calloc();
+
+
+/* This semaphore used to coordinate access to "critical" areas */
+
+long	semaphore = 0;
+
+/*******************************************************************
+*	This structure starts defines the members of the linked list
+*	which starts at master_ptr.  Once a structure is allocated,
+*	it is never released, although the character array member 
+*	msg_ptr points to will be released when the message is no longer 
+*	needed
+********************************************************************/
+#define	MSG	struct	_msg
+MSG{
+	MSG			*next_ptr;	/* Point to next MSG, or NULLM      */
+	char		*msg_ptr;	/* Point to the actual message      */
+	int			msg_len;	/* length of the message - optional */
+	unsigned	f_word;		/* flag_word. When set to 0xfff     */
+							/* all chat members have seen this  */
+							/* message, so it can be freed      */
+	};
+
+int	flag_word = 0xffff;	/* This is the word that f_word is  */
+							/* set to initially. It is modified */
+							/* so that each bit is "off" if that*/
+							/* "user" is logged in              */
+			 
+#define	NULLM	((MSG *)NULL)
+MSG	*master_ptr = NULLM;	/* Where the linked list begins    */
+
+/********************************************************************
+*	new_msg_struct(pointer to last MSG)
+*
+*	Allocates a new MSG, initializes the contents of the structure, 
+*	and sets the linked list if not the first time called 
+*	(last_msg != NULLM)
+*
+*	Returns a pointer to the structure allocated, NULLM if an error
+********************************************************************/
+
+MSG	*new_msg_struct(MSG *last_msg)
+{
+MSG	*tmp_ptr;
+
+	if	((tmp_ptr = (MSG *)my_calloc(sizeof(MSG), 1)) == NULLM)
+		return(NULLM);
+
+	tmp_ptr->next_ptr = NULLM;
+
+	tmp_ptr->msg_ptr = NULLP;
+	tmp_ptr->msg_len = NULL;
+
+	tmp_ptr->f_word = flag_word;
+
+	if	(last_msg != NULLM)
+		last_msg->next_ptr = tmp_ptr;
+
+	return(tmp_ptr);
+}
+
+
+/********************************************************************
+*	initialize()
+*
+*	Called either by the initialization routine of the DLL, or by the
+*	first login. It allocates the first MSG structure, then allocates
+*	and sets up for the next member
+********************************************************************/
+
+void far _loadds pascal initialize()
+{
+
+	if	((master_ptr = new_msg_struct(NULLP)) == NULLM)
+	{
+		printf("Couldn't allocate MSG memory for header...\n");
+		exit(1);
+	}
+
+	new_msg_struct(master_ptr);
+}
+
+/********************************************************************
+*	login()
+*
+*	If the master MSG structure hasn't been allocated already by
+*	and earlier call to initialize() (by the DLL initialize routine),
+*	then make the call now.  Memory has already been allocated, 
+*	therefore, so now give ourselves access to the segment we've 
+*	allocated.
+*
+*	Get the next free bit slot in the flag word, set it to indicate
+*	it's in use, then return our login id.
+********************************************************************/
+
+int far _loadds pascal login()
+{
+int	log_id;
+int	tmp_msk;
+
+	if	(master_ptr == NULLM)
+	{
+		printf("Init in login\n");
+		initialize();
+	}
+
+	my_getseg();
+
+	GET_SEM;
+	for (log_id= 0 ; log_id < 16 ; log_id++)
+	{
+		tmp_msk = mask(log_id);
+		if	(flag_word & tmp_msk)
+		{
+			flag_word &= ~tmp_msk;
+			RLS_SEM;
+			return(log_id);
+		}
+
+	}
+	RLS_SEM;
+
+	printf("Login slots all used up!\n");
+	exit(1);
+}
+
+/********************************************************************
+*	get_msg_cnt(login_id)
+*
+*	For every MSG structure in the linked list with an associated
+*	message attached to it, increment a counter if the id in question
+*	hasn't received it yet, then return that counter when we fall off
+*	the end.  
+********************************************************************/
+
+int far _loadds pascal get_msg_cnt(int id)
+{
+MSG	*tmp_ptr;
+int	tmp_cnt = 0;
+int	tmp_msk = mask(id);
+
+
+	GET_SEM;
+	for(tmp_ptr = master_ptr; tmp_ptr; tmp_ptr = tmp_ptr->next_ptr)
+	{
+		if	(!(tmp_ptr->f_word & tmp_msk))
+			if	(tmp_ptr->msg_len)
+				tmp_cnt++;
+	}
+
+	RLS_SEM;
+	return(tmp_cnt);
+}
+
+/********************************************************************
+*	send_msg(login_id, pointer_to_message)
+*
+*	If there are no other "chatter's" logged in, simply return.
+*	(Flag_word or'ed with our mask would be 0xfff)
+*
+*	Find a free MSG structure (guaranteed to have at least one, since
+*	every write leaves a free one allocated if its the last one in 
+*	the linked list.  
+*
+*	Allocate memory for the message, copy the message into it, then
+*	assign the pointer in the structure and the length of the message.
+*	Finally, allocate a new structure if required.
+********************************************************************/
+
+int far _loadds pascal send_msg(int id, char far *ptr)
+{
+MSG	*tmp_ptr = master_ptr;
+int	tmp_len = strlen(ptr) + 1;
+
+
+	if	((flag_word | mask(id)) == 0xffff)
+		return(OK);
+
+	GET_SEM;
+	while	(tmp_ptr->msg_len)
+		tmp_ptr = tmp_ptr->next_ptr;
+
+	if	((tmp_ptr->msg_ptr = my_calloc(tmp_len, 1)) == NULLP)
+	{
+		printf("Can't allocate %d bytes for msg\n", tmp_len);
+		RLS_SEM;
+		return(NOT_OK);
+	}
+
+	strcpy(tmp_ptr->msg_ptr, ptr);
+	tmp_ptr->msg_len = tmp_len;
+	tmp_ptr->f_word = (flag_word | mask(id));
+
+	if	(tmp_ptr->next_ptr == NULLM)
+	{
+		if	(new_msg_struct(tmp_ptr) == NULLM)
+		{
+			printf("Can't allocate new MSG_header\n");
+			free_msg(tmp_ptr);
+			RLS_SEM;
+			return(NOT_OK);
+		}
+	}
+
+	RLS_SEM;
+	return(OK);
+}
+
+
+/********************************************************************
+*	logout(login_id)
+*
+*	Mark every mesage as read (freeing them if now "totally" read),
+*	reset the flag word, and then indicate that the logout worked.
+********************************************************************/
+
+int far _loadds pascal logout(int id)
+{
+MSG	*tmp_ptr;
+int	tmp_msk = mask(id);
+
+	GET_SEM;
+	for(tmp_ptr = master_ptr; tmp_ptr; tmp_ptr = tmp_ptr->next_ptr)
+		mark_msg(id, tmp_ptr);
+
+	flag_word |= mask(id);
+
+	RLS_SEM;
+
+	printf("In logout ... Hit a Key:");fflush(stdout);
+	getch();
+	printf("\n\n\n\n");
+
+	return(0);
+}
+
+/********************************************************************
+*	get_msg(login_id, pointer to buffer)
+*
+*	Find the first message the login_id hasn;t read, then
+*	strcpy it into the buffer supplied. Then mark the message as
+*	read (freeing as required).
+********************************************************************/
+
+int far _loadds pascal get_msg(int id, char far *ptr)
+{
+MSG	*tmp_ptr = master_ptr;
+int	tmp_msk = mask(id);
+
+
+
+	GET_SEM;
+	for(tmp_ptr = master_ptr; tmp_ptr; tmp_ptr = tmp_ptr->next_ptr)
+	{
+		if	(!(tmp_ptr->f_word & tmp_msk))
+		{
+			strcpy(ptr, tmp_ptr->msg_ptr);
+			mark_msg(id, tmp_ptr);
+			RLS_SEM;
+			return(TRUE);
+		}
+	}
+	RLS_SEM;
+	return(FALSE);
+}
+
+/********************************************************************
+*	mark_msg(login id, pointer to message structure)
+*
+*	Mark our bit in the MSG f_word as set.  If then set to 0xffff,
+*	the message is "totally" read, so free it.
+*
+*	******************************************************************
+*
+*	free(pointer to message structure)
+*      
+*	If there is a string associated with this structure, free the
+*	memory so used, then zero out the pointer and the msg_len
+********************************************************************/
+
+mark_msg(int id, MSG *ptr)
+{
+	ptr->f_word |= mask(id);
+	if	(ptr->f_word == 0xffff)
+		free_msg(ptr);
+}
+
+free_msg(MSG *ptr)
+{
+	if	(ptr->msg_ptr)
+		my_free(ptr->msg_ptr);
+ 	ptr->msg_ptr = NULLP;
+	ptr->msg_len = NULL;
+}
+
+						/* GENERAL ROUTINES */
+
+/* This routine merely returns with the bit corresponding 
+ * to our login set
+ */
+
+mask(int log_id)
+{
+	return(1 << (log_id - 1));
+}
+
+
+==============================================================================
+
+
+Additional Module for CHATLIB
+=============================
+
+
+/********************************************************************
+*	CHATMEM.C  - Memory allocation routines for shared DLL memory
+*
+*	(C) 1988, By Ross M. Greenberg for Microsoft Systems Journal
+*
+*	This module conatins three functions. Allocation of memory,
+*	de-allocation of memory and the getseg call.
+*
+*	The current ANSI calloc/alloc/malloc sequence does not allow for
+*	an additional parameter to specify if memory requested through
+*	these functions is to be sharable or private. Therefore the MSC
+*	library calls all allocate private memory.
+*
+*	These routines allocate a 64K chunk of memory, requested from OS/2
+*	as a sharable chunk, then dole it out using the DosSub allocation
+*	calls.
+*
+*	Only one 64K chunk is allocated: if more memory is desired an
+*	additional call to dosallocseg would have to be made and all 
+*	sessions already logged in given access to the chunk.  Out of 
+*	laziness, that was not done for these demonsttration routines.
+*
+*
+*	Compile with:
+*
+*	cl /AL /Au /Gs /c chatmem.c
+*
+*	Note -	Though broken here, the following two lines are entered
+*			as one line:
+*
+*	link startup+chatlib+chatmem,chatlib.dll,,llibcdll+doscalls,
+*	chatlib/NOE
+*
+*	Remember to move the DLL itself into your DLL library directory
+*
+********************************************************************/
+
+#include	<stdio.h>
+#include	<stdlib.h>
+#include	<malloc.h>
+#include	<dos.h>
+
+#define	TRUE	1
+#define	FALSE	0
+
+/* The following OS/2 system calls are made in this module: */
+
+extern far pascal dosallocseg();
+extern far pascal dosfreeseg();
+extern far pascal dossuballoc();
+extern far pascal dossubset();
+extern far pascal dossubfree();
+extern far pascal dosgetseg();
+extern far pascal dossemrequest();
+extern far pascal dossemclear();
+
+
+#define	NULLP	(char *)NULL
+
+
+/*	This semaphore is so that we don't hurt ourselves as we allocate
+ *	and deallocate memory
+ */
+
+long	memory_semaphore = NULL;
+
+/*	This is the actual selector which the 64K dosallocseg() 
+ * call returns
+ */
+
+unsigned major_selector = NULL;
+
+/********************************************************************
+*	my_calloc(number_of_items,size_of_item)
+*
+*	Emulates the more typical calloc call, but returns memory which
+*	can later be allocated as sharable.
+*
+*	After the first call (which causes a 64K chunk to be allocated),
+*	all subsequent calls cause a dossuballoc call to be made, and
+*	a long pointer to the returned memory to be created and returned
+*
+*	The 64K chunk must be initialized by the dossubset call before it
+*	can be used by other dossub functions.
+*
+*	Because the dossubfree call requires a size, the size requested
+*	plus the sizeof an int is actually allocated and the size of the
+*	total request is then stored in the first two bytes of the 
+*	returned character array.  The ptr returned, however, is this 
+*	memory location plus the initial sizeof and int -- therefore the 
+*	bookkeeping is transparent to the application task.
+********************************************************************/
+
+char * 
+my_calloc(size1, size2)
+int	size1;
+int	size2;
+{
+unsigned	long	selector;
+int	stat;
+char	*ptr;
+int	sizeit = (size1 * size2) + sizeof(int);
+
+	dossemrequest(&memory_semaphore, -1L);
+	if	(!major_selector)
+	{
+		if	(stat = dosallocseg(0, &major_selector, 3))
+		{
+			printf("dosalloc error:%d\n", stat);
+			dossemclear(&memory_semaphore);
+			return(NULLP);
+		}
+
+		if	(stat = dossubset(major_selector, 1, 0))
+		{
+			printf("Error in dossubset:%d\n", stat);
+			dossemclear(&memory_semaphore);
+			return(NULLP);
+		}
+	}
+
+	selector = 0;
+	if	(stat = dossuballoc(major_selector, &selector, sizeit))
+	{
+		printf("dossuballoc error:%d\n", stat);
+		dossemclear(&memory_semaphore);
+		return(NULLP);
+	}
+
+	dossemclear(&memory_semaphore);
+	ptr = (char *)(((long)major_selector << 16) + (long)selector);
+	memset(ptr, (char)NULL, sizeit);
+	*(int *)ptr = sizeit;
+	return(ptr + sizeof(int));
+}
+
+/********************************************************************
+*	my_free(pointer_to_a_character_array_previously_my_calloc'ed)
+*
+*	Subtract sizeof an int from the pointer, dereference as an
+*	int, then free that number of bytes.
+*
+********************************************************************/
+
+my_free(ptr)
+char	*ptr;
+{
+int	stat;
+
+	ptr -= sizeof(int);
+
+	dossemrequest(&memory_semaphore, -1L);
+	if (stat = dossubfree(major_selector, FP_OFF(ptr), *(int *)ptr))
+	{
+		printf("Error freeing: %lx\n", ptr);
+		exit(1);
+	}
+	dossemclear(&memory_semaphore);
+}
+
+/********************************************************************
+*	my_getseg()
+*
+*	Causes the memory affilaited with the major_selector to become
+*	accessable to this process.
+********************************************************************/
+
+my_getseg()
+{
+int	stat;
+
+	if	(stat=dosgetseg(major_selector))
+		printf("Error on getseg:%d\n", stat);
+	return(stat);
+}
+

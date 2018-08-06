@@ -1,0 +1,39 @@
+
+
+       NAME
+               repchar -- repeat a character n times to fd
+
+       SYNOPSIS
+               void repchar(chr, qty, fd);
+               char chr;       character to send
+               int qty;        number of characters to send
+               FILE *fd;       file descriptor of output channel
+
+       DESCRIPTION
+       This function sends qty number of chr to fd, which is usually
+       stdout, stderr, or an open file.  Maximum qty is 128.
+       If qty > 128, it will be truncated to 128.  This limit is due
+       to an internal string buffer.  For speed, the string is filled
+       and then fputs() is called to output the data as a string.
+
+       EXAMPLE
+
+             repchar('X', 50, stdout);
+
+       to output a double horizontal line:
+             #include "graphics.h"
+             repchar(DHLINE, 50, stdout);
+
+
+
+
+
+
+
+
+
+
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

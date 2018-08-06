@@ -1,0 +1,33 @@
+Comments about VECTFONT
+
+This program, written by Charles Petzold, demonstrates OS/2 vector font
+capabilities.  In order for the 24 point font demonstration to work, you
+must first install the necessary fonts, by using the Control Panel.
+
+This is done as follows:
+1.  Bring up the control panel
+2.  Select Installation...Add Font
+3.  Tell the program the location of the font file (usually C:\OS2\DLL)
+4.  Select a font in the font list box, then press the Add button.
+5.  At this point, it will ask if you wish that the font be copied
+    to the directory C:\OS2\DLL.  Since have just installed the font
+    from this directory, this copy step will not be needed -- press "no"
+6.  Press the Cancel button to exit the Add Font dialog box
+7.  Finally, Exit the control panel
+
+Also, there is an accompanying readme file which describes the program
+(this should appear in Microsoft Systems Journal soon)
+
+File List:
+
+README 		This file
+VECTFONT	Makefile for VECTFONT application
+VECTFONT.C	Main source file (driver)
+VECTFONT.DEF	Definition file for VECTFONT
+VECTFONT.DOC	Text file explaining the VECTFONT application
+VECTFONT.EXE	Executable file
+VECTFONT.H	Header file
+VECTFONT.LNK	File used in linking
+VECTFONT.RC	Resource file
+VECTFONT.SYM	Symbol file (goes with the executable)
+VF00.C-VF15.C	Source code demonstrating various vector font implementations

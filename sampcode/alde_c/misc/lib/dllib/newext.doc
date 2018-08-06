@@ -1,0 +1,39 @@
+
+
+        NAME
+                newext -- change a filename extension
+
+        SYNOPSIS
+                void newext(old, new, extn);
+                char *old       original filename string
+                char *new       destination for new filename
+                char *extn      new extension string
+
+        DESCRIPTION
+        This function will make a new filename from an existing
+        filename and a specified extension string.  The original
+        filename string is left unchanged, since its base is copied to a
+        new string area.  Nothing is returned.
+
+        EXAMPLE
+             char old[]={"FOOBAR.COM"};
+             char new[14];
+
+             newext(old, new, "BIN");
+
+
+        After operation, the filename string in "new" will be:
+             FOOBAR.BIN
+
+        Character strings are NULL terminated.  The original string
+        need not have any extension or period terminator, and may
+        contain a path specifier.  Note that the destination string
+        area must be long enough to hold the new filename.
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

@@ -1,0 +1,5 @@
+tinycmd.obj : tinycmd.asm
+	masm /T tinycmd.asm;
+
+tinycmd.exe : tinycmd.obj tinycmd.def
+	link tinycmd,,,os2,tinycmd

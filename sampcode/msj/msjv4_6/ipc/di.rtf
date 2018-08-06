@@ -1,0 +1,424 @@
+{\rtf1\pc {\info{\title DI.C}{\revtim\mo10\dy27\yr1989}
+{\creatim\mo10\dy27\yr1989}{\nofchars12374}}\deff0
+{\fonttbl{\f0\fmodern pica;}{\f1\fmodern Courier;}{\f2\fmodern elite;}
+{\f3\fmodern prestige;}{\f4\fmodern lettergothic;}
+{\f5\fmodern gothicPS;}{\f6\fmodern cubicPS;}
+{\f7\fmodern lineprinter;}{\f8\fswiss Helvetica;}
+{\f9\fmodern avantegarde;}{\f10\fmodern spartan;}{\f11\fmodern metro;}
+{\f12\fmodern presentation;}{\f13\fmodern APL;}{\f14\fmodern OCRA;}
+{\f15\fmodern OCRB;}{\f16\froman boldPS;}{\f17\froman emperorPS;}
+{\f18\froman madaleine;}{\f19\froman zapf humanist;}
+{\f20\froman classic;}{\f21\froman roman f;}{\f22\froman roman g;}
+{\f23\froman roman h;}{\f24\froman timesroman;}{\f25\froman century;}
+{\f26\froman palantino;}{\f27\froman souvenir;}{\f28\froman garamond;}
+{\f29\froman caledonia;}{\f30\froman bodini;}{\f31\froman university;}
+{\f32\fscript script;}{\f33\fscript scriptPS;}{\f34\fscript script c;}
+{\f35\fscript script d;}{\f36\fscript commercial script;}
+{\f37\fscript park avenue;}{\f38\fscript coronet;}
+{\f39\fscript script h;}{\f40\fscript greek;}{\f41\froman kana;}
+{\f42\froman hebrew;}{\f43\froman roman s;}{\f44\froman russian;}
+{\f45\froman roman u;}{\f46\froman roman v;}{\f47\froman roman w;}
+{\f48\fdecor narrator;}{\f49\fdecor emphasis;}
+{\f50\fdecor zapf chancery;}{\f51\fdecor decor d;}
+{\f52\fdecor old english;}{\f53\fdecor decor f;}{\f54\fdecor decor g;}
+{\f55\fdecor cooper black;}{\f56\ftech Symbol;}{\f57\ftech linedraw;}
+{\f58\ftech math7;}{\f59\ftech math8;}{\f60\ftech bar3of9;}
+{\f61\ftech EAN;}{\f62\ftech pcline;}{\f63\ftech tech h;}}
+\margl720\margr720\ftnbj\ftnrestart\widowctrl \sectd 
+\linex576\endnhere \pard \sl-240 \plain /* di.c RHS 7/15/89\par 
+ *\par 
+ */\par 
+\par 
+\par 
+#define\tab INCL_DOS\par 
+#define\tab INCL_ERRORS\par 
+\par 
+#include<os2.h>\par 
+#include<mt\\stdio.h>\par 
+#include<mt\\string.h>\par 
+#include<mt\\stdlib.h>\par 
+#include<mt\\ctype.h>\par 
+#include"errexit.h"\par 
+\par 
+#define DICODE\par 
+#include"di.h"\par 
+\par 
+#define\tab lastchar(str)\tab \tab (str[strlen(str)-1])\par 
+\par 
+void   diInit(PID *qowner, HQUEUE *qhandle);\par 
+void   adddriveletter(PCH *filespecs,USHORT driveno);\par 
+void\tab   makefpath(char *org,char*result,char*currentpath, \tab \tab \tab \tab \tab \tab \tab   USHORT currentdrive);\par 
+void\tab   getdriveinfo(USHORT*currentdrive,char*currentpath,\tab \tab \tab \tab \tab \tab \tab \tab USHORT *psize);\par 
+USHORT diallocseg(USHORT size,SEL*oursel,PID other,SEL*othersel):\par 
+void\tab convertptr(VOID **ptr,SEL newsel);\par 
+\par 
+\tab /* DiMakeRequest\par 
+\tab This function creates or adds to an existing directory information\par 
+\tab request. A new request is created if the pointer (hptr) is set to \tab \tab NULL. Note that this is the pointer whose address is passed to the \tab \tab function.\tab The filespec is a full path and file specification with \tab \tab optional wildcards. The attribute parameter will control the files \tab \tab that are found. */\par 
+\par 
+void DiMakeRequest(PREQUESTHEADER *hptr, PCH filespec, USHORT att)\par 
+\tab \{\par 
+    PREQUESTHEADER\tab header;\par 
+    PDIRINFORESULT\tab resultstru;\par 
+\tab SEL\tab \tab \tab \tab hselector,serversel;\par 
+\tab void far\tab \tab \tab *results;\par 
+\tab USHORT\tab \tab \tab retval,size,psize = 0,setdir = FALSE;\par 
+\tab HQUEUE\tab \tab \tab qhandle;\par 
+\tab PID\tab \tab \tab \tab qowner;\par 
+\tab PCH\tab \tab \tab \tab requestspec;\par 
+\tab char\tab \tab \tab \tab resultbuf[_MAX_DIR],*resultfspec;\par 
+\tab char\tab \tab \tab \tab currentpath[_MAX_PATH];\par 
+\tab USHORT\tab \tab \tab currentdrive;\par 
+\par 
+     if(!(header = *hptr))\par 
+\tab  DiInit(&qowner, &qhandle);\par 
+\par 
+\tab /* Now gather the information to prepare the header:\par 
+\tab  o\tab Get the current disk drive\par 
+\tab  o\tab Get the length of the current directory path\par 
+\tab  o\tab Get the size of the request arguments (the requestspec)\par 
+\tab  o\tab Allocate the header segment\par 
+\tab  o\tab Make it giveable to the server process */\par 
+\par 
+    getdriveinfo(&currentdrive,currentpath,&psize);\par 
+\par 
+\tab if(!header)\tab \tab \tab \tab \tab   /* If no header is  alloc'd */\par 
+\tab   \{\par 
+\tab \tab \tab \tab \tab \tab \tab \tab   /* Allocate header segment */\par 
+\tab if(retval = diallocseg(size = sizeof(REQUESTHEADER),&hselector,\par 
+\tab \tab \tab \tab \tab    qowner,&serversel))\par 
+\tab   error_exit(retval,"diallocseg");\par 
+\par 
+\tab   header = MAKEP(hselector,0);\tab   /* Make header pointer */\par 
+\tab   *hptr = header;\par 
+\tab   header->serverhsel = serversel;    /* Allocate work segment */\par 
+\tab if(retval = diallocseg(MAXSEGSIZE,&header->rselector,qowner,\par 
+\tab \tab \tab \tab \tab \tab &serversel))\par 
+\tab   error_exit(retval,"diallocseg");\par 
+\par 
+\tab  results = MAKEP(header->rselector,0); /* Make pointer */\par 
+\tab \par 
+\tab  header->RAMsem = 0L;\tab \tab \tab   /* Initialize semaphore */\par 
+     header->resultptr = MAKEP(serversel,0); /* Set pointer to work area */\par 
+\tab  header->serverwsel = serversel;\tab \tab /* Selector to work area\tab */\par 
+\tab  header->numRequests = 0;\tab \tab \tab /* Set number of requests */\par 
+\par 
+\tab requestspec = (PCH)results;\tab \tab \tab /* Set to work area */\par 
+\tab  header->currentdir = requestspec;\tab \tab /* Set pointer to it */\par 
+\tab  *requestspec++ = (char)(currentdrive + 'A' - 1);\par 
+\tab \tab \tab \tab \tab \tab \tab \tab \tab /* Add drive letter\tab */\par 
+\tab   strcpy(requestspec,":\\\\");\tab \tab \tab /* And ':\\'*/\par 
+\tab   requestspec += 2; \tab \tab \tab \tab /* Move pointer past them */\par 
+\par 
+\tab DosQCurDir(currentdrive,requestspec,&psize);\par 
+\tab \tab \tab \tab \tab \tab \tab \tab \tab /* Add current directory */\par 
+\tab   requestspec += (strlen(requestspec)+1);   /* Move pointer past dir*/\par 
+\tab    header->qowner = qowner;\par 
+\tab    header->qhandle = qhandle;\par 
+\tab \tab \}\par 
+\tab \par 
+\tab    else\par 
+\tab \tab \{\par 
+\tab    requestspec = header->requestspec;\par 
+\tab    qowner = header->qowner;\par 
+\tab    qhandle = header->qhandle;\par 
+\par 
+\tab    size = header->size + sizeof(DIRINFORESULT);\par 
+\tab    hselector = SELECTOROF(header);\par 
+\par 
+\tab    if(retval = DosReallocSeg(size,hselector)) /* Resize segment */\par 
+\tab \tab error_exit(retval,"DosReallocSeg");\par 
+\tab \tab \}\par 
+\par 
+\tab \tab  /* Resultstru always points to the next available structure */\par 
+\tab resultstru = &header->resultArray[header->numRequests];\par 
+\tab    strupr(filespec);\tab \tab \tab \tab  /* Set arg to upper case */\par 
+\tab memset(resultstru,0,sizeof(DIRINFORESULT)); /* Clear structure */\par 
+\tab    resultstru->attributes = att;\tab \tab  /* Set attributes */\par 
+\tab \tab \tab \tab \tab \tab \tab \tab \tab /* Get full path filespec */\par 
+\tab makefpath(filespec,resultbuf,currentpath,currentdrive);\par 
+\tab  resultfspec = strrchr(resultbuf,'\\\\');  /* Find last backslash */\par 
+\tab \par 
+\tab if(strcmp(resultbuf,header->currentdir))  /* If not in currentdir */\par 
+\tab    \{\par 
+\tab   strcpy(requestspec,resultbuf);\tab \tab  /* Copy path */\par 
+\tab  resultstru->currentdir = requestspec;\tab  /* Set pointer */\par 
+\tab  requestspec += (strlen(requestspec)+1);\tab \par 
+\tab \tab \tab \tab \tab \tab \tab \tab    /* Set pointer to next spot */\par 
+\tab    \}\par 
+\tab  else\tab \tab \tab \tab \tab \tab      /* Use default directory */\par 
+\tab   resultstru->currentdir = header->currentdir; /* Set pointer */\par 
+\par 
+\tab strcpy((char *)requestspec,resultfspec);  /* Copy the filespec */\par 
+\tab resultstru->filespec = requestspec;\tab   /* Set a pointer to it */\par 
+\tab requestspec += (strlen(requestspec)+1);\tab   /* set to next position */\par 
+\par 
+\tab header->size = size;\par 
+\tab header->numRequests++;\par 
+\tab header->requestspec = requestspec;\par 
+\tab  \}\par 
+\par 
+\par 
+void DiSendRequest(PREQUESTHEADER hdr)\par 
+\tab  \{\par 
+\tab PCH *resptr,*newptr;\par 
+\tab USHORT\tab offset,retval,i;\par 
+\tab SEL\tab newsel,serverwsel = SELECTOROF(hdr->resultptr);\par 
+\tab PBYTE sheader = MAKEP(hdr->serverhsel,0);   /* Make pointer */\par 
+\tab \tab \par 
+\tab \tab   /* Adjust resultptr to point to available space\tab */\par 
+\tab resptr = MAKEP(hdr->rselector,0);\tab \tab    /* Create ptr to result */\par 
+\tab offset = (hdr->requestspec - (PCH)resptr);\tab /* Get offset to use */\par 
+\tab hdr->resultptr = MAKEP(serverwsel,offset);\tab /* Reset pointer */\par 
+\par 
+\tab \tab   /* Write request to the queue */\par 
+\tab if(retval = DosWriteQueue(hdr->qhandle,0,hdr->size,(PBYTE)sheader,0))\par 
+\tab   error_exit(retval,"DosWriteQueue");  /* Wait for server to finish */\par 
+\par 
+\tab DosSemSetWait(&hdr->RAMsem,SEM_INDEFINITE_WAIT); /* Get new segment */\par 
+\tab if(retval = DosAllocSeg(hdr->resultsize,&newsel,SEG_NONSHARED))\par 
+\tab   error_exit(retval,"DosAllocSeg");\par 
+\par 
+\tab  newptr = MAKEP(newsel,0);\tab \tab \tab /* Make pointer to segment */\par 
+\tab memmove(newptr,resptr,hdr->resultsize);\tab    /* Copy from old segment */\par 
+\tab convertptr(&hdr->currentdir,newsel);\tab  /* Convert pointers */\par 
+\tab   convertptr(&hdr->requestspec,newsel);\par 
+\par 
+\tab for( i = 0; i < hdr->numRequests; i++)\par 
+\tab    \{\par 
+\tab convertptr(&hdr->resultArray[i].filespec,newsel);\par 
+\tab if(SELECTOROF(hdr->resultArray[i].currentdir) == hdr->rselector) \par 
+\tab convertptr(&hdr->resultArray[i].currentdir,newsel);\par 
+\tab convertptr(&hdr->resultArray[i].firstfile,newsel);\par 
+\tab convertptr(&hdr->resultArray[i].nextfile,newsel);\par 
+\tab    \}\par 
+\par 
+\tab DosFreeSeg(hdr->rselector);\tab \tab /* Free the old segment */\par 
+\tab hdr->rselector = newsel;\tab \tab \tab /* Set for new selector */\par 
+\tab  \}\par 
+\par 
+void DiGetNumResults(PREQUESTHEADER header,USHORT *numresults,\par 
+\tab \tab \tab \tab USHORT *numrequests)\par 
+\tab  \{\par 
+     *numresults = header->totalresults;\par 
+     *numrequests = header->numRequests;\par 
+\tab  \}\par 
+\par 
+void DiDestroyRequest(PREQUESTHEADER *header)\par 
+\tab  \{\par 
+\tab USHORT retval;\par 
+\tab PREQUESTHEADER hdr = *header;\par 
+\par 
+\tab if(retval = DosFreeSeg(hdr->rselector))\tab      /* Free work segment */\par 
+\tab   error_exit(retval,"DosFreeSeg");\par 
+\tab if(retval = DosFreeSeg(SELECTOROF(hdr)))\tab /* Free header segment */\par 
+\tab   error_exit(retval,"DosFreeSeg");\par 
+\par 
+\tab *header = NULL;\tab \tab \tab \tab \tab     /* Set pointer to NULL *\\\par 
+\tab  \}\par 
+\par 
+char *DiGetResultFspec(PDIRINFORESULT result)\par 
+\tab \{\par 
+    static char *p = "*.*";\par 
+\par 
+    if(result->errorval == DIREXPANDED)\par 
+\tab \tab return p;\par 
+    return result->currentdir;\par 
+    return result->filespec;\par 
+\tab \}\par 
+\par 
+char *DiGetResultDir(PDIRINFORESULT result)\par 
+\tab \{\par 
+    static char dirbuf[80];\par 
+    \par 
+    if(result->errorval == DIREXPANDED)\par 
+\tab \tab \{\par 
+\tab  strcpy(dirbuf,result->currentdir);\par 
+      strcat(dirbuf,"\\\\");\par 
+\tab  strcat(dirbuf,result->filespec);\par 
+\tab  return dirbuf;\par 
+\tab \tab \}\par 
+\par 
+    return result->currentdir;\par 
+\tab \}\par 
+\par 
+void DiGetResultHdl(PREQUESTHEADER header,USHORT requestnum,USHORT *num, PDIRINFORESULT *resulthdl)\par 
+\tab \{\par 
+   *resulthdl = &header->resultArray[requestnum];\par 
+   *num = (*resulthdl)->numfound;\par 
+\tab \}\par 
+\par 
+void DiGetFirstResult(PDIRINFORESULT result, char *buffer)\par 
+\tab \{\par 
+   result->nextfile = result->firstfile;\par 
+   DiGetNextResult(result,buffer);\par 
+\tab \}\par 
+\par 
+void DiGetNextResult(PDIRINFORESULT result, char *buffer)\par 
+\tab \{\par 
+   if(!result->nextfile)\par 
+\tab   \{\tab \par 
+\tab  *buffer = '\\0';\par 
+\tab  return;\par 
+\tab   \}\par 
+\par 
+   strcpy(buffer,result->nextfile->achName);\par 
+   result->nextfile = \par 
+   (PFILEFINDBUF)(&(result->nextfile->cchName)+\par 
+\tab \tab \tab \tab result->nextfile->cchName+2);\par 
+\tab \}\par 
+\par 
+void DiGetFirstResultPtr(PDIRINFORESULT result, PFILEFINDBUF *ptr)\par 
+\tab \{\par 
+    result->nextfile = result->firstfile;\par 
+    DiGetNextResultPtr(result,ptr);\par 
+\tab \}\par 
+\par 
+void DiGetNextResultPtr(PDIRINFORESULT result, PFILEFINDBUF *ptr)\par 
+\tab \{\par 
+    if(!result->nextfile)\par 
+\tab    \{\tab \par 
+\tab   *ptr = NULL;\par 
+\tab   return;\par 
+\tab    \}\par 
+\par 
+\tab *ptr = result->nextfile;\par 
+\tab result->nextfile = \par 
+\tab (PFILEFINDBUF)(&(result->nextfile->cchName)+\par 
+\tab \tab \tab \tab   result->nextfile->cchName+2);\par 
+\tab \}\par 
+\par 
+void DiBuildResultTbl(PREQUESTHEADER header, PFILEFINDBUF **table)\par 
+\tab \{\par 
+    SEL tablesel;\par 
+    USHORT retval, i;\par 
+    PFILEFINDBUF f,*temp;\par 
+\par 
+   if (retval = DosAllocSeg((header->totalresults*sizeof(PFILEFINDBUF)),\par 
+\tab \tab \tab \tab \tab \tab &tablesel, SEG_NONSHARED))\par 
+\tab  error_exit(retval,"DosAllocSeg");\par 
+\par 
+\tab  temp = MAKEP(tablesel,0);\par 
+\tab  f = header->resultArray[0].firstfile;\par 
+\par 
+\tab  for( i = 0; i < header->totalresults; i++)\par 
+\tab \tab \{\par 
+\tab     temp[i] = f;\par 
+  \tab     f = (PFILEFINDBUF) (&(f->cchName)+f->cchName+2);\par 
+\tab \tab \}\par 
+\tab \par 
+\tab *table = temp;\par 
+\tab \}\par 
+\par 
+void diInit(PID *qowner, HQUEUE *qhandle)\par 
+\tab \{\par 
+    USHORT\tab retval;\par 
+\par 
+/* Try to open the queue to the directory server\tab */\par 
+   if(!(retval = DosOpenQueue(qowner,qhandle,DIRINFOQNAME)))\par 
+\tab  return;\par 
+   if(retval != ERROR_QUE_NAME_NOT_EXIST)\par 
+\tab  error_exit(retval,"DosOpenQueue");\par 
+\tab  else\par 
+\tab  error_exit(retval,\par 
+\tab \tab \tab   "DosOpenQueue - Server probably hasn't opened queue");\par 
+   \tab \}\par 
+\par 
+void convertptr(VOID**ptr,SEL newsel)\par 
+\tab \{\par 
+   USHORT offset = OFFSETOF(*ptr);\par 
+   *ptr = MAKEP(newsel,offset);\par 
+\tab \}\par 
+\tab \tab \tab \par 
+/* Assumes that the globals, currentpath and currentdrive are properly\par 
+   initialized */\par 
+void makefpath(char *org,char *result,char *currentpath,\par 
+\tab \tab \tab USHORT currentdrive)\par 
+\tab \{\par 
+   char drive[_MAX_DRIVE], dir[_MAX_DIR], fname[_MAX_FNAME], \tab \tab \tab \tab \tab      ext[_MAX_EXT];\par 
+   char currdir[_MAX_DIR], *backup, *outdir;\par 
+   USHORT driveno,cdirsize = _MAX_DIR-1, retval;\par 
+   strupr(org);\tab \tab \tab \tab /* uppercase the path */\par 
+   _splitpath(org,drive,dir,fname,ext);\tab /* get path components */\par 
+\par 
+   /* If we have a full path from the user at this point, we don't have \tab \tab  to do anything more-whatever they ask for, they get. If we don't have \tab  a full path, we will need to get the fullpath to the current \tab \tab \tab  directory of that drive, and then reconcile the working directory or \par 
+\tab  parent directory to end up with the "real" path to the file. However,\par 
+\tab  if the path is on the same drive, we can use currentdir and save the\tab \tab  the time of a DosQCurDir call. */\par 
+\par 
+     if(!(*drive))\tab \tab \tab \tab \tab /* If no drive letter */\par 
+\tab    \{\par 
+\tab   driveno = currentdrive;\par 
+\tab   *drive = (char)(currentdrive+'A'-1);\par 
+\tab   strcpy(&drive[1],":");\par 
+\tab    \}\par 
+\tab else\par 
+\tab   driveno = (*drive-'A'+1);\par 
+\par 
+\tab if(*dir != '\\\\')\tab \tab \tab \tab /* If not a full path */\par 
+\tab    \{\par 
+\tab   if(driveno != currentdrive)\par 
+\tab \tab \{\par 
+\tab     *currdir = '\\\\';\par 
+\tab   if(retval = DosQCurDir(driveno,&currdir[1],&cdirsize))\par 
+\tab \tab error_exit(retval,\par 
+\tab \tab \tab \tab "DosQCurDir - probably invalid drive or directory");\par 
+\tab      \}\par 
+\par 
+\tab   else\par 
+\tab \tab strcpy(currdir,&currentpath[2]);\par 
+\tab \tab \par 
+\tab if(lastchar(currdir) != '\\\\')\par 
+\tab    strcat(currdir,"\\\\");\par 
+\par 
+\tab strcat(currdir,dir);\par 
+\tab strcpy(dir,currdir);\par 
+        \}\par 
+\par 
+     /* dir now has full path to the filespec, reconcile and restore */\par 
+    while(backup = strstr(dir,"\\\\..\\\\"))\tab /* Remove any "\\..\\" */\par 
+\tab   \{\par 
+     for(outdir = backup-1; (*outdir != '\\\\') && (outdir > dir); \par 
+\tab \tab outdir--);\par 
+\tab \tab \tab \tab \tab \tab \tab \tab \tab /* Now outdir is '\\' dest */\par 
+\tab  backup += 3;\tab  /* now backup is on the source '\\'\tab */\par 
+\tab  strcpy(outdir,backup);\par 
+\tab   \}\par 
+\tab \par 
+    while(backup = strstr(dir,"\\\\.\\\\"))\tab \tab /* Remove any "\\.\\" */\par 
+\tab   \{\par 
+\tab  outdir = backup;\par 
+\tab  backup += 2;\par 
+\tab  strcpy(outdir,backup);\par 
+\tab   \}\par 
+\par 
+\tab _makepath(result,drive,dir,fname,ext); \tab /* Put it all back togeth */\par 
+\tab  \}\tab \tab \par 
+\par 
+void getdriveinfo(USHORT *currentdrive,char *currentpath,USHORT *psize)\par 
+\tab \{\par 
+\tab ULONG\tab drivemap;\par 
+\tab USHORT    retval;\par 
+\par 
+\tab DosQCurDisk(currentdrive,&drivemap);  \tab /* Get current drive number */\par 
+\tab *currentpath = (char)(*currentdrive+'A'-1);\par 
+\tab strcpy(&currentpath[1],":\\\\");\par 
+\par 
+\tab *psize = _MAX_PATH;\par 
+\tab if(retval = DosQCurDir(*currentdrive,&currentpath[3],psize))\par 
+\tab   error_exit(retval,"DosQCurDir");\par 
+\par 
+\tab DosQCurDisk(currentdrive,&drivemap);\tab /* Get current drive number */\par 
+\tab *psize = 0;\par 
+\tab DosQCurDir(*currentdrive,NULL,psize);\tab /* Get size of currdir path */\par 
+\tab \}\par 
+\par 
+USHORT diallocseg(USHORT size, SEL *oursel,PID other,SEL *othersel)\par 
+\tab \{\par 
+    USHORT retval = 0;\par 
+\tab \tab \tab \tab \tab \tab \tab \tab \tab /* And shareable by server */\par 
+    if(!(retval = DosAllocSeg(size,oursel,SEG_GIVEABLE)))\par 
+\tab  retval = DosGiveSeg(*oursel,other,othersel);\par 
+\par 
+    return retval;\par 
+\tab \}\par 
+\page \sect }

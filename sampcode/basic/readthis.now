@@ -1,0 +1,23 @@
+	   Welcome to Microsoft BASIC Professional Development System
+	   ----------------------------------------------------------
+
+SETUP:	      The Setup program is on distribution disk 1.  You MUST run Setup
+	      to install a fully functional copy of Microsoft BASIC 7.0, since
+	      many of the files are both compressed and in fragments which must
+	      be decompressed and linked together correctly.  Setup handles
+	      this process automatically.  You will need up to 14MB of hard
+	      disk space and 500KB of available RAM to run Setup successfully.
+
+SETUP /BATCH: Run Setup with the /BATCH option to make Setup run more quickly
+	      (Setup can take up to an hour on a DOS 286 computer with default
+	      options). To do this, first run Setup with the /BATCH option;
+	      then run the BUILD batch file that is created and left on the
+	      target drive. Setup will copy and decompress the files; the BUILD
+	      batch file will construct all of the files as specified by your
+	      choices in Setup.
+
+README.DOC:   The README.DOC file is located on disk 1.	 This file contains
+	      additional technical information and documentation corrections.
+
+See the Getting Started pamphlet for more information about getting up and
+running with the Microsoft BASIC Professional Development System.

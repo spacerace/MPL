@@ -1,0 +1,12 @@
+wrtcomm.obj: wrtcomm.c 
+  cl -c -W2 -AS -Gsw -Od -Zped wrtcomm.c
+
+wrtcomm.res: wrtcomm.rc wrtcomm.ico
+  rc -r wrtcomm.rc
+
+wrtcomm.exe: wrtcomm.obj wrtcomm.def wrtcomm.res 
+    link4 wrtcomm,/align:16,,slibw,wrtcomm.def
+    rc wrtcomm.res
+    del wrtcomm.obj
+    del wrtcomm.map
+

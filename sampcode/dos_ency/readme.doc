@@ -1,0 +1,516 @@
+                   Programmer's Library 
+          The MS-DOS Encyclopedia Companion Disks
+                  (c)1988 Microsoft Press
+
+
+     This directory contains listings for the programs and
+examples in the following sections of the MS-DOS Encyclopedia:
+
+  Disk 1:
+     Section II (Programming for MS-DOS)
+                Articles 2 through 17
+
+  Disk 2:
+     Section II (Programming for MS-DOS)
+                Articles 18 and 19
+     Section V  (System Calls)
+     Appendix A (MS-DOS Version 3.3)
+     Appendix L (Intel Hexadecimal Object File Format)
+     Appendix N (An Object Module Dump Utility)
+
+     The listings are organized into separate directories.
+The code for the programs and examples in Section II is
+organized into directories that correspond to the article
+number. For example, the code for Article 4, Structure of
+an Application Program, is in the \4 subdirectory; the code
+for Section V, System Calls, is in the \SECTION5 subdirectory,
+and the code for the three appendixes is in the \APP-A,
+\APP-L, and \APP-N directories.
+
+     The name and description of each file on the companion
+disks is listed below in the order in which the code appears
+in The MS-DOS Encyclopedia.
+
+     If you have any questions about the files on these
+disks, you can send your written queries or comments to:
+          Microsoft Press
+          Attn: MS-DOS Encyclopedia
+          16011 NE 36th Way
+          Box 97017
+          Redmond, WA  98073-9717
+
+          or to MICROSOFT PRESS on MCI Mail.
+
+     Unfortunately, we are not able to answer phone queries.
+
+
+
+
+                    -+- THE LISTINGS -+-
+                         (Disk #1)
+
+Subdirectory \2    The Components of MS-DOS
+
+   SHELL.ASM:   A simple program to run an application as an
+                MS-DOS shell.
+
+
+
+Subdirectory \4    Structure of an Application Program
+
+  FIG4-3.ASM:   Skeleton program demonstrating proper
+                termination under any MS-DOS version.
+  FIG4-4.ASM:   Example using RET to return to MS-DOS.
+  FIG4-8.ASM:   Source module MODULE_A that demonstrates
+                .EXE program structuring.
+  FIG4-9.ASM:   Source module MODULE_B that demonstrates
+                .EXE program structuring.
+ FIG4-10.ASM:   Source module MODULE_C that demonstrates
+                .EXE program structuring.
+ FIG4-15.ASM:   Sample .COM program COMPROG1.ASM that
+                declares only a single segment.
+ FIG4-16.ASM:   Sample .COM program COMPROG2.ASM that
+                declares multiple segments.
+
+
+
+Subdirectory \5    Character Device Input and Output
+
+  INT16H.ASM:   Example using INT 16H to read a character
+                from the keyboard.
+  FXN08H.ASM:   Example using INT 21H Fxn 08H to read a
+                character from the keyboard.
+  FXN0AH.ASM:   Example using INT 21H Fxn 0AH to read a line
+                from the keyboard.
+  FXN3FH.ASM:   Example using INT 21H Fxn 3FH to read a line
+                from the keyboard.
+  INT10H.ASM:   Example using INT 10H to write an asterisk
+                character to the display in text mode.
+  FXN02H.ASM:   Example using INT 21H Fxn 02H to write an
+                asterisk character to the display.
+  FXN09H.ASM:   Example using INT 21H Fxn 09H to write a
+                string to the display.
+FXN40H-1.ASM:   Example using INT 21H Fxn 40H to write a
+                string to standard output.
+  INT14H.ASM:   Example using INT 14H to write a string to
+                COM1.
+  FXN04H.ASM:   Example using INT 21H Fxn 04H to write a
+                string to COM1.
+FXN40H-2.ASM:   Example using INT 21H Fxn 40H to write a
+                string to COM1.
+  INT17H.ASM:   Example using INT 17H to send a string to
+                LPT1.
+  FXN05H.ASM:   Example using INT 21H Fxn 05H to send a
+                string to LPT1.
+FXN40H-3.ASM:   Example using INT 21H Fxn 40H to send a
+                string to the system list device.
+ IOCTL-1.ASM:   Example using IOCTL Subfxn 00H to obtain the
+                device information word for standard input.
+ IOCTL-2.ASM:   Example using IOCTL Subfxn 06H to test
+                whether a character is ready for input on
+                COM1.
+
+
+
+
+Subdirectory \6    Interrupt-Driven Communications
+
+ENGINE-1.ASM:   Example demonstrating an incomplete (and
+                unworkable) implementation of a modem
+                engine.
+ENGINE-2.ASM:   Example demonstrating an improved (but still
+                unworkable) implementation of a modem
+                engine.
+    UART.ASM:   Example demonstrating UART startup
+                programming.
+  COMDVR.ASM:   Communications port device-driver program.
+  ENGINE.ASM:   Modem engine program.
+    CDVUTL.C:   Driver-status utility program that permits
+                either of the two drivers (ASY1 and ASY2) to
+                be reconfigured after installation.
+     CH1.ASM:   Support program for CTERM.C terminal
+                emulator program.
+    CH1A.ASM:   Support program for CTERM.C terminal
+                emulator program.
+     CH2.ASM:   Support program for CTERM.C terminal
+                emulator program.
+     CTERM.C:   Terminal emulation program.
+
+
+
+Subdirectory \7    File and Record Management
+
+  FXN3CH.ASM:   Example using INT 21H Fxn 3CH to create the
+                file MEMO.TXT in C:\LETTERS.
+  FXN5AH.ASM:   Example using INT 21H Fxn 5AH to create a
+                temporary file in C:\TEMP.
+ CMDTAIL.ASM:   Example that copies the first parameter from
+                the program's command tail in the PSP, then
+                appends a null character to form an ASCIIZ
+                string.
+  MYFILE.ASM:   Example that opens the file MYFILE.DAT,
+                creates the file MYFILE.BAK, copies the
+                contents of the .DAT file into the .BAK
+                file, then closes both files.
+POINTER1.ASM:   Example that positions the file pointer
+                32768 bytes from the beginning of
+                MYFILE.DAT, then reads 512 bytes of data.
+POINTER2.ASM:   Example that finds the size in bytes of
+                MYFILE.DAT by positioning the file pointer
+                to zero bytes relative to the end of the
+                file.
+  FXN56H.ASM:   Example using INT 21H Fxn 56H to rename
+                \WORK\MYFILE.DAT to \BACKUP\MYFILE.OLD.
+  FXN41H.ASM:   Example using INT 21H Fxn 41H to delete the
+                file \WORK\MYFILE.DAT.
+  FXN43H.ASM:   Example using INT 21H Fxn 43H to change the
+                attributes of \BACKUP\MYFILE.DAT to read-
+                only.
+  FXN45H.ASM:   Example using INT 21H Fxn 45H to duplicate
+                the handle for the previously opened file
+                MYFILE.DAT, then using INT 21H Fxn 3EH to
+                close the duplicate handle and update the
+                file.
+OPENFILE.ASM:   Example that displays a prompt, accepts a
+                filename from the user, parses the filename
+                into an FCB, checks for an illegal drive
+                letter or wildcards, attempts to open the
+                file, and creates it if it doesn't exist.
+
+COPYFILE.ASM:   Example that opens the file MYFILE.DAT,
+                creates the file MYFILE.BAK, copies the
+                contents of the .DAT file into the .BAK
+                file, then closes both files.
+  FXN17H.ASM:   Example using INT 21H Fxn 17H to rename all
+                files with a .ASM extension to have the
+                extension .COD.
+  FXN13H.ASM:   Example using INT 21H Fxn 13H to delete all
+                files whose filenames have A as the first
+                character and a .BAK extension.
+
+
+
+Subdirectory \8    Disk Directories and Volume Labels
+
+    DIRS.ASM:   Program that uses INT 21H Fxns 4EH and 4FH
+                to provide search subroutines for DIRDUMP.C.
+   DIRDUMP.C:   Program that lists the attributes associated
+                with each entry in the current directory.
+    VOLS.ASM:   Program containing C-callable subroutines
+                for manipulating volume labels.
+
+
+
+Subdirectory \9    Memory Management
+
+  FIG9-2.ASM:   Example using INT 21H Fxn 4AH to demonstrate
+                how a .COM program can release extra memory
+                after receiving control from MS-DOS.
+  FIG9-3.ASM:   Example using INT 21H Fxn 4AH to demonstrate
+                how a .EXE program can release extra memory
+                after receiving control from MS-DOS.
+  FIG9-4.ASM:   Example demonstrating dynamic memory
+                allocation.
+  FIG9-6.ASM:   Example using INT 21H Fxns 3DH and 44H to
+                test for the presence of the Expanded Memory
+                Manager.
+  FIG9-7.ASM:   Example that tests for the presence of the
+                Expanded Memory Manager by inspecting the
+                name field of the device driver header.
+  FIG9-8.ASM:   Example demonstrating the use of expanded
+                memory.
+
+
+
+Subdirectory \10   The MS-DOS EXEC Function
+
+  PARENT.ASM:   Program that loads and executes CHILD.EXE.
+   CHILD.ASM:   Program loaded and executed by PARENT.EXE.
+    ROOT.ASM:   Program that loads the overlay OVERLAY.OVL,
+                calls a routine within OVERLAY, then
+                recovers control and terminates.
+ OVERLAY.ASM:   Overlay loaded by ROOT.EXE.
+
+
+
+Subdirectory \11   Terminate-and-Stay-Resident Utilities
+
+ INDOS-1.ASM:   Example that scans the MS-DOS segment for
+                the InDOS flag in MS-DOS versions 3.1 and
+                later.
+ INDOS-2.ASM:   Example that scans the MS-DOS segment for
+                the InDOS flag in MS-DOS versions earlier
+                than 3.1.
+   HELLO.ASM:   Passive TSR program that displays a message
+                when INT 64H is executed.
+
+    SNAP.ASM:   Active TSR program that dumps the current
+                contents of the video buffer to a disk file
+                when Alt-Enter is pressed.
+
+
+
+Subdirectory \12   Exception Handlers
+
+ SET_INT.ASM:   Example that sets the INT 23H and INT 1BH
+                vectors to point to an IRET instruction.
+REST_INT.ASM:   Example that restores the original contents
+                of the INT 23H and INT 1BH vectors set by
+                the previous example.
+   INT24.ASM:   Replacement INT 24H critical error handler.
+FXN59H-1.ASM:   Example using INT 21H Fxn 59H to obtain more
+                detailed error information under MS-DOS
+                versions 3.0 and later.
+FXN59H-2.ASM:   Example using INT 21H Fxn 59H to test the
+                contents of BL as a guide to the appropriate
+                error-handling action to take.
+
+
+
+Subdirectory \13   Hardware Interrupt Handlers
+
+ DIVZERO.ASM:   Replacement divide-by-zero handler for use
+                with 80286 and 80386 microprocessors.
+  INT08H.ASM:   Example replacement INT 08H handler that
+                increments an internal flag at each timer
+                tick.
+  MYINT8.ASM:   Example replacement INT 08H handler that
+                implements and tests a semaphore to prevent
+                nested interrupts.
+
+
+
+Subdirectory \14   Writing MS-DOS Filters
+
+  PROTOC.ASM:   Template character-oriented filter program.
+    PROTOC.C:   Template character-oriented filter program.
+  PROTOL.ASM:   Template line-oriented filter program.
+    PROTOL.C:   Template line-oriented filter program.
+      LC.ASM:   Character-oriented filter that translates
+                uppercase letters to lowercase letters.
+        LC.C:   Character-oriented filter that translates
+                uppercase letters to lowercase letters.
+      FIND.C:   Filter that searches the input stream for
+                lines containing the pattern specified in
+                the command line.
+EXECSORT.ASM:   Program demonstrating the use of the MS-DOS
+                SORT filter as a child process.
+
+
+
+Subdirectory \15   Installable Device Drivers
+
+TEMPLATE.ASM:   Skeleton character-device driver that
+                demonstrates all the essential driver
+                components.
+TINYDISK.ASM:   Source code for a 64 KB virtual disk
+                (RAMdisk).
+
+
+
+Subdirectory \17   Windows
+
+    SAMPLE.C:   Source code for the SAMPLE program.
+   SAMPLE.RC:   Resource script for the SAMPLE program.
+    SAMPLE.H:   Header file for the SAMPLE program.
+  SAMPLE.DEF:   Module-definition file for the SAMPLE
+                program.
+  SAMPLE.MAK:   Make file for the SAMPLE program.
+
+
+
+                    -+- THE LISTINGS -+-
+                         (Disk #2)
+
+Subdirectory \18
+
+    EXP1.BAS:   INCORRECT version of a program to calculate
+                EXP(x) to a specified precision using an
+                infinite series.
+    EXP2.BAS:   Corrected version of EXP1.BAS.
+COMMSCOP.ASM:   Program to monitor activity on a specified
+                COM port, placing a copy of all transacted
+                data in a RAM buffer.
+  COMMSCMD.C:   C program to control the COMMSCOP program.
+COMMSCMD.BAS:   QB program to control the COMMSCOP program.
+COMMDUMP.BAS:   Program that produces a formatted dump of
+                the communication trace buffer.
+TESTCOM1.ASM:   INCORRECT version of a program that provides
+                data to the COMMSCOP program.
+TESTCOM2.ASM:   Corrected version of TESTCOM1.ASM.
+ BADSCOP.ASM:   INCORRECT version of COMMSCOP.ASM.
+  UPERCAS1.C:   INCORRECT version of a program that converts
+                a fixed string to uppercase and prints it.
+  UPERCAS2.C:   Corrected version of UPERCAS1.C.
+   ASCTBL1.C:   INCORRECT version of a program that displays
+                a table of all displayable characters.
+   ASCTBL2.C:   Corrected version of ASCTABL1.C.
+
+
+
+Subdirectory \19   Object Modules
+
+   HELLO.ASM:   Program that displays a short message. (Used
+                to demonstrate object records within an
+                object module.)
+
+
+
+Subdirectory \SECTION5     System Calls
+
+CMACROSX.INC:   Supplemental macros for two macros included
+                in CMACROS.INC.
+    TEST.ASM:   Program that demonstrates the use of Cmacros
+                in assembly-language.
+    TESTCM.C:   Simple C program that calls the function in
+                the previous example.
+  FXN01H.ASM:   Character Input with Echo
+  FXN02H.ASM:   Character Output
+  FXN03H.ASM:   Auxiliary Input
+  FXN04H.ASM:   Auxiliary Output
+  FXN05H.ASM:   Print Character
+  FXN06H.ASM:   Direct Console I/O
+  FXN07H.ASM:   Unfiltered Character Input Without Echo
+  FXN08H.ASM:   Character Input Without Echo
+  FXN09H.ASM:   Display String
+  FXN0AH.ASM:   Buffered Keyboard Input
+  FXN0BH.ASM:   Check Keyboard Status
+  FXN0CH.ASM:   Flush Buffer, Read Keyboard
+  FXN0DH.ASM:   Disk Reset
+  FXN0EH.ASM:   Select Disk
+  FXN0FH.ASM:   Open File with FCB
+  FXN10H.ASM:   Close File with FCB
+  FXN11H.ASM:   Find First File
+  FXN12H.ASM:   Find Next File
+  FXN13H.ASM:   Delete File
+  FXN14H.ASM:   Sequential Read
+  FXN15H.ASM:   Sequential Write
+
+  FXN16H.ASM:   Create File with FCB
+  FXN17H.ASM:   Rename File
+  FXN19H.ASM:   Get Current Disk
+  FXN1AH.ASM:   Set DTA Address
+  FXN1CH.ASM:   Get Drive Data
+  FXN21H.ASM:   Random Read
+  FXN22H.ASM:   Random Write
+  FXN23H.ASM:   Get File Size
+  FXN24H.ASM:   Set Relative Record
+  FXN25H.ASM:   Set Interrupt Vector
+  FXN26H.ASM:   Create New Program Segment Prefix
+  FXN27H.ASM:   Random Block Read
+  FXN28H.ASM:   Random Block Write
+  FXN29H.ASM:   Parse Filename
+  FXN2AH.ASM:   Get Date
+  FXN2BH.ASM:   Set Date
+  FXN2CH.ASM:   Get Time
+  FXN2DH.ASM:   Set Time
+  FXN2EH.ASM:   Set/Reset Verify Flag
+  FXN2FH.ASM:   Get DTA Address
+  FXN30H.ASM:   Get MS-DOS Version Number
+  FXN31H.ASM:   Terminate and Stay Resident
+  FXN33H.ASM:   Get/Set Control-C Check Flag
+  FXN34H.ASM:   Return Address of InDOS Flag
+  FXN35H.ASM:   Get Interrupt Vector
+  FXN36H.ASM:   Get Disk Free Space
+  FXN38H.ASM:   Get/Set Current Country
+  FXN39H.ASM:   Create Directory
+  FXN3AH.ASM:   Remove Directory
+  FXN3BH.ASM:   Change Current Directory
+  FXN3CH.ASM:   Create File with Handle
+  FXN3DH.ASM:   Open File with Handle
+  FXN3EH.ASM:   Close File
+  FXN3FH.ASM:   Read File or Device
+  FXN40H.ASM:   Write File or Device
+  FXN41H.ASM:   Delete File
+  FXN42H.ASM:   Move File Pointer
+  FXN43H.ASM:   Get/Set File Attributes
+FXN4400H.ASM:   Get Device Data
+FXN4401H.ASM:   Set Device Data
+FXN4402H.ASM:   Receive Control Data from Character Device
+FXN4403H.ASM:   Send Control Data to Character Device
+FXN4404H.ASM:   Receive Control Data from Block Device
+FXN4405H.ASM:   Send Control Data to Block Device
+FXN4406H.ASM:   Check Input Status
+FXN4407H.ASM:   Check Output Status
+FXN4408H.ASM:   Check If Block Device Is Removable
+FXN4409H.ASM:   Check If Block Device Is Remote
+FXN440AH.ASM:   Check If Handle Is Remote
+FXN440BH.ASM:   Change Sharing Retry Count
+FXN440CH.ASM:   Generic I/O Control for Handles
+FXN440DH.ASM:   Generic I/O Control for Block Devices
+FXN440EH.ASM:   Get Logical Drive Map
+FXN440FH.ASM:   Set Logical Drive Map
+  FXN45H.ASM:   Duplicate File Handle
+  FXN46H.ASM:   Force Duplicate File Handle
+  FXN47H.ASM:   Get Current Directory
+  FXN48H.ASM:   Allocate Memory Block
+  FXN49H.ASM:   Free Memory Block
+  FXN4AH.ASM:   Resize Memory Block
+  FXN4BH.ASM:   Load and Execute Program (EXEC)
+  FXN4CH.ASM:   Terminate Process with Return Code
+  FXN4DH.ASM:   Get Return Code of Child Process
+  FXN4EH.ASM:   Find First File
+  FXN4FH.ASM:   Find Next File
+  FXN54H.ASM:   Get Verify Flag
+
+  FXN56H.ASM:   Rename File
+  FXN57H.ASM:   Get/Set Date/Time of File
+  FXN58H.ASM:   Get/Set Allocation Strategy
+  FXN59H.ASM:   Get Extended Error Information
+  FXN5AH.ASM:   Create Temporary File
+  FXN5BH.ASM:   Create New File
+  FXN5CH.ASM:   Lock/Unlock File Region
+FXN5E02H.ASM:   Set Printer Setup
+FXN5F02H.ASM:   Get Assign-List Entry
+FXN5F03H.ASM:   Make Assign-List Entry
+FXN5F04H.ASM:   Cancel Assign-List Entry
+  FXN62H.ASM:   Get Program Segment Prefix Address
+  FXN63H.ASM:   Get Lead Byte Table
+  INT20H.ASM:   Terminate Program
+  INT25H.ASM:   Absolute Disk Read
+  INT26H.ASM:   Absolute Disk Write
+  INT27H.ASM:   Terminate and Stay Resident
+
+
+
+Subdirectory \APP-A     MS-DOS Version 3.3
+
+  FXN67H.ASM:   Example using INT 21H Fxn 67H to set the
+                maximum handle count of the current process
+                to 30.
+  FXN68H.ASM:   Example using INT 21H Fxn 68H to flush any
+                data in MS-DOS's internal buffers associated
+                with a specified handle to disk and update
+                the directory and FAT.
+FXN6501H.ASM:   Example using INT 21H Fxn 65H Subfxn 01H to
+                obtain extended country information
+                associated with the default country and code
+                page 437.
+6501-BUF.ASM:   Assembly-language format of the buffer
+                created by MS-DOS after the FXN6501H.ASM
+                example is executed.
+FXN6502H.ASM:   Example using INT 21H Fxn 65H Subfxn 02H to
+                obtain the pointer to the uppercase table
+                associated with the default country and code
+                page 437.
+6502-BUF.ASM:   Assembly-language format of the buffer
+                created by MS-DOS after the FXN6502H.ASM
+                example is executed.
+CODEPAGE.ASM:   Example using INT 21H Fxn 66H Subfxns 01H
+                and 02H to force the active code page to be
+                the same as the system's default code page.
+
+
+
+Subdirectory \APP-L     Intel Hexadecimal Object File Format
+
+ BIN2HEX.BAS:   QuickBASIC binary-to-hexadecimal file
+                conversion utility.
+
+
+
+Subdirectory \APP-N     An Object Module Dump Utility
+
+   OBJDUMP.C:   Utility program that displays the contents
+                of an object file as individual object
+                records.

@@ -1,0 +1,13 @@
+NAME         getprofs
+
+DESCRIPTION  'Microsoft Windows Demonstration Program'
+
+STUB         'WINSTUB.EXE'
+
+CODE         MOVEABLE
+
+DATA         MOVEABLE MULTIPLE
+
+HEAPSIZE     4096
+
+STACKSIZE    4096

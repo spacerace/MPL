@@ -1,0 +1,29 @@
+/*--------------------------------
+   BLOWUP.RC resource script file
+  --------------------------------*/
+
+#include <os2.h>
+#include "blowup.h"
+
+MENU ID_RESOURCE
+     {
+     SUBMENU "~Edit",         IDM_EDIT
+          {
+          MENUITEM "~Copy\tCtrl+Ins",    IDM_COPY
+          MENUITEM "~Paste\tShift+Ins",  IDM_PASTE
+          }
+
+     MENUITEM "~Capture!",    IDM_CAPTURE
+
+     SUBMENU "~Display",      IDM_DISPLAY
+          {
+          MENUITEM "~Actual size",       IDM_ACTUAL,, MIA_CHECKED
+          MENUITEM "~Stretch to window", IDM_STRETCH
+          }
+     }
+
+ACCELTABLE ID_RESOURCE
+     {
+     VK_INSERT, IDM_COPY,  VIRTUALKEY, CONTROL
+     VK_INSERT, IDM_PASTE, VIRTUALKEY, SHIFT
+     }

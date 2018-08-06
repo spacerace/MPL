@@ -1,0 +1,889 @@
+.************************************************************************
+.*
+.* Tedhp.itl  - Information Tag Language file for Help Manager text
+.*              used in the TED sample Toolkit Application for
+.*              the OS/2 Presentation Manager.
+.*
+.************************************************************************
+:userdoc.
+:prolog.
+:title.
+:tline.HELP for TED Sample Toolkit Application
+:etitle.
+:author.Microsoft Corp.
+:address.
+:aline.Redmond, WA
+:eaddress.
+:eprolog.
+:body.
+
+#include "tedhp.h"
+
+.************************************************************************
+.* TED EDITOR EXTENDED HELP PANEL - This panel is displayed for a
+.* help request when no dialogs or message boxes are visible.
+.************************************************************************
+:h1 res=GENERAL_HP name=GENERAL_HP.About the TED Editor
+:i1 id=about1.About the TED Editor
+:p.The TED Editor is a Presentation Manager-based sample
+application for the Software Developers Toolkit.  It is used to demonstrate
+the use of the MLE class and the use of Help Manager from within an application.
+:p.The help facility is designed to give a context-sensitive
+description of the highlighted field.  It is not
+intended to be a tutorial.
+:p.For more information about using the help facility,
+select :hp2.Help for help:ehp2. on the :hp2.Help:ehp2. pull-down.
+:eh1.
+
+.************************************************************************
+.* INDEX..., AAB ITEM HELP PANEL - This panel appears for a help request
+.* when "Index..." is highlighted on the "Help pull-down menu.
+.************************************************************************
+:h1 res=INDEX_MENU_HP name=INDEX_MENU_HP.Help for Help index
+:p.Select :hp2.Help index:ehp2. on the :hp2.Help:ehp2. pull-down
+to see the help index for the TED Editor.
+:eh1.
+
+.************************************************************************
+.* KEYS..., AAB ITEM HELP PANEL - This panel appears for a help request
+.* when "Keys..." is highlighted on the "Help" pull-down menu.
+.************************************************************************
+:h1 res=KEYS_MENU_HP name=KEYS_MENU_HP.Help for Keys help
+:p.Select :hp2.Keys help:ehp2. on the :hp2.Help:ehp2. pull-down
+for help on the keys you use to perform a specific task,
+:p.When you select this item, you see a list of key
+groups.  Double click on one of the groups to see the
+keys you use to perform the task.
+:eh1.
+
+
+
+.************************************************************************
+.* FIND, CASE SENSITIVE OPTION FIELD HELP PANEL - This panel appears for
+.* a help request when the cursor focus is on the "Case sensitive" check
+.* box on the "Find" dialog.
+.************************************************************************
+:h1 res=FIND_CASE_HP name=FIND_CASE_HP hide.Help for Case sensitive
+:p.Select this to switch :hp2.Case sensitive:ehp2. on and off. :hp2.Case
+Sensitive:ehp2. is on when the box is checked.
+:p.If :hp2.Case sensitive:ehp2. is on, the :hp2.Find:ehp2. text must
+match uppercase and lowercase letters exactly as they appear in the file
+for the text to be found.
+:p.To switch :hp2.Case sensitive:ehp2. on and off&colon.
+:p.
+:hp5.Mouse users:ehp5.
+:ul compact.
+:li.Click on the :hp2.Case sensitive:ehp2. box.
+:eul.
+:p.
+:hp5.Keyboard users:ehp5.
+:ul compact.
+:li.Press the space bar.
+:eul.
+:eh1.
+
+
+
+
+.************************************************************************
+.* FIND, CHANGE ALL BUTTON HELP PANEL - This panel appears for a help
+.* request when the Change All button on the "Find" dialog has cursor
+.* focus.
+.************************************************************************
+:h1 res=FIND_CHGALL_BUTN_HP name=FIND_CHGALL_BUTN_HP hide.Help for Change All
+:p.Select the :hp2.Change All:ehp2. pushbutton to change all occurrences
+of the :hp2.Find:ehp2. text to the :hp2.Change to:ehp2. text.
+:nt.  If the :hp2.Change to:ehp2. field is blank, all occurrences of the
+:hp2.Find:ehp2. text
+will be deleted from the file.
+:ent.
+:eh1.
+
+
+
+
+.************************************************************************
+.* WORD WRAP, EXTENDED HELP PANEL - This panel appears for a help
+.* request when "Word wrap" is highlight on the "Options" pull-down
+.* menu; when the "Word wrap" reference phrase is selected from the End
+.* of line (EOL) character help panel.
+.************************************************************************
+:h1 res=WORD_WRAP_HP name=WORD_WRAP_HP.Help for Word wrap
+:i1 id=wordwrap.Word wrap
+:p.Select :hp2.Word wrap:ehp2. on the :hp2.Options:ehp2. pull-down
+to reflow the text in the editing area so that any text not visible
+past the sides of the window is wrapped to the next line.  This is
+helpful for reading text without having to scroll horizontally.
+:p.When Word wrap is on, the cursor will automatically advance to
+the next line as you type so that all text remains visible.
+:p.The check mark on the pull-down indicates that Word wrap is on.
+:p.When Word wrap is on, every line may not end with
+an :hpt.EOL character:ehpt.:hdref RES=EOL_CHAR_HP.&period.
+:p.Word wrap only determines the way text appears on the screen.  Turn
+it off to see how the file will be stored or printed.
+:eh1.
+
+
+.************************************************************************
+.* QUERY LINES, EXTENDED HELP PANEL - This panel appears for a help
+.* request when "Query lines" is highlight on the "Options" pull-down
+.* menu;
+.************************************************************************
+:h1 res=QUERY_LINES_HP name=QUERY_LINES_HP.Help for Query lines
+:i1 id=querylines.Query lines
+:p.Select :hp2.Query lines:ehp2. on the :hp2.Options:ehp2. pull-down
+to display a current count of lines in the MLE.
+:eh1.
+
+
+.************************************************************************
+.* SELECT ALL, EXTENDED HELP PANEL - This panel appears for a help
+.* request when "Select all" is highlighted on the "Edit" pull-down
+.* menu. This has a hypertext link on the word SELECT to panel 4864.
+.************************************************************************
+:h1 res=SELECTALL_HP name=SELECTALL_HP.Help for Select all
+:i1 id=selectall.Select all
+:i2 refid=select.Selecting all text
+:p.Select :hp2.Select all:ehp2. on the :hp2.Edit:ehp2. pull-down
+to :hpt.select:ehpt.:hdref RES=SELECTING_TEXT_HP. all of the text in the file.
+:eh1.
+
+
+
+.************************************************************************
+.* COPY, EXTENDED HELP PANEL - This panel appears for a help request
+.* when "Copy" is highlighted on the "Edit" pull-down menu; when the
+.* "Copy" reference phrase is selected from the Paste, Editing Keys, or
+.* Clipboard help panels.
+.************************************************************************
+:h1 res=COPY_HP name=COPY_HP.Help for Copy
+:i1 id=copy.Copy
+:p.Select :hp2.Copy:ehp2. on the :hp2.Edit:ehp2. pull-down,
+or press Ctrl+Insert to copy :hpt.selected text:ehpt.:hdref RES=SELECTING_TEXT_HP.
+to the :hpt.Clipboard:ehpt.:hdref RES=CLIPBOARD_HP.&period.
+:p.You can insert the text you copy somewhere else in this file
+or in another file using :hpt.Paste:ehpt.:hdref RES=PASTE_HP.&period.
+:eh1.
+
+.************************************************************************
+.* PASTE, EXTENDED HELP PANEL - This panel appears for a help request
+.* when "Paste" is highlighted on the "Edit" pull-down menu; when the
+.* "Paste" reference phrase is selected from the Cut, Copy, Editing Keys
+.* or Clipboard help panels.
+.************************************************************************
+:h1 res=PASTE_HP name=PASTE_HP.Help for Paste
+:i1 id=paste.Paste
+:p.Select :hp2.Paste:ehp2. on the :hp2.Edit:ehp2. pull-down, or press
+Shift+Insert to insert the text on
+the :hpt.Clipboard:ehpt.:hdref RES=CLIPBOARD_HP. into the file at the cursor position.
+:p.If text is :hpt.selected:ehpt.:hdref RES=SELECTING_TEXT_HP., the text from
+the :hpt.Clipboard:ehpt.:hdref RES=CLIPBOARD_HP. will replace the selected text.
+:nt.  Use :hpt.Cut:ehpt.:hdref RES=CUT_HP. or :hpt.Copy:ehpt.:hdref RES=COPY_HP. to
+put text on the :hpt.Clipboard:ehpt.:hdref RES=CLIPBOARD_HP.&period.
+:ent.
+:eh1.
+
+
+.************************************************************************
+.* CUT, EXTENDED HELP PANEL - This panel appears for a help request when
+.* "Cut" is highlighted on the "Edit" pull-down menu; when the "Cut"
+.* reference phrase is selected from the Paste, Editing Keys, or
+.* Clipboard help panels.
+.************************************************************************
+:h1 res=CUT_HP name=CUT_HP.Help for Cut
+:i1 id=cut.Cut
+:p.Select :hp2.Cut:ehp2. on the :hp2.Edit:ehp2. pull-down,
+or press Shift+Delete to delete :hpt.selected text:ehpt.:hdref RES=SELECTING_TEXT_HP. from
+the file and copy it to the :hpt.Clipboard:ehpt.:hdref RES=CLIPBOARD_HP.&period.
+:p.You can insert the text you cut somewhere else in this file
+or in another file using :hpt.Paste:ehpt.:hdref RES=PASTE_HP.&period.
+:eh1.
+
+.************************************************************************
+.* FIND, CHANGE TO EDIT FIELD HELP PANEL - This panel appears for a help
+.* request when the cursor focus is on the "Change to..." edit field on
+.* the "Find" dialog.
+.************************************************************************
+:h1 res=FIND_CHANGETOEDIT_HP name=FIND_CHANGETOEDIT_HP hide.Help for Change to&colon.
+:p.Type the text that you want to replace
+the :hp2.Find:ehp2. text with.
+:nt.  The :hp2.Find:ehp2. text will be deleted from the file if this
+field is left blank and you select the :hp2.Change all:ehp2. button.
+:ent.
+:eh1.
+
+
+
+.************************************************************************
+.* UNDO, EXTENDED HELP PANEL - This panel appears for a help request
+.* when "Undo" is highlighted on the "Edit" pull-down menu.
+.************************************************************************
+:h1 res=UNDO_HP name=UNDO_HP.Help for Undo
+:i1 id=undo.Undo
+:p.Select :hp2.Undo:ehp2. on the :hp2.Edit:ehp2. pull-down,
+or press Alt+Backspace to cancel the last action you performed that
+changed the edit window.
+:p.The text of the Undo pull-down item will change according to the
+last action you performed.
+:eh1.
+
+
+.************************************************************************
+.* ABOUT, EXTENDED HELP PANEL - This panel appears for a help request
+.* when when "About..." is highlighted on the "Help" pull-down menu.
+.************************************************************************
+:h1 res=ABOUT_HP name=ABOUT_HP.Help for About
+:i1 id=about2.About
+:p.Select :hp2.About:ehp2. on the :hp2.Help:ehp2. pull-down
+to display copyright information about the TED Editor,
+:eh1.
+
+.************************************************************************
+.* EXIT, EXTENDED HELP PANEL - This panel appears for a help request
+.* when when "Exit" is highlighted on the "File" pull-down menu.
+.************************************************************************
+:h1 res=EXIT_HP name=EXIT_HP.Help for Exit
+:i1 id=exit.Exit
+:p.Select :hp2.Exit:ehp2. on the :hp2.File:ehp2. pull-down
+or press F3 to leave the TED Editor.
+:eh1.
+
+
+
+.************************************************************************
+.* SAVE AS, EXTENDED HELP PANEL - This panel appears for a help request
+.* when "Save as..." is highlighted on the "File" pull-down menu; when
+.* extended help is requested while the "Save as" dialog is visible.
+.************************************************************************
+:h1 res=SAVEAS_HP name=SAVEAS_HP.Help for Save as
+:i1 id=saveas.Save as
+:i2 refid=save.Saving with a new name
+:i2 refid=save.Saving an untitled file
+:p.Select :hp2.Save as:ehp2. on the :hp2.File:ehp2. pull-down to&colon.
+:p.
+:ul.
+:li.Save a new file
+:li.Save a file&colon.
+:ul.
+:li.With a different name
+:li.In a different directory
+:li.On a different disk
+:eul.
+:eul.
+:p.When you choose this command, the Save as dialog appears.  Use
+it to enter the drive, path and file name for the file.
+:eh1.
+
+
+
+.************************************************************************
+.* NEW, EXTENDED HELP PANEL - This panel appears for a help request when
+.* "New" is highlighted on the "File" pull-down menu.
+.************************************************************************
+:h1 res=CREATENEW_HP name=CREATENEW_HP.Help for New
+:i1 id=new.New
+:i2 refid=open.Opening a new file
+:p.Select :hp2.New:ehp2. on the :hp2.File:ehp2. pull-down to create
+a new file.
+:eh1.
+
+
+.************************************************************************
+.* FIND, EDIT FIELD HELP PANEL - This panel appears for a help request
+.* when the cursor focus is on the "Find..."  edit field on the "Find"
+.* dialog.
+.************************************************************************
+:h1 res=FIND_FINDEDIT_HP name=FIND_FINDEDIT_HP.Help for Find&colon.
+:p.Type the text you want to find or change.
+:p.If :hp2.Case sensitive:ehp2. is turned on, the uppercase and lowercase
+letters of the text you type must match the text you are looking
+for exactly.
+:eh1.
+
+.************************************************************************
+.* FIND, FIND BUTTON HELP PANEL - This panel appears for a help request
+.* when the Find button on the "Find" dialog has cursor focus.
+.************************************************************************
+:h1 res=FIND_FIND_BUTN_HP name=FIND_FIND_BUTN_HP hide.Help for Find
+:p.Select the :hp2.Find:ehp2. pushbutton to search the file for the
+first occurrence of the text that is in the :hp2.Find:ehp2. field.
+:eh1.
+
+
+.************************************************************************
+.* OPEN, EXTENDED HELP PANEL - This panel appears for a help request
+.* when "Open..." is highlighted on the "File" pull-down menu; when
+.* extended help is requested while the "Open" dialog is visible.
+.************************************************************************
+:h1 res=OPEN_HP name=OPEN_HP.Help for Open
+:i1 id=open.Open
+:i2 refid=open.Opening an existing file
+:p.Select :hp2.Open:ehp2. on the :hp2.File:ehp2. pull-down
+to edit an existing text file.
+:p.When you select :hp2.Open,:ehp2. the Open dialog appears.
+Use it to select the file you want to edit.
+:eh1.
+
+.************************************************************************
+.* FIND, EXTENDED HELP PANEL - This panel appears for a help request
+.* when "Find..." is highlighted on the "Edit" pull-down menu; when
+.* extended help is requested while the "Find" dialog is visible.
+.************************************************************************
+:h1 res=FIND_HP name=FIND_HP.Help for Find
+:i1 id=find.Find
+:i2 refid=find.Searching for text
+:i2 refid=find.Changing text
+:p.Select :hp2.Find:ehp2. on the :hp2.Edit:ehp2. pull-down
+to find or change text in the file.
+:p.When you choose this command, the Find dialog appears.  Use
+it to enter the text you want to find or change.
+:eh1.
+
+
+.************************************************************************
+.* SAVE, EXTENDED HELP PANEL - This panel appears for a help request
+.* when "Save" is highlighted on the "File" pull-down menu.
+.************************************************************************
+:h1 res=SAVE_HP name=SAVE_HP.Help for Save
+:i1 id=save.Save
+:i2 refid=save.Saving a file
+:p.Select :hp2.Save:ehp2. on the :hp2.File:ehp2. pull-down to save
+the file you are editing.
+:nt.  Use :hp2.Save as:ehp2. to save an untitled file.
+:ent.
+:eh1.
+
+
+
+.************************************************************************
+.* FILE AAB, HELP PANEL - This panel appears for a help request when
+.* "File" is highlighted on the action bar.
+.************************************************************************
+:h1 res=FILE_AAB_HP name=FILE_AAB_HP hide.Help for File pull-down
+:p.The :hp2.File:ehp2. pull-down contains commands that let you open and
+save files, and to exit the editor.
+:p.Press the Enter key to access the items on
+the :hp2.File:ehp2. pull-down.
+:eh1.
+
+.************************************************************************
+.* EDIT AAB, HELP PANEL - This panel appears for a help request when
+.* "Edit" is highlighted on the action bar.
+.************************************************************************
+:h1 res=EDIT_AAB_HP name=EDIT_AAB_HP hide.Help for Edit pull-down
+:p.The :hp2.Edit:ehp2. pull-down contains commands that help you move,
+copy, delete, find and change text.
+:p.Press the Enter key to access the items on
+the :hp2.Edit:ehp2. pull-down.
+:eh1.
+
+.************************************************************************
+.* OPTIONS AAB, HELP PANEL - This panel appears for a help request when
+.* "File" is highlighted on the action bar.
+.************************************************************************
+:h1 res=OPTIONS_AAB_HP name=OPTIONS_AAB_HP hide.Help for Options pull-down
+:p.The :hp2.Options:ehp2. pull-down contains items you can use to
+customize the TED Editor.
+:p.Press the Enter key to access the items on
+the :hp2.Options:ehp2. pull-down.
+:eh1.
+
+.************************************************************************
+.* HELP AAB, HELP PANEL - This panel appears for a help request when
+.* "Help" is highlighted on the action bar.
+.************************************************************************
+:h1 res=HELP_AAB_HP name=HELP_AAB_HP hide.Help for Help pull-down
+:p.The :hp2.Help:ehp2. pull-down contains items you can use to get
+different types of online help for the TED Editor.
+:p.Press the Enter key to access the items on
+the :hp2.Help:ehp2. pull-down.
+:eh1.
+
+.************************************************************************
+.* HELP FOR HELP..., AAB ITEM HELP PANEL - This panel appears for a help
+.* request when "Help for help..." is highlighted on the "Help" pull-down
+.* menu.
+.************************************************************************
+:h1 res=HELPONHELP_MENU_HP name=HELPONHELP_MENU_HP.Help for help
+:p.Select :hp2.Help for help:ehp2. on the :hp2.Help:ehp2. pull-down
+for information on how to use the Ted Editor help facility.
+:eh1.
+
+
+
+.************************************************************************
+.* CANCEL BUTTON, HELP PANEL - This panel appears for a help request
+.* when the Cancel button on any dialog has cursor focus.
+.************************************************************************
+:h1 res=CANCEL_BUTTON_HP name=CANCEL_BUTTON_HP hide.Help for Cancel
+:p.Select the :hp2.Cancel:ehp2. pushbutton to exit the dialog without
+performing any action.
+:eh1.
+
+.************************************************************************
+.* HELP BUTTON, HELP PANEL - This panel appears for a help request
+.* when the Help button on any dialog has cursor focus.
+.************************************************************************
+:h1 res=HELP_BUTTON_HP name=HELP_BUTTON_HP hide.Help for Help
+:p.Select the :hp2.Help:ehp2. pushbutton when you need help with the
+highlighted field on the dialog.
+:p.For more information about using the help facility,
+select :hp2.Help for help:ehp2. on the :hp2.Help:ehp2. pull-down.
+:eh1.
+
+
+.************************************************************************
+.* EXTENDED HELP..., AAB ITEM HELP PANEL - This panel appears for a help
+.* request when "Extended help..." is highlighted on the "Help" pull-down
+.* menu.
+.************************************************************************
+:h1 res=EXTHELP_MENU_HP name=EXTHELP_MENU_HP.Help for Extended help
+:p.Select :hp2.Extended help:ehp2. on the :hp2.Help:ehp2. pull-down
+to see the extended help panel for the TED Editor.
+:eh1.
+
+
+.************************************************************************
+.* END OF LINE CHARACTER, HELP PANEL - This panel appears when the "EOL
+.* character" reference phrase is selected from the Word wrap or Editing
+.* Keys help panels.
+.************************************************************************
+:h1 res=EOL_CHAR_HP name=EOL_CHAR_HP.Help for EOL character
+:i1 id=eol.End of line character
+:p.The End of line (EOL) character is an invisible character that is
+located at the end of every line of text when :hpt.Word wrap
+:ehpt. :hdref RES=WORD_WRAP_HP. is turned off.  You can join or split lines by
+deleting or inserting an EOL character.
+:p.When :hpt.Word wrap:ehpt.:hdref RES=WORD_WRAP_HP. is on, every line
+may not end with an EOL character.  Be sure it is turned off
+before attempting to spit or join a line.
+:p.To split a line&colon.
+:p.
+:hp5.Mouse users:ehp5.
+:ol compact.
+:li.Click the mouse button to move the cursor to the location
+where you want the line split.
+:li.Press the Enter key to insert an EOL character.
+:eol.
+:p.
+:hp5.Keyboard users:ehp5.
+:ol compact.
+:li.Use the cursor keys to move the cursor to the location
+where you want the line split.
+:li.Press the Enter key to insert an EOL character.
+:eol.
+:p.To join two lines&colon.
+:p.
+:hp5.Mouse users:ehp5.
+:ol compact.
+:li.With the pointer past the end of the line, click the
+mouse button to move the cursor to the end of the line.
+:li.Press the Delete key to delete the EOL character.
+:eol.
+:p.
+:hp5.Keyboard users:ehp5.
+:ol compact.
+:li.Press the End key to move the cursor to the end of the line.
+:li.Press the Delete key to delete the EOL character.
+:eol.
+:eh1.
+
+
+.************************************************************************
+.* TAB CHARACTER, HELP PANEL - This panel appears when "Tab character"
+.* reference phrase is selected from the Editing Keys help panel.
+.************************************************************************
+:h1 res=TAB_CHAR_HP name=TAB_CHAR_HP.Help for Tab character
+:i1 id=tab.Tab character
+:p.A :hp4.tab character:ehp4. is a :hp5.single:ehp5. character that
+appears on the screen to be as many as eight blank spaces.
+:p.:hp4.Tab stops:ehp4. are invisible, stationary points on the
+screen that are located every eight character spaces.
+:p.A tab may be inserted and deleted like any other character.  When
+the Tab key is pressed to insert a tab character in the text, enough
+blank space is inserted to reach from the cursor location to the
+next tab stop.  Any characters to the right of the cursor are shifted
+to the right.  If a tab character is deleted, the text to the right
+of it will shift to the left.
+:p.As text is inserted or deleted to the left of a tab character,
+the size of the tab character is automatically reduced or increased
+so that characters to the right of the tab do not move. This
+characteristic helps you keep columns of text aligned.
+:eh1.
+
+
+
+
+.************************************************************************
+.* KEYS, HELP PANEL - This panel appears when Keys help is requested
+.* from any help pull down menu.
+.************************************************************************
+:h1 res=KEYS_HELP_HP name=KEYS_HELP_HP.Help for Keys
+:i1 id=keys.Keys
+:p.Double click on one of the following groups to get help for
+keys that do a specific task&colon.
+:p.
+:ul compact.
+:li.:hpt.Cursor movement keys
+:ehpt.:hdref RES=CURSOR_KEYS_HP.
+:li.:hpt.Editing keys
+:ehpt.:hdref RES=EDITING_KEYS_HP.
+:li.:hpt.Text selection keys
+:ehpt.:hdref RES=SELECTION_KEYS_HP.
+:li.:hpt.Action bar keys
+:ehpt.:hdref RES=AAB_KEYS_HP.
+:li.:hpt.Menu keys
+:ehpt.:hdref RES=MENU_KEYS_HP.
+:li.:hpt.Dialog keys
+:ehpt.:hdref RES=DIALOG_KEYS_HP.
+:li.:hpt.System keys.
+:ehpt.:hdref RES=SYSTEM_KEYS_HP.
+:eul.
+:eh1.
+
+.************************************************************************
+.* CURSOR MOVEMENT KEYS, HELP PANEL - This panel appears when the
+.* "Cursor Movement Keys" reference phrase is selected from the main
+.* keys help panel.
+.************************************************************************
+:h1 res=CURSOR_KEYS_HP name=CURSOR_KEYS_HP hide.Help for Cursor movement keys
+:i2 refid=keys.Cursor movement keys
+:p.Use these keys to move the cursor in the editing area.
+:dl tsize=14.
+:dthd.:hp5.Key&colon.:ehp5.
+:ddhd.:hp5.Function&colon.:ehp5.
+:dt.Up
+:dd.Moves the cursor up one line.
+:dt.Down
+:dd.Moves the cursor down one line.
+:dt.Right
+:dd.Moves the cursor right one character.
+:dt.Left
+:dd.Moves the cursor left one character.
+:dt.Ctrl+Right
+:dd.Moves the cursor to the beginning of the next word.
+:dt.Ctrl+Left
+:dd.Moves the cursor to the beginning of the previous word.
+:dt.Home
+:dd.Moves the cursor to the beginning of the current line.
+:dt.End
+:dd.Moves the cursor to the end of the current line.
+:dt.Ctrl+Home
+:dd.Moves the cursor to the beginning of the first line in the file.
+:dt.Ctrl+End
+:dd.Moves the cursor to the end of the last line in the file.
+:dt.Page Up
+:dd.Scrolls the text up one window.
+:dt.Page Down
+:dd.Scrolls the text down one window.
+:edl.
+:eh1.
+
+.************************************************************************
+.* EDITING KEYS, HELP PANEL - This panel appears when the "Editing Keys"
+.* reference phrase is selected from the main keys help panel.
+.************************************************************************
+:h1 res=EDITING_KEYS_HP name=EDITING_KEYS_HP hide.Help for Editing keys
+:i2 refid=keys.Editing keys
+:p.Use these keys to edit the text in the file.
+:dl tsize=18.
+:dthd.:hp5.Key&colon.:ehp5.
+:ddhd.:hp5.Function&colon.:ehp5.
+:dt.Enter
+:dd.Splits the current line by inserting
+one :hpt.EOL character:ehpt.:hdref RES=EOL_CHAR_HP. at the cursor position.
+:dt.Tab
+:dd.Inserts a :hpt.Tab character:ehpt.:hdref RES=TAB_CHAR_HP. at
+the cursor position.
+:dt.Insert
+:dd.Switches between insert and overtype mode.
+:p.In insert mode, new text is inserted at the cursor position,
+moving the existing text to the right.
+:p.In overtype mode, the new text replaces the existing text.
+:dt.Delete
+:dd.If text is selected, the selected text is deleted.
+:p.If no text is selected, the character to the right of the cursor
+is deleted, and any remaining characters to the right of the cursor are
+shifted left.
+:p.If the cursor is at the end of the line,
+the :hpt.EOL character:ehpt.:hdref RES=EOL_CHAR_HP. is
+deleted and the line is joined with the next line.
+:dt.Backspace
+:dd.If text is selected, the selected text is deleted.
+:p.If no text is selected, the character to the left of the cursor
+is deleted, and any remaining characters to the right of the cursor are
+shifted left.
+:p.If the cursor is at the beginning of the line,
+the :hpt.EOL character:ehpt.:hdref RES=EOL_CHAR_HP. on the previous line
+is deleted, and the current line is joined with the previous one.
+:dt.Ctrl+Delete
+:dd.Deletes all characters from the cursor to the end of the current line.
+:p.If the cursor is at the end of the line,
+the :hpt.EOL character:ehpt.:hdref RES=EOL_CHAR_HP. is deleted
+and the line is joined with the next line.
+:dt.Shift+Del
+:dd.:hpt.Cuts:ehpt.:hdref RES=CUT_HP. the selected text out
+of the file and saves it in
+the :hpt.Clipboard:ehpt.:hdref RES=CLIPBOARD_HP.&period.
+:dt.Ctrl+Ins
+:dd.:hpt.Copies:ehpt.:hdref RES=COPY_HP. the selected from the file
+and saves it in the :hpt.Clipboard:ehpt.:hdref RES=CLIPBOARD_HP.&period.
+:dt.Shift+Ins
+:dd.:hpt.Pastes:ehpt.:hdref RES=PASTE_HP. the text in
+the :hpt.Clipboard:ehpt.:hdref RES=CLIPBOARD_HP. into the
+file at the cursor position.
+:p.If text is selected, the :hpt.Clipboard:ehpt.:hdref RES=CLIPBOARD_HP. text
+will replace the selected text.
+:p.If no text is selected, the :hpt.Clipboard:ehpt.:hdref RES=CLIPBOARD_HP. text
+is inserted at the cursor position.
+:dt.Alt+Backspace
+:dd.Undoes the last change made
+:edl.
+:eh1.
+
+.************************************************************************
+.* TEXT SELECTION KEYS, HELP PANEL - This panel appears when the "Text
+.* Selection Keys" reference phrase is selected from the main keys help
+.* or the Selecting Text help panel.
+.************************************************************************
+:h1 res=SELECTION_KEYS_HP name=SELECTION_KEYS_HP hide.Help for Text selection keys
+:i2 refid=keys.Text selection keys
+:i2 refid=select.Text selection keys
+:p.Use these keys to select text and extend existing selected
+areas of text.
+:caution. If an area of text is selected, pressing
+any character key, the Backspace key, or the Delete
+key deletes the selected text from the file.
+:ecaution.
+:dl tsize=20.
+:dthd.:hp5.Key&colon.:ehp5.
+:ddhd.:hp5.Function&colon.:ehp5.
+:dt.Shift+arrow
+:dd.Selects text or extends a selection in
+the direction of the arrow.
+:dt.Shift+Home
+:dd.Selects text or extends a selection to
+the beginning of the current line.
+:dt.Shift+End
+:dd.Selects text or extends a selection to
+the end of the current line.
+:dt.Shift+Ctrl+Right
+:dd.Selects text or extends a selection to
+the beginning of the next word.
+:dt.Shift+Ctrl+Left
+:dd.Selects text or extends a selection to
+the beginning of the previous word.
+:dt.Shift+Ctrl+Home
+:dd.Selects text or extends a selection to
+the beginning of the file.
+:dt.Shift+Ctrl+End
+:dd.Selects text or extends a selection to
+the end of the file.
+:edl.
+:eh1.
+
+.************************************************************************
+.* ACTION BAR KEYS, HELP PANEL - This panel appears when the "Action Bar
+.* Keys" reference phrase is selected from the main keys help panel.
+.************************************************************************
+:h1 res=AAB_KEYS_HP name=AAB_KEYS_HP hide.Help for Action bar keys
+:i2 refid=keys.Action bar keys
+:p.Use these keys to select the System icon and action bar items.
+:dl tsize=15.
+:dthd.:hp5.Key&colon.:ehp5.
+:ddhd.:hp5.Function&colon.:ehp5.
+:dt.F10
+:dd.Switches between the action bar and the editing area.
+:dt.Shift+Esc
+:dd.Switches between the System icon and the editing area.
+:dt.Right
+:dd.Highlights the next action bar item or the System icon.
+:dt.Left
+:dd.Highlights the previous action bar item or the System icon.
+:dt.Enter
+:dd.Accesses the pull-down of the highlighted action
+bar item or System icon.
+:dt.Mnemonic
+:dd.The mnemonic key is the key corresponding with the
+underlined letter in the action bar items.  It accesses
+the pull-down of the action bar item containing the mnemonic.
+:dt.Escape
+:dd.Returns to the editing area.
+:edl.
+:eh1.
+
+.************************************************************************
+.* MENU KEYS, HELP PANEL - This panel appears when the "Menu Keys"
+.* reference phrase is selected from the main keys help panel.
+.************************************************************************
+:h1 res=MENU_KEYS_HP name=MENU_KEYS_HP hide.Help for Menu keys
+:i2 refid=keys.Menu keys
+:p.Use these keys to select pull-down items.
+:dl tsize=15.
+:dthd.:hp5.Key&colon.:ehp5.
+:ddhd.:hp5.Function&colon.:ehp5.
+:dt.Up
+:dd.Moves up one pull-down item.
+:dt.Down
+:dd.Moves down one pull-down item.
+:dt.Enter
+:dd.Selects the highlighted pull-down item.
+:dt.Mnemonic
+:dd.The mnemonic key is the key corresponding with the
+underlined letter in the pull-down items.  It selects
+the pull-down item containing the mnemonic.
+:dt.Escape
+:dd.Closes the pull-down.
+:edl.
+:eh1.
+
+.************************************************************************
+.* DIALOG KEYS, HELP PANEL - This panel appears when the "Dialog Keys"
+.* reference phrase is selected from the main keys help panel.
+.************************************************************************
+:h1 res=DIALOG_KEYS_HP name=DIALOG_KEYS_HP hide.Help for Dialog keys
+:i2 refid=keys.Dialog keys
+:p.Use these keys to select dialog box items.
+:dl tsize=14.
+:dthd.:hp5.Key&colon.:ehp5.
+:ddhd.:hp5.Function&colon.:ehp5.
+:dt.Tab
+:dd.Moves to the next control group on the dialog.
+:dt.Shift+Tab
+:dd.Moves to the previous control group on the dialog.
+:dt.Right
+:dd.Moves to the next button on the dialog.
+:dt.Left
+:dd.Moves to the previous button on the dialog.
+:dt.Up
+:dd.Moves up one item in a selection box.
+:dt.Down
+:dd.Moves down one item in a selection box.
+:dt.Page Up
+:dd.Scrolls up one page in a selection box with scroll bars.
+:dt.Page Down
+:dd.Scrolls down one page in a selection box with scroll bars.
+:dt.Spacebar
+:dd.Switches a check box on and off.
+:dt.Enter
+:dd.Starts the activity for the selected pushbutton.
+:dt.Escape
+:dd.Exits the dialog.
+:edl.
+:eh1.
+
+.************************************************************************
+.* SYSTEM KEYS, HELP PANEL - This panel appears when the "System Keys"
+.* reference phrase is selected from the main keys help panel.
+.************************************************************************
+:h1 res=SYSTEM_KEYS_HP name=SYSTEM_KEYS_HP hide.Help for System keys
+:i2 refid=keys.System keys
+:p.Use these keys to switch between, move, and size
+Presentation Manager windows.
+:dl tsize=20.
+:dthd.:hp5.Key&colon.:ehp5.
+:ddhd.:hp5.Function&colon.:ehp5.
+:dt.Alt+Tab
+:dd.Switches to the next Presentation Manager window.
+:dt.Alt+Shift+Tab
+:dd.Switches to the previous Presentation Manager window.
+:dt.Alt+Esc
+:dd.Switches to the next application (including non-Presentation
+Manager applications).
+:dt.Ctrl+Esc
+:dd.Switches to the Task List.
+:dt.Alt+F4
+:dd.Closes the active window.
+:dt.Alt+F5
+:dd.Restores the active window.
+:dt.Alt+F7
+:dd.Moves the active window.
+:dt.Alt+F8
+:dd.Sizes the active window.
+:dt.Alt+F9
+:dd.Minimizes the active window.
+:dt.Alt+F10
+:dd.Maximizes the active window.
+:edl.
+:eh1.
+
+.************************************************************************
+.* CLIPBOARD, HELP PANEL - This panel appears when the "Clipboard"
+.* reference phrase is selected from the Cut, Copy, or Paste help
+.* panels.
+.************************************************************************
+:h1 res=CLIPBOARD_HP name=CLIPBOARD_HP.Help for Clipboard
+:i1 id=clipboard.Clipboard
+:p.The Clipboard holds the text that
+you :hpt.Cut :ehpt.:hdref RES=CUT_HP.or :hpt.Copy:ehpt.:hdref RES=COPY_HP.&period.
+:p.The Clipboard can only hold one block of text at a time.  When
+you :hpt.Cut :ehpt.:hdref RES=CUT_HP.or :hpt.Copy:ehpt.:hdref RES=COPY_HP. text,
+any text that is already in the Clipboard is replaced.
+:p.When you use :hpt.Paste:ehpt.:hdref RES=PASTE_HP. text, the text
+in the Clipboard is inserted into the file.
+:eh1.
+
+.************************************************************************
+.* SELECTING TEXT, EXTENDED HELP PANEL - This help panel appears when
+.* the "selected text" reference phrase is selected from the Cut, Copy,
+.* or Clear help panels.
+.************************************************************************
+:h1 res=SELECTING_TEXT_HP name=SELECTING_TEXT_HP.Help for Selecting text
+:i1 id=select.Selecting text
+:i2 refid=select.How to select text
+:p.Selecting text means to highlight it. You can select text
+using the mouse, the keyboard, or both.
+:p.Select :hp2.Select all:ehp2. on the :hp2.Edit:ehp2. pull-down to
+select all of the text in the file.
+:caution. If an area of text is selected, pressing
+any character key, the Backspace key, or the Delete
+key deletes the selected text from the file.
+:ecaution.
+:hp5.Using only the mouse:ehp5.
+:p.To select text&colon.
+:p.
+:ol compact.
+:li.Click and hold the mouse button at the beginning of the area you
+want to select.
+:li.Move the mouse to highlight the area to be selected.
+:li.Release the mouse button.
+:eol.
+:p.To select a word&colon.
+:p.
+:ol compact.
+:li.Move the pointer to the word you want to select.
+:li.Double click the mouse button.
+:nt.  This method will also select blank space in a line.
+:ent.
+:eol.
+:hp5.Using both the mouse and the keyboard:ehp5.
+:p.
+:ol compact.
+:li.Click the mouse button at the beginning of the area you want to
+select.
+:li.Hold the Shift key down.
+:li.Click the mouse button at the end of the area you want to select.
+:nt.  Double clicking at this point will include the word under the
+pointer in the selection.
+:ent.
+:eol.
+:hp5.Using only the keyboard:ehp5.
+:p.Use the :hpt.text selection keys:ehpt.:hdref RES=SELECTION_KEYS_HP. to select
+text or extend an existing selection using only the keyboard.
+:p.
+:hp5.Extending a selection:ehp5.
+:p.
+:ol compact.
+:li.Hold the Shift key down.
+:li.Click the mouse button at the end of the area you want to select.
+:nt.  Double clicking at this point will include the word under the
+pointer in the selection.
+:ent.
+:eol.
+:eh1.
+
+
+.************************************************************************
+.* End of file
+.************************************************************************
+:euserdoc.

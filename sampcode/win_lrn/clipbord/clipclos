@@ -1,0 +1,6 @@
+clipclos.obj: clipclos.c
+    cl -d -c -AS -Gsw -Os -Zpe clipclos.c
+
+clipclos.exe: clipclos.obj clipclos.def
+    link4 clipclos,/align:16,/map,slibw/NOE,clipclos.def
+    mapsym clipclos

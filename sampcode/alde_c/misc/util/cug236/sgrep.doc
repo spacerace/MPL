@@ -1,0 +1,225 @@
+/*
+	HEADER:		CUG236;
+	TITLE:		SGREP Documentation;
+	DATE:		05/17/1987;
+	VERSION:	1.0;
+	FILENAME:	SGREP.DOC;
+	SEE-ALSO:	SGREP.C;
+	AUTHORS:	J. McKeon;
+*/
+
+	SGREP is a modification of the public domain
+version of the Unix utility GREP, PC Sig #149 or CUG 152.
+The following additions were made:
+
+	1) string substitution capability,
+	2) multiple pattern search,
+	3) distinction between upper and lower case,
+	4) scanning options to extend capability and speed-up processing.
+
+All Grep options are retained except multiple files.
+
+	The command line for Sgrep is similar to that
+for Grep but with the pattern replaced by the name of the
+pattern file. For output to the screen the command line is
+
+	sgrep [-y] pattern_file input_file
+
+and for output to disk,
+
+	sgrep [-y] pattern_file input_file > output_file
+
+The y-option removes the distinction between upper and lower case
+when matching patterns.
+
+	Also included is a peprocessor using Sgrep which translates
+from a Basic - Fortran like language into C. Several programs are
+included in this "BC" language, which may also contain C statements.
+The pattern file, pf.bc, for this preprocessor language illustrates
+the use of Sgrep.
+
+	This disk contains the following files:
+
+	sgrep.doc	pattern matching and substitution utility
+	sgrep.c
+	pf.bc		BC to C translator
+	progs.bc	programs in BC
+	progs.c		programs translated into C by Sgrep
+	bc.h		small header file
+	bc.bat		batch file to translate and compile
+
+	Information on the construction of patterns is contained
+in the help file which is displayed on typing "sgrep ?". The contents
+of the help file is:
+
+                 *     *     *     *
+
+Sgrep searches a file for a given pattern and substitutes a pattern.
+If no substitution is required, the command sgrep -myn corresponds
+to grep -n and will match only. Output is to the screen and may be
+re-directed using ">" at the DOS level. Execute by
+  sgrep [flags] pattern-file input-file
+
+Flags are single characters preceeded by '-':
+   -c      Only a count of matching lines is printed.
+   -m      Match patterns only. No substitutions.
+   -n      Each line is preceeded by its line number.
+   -v      Only print non-matching lines.
+   -y      Upper and lower case match.
+
+Each match pattern is on a separate line followed by its substitute
+pattern, if any, also on a separate line.
+
+ MATCH PATTERNS
+
+The regular_expression defines the pattern to search for.  Upper and
+lower-case are regarded as different unless -y option is used.
+x      An ordinary character (not mentioned below) matches that character.
+'\'    The backslash quotes any character.  "\$" matches a dollar-sign.
+'$'    Matches beginning or end of line.
+'.'    A period matches any character except "new-line".
+':a'   A colon matches a class of characters described by the following
+':d'     character.  ":a" matches any alphabetic, ":d" matches digits,
+':n'     ":n" matches alphanumerics, ": " matches spaces, tabs, and
+': '     other control characters except new-line.
+'*'    An expression followed by an asterisk matches zero or more
+       occurrances of that expression: "fo*" matches "f", "fo"
+       "foo", etc.
+'+'    An expression followed by a plus sign matches one or more
+       occurrances of that expression: "fo+" matches "fo", etc.
+'-'    An expression followed by a minus sign optionally matches
+       the expression.
+'[]'   A string enclosed in square brackets matches any character in
+       that string, but no others.  If the first character in the
+       string is a circumflex, the expression matches any character
+       except "new-line" and the characters in the string.  For
+       example, "[xyz]" matches "xx" and "zyx", while "[^xyz]"
+       matches "abc" but not "axb".  A range of characters may be
+       specified by two characters separated by "-".  Note that,
+       [a-z] matches alphabetics, while [z-a] never matches.
+The concatenation of regular expressions is a regular expression.
+
+ SCANNING OPTIONS
+
+The default scanning option is match all occurences of the pattern.
+'@'    at the beginning of the pattern, is equivalent to
+       "$: *", meaning match first non-whitespace pattern.
+'@e'   at the end of a pattern means that if a match is
+       found (and a substitution made), end all pattern search
+       on current line.
+'@r'   at the end of a pattern means that after a match
+       (and substitution), rescan line until no match occurs.
+
+ SUBSTITUTE PATTERNS 
+
+The only control character for substitute patterns is "?".
+Any other character represents itself. Only the characters ? and
+ \ itself need to be quoted.
+'?n'   where n is a non-zero digit, indicates the position where
+       the nth wildcard string is to be placed.
+A wildcard string is any string which is not completely fixed,
+both as to the characters and number of characters in the string.
+
+                 *     *     *     *
+
+	The options n, c and v are carried over from Grep and can be
+used only with the m (match only) option. The added y option applies
+to both match only and substitution.
+
+	A substituiton file consists of 2N records, where N is the
+number of substitutions. The file contains N pattern pairs, each
+pair consisting of a match pattern followed by its substitute pattern.
+A match only file contains N records.
+
+	The control characters for constructing match patterns, listed
+ above, are the same as those for Grep with a few changes and addtions:
+
+    1) The beginning of line symbol "^", which also represents the
+complement or NCLASS operator, has been replaced by "$, now used
+for both beginning and end of line. When "$" is the first character in
+the pattern, it is a beginning of line, otherwise, it is an end of line.
+    2) The expressions ".", "[^x]" and ": " do not match newline (linefeed).
+    3) The scan options described above have been added. The @ and @e
+options speed-up processing. The @r option allows certain repetitve
+operations. For example, the standard array index designation
+  A[I,J,K] is changed to the C form A[I][J][K] by the pattern pair
+
+	\[:n+,@r
+	[?1][
+
+This will handle arrays of any number of dimensions. The @r scan option
+is also used to insert the & before each item in a list of input variables.
+
+
+	The file pf.bc is the pattern file for the BC to C translator
+and illustrates the use of Sgrep. The file progs.bc contains programs
+in the BC language with C translations in progs.c. Translation
+from the BC language into C is line for line to simplify
+error detection. While some of the substitutions could be accomplished
+with #define macros placed in the bc.h file, the target language would
+not then be standard C.
+
+	The BC language has the following properties:
+
+	1) Each program must begin with the line GLOBAL even if there
+are no global declarations.
+
+	2) Generally, each condition or statement occupies a separate
+line but multiple declaration and assignment statements are possible,
+
+	REAL A; INTEGER N
+	I=1; J=2; K=3
+
+	3) No semicolons are required at the end of lines.
+
+	4) Only lines whose first non-whitespace character is a capital
+letter will be processed. Other lines are copied without change. This
+allows C statements to be included anywhere provided the first character
+in the line is not a capital letter.
+
+	5) Comments are usually on a separate line but a comment may
+follow a statement terminated by a semicolon,
+
+		A = B + C;  /* Comment* /
+
+	6) All conditions and loops must have a terminal statement,
+
+		IF ...
+		ENDIF
+		WHILE ...
+		ENDWH
+		FOR I ...
+		NEXT I
+		etc.
+
+The FOR statement is terminated with NEXT rather than END to increase
+readability.
+
+	7) The & is inserted before variables in an input statement but
+a string variable must be preceded by *,
+
+		INPUT #1, "%d %s", A, *S
+
+	8) The file unit #n becomes file pointer fpn when used in C functions.
+	9) The switch ... case construction, although fairly common, has
+been omitted because IF ... ELSE IF ... ELSE ... ENDIF is more general
+and because the constructions switch, structure, typedef, #include, etc.
+can be included in C.
+
+
+
+	This program, SGREP, is a modification of the public domain
+version of the Unix utility GREP, PC Sig #149 or CUG 152. The following
+additions were made:
+
+	1) string substitution capability
+	2) multiple pattern search
+	3) distinction between upper and lower case
+	4) scanning options to extend capability and speed-up processing.
+
+	Also included is a peprocessor using Sgrep which translates
+from a Basic - Fortran like language into C. Several programs are
+included in this "BC" language, which may also contain C statements.
+
+					James J. McKeon
+

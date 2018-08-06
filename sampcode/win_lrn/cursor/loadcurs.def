@@ -1,0 +1,14 @@
+NAME	loadcurs
+
+DESCRIPTION 'Simple Microsoft Windows Application'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  4096
+STACKSIZE 4096
+
+EXPORTS
+    LoadCursWndProc @1

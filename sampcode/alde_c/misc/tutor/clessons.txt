@@ -1,0 +1,6017 @@
+This disk contains demostration programs that parallel the Kernighan and
+Ritchie book: The C Programming Language.  The programs are grouped by
+chapter (C-CH.1 thru C-CH.7). Each chapter contains various examples or
+C programs that demostrate a function or method.  These programs are not
+meant to be finished C programs, rather they were created for classroom
+use as an aide.  Most of these programs are in general C libraries although
+generally in a greatly enhanced form.
+
+One warning.
+These programs were created on a UNIX system, an AT&T 3B20s and a
+Digital VAX 11/70.  Keep this in mind while using the files.
+
+The file 'C-FUNCT', is a collection of more usable function calls that
+may be used and called within a C program.
+
+The file 'C-PRG.LS', is the complete listing of programs included on this
+disk.  For information, the listing is the output from the UNIX version
+of the DOS 'dir' command.  The first column, mostly -rw-r--r-- is the file
+permissions.  The first (-) is the directory place, the letter 'd', denotes
+that this entry is a directory, the hyphen, denotes that the entry is a file.
+The next 3 positions (rw-), show the permissions for the owner of the file.
+Read and Write permissions are in force here.  The hyphen in the 3rd position
+denotes that the 'execute' permission is not in force.  In the last 6
+positions, the first 3 are for the group permissions and the last 3 are for
+the public permissions.  In this example, the group and public have only
+read permissions.  The next three columns, mostly (1 cp18     cp), indicate
+quanity of links and owners (cp18 is the login).  The rest is roughly
+the same as 'dir'.
+
+
+pr 1.*
+
+
+Jul 31 13:15 1984  1.00array.c Page 1
+
+
+/* example of arrays */
+
+#define EOF -1
+#define SZ  25
+main()  /* count digits 0 - 9 and store in elements 0 - 9 */
+{
+        int c, i, digit[SZ];            /* declaration */
+        while (i = 1; i < SZ; ++i)      /* initialization */
+              digit[i - 1] = i;
+        printf("digits =");
+        for (i = 0; i < SZ; ++i)
+                printf("%4d", digit[i]);
+        printf("\n");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.10first.c Page 1
+
+
+/* This is a C program that prints a
+/* message to standard output
+/* (usually your terminal) */
+
+main()
+{
+        printf("This is a C program.\n");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.29while.c Page 1
+
+
+/* print the numbers 1 - 10 with squares and cubes */
+
+main()
+{
+        int     st, end, step, num, sq, cube;
+        st = 1;
+        end = 10;
+        step = 1;
+        num = st;
+        while (num <= end)
+        {       sq = num * num;
+                cube = num * sq;
+                printf("%6d %6d %6d\n", num, sq, cube);
+                num = num + step;
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.49for.c Page 1
+
+
+/* also prints the numbers 1 - 10 with squares
+   and cubes - this time with a "for" loop */
+
+main()
+{
+        int n;
+
+        for (n = 1; n <= 10; n = n + 1)
+                printf("%6d %6d %6d\n", n, n * n, n * n * n);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.53inc.c Page 1
+
+
+/* introduces the increment operator */
+
+main()
+{
+        int n;
+
+        for (n = 1; n <= 10; ++n)
+                printf("%6d %6d %6d\n", n, n * n, n * n * n);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.55symbolic.c Page 1
+
+
+/* introduces symbolic constants */
+
+#define MAX     10
+#define SQ      n * n
+#define CU      n * n * n
+main()
+{
+        int n;
+
+        for (n = 1; n <= MAX; ++n)
+                printf("%6d %6d %6d\n", n, SQ, CU);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.58copy.c Page 1
+
+
+/* copy input to output */
+
+#define EOF -1
+
+main()
+{
+        int c;
+        c = getchar();          /* see getc(3) */
+        while (c != EOF) {
+          putchar(c);           /* see putc(3) */
+          c = getchar();
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.62copy2.c Page 1
+
+
+/* assignments within tests */
+
+#define EOF -1
+main()  /* copy input to output; 2nd version */
+{
+        int c;
+
+        while ((c = getchar()) != EOF)
+                putchar(c);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.64ccount.c Page 1
+
+
+/* character counting program */
+
+#define EOF -1
+main()  /* count number of characters received */
+{
+        double  nc;
+
+        for (nc = 0; getchar() != EOF; ++nc)
+                        ;       /* do nothing */
+        printf("char count is %.0f\n", nc);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.67lcount.c Page 1
+
+
+/* count lines */
+
+#define EOF -1
+main()  /* count number of lines in input */
+{
+        int c;
+        long nl = 0; /* combined declaration and initialization */
+
+        while ((c = getchar()) != EOF)
+                if (c == '\n')
+                        ++nl;
+        printf("line count is %ld\n", nl);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.71uccount.c Page 1
+
+
+/* count upper case and others */
+
+#define EOF -1
+main()  /* print count of upper case letters
+        /* & all other characters received */
+{
+        int c, uc, oth;
+
+        uc = oth = 0;   /* multiple assignment */
+        while ((c = getchar()) != EOF)
+                if      (c >= 'A' && c <= 'Z')
+                        ++uc;
+                else    ++oth;
+        printf("uc is %d, oth is %d\n", uc, oth);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.73lwccount.c Page 1
+
+
+/* line, word, and char count */
+#define EOF -1
+#define YES  1
+#define NO   0
+main()  /* count lines, words, chars in input */
+{       int c, nl, nw, inword = NO;
+        long nc;
+        nl = nw = nc = 0;
+        while ((c = getchar()) != EOF)
+        {       ++nc;
+                if (c == '\n')
+                        ++nl;
+                if      (c == ' ' || c == '\t' || c == '\n')
+                        inword = NO;
+                else if (inword == NO)
+                {       inword = YES;
+                        ++nw;
+                }
+        }
+        printf("lines, words, chars: %d %d %ld\n", nl, nw, nc);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.77power.c Page 1
+
+
+/* example of function calls */
+
+main()  /* test power() for range 1 - 9 */
+{
+        int i;
+        printf("   Num   Sq\n");
+        for (i = 1; i < 10; ++i)
+                printf("%5d %5d\n", i, power(i, 2));
+}
+power(x, n)     /* raise x to the n-th power; n > 0 */
+int x, n;       /* declaration of arguments */
+{
+        int i, p = 1;
+        for (i = 1; i <= n; ++i)
+                p = p * x;
+        return (p);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.85array.c Page 1
+
+
+/* example of arrays */
+
+#define EOF -1
+#define SZ  10
+main()  /* count digits 0 - 9 and store in elements 0 - 9 */
+{
+        int c, i, digit[SZ];            /* declaration */
+        for (i = 0; i < SZ; ++i)        /* initialization */
+                digit[i] = 0;
+        while ((c = getchar()) != EOF)
+                if (c >= '0' && c <= '9')
+                        ++digit[c - '0'];
+        printf("digits =");
+        for (i = 0; i < SZ; ++i)
+                printf("%4d", digit[i]);
+        printf("\n");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.91square.c Page 1
+
+
+/* example of call by value/reference */
+
+#define MAX 10
+main()  /* test of square() */
+{
+        int answer[MAX], i;
+        square(answer, MAX);
+        for (i = 0; i < MAX; ++i)
+                printf("element %d contains %2d\n", i, answer[i]);
+}
+square(ar, sz)  /* fills array ar of size sz with the
+                /* square of the element number */
+int ar[], sz;
+{
+        for (--sz; sz >= 0; --sz)
+                ar[sz] = sz * sz;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.94getline.c Page 1
+
+
+/* example of character arrays */
+
+#define EOF -1
+#define MAX 30
+main()  /* use getline() to get a name from terminal */
+{
+  char greet[6], name[MAX];
+
+  printf("input name: ");
+  if    (getline(name, MAX) > 1)
+  {     greet[0] = 'H';
+        greet[1] = 'E';
+        greet[2] = 'L';
+        greet[3] = 'L';
+        greet[4] = 'O';
+        greet[5] = '\0';
+        printf("%s %s", greet, name);
+  }
+  else
+        printf("no name received\n");
+}
+getline(line, lim)      /* function to read a line from std input;
+                        /* insert NULL at end and return char count */
+char    line[];         /* array where line will be stored */
+int     lim;            /* max line size */
+{
+  int   c, i;
+
+  for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
+        line[i] = c;
+  if (c == '\n')                /* retain  */
+        line[i++] = c;          /* newline */
+  line[i] = '\0'; return (i);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  1.98external.c Page 1
+
+
+/* example of external variables */
+int max;        /* external variable */
+main()
+{       int i, j;
+
+        i = getint();
+        j = getint();
+        if (findmax(i, j))
+                printf("%d is largest\n", max);
+        else    printf("%d and %d are equal\n", i, j);
+}
+findmax(x, y)
+int x, y;
+{
+        if      (x == y)
+                return (0);
+        else if (x < y)
+                max = y;
+        else    max = x;
+        return (1);
+}
+getint()        /* function to convert ASCII
+                /* input from terminal to an int */
+{       int     c, sign = 1, num = 0;
+
+        printf("input integer: ");
+        if      ((c = getchar()) == '-')
+                sign = -1;
+        else if (c >= '0' && c <= '9')
+                num = (c - '0');
+        else
+                return (0);
+        while ((c = getchar()) >= '0' && c <= '9')
+                num = num * 10 + (c - '0');
+        return (num * sign);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$ 
+pr 2.*
+
+
+Jul 27 17:12 1984  2.34conv.c Page 1
+
+
+/* type conversion */
+
+main()  /* print conversion table from cm to inches
+        /* 1 inch = 2.54 cm - from 1 through 12 cm */
+{
+        int cm;
+
+        for (cm = 1; cm <= 12; ++cm)
+          printf("cm = %3d, inch = %6.2f\n", cm, cm / 2.54);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  2.50comma.c Page 1
+
+
+main()  /* calculate the sum of all integers between and including
+        /* 2 input integers, compute their average and remainder */
+{ int   i, n1, n2, ct, sm;
+  n1 = getint(); n2 = getint();
+  if (n1 <= n2)
+  { for (ct = sm = 0, i = n1; i <= n2; ++i)
+    {   sm += i; ++ct;
+    }
+    printf("n1 = %d, n2 = %d, sum = %d, ave = %.2f, remainder = %d\n",
+                n1, n2, sm, (float) sm / ct, sm % ct);
+  }
+  else
+  { printf("2nd number not big enough\n"); exit(1);
+  }
+}
+getint()        /* function to convert ASCII
+                /* input from terminal to an int */
+{       int     c, sign = 1, num = 0;
+
+        printf("input integer: ");
+        if      ((c = getchar()) == '-')
+                sign = -1;
+        else if (c >= '0' && c <= '9')
+                num = (c - '0');
+        else
+                return (0);
+        while ((c = getchar()) >= '0' && c <= '9')
+                num = num * 10 + (c - '0');
+        return (num * sign);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  2.58itob.c Page 1
+
+
+#define SZ      8 * sizeof(int) /* for portabilty       */
+main()  /* function to test itob(), integer to binary */
+{       char asc[SZ+1];
+        int i = getint();
+        itob(i, asc);
+        printf("dec = %d, octal = %o, binary = %s\n", i, i, asc);
+}
+itob(num, ar)   /* convert int to ASCII 0's and 1's */
+int num;        /* received int */
+char ar[];      /* array to store 0's and 1's */
+{       int cnt, mask = 1;
+        for (cnt = SZ - 1; cnt >= 0; --cnt)
+        {       ar[cnt] = ((num & mask)? '1': '0'); mask <<= 1;
+        }
+        ar[SZ] = '\0';
+}
+getint()        /* function to convert ASCII
+                /* input from terminal to an int */
+{       int     c, sign = 1, num = 0;
+
+        printf("input integer: ");
+        if      ((c = getchar()) == '-')
+                sign = -1;
+        else if (c >= '0' && c <= '9')
+                num = (c - '0');
+        else
+                return (0);
+        while ((c = getchar()) >= '0' && c <= '9')
+                num = num * 10 + (c - '0');
+        return (num * sign);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$ 
+pr 3.*
+
+
+Jul 27 17:12 1984  3.10while.c Page 1
+
+
+main()  /* example of nested while statements */
+{
+        int x = 10, y;
+
+        while (x >= 0)
+        {       y = x;
+                while (y >= 0)
+                {       printf("%2d%c", y, (y == 0)? '\n': '\040');
+                        --y;
+                }
+                --x;
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  3.14for.c Page 1
+
+
+main()  /* example of nested for statements */
+{       int i, j;
+
+        for (i = 0; i < 5; ++i)
+        {
+                for (j = 0; j < 5; ++j)
+                        printf("%d,%d  ", i, j);
+                putchar('\n');
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  3.20wc.c Page 1
+
+
+#define EOF -1
+main()  /* emulation of wc(1) without options */
+{       int     c, inword;
+        long    cc, lc, wc;
+        inword = cc = lc = wc = 0;
+        while ((c = getchar()) != EOF)
+        {       ++cc;
+                switch (c)
+                { case '\n':    ++lc;
+                  case '\t':
+                  case '\040':  inword = 0; break;
+                  default:      if (!inword)
+                                        ++wc;
+                                inword = 1;
+                }
+        }
+        printf("%7ld %6ld %6ld\n", lc, wc, cc);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  3.24strln.c Page 1
+
+
+#define EOF -1
+#define MAX 256
+main()  /* test strln() */
+{ char stor[MAX];
+  getline(stor, MAX);
+  printf("string length including null at end is %d\n", strln(stor));
+}
+strln(str)      /* return length of char string stored in array str;
+                /* include null at end in count */
+char str[];
+{       int i = 0, length = 0;
+        do
+        {       ++length;
+        } while (str[i++] != '\0');
+        return (length);
+}
+getline(line, lim)      /* function to read a line from std input;
+                        /* insert NULL at end and return char count */
+char    line[];         /* array where line will be stored */
+int     lim;            /* max line size */
+{
+  int   c, i;
+
+  for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
+        line[i] = c;
+  if (c == '\n')                /* retain  */
+        line[i++] = c;          /* newline */
+  line[i] = '\0'; return (i);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  3.28bc.c Page 1
+
+
+main()  /* example of break and continue */
+{
+        int     x, y;
+        for (x = 10; x; --x)
+        {       if      (x == 3)
+                        break;
+                else    y = x - 1;
+                while   (y)
+                {       if (y == 3)
+                        {       --y; continue;
+                        }
+                        printf("%3d,%d ", x, y--);
+                }
+                putchar('\n');
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  3.32bcg.c Page 1
+
+
+main()  /* example of break, continue, and goto */
+{
+        int     x, y;
+        for (x = 10; x; --x)
+        {       if      (x == 3)
+                        break;
+                else    y = x - 1;
+                while   (y)
+                {       if (y == 3)
+                        {       --y; continue;
+                        }
+                        else if (x == 5 && y == 1)
+                                goto done;
+                        printf("%3d,%d ", x, y--);
+                }
+                putchar('\n');
+        }
+        done: printf(" DONE!\n");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$ 
+pr 4.*
+
+
+Jul 27 17:12 1984  4.08getdbl.c Page 1
+
+
+#define EOF -1
+int main()      /* obtain 3 dimensions and compute volume */
+{       double l, w, h, getdbl(), vol();
+
+        l = getdbl(); w = getdbl(); h = getdbl();
+        printf("(dimensions %.2f x %.2f x %.2f) vol is %.2f\n",
+                l, w, h, vol(l, w, h));
+}
+double vol(a, b, c)     /* given 3 dimensions compute volume */
+double a, b, c;         /* arg declarations */
+{
+        return (a * b * c);
+}
+double  getdbl()        /* convert ASCII from terminal to dbl */
+{       int     c, sign = 1;    /* c = char input, sign = + */
+        float   d = 1.0;        /* d = decimal place */
+        double  num = 0.0;      /* num = converted number */
+        printf("input number: ");
+        if      ((c = getchar()) == '-')
+                sign = -1;                      /* sign = - */
+        else if (c == '\n' || c == EOF)
+                return (0);
+        else if (c == '.')
+                goto dot;
+        else if (c >= '0' && c <= '9')
+                num = (c - '0');
+        while ((c = getchar()) != '\n' && c != '.' && c != EOF)
+                if (c >= '0' && c <= '9')
+                        num = num * 10 + (c - '0');
+        if (c == '.')
+dot:            while ((c = getchar()) != EOF && c != '\n')
+                        if (c >= '0' && c <= '9')
+                        { d /= 10.0; num += d * (c - '0');
+                        }
+        return (num * sign);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  4.14vol_a.c Page 1
+
+
+double l, w, h, volume; /* external variables */
+
+int main()      /* obtain 3 dimensions and compute volume */
+{
+        double getdbl();
+        l = getdbl(); w = getdbl(); h = getdbl();
+        vol_ext();
+        printf("(dimensions %.2f x %.2f x %.2f) vol is %.2f\n",
+                l, w, h, volume);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  4.14vol_b.c Page 1
+
+
+extern double l, w, h, volume;  /* extern required if sep src file */
+
+vol_ext()       /* given 3 dimensions compute volume */
+{
+        volume = l * w * h;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  4.14vol_c.c Page 1
+
+
+#define EOF -1          /* define moved to this file */
+double  getdbl()        /* convert ASCII from terminal to dbl */
+{       int     c, sign = 1;    /* c = char input, sign = + */
+        float   d = 1.0;        /* d = decimal place */
+        double  num = 0.0;      /* num = converted number */
+        printf("input number: ");
+        if      ((c = getchar()) == '-')
+                sign = -1;                      /* sign = - */
+        else if (c == '\n' || c == EOF)
+                return (0);
+        else if (c == '.')
+                goto dot;
+        else if (c >= '0' && c <= '9')
+                num = (c - '0');
+        while ((c = getchar()) != '\n' && c != '.' && c != EOF)
+                if (c >= '0' && c <= '9')
+                        num = num * 10 + (c - '0');
+        if (c == '.')
+dot:            while ((c = getchar()) != EOF && c != '\n')
+                        if (c >= '0' && c <= '9')
+                        { d /= 10.0; num += d * (c - '0');
+                        }
+        return (num * sign);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  4.17perm.c Page 1
+
+
+main()  /* test stat() */
+{
+        int i;
+        for (i = 0; i <= 9; ++i)
+                stat();
+}
+stat()  /* demonstration of internal static */
+{
+        int fgt = 0;
+        static int rem;         /* count calls */
+
+        printf("this is call %2d, fgt is %d\n", ++rem, ++fgt);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  4.18block.c Page 1
+
+
+char ABC[] = { 'A', 'B', 'C', '\0' };                           /* 1st declaration */
+main()  /* demonstration of static and scope rules */
+{ printf("main() ABC[] is %s\n", ABC);
+  sub(); sub();
+}
+sub()   /* declare, initialize, & access two ABC[]'s */
+{ static int ABC[] = { 1, 2, 3 };                               /* 2nd declaration */
+  { static long ABC[] = { 10000, 20000, 30000 };                /* 3rd declaration */
+    printf("sub() sub-block ABC[1] is %ld\n", ABC[1]++);
+  }
+  printf("sub() ABC[1] is %d\n", ABC[1]++);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  4.26fact.c Page 1
+
+
+/* example of recursive function */
+
+main() /* test fact() for range 1 - 10 */
+{       register int i;
+        double fact();
+        for (i = 1; i <= 10; ++i)
+                printf("%2d! is %8.0f\n", i, fact(i));
+}
+double fact(num)        /* recursive function to compute and
+                           return factorial (num!) for num > 0 */
+int num;
+{       if      (num > 1)
+                return (num * fact(num - 1));
+        else    return 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  4.29prepro.c Page 1
+
+
+/* examples of #include & #define */
+
+#include <stdio.h>      /* EOF - used by getdbl() -
+                        /* is defined in <stdio.h> */
+#include "getdbl.f"     /* assumes getdbl() is in
+                        /* file getdbl.f in wd */
+#define max(A, B) ((A) > (B)? (A): (B))
+
+main()  /* test max macro */
+{
+        double getdbl();
+        double i = getdbl(), j = getdbl();
+        printf("max is %f\n", max(i, j));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  4.30sqrt.c Page 1
+
+
+/* another #include and nested function calls
+/* compile as "cc filename -lm"
+/* see exp(3M) and start of section 3 (3M) */
+
+#include <math.h>       /* declares sqrt() as type double */
+#include <stdio.h>      /* provides EOF for getdbl() */
+#include "getdbl.f"     /* assumes getdbl() is in
+                        /* file getdbl.f in wd */
+
+main() /* use sqrt() to compute square roots */
+{
+        double getdbl();
+        printf("square root is %f\n", sqrt(getdbl()));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$ 
+pr 5.*
+
+
+Aug  3 09:13 1984  5.12pdemo.c Page 1
+
+
+main()          /* demonstration of pointers */
+{
+  int x, y;
+  int *px;      /* declare px pointer to type int */
+
+  x = 5;
+  px = &x;      /* initialize px to address of x */
+  y = *px;      /* initialize y to contents of address
+                   contained in px */
+  printf("addresses of x, y, px are...\n\t%8o, %8o, %8o\n",
+                &x, &y, &px);
+  printf("values of x, y, px, *px are...\n\t%8d, %8d, %8o, %8d\n",
+                x, y, px, *px);
+y = 12;
+px = &y;
+  printf("addresses of x, y, px are...\n\t%8o, %8o, %8o\n",
+                &x, &y, &px);
+  printf("values of x, y, px, *px are...\n\t%8d, %8d, %8o, %8d\n",
+                x, y, px, *px);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.14swap_ng.c Page 1
+
+
+/* swapping values - wrong way */
+
+#include "getint.f"     /* assumes getint() in
+                           file getint.f in wd */
+main()
+{       int a = getint(), b = getint();
+
+        printf("original a, b are\t%6d, %6d\n", a, b);
+        swap_ng(a, b);
+        printf("swapped a, b are\t%6d, %6d\n", a, b);
+}
+swap_ng(x, y)           /* call by value */
+int x, y;
+{       int tmp;
+        tmp = x;
+        x = y;
+        y = tmp;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.17swap.c Page 1
+
+
+/* swapping values - correct way */
+
+#include "getint.f"     /* assumes getint() in
+                           file getint.f in wd */
+main()
+{       int a = getint(), b = getint();
+
+        printf("original a, b are\t%6d, %6d\n", a, b);
+        swap(&a, &b);
+        printf("swapped a, b are\t%6d, %6d\n", a, b);
+}
+swap(px, py)            /* call by reference */
+int *px, *py;           /* px, py are pointers to type int */
+{       int tmp;
+        tmp = *px;
+        *px = *py;
+        *py = tmp;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.20ap.c Page 1
+
+
+/* demonstration of similarity between arrays and pointers */
+
+main()
+{       static char ar[] = "test";
+        char *par;
+        int i;
+        par = ar;               /* "&" not used, WHY? */
+
+        printf("array is\t\"%s\"\n", ar);
+        printf("pointer is\t\"%s\"\n", par);
+        printf("array\tpointer\n");
+        for (i = 0; i < (sizeof(ar) - 1); ++i)
+                printf("  %c\t  %c\n", ar[i], *par++);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.26pcs.c Page 1
+
+
+/* pointers to "character strings" */
+
+main()
+{       static char arr1[] = { 'I', ' ', 'u', 's', 'e', '\0' };
+        char *ptr1 = arr1;
+        char *ptr2 = "pointers.";
+
+        printf("%s %s\n", ptr1, ptr2);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.28strln_p.c Page 1
+
+
+/* pointer version of strln() */
+
+#define MAX 256
+#include <stdio.h>      /* getline() needs EOF */
+#include "getline.f"    /* assumes getline() is in
+                           file getline.f in wd */
+main()  /* test strln_p() */
+{       char stor[MAX];
+        getline(stor, MAX);
+        printf("string length is %d\n", strln_p(stor));
+}
+strln_p(ptr)    /* return length of char string pointed to by ptr;
+                /* include null at end in count */
+char *ptr;
+{       register length = 0;
+        do
+        {       ++length;
+        } while (*ptr++ != '\0');       /* ++ increments ptr by 1 */
+        return (length);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.30strcpy.c Page 1
+
+
+/* copying strings - array version */
+
+#define MAX 256
+#include <stdio.h>      /* getline() needs EOF */
+#include "getline.f"    /* assumes getline() is in
+                           file getline.f in wd */
+main() /* test strcpy() */
+{       char src[MAX], dest[MAX];
+        getline(src, MAX);
+        strcpy(dest, src);
+        printf("src, dest...\n%s%s", src, dest);
+}
+strcpy(d, s)    /* copy string in s[] into d[] */
+char d[], s[];
+{       register i;
+        for (i = 0; d[i] = s[i]; ++i)
+                ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.33strcpy_p.c Page 1
+
+
+/* copying strings - pointer version */
+
+#define MAX 256
+#include <stdio.h>      /* getline() needs EOF */
+#include "getline.f"    /* assumes getline() is in
+                           file getline.f in wd */
+main() /* test strcpy_p() */
+{       char src[MAX], dest[MAX];
+        getline(src, MAX);
+        strcpy_p(dest, src);
+        printf("src, dest...\n%s%s", src, dest);
+}
+strcpy_p(d, s)  /* copy string *s to *d */
+char *d, *s;
+{       
+        while (*d++ = *s++)
+                ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.34strcmp.c Page 1
+
+
+/* comparing strings with pointers */
+
+#define MAX 256
+#include <stdio.h>
+#include "getline.f"
+main()  /* test strcmp() */
+{       char str1[MAX], str2[MAX];
+        register ret;
+        printf("input 1st string: "); getline(str1, MAX);
+        printf("input 2nd string: "); getline(str2, MAX);
+        if (!(ret = strcmp(str1, str2)))
+                printf("they are equal\n");
+        else    printf("no match, char %d\n", ret);
+}
+strcmp(s1, s2)  /* compare 2 strings;
+                /* if match return 0 (else char count) */
+char    *s1, *s2;
+{       register i;
+        for (i = 1; *s1 == *s2; ++i)
+                if (*s1++ == '\0')
+                        return (0);
+                else s2++;
+        return (i);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.38mda1.c Page 1
+
+
+#define D1 3
+#define D2 5
+int a[D1][D2];  /* two-dimensional array */
+main()          /* demonstration of multi-dimensional array */
+{ register i, j;
+
+  for (i = 0; i < D1; ++i)
+    for (j = 0; j < D2; ++j)
+    { a[i][j] = (i * D2) + j + 1;
+      printf("a[%d][%d] adr, value is %o, %2d\n",
+                i, j, &a[i][j], a[i][j]);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.40mda2.c Page 1
+
+
+#define D1 3
+#define D2 5
+int a[][D2] =   { {  1,  2,  3,  4,  5 },
+                  {  6,  7,  8,  9, 10 },
+                  { 11, 12, 13, 14, 15 }
+                };      /* compiler initialized */
+main()  /* two-dimensional array; another version */
+{ register i, j;
+
+  for (i = 0; i < D1; ++i)
+    for (j = 0; j < D2; ++j)
+      printf("a[%d][%d] adr, value is %o, %2d\n",
+                i, j, &a[i][j], a[i][j]);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.44aop.c Page 1
+
+
+main()  /* demonstration of an array of pointers */
+{       register i;
+        static char *arp[] =    { "I",
+                                  "NEED",
+                                  "HELP",
+                                  ""
+                                };
+        for (i = 0; *arp[i]; ++i)
+                printf("%s ", arp[i]);  
+        putchar('\n');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.49argdemo.c Page 1
+
+
+/* demonstration of arguments passed to main() */
+
+main(argc, argv, envp)          /* three args to main() */
+int     argc;                   /* argc is an int */
+char    *argv[], *envp[];       /* argv & envp are arrays
+                                /* of character pointers */
+{       register i;
+
+        printf("argc is %d\n", argc);
+        for (i = 0; i < argc; ++i)
+                printf("*argv[%d] is %s\n", i, argv[i]);
+        for (i = 0; envp[i]; ++i)
+                printf("*envp[%d] is %s\n", i, envp[i]);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.50echo1.c Page 1
+
+
+main(argc, argv)        /* emulation of basic echo(1) command;
+                        /* first version, array notation */
+int     argc;
+char    *argv[];
+{
+  register i;
+
+  for (i = 1; i < argc; ++i)
+    printf("%s%c", argv[i], (i < argc - 1)? ' ': '\n');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.53echo2.c Page 1
+
+
+main(argc, argv)        /* emulation of basic echo(1) command;
+                        /* second version, pointer notation */
+int     argc;
+char    **argv;         /* same as *argv[] */
+{
+  while (--argc > 0)
+    printf("%s%c", *++argv, (argc > 1)? ' ': '\n');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.60frp.c Page 1
+
+
+/* demonstration of function returning pointer */
+
+main()                  /* test new version of getint() */
+{
+  int *getintp();       /* getintp() returns pointer to type int */
+
+  printf("%d\n", *getintp());
+}
+int *getintp()  /* function to convert ASCII
+                /* input from terminal to an int;
+                /* return pointer to int */
+{ int   c, sign = 1, num = 0;
+
+  printf("input integer: ");
+  if    ((c = getchar()) == '-')
+        sign = -1;
+  else if (c >= '0' && c <= '9')
+        num = (c - '0');
+  else
+        return (&num);
+  while ((c = getchar()) >= '0' && c <= '9')
+        num = num * 10 + (c - '0');
+  num *= sign;
+  return (&num);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  5.63pfi.c Page 1
+
+
+/* demonstration of pointer to function */
+
+main()          /* test inter() */
+{
+  int getint(); /* getint() must be declared */
+
+  printf("%d\n", inter(getint));
+}
+inter(pfi)      /* call function via pointer arg */
+int (*pfi)();   /* pfi is pointer to function
+                /* returning type int */
+{
+  return ((*pfi)());    /* (*pfi)() is a function call */
+}
+#include "getint.f"     /* assumes getint() is in
+                        /* file getint.f in wd */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$ 
+Bpr 6.*
+
+
+Jul 27 17:12 1984  6.14struct1.c Page 1
+
+
+/* demonstration of a structure, 1st version */
+
+struct data
+{ char first[20];
+  char  last[26];
+  double     sal;
+};                      /* external definition */
+main()                  /* print structure contents */
+{ static struct data emp = { "Linda",
+                             "Sample",
+                              39000.0
+                           };   /* declare and init */
+  printf("%s %s earns $%.2f per year\n",
+                emp.first, emp.last, emp.sal);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  6.17struct2.c Page 1
+
+
+/* demonstration of a structure, 2nd version */
+
+#define FSZ 20
+#define LSZ 26
+#include <stdio.h>
+#include "getlinepn.f"  /* does not retain newline */
+#include "getdbl.f"
+struct
+{ char first[FSZ];
+  char  last[LSZ];
+  double     sal;
+} emp;  /* external definition and declaration */
+main()  /* populate then print structure */
+{ double getdbl();
+  printf("input first name: "); getlinepn(emp.first, FSZ);
+  printf("input last name: ");  getlinepn(emp.last, LSZ);
+  printf("(annual salary) ");   emp.sal = getdbl();
+  printf("%s %s earns $%.2f per year\n",
+                emp.first, emp.last, emp.sal);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  6.20aos.c Page 1
+
+
+/* demonstration of an array of structures */
+
+struct data
+{ char first[20];
+  char  last[26];
+  double     sal;
+};              /* external definition */
+main()          /* find and print last names M - Z */
+{ register i;
+  static struct data ar[] = { { "Linda", "Sample", 39000.0 },
+                              { "Sam", "Next", 37500.0 },
+                              { "Larry", "Last", 34900.0 },
+                             }; /* declare and init array ar */
+  printf("employees with last names M - Z...\n");
+  for (i = 0; i < (sizeof(ar) / sizeof(ar[0])); ++i)
+    if (ar[i].last[0] >= 'M' && ar[i].last[0] <= 'Z')
+        printf("\t%s %s earns $%.2f per year\n",
+          ar[i].first, ar[i].last, ar[i].sal);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  6.24cbv.c Page 1
+
+
+/* passing structures as arguments - by value */
+
+struct data
+{ char first[20];
+  char  last[26];
+  double     sal;
+};              /* external definition */
+main()          /* test check() */
+{ register i;
+  double pay = 36000.0;
+  static struct data ar[] = { { "Linda", "Sample", 39000.0 },
+                              { "Sam", "Next", 37500.0 },
+                              { "Larry", "Last", 34900.0 },
+                             }; /* declare and init array ar */
+  printf("employees earning more than $%.2f per year...\n", pay);
+  for (i = 0; i < (sizeof(ar) / sizeof(ar[0])); ++i)
+    if (check(ar[i], pay))
+        printf("\t%s %s earns $%.2f per year\n",
+          ar[i].first, ar[i].last, ar[i].sal);
+}
+check(str, lim)         /* return 1 if sal >= lim */
+struct data str;        /* struct declaration */
+double lim;
+{ if (str.sal >= lim)
+        return (1);
+  return (0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  6.26cbr.c Page 1
+
+
+/* passing structures as arguments - by reference */
+
+struct data
+{ char first[20];
+  char  last[26];
+  double     sal;
+};              /* external definition */
+main()          /* test check_p() */
+{ register i;
+  double pay = 36000.0;
+  static struct data ar[] = { { "Linda", "Sample", 39000.0 },
+                              { "Sam", "Next", 37500.0 },
+                              { "Larry", "Last", 34900.0 },
+                             }; /* declare and init array ar */
+  printf("employees earning more than $%.2f per year...\n", pay);
+  for (i = 0; i < (sizeof(ar) / sizeof(ar[0])); ++i)
+    if (check_p(&ar[i], pay))
+        printf("\t%s %s earns $%.2f per year\n",
+          ar[i].first, ar[i].last, ar[i].sal);
+}
+check_p(pstr, lim)      /* return 1 if sal >= lim */
+struct data *pstr;      /* pointer to struct declaration */
+double lim;
+{ if (pstr->sal >= lim)
+        return (1);
+  return (0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  6.34fields.c Page 1
+
+
+/* structure with fields */
+
+#define YES 1
+#define NO  0
+struct
+{ char first[20];
+  char  last[26];
+  double     sal;
+  unsigned retire : 1;  /* field width 1 bit */
+  unsigned school : 1;  /* field width 1 bit */
+} ar[] = { { "Linda", "Sample", 39000.0, NO,  NO },
+           { "Sam",   "Next",   37500.0, NO, YES },
+           { "Larry", "Last",   34900.0, YES, NO },
+         };     /* declare and init external array */
+main()  /* find and print active employees;
+        /* note if in school */
+{ register i;
+  printf("active employees...\n");
+  for (i = 0; i < (sizeof(ar) / sizeof(ar[0])); ++i)
+  { if (!ar[i].retire)
+    {   printf("\t%s %s earns $%.2f per year\n",
+           ar[i].first, ar[i].last, ar[i].sal);
+        if (ar[i].school)
+           printf("\t\t(in school)\n");
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aug  7 15:11 1984  6.40unions.c Page 1
+
+
+union utag
+{ char  ca[256];        /* type 1 */
+  int       num;        /* type 2 */
+};                      /* external definition */
+#include <stdio.h>
+#include "getline.f"
+#include "getint.f"
+main(argc, argv)        /* load union, call chk_u() */
+int argc;               /*      to test and print  */
+char **argv;
+{ union utag udemo;     /* union declaration */
+  ++argv;               /* point to argv[1]  */
+  if (*++*argv != '\0') /* test 2nd char of *argv[1] */
+    chk_u(0, &udemo);   /*      if not '\0' fail    */
+  switch (*--*argv)     /* test 1st char of *argv[1] */
+  { case '1': printf("input line: "); getline(udemo.ca, 256);
+              chk_u(**argv, &udemo);
+    case '2': udemo.num = getint(); chk_u(**argv, &udemo);
+    default:  chk_u(**argv, &udemo);
+  }
+}
+chk_u(utype, pun)       /* test, then print union and exit */
+char utype;
+union utag *pun;        /* pun is pointer to union */
+if(pun -> ca == pun ->num)
+     printf("same size");
+else printf("different size");
+{ switch(utype)
+  { case '1': printf("type 1, content...\n\t%s", pun->ca);
+              break;
+    case '2': printf("type 2, value is %d\n", pun->num);
+              break;
+    default:  printf("usage: filename { 1 2 }\n");
+              exit(1);  /* exit unsuccessfully */
+  }
+  exit(0);              /* exit successfully */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$ 
+pr 7.*
+
+
+Jul 27 17:12 1984  7.14getdbl_n.c Page 1
+
+
+#include <stdio.h>
+main()                  /* test getdbl_n() */
+{       double getdbl_n();
+        printf("number is %f\n", getdbl_n());
+}
+double  getdbl_n()      /* convert ASCII to dbl - 2nd version */
+{       int     c, sign = 1;    /* c = char input, sign = + */
+        float   d = 1.0;        /* d = decimal place */
+        double  num = 0.0;      /* num = converted number */
+        printf("input number: ");
+        if      ((c = getc(stdin)) == '-')
+                sign = -1;              /* sign = - */
+        else if (c == '\n' || c == EOF)
+                return (0);
+        else if (c == '.' || (c >= '0' && c <= '9'))
+                ungetc(c, stdin);       /* return c to buffer */
+        while ((c = getc(stdin)) != '\n' && c != '.' && c != EOF)
+                if (c >= '0' && c <= '9')
+                        num = num * 10 + (c - '0');
+        if (c == '.')
+                while ((c = getc(stdin)) != EOF && c != '\n')
+                        if (c >= '0' && c <= '9')
+                        { d /= 10.0; num += d * (c - '0');
+                        }
+        return (num * sign);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  7.20cp.c Page 1
+
+
+#include <stdio.h>
+main(argc, argv)        /* modified cp(1) command */
+int argc;
+char *argv[];
+{ FILE *fpr, *fpw;      /* pointers to type FILE */
+  if (argc != 3)
+  { printf("usage: %s src_file dest_file\n", argv[0]);
+    exit(1);
+  }
+  if ((fpr = fopen(argv[1], "r")) == NULL)
+  { printf("%s: cannot access %s\n", argv[0], argv[1]);
+    exit(2);
+  }
+  if ((fpw = fopen(argv[2], "w")) == NULL)
+  { printf("%s: cannot create %s\n", argv[0], argv[2]);
+    exit(2);
+  }
+  if (copy(fpr, fpw) == EOF)
+        exit(0);        /* success */
+  exit(3);              /* failure */
+}
+copy(fp1, fp2)          /* copy fp1 to fp2 */
+FILE *fp1, *fp2;
+{
+        int c;
+
+        while ((c = getc(fp1)) != EOF)
+                putc(c, fp2);
+        return (c);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  7.27cat.c Page 1
+
+
+#include <stdio.h>
+main(argc, argv)        /* modified cat(1) command */
+int argc;
+char *argv[];
+{
+  register i, c;
+  FILE *fp;             /* fp is pointer to type FILE */
+
+  for (i = 1; i < argc; ++i)
+  { if ((fp = fopen(argv[i], "r")) == NULL)
+    {   fprintf(stderr, "%s: cannot open %s\n",
+                argv[0], argv[i]);
+        continue;
+    }
+    while ((c = getc(fp)) != EOF)
+        putc(c, stdout);
+    fclose(fp);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  7.34sscanf.c Page 1
+
+
+#include <stdio.h>
+char tst[] = "123456.78 592 89000 now is the time";
+main()  /* demonstration of sscanf() */
+{
+  int   dec;
+  float f;
+  long  lg;
+  char  s1[50], s2[50];
+  int ret;
+
+  ret = sscanf(tst, "%3d %f %*d %ld %s %[a-z ]",
+                &dec, &f, &lg, s1, s2);
+  printf("return from sscanf() was %d\n", ret);
+  printf("int dec is %d\n", dec);
+  printf("float f is %.2f\n", f);
+  printf("long lg is %ld\n", lg);
+  printf("array s1 is \"%s\"\n", s1);
+  printf("array s2 is \"%s\"\n", s2);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  7.46atof.c Page 1
+
+
+/* another version of getdbl() */
+
+#include <stdio.h>
+#define MAX 256
+main()  /* test getdbl_a() */
+{       double getdbl_a();
+
+        printf("num is %f\n", getdbl_a());
+}
+double getdbl_a()       /* use (3S) & (3C) functions */
+{       char stor[MAX];
+        double atof();
+
+        printf("input number: ");
+        return (atof(fgets(stor, MAX, stdin)));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  7.50create.c Page 1
+
+
+#include <stdio.h>
+#define SCORE 8
+struct record
+{       char name[48];
+        float score[SCORE];
+};
+main()  /* create DATAFILE with student names and scores */
+{       struct record data;
+        FILE *fp;
+        if ((fp = fopen("DATAFILE", "w")) == NULL)
+        {       fprintf(stderr, "cannot create DATAFILE\n");
+                exit(2);
+        }
+        while (load(&data))
+                fwrite(&data, sizeof (data), 1, fp);
+        exit(0);
+}
+load(pstr)      /* get data from terminal; load structure */
+struct record *pstr;
+{
+        register i;
+        printf("\ninput name: ");
+        gets(pstr->name);
+        if (pstr->name[0] == '\0')
+                return (0);
+        printf("input up to %d scores ('q' to quit): ", SCORE);
+        for (i = 0; i < SCORE ; ++i)
+                if (scanf("%f", &pstr->score[i]) != 1)
+                {       pstr->score[i] = EOF;
+                        break;
+                }
+        while (getchar() != '\n')       /* buffer drain */
+                ;
+        return (1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  7.52getinfo.c Page 1
+
+
+#include <stdio.h>
+#define SCORE 8
+struct record
+{       char name[48];
+        float score[SCORE];
+};
+main()  /* get information from DATAFILE */
+{       struct record data;
+        FILE *fp;
+        if ((fp = fopen("DATAFILE", "r")) == NULL)
+        {       fprintf(stderr, "cannot open DATAFILE\n");
+                exit(2);
+        }
+        while (fread(&data, sizeof (data), 1, fp))
+                print(&data);
+        exit(0);
+}
+print(pstr)     /* compute student ave; provide printout */
+struct record *pstr;
+{
+        register i, cnt = 0;
+        double num = 0.0;
+        for (i = 0; i < SCORE ; ++i)
+                if      (pstr->score[i] != EOF)
+                {       printf("%7.2f", pstr->score[i]);
+                        num += pstr->score[i];
+                        ++cnt;
+                }
+                else    for (   ; i < SCORE; ++i)
+                                printf("   --- ");
+        if      (cnt > 0)
+                printf(" (%6.2f)", num / (double) cnt);
+        else    printf(" (  --- )");
+        printf(" %s\n", pstr->name);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  7.56checknum.c Page 1
+
+
+#include <stdio.h>
+#define SCORE 8
+struct record
+{       char name[48];
+        float score[SCORE];
+};
+main()  /* check number of entries in DATAFILE */
+{       struct record data;
+        FILE *fp;
+        if ((fp = fopen("DATAFILE", "r")) == NULL)
+        {       fprintf(stderr, "cannot open DATAFILE\n");
+                exit(2);
+        }
+        fseek(fp, 0L, 2);       /* move pointer to end-of-file */
+        printf("%5ld entries in DATAFILE\n", ftell(fp) / (long) sizeof (data));
+        exit(0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  7.59system.c Page 1
+
+
+main()  /* use sh(1) to get
+        /* long listing of DATAFILE
+        /* and use same exit status */
+{
+        unsigned ret;   /* machine independent */
+
+        ret = system("ls -l DATAFILE");
+        exit(ret >> 8); /* shift right 8 places
+                        /* to get sh(1) exit status */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  7.70cp2.c Page 1
+
+
+#include <fcntl.h>      /* included for open(2) */
+main(argc, argv)        /* modified cp(1) command */
+int argc;               /* 2nd version */
+char *argv[];           /* using system calls */
+{ int fdr, fdw;         /* file descriptors */
+  if (argc != 3)
+  { printf("usage: %s src_file dest_file\n", argv[0]);
+    exit(1);
+  }
+  if ((fdr = open(argv[1], 0)) == -1)
+  { printf("%s: cannot access %s\n", argv[0], argv[1]);
+    exit(2);
+  }
+  if ((fdw = creat(argv[2], 0644)) == -1)
+  { printf("%s: cannot create %s\n", argv[0], argv[2]);
+    exit(2);
+  }
+  if (copy(fdr, fdw) == 0)
+        exit(0);        /* success */
+  exit(3);              /* failure */
+}
+copy(fd1, fd2)          /* copy fd1 to fd2 */
+int fd1, fd2;
+{ register n;
+  char buf[512];        /* temp character storage */
+
+  while ((n = read(fd1, buf, 512)) > 0)
+    write(fd2, buf, n);
+  return (n);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$ 
+pr *.f
+
+
+Jul 27 17:12 1984  fact.f Page 1
+
+
+double fact(num)        /* recursive function to compute and
+                           return factorial (num!) for num > 0 */
+int num;
+{       if      (num > 1)
+                return (num * fact(num - 1));
+        else    return 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  getdbl.f Page 1
+
+
+double  getdbl()        /* convert ASCII from terminal to dbl */
+{       int     c, sign = 1;    /* c = char input, sign = + */
+        float   d = 1.0;        /* d = decimal place */
+        double  num = 0.0;      /* num = converted number */
+        printf("input number: ");
+        if      ((c = getchar()) == '-')
+                sign = -1;                      /* sign = - */
+        else if (c == '\n' || c == EOF)
+                return (0);
+        else if (c == '.')
+                goto dot;
+        else if (c >= '0' && c <= '9')
+                num = (c - '0');
+        while ((c = getchar()) != '\n' && c != '.' && c != EOF)
+                if (c >= '0' && c <= '9')
+                        num = num * 10 + (c - '0');
+        if (c == '.')
+dot:            while ((c = getchar()) != EOF && c != '\n')
+                        if (c >= '0' && c <= '9')
+                        { d /= 10.0; num += d * (c - '0');
+                        }
+        return (num * sign);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  getdbl_a.f Page 1
+
+
+double getdbl_a()       /* use (3S) & (3C) functions */
+{       char stor[MAX];
+        double atof();
+
+        printf("input number: ");
+        return (atof(fgets(stor, MAX, stdin)));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  getdbl_n.f Page 1
+
+
+double  getdbl_n()      /* convert ASCII to dbl - 2nd version */
+{       int     c, sign = 1;    /* c = char input, sign = + */
+        float   d = 1.0;        /* d = decimal place */
+        double  num = 0.0;      /* num = converted number */
+        printf("input number: ");
+        if      ((c = getc(stdin)) == '-')
+                sign = -1;              /* sign = - */
+        else if (c == '\n' || c == EOF)
+                return (0);
+        else if (c == '.' || (c >= '0' && c <= '9'))
+                ungetc(c, stdin);       /* return c to buffer */
+        while ((c = getc(stdin)) != '\n' && c != '.' && c != EOF)
+                if (c >= '0' && c <= '9')
+                        num = num * 10 + (c - '0');
+        if (c == '.')
+                while ((c = getc(stdin)) != EOF && c != '\n')
+                        if (c >= '0' && c <= '9')
+                        { d /= 10.0; num += d * (c - '0');
+                        }
+        return (num * sign);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  getint.f Page 1
+
+
+getint()        /* function to convert ASCII
+                /* input from terminal to an int */
+{       int     c, sign = 1, num = 0;
+
+        printf("input integer: ");
+        if      ((c = getchar()) == '-')
+                sign = -1;
+        else if (c >= '0' && c <= '9')
+                num = (c - '0');
+        else
+                return (0);
+        while ((c = getchar()) >= '0' && c <= '9')
+                num = num * 10 + (c - '0');
+        return (num * sign);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  getintp.f Page 1
+
+
+int *getintp()  /* function to convert ASCII
+                /* input from terminal to an int;
+                /* return pointer to int */
+{ int   c, sign = 1, num = 0;
+
+  printf("input integer: ");
+  if    ((c = getchar()) == '-')
+        sign = -1;
+  else if (c >= '0' && c <= '9')
+        num = (c - '0');
+  else
+        return (&num);
+  while ((c = getchar()) >= '0' && c <= '9')
+        num = num * 10 + (c - '0');
+  num *= sign;
+  return (&num);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  getline.f Page 1
+
+
+getline(line, lim)      /* function to read a line from std input;
+                        /* insert NULL at end and return char count */
+char    line[];         /* array where line will be stored */
+int     lim;            /* max line size */
+{
+  int   c, i;
+
+  for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
+        line[i] = c;
+  if (c == '\n')                /* retain  */
+        line[i++] = c;          /* newline */
+  line[i] = '\0'; return (i);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aug  3 14:21 1984  getlinep.f Page 1
+
+
+getlinep(line, lim)     /* function to read a line from std input;
+                        /* insert NULL at end and return char count */
+char    *line;          /* array where line will be stored */
+int     lim;            /* max line size */
+{
+  int   c, i;
+
+  for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
+        *line++ = c;
+  if (c == '\n')                /* retain  */
+        *line++ = c;            /* newline */
+  *line = '\0'; return (i);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  getlinepn.f Page 1
+
+
+getlinepn(pline, lim)   /* function to get a line from std input
+                        /* (do not save newline); insert null at end
+                        /* and return char count per PA ex. 04a */
+char    *pline;         /* pointer to array where line will be stored */
+int     lim;            /* max line size */
+{
+  register c, i;
+
+  for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
+        *pline++ = c;           /* newline is                   */
+  *pline = '\0'; return (i);    /*      not retained or counted */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  inter.f Page 1
+
+
+inter(pfi)      /* call function via pointer arg */
+int (*pfi)();   /* pfi is pointer to function
+                /* returning type int */
+{
+  return ((*pfi)());    /* (*pfi)() is a function call */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  itob.f Page 1
+
+
+itob(num, ar)   /* convert int to ASCII 0's and 1's */
+int num;        /* received int */
+char ar[];      /* array to store 0's and 1's */
+{       int cnt, mask = 1;
+        for (cnt = (8 * sizeof(cnt)) - 1; cnt >= 0; cnt--)
+        {       ar[cnt] = ((num & mask)? '1': '0'); mask <<= 1;
+        }
+        ar[(8 * sizeof(cnt))] = '\0';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  power.f Page 1
+
+
+power(x, n)     /* raise x to the n-th power; n > 0 */
+int x, n;       /* declaration of arguments */
+{
+        int i, p = 1;
+        for (i = 1; i <= n; ++i)
+                p = p * x;
+        return (p);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  square.f Page 1
+
+
+square(ar, sz)  /* fills array ar of size sz with the
+                /* square of the element number */
+int ar[], sz;
+{
+        for (--sz; sz >= 0; --sz)
+                ar[sz] = sz * sz;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  strcmp.f Page 1
+
+
+strcmp(s1, s2)  /* compare 2 strings;
+                /* if match return 0 (else char count) */
+char    *s1, *s2;
+{       register i;
+        for (i = 1; *s1 == *s2; ++i)
+                if (*s1++ == '\0')
+                        return (0);
+                else s2++;
+        return (i);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  strcpy.f Page 1
+
+
+strcpy(d, s)    /* copy string in s[] into d[] */
+char d[], s[];
+{       register i;
+        for (i = 0; d[i] = s[i]; ++i)
+                ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  strcpy_p.f Page 1
+
+
+strcpy_p(d, s)  /* copy string *s to *d */
+char *d, *s;
+{       
+        while (*d++ = *s++)
+                ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  strln.f Page 1
+
+
+strln(str)      /* return length of char string stored in array str;
+                /* include null at end in count */
+char str[];
+{       int i = 0, length = 0;
+        do
+        {       ++length;
+        } while (str[i++] != '\0');
+        return (length);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  strln_p.f Page 1
+
+
+strln_p(ptr)    /* return length of char string pointed to by ptr;
+                /* include null at end in count */
+char *ptr;
+{       register length = 0;
+        do
+        {       ++length;
+        } while (*ptr++ != '\0');       /* ++ increments ptr by 1 */
+        return (length);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  swap.f Page 1
+
+
+swap(px, py)            /* call by reference */
+int *px, *py;           /* px, py are pointers to type int */
+{       int tmp;
+        tmp = *px;
+        *px = *py;
+        *py = tmp;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 27 17:12 1984  vol.f Page 1
+
+
+double vol(a, b, c)     /* given 3 dimensions compute volume */
+double a, b, c;         /* arg declarations */
+{
+        return (a * b * c);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$ 
+ls -la
+total 251
+drwxr-xr-x   2 cp18     cp          2592 Aug 10 00:18 .
+drwxr-xr-x  55 root     sys          928 Aug  6 18:19 ..
+-rwxr-xr-x   1 cp18     cp           205 Jul 31 15:00 .profile
+-rw-r--r--   1 cp18     cp           330 Jul 31 13:15 1.00array.c
+-rw-r--r--   1 cp18     cp           144 Jul 27 17:12 1.10first.c
+-rw-r--r--   1 cp18     cp           266 Jul 27 17:12 1.29while.c
+-rw-r--r--   1 cp18     cp           195 Jul 27 17:12 1.49for.c
+-rw-r--r--   1 cp18     cp           136 Jul 27 17:12 1.53inc.c
+-rw-r--r--   1 cp18     cp           176 Jul 27 17:12 1.55symbolic.c
+-rw-r--r--   1 cp18     cp           173 Jul 27 17:12 1.58copy.c
+-rw-r--r--   1 cp18     cp           153 Jul 27 17:12 1.62copy2.c
+-rw-r--r--   1 cp18     cp           212 Jul 27 17:12 1.64ccount.c
+-rw-r--r--   1 cp18     cp           245 Jul 27 17:12 1.67lcount.c
+-rw-r--r--   1 cp18     cp           322 Jul 27 17:12 1.71uccount.c
+-rw-r--r--   1 cp18     cp           428 Jul 27 17:12 1.73lwccount.c
+-rw-r--r--   1 cp18     cp           341 Jul 27 17:12 1.77power.c
+-rw-r--r--   1 cp18     cp           393 Jul 27 17:12 1.85array.c
+-rw-r--r--   1 cp18     cp           369 Jul 27 17:12 1.91square.c
+-rw-r--r--   1 cp18     cp           793 Jul 27 17:12 1.94getline.c
+-rw-r--r--   1 cp18     cp           675 Jul 27 17:12 1.98external.c
+-rw-r--r--   1 cp18     cp           219 Jul 27 17:12 2.34conv.c
+-rw-r--r--   1 cp18     cp           798 Jul 27 17:12 2.50comma.c
+-rw-r--r--   1 cp18     cp           816 Jul 27 17:12 2.58itob.c
+-rw-r--r--   1 cp18     cp           182 Jul 27 17:12 3.10while.c
+-rw-r--r--   1 cp18     cp           163 Jul 27 17:12 3.14for.c
+-rw-r--r--   1 cp18     cp           356 Jul 27 17:12 3.20wc.c
+-rw-r--r--   1 cp18     cp           764 Jul 27 17:12 3.24strln.c
+-rw-r--r--   1 cp18     cp           230 Jul 27 17:12 3.28bc.c
+-rw-r--r--   1 cp18     cp           309 Jul 27 17:12 3.32bcg.c
+-rw-r--r--   1 cp18     cp          1048 Jul 27 17:12 4.08getdbl.c
+-rw-r--r--   1 cp18     cp           260 Jul 27 17:12 4.14vol_a.c
+-rw-r--r--   1 cp18     cp           145 Jul 27 17:12 4.14vol_b.c
+-rw-r--r--   1 cp18     cp           736 Jul 27 17:12 4.14vol_c.c
+-rw-r--r--   1 cp18     cp           230 Jul 27 17:12 4.17perm.c
+-rw-r--r--   1 cp18     cp           465 Jul 27 17:12 4.18block.c
+-rw-r--r--   1 cp18     cp           356 Jul 27 17:12 4.26fact.c
+-rw-r--r--   1 cp18     cp           355 Jul 27 17:12 4.29prepro.c
+-rw-r--r--   1 cp18     cp           425 Jul 27 17:12 4.30sqrt.c
+-rw-r--r--   1 cp18     cp           574 Aug  3 09:13 5.12pdemo.c
+-rw-r--r--   1 cp18     cp           348 Jul 27 17:12 5.14swap_ng.c
+-rw-r--r--   1 cp18     cp           403 Jul 27 17:12 5.17swap.c
+-rw-r--r--   1 cp18     cp           342 Jul 27 17:12 5.20ap.c
+-rw-r--r--   1 cp18     cp           186 Jul 27 17:12 5.26pcs.c
+-rw-r--r--   1 cp18     cp           519 Jul 27 17:12 5.28strln_p.c
+-rw-r--r--   1 cp18     cp           430 Jul 27 17:12 5.30strcpy.c
+-rw-r--r--   1 cp18     cp           408 Jul 27 17:12 5.33strcpy_p.c
+-rw-r--r--   1 cp18     cp           580 Jul 27 17:12 5.34strcmp.c
+-rw-r--r--   1 cp18     cp           318 Jul 27 17:12 5.38mda1.c
+-rw-r--r--   1 cp18     cp           359 Jul 27 17:12 5.40mda2.c
+-rw-r--r--   1 cp18     cp           209 Jul 27 17:12 5.44aop.c
+-rw-r--r--   1 cp18     cp           405 Jul 27 17:12 5.49argdemo.c
+-rw-r--r--   1 cp18     cp           223 Jul 27 17:12 5.50echo1.c
+-rw-r--r--   1 cp18     cp           221 Jul 27 17:12 5.53echo2.c
+-rw-r--r--   1 cp18     cp           592 Jul 27 17:12 5.60frp.c
+-rw-r--r--   1 cp18     cp           409 Jul 27 17:12 5.63pfi.c
+-rw-r--r--   1 cp18     cp           367 Jul 27 17:12 6.14struct1.c
+-rw-r--r--   1 cp18     cp           590 Jul 27 17:12 6.17struct2.c
+-rw-r--r--   1 cp18     cp           627 Jul 27 17:12 6.20aos.c
+-rw-r--r--   1 cp18     cp           775 Jul 27 17:12 6.24cbv.c
+-rw-r--r--   1 cp18     cp           801 Jul 27 17:12 6.26cbr.c
+-rw-r--r--   1 cp18     cp           746 Jul 27 17:12 6.34fields.c
+-rw-r--r--   1 cp18     cp          1181 Aug  7 15:11 6.40unions.c
+-rw-r--r--   1 cp18     cp           811 Jul 27 17:12 7.14getdbl_n.c
+-rw-r--r--   1 cp18     cp           667 Jul 27 17:12 7.20cp.c
+-rw-r--r--   1 cp18     cp           395 Jul 27 17:12 7.27cat.c
+-rw-r--r--   1 cp18     cp           483 Jul 27 17:12 7.34sscanf.c
+-rw-r--r--   1 cp18     cp           361 Jul 27 17:12 7.46atof.c
+-rw-r--r--   1 cp18     cp           773 Jul 27 17:12 7.50create.c
+-rw-r--r--   1 cp18     cp           769 Jul 27 17:12 7.52getinfo.c
+-rw-r--r--   1 cp18     cp           414 Jul 27 17:12 7.56checknum.c
+-rw-r--r--   1 cp18     cp           242 Jul 27 17:12 7.59system.c
+-rw-r--r--   1 cp18     cp           788 Jul 27 17:12 7.70cp2.c
+-rw-r--r--   1 cp18     cp           173 Jul 27 17:12 fact.f
+-rw-r--r--   1 cp18     cp           688 Jul 27 17:12 getdbl.f
+-rw-r--r--   1 cp18     cp           188 Jul 27 17:12 getdbl_a.f
+-rw-r--r--   1 cp18     cp           699 Jul 27 17:12 getdbl_n.f
+-rw-r--r--   1 cp18     cp           344 Jul 27 17:12 getint.f
+-rw-r--r--   1 cp18     cp           400 Jul 27 17:12 getintp.f
+-rw-r--r--   1 cp18     cp           391 Jul 27 17:12 getline.f
+-rw-r--r--   1 cp18     cp           387 Aug  3 14:21 getlinep.f
+-rw-r--r--   1 cp18     cp           439 Jul 27 17:12 getlinepn.f
+-rw-r--r--   1 cp18     cp           177 Jul 27 17:12 inter.f
+-rw-r--r--   1 cp18     cp           285 Jul 27 17:12 itob.f
+-rw-r--r--   1 cp18     cp           163 Jul 27 17:12 power.f
+-rw-r--r--   1 cp18     cp           155 Jul 27 17:12 square.f
+-rw-r--r--   1 cp18     cp           204 Jul 27 17:12 strcmp.f
+-rw-r--r--   1 cp18     cp           113 Jul 27 17:12 strcpy.f
+-rw-r--r--   1 cp18     cp            85 Jul 27 17:12 strcpy_p.f
+-rw-r--r--   1 cp18     cp           204 Jul 27 17:12 strln.f
+-rw-r--r--   1 cp18     cp           228 Jul 27 17:12 strln_p.f
+-rw-r--r--   1 cp18     cp           140 Jul 27 17:12 swap.f
+-rw-r--r--   1 cp18     cp           125 Jul 27 17:12 vol.f
+$
+w-r--r--   1 cp18     cp           140 Jul 27 17:12 swap.f
+-rw-r--r--   1 cp18     cp           125 Jul 27 17:12 vol

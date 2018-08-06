@@ -1,0 +1,10 @@
+#include <windows.h>
+#include  "GetAsyKS.h"
+
+GetAsyKS MENU
+    BEGIN
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

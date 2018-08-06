@@ -1,0 +1,21 @@
+# This file is used to make different versions of SHOW 
+
+LST=
+DEB=
+LDEB=
+STUB=
+BIND=
+MODE=
+
+show$(MODE).obj: show$(MODE).asm
+    masm /Z $(DEB) $(LST) show$(MODE);
+
+pager$(MODE).obj: pager$(MODE).asm
+    masm /Z $(DEB) $(LST) pager$(MODE);
+
+show$(MODE).exe: show$(MODE).obj pager$(MODE).obj
+    link $(LDEB) show$(MODE) pager$(MODE) $(STUB);
+
+:
+    $(BIND)
+

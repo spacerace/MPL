@@ -1,0 +1,56 @@
+
+
+        NAME
+                disp_cls -- clear the display and home cursor
+                disp_say -- display a string at specified position
+                disp_sayr -- disp_say, returns cursor to starting point
+                disp_char_at -- display character at specified position
+                disp_char_atr -- disp_char_at, returns cursor to start
+
+        SYNOPSIS
+                void disp_cls();
+                void disp_say(row, col, string);
+                void disp_sayr(row, col, string);
+                void disp_char_at(row, col, ch);
+                void disp_char_atr(row, col, char);
+                int row, col;     position to display
+                char *string;     string to display
+                char ch;          character to display
+
+
+        DESCRIPTION
+        These functions use the features of Datalight's display
+        package functions, and therefore, must follow the rules
+        laid down by Datalight for their use.  Specifically,
+        disp_open() must be called prior to using these functions,
+        and the functions may fail of the target system is not a
+        very close compatible since direct memory writing is being
+        used.  disp_char_at() passes only a carriage return, linefeed,
+        backspace, tab, and bell control code.  All other control codes
+        are ignored.  disp_sayr() and disp_char_atr() read the current
+        real cursor position and perform a disp_move() after writing
+        the specified data.  Before using these calls, be sure the
+        display package cursor position and the screen position are
+        equal by doing a disp_flush() call.  disp_say(), disp_cls(),
+        and disp_char_at() all perform the disp_flush() call before
+        returning, thereby insuring cursor updating.
+
+
+        EXAMPLE
+
+              int i;
+              disp_open();    /* initialize the package */
+              disp_cls();     /* clear the screen */
+              disp_say(0, 0, "Hello");  /* write to upper left corner */
+              for(i = 0; i < 10; i++) {
+                 disp_char_at(i, i+1, i | '0');  /* write a sequence */
+                 }
+              disp_move(12, 40);   /* move to center of screen */
+              disp_flush();        /* physically update screen cursor */
+              disp_sayr(20, 70, "Goodby");  /* write into lower corner */
+              disp_putc('!');   /* this char should be at 12, 40 */
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

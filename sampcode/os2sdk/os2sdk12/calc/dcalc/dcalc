@@ -1,0 +1,42 @@
+#===================================================================
+#
+#   DCalc Application Make file
+#
+#===================================================================
+#
+# Default compilation macros
+#
+
+CC  = cl -c -u -Asnd -G2cs -Od -W3 -Zi
+LF  = /align:16 /codeview /map /NOD
+
+#===================================================================
+#
+# Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+all: dcalc.exe
+
+#===================================================================
+#
+# Dependencies
+#
+#===================================================================
+
+dcalc.res: dcalc dcalc.h dcalc.rc ..\calc.ico dcalc.dlg
+
+dcalc.obj: dcalc dcalc.h dcalc.c
+
+calcmath.obj: ..\calcmath.c ..\calc.h
+    $(CC) /Focalcmath.obj ..\calcmath.c
+
+dcalc.exe: dcalc dcalc.obj calcmath.obj dcalc.res dcalc.def
+    link $(LF) dcalc calcmath, dcalc, dcalc, os2 slibcep, dcalc.def
+    rc dcalc.res

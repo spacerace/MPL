@@ -1,0 +1,12 @@
+setrop2.obj: setrop2.c 
+  cl -c -W2 -AS -Gsw -Od -Zped setrop2.c
+
+setrop2.res: setrop2.rc setrop2.ico
+  rc -r setrop2.rc
+
+setrop2.exe: setrop2.obj setrop2.def setrop2.res 
+    link4 setrop2,/align:16,,slibw,setrop2.def
+    rc setrop2.res
+    del setrop2.obj
+    del setrop2.map
+

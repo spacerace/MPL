@@ -1,0 +1,6 @@
+
+fillrgn.obj: fillrgn.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 fillrgn.c
+
+fillrgn.exe: fillrgn.obj fillrgn.def
+    link4 /align:16 fillrgn,,nul,slibw/NOE,fillrgn.def

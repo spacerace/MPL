@@ -1,0 +1,6 @@
+
+arcc.obj: arcc.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 arcc.c
+
+arcc.exe: arcc.obj arcc.def
+    link4 /align:16 arcc,,nul,slibw/NOE,arcc.def

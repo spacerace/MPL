@@ -1,0 +1,516 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,32
+[1mPonzoTUTOR
+.WNT
+    a little STRUCTURE   
+.R5C1
+    If we wish to keep a record of, say, friends ... including name,
+    address, birthdate, etc. we might declare:
+
+~b~Ichar name[20], address[40], birthdate[15];~N
+
+    where ~b~Iname~N, for example, is an array of 20 characters which is meant to
+    hold the name of one such friend, and ~b~Iaddress~N holds 40 ~b~Ichar~Ns, etc.
+    If we want 100 such records, we could use:    
+
+~b~Ichar name[100][20], address[100][40], birthdate[100][15];~N
+
+    where name[0], name[1],name[2], etc. are each arrays of 20 characters, etc.
+
+    We would print our list via a statement like:
+
+~b~Ifor (i=0; i<100; i++) printf("\n%s %s %s",name[i],address[i],birthdate[i]);~N
+.WN
+    Since the ~b~Ibirthdate~N has the form "Nov 6, 1934" (for example) we would
+    need to extract the last number ( 1934), and perform a subtraction, in 
+    order to determine his (her?) age ... and would need all such numbers in
+    order to deduce the average age of our friends. So we might declare
+    ~b~Ibirthdate~N to be a trio of objects: an array of characters (to hold
+    the birth-month, like "Nov"), an integer (to hold the birth-day) and a
+    second integer (to hold the birth-year) ... that way we could perform some
+    arithmetic on the integer parts of the ~b~Ibirthdate~N.
+
+~b~Ichar name[100][~V20~N~b~I], address[100][~V40~N~b~I];    ~N
+~b~Ichar birth_month[100][~V4~N~b~I];                ~N
+~b~Iint  birth_day[100], birth_year[100];    ~N
+
+    The above would do it. Sufficiently many arrays (of characters and 
+    integers) for 100 friends, each with names of ~V 19 ~N characters (or less)
+    and addresses of ~V 39 ~N characters (or less) and ~V 3 ~N characters for 
+    the birth_month (we'll need the terminating '\0' in each char array!)
+    ... and 100 birth_days and birth_years (remember that birth_day[0] to 
+    birth_day[99] is 100 birth-days!) 
+.w
+
+    It would be nice to have a DATA TYPE which held ~Ione~N such record, with
+    name, address, etc. and mixed ~b~Ichar~Ns and ~b~Iint~Ns !!
+.WK8,60
+  amen!
+.WN
+.R2C1B
+    ... let's welcome the STRUCTURE ...
+.R6C1
+    We invent a ~Istructure~N called ~b~Idate~N which includes a ~V3~N character 
+    ~b~Imonth~N ( hence month[~V4~N] ) and two ~b~Iint~Ns (day and year).
+
+    We are accustomed to saying ~b~Iint x;~N and ~b~Ichar y;~N, meaning that
+    ~b~Ix~N is of DATA TYPE ~b~Iint~N and ~b~Iy~N is of DATA TYPE ~b~Ichar~N.
+    SO, we will want to say ~b~Idate birth;~N meaning that ~b~Ibirth~N is
+    of DATA TYPE ~b~Idate~N meaning a collection of objects: 
+    a ~b~Ichar month[4]~N, an ~b~Iint day~N and an ~b~Iint year~N.
+
+    But, if ~b~Idate~N is a ~b~Istruc~Nture (with the elements mentioned above)
+    then we will refer to it as ~b~Istruct date~N, to inform the compiler that 
+    ~b~Idate~N is no ordinary guy but is, in fact, a ~b~Istruct~N ...
+    with all the rights and privileges thereto appertaining!
+
+
+    ~ISO~N, we declare ~b~Ibirth~N to be such a structure (called ~b~Idate~N) via:
+
+~b~Istruct date birth;~N          see? ~Vstruct date~N go together!
+.WK8,32
+confusing!
+.WN
+    So why wouldn't we just define a ~b~Istruct~Nure called ~b~Ibirth~N, which
+    has the 3 members: ~b~Imonth[4]~N and ~b~Iint day~N and ~b~Iint year~N ??
+
+    Because we will want to use this ~b~Istruc~N for ~Iother~N ~b~Idate~Ns, like:
+
+~b~Istruct date death;~N
+
+    Too morbid?  Then how about:
+
+~b~Istruct date WhenWeMet;~N
+
+    Now, ~b~IWhenWeMet~N is of DATA TYPE ~b~Idate~N too, containing the same
+    3 elements of ~b~Ichar month[4]~N and ~b~Iint day~N and ~b~Iint year~N !!
+
+    (Note: some compilers may not recognize names like ~b~IWhenWeMet~N
+           but may restrict names to, say, ~I8~N characters or less).
+.WK19,32
+  go on!
+.WNT
+    inside a STRUCTure    
+.R5C1
+    Before we see how to define such a ~b~Istruct~Nure as ~b~Idate~N, we use it!
+    It will have ~I3~N members: ~b~Imonth~N, ~b~Iday~N, ~b~Iyear~N.
+    We declare:
+
+~b~Istruct date birth[100], WhenWeMet[100];~N
+
+    so each of ~b~Ibirth[0]~N, ~b~Ibirth[1]~N, etc. and ~b~IWhenWeMet[0]~N, ~b~IWhenWeMet[1]~N, etc.
+    are ~b~Istruct~Ns of TYPE ~b~Idate~N.
+    We refer to ~b~Ibirth[i]~F.~N~b~Imonth~N, ~b~Ibirth[i]~F.~N~b~Iday~N and ~b~Ibirth[i]~F.~N~b~Iyear~N and to
+    ~b~IWhenWeMet[i]~F.~N~b~Imonth~N, ~b~IWhenWeMet[i]~F.~N~b~Iday~N and ~b~IWhenWeMet[i]~F.~N~b~Iyear~N 
+    for i=0, 1, 2, ... up to the number of friends we have ( and each
+    reflects the ~I3~N members ~b~Imonth~N, ~b~Iday~N and ~b~Iyear~N of the
+    ~b~Idate~N structure ... OK?)
+.K18,32
+note the [5m.[0m
+.WN
+    To input all this information we might use:
+.R4C1
+~b~Iprintf("\n How many friends do you have "); scanf("%s",&number);     ~N
+~b~Ifor (i=0; i<number; i++) {                                           ~N
+~b~I    printf("\n For friend %d",i);                                    ~N
+~b~I    printf("\n Enter Month of Birth "); scanf("%s",&birth[i].month); ~N
+~b~I    printf("\n Enter Day   of Birth "); scanf("%s",&birth[i].day);   ~N
+~b~I    printf("\n Enter Year  of Birth "); scanf("%s",&birth[i].year);  ~N
+~b~I}                                                                    ~N
+.s
+.R4C1
+~Vprintf("\n How many friends do you have "); scanf("%s",&number);  ~N
+.r
+    Here we ask for the number of friends, and store it in ~b~Inumber~N
+    (note the ~V&~Nnumber!)
+.WR4C1
+~b~Iprintf("\n How many friends do you have "); scanf("%s",&number);  ~N
+~Vfor (i=0; i<number; i++) {                                        ~N
+.r
+    Then, we go through each of ~b~Inumber~N of friends, asking questions:
+.WR5C1
+~b~Ifor (i=0; i<number; i++) {                                        ~N
+~V    printf("\n For friend %d:",i+1);                              ~N
+.r
+    We remind the user which friend we're working on by ~b~Iprintf~Ning ...   
+    ~r~I For friend 1:~N  then ~r~I For friend 2:~N  etc.
+    (We don't refer to "friend 0:" ... that would be insulting ...so we print
+    the numbers ~b~Ii+1~N rather than ~b~Ii~N).
+.WR6C1
+~b~I    printf("\n For friend %d",i);                                 ~N
+~V    printf("\n Enter Month of Birth "); scanf("%s",&birth[i].month); ~N
+.r
+    We ask ~r~I Enter Month of Birth ~N and put the answer into ~V&birth[i].month~N
+    (for the ~Ii~Nth friend) and, as required by ~b~Iscanf()~N,
+    we use the ~I&ddress~N !
+.WR7C1
+~b~I    printf("\n Enter Month of Birth "); scanf("%s",&birth[i].month); ~N
+~V    printf("\n Enter Day   of Birth "); scanf("%s",&birth[i].day);   ~N
+~V    printf("\n Enter Year  of Birth "); scanf("%s",&birth[i].year);  ~N
+.r
+    ... and so on, for the ~b~Ibirth.day~N and ~b~Ibirth.year~N               
+.WN
+    ... unfortunately, this won't (quite) work ... did you see why?
+.WR2C1
+    We'll repeat the program excerpt:
+~b~Iprintf("\n How many friends do you have "); scanf("%~Fs~N~b~I",&number);     ~N
+~b~Ifor (i=0; i<number; i++) {                                           ~N
+~b~I    printf("\n For friend %d",i);                                    ~N
+~b~I    printf("\n Enter Month of Birth "); scanf("%s",&birth[i].month); ~N
+~b~I    printf("\n Enter Day   of Birth "); scanf("%~Fs~N~b~I",&birth[i].day);   ~N
+~b~I    printf("\n Enter Year  of Birth "); scanf("%~Fs~N~b~I",&birth[i].year);  ~N
+~b~I}                                                                    ~N
+    ~b~Inumber~N     should have a ~b~I%d~N (for an integer)
+    ~b~Ibirth[i].day~N  should have a ~b~I%d~N (for an integer)
+    ~b~Ibirth[i].year~N should have a ~b~I%d~N (for an integer)
+    ... but there's something else ...
+.sWR6C1
+~V    printf("\n Enter Month of Birth "); scanf("%s",&birth[i].month); ~N
+.r
+    ~b~Iscanf()~N will put the ~I3~N characters typed at the keyboard, say "Nov",
+    into the memory reserved for ~b~Ibirth[i].month~N, but won't put in a ~I'\0'~N!
+
+    WE must put it in ( ... while we're praying that the user doesn't type
+    november, which is much too long to fit into the ~I4~N bytes we've reserved
+    for the month!)
+.WN
+    We could initialize all the bytes in the ~b~Ibirth.month~N to ~I'\0'~N via:
+~b~Ifor (i=0; i<100; i++)    {      /* for all 100 friends  */~N
+~b~I    for (j=0; j<4; j++)  {      /* for each of 4 bytes  */~N
+~b~I        birth[i].month+j='\0';  /* set byte to '\0'     */~N
+~b~I    }                           /* end of inner "for"   */~N
+~b~I}                               /* end of outer "for"   */~N
+
+    ... then (provided the user doesn't type more than a ~I3~N character month!)
+    we've got all the ~I'\0' string terminators~N we'll need.
+
+    This little ritual is necessary because ~b~Iscanf()~N is meant as a
+    general-purpose input ... ~b~Iint~Ns and ~b~Ifloats~N and ~b~Ichar~Ns etc.
+
+    A special-purpose input ... just for ~Istrings~N of ~b~Ichar~Ns ... would
+    be smart enough to append the ~I'\0'~N (wouldn't it?)
+
+    The ~Istdio.h~N library of C-functions will contain such a function.
+    ~b~Igets(&sam)~N will ~b~Iget~N a ~b~Is~Ntring and put it into the
+    address ~b~I&sam~N. Just like scanf() requires a ~r~Ipointer~N to the memory
+    location where the input is to be stored, so does gets().
+.WN
+    We write:
+1 ~b~Iprintf("\n How many friends do you have "); scanf("%d",&number);     ~N
+2 ~b~Ifor (i=0; i<number; i++) {                                           ~N
+3 ~b~I    printf("\n For friend %d",i);                                    ~N
+4 ~b~I    printf("\n Enter Month of Birth "); gets(&birth[i].month);       ~N
+5 ~b~I    printf("\n Enter Day   of Birth "); scanf("%d",&birth[i].day);   ~N
+6 ~b~I    printf("\n Enter Year  of Birth "); scanf("%d",&birth[i].year);  ~N
+7 ~b~I}                                                                    ~N
+    and the ~b~Igets()~N in line 4 will collect each ~b~Ichar~Naracter typed,
+    and when a ~I\n~Newline is typed (the Return or Enter key) it will exchange
+    it for a ~I'\0'~N ... and put everything into the memory location indicated.
+.K16,32
+wunderbar!
+.WNT
+    defining a STRUCTure    
+.R5C1
+    It's about time we ~Idefined~N our ~b~Istruct date~N :
+~b~I     struct date   {       ~N
+~b~I          char month[4];   ~N
+~b~I          int day;         ~N
+~b~I          int year;        ~N
+~b~I    };                     ~N
+    Note the structure of a structure:
+~b~I     struct ~Vname~N~b~I   ~F{~N~b~I       ~N
+~b~I          --- all the ---  ~N
+~b~I          --- members ---  ~N
+~b~I          --- go here ---  ~N
+~b~I    ~F}~N~V;~N~b~I                     ~N
+
+    We give it a ~Vname~N (like ~b~Idate~N) so we can declare other objects to
+    be of this DATA TYPE ( remember ~b~Ibirth~N and ~b~IWhenWeMet~N ? )
+    ... and an opening and closing ~F~b~I{~N and ~F~b~I}~N
+    ... and the various members (like ~b~Ichar month[4]~N, etc.)
+    ... and a final ~V ; ~N
+.WK6,60
+final ; ??
+.WN
+~b~I     struct date   {             ~N
+~b~I          char month[4];         ~N
+~b~I          int day;               ~N
+~b~I          int year;              ~N
+~b~I    }~F;~N~b~I                           ~N
+
+    This final ~F;~N is meaningful!
+
+    Because a ~b~Istruct date~N is to be used just like ~b~Iint~N or ~b~Ichar~N,
+    and because we usually say ~b~Iint x~F;~N or ~b~Ichar x~F;~N (with a final ~F;~N),
+    then we terminate a structure definition with a ~F;~N and expect to be able
+    to say ~b~Istruct date {   ~N
+           ~b~I   --- etc ---  ~N
+           ~b~I} x~F;~N~b~I            ~N  (note the similarity with ~b~Iint x;~N etc.)
+
+.w
+    SO, for our earlier example, we could say:
+
+~b~I     struct date   {             ~N
+~b~I          char month[4];         ~N
+~b~I          int day;               ~N
+~b~I          int year;              ~N
+~b~I    } birth[100],WhenWeMet[100]~F;~N~b~I ~N
+    ... and we've defined our ~b~Istruct date~N AND declared ~b~Ibirth[]~N 
+    and ~b~IWhenWeMet[]~N to be such structures ... all at once!
+.K2,60
+how nice!
+.WN
+    Now let's return to the record of our "friends", which includes ~b~Iname~N
+    and ~b~Iaddress~N as well as some ~b~Idates~N.
+
+    For each "record" we will define ~Ianother~N structure ... let's call it
+    "record" (what else?)
+~b~I     struct  record  {             ~N
+~b~I          char name[20];           ~N
+~b~I          char address[40];        ~N
+~b~I          struc date birth;        ~N
+~b~I          struc date WhenWeMet;    ~N
+~b~I     } friend[100];                ~N
+
+    Note that we've not only defined the ~b~Istruct~N called ~b~Irecord~N but we've
+    also declared 100 such structures, using the "final" ~b~Ifriend[100];~N
+
+    ~b~Ifriend[0]~N and ~b~Ifriend[1]~N and ~b~Ifriend[2]~N etc. are ALL of type
+    ~b~Irecord~N hence contain members ~b~Iname~N, ~b~Iaddress~N, ~b~Ibirth~N
+    and  ~b~IWhenWeMet~N.
+
+.w
+    The first two (~b~Iname~N and ~b~Iaddress~N) are ~b~Ichar~Nacter arrays
+    ~IBUT~N the last two (~b~Ibirth~N and ~b~IWhenWeMet~N) are ... SURPRISE (!)
+    ~Istructures~N of TYPE ~b~Idate~N !!!
+.WN
+    We now have two structures defined:
+~b~I  struct date   {           ~N     ~b~I  struct  record  {             ~N
+~b~I       char month[4];       ~N     ~b~I       char name[20];           ~N
+~b~I       int day;             ~N     ~b~I       char address[40];        ~N
+~b~I       int year;            ~N     ~b~I       struc date birth;        ~N
+~b~I  };                        ~N     ~b~I       struc date WhenWeMet;    ~N
+                                 ~b~I} friend[100];                  ~N
+
+    Earlier we declared 200 structures of TYPE ~b~Idate~N (namely ~b~Ibirth[100]~N
+    and ~b~IWhenWeMet[100]~N). We also referred to the ~I3~N members of ~b~Ibirth[47]~N
+    (for example) as ~b~Ibirth[47]~F.~N~b~Imonth~N, ~b~Ibirth[47]~F.~N~b~Iday~N and ~b~Ibirth[47]~F.~N~b~Iyear~N.
+
+    Now we won't need to define these 200 structures (sorry about that!) since
+    ~b~Istruct date birth~N and ~b~Istruct date WhenWeMet~N are embedded in the
+    ~b~Irecord~N structure ... ~Istructures within structures~N!!
+.K16,32
+aw c'mon!!
+.WNT
+    STRUCTures within STRUCTures ??   
+.R10C1
+                       ~V  NOBODY SAID THIS WAS EASY!  ~N
+.b8-12
+.K16,32
+!@#$%^&*?!
+.WN
+~b~I  struct date   {           ~N     ~b~I  struct  record  {             ~N
+~b~I       char month[4];       ~N     ~b~I       char name[20];           ~N
+~b~I       int day;             ~N     ~b~I       char address[40];        ~N
+~b~I       int year;            ~N     ~b~I       struc date birth;        ~N
+~b~I  };                        ~N     ~b~I       struc date WhenWeMet;    ~N
+                                 ~b~I} friend[100];                  ~N
+    To input (for example) the name of the friend[47], we'd say:
+
+~b~Iprintf("\n Name please : "); gets(&friend[47].name);~N
+
+    ... and ... to input his (her?) birth.month we'd say:
+
+~b~Iprintf("\n Month of Birth : "); gets(&friend[47].birth.month);~N
+
+    Note the use of ~b~Igets()~N ( to automatically append the ~I'\0'~N ).
+    Note, too, the very logical way we refer to the member of a structure
+    within a structure ... ~b~Ifriend[47].birth.month~N
+.K19,60
+gorgeous!!
+.WN
+~b~Imain()   {                    /* not-too-useful-program */               ~N
+~b~I    int number, i;                                                       ~N
+~b~I    struct date  {                                                       ~N
+~b~I         char month[4];                                                  ~N
+~b~I         int day;                                                        ~N
+~b~I         int year;                                                       ~N
+~b~I    };                                                                   ~N
+~b~I    struct record {                                                      ~N
+~b~I         char name[20];                                                  ~N
+~b~I         char address[40];                                               ~N
+~b~I         struct date birth;                                              ~N
+~b~I    } friend[100];                                                       ~N
+~b~I    printf("\nHow many friends : "); scanf("%d",&number);                ~N
+.w                                                                           ~N
+~b~I    for (i=0; i<number; i++) {                                           ~N
+~b~I        printf("\n For friend %d",i+1);                                  ~N
+~b~I        printf("\nName ? ");           gets(&friend[i].name);            ~N
+~b~I        printf("\nAddress ? ");        gets(&friend[i].address);         ~N
+~b~I        printf("\nMonth of birth ? "); gets(&friend[i].birth.month);     ~N
+~b~I        printf("\nDay of birth ? ");   scanf("%d",&friend[i].birth.day); ~N
+~b~I        printf("\nYear of birth ? ");  scanf("%d",&friend[i].birth.year);~N
+~b~I    }                                                                    ~N
+.WN
+~b~I    printf("\nSUMMARY of your %d friends",number);                      ~N
+~b~I    for (i=0; i<number; i++) {                                          ~N
+~b~I        printf("\nName:%s",friend[i].name);                             ~N
+~b~I        printf("\nAddress:%s",friend[i].address);                       ~N
+~b~I        printf("\nBorn on %s %d,%d",                                    ~N
+~b~I        friend[i].birth.month,friend[i].birth.day,friend[i].birth.year);~N
+~b~I    }                                                                   ~N
+~b~I}                                                                       ~N
+    giving a (typical) printout:
+~r~IName:Peter Ponzo~N
+~r~IAddress:49 Margaret S., Waterloo, Ont.~N
+~r~IBorn on Nov 6,1934~N
+.K16,32
+a-a-a-ah!
+.WNT
+    and POINTERS to STRUCTURES!    
+.R4C1
+    One sometimes feels frustrated in writing an elaborate function which does
+    the most wonderful things, only to get from such a function  a single
+    ~b~Iint~N or ~b~Ifloat~N or ~b~Ichar~N ( you can't ~b~Ireturn(a,b,c,d,e)~N
+    at the end of the function, but only ~b~Ireturn(a)~N !@#$% ).
+
+    BUT, the function can create an elaborate ~Istructure~N which houses all the
+    wonderful things, then ~b~Ireturn(a)~N where ~n~Ia~N is a ~r~Ipointer~N to
+    the structure!
+
+    In fact we've used such a function ... one which returns a ~r~Ipointer~N.
+    Before I tell you which function it is (from the ~Istdio.h~N library), let's
+    see how such a function should be declared.
+
+    Consider
+~b~Ichar f();~N  which declares ~b~If()~N to be a function which returns a ~b~Ichar~N
+    Then, to declare a function which returns a ~r~Ipointer~N 
+    to a ~b~Ichar~N it would be sensible to use the format:
+~b~Ichar *f();~N   ... right?
+.WK19,60
+  RIGHT!
+.WN
+    ~ISO~N ... if the function ~b~If()~N were to return a ~r~Ipointer~N to a
+    structure called ~b~Isam~N, we'd declare it with:
+
+~b~Isam *f();~N    ... right?
+.WK16,32
+  RIGHT!
+
+    And what if ~b~Isam~N was ~b~Itypedef~Nined to be a structure, as in:
+
+~b~Itypedef SomeStructure  SAM;~N      ( where we have agreed to use capitals )
+
+    Then the function ~b~If()~N would be declared:
+
+~b~ISAM *f();~N    ... right?
+.WK16,32
+          
+.K16,32
+  [1mRIGHT!![0m
+.WN
+
+
+    ~INOW~N ... remember when we used:
+
+~b~IFILE *fopen();~N     ???
+
+    In fact, when we ~b~Ifopen()~N a file on a disk, the operating system
+    returns a ~r~Ipointer~N to a ~Istructure~N ( called ~b~IFILE~N ) and this
+    structure contains all the wonderful things we need to know about the
+    file ... and that's why we also declare this ~r~Ipointer~N ~b~Ifp~N:
+
+~b~IFILE *fp, *fopen();~N
+
+    and say (subsequent to the above declaration):
+
+~b~I     fp=fopen();~N       so we assign to ~b~Ifp~N the ~r~Ipointer~N returned
+                             by ~b~Ifopen()~N.
+
+    Then, when we want to get a character from this file, we need only pass to
+    ~b~Igetc()~N this ~r~Ipointer~N ( as in ~b~Igetc(fp)~N ) and now the ~b~Igetc()~N
+    function will be able to extract all the wonderful things it needs ...
+    ~Ifrom the structure~N!
+.WK1,60
+magnifico!
+.WN
+
+    ~INOW~N, if ~b~Isam *f();~N is the way we ~Ideclare f() to be a function~N
+    which returns a ~r~Ipointer~N to an object of TYPE ~b~Isam~N (which could
+    be an ~b~Iint~N or a ~b~Ifloat~N or a ~b~Istruct~N etc.), then how should
+    we ~Ideclare f to be a pointer~N to a function which returns an object
+    of TYPE ~b~Isam~N ????
+.K19,60
+I give up!
+.W
+
+~b~Isam  (*f)();~N      
+
+    says that ~b~If~N is now the ~r~Ipointer~N ... because we used ~b~I(*f)~N ...
+    and the thing it points to is ~b~I*f~N ( remember that ~b~Iint *x;~N declares
+    ~b~Ix~N to be a ~r~Ipointer~N to an ~b~Iint~N, and the ~b~Iint~N is ~b~I*x~N )
+    ~ISO~N, since ~b~I(*f)~N is to be a ~Ifunction~N, we say ~b~I(*f)()~N !
+
+    ... and we've seen ~Ithis~N curious notation before too!
+.WK19,60
+   amen!
+.WN
+    Suppose that ~b~Iptr~N is a ~r~Ipointer~N to a ~Istruct~Nure 
+   ( declared using ~b~I*ptr~N so that ~b~I(*ptr)~N ~IIS~N the structure itself ).
+    Suppose the structure had a member called ~b~Iname~N. 
+    Then we'd refer to this member as:  ~b~I(*ptr).name~N
+    ( as in ~b~I(*ptr).name="George";~N )
+
+    Another (simpler) notation ~Ifor the same thing~N is:
+
+    ~b~Iptr -> name~N  (use this only if ~b~Iptr~N is a ~r~Ipointer~N)
+
+    ... and if the structure had a member ~b~Ibirth~N which was itself a structure
+    containing a member called ~b~Imonth~N, then we can use the notation:
+
+    ~b~Iptr->birth.month~N  ( which means ~b~I(*ptr).birth.month~N )
+
+    as in ~b~Iptr->birth.month="May";~N                        
+
+    ~IAND~N, if ~b~Ibirth~N happened to be a ~r~Ipointer~N too, we'd use:
+
+    ~b~Iptr->birth->month~N
+.w
+.WK3,60
+ MORAL???
+.W
+
+    Use   ~b~Isam.birth ~N     if ~b~Isam~N is a structure.
+    Use   ~b~Isam->birth~N     if ~b~Isam~N is a ~r~Ipointer~N to a structure.    
+.WN
+
+
+
+.T
+   That's all folks!   
+.K16,32
+au revoir!
+
+
+.q
+

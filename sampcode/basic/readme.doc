@@ -1,0 +1,691 @@
+
+				README.DOC File
+
+     Release Notes for Microsoft (R) BASIC Professional Development System
+
+				  Version 7.00
+
+		    (C) Copyright Microsoft Corporation, 1989
+
+
+    This document contains release notes for Version 7.00 of the Microsoft (R)
+    Professional Development System for MS-DOS (R) and the Microsoft Operating
+    System/2 (MS(R) OS/2). The information in this document is more up-to-date
+    than that in the manuals.
+
+    Microsoft improves its languages documentation at the time of reprinting,
+    so some of the information in this online file may already be included in
+    your manuals.
+
+    =======================================================================
+    ===									===
+    ===				    Contents				===
+    ===									===
+    =======================================================================
+
+    This file has 5 parts.
+
+
+	Part	Description
+	----	-----------
+
+	 1	Notes for "Microsoft BASIC Getting Started"
+
+	 2	Notes for "Microsoft BASIC Language Reference"
+
+	 3	Notes for "Microsoft BASIC Programmer's Guide"
+
+	 4	Notes for "Microsoft CodeView and Utilities User's Guide"
+
+	 5	Miscellaneous Notes and Tips
+
+
+    =======================================================================
+    ===									===
+    === Part 1: Notes for "Microsoft BASIC Getting Started"		===
+    ===									===
+    =======================================================================
+
+
+    The following notes refer to specific pages in "Microsoft BASIC Getting
+    Started."
+
+    Page	Section\Note
+    ----	------------
+
+     v		Distribution of Run-Time Modules
+		--------------------------------
+
+		Add the following to the list of run-time modules that may be
+		distributed under the terms and conditions of the Microsoft
+		License Agreement:
+
+		COURA.FON  COURE.FON  COURB.FON	 HELVA.FON  HELVE.FON
+		TMSRA.FON  TMSRE.FON
+
+
+     9		How Setup Uses Stub Files
+		-------------------------
+
+		Replace the first sentence with the following:
+
+		You can use stub files for programs that use the BRT module, or
+		for stand-alone programs.  However, Setup only uses stub files
+		to build the BRT module.  If you want to remove functionality
+		for stand-alone programs, you must specify a given stub file on
+		the LINK command line.
+
+
+    =======================================================================
+    ===									===
+    === Part 2: Notes for "Microsoft BASIC Language Reference"		===
+    ===									===
+    =======================================================================
+
+
+    The following notes refer to specific pages in "Microsoft BASIC
+    Language Reference."
+
+    Page	Section\Note
+    ----	------------
+
+     37		CHAIN
+		-----
+
+		Under DOS 2.1, CHAIN will not work unless filespec$ provides a
+		path. Also under DOS 2.1, if the run-time module is in the
+		root directory, the root directory must be listed in the PATH
+		environment variable.
+
+
+     40		CHDIR
+		-----
+
+		Refer to the online Help for CHDIR for a more appropriate
+		example of CHDIR and MKDIR usage.
+
+
+     68		CONST
+		-----
+
+		You cannot use ASCII 01 and 02 in string constants if you are
+		going to compile to an executable program. The compiler
+		(BC.EXE) uses ASCII 1 and 2 internally to represent
+		End-of-Statement and End-of-Line, respectively. You can,
+		however, still use 1 and 2 within the QBX environment.
+
+
+     84		DATA
+		----
+
+		You cannot use ASCII 01 and 02 in data strings if
+		you are going to compile to an executable program.
+		See the preceding note for CONST.
+
+
+    116		END
+		---
+
+		Syntax 2, END [n%], accepts a range of integers from -32768
+		through 32767, inclusive.
+
+
+    177		KEY
+		---
+
+		The KEY n%, stringexpression$ syntax can also be used to
+		create user-defined keys. Refer to the information on page 180
+		for specific details on how this is accomplished.
+
+
+    181		KeyBoard Scan Codes
+		-------------------
+
+		Add the following to the Keyboard Scan Code chart:
+
+		    Key	    Code
+		    ---	    ----
+		    F11	     87
+		    F12	     88
+
+
+    188		LEN
+		---
+
+		When passing a string length as an argument to a procedure that
+		may change the value of the argument, ensure that it is
+		passed by value instead of by reference, which is the BASIC
+		default. Do this by placing parentheses around LEN(N$), e.g.,
+		(LEN(N$)). Alternatively, you can use a temporary variable,
+		e.g. N% = LEN(N$), and pass the temporary variable in the
+		standard way. Failure to use these techniques will corrupt
+		string space if you change the value of the passed argument.
+
+
+    238		OPEN COM
+		--------
+
+		Under OS/2, specifying DS0 to ignore the state of the Data Set
+		Ready (DSR) line, does not work properly. In this case, you
+		will have to either not ignore the DSR line or you will have
+		to jumper the DSR line to an active high signal line. Refer to
+		serial port information that specifically pertains to your
+		hardware, and perform any modifications at your own risk.
+
+
+    345		SOUND
+		-----
+
+		The duration argument accepts any positive single-precision,
+		floating-point value between 0 and 65535, inclusive.
+
+
+    425		DATESERIAL
+		----------
+
+		Change the paragraph that begins "For each of the three
+		arguments..." to read as follows:
+
+		When converting specific dates, the ranges shown above for each
+		of the arguments should be used. However, when using expressions
+		to calculate date serial numbers for relative dates (e.g., a
+		week from 10 Dec 89) each of the three arguments can be any
+		valid integer as long as the resulting date serial number
+		is between -53688 and 65380, inclusive. Date serial
+		numbers outside this range generate the error message "Illegal
+		function call."
+
+
+    518		Fonts Toolbox
+		-------------
+
+		Change the first sentence in the second paragraph to read as
+		follows:
+
+		Nine font files are supplied:  Courier fonts in COURA.FON,
+		COURB.FON, and COURE.FON, Helvetica fonts in HELVA.FON,
+		HELVB.FON, and HELVE.FON, and Times Roman fonts in TMSRA.FON,
+		TMSRB.FON and TMSRE.FON.
+
+
+    523		Fonts Toolbox
+		-------------
+
+		Add the following documentation for the GTextWindow before
+		existing documentation for GetTotalFonts:
+
+		GTextWindow SUB
+
+		Action	    Retains the logical coordinates of window
+			    boundaries. (See note below.)
+
+		Syntax	    GTextWindow (x1, y1, x2, y2, Scrn%)
+
+		Remarks	    The GTextWindow procedure uses the following
+			    arguments:
+
+			    Argument	    Description
+			    --------	    -----------
+
+			       x1	    Integer containing the minimum
+					    X value  (logical coordinate).
+
+			       y1	    Integer containing the minimum
+					    Y value.
+
+			       x2	    Integer containing the maximum
+					    X value.
+
+			       y2	    Integer containing the maximum
+					    Y value.
+
+			      Scrn%	    Integer containing either cTRUE
+					    (used with WINDOW SCREEN statement
+					    to show window Y values increase
+					    top to bottom) or cFALSE (used
+					    with WINDOW statement to show
+					    window Y values increase bottom to
+					    top )
+
+			    This procedure should be called after defining
+			    VIEW and WINDOW and prior to calling OutGText.
+
+			    To clear the current window, call this routine
+			    with X1=X2 or Y1=Y2.
+
+			    Note: The first call to OutGtext will work without
+			    calling GTextWindow, however all subsequent calls
+			    treat the coordinates as pixel coordinates of the
+			    window; therefore, to retain the logical
+			    coordinates call GTextWindow prior to calling
+			    OutGText.
+
+		See Also    See OutGText statement for more information.
+
+
+    601		Keyboard Scan Codes and ASCII Character Codes
+		---------------------------------------------
+
+		Add the following to the table on page 601:
+
+		   |	   |		|  ASCII or  |	ASCII or  |  ASCII or
+		   |  Scan |  ASCII or	|  Extended  |	Extended  |  Extended
+		Key|  Code |  Extended	|  with SHIFT|	with CTRL |  with ALT
+		---|-------|------------|------------|------------|------------
+		   |Dec|Hex|Dec|Hex|Char|Dec|Hex|Char|Dec|Hex|Char|Dec|Hex|Char
+		---|---|---|---|---|----|---|---|----|---|---|----|---|---|----
+		F11| 87| 57|133| 85| NUL|135| 87| NUL|137| 89| NUL|140| 8B| NUL
+		F12| 88| 58|134| 86| NUL|136| 88| NUL|138| 8A| NUL|141| 8C| NUL
+		---------------------------------------------------------------
+
+
+    611		BUILDRTM Utility
+		----------------
+
+		The runtime argument to BUILDRTM should not include a path or
+		a file extension.
+	
+
+    620		NMAKE
+		-----
+
+		Change the description for the macrodefinitions argument to
+		the following:
+
+		An optional field that lists macro definitions for NMAKE to
+		use. Macros can also be specified in the makefile. See the
+		"Macro Definitions" section for details.
+
+
+    665		Run-Time Error Message - Overflow
+		----------------------------------
+
+		In the first bulleted item, change "40 indices" to "28
+		indexes". Entirely remove the sentence that begins, "If there
+		are 32 open tables..." This limitation is not correct and does
+		not cause an Overflow error. See "Using Multiple Files:
+		'Relational Databases'" in Chapter 10 of the Programmer's Guide
+		for information on open table limitations.
+
+
+    684		Link error L1083 - Cannot open run file
+		-------------------------------------
+
+		This error can also be caused by a read-only .EXE file of the
+		same name as specified for the run file. Link will not be able
+		to overwrite the read-only file.
+
+
+    =======================================================================
+    ===									===
+    === Part 3: Notes for "Microsoft BASIC Programmer's Guide"		===
+    ===									===
+    =======================================================================
+
+
+    The following notes refer to specific pages in "Microsoft BASIC
+    Programmer's Guide.:
+
+
+    Page	Section/Note
+    ----	------------
+
+    341		Restrictions on Indexing
+		------------------------
+
+		Add the following to the end of the first paragraph:
+
+		The maximum number of indexes per table is 28.
+
+
+    344		Setting the Current Record by Position
+		--------------------------------------
+
+		Add the following just after the paragraph that begins,
+		"The effect of any of the MOVEdest statements...":
+
+		If you trap errors while using either a MOVENEXT or
+		MOVEPREVIOUS ISAM statement, and an I/O error occurs (either
+		57 or 71) on an index that is not the NULL index, you must
+		resynchronize ISAM internal pointers before using another
+		MOVENEXT or MOVEPREVIOUS statement. Synchronization can be
+		done using any valid SETINDEX statement, either a MOVEFIRST or
+		MOVELAST statement, or any of the SEEKxx (SEEKEQ, SEEKGE,
+		SEEKGT) statements.
+
+
+    345		A Typical ISAM Program
+		----------------------
+
+		The command line used for invoking PROISAM for use with the
+		BOOKLOOK program (shown halfway down the page) is stated as
+		PROISAM /Ib:24. The efficiency of the ISAM has improved and
+		the program can now be run in 640K conventional memory, with
+		no expanded memory, with only 9 buffers: PROISAM /Ib:9. If you
+		have EMS available, you need not specify the /Ib option.
+
+
+    376		Starting ISAM for Use in QBX - /Ie argument
+		-------------------------------------------
+
+		The explanation for the /Ie: option for the ISAM TSR states
+		that "...In practice, you only need to specify /Ie if your
+		program code (or a loaded Quick library) actually manages EMS
+		memory." Although this is true, there may be other times when
+		you want to reserve EMS for other uses. Having many ISAM
+		buffers improves the performance of ISAM, but during program
+		development ISAM performance may be less important than the
+		size of your program's source code. For example, your program
+		may only need 10-12 ISAM buffers to prevent an "Out of memory"
+		error at run time. However, with a very large program, the
+		size of the source code loaded in QBX may result in an "Out of
+		memory" error. If you have 1.2 megabytes of EMS available, you
+		can use the /Ie: option to minimize the EMS used by ISAM
+		buffers, reserving the rest for program source code. For
+		example, if your program needs about 10 buffers, you can
+		invoke the ISAM TSR with /Ie:900. This will provide several
+		hundred K of EMS to be used for ISAM buffers. The rest will be
+		reserved for QBX (and your program source code). Note that
+		only program parts whose size is between 512 bytes and 16K are
+		placed in EMS by QBX. You can check the sizes of your
+		procedures and module-level code blocks by pressing F2 to see
+		the View menu's SUBs dialog box.
+
+
+    393		The ISAMCVT Utility
+		-------------------
+
+		Add the following sentence just before the section entitled
+		"The Repair Utility":
+
+		No EMS driver can be loaded when running ISAMCVT.
+
+
+    394		Repair Utility
+		--------------
+
+		Replace the paragraph that begins, "When you use the ISAMREPR
+		utility..." with the following:
+
+		The ISAMREPR utility requires an additional 32K within your
+		database to re-create the system indexes.  This adds a least
+		32K to the size of the database. Do not run the utility if
+		your disk does not have this amount of space available in the
+		current working directory. Also note that the maximum size of
+		a database is 128 megabytes. When you run the ISAMREPR
+		utility, adding 32K to the size of an extremely large database
+		may cause it to exceed the maximum allowed. ISAMREPR deletes
+		inconsistent records in tables, but does not compact after
+		doing so. Compacting a database is described in the next
+		section.
+
+
+    495		BASIC Calling MASM
+		------------------
+
+		Change the first sentence in the paragraph following the
+		"Important" note to read as follows:
+
+		This MASM code uses the .MODEL directive which establishes
+		compatible naming and calling conventions for BASIC, and
+		it also uses simplified segment directives.
+
+
+    559		Using BC Command Options - /D option
+		------------------------------------
+
+		When using the /D option with dynamic arrays, it is possible
+		to produce incorrect results if you pass an array element to a
+		procedure that changes the value of the element index. For
+		example, the following works properly when compiled with all
+		options except /D:
+
+			CALL foo(a(i),i)
+			PRINT a(i), i
+
+		The following performs the same operations and works properly
+		with all compile options including /D.
+
+			j=i
+			CALL foo(a(i),j)
+			PRINT a(i), j
+
+
+    561		Using Floating-Point Options (/FPa and /FPi)
+		--------------------------------------------
+
+		The new CURRENCY data type is not currently supported in the
+		alternate math library.
+
+
+    576		Options
+		-------
+
+		Replace /NOD with /NOE in the table at the top of the page.
+
+
+    595		Ignoring Default Libraries (/NOD:filename)
+		------------------------------------------
+
+		Add the following to the paragraph that begins, "In general,
+		higher-level languages..."
+
+		For example, if you specify the /NOD option when linking a
+		protect-mode BASIC program, you must explicitly specify the
+		run-time library (BRT70xxP.LIB) and OS2.LIB in the libraries
+		field of the LINK command line.
+
+
+    624		Mouse, Menu, and Window Libraries
+		--------------------------------
+
+		If you rebuild toolbox Quick libraries, files should be
+		compiled with the /Ah option (allow dynamic arrays to be
+		greater than 64K) if you intend to use QBX with the /Ea option
+		(Put arrays into expanded memory).
+
+		Also note that Table 19.1 applies to all toolbox files, not
+		just MOUSE.BAS, MENU.BAS, and WINDOW.BAS.
+
+
+    625		Loading and Viewing Quick Libraries
+		-----------------------------------
+
+		QBX now requires that the BASIC source for any Quick library
+		be compiled using the /Fs (far string) compiler option.
+		Consequently, QBX will not permit you to load a Quick library
+		file that has the near string features of earlier versions of
+		QuickBASIC. If you encounter an "Invalid Format" error when
+		attempting to load an older Quick library file, you should
+		recompile the files using BC with the /Fs option.
+
+		You may also encounter the "Invalid Format" error if you
+		invoke QBX with a /Ea option (put arrays into expanded memory)
+		and have not compiled the Quick library with /D (generate
+		debugging code) or /Ah (Allow dynamic arrays of records,
+		fixed-length strings, and numeric data to be larger than 64K).
+
+
+    636		Description Blocks
+		------------------
+
+		The following information applies to the command component
+		of description blocks:
+
+		The first character after a dependency line in a description
+		block must be a whitespace character, i.e., either a space or
+		a tab. An error occurs if only a carriage return is used on a
+		blank line.
+
+
+    701		Elementary Data Types - String
+		------------------------------
+
+		You cannot use ASCII 01 and 02 in strings of any form if you
+		are going to compile to an executable program. The compiler
+		(BC.EXE) uses ASCII 1 and 2 internally to represent
+		End-of-Statement and End-of-Line, respectively. You can,
+		however, still use 1 and 2 within the QBX environment.
+
+
+    702		Elementary Data Types - Numeric
+		-------------------------------
+
+		A math coprocessor (80x87) handles rounding of extremely small
+		numbers differently from the way numbers are rounded by the
+		BASIC emulator math package. Because of this difference, some
+		numbers that are properly displayed using a coprocessor are
+		rounded and displayed as zero when using emulator math. The
+		range of single-precision floating-point numbers that are
+		properly displayed as input, using the emulator math package,
+		is +/- 2.802597E-45. For double-precision floating-point
+		numbers, the range is +/- 4.94065645841247D-324.
+
+
+    =======================================================================
+    ===									===
+    === Part 4: Notes for "Microsoft Codeview and Utilities Users	===
+    ===		Guide"							===
+    ===									===
+    =======================================================================
+
+
+    The following notes refer to specific pages in "Microsoft CodeView and
+    Utilities User's Guide."
+
+    Page	Section\Note
+    ----	------------
+
+     76		Add the following BASIC intrinsic functions to Table 4.8,
+		"BASIC Intrinsic Functions Supported by the CodeView Debugger":
+
+					       Argument	       Function
+		Name	 Definition	       Type	       Type
+		-------------------------------------------------------
+		CCUR	 Data-type conversion  Numeric	       Currency
+		CVC	 Data-type conversion  8-byte string   Currency
+		SADD	 Offset of string      String	       Integer
+		SSEG	 Segment of string     String	       Integer
+		SSEGADD	 Far pointer of string String	       Integer
+
+		
+    100		Add the following format specifier to Table 6.1, "CodeView
+		Format Specifiers":
+
+
+			   Output	 Sample		 Sample
+		Character  Format	 Expression	 Output
+		-----------------------------------------------
+		   m	  Currency	?1.2345678, m	1.2346
+
+
+    101		Add the following note after the paragraph that begins,
+		"You can specify individual members..."
+
+		-----------------------------------------------------------
+		Note   Individual members of a BASIC user-defined type are
+		       displayed in reverse order from the way they are
+		       defined within the user-defined type.
+		-----------------------------------------------------------
+
+									       
+    102		The last example on the page is incorrect for Codeview version
+		2.35. The members of a BASIC user-defined type are displayed in
+		reverse order. "? mystruct" should display:
+
+		    {c3 =0x1000:2d34, c2={b=2, a=1}, c1=123}
+
+
+    117		Add the following to the list of Dump commands in Section 6.4,
+		"Dump Commands":
+
+		Command		    Command Name
+		-------		    ------------
+		  DC		    Dump Currency
+
+
+    133		Add the following note after the first paragraph of Section
+		7.1, "Breakpoint Set Command":
+
+		-----------------------------------------------------------
+		Note   If the BASIC program being debugged was compiled with
+		       the /Ot option, you cannot set a breakpoint on the line
+		       containing a SUB, FUNCTION, DEF FN statement.  If you
+		       do set a breakpoint there, it will be ignored by
+		       CodeView; the program will not halt. You will be unable
+		       to unassemble from the correct beginning address and
+		       CodeView will not display the correct address when
+		       issued a "?" command.
+		-----------------------------------------------------------
+
+
+    144		Add the following to the list of size specifiers in Section
+		8.2, "Setting Watch-Expression and Watch-Memory Statements":
+
+		Specifier	    Size
+		---------	    ----
+		    C		    Currency
+
+
+    151		Add the following to the list of size specifiers in Section
+		8.4, "Setting Tracepoints":
+
+		Specifier	    Size
+		---------	    ----
+		    C		    Currency
+
+
+    175		Add the following to the list of Enter commands in Section
+		10.2:
+
+		Command		    Command Name
+		-------		    ------------
+		  EC		    Enter Currency
+
+
+    199		Add the following to the Note in Section 11.7, "Shell Escape
+		Command":
+
+		If there is insufficient memory to perform a shell escape, the
+		resulting "Not enough memory" message is printed to the output
+		screen but you are returned immediately to the debug screen.
+		Since you will not normally see the output screen you can use
+		the Screen Exchange command to confirm that this is what
+		caused the Shell Escape to fail.
+
+
+    =======================================================================
+    ===									===
+    === Part 5: Miscellaneous Notes and Tips				===
+    ===									===
+    =======================================================================
+
+    The following notes refer to specific issues that may not conveniently
+    fall into any of the previous categories.
+
+
+    I/O within LPRINT, PRINT #, PRINT # USING, WRITE, and WRITE USING
+    -----------------------------------------------------------------
+
+    If you use any of these output statements with an argument that is,
+    itself, an input/output statement, the output will go to the
+    console screen rather than the expected file or device. To avoid this
+    problem, use a variable to get input, and use that variable as the
+    argument to the statement that will perform the output. In the following
+    example output will always go to the screen:
+
+	OPEN "Test1.dat" FOR INPUT AS #1
+	OPEN "Test2.dat" FOR OUTPUT as #2
+	PRINT #2, INPUT$(10, #1)
+
+    The following rewritten example will send output to the proper place:
+
+	OPEN "Test1.dat" FOR INPUT AS #1
+	OPEN "Test2.dat" FOR OUTPUT AS #1
+	TEXT$ = INPUT$(10, #1)
+	PRINT #2, TEXT$
+
+    Output is also sent to the screen if you use an argument that is a
+    user-defined function that also performs input/output. You must not
+    use user-defined functions that perform I/O as arguments to any of the
+    above listed output statements.

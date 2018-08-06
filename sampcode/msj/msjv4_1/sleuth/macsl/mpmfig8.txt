@@ -1,0 +1,53 @@
+HPS APIENTRY WinGetPS( hwnd )
+    HWND        hwnd;
+{
+    GrafPtr     pgraf;
+    RgnHandle   hrgn;
+    Rect        rect;
+
+    ASSERT( ! ( _ps1.flags & PSF_INUSE ),
+            "WinGetPS: PS already in use" );
+
+    if( ! hwnd  ||  hwnd == HWND_DESKTOP )
+      hwnd = _hwndDesktop;
+
+    if( ! MpmValidateWindow(hwnd) )
+      return NULL;
+
+    /* Clear the cache PS and mark it as in use */
+
+    memzero( &_ps1 );
+    _ps1.hwnd = hwnd;
+    _ps1.flags |= PSF_INUSE;
+
+    /* Copy the Mac window's GrafPort */
+
+    if( hwnd == _hwndDesktop )
+      GetWMgrPort( &pgraf );
+    else
+      pgraf = &PWINOFHWND(hwnd)->port;
+
+    _ps1.port = *pgraf;
+
+    _ps1.port.visRgn = NewRgn();
+    CopyRgn( pgraf->visRgn, _ps1.port.visRgn );
+
+    _ps1.port.clipRgn = NewRgn();
+    CopyRgn( pgraf->clipRgn, _ps1.port.clipRgn );
+
+    /* Clip the visRgn down to this window's rectangle in case it's
+       a child window */
+
+    if( ! ( MYWNDOF(hwnd).flStyle & WS_PARENTCLIP ) )
+    {
+      hrgn = NewRgn();
+      MpmQueryMacRect( hwnd, &rect );
+      RectRgn( hrgn, &rect );
+      SectRgn( _ps1.port.visRgn, hrgn, _ps1.port.visRgn );
+      DisposeRgn( hrgn );
+    }
+
+    /* Handle WS_CLIPCHILDREN and WS_CLIPSIBLINGS here? */
+
+    return _hps1;
+}

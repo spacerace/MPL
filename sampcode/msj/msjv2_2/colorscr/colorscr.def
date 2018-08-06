@@ -1,0 +1,9 @@
+
+NAME            ColorScr
+STUB            'WINSTUB.EXE'
+CODE            MOVABLE
+DATA            MOVABLE MULTIPLE
+HEAPSIZE        1024
+STACKSIZA       4096
+EXPORTS         WndProc
+                ScrollProc

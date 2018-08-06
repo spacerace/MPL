@@ -1,0 +1,11 @@
+This archive contains the IBM-PC specific source code for XLISP
+version 2.0.  In order to recompile XLISP, you'll also need the
+generic code archive.  These files were designed to be used with
+Turbo C v1.5 and will probably need to be changed to use any other
+compiler.  Before attempting to recompile any of the modules, make
+sure that the symbol _TURBOC_ is defined at the top of 'xlisp.h'
+where the machine type is specified (right under the copyright
+notice).
+
+
+

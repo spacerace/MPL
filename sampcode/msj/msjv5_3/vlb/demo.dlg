@@ -1,0 +1,18 @@
+DEMO DIALOG LOADONCALL MOVEABLE DISCARDABLE 27, 28, 107, 110
+CAPTION " Virtual List Box "
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_POPUP
+BEGIN
+    CONTROL "", 102, "static", SS_BLACKFRAME | WS_CHILD,
+            10, 20, 84, 57
+    CONTROL "", 100, "edit", WS_BORDER | WS_VSCROLL |
+            WS_HSCROLL | WS_TABSTOP | WS_CHILD, 10, 20, 84, 57
+    CONTROL "OK", 1, "button", BS_DEFPUSHBUTTON | WS_TABSTOP |
+            WS_CHILD, 11, 90, 32, 14
+    CONTROL "Cancel", 2, "button", BS_PUSHBUTTON | WS_TABSTOP |
+            WS_CHILD, 56, 90, 32, 14
+    CONTROL "Selected String", 101, "static", SS_LEFT | WS_CHILD,
+            10, 6, 80, 8
+END
+
+
+

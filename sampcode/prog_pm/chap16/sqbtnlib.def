@@ -1,0 +1,12 @@
+;-------------------------------------
+; SQBTNLIB.DEF module definition file
+;-------------------------------------
+
+LIBRARY        SQBTNLIB  INITINSTANCE
+
+DESCRIPTION    'Square Button Dynamic Link Library (C) Charles Petzold, 1988'
+PROTMODE
+DATA           NONSHARED
+HEAPSIZE       1024
+EXPORTS        RegisterSqBtnClass
+               SqBtnWndProc

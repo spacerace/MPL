@@ -1,0 +1,10 @@
+;---------------------------------
+; WELC.DEF module definition file
+;---------------------------------
+
+NAME           WELC      WINDOWAPI
+
+DESCRIPTION    'Welcome to PM -- Program No. 4 (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192

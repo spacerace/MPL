@@ -1,0 +1,55 @@
+     INSTRUCTIONS FOR CALLING MACRO-ASSEMBLER FUNCTIONS FROM MS-C LANGUAGE
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                             By Bill Dickson
+
+1.  The Assembled function called is a near procedure.
+     a. Proc name is lower case prefixed with '_' ( eg: _pname).
+     b. Public data is formatted like proc name above.
+     c. C calls omit the '_' prefix when declaring or calling.
+     d. Use MASM option /MX to preserve case in public and externals.
+     e. Use LINK option /DO for MS-DOS segment ordering.
+     f. Use LINK option /NOI for no_ignore_case.
+
+2.  Example of C declarations and call. ( ASM function _test )
+     a. extern int test(tdata);   /* before all C blocks */
+     b. extern int adat;          /* to access ASM _adat */
+     c. cdat = test(x);           /* to call ASM proc _test */
+
+3.  MASM declarations to make proc and data (_test, _adat) public.
+     a. public  _test, _adat      ; Before prog main body.
+
+4.  Register preservation for C.
+     a. All segment registers must be restored.
+     b. bp and sp must be restored.
+     c. si and di must be restored.
+     d. dir flag must be cleared on exit.
+
+5.  Passing parameter (only 1 allowed) back to C.
+     a. 16 bit type in AX.
+     b. 32 bit type in DX:AX.
+     c. Start address (public) of union or struct in AX.
+     d. Start address (public) of float or double in AX.
+
+6.  The data segment must be defined as DGROUP (see example).
+
+7.  The data segment must be defined as example listing.
+
+8.  The text segment must be defined as example listing.
+
+9.  Stack segment should not be defined. Use C's stack.
+
+10. Other C segments are available for use by assembly program but
+    these are more usefull for an assembly language program calling
+    C functions.(Another subject matter!)
+
+11. This discussion pertains to the Microsoft Macro Assembler and
+    the Microsoft C Compiler. Included in these files are:
+     a. C_ASM.DOC            This text file.
+     b. Demo.c               C example source file.
+     c. Cadd.asm             Assembler example source file.
+
+12.  I hope this tutorial helps anyone who wishes to use this killer
+     combination of C's power and the Macro Assemblers speed. I had
+     to sift through tons of pages in 3 manuals to extract this info
+     and I hope I can save you some time passing on what I learned.
+     Please note that there is no substitute for reading your manual.

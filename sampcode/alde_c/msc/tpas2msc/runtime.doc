@@ -1,0 +1,917 @@
+           GLOCKENSPIEL TURBO PASCAL(TM)-TO-QUICKC(TM) TRANSLATOR
+                                  VERSION 1.0
+                                  RUNTIME.DOC
+
+
+This document describes, in alphabetical order, the library functions used in 
+C files output by the Glockenspiel Turbo Pascal-to-C Translator.  
+These functions are included in the T2C.LIB library provided with the translator.
+
+
+chk_err()
+=========
+Used to simulate the Turbo Pascal $I+ and $I- compiler directives.
+
+
+int getcur(int *, int *)
+========================
+Returns the current cursor coordinates (row and column, respectively) in the
+variables passed as arguments.
+
+
+map_err(int)
+============
+Used by T2CF_ioresult().
+
+
+setcur(int, int)
+================
+Positions the cursor at the given coordinates. Used by gotoxy() and other
+functions.
+
+
+T2C_setup_delay()
+=================
+Calculates the loop size necessary for a millisecond delay.  This function is
+always called at the start of the C program so that no conflicts arise between
+uses of the timer chip for sound and delay.
+
+
+T2CD_chdir(char *)
+==================
+Moves to the specified directory.
+
+
+T2CD_getdir(int, char *)
+=======================
+Obtains the current directory of the drive specified by the first argument and
+returns its name in the variable supplied as the second argument.
+
+
+T2CD_mkdir(char *)
+=================
+Creates a new directory.
+
+
+T2CD_rmdir(char *)
+==================
+Removes the named directory.
+
+
+T2CF_append(PTR_FILE, int, int)
+===============================
+Opens the given file for appending only, with the file pointer set to the last
+position.
+
+
+T2CF_assign( PTR_FILE, char * )
+===============================
+Equivalent to first half of the standard C function open().
+
+
+T2CF_blockread(PTR_FILE, char *, int, short, va_alist)
+=====================================================
+Reads from an untyped file.  The second argument is the variable into which the
+characters are read; the third argument gives the number of 128-bye blocks to
+be read. An optional argument returns the actual number of blocks read.
+
+
+T2CF_blockwrite(PTR_FILE, char *, int, short, va_alist)
+======================================================
+Writes to an untyped file.  The second argument is the variable from which the
+characters are written; the third argument gives the number of 128-bye blocks
+to be written. An optional argument returns the actual number of blocks
+written.
+
+
+T2CF_chain(PTR_FILE)
+====================
+Emulates the Turbo Pascal Chain procedure:  spawns a child process and then
+returns to the parent process.
+
+
+T2CF_close(PTR_FILE)
+====================
+Flushes all buffers and closes the given file.
+
+
+T2CF_eof(PTR_FILE)
+==================
+Returns TRUE if the file pointer is at the end of the file or FALSE otherwise.
+
+
+T2CF_eoln(PTR_FILE)
+===================
+Returns TRUE if the file pointer is at the end of the current line or FALSE if
+it is not.
+
+
+T2CF_erase(PTR_FILE)
+====================
+Erases the given file.  This function assumes that the file name includes a
+path.
+
+
+T2CF_execute(PTR_FILE)
+======================
+Executes the given file and does not return to the parent process.
+
+
+T2CF_filepos(PTR_FILE)
+======================
+Returns a value of type int representing the current position (in records) of
+the file pointer.
+
+
+T2CF_filesize(PTR_FILE)
+=======================
+Returns the number of records in the file.
+
+
+T2CF_flush(PTR_FILE);
+=====================
+If the file is open for writing and any write operation has taken place since
+the last disk update, writes the sector buffer.  If the file is open for
+reading, causes the next read operation to be a physical read from the disk
+file.  This function has no effect on unbuffered file I/O.
+
+
+T2CF_ioresult()
+===============
+Emulates the Turbo Pascal IOresult function:  returns the result of an I/O
+operation.
+
+
+double T2CF_longfilepos(PTR_FILE)
+=================================
+Similar to T2CF_filepos, but returns a double instead of an int.
+
+
+double T2CF_longfilesize(PTR_FILE)
+==================================
+Returns a value of type double representing the current position (in records)
+of the file pointer.
+
+
+T2CF_longseek(PTR_FILE, long)
+=============================
+Moves the file pointer to the byte given by the second argument. The position
+of the first byte is assumed to be 0.
+
+
+T2CF_read(PTR_FILE, char *, int, va_alist)
+=========================================
+Reads an arbitrary number of bytes from the specified file. The second argument
+is a format string.  The remaining arguments name the variables to which the
+consecutive read values are to be assigned.
+
+
+T2CF_rename(PTR_FILE, char *)
+============================
+Renames the indicated file to the name given by the second argument.  Do not
+use this function with an open file.
+
+
+T2CF_reset(PTR_FILE, int, short, va_alist)
+==========================================
+Prepares the given file for processing, setting the file pointer to position 0.
+This function takes an optional argument to specify the block size for untyped
+file.
+
+
+T2CF_rewrite(PTR_FILE, int, short, va_alist)
+============================================
+Creates a new, empty disk file for writing.  This function takes an optional
+argument to specify the block size for an untyped file.
+
+
+T2CF_seek(PTR_FILE, int)
+========================
+Moves the file pointer to the byte given by the second argument. The position
+of the first byte is assumed to be 0.
+
+
+T2CF_seekeof(PTR_FILE)
+======================
+Returns TRUE if the file pointer is at the end of the file or FALSE otherwise.
+This function is similar to T2CF_eof(), but it ignores white-space characters.
+
+
+T2CF_seekeoln(PTR_FILE)
+=======================
+Returns TRUE if the file pointer is at the end of the current line or FALSE if
+it is not.  This function is similar to T2CF_eoln(), but it ignores white-space
+characters.
+
+
+T2CF_truncate(PTR_FILE)
+=======================
+Truncates the given file at the current file-pointer position.  The file must
+be open for writing.
+
+
+T2CF_write(PTR_FILE, char *, int, va_alist)
+==========================================
+Writes an arbitrary number of bytes to the specified file. The second argument
+is a format string.  The remaining arguments name the variables from which the
+consecutive values are to be written.
+
+
+void T2CG_arc (int, int, int, int, int)
+=======================================
+Draws an arc.  The first two arguments give the start position; the third gives
+the angle subtended; the fourth specifies the radius; and the fifth indicates
+the color.
+
+
+int T2CG_circle (int, int, int, int)
+====================================
+Draws a circle in the color given by the last argument.  The first two
+arguments describe the center of the circle; the third indicates the radius.
+
+
+void T2CG_clearscreen()
+=======================
+Clears the active window and homes the turtle.
+
+
+void T2CG_colortable (int, int, int, int)
+=========================================
+Emulates the Turbo Pascal ColorTable routine:  defines a color-translation
+table for drawing procedures.
+
+
+int T2CG_draw(int, int, int, int, int)
+======================================
+Draws a line in the color specified by the last argument.  The first two pairs
+of arguments give the starting and ending points.
+
+
+int T2CG_fillpattern (int, int, int, int, int)
+==============================================
+Fills a rectangular region with the pattern set by the T2CG_pattern() function.
+The first two pairs of arguments define the corners of the target area; the
+last argument gives the color.
+
+
+int T2CG_fillscreen (int)
+=========================
+Fills the screen with the specified color.
+
+
+int T2CG_fillshape (int, int, int, int)
+=======================================
+Fills an arbitrary area with the color given by the third argument.  The first
+two arguments describe the fill starting point, which should lie within a
+region entirely enclosed by the color given by the fourth argument.
+
+
+int T2CG_getdotcolor (int, int)
+===============================
+Returns the color value of the pixel at the specified coordinates.
+
+
+int T2CG_getpic(char *, int, int, int, int)
+==========================================
+Emulates the Turbo Pascal GetPic routine:  copies the contents of a rectangular
+region to the location given by the first argument.  The last two pairs of
+arguments define the corners of the area to be copied.
+
+int T2CG_graphbackground (int)
+==============================
+Sets the graphics background color.  Legal values are 0-15 as listed in the
+color table for T2CG_textcolor().
+
+
+int T2CG_graphcolormode ()
+==========================
+Activates 320x200 color graphics.
+
+
+int T2CG_graphics ()
+====================
+Activates 320x200 black/white graphics.  Same as T2CG_graphmode ().
+
+
+int T2CG_graphmode ()
+=====================
+Activates 320x200 black/white graphics.
+
+
+int T2CG_graphwindow (int, int, int, int)
+=========================================
+Declares a new graphics window.  The arguments describe the top left and lower
+right corners of the new window in global screen pixel coordinates.
+
+
+int T2CG_hires ()
+=================
+Activates 640x200 black/one-color graphics.
+
+int T2CG_palette (int)
+======================
+Sets the palette available for use in GraphColorMode. The four palettes are
+
+Color:         1              2              3              4
+
+Palette 0      Background     Green          Red            Brown
+Palette 1      Background     Cyan           Magenta        Light Gray
+Palette 2      Background     Light Green    Light Red      Yellow
+Palette 3      Background     Light Cyan     Light Magenta  White
+
+
+void T2CG_pattern (char *)
+=========================
+Emulates the Turbo Pascal procedure pattern.
+
+
+int T2CG_hirescolor(int)
+========================
+Sets the color used for drawing in hi-res graphics.  Allowable values are the
+same as for T2CTR_textcolor().
+
+
+int T2CG_plot (int, int, int)
+=============================
+Plots a point in the color specified by the third argument.  The first two
+arguments give the coordinates in the current window's frame of reference.
+
+
+void T2CG_putpic (char *, int, int)
+==================================
+Copies the contents of the first argument--presumably containing the results of
+a T2CG_getpic()--to the screen.  The last two arguments describe the lower left
+corner of the target area.
+
+
+int T2CG_textbackground (int)
+=============================
+Sets text background color from among the values 0-7, which correspond to the
+colors shown in the table for T2CG_textcolor().
+
+
+int T2CG_textcolor (int)
+========================
+Sets the color of text-mode characters based on the value of the argument, as
+shown below:
+
+Value     Color          Value     Color
+-----     -----          -----     -----
+0         Black          8         Dark Gray
+1         Blue           9         Light Blue
+2         Green          10        Light Green
+3         Cyan           11        Light Cyan
+4         Red            12        Light Red
+5         Magenta        13        Light Magenta
+6         Brown          14        Yellow
+7         Light Gray     15        White
+
+To make characters blink, add 16 to the argument value.
+
+
+int T2CG_textmode(int, va_alist )
+=================================
+Sets the text display mode. If no argument is given, the last active text mode
+is restored.  The legal arguments are:
+
+     Argument       Mode
+     --------       ----
+     BW40           40-column black and white
+     BW80           80-column black and white
+     C40            40-column color
+     C80            80-column color
+
+
+int T2CG_wherex ()
+==================
+Returns the x coordinate of the cursor position.
+
+
+int T2CG_wherey ()
+==================
+Returns the y coordinate of the cursor position.
+
+
+void T2CG_window (int, int, int, int)
+=====================================
+Creates a new active text window.  The first two arguments describe the upper
+left corner (in global screen coordinates), and the last two describe the lower
+right corner.
+
+
+T2CH_cseg()
+===========
+Returns the base address of the code segment.
+
+
+T2CH_dseg()
+===========
+Returns the base address of the data segment.
+
+
+T2CH_intr(int, PAS_REGS *)
+===========================
+Initializes the CPU registers and executes the given BIOS interrupt.
+
+
+char T2CH_mem(int, int)
+=======================
+Returns the value stored at the memory location indicated by the given segment
+(first argument) and offset (second argument).
+
+
+int T2CH_memw(int, int)
+=======================
+Returns the value stored at the memory location indicated by the given segment
+(first argument) and offset (second argument).  This function is the same as
+the T2CH_mem() function, except that it returns a two-byte word (int).
+
+
+T2CH_msdos(PAS_REGS *)
+======================
+Initializes the CPU registers and executes a DOS function call.
+
+
+T2CH_ofs(char *)
+===============
+Returns the offset (relative to the segment beginning) of a given address.
+
+
+char far * T2CH_ptr(int, int)
+=============================
+Returns a 32-bit pointer to the memory location indicated by the given segment
+(first argument) and offset (second argument).
+
+
+T2CH_seg(char *)
+===============
+Returns the address of the segment containing the specified memory location.
+
+
+T2CH_sseg()
+===========
+Returns the base address of the stack segment.
+
+
+double T2CM_arctan(double)
+==========================
+Returns the arctangent of the argument.
+
+
+char T2CM_chr (int)
+===================
+Returns the character corresponding to the given ASCII value.
+
+
+double T2CM_cos(double)
+=======================
+Returns the cosine of the argument.
+
+
+double T2CM_exp(double)
+=======================
+Returns the exponential of the argument.
+
+
+double T2CM_frac(double)
+========================
+Returns the fractional part of the argument.
+
+
+int T2CM_hi (int)
+=================
+Returns the high byte of the argument word.
+
+
+int T2CM_I_abs(int) double T2CM_R_abs(double)
+=========================
+Return the absolute value of an int or double value, respectively.
+
+
+int T2CM_I_random(int)
+======================
+Returns a random integer between 0 and the value of the argument minus 1.
+
+
+int T2CM_I_sqr(int) double T2CM_R_sqr(double)
+=========================
+Return the square of an int or double value, respectively.
+
+
+double T2CM_int(double)
+=======================
+Returns the integer part of the argument.
+
+
+double T2CM_ln(double)
+======================
+Returns the natural logarithm of the argument.
+
+
+int T2CM_lo (int)
+=================
+Returns the low byte of the argument word.
+
+
+int T2CM_odd (int)
+==================
+Returns TRUE if the argument is odd or FALSE if it is even.
+
+
+double T2CM_R_random()
+======================
+Returns a random number greater than or equal to 0 and less than 1.
+
+
+void T2CM_randomize()
+=====================
+Generates a random-number seed.
+
+
+int T2CM_round (double)
+=======================
+Returns the integer portion of the number, rounded upward.
+
+
+double T2CM_sin(double)
+=======================
+Returns the sine of the argument.
+
+
+double T2CM_sqrt(double)
+========================
+Returns the square root of the argument.
+
+
+int T2CM_trunc (double)
+=======================
+Returns the integer portion of the argument.
+
+
+T2CR_freemem(char **, int)
+==========================
+Frees a block of space allocated by T2CR_getmem(). The second argument is not
+used.
+
+
+T2CR_getmem(char **, int)
+=========================
+Allocates the specified number of bytes for an object of type char.
+
+
+T2CR_maxavail()
+===============
+Returns the size (in 16-byte paragraphs) of the largest block of contiguous
+free space on the heap.  This function may return a negative number to indicate
+that more than 32K of contiguous stack space is free. To avoid this
+possibility, enter
+
+     EXEMOD <filename>.EXE /MAX n
+
+to test the amount of contiguous, free stack space.
+
+
+T2CR_memavail()
+===============
+Returns the available heap space (in 16-byte paragraphs) at any given time.
+Like T2CR_maxavail(), this function may return a negative number to indicate
+that the amount of free space is more than 32K. To avoid this possibility,
+enter
+
+     EXEMOD <filename>.EXE /MAX n
+
+to test the amount of contiguous, free stack space.
+
+
+char * T2CS_ch2str (char)
+=========================
+Returns a string consisting of the given character.
+
+
+char T2CS_str2ch(char *)
+=======================
+Returns the first character in the string.
+
+
+T2CSCR_clreol()
+===============
+Clears all characters from the current position to the end of the line.
+
+
+T2CSCR_clrscr()
+===============
+Clears the screen, homing the cursor.
+
+
+T2CSCR_crtexit()
+================
+Sends the terminal-reset string.
+
+
+T2CSCR_crtinit()
+================
+Initializes the CRT.
+
+
+T2CSCR_delline()
+================
+
+Deletes the line on which the cursor rests, moving all succeeding lines up one
+line.
+
+
+T2CSCR_gotoxy(int, int)
+=======================
+Moves the cursor to the column given by the first argument and the row given by
+the second argument.
+
+
+T2CSCR_highvideo()
+==================
+Sets screen output to high-intensity video.
+
+
+T2CSCR_insline()
+================
+Inserts a blank line at the current screen position.
+
+
+T2CSCR_lowvideo()
+=================
+Sets screen output to dimmed intensity.
+
+
+T2CSCR_normvideo()
+==================
+Sets screen output to normal intensity.
+
+
+TURBOSET T2CSOP_tsassign(TURBOSET, TURBOSET)
+============================================
+Assigns the values of the second set to the first set.
+
+
+TURBOSET T2CSOP_tsdiff(TURBOSET, TURBOSET)
+==========================================
+Returns the differences between two sets.
+
+
+boolean T2CSOP_tseq (TURBOSET, TURBOSET)
+========================================
+Returns TRUE if the sets are equal or FALSE if they are not.
+
+
+boolean T2CSOP_tsgrteq (TURBOSET, TURBOSET)
+===========================================
+Returns TRUE if the second set is a subset of the first or FALSE if it is not.
+
+
+boolean T2CSOP_tsincl (int, TURBOSET)
+=====================================
+Returns TRUE if the first argument is an element of the set or FALSE if it is
+not.
+
+
+TURBOSET T2CSOP_tsinter (TURBOSET, TURBOSET)
+=============================================
+Returns the intersection of two sets.
+
+
+boolean T2CSOP_tslesseq (TURBOSET, TURBOSET)
+============================================
+Returns TRUE if the first set is a subset of the second or FALSE if it is not.
+
+
+TURBOSET T2CSOP_tsmake ( va_alist)
+===================================
+Creates a Turbo-Pascal-type set containing the given elements.
+
+
+boolean T2CSOP_tsnoteq (TURBOSET, TURBOSET)
+===========================================
+Returns TRUE if the sets are not equal or FALSE if they are equal.
+
+
+TURBOSET T2CSOP_tsunion  (TURBOSET, TURBOSET)
+=============================================
+Returns the union of two sets.
+
+
+void T2CST_I_val (char *, int *, int *)
+=======================================
+Converts the first argument to an int and stores this value in the second
+argument.  The third argument is set to 0 if no errors occur or to 1 otherwise.
+If errors occur, the value stored in the int is undefined.
+
+
+void T2CST_R_val(char *, double*, int *)
+========================================
+Converts the first argument to a double and stores this value in the second
+argument.  The third argument is set to 0 if no errors occur or to 1 otherwise.
+If errors occur, the value stored in the double is undefined.
+
+
+char * T2CST_concat(int, char *, char *, va_alist)
+==================================================
+Concatenates the second and subsequent arguments and returns the concatenated
+string.  The first argument gives the number of character arguments that
+follow.
+
+
+char * T2CST_copy(char *, int, int)
+==================================
+Returns a substring of the first argument.  The second argument is the starting
+position within the string; the third argument is the number of characters to
+copy.
+
+
+void T2CST_delete(char *, int, int)
+==================================
+Removes a substring from the first argument. The second argument gives the
+position in the string from which to begin deleting characters; the third
+argument tells how many characters to delete.
+
+
+void T2CST_insert (char *, char *, int)
+=====================================
+Inserts the string given as the first argument into the string given as the
+second.  The last argument indicates the point in the second argument where the
+first argument is inserted.
+
+
+int T2CST_length(char *)
+=======================
+Returns the length of the given string.
+
+
+int T2CST_pos(char *, char *)
+===========================
+Checks for the presence of the first argument as a substring within the second
+argument.  Returns the starting position if the first argument is found or 0
+otherwise. The first character of the second argument string is considered to
+be character 1 for the sake of compatibility with Pascal.
+
+
+T2CST_str()
+===========
+Not yet implemented.
+
+
+void T2CTR_back(int)
+====================
+Moves the turtle back the specified number of turtle steps, drawing a line in
+the current pen color if the pen is down.
+
+
+void T2CTR_forwd(int)
+=====================
+Moves the turtle forward the specified number of turtle steps, drawing a line
+in the current pen color if the pen is down.
+
+
+int T2CTR_heading()
+===================
+Returns the turtle's current heading.
+
+
+void T2CTR_hideturtle()
+=======================
+Hides the turtle (that is, makes it invisible).
+
+
+void T2CTR_home()
+=================
+Repositions the turtle at (0,0) pointing to heading 0.  Does not draw a line.
+
+
+void T2CTR_nowrap()
+===================
+Sets drawing to nowrap mode. The turtle may move anywhere in an infinite plane,
+and only activity within the confines of the window will be visible.
+
+
+void T2CTR_pendown()
+====================
+Puts the turtle's pen down.
+
+
+void T2CTR_penup()
+==================
+Puts the turtle's pen up.6
+
+
+void T2CTR_setheading(int)
+==========================
+Sets the turtle's heading to the given value in the range 0-359. Heading 0 is
+compass north, heading 90 is east, and so on.
+
+
+void T2CTR_setpencolor(int)
+===========================
+Sets the color of the turtle's pen.
+
+
+void T2CTR_setposition(int, int)
+================================
+Moves the turtle to the specified position.  Does not draw a line.
+
+
+void T2CTR_showturtle()
+=======================
+Shows the turtle (that is, makes it visible).
+
+
+void T2CTR_turnleft (int)
+=========================
+Turns the turtle left (counterclockwise) by the given number of degrees.
+
+
+void T2CTR_turnright(int)
+=========================
+Turns the turtle right (clockwise) by the given number of degrees.
+
+
+void T2CTR_turtledelay(int)
+===========================
+Sets the delay between turtle steps (normally 0) to the given number of
+milliseconds.
+
+
+int T2CTR_turtlethere()
+=======================
+Returns 1 if the turtle is shown or 0 if it is not.
+
+
+void T2CTR_turtlewindow(int, int, int, int)
+===========================================
+Defines a turtle window.  The first two arguments specify the center of the
+window (in terms of screen turtle coordinates); the next two give the width and
+height, respectively, in pixels.
+
+
+void T2CTR_wrap()
+=================
+Sets the drawing mode to wrap.  In this mode, when the turtle crosses the
+boundary of the window, it reappears on the opposite side.
+
+
+int T2CTR_xcor()
+================
+Returns the turtle's current x coordinate.
+
+
+int T2CTR_ycor()
+================
+Returns the turtle's current y coordinate.
+
+
+T2CV_delay(int)
+===============
+Causes a delay for the specified number of milliseconds. Expects
+T2C_setup_delay() to have been run previously.
+
+
+T2CV_fillchar(char *, int, char)
+===============================
+Fills a range of memory with a certain value.  Starting at the location given
+by the first argument, the number of bytes given by the second argument are
+filled with the value given by the third argument.
+
+
+T2CV_keypressed()
+=================
+Returns TRUE if a keystroke is waiting in the keyboard buffer or FALSE if the
+keyboard buffer is empty.
+
+
+T2CV_move(char *, char *, int)
+============================
+Copies characters from one range of memory to another.  The first two arguments
+describe the source and destination bytes, respectively.  The third argument
+gives the number of bytes to be copied. Note that possible range overlap is
+taken into account.
+
+
+T2CV_nosound()
+==============
+Turns off a tone generated by T2CV_sound().
+
+
+T2CV_sound(int)
+===============
+Emits a tone of the given frequency until the T2CV_nosound function is called.
+
+
+T2CV_swap(int)
+==============
+Swaps the high and low bytes of an int, returning the result.
+
+
+char T2CV_upcase(char)
+======================
+Converts a character to uppercase.
+
+----------------------------------------------------------------------
+QuickC is a trademark of Microsoft Corporation.
+
+Turbo Pascal is a trademark of Borland International, Inc..

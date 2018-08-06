@@ -1,0 +1,8 @@
+tracer.obj +
+tracerp.obj +
+tracerd.obj
+tracer/align:16
+tracer/map
+os2 llibcmt doscalls/NOD
+tracer.def
+

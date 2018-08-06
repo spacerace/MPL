@@ -1,0 +1,23 @@
+STDFLAGS=-c -u -AM -FPa -Gsw -Os -Zep -W2
+
+viewer.res: viewer.rc viewer.h viewer.ico
+   rc -r viewer.rc
+
+viewer1.obj: viewer1.c viewer.h
+   cl $(STDFLAGS) -NT _VIEWER viewer1.c
+
+viewer2.obj: viewer2.c viewer.h
+   cl $(STDFLAGS) -NT _DISPLAY viewer2.c
+
+viewer3.obj: viewer3.c viewer.h
+   cl $(STDFLAGS) -NT _DIALOG viewer3.c
+
+viewer4.obj: viewer4.c viewer.h
+   cl $(STDFLAGS) -NT _UTILITY viewer4.c
+
+viewer.exe: viewer1.obj viewer2.obj viewer3.obj \
+            viewer4.obj viewer.res viewer.def
+   link4 viewer1+viewer2+viewer3+viewer4 /AL:16 /NOE,\
+            viewer,,mlibw,viewer.def
+   rc viewer.res
+

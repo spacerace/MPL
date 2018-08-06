@@ -1,0 +1,13 @@
+/*
+ * FORM LIBRARY - RESOURCE FILE
+ *
+ * 07/12/90 1.00 - Kevin P. Welch - initial creation.
+ *
+ */
+
+#include <windows.h>
+#include "form.h"
+
+
+/* FORM DEFINITION & DIALOG BOXES HERE */
+

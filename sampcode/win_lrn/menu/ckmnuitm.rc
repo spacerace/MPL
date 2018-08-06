@@ -1,0 +1,13 @@
+#include "style.h"
+#include "ckmnuitm.h"
+
+
+menucnt MENU
+BEGIN
+    POPUP "Commands"
+        BEGIN
+	MENUITEM "Pick me",    IDM_CHOICE1
+	MENUITEM "Pick me" ,   IDM_CHOICE2
+	MENUITEM "Pick me",    IDM_CHOICE3
+	END
+END

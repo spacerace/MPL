@@ -1,0 +1,13 @@
+
+ckmnuitm.res: ckmnuitm.rc ckmnuitm.h
+    rc -r ckmnuitm.rc
+
+ckmnuitm.obj: ckmnuitm.c
+   cl -c -W2 -AS -Gsw -Od -Zped ckmnuitm.c
+
+ckmnuitm.exe: ckmnuitm.obj ckmnuitm.def
+   link4 ckmnuitm,/align:16,/map/li,slibw/NOE,ckmnuitm.def
+   rc ckmnuitm.res
+
+ckmnuitm.exe: ckmnuitm.res
+    rc ckmnuitm.res

@@ -1,0 +1,65 @@
+
+							   PTC(1)
+
+
+NAME
+     ptc - Pascal to C translator
+
+SYNOPSIS
+     ptc < pascal source > c source
+
+DESCRIPTION
+     Ptc reads a correct Pascal	program	and prints a C program
+     with the same behaviour.  It is intended as a tool	for tran-
+     sporting finished applications to environments that lack
+     Pascal compilers, it is not intended for program develop-
+     ment.
+
+     The input should comply with the ISO level	0 Pascal defini-
+     tion.  Two	common Pascal extensions are also recognized: the
+     keyword otherwise may be used for default entries in case-
+     statements, the keyword external may be used in place of the
+     forward directive to signify that a procedure or function is
+     defined in	a library.  Furthermore, the translator	does not
+     require a complete	Pascal program,	a consistent subset of
+     declarations can be translated.  Thus a primitive module
+     concept is	supported.
+
+SEE ALSO
+     Ptc implementation	notes.
+
+CAVEATS
+     The quality of an object program is of course highly depen-
+     dent on the C compiler that processes the translated code.
+     Arithmetic	operations are sometimes implemented in	a way
+     that is incompatible with the Pascal definition.  For exam-
+     ple, the translator assumes that:
+
+	  a := b mod c
+
+     can be accurately translated into
+
+	  a = b	% c
+
+     but that may not be true if c is negative.	 A check on the
+     characteristics of	integer	and float arithmetic is	strongly
+     recommended.
+
+     Some Pascal constructs are	impossible to express in C.  The
+     translator	will not object	to:
+
+	  type ptr = ^ ptr;
+
+     but a C-compiler may balk at the resulting:
+
+	  typedef   ptr	* ptr;
+
+BUGS
+     The program can't translate comments from Pascal to C.
+
+     The translator does not do	complete typechecking so a Pascal
+     program that isn't	formally correct may cause malfunction.
+
+     Passing a procedure as parameter to an enclosing recursive
+     procedure may produce erroneous code (see the implementation
+     notes).

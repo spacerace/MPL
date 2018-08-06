@@ -1,0 +1,67 @@
+/*
+Microsoft Systems Journal
+Volume 1; Issue 2; December, 1986
+
+Code Listings For:
+
+	Whatsize
+	pp. 13-24
+
+Author(s): Charles Petzold
+Title:     A Step-by-Step Guide to Building Your First Windows Application
+
+
+
+==============================================================================
+==============================================================================
+
+Figure 2: WSZ.RC
+==============================================================================
+*/
+
+#include <windows.h>
+#include "WSZ.h"
+
+WhatSize ICON WSZ.ico
+
+STRINGTABLE
+    BEGIN
+        IDS_NAME,   "WhatSize"
+        IDS_ABOUT,  "About..."
+        IDS_TITLE,  "What Size is the Window?"
+        IDS_FORMAT, "%.3G %s by %.3G %s"
+        ID_MILLIM,  "millimeters"
+        ID_INCHES,  "inches"
+        ID_PIXELS,  "pixels"
+    END
+
+WhatSize MENU
+    BEGIN
+        POPUP "Colors"
+            BEGIN
+                MENUITEM "Black on White", ID_BLACK
+                MENUITEM "White on Black", ID_WHITE
+            END
+        MENUITEM "Units", IDM_UNITS
+    END
+
+AboutBox DIALOG 20, 20, 144, 75
+    STYLE WS_POPUP | WS_DLGFRAME
+    BEGIN
+        CTEXT "What Size?",             -1, 37,  5,  68,  8
+        ICON  "WhatSize",               -1,  9, 23,   0,  0
+        CTEXT "A Windows Application",  -1,  0, 14, 144,  8
+        CTEXT "Version 1.00",           -1, 38, 34,  64,  8
+        DEFPUSHBUTTON "Ok",           IDOK, 53, 59,  32, 14, WS_GROUP
+    END
+
+UnitsBox DIALOG 20, 20, 100, 90
+    STYLE WS_POPUP | WS_BORDER
+    CAPTION "What Size Units"
+    BEGIN
+        RADIOBUTTON "Pixels",ID_PIXELS,20,5,60,15,WS_GROUP | WS_TABSTOP
+        RADIOBUTTON "Millimeters", ID_MILLIM, 20, 25, 60, 15
+        RADIOBUTTON "Inches",      ID_INCHES, 20, 45, 60, 15
+        DEFPUSHBUTTON "Ok",        IDOK,      10, 70, 32, 15, WS_GROUP
+        PUSHBUTTON "Cancel",       IDCANCEL,  58, 70, 32, 15
+    END

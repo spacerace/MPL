@@ -1,0 +1,6 @@
+clipchan.obj: clipchan.c
+    cl -d -c -AS -Gsw -Os -Zpe clipchan.c
+
+clipchan.exe: clipchan.obj clipchan.def
+    link4 clipchan,/align:16,/map,slibw/NOE,clipchan.def
+    mapsym clipchan

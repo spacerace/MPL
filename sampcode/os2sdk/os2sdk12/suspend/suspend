@@ -1,0 +1,14 @@
+# Makefile for suspend
+
+INC = ..\..\..\include
+OPT = -AL -Zi -G2 -Gs -I$(INC) -c
+
+.c.obj:
+        cl $(OPT) $*.c
+
+all: suspend.exe
+
+suspend.obj: suspend.c
+
+suspend.exe: suspend.obj
+    link suspend,,,/nod:llibce llibcep;

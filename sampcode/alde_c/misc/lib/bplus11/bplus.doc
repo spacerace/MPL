@@ -1,0 +1,639 @@
+(s10H
+
+
+
+
+
+                               THE B-PLUS PROGRAM
+                         A B-TREE INDEXING FILE MODULE
+                               FOR C PROGRAMMERS
+                                       by
+                             Hunter and Associates
+
+
+
+              B-PLUS is a versatile, carefully designed module for C
+         programmers who need a fast, efficient program for indexing
+         data files.  B-PLUS allows data records to be retrieved based
+         on a key value without regard to their position in the data
+         file.  The data records can also be accessed in sequential
+         order in either a forward and reverse direction.
+
+              The B-PLUS Program Module is based on the famous and
+         widely used b-tree algorithm and has a number of useful
+         extensions which are not found in many programs of this type.
+         Some of its features are the following:
+
+              - Variable length keys are allowed
+
+              - File size limited only by DOS or by disk space
+
+              - All functions are non-recursive so very little stack
+                space is required
+
+              - The most recently used key values are stored in a
+                cache buffer in main memory for fast access
+
+              - Duplicate keys are allowed
+
+              The B-PLUS program has been tested using the Microsoft C
+         Compilers, Versions 4.0, 4.5 (OS2 Beta release), 5.0 and the
+         Borland Turbo C Compiler Version 1.0.  The compiled object
+         file is less than 9.4K bytes in length for these compilers.
+         See the instructions at the end of this user's guide for a
+         special note regarding Microsoft C Version 5.0 and Quick C.
+
+              Version 1.1 has several new features that were not in
+         Version 1.0.  The next_key and prev_key routines can now be
+         called immediately after adding or deleting an index key.  It
+         is no longer necessary to "reset" the index file with a
+         find_key or locate_key function call after adding or deleting
+         keys.  Several minor bugs that were discovered in Version 1.0
+         have been corrected in Version 1.1.
+
+
+         LICENSE AND REGISTRATION
+
+              B-PLUS is distributed as a "share ware" program.  Please
+         help us get it known by giving unmodified copies of the
+
+
+         HUNTER AND ASSOCIATES            B-PLUS FILE INDEXING PROGRAM
+         -------------------------------------------------------------
+
+
+         program and documentation to other programmers who may find
+         B-PLUS useful.
+
+              B-PLUS is copyright (C) 1987 by Hunter and Associates.
+         It is not public domain or free software.  Non-registered
+         users are granted a limited license to use B-PLUS on a trial
+         basis for determining whether or not it is suitable for their
+         needs.  Registration permits the use of B-PLUS on one CPU and
+         allows the use of the compiled B-PLUS modules in programs for
+         general sale and/or distribution.
+
+              The registration fee is $25 or $35.  Users who pay the
+         $35 fee will be sent a disk containing a fully commented
+         listing of the latest source code, the user documentation,
+         and a number of useful sample programs.  Users who pay the
+         $25 fee are not sent a new disk but are included in the
+         mailing list for announcements about both current and future
+         products.  Your prompt registration of your copy of the B-
+         PLUS program is appreciated.
+
+              A trial disk with supporting documentation is available
+         directly from Hunter and Associates for $10.
+
+              Register your usage of B-PLUS by sending the registra-
+         tion fee to:
+
+                        Hunter and Associates
+                        7050 NW Zinfandel Lane
+                        Corvallis, OR  97330
+                        Telephone: (503) 745-7186
+
+         Your comments regarding the B-PLUS program or any suggestions
+         you have for extensions or for other programs that would be
+         useful to you are welcomed.
+
+              Hunter and Associates makes no warranties whatsoever
+         regarding the B-PLUS computer programs or the supporting
+         documentation.
+
+
+         USING B-PLUS IN YOUR PROGRAMS
+
+              The B-PLUS File Indexing Module contains twelve
+         functions that handle the retrieval of data records by key
+         value.  The keys that are used to locate records are null
+         terminated strings.  The data structures and constants that
+         are used are defined in the header file bplus.h.
+
+              If the data record field that you want to use as a key
+         contains numeric data, you can use one of the library
+
+                                   Page 2
+
+
+         HUNTER AND ASSOCIATES            B-PLUS FILE INDEXING PROGRAM
+         -------------------------------------------------------------
+
+
+         conversion routines (fcvt, evct, sprintf) to convert the data
+         to string format.
+
+              The connection between a key and its reference is
+         formalized as a structure of type ENTRY.  This structure
+         contains three elements:
+
+         typedef struct
+           {
+             RECPOS   idxptr;         /* long pointer to next index
+                                         level                      */
+             RECPOS   recptr;         /* long pointer to the file
+                                         position of data record    */
+             char     key[MAXKEY];    /* with this key value        */
+           } ENTRY;
+
+              The application program uses only the recptr and key[]
+         fields.  The idxptr is used and maintained by the B-PLUS
+         modules.
+
+              A variable of type IX_DESC is declared for each open
+         index file.  See the header file bplus.h if you are
+         interested in the elements of this structure.  ENTRY and
+         IX_DESC are the only two data types that are normally used by
+         application programs.
+
+              Here is a sample program stub which calls the open_index
+         and find_index subroutines.
+
+
+         Example:
+
+           #include "bplus.h"
+           main()
+             {
+                ENTRY    e;
+                IX_DESC  names;
+
+                /* open index file called NAMES.IDX */
+
+                open_index("NAMES.IDX", &names, 0);
+
+                /* find an index record for John Smith */
+
+                strcpy(e.key, "SMITH JOHN");
+                if(find_key(&e, &names))
+                  printf("Data record address is %ld", e.recptr);
+                else
+                  printf("Cannot find record for that key");
+              }
+
+                                   Page 3
+
+
+         HUNTER AND ASSOCIATES            B-PLUS FILE INDEXING PROGRAM
+         -------------------------------------------------------------
+
+
+         Each of the twelve subroutines is now described.
+
+         int cdecl open_index(name, pix, dup);
+
+              char *name;         File path name
+              IX_DESC *pix;       Pointer to index file variable
+              int dup;            0 - no duplicate keys allowed
+                                  1 - allow duplicate keys
+
+              Description:  The open_index function is used to open
+              and initialize an existing index file specified by name
+              and prepares the file for subsequent reading or writing.
+              The file structure variable pix is defined in the
+              application program.  Duplicate keys are allowed or not
+              allowed depending on whether dup has the value of 0 or
+              1.  The open_index function returns the value IX_OK (1)
+              if the file is opened successfully.  If the file cannot
+              be opened, an error message is displayed and the program
+              is aborted.
+
+
+
+         int cdecl make_index(name, pix, dup);
+
+              char *name;         File path name
+              IX_DESC *pix;       Pointer to index file variable
+              int dup;            0 - no duplicate keys allowed
+                                  1 - allow duplicate keys
+
+              Description:  The make_index function is used to create
+              and initialize a new index file specified by name and to
+              prepare the file for subsequent reading or writing.  If
+              a file of this name already exists, its contents are
+              destroyed when the new file is created.  The file
+              structure variable pix is defined in the application
+              program.  Duplicate keys are allowed or not allowed
+              depending on whether dup has the value of 0 or 1.  The
+              make_index function returns the value IX_OK (1) if the
+              file is created successfully.  If the file cannot be
+              created, an error message is displayed and the program
+              is aborted.
+
+
+
+         int cdecl close_index(pix);
+
+              IX_DESC *pix;       Pointer to index file variable
+
+              Description:  The close_index file function clears the
+              internal cache buffer and closes the specified index
+
+                                   Page 4
+
+
+         HUNTER AND ASSOCIATES            B-PLUS FILE INDEXING PROGRAM
+         -------------------------------------------------------------
+
+
+              file.  It is very important that each index file be
+              closed.  Otherwise data that is stored in the internal
+
+              cache buffer may be lost and the index file may not be
+              properly updated.  The close_index function returns the
+              value IX_OK (1) if the file is successfully closed.
+
+
+
+         int cdecl find_key(pe, pix);
+
+              ENTRY *pe;          Pointer to variable of type ENTRY
+              IX_DESC *pix;       Pointer to index file variable
+
+              Description:  The find_key function searches the index
+              file for the key value contained in pe.key.  If an exact
+              match is found, the value IX_OK (1) is returned and the
+              location of the data record with this key value is
+              stored in pe.recptr.  If an exact match is not found,
+              the value IX_FAIL (0) is returned and pe.recptr is
+              undefined.  If the index file contains duplicate keys,
+              the first key is always found.
+
+
+
+         int cdecl locate_key(pe, pix);
+
+              ENTRY *pe;          Pointer to variable of type ENTRY
+              IX_DESC *pix;       Pointer to index file variable
+
+              Description:  The locate key function searches the index
+              file for the first key value which is equal to or
+              greater than that stored in pe.key.  The location of the
+              data record which is equal to or greater than pe.key is
+              stored in pe.recptr.  This function can be used to
+              locate an entry in the index file when only part of the
+              key value is known.  If the index file contains
+              duplicate keys, locate_key will locate the first key.
+              The following values are returned by locate_key:
+
+                   IX_OK  -  the value (1) is returned if an exact
+                             match is found
+
+                   IX_FAIL - the value (0) is returned if an exact
+                             match is not found
+
+                   EOIX  -   the value (-2) is returned for end of
+                             index if the search key is greater than
+                             all keys in the index file and pe.recptr
+                             is undefined.
+
+                                   Page 5
+
+
+         HUNTER AND ASSOCIATES            B-PLUS FILE INDEXING PROGRAM
+         -------------------------------------------------------------
+
+
+
+
+         int cdecl add_key(pe, pix);
+
+              ENTRY *pe;          Pointer to variable of type ENTRY
+              IX_DESC *pix;       Pointer to index file variable
+
+              Description:  The add_key function adds new entries to
+              the index file.  The calling program stores the key
+              value in pe.key and the data record address in
+              pe.recptr.  Add_key first looks to see if an entry with
+              this key already exists in the index file.  If no entry
+              with this key exists, the new entry is added.  If an
+              entry with this key already exists, the new entry is
+              added only if duplicate keys are allowed (as defined by
+              the open_index function).  If the entry is successfully
+              added, IX_OK (1) is returned; otherwise IX_FAIL (0) is
+              returned.
+
+
+
+         int cdecl delete_key(pe, pix);
+
+              ENTRY *pe;          Pointer to variable of type ENTRY
+              IX_DESC *pix;       Pointer to index file variable
+
+              Description:  The delete_key function deletes entries
+              in the index file.  The key to be deleted is stored in
+              pe.key.  If duplicate records are allowed, the
+              corresponding data record address must also be stored in
+              pe.recptr.  In this case, delete key needs the record
+              number to distinguish entries.  If there are not
+              duplicate entries, this field is ignored.  If the entry
+              is successfully deleted, IX_OK (1) is returned;
+              otherwise IX_FAIL (0) is returned.  The space that was
+              occupied by the entry is marked as free for reused by
+              B_PLUS.
+
+
+
+         int cdecl first_key(pix);
+
+              IX_DESC *pix;       Pointer to index file variable
+
+              Description:  The first_key function positions the index
+              file pointer to the beginning of the index file.  The
+              function next_key can then be used to list the file in
+              key order.  The first_key function returns the value
+              IX_OK (1).
+
+
+                                   Page 6
+
+
+         HUNTER AND ASSOCIATES            B-PLUS FILE INDEXING PROGRAM
+         -------------------------------------------------------------
+
+
+         int cdecl last_key(pix);
+
+              IX_DESC *pix;       Pointer to index file variable
+
+              Description:  The last_key function positions the index
+              file pointer at the end of the index file.  The function
+              previous_key can then be used to list the file in
+              reverse key order.  The last_key function returns the
+              value IX_OK (1).
+
+
+
+         int cdecl next_key(pe, pix);
+
+              ENTRY *pe;          Pointer to variable of type ENTRY
+              IX_DESC *pix;       Pointer to index file variable
+
+              Description:  The next_key function returns the next
+              entry in the index file.  After deleting or adding keys,
+              next_key returns the key immediately following the
+              addition or deletion.  Next_key can be used to locate
+              the desired data record when duplicate keys are allowed.
+              Next_key is used to process files sequential.  Next_key
+              returns the value IX_OK (1) if the next key is present
+              and the value EOIX (-2) when the file pointer is at the
+              end of the index file.  The following program processes
+              an indexed file sequentially:
+
+              #include "bplus.h"
+              main()
+                {
+                  ENTRY e;
+                  IX_DESC names;
+
+                  /* open the index file */
+                  open_index("names.idx", &names);
+
+                  /* now process the file sequentially */
+                  first_key(&names);
+                  ret = next_key(&e, &names);
+                  while (ret == IX_OK)
+                    {
+                      /* the data record location is e.recptr */
+                      /* the program would retrieve and process it */
+                      ret = next_key(&e, &names);
+                    }
+
+                  /* remember to always close open files */
+                  close_index(&names);
+                }
+
+                                   Page 7
+
+
+         HUNTER AND ASSOCIATES            B-PLUS FILE INDEXING PROGRAM
+         -------------------------------------------------------------
+
+
+         int cdecl prev_key(pe, pix);
+
+              ENTRY *pe;          Pointer to variable of type ENTRY
+              IX_DESC *pix;       Pointer to index file variable
+
+              Description:  The prev_key function returns the previous
+              entry in the index file.  After deleting or adding keys,
+              prev_key returns the key immediately preceeding the
+              addition or deletion.  Prev_key can be used to process
+              files sequentially in reverse order. Prev_key returns
+              the value IX_OK (1) if there is a previous key and the
+              value EOIX (-2) when the file pointer is at the
+              beginning of the index file.
+
+
+
+         int cdecl find_exact(pe, pix);
+
+              ENTRY *pe;          Pointer to variable of type ENTRY
+              IX_DESC *pix;       Pointer to index file variable
+
+              Description:  The find_exact function searches the index
+              file for the key value contained in pe.key and the data
+              record position stored in pe.recptr.  If an exact match
+              is found for both of these values, the value IX_OK (1)
+              is returned, and the internal index file pointer is set
+              to that position in the index file.  If an exact match
+              is not found, the value IX_FAIL (0) is returned.
+
+
+
+         TAILORING OR CHANGING B-PLUS
+
+              Most applications can use the B-PLUS program as it is
+         distributed by Hunter and Associates without any changes.  It
+         allows multiple, large data files to be indexed in a fast,
+         efficient manner.  However, a description of the values that
+         can be changed to tailor B-PLUS are given in this section.
+
+              An index tree becomes full when no more entries can be
+         added to the tree.  This is the case when adding another
+         entry to the tree would cause the tree to grow larger than
+         its maximum allowed height.  This height depends on the size
+         of the index blocks and the average size of the keys used by
+         the data files.  The minimum capacity of a b-tree index is
+         given by the following formula:
+
+              C = (B / E + 1) * (B / (2 * E)  + 1) ** (H - 1)
+
+         where C is the number of entries in the index file, B is the
+
+                                   Page 8
+
+
+         HUNTER AND ASSOCIATES            B-PLUS FILE INDEXING PROGRAM
+         -------------------------------------------------------------
+
+
+         block size in bytes, E is the average size of an ENTRY in
+         bytes, and H is the maximum tree height.
+
+              The maximum key size is defined by MAXKEY and is set at
+         100.  The block size is 1024 bytes as defined by IXB_SIZE.
+         Ten bytes are used by pointers so 1014 bytes are used by
+         entries.  The size of an ENTRY is 9 + the key length.
+
+              Thus, if the average key length is 11, an average ENTRY
+         is 20 bytes long and the minimum number of entries that can
+         be contained in a tree of height 4 is:
+
+              C = (1014 / 20 + 1) * (1014 / 40 + 1) ** 3
+                = 945,072
+
+         If the average ENTRY is 40 bytes long, the minimum number of
+         entries that can be contained in a tree of height 4 is
+         67,384.  The corresponding values for a tree of height 3 are
+         35,896 and 4927, respectively.
+
+              The maximum tree height is determined by MAX_LEVELS and
+         is set to eight.  Very little memory space is used by
+         allowing the maximum tree height to be this large.  B-PLUS
+         increases the height of the tree dynamically as required by
+         number of records in the data file.
+
+              If your application does not use long keys and your
+         files are not huge, IXB_SIZE can be changed to 512 bytes with
+         only a slight degradation in performance.
+
+              The root of an open index file is always memory resident
+         as defined by the variable of type IX_DESC.  A dynamic pool
+         of cache buffers is used for other index blocks of the tree.
+         The number of blocks in the pool is defined by NUM_BUFS with
+         a default value of 8.  Each memory block is sizeof(IXB_SIZE)
+         + 8 bytes in length so approximately 8K of memory is used for
+         cache storage of index blocks.  If the number of index files
+         that are open simultaneously is larger than 4, you may want
+         to increase NUM_BUFS.  If the usage of memory is critical,
+         the number of buffers can be decreased.  However, NUM_BUFS
+         must be at least 2.  In general, the speed of file access can
+         be expected to improve if the number of buffers is increased
+         since more of the index file is memory resident.
+
+              Because some indices are always memory resident, and
+         because the DOS Operating System requires it, it is very
+         important that all open index files be closed before an
+         application program terminates.
+
+              As stated earlier, the B-PLUS program has been tested
+
+                                   Page 9
+
+
+         HUNTER AND ASSOCIATES            B-PLUS FILE INDEXING PROGRAM
+         -------------------------------------------------------------
+
+
+         using Microsoft's Optimizing C Compilers, Versions 4, 4.5 and
+         5.0, and Borland's Turbo C, Version 1.0.  However, standard K
+         & R programming guidelines are followed so B-PLUS should be
+         able to be used with other C Compilers with little
+         modification.  Since B-PLUS is non-recursive, the usage of
+         stack space does not change dynamically.  It is recommend
+         that the B-PLUS program be complied without stack checking.
+         For Microsoft C, the /Ox option can be used to maximize speed
+         and minimize code size.  For Turbo C, B-PLUS can be complied
+         with maximum optimization to minimize the object size and
+         improve performance.
+
+
+         ACKNOWLEDGMENTS AND REFERENCES
+
+              The following reference materials were used and helpful
+         in writing the B-PLUS program:
+
+              Wirth, Niklaus:
+                     Algorithms + Data Structures = Programs
+                     Prentice Hall (1976)
+
+              Hunt, William James:
+                     The C Toolbox
+                     (Serious C Programming for the IBM PC)
+                     Addison-Wesley (1985)
+
+
+              Wirth's book is a standard reference source for binary
+         trees and data structures.  Hunt's C Toolbox contains useful
+         C programming concepts with carefully constructed programming
+         examples.
+
+
+         USING THE BPLUS ROUTINES
+
+              The BPLUS.C routines must be compiled and the object
+         file (BPLUS.OBJ) loaded with programs that use the B_PLUS
+         toolkit.  Several sample C programs have been included which
+         illustrate how to use the BPLUS Toolkit.  These programs
+         should be compiled and run to make sure your copy of the
+         program is correct.
+
+
+         A SPECIAL NOTE REGARDING MICROSOFT C COMPILERS
+
+              The Microsoft C library routines are different for
+         Version 4.0 and for Version 5.0 and Quick C.  In particular,
+         the memcpy routine in Version 5.0 does not check that
+         overlapping bytes are copied correctly.  Consequently, the
+
+                                  Page 10
+
+
+         HUNTER AND ASSOCIATES            B-PLUS FILE INDEXING PROGRAM
+         -------------------------------------------------------------
+
+
+         memmove routine must be used for Version 5.0 and for Quick C.
+         A macro is included in BLUS.C which makes this substitution.
+         This macro MUST be used (remove the comment delimiters) for
+         these versions of the Microsoft compilers.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  Page 11
+

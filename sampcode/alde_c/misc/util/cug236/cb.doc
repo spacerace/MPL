@@ -1,0 +1,90 @@
+/*
+	HEADER:		CUG236;
+	TITLE:		C Source Formatter Manual Page;
+	DATE:		04/04/1987;
+	VERSION:	2.1;
+	FILENAME:	CB.DOC;
+	SEE-ALSO:	CB.C;
+	AUTHORS:	W. C. Colley III, J. W. Kindschi Jr.;
+*/
+
+	     "C" Source Formatter   'Pretty Printer'
+
+
+DESCRIPTION:
+
+     This program takes as input a "C" source  program	file  and 
+     formats  it with the proper indents for each statement.  The 
+     formatted	 output	  is placed in a specified  file,  or  by 
+     default, to the standard output.
+
+INVOCATION:
+
+     CB inputfile { outputfile }
+
+     inputfile	    Input  "C" source program.	 This file should 
+		    be	a file that has compiled error	free,  as 
+		    the formatter is not smart enough to pick  up 
+		    syntax errors.
+
+     outputfile	    This  is the formatted output file.	  If this
+		    argument  is  omitted,  the formatted  output
+		    goes to the standard output stream.
+
+HELP:
+
+     Typing CB with no file name displays a short help reminder.
+
+EXAMPLE:
+
+     Run CB on file test, send the output to stdout:
+
+	  CB TEST
+
+
+*** <Contents of TEST before run.> ***
+
+#include "stdio.h"
+double ran()
+/*	    Generate a random number between 0.0 and 1.0	*/
+{
+double r;
+static unsigned int seed = 0;
+struct regval { 
+int ax,bx,cx,dx,si,di,ds,es; 
+};
+struct regval regs;
+
+if (seed==0) {
+regs.ax = 0x2C00;		/* Set up the function */
+sysint(0x21,&regs,&regs);
+seed = regs.dx;
+}
+r = seed / 65536.;
+seed = (25173 * seed + 13849) % 65536; 
+return(r);
+}
+
+
+*** <As seen on stdout after the run.> ***
+
+#include "stdio.h"
+double ran()
+/*	    Generate a random number between 0.0 and 1.0	*/
+{
+	double r;
+	static unsigned int seed = 0;
+	struct regval { 
+		int ax,bx,cx,dx,si,di,ds,es; 
+	};
+	struct regval regs;
+
+	if (seed==0) {
+		regs.ax = 0x2C00;	     /* Set up the function */
+		sysint(0x21,&regs,&regs);
+		seed = regs.dx;
+	}
+	r = seed / 65536.;
+	seed = (25173 * seed + 13849) % 65536;
+}
+

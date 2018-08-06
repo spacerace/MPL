@@ -1,0 +1,11 @@
+#include "sample.h"
+
+Sample MENU
+     BEGIN
+          POPUP "&Typeface"
+               BEGIN
+                    MENUITEM "&Script", IDM_SCRIPT, CHECKED
+                    MENUITEM "&Modern", IDM_MODERN
+                    MENUITEM "&Roman",  IDM_ROMAN
+               END
+     END

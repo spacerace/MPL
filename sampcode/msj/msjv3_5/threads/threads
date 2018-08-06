@@ -1,0 +1,9 @@
+#-------------------
+# THREADS make file
+#-------------------
+
+threads.obj : threads.c
+     cl -c -Alfw -G2s -W3 -Zi threads.c
+
+threads.exe : threads.obj threads.def
+     link threads, /align:16, NUL, /nod llibcmt doscalls, threads /CO

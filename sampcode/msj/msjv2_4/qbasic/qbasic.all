@@ -1,0 +1,643 @@
+Microsoft Systems Journal
+Volume 2; Issue 4; September, 1987
+
+Code Listings For:
+
+	DSEARCH.ASM
+	DSEARCHT.BAS
+	BROWSE.BAS
+	pp. 63-76
+
+Author(s): Dan Mick
+Title:     Microsoft QuickBASIC: Everyone's First PC Language Gets Better
+
+
+
+Figure 1
+========
+
+
+
+;;	DSEARCH.ASM
+;;	Written by Dan Mick
+
+
+        page    62,132
+
+data    segment public 'data'
+dta_ofs dw      ?               ;save area for BASIC's DTA
+dta_seg dw      ?
+fill    db      ?               ;"fill array" flag
+selflg  db      ?               ;"selective search" flag
+search_attr     db      ?       ;files' search attribute
+filcnt  dw      ?               ;count of files found
+path    db      64 dup (0)      ;search path, passed from BASIC
+
+;DTA structure for findfirst, findnext calls (see DOS documentation)
+
+dta     db      21 dup (0)      ;reserved area (used for findnext)
+attrib  db      ?               ;attribute of file found
+time    dw      ?               ;time of last write
+date    dw      ?               ;date
+fsize   dd      ?               ;filesize (32 bit integer)
+fname   db      13 dup (0)      ;ASCIIZ filename: name.ext,00
+data    ends
+
+dgroup  group   data
+
+code    segment byte public 'code'
+        assume  cs:code, ds:dgroup
+        .xlist
+;
+;CALL DSEARCH(path$, attr, count, selective, array ofs)
+; path$ is a normal string variable with the path for the
+; directory search.  It be a full pathname, including filename
+; and extension fields.  To get all the files in the default
+; directory on C:, for instance, path$="C:*.*", or all the files
+; in subdir on the current drive, path$="subdir\*.*".
+; attr is the MS-DOS file attribute for the search.  See below for
+; a description.  Each bit represents a file attribute.
+; count is an input and an output parameter.  On input, if it is
+; zero, the files will not be put in the array, only counted.
+; This is provided so that a dynamic array may be allocated after
+; the size is determined by dsearch().  If count is non-zero on
+; input, the filenames will be placed in the array.
+; In either case, the count of filenames found is returned.
+; selective is a flag indicating how to do the counting and
+; searching process.  If the file attribute 10 is specified, for
+; example, DOS will return all those filenames that have the
+; subdir attribute as well as those that don't.  If selective is
+; set nonzero, the non-subdir files will not be returned.  What
+; this does, basically, is allow a "filter normal files" selection
+; so that subdirs and volume labels may easily be found.
+; array offset is a pointer (offset only for strings) to a string
+; array big enough to hold all files found in path$.  The size
+; required may be determined as described below.
+;
+; The attribute byte:
+;
+;           -------------------------------------
+;           | X | X | X | A | D | V | S | H | R |
+;           -------------------------------------
+;
+;  X is don't care, A = archive, D = subdirectory, V = volume label,
+;  S = system, H = hidden, R = read-only.
+;
+        .list
+
+stk     struc
+bbp     dw      ?               ;BASIC's bp
+retadd  dd      ?               ;return address
+arrofs  dw      ?               ;param: array offset
+select  dw      ?               ;param: filter normal files flag
+count   dw      ?               ;param: count flag/count return
+attr    dw      ?               ;param: search attr
+path$   dw      ?               ;param: pathname to search
+stk     ends
+
+;calculate value to pop with RET n at end of proc (length of params)
+popval  =       (offset path$) + (size path$) - (offset arrofs)
+
+strdes  struc                   ;BASIC string descriptor structure
+len     dw      ?               ;word length of string
+strptr  dw      ?               ;pointer to string space
+strdes  ends
+
+dsearch proc    far             ;it's a far proc to BASIC
+        public  dsearch         ;let LINK know about this one
+
+        push    bp              ;save BASIC's bp
+        mov     bp,sp           ;address stack as it exists now
+
+        mov     [filcnt],0      ;initialize file count
+
+        mov     si,path$[bp]    ;get pointer to string descriptor
+        mov     cx,len[si]      ;cx = path length
+        mov     si,strptr[si]   ;si -> path string data
+        lea     di,path         ;di -> place to fill
+        rep     movsb           ;move pathname to our data area
+        mov     byte ptr es:[di],0 ;make sure it's an ASCIIZ string
+
+        mov     si,count[bp]    ;get pointer to fill flag in di
+        mov     cx,[si]         ;cx = fill flag
+        mov     byte ptr [fill],0 ;set flag to "no" first
+        or      cx,cx           ;nonzero?
+        jz      nofill          ;nope
+        mov     byte ptr [fill],0ffh ;yes, set flag
+
+nofill: mov     di,select[bp]   ;get pointer to selective flag in di
+        mov     cx,[di]         ;cx = selective flag
+        mov     byte ptr [selflg],0 ;set flag to "no" first
+        or      cx,cx           ;nonzero?
+        jz      nosel           ;nope
+        mov     byte ptr [selflg],0ffh ;yes, set flag
+
+nosel:  mov     di,attr[bp]     ;point at search attribute param
+        mov     cx,[di]         ;and get it
+
+        mov     ah,2fh          ;get BASIC's DTA
+        int     21h
+        mov     [dta_ofs],bx
+        mov     [dta_seg],es    ;and save it
+        lea     dx,dta          ;set DTA to our area here
+        mov     ah,1ah
+        int     21h
+
+        mov     di,arrofs[bp]   ;di -> first string descriptor
+        mov     di,[di]         ;di = first string descriptor offset
+        mov     bx,ds           ;set up es to string array segment
+        mov     es,bx           ; (BASIC's data segment)
+                                ;now es:di -> first string descriptor
+
+        mov     ah,4eh          ;find first matching file
+        xor     ch,ch           ;clear hi part of attribute
+        lea     dx,path         ;ds:dx points to search path
+        int     21h
+        jnc     ok              ;if error, cy set
+        cmp     ax,18           ;no files found?
+        jz      exit            ;yes, don't report error
+        mov     [filcnt],0ffffh ;set count to -1 to report path error
+        jmp     short exit      ;and leave
+
+ok:     call    countit         ;rets cy if should save, incs filcnt
+        jz      findnext        ;no fill if zr set
+        call    move_filename   ;do the move
+
+findnext:
+        mov     ah,4fh          ;find next function
+        int     21h             ;do it
+        jc      exit            ;if error, must be no more files
+        call    countit         ;count, return cy if should save
+        jz      findnext        ;if zr set, don't save name
+        call    move_filename   ;move it
+        jmp     short findnext  ;and keep hunting
+
+exit:   push    ds
+        lds     dx,dword ptr [dta_ofs] ;get BASIC's DTA
+        mov     ah,1ah                 ;set DTA fn.
+        int     21h
+        pop     ds
+        mov     di,count[bp]    ;di -> fattr for count return
+        mov     ax,[filcnt]     ;get file count
+        mov     [di],ax         ;put file count in fattr
+        pop     bp              ;restore BASIC's BP
+        ret     popval          ;return and pop parameter pointers
+dsearch endp
+
+countit         proc
+;
+
+;Check file attribute if selective, and update count or not based on
+;result. Return flag saying whether or not to move filename, too,
+;based on updated count and the "fill" flag.
+
+;
+         cmp     [selflg],0ffh  ;are we selective?
+         jnz     bump           ;nope, count it
+         cmp     [attrib],cl    ;is the attr just what we want?
+         je      bump           ;yes, count this file
+         cmp     cl,cl          ;nope, set ZF
+         jmp     short dontfill ;and skip to exit
+bump:    inc     [filcnt]       ;update counter
+         cmp     [fill],0       ;now, are we filling?
+dontfill:                       ;get here from jne, so NZ
+         ret                    ; return with NZ if filling
+countit         endp
+
+move_filename   proc    near
+;
+;es:di points to string descriptor to fill with filename from DTA
+;
+        push    di              ;save pointer to descr. length part
+        mov     di,es:strptr[di] ;and point instead to string data
+        lea     si,fname        ;si -> filename (ASCIIZ)
+moveloop:
+        lodsb                   ;get filename character
+        or      al,al           ;is it 0? (end of string?)
+        jz      done            ;yes, quit moving data
+        stosb                   ;no, store
+        jmp     short moveloop  ;and continue
+done:   test    byte ptr [attrib],10h ;is this a subdir?
+        jz      notsub          ;no
+        mov     al,'\'          ;yes, store a trailing backslash
+        stosb
+notsub: pop     di              ;di -> length in s.d. again
+        add     di,4            ;move to next s.d. pointer
+        ret
+move_filename   endp
+
+code    ends
+        end     dsearch
+
+
+
+
+
+Figure 2
+========
+
+
+"Test Program" for DSEARCH.
+
+
+'dsearcht.bas
+'simple program to check dsearch routine and make sure it's
+'working.  The idea is to call it just enough to check out
+'its capabilities, and perhaps vary its input by small
+'amounts, so that you get a controlled test where there are
+'no likely bugs in the BASIC code.
+
+
+rem $dynamic
+DIM A$(0)
+
+start:
+input "Path for directory? (wildcards allowed): ",path$
+if instr("\:",right$(path$,1)) then path$=path$+"*.*"
+
+'get number of filenames in path
+attr%=&H10:arrofs%=0:count%=0:selective%=0
+call dsearch(path$,attr%,count%,selective%,arrofs%)
+
+'now count% has actual filename count for redim, or -1 if error
+'(other than file not found, that is.)
+
+if count%=-1 then print "Bad pathname":goto start
+redim a$(count%)
+
+print "There are "count%"filenames in path "path$"."
+'set up a$ so that dsearch doesn't have to change length
+for i=0 to count%-1:a$(i)=space$(12):next i
+
+arrptr=varptr(a$(0))
+arrofs%=int(arrptr)             'explicit conversion
+
+call dsearch(path$,attr%,count%,selective%,arrofs%)
+
+for i= 0 to count%-1:print i;":";a$(i):next i
+goto start
+
+
+
+
+
+
+
+Figure 3
+========
+
+
+
+BROWSE.BAS
+
+
+'BROWSE.BAS - a file browser/directory maintenance routine
+'To compile in the editor environment, make a user library by
+'assembling DSEARCH.ASM, using BUILDLIB to add it and USERLIB.OBJ
+'to a user library (call it MYLIB.EXE, for instance), and then
+'use the /L switch to load QB, as in "QB BROWSE /L MYLIB.EXE".
+'To compile standalone, use "LINK BROWSE+DSEARCH+USERLIB...."
+
+defint a-z
+dim winrec(8) 'holds window dimensions, colors for text and borders
+
+'the following arrays and constants are used for int86()
+dim inary(7), outary(7)
+const ax = 0, bx = 1, cx = 2, dx = 3
+const bp = 4, si = 5, di = 6, flag = 7
+
+'actions returned by PageAndSelect
+const disk.change = 1, delete.file = 2, type.file = 3, quit = 4
+action.flag = 0  'set by PageAndSelect to one of the above
+
+rem $dynamic
+dim filename$(0)
+dim shared ScreenData (0,0)
+
+def fn.min(x,y)
+   if x < y then fn.min = x else fn.min = y
+end def
+
+def fn.max(x,y)
+   if x > y then fn.max = x else fn.max = y
+end def
+
+'************************ MAIN PROGRAM **************************
+
+call GetCurrDisk(origdisk$)
+call GetCurrPath(origdisk$,origpath$)
+
+disk$ = origdisk$
+
+'get a count of all normal and subdir files
+
+Do
+   call GetCurrPath(disk$,CurrPath$)
+   searchpath$ = disk$ + ":" + CurrPath$ + "*.*"
+
+   attr = &H10 : count  =  0 : selective = 0
+   arrofs = int(varptr(filename$(0)))
+   call dsearch (searchpath$,attr,count,selective,arrofs)
+
+   ' This should never happen!...
+   if count = -1 then
+      locate 25,1:print "Invalid path: "searchpath$
+      print "Strike a key...":a$ = input$(1):end
+   end if
+
+   redim filename$(count-1)
+   for i = 0 to count-1:filename$(i) = space$(12):next i
+
+   arrofs = int(varptr(filename$(0)))
+   call dsearch (searchpath$,attr,count,selective,arrofs)
+
+   'now filename$(0 to count-1) have all the files and subdirs
+   winrec(1) = 1 : winrec(2) = 1    'upper left of window  (row,col)
+   winrec(3) = 10 : winrec(4) = 80   'lower right of window
+   winrec(5) = 0 : winrec(6) = 11    'fg/bg color
+   winrec(7) = 10 : winrec(8) = 0    'border colors, fg/bg
+
+   call makewindow (winrec())
+
+   'do window/cursor/path manipulation.
+
+   call PageAndSelect(winrec(),filename$(),action.flag,f$)
+
+   'f$ comes back as fixed-length (12) string
+   ' ...strip off trailing blanks
+   i = instr(f$," ") : if i > 0 then f$ = left$(f$,i-1)
+
+   select case action.flag
+      case quit
+         call SetCurrDisk(OrigDisk$)
+         call SetCurrPath(OrigPath$)
+         cls : end
+      case disk.change
+         cls : print "Enter new disk drive letter: ";
+         disk$ = input$(1) : print disk$;
+         if disk$ > "Z" then disk$ = chr$(asc(disk$) and &HDF)
+         call SetCurrDisk(disk$)
+         action.flag = 0
+      case type.file
+         if right$(f$,1) = "\" then
+            CurrPath$ = CurrPath$ + f$
+            call SetCurrPath(CurrPath$)
+         else
+            call ListIt (disk$+":"+CurrPath$+f$)
+         end if
+      case delete.file
+         kill (disk$+":"+CurrPath$+f$)
+   end select
+
+   action.flag = 0
+loop while (1)
+
+'****************************************************************
+
+sub makewindow (winrec(1)) static
+y1 = winrec(1):x1 = winrec(2):y2 = winrec(3):x2 = winrec(4)
+fc = winrec(5):bc = winrec(6):bfc = winrec(7):bbc = winrec(8)
+wid  =  x2-x1+1 : height = y2-y1+1
+
+const vert = 186,upright = 187,lowright = 188
+const lowleft = 200,upleft = 201,horiz = 205
+
+color bfc,bbc
+locate y1,x1:print chr$(upleft);string$(wid-2,horiz);chr$(upright);
+for i = 2 to height-1
+   locate y1+i-1,x1:print chr$(vert);
+   locate y1+i-1,x2:print chr$(vert);
+next i
+locate y2,x1:print chr$(lowleft);string$(wid-2,horiz);chr$(lowright);
+
+call clearwindow(winrec())
+end sub
+
+'****************************************************************
+
+sub clearwindow (winrec(1)) static
+y1 = winrec(1):x1 = winrec(2):y2 = winrec(3):x2 = winrec(4)
+fc = winrec(5):bc = winrec(6):bfc = winrec(7):bbc = winrec(8)
+wid  =  x2-x1+1 : height = y2-y1+1
+
+color fc,bc
+for i = 2 to height-1
+   locate y1+i-1,x1+1:print string$(wid-2," ");
+next i
+end sub
+
+'****************************************************************
+
+sub savewindow (winrec(1)) static
+y1 = winrec(1):x1 = winrec(2):y2 = winrec(3):x2 = winrec(4)
+fc = winrec(5):bc = winrec(6):bfc = winrec(7):bbc = winrec(8)
+wid = x2-x1+1 : height = y2-y1+1
+
+for i = x1 to x2
+   for j = y1 to y2
+      ScreenData(j-y1,i-x1) = screen(j,i,1) * 256 + screen (j,i,0)
+   next j
+next i
+end sub
+
+'****************************************************************
+
+sub restorewindow (winrec(1)) static
+y1 = winrec(1):x1 = winrec(2):y2 = winrec(3):x2 = winrec(4)
+fc = winrec(5):bc = winrec(6):bfc = winrec(7):bbc = winrec(8)
+
+for j = y1 to y2
+   locate j,x1
+   for i = x1 to x2
+      d = ScreenData(j-y1,i-x1)
+      bc = (d\256)\8 : fc = (d\256) mod 8 : color fc,bc
+      print chr$(d and &hff);
+   next i
+next j
+end sub
+
+'****************************************************************
+
+sub PageAndSelect_
+  (winrec(1),file$(1),action.flag,FileSelected$) static
+
+'This routine does all the work here.  It assumes MakeWindow
+'has been called before entering, and does all key processing and
+'subsequent window updates.  action.flag is returned as the action
+'for the main program to take (see the constants in the main program
+'for a list of possible actions).
+
+shared disk$,CurrPath$,count
+
+'second codes from extended keys used in PageAndSelect
+const up = 72, down = 80, left = 75, right = 77
+const f1 = 59, AltD = 32, AltX = 45
+
+y1 = winrec(1):x1 = winrec(2):y2 = winrec(3):x2 = winrec(4)
+fc = winrec(5):bc = winrec(6):bfc = winrec(7):bbc = winrec(8)
+wid = x2-x1+1 : height = y2-y1+1
+
+locate y1,x1+1:color bfc,bbc:print " ";disk$;":";CurrPath$;" "
+locate y2,x1+1
+print "RET-Type file  AltD - delete file  F1 - chg disk  AltX - quit"
+locate y1,x2-1-9:print count;"files"
+
+NamesPerLine = (wid-2)\15 'how many filenames on each line in window
+lines = height-2          'how many usable lines inside window
+FilesPerWindow = lines * NamesPerLine
+
+StartIndex = 0 'first file$() to be displayed in window
+CurrIndex = 0  'current file$() being highlighted
+NewIndex = 0   'updated file$() index after moving cursor
+
+do
+   call clearwindow(winrec())
+   limit = fn.min (ubound(file$) - StartIndex, FilesPerWindow - 1)
+   color fc,bc : locate y1+1
+   for i = 0 to limit step NamesPerLine
+      for j = 0 to NamesPerLine-1
+         locate ,x1 + 1 + j*15
+         if StartIndex + i + j <= ubound(file$) then
+            print file$(StartIndex+i+j);
+         else
+            print space$(15);
+         end if
+      next j
+   print
+   next i
+
+   'initialize highlight bar position
+   BarRow = y1+1 : BarCol = x1 + 1
+
+   do
+      color fc,bc : locate BarRow,BarCol : print file$(CurrIndex);
+      CurrIndex = NewIndex
+      BarRow = (CurrIndex-StartIndex)\NamesPerLine + y1 + 1
+      BarCol = (CurrIndex mod NamesPerLine)*15 + x1 + 1
+      color bc,fc : locate BarRow,BarCol : print file$(CurrIndex);
+
+      'wait for extended character (look for cursor keys) or RETURN
+      GetKey:
+         a$ = "" : while a$ = "" : a$ = inkey$ : wend
+         if a$ = chr$(13) then
+            action.flag = type.file
+            FileSelected$ = file$(CurrIndex)
+            exit do
+         end if
+      if len(a$)<>2 then goto GetKey
+
+      redraw = 0  'flag to indicate when window must be redrawn
+                  'and in which direction the cursor was moving
+      select case asc(right$(a$,1))
+         case up
+            NewIndex = fn.max (0,CurrIndex-NamesPerLine)
+            if NewIndex < StartIndex then redraw = -1
+         case down
+            NewIndex = fn.min (ubound(file$), CurrIndex+NamesPerLine)
+            if NewIndex > StartIndex + FilesPerWindow - 1 _
+             then redraw = 1
+         case left
+            NewIndex = fn.max (0,CurrIndex-1)
+            if NewIndex < StartIndex then redraw = -1
+         case right
+            NewIndex = fn.min (ubound(file$), CurrIndex + 1)
+            if NewIndex > StartIndex + FilesPerWindow - 1 _
+             then redraw = 1
+
+         case f1
+            action.flag = disk.change : file.selected = -1 : exit do
+         case AltX
+            action.flag = quit : file.selected = -1 : exit do
+         case AltD
+            action.flag = delete.file
+            FileSelected$ = file$(CurrIndex) : exit do
+         case else
+            sound 440,2:sound 220,2
+      end select
+   loop while redraw = 0
+
+   if action.flag then exit do
+   'otherwise, fall through and redo the entire "do" loop
+   select case sgn(redraw)
+      case -1
+        StartIndex = fn.max (StartIndex - FilesPerWindow , 0)
+      case 1
+        StartIndex = fn.min (StartIndex + FilesPerWindow , _
+                             ubound(file$))
+   end select
+   CurrIndex = StartIndex
+loop while not action.flag
+
+end sub
+
+'****************************************************************
+
+sub     GetCurrPath(disk$,CurrPath$) static
+shared inary(),outary()
+
+'first set up 64-byte work area for Int 21h Function 47h
+' (get current directory)
+CurrPath$ = space$(64) : pathptr = sadd(CurrPath$)
+
+inary(dx)=asc(disk$)-65+1
+inary(si)=pathptr 'pointer to area to fill
+inary(ax)=&H4700  'function number
+call int86(&H21,varptr(inary(0)),varptr(outary(0)))
+
+'strip off trailing NUL, rest of blanks
+CurrPath$=left$(CurrPath$,instr(CurrPath$,chr$(0))-1)
+CurrPath$="\"+CurrPath$
+if CurrPath$ <> "\" then CurrPath$=CurrPath$+"\"
+end sub
+
+'****************************************************************
+
+sub GetCurrDisk(disk$) static
+shared inary(),outary()
+inary(ax) = &H1900
+call int86(&H21,varptr(inary(0)),varptr(outary(0)))
+disk$ = chr$(65 + (outary(ax) and 255))
+end sub
+
+'****************************************************************
+
+sub SetCurrDisk(disk$) static
+shared inary(),outary()
+
+inary(ax) = &H0E00
+inary(dx) = asc(disk$) - 65
+call int86(&H21,varptr(inary(0)),varptr(outary(0)))
+
+end sub
+
+'****************************************************************
+
+sub SetCurrPath(path$) static
+shared inary(),outary()
+
+newpath$=path$
+if newpath$<>"\" then newpath$=left$(newpath$,len(newpath$)-1)
+newpath$=newpath$+chr$(0)
+
+inary(ax) = &H3B00
+inary(dx) = sadd(newpath$)
+call int86(&H21,varptr(inary(0)),varptr(outary(0)))
+
+end sub
+
+'****************************************************************
+
+sub TypeIt (path$) static
+   cls
+   shell ("type "+path$+" | more")
+   locate 25,1:print "Any key to continue...";
+   a$=input$(1):cls
+end sub
+
+'****************************************************************
+
+sub ListIt (path$) static
+   shell ("list "+path$)
+   cls
+end sub
+

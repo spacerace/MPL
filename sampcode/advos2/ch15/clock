@@ -1,0 +1,5 @@
+clock.obj : clock.asm
+ masm clock;
+
+clock.exe : clock.obj clock.def
+ link clock,,,os2,clock

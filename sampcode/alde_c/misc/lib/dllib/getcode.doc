@@ -1,0 +1,39 @@
+
+
+        NAME
+                get_code_adr -- get a function address
+
+        SYNOPSIS
+                void get_code_adr(function, segment, offset);
+                int *function;     name of function
+                int *segment;      destination of segment value
+                int *offset;       destination of offset value
+
+
+        DESCRIPTION
+        This function is used to get the absolute segment and offset
+        values for the address of a function within a program.
+        It is useful for installing interrupt handlers and
+        interfacing to assembly language modules.
+
+
+
+        EXAMPLE
+
+               somefunc() {
+                        }
+
+               main() {
+                 int segment, offset;
+                 getcode(&somefunc, &segment, &offset);
+                 printf("Address is %x:%x\n", segment, offset);
+                 }
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

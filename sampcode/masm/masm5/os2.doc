@@ -1,0 +1,896 @@
+                        Calling OS/2 Macros
+
+You can simplify calls of OS/2 systems services by using the macros.
+The OS/2 macros are organized into groups that can be enabled by
+including the file OS2.INC and defining constants associated with each
+group. For example, to enable file management macros, put the
+following lines in the source file where the macros will be used:
+
+INCL_DOSFILEMGR EQU 1
+INCLUDE os2.inc
+
+Note that the constant must be defined before the include file is
+specified. The groups of macros and the constants associated with each
+are described later in this file.
+
+Macros have the name of the OS/2 call preceded by an at sign (@). For
+example, the macro to call the DosFindNext service is called
+@DosFindNext.
+
+Parameters are passed to macros by listing them on the same line as
+the macro name in much the same way as in most high-level languages.
+For example, you could use the following lines to call the
+@DosFindNext macro:
+
+dHandle   DW      -1            ; Directory handle
+dResult   FILEFINDBUF <>        ; Structure for results
+dlResult  EQU     $ - dResult   ;   length of result
+dCount    DW      1             ; Find one file at a time
+          .
+          .
+          .
+          @DosFindNext [dHandle], dResult, dlResult, dCount
+
+When passing memory locations as arguments, you can specify the
+contents of the specified variable by enclosing it in brackets. In the
+command line above, the value of the word variable dHandle (-1) is
+passed as the first argument.
+
+To pass the far address of a variable, give the argument without
+brackets. The addresses of dResult and dCount are passed in the
+command-line above. Note that dResult is defined as a structure of
+type FILEFINDBUF. The FILEFINDBUF structure is defined in the include
+file.
+
+You can pass word values in registers or constants by listing them
+without brackets. For example, dlResult is a constant in the example.
+If the file handle were in register DX instead of in the variable
+dHandle, you could substitute the register name. You cannot pass
+doubleword constants. For example, to pass a doubleword zero, you must
+first store the value in a variable.
+
+The macros do type checking. An error will be generated if you pass an
+argument of an invalid size or if you pass the wrong number of
+arguments. All arguments are expected to be word or doubleword values.
+Addresses are always far, and are thus passed as doublewords.
+
+Note that the macros cannot check to see that you are actually passing
+an an address when required, since the macro has no way of knowing
+whether you are passing the address as a doubleword pointer variable
+or as a label specifying an address.
+
+If you wish to pass a value stored in a byte variable or register, you
+must expand this value to a word before passing. For example, use CBW
+to expand a byte in AL to a word in AX.
+
+Most valid operands can be passed as arguments. For example, the
+following are valid arguments:
+
+    [es:[di]]               ; Contents of a word indirect memory operand
+    <[DWORD PTR es:[di]]>   ; Contents of a doubleword indirect memory operand
+    <SIZE var1>             ; A constant
+    es:table[bx]            ; Address of an indirect memory operand
+
+Note that arguments containing spaces or tabs must be enclosed in
+angle brackets so that the macro will see them as a single argument.
+
+The macros assume that DS=SS. If you change either of these registers
+temporarily, you should restore the register before passing arguments.
+The macros may change the contents of AX or BX, so you should save any
+important values in these registers before using an OS/2 macro.
+
+                           OS/2 Call Summary
+
+The OS/2 calls are listed below. The constant symbols associated with
+each group of macros are shown before the listings. The listings
+consist of the macro name followed by a one-line description. A second
+line shows the arguments expected by the macro. The following symbols
+are used to indicate the type of each argument:
+
+    W     Word
+    D     Doubleword
+    PB    Pointer to byte
+    PW    Pointer to word
+    PD    Pointer to doubleword
+    PZ    Pointer to ASCIIZ string
+    PS    Pointer to structure
+
+If the macro expects the address of a structure as one of its
+arguments, the structure will be listed below the argument line. See
+the include files for listings of structure fields. The include files
+also contain definitions for constants often passed to specific
+macros.
+
+This document makes no attempt to explain the purpose or function of
+the OS/2 systems calls. The calls are described in detail in manuals
+published separately by Microsoft and in some third-party books and
+magazine articles.
+
+The following macros are included unconditionally:
+
+  @DosBeep - Generates sound from speaker
+  Parameters - Frequency:W, Duration:W
+
+  @DosExit - Terminates a thread
+  Parameters - ActionCode:W, ResultCode:W
+
+Named error number constant - INCL_ERRORS
+
+Processes control constant - INCL_DOSPROCESS
+
+  @DosCreateThread - Creates an asynchronous thread
+  Parameters - PgmAddress:D, ThreadID:PW, NewThreadStack:PB
+
+  @DosResumeThread - Restarts a suspended thread
+  Parameters - ThreadID:W
+
+  @DosSuspendThread - Suspends a thread
+  Parameters - ThreadID:W
+
+  @DosCWait - Makes thread wait for child process to terminate
+  Parameters - ActionCode:W, WaitOption:W, ReturnCodes:PS, ProcessIDWord:PD,
+               ProcessID:W
+  Structure - RESULTCODES
+
+  @DosSleep - Suspends current thread for specified interval
+  Parameters - Interval:D
+
+  @DosEnterCritSec - Disables other threads
+  Parameters - none
+
+  @DosExitCritSec - Reenables other threads
+  Parameters - none
+
+  @DosExitList - Maintains list of routines to be executed when thread ends
+  Parameters - FnCode:W, RtnAddress:PW
+
+  @DosExecPgm - Requests execution of a child program
+  Parameters - ObjNameBuf:PB, ObjNameBufL:W, AsyncTraceFlags:W, ArgPointer:PZ,
+               EnvPointer:PZ, ReturnCodes:PD, PgmPointer,PZ
+
+  @DosGetPid - Gets process identification
+  Parameters - Pid:PS
+  Structure - PIDINFO
+
+  @DosGetPrty - Returns the priority of a thread
+  Parameters - Scope:W, Priority:PW, ID:W
+
+  @DosSetPrty - Sets the priority of a child process or thread
+  Parameters - Scope:W, PriorityClass:W, PriorityDelta:W, ID:W
+
+  @DosKillProcess - Terminates a process and returns its termination code
+  Parameters - ActionCode:W, ProcessID:W
+
+Information segment constant - INCL_DOSPROCESS
+
+  @DosGetInfoSeg - Returns the addresses of the global and local segment
+  Parameters - GlobalSeg:PW, LocalSeg:PW
+  Structures - The returned segments contain the addresses of the GINFOSEG and
+               LINFOSEG structures
+
+File management constant - INCL_DOSFILEMGR
+
+  @DosOpen - Opens a file (creating it if necessary)
+  Parameters - FileName:PZ, Handle:PW, ActionTaken:PW, Size:D,
+               FileAttribute:W, OpenFlag:W, OpenMode:@, Reserved:D
+
+  @DosClose - Closes a file handle
+  Parameters - FileHandle:W
+
+  @DosRead - Reads bytes from a file to a buffer
+  Parameters - FileHandle:W, BufferArea:PB, BufferLength:W, ByteRead:PW
+
+  @DosWrite - Writes bytes synchronously from a buffer to a file
+  Parameters - FileHandle:W, BufferAddress:PB, BufferLength:W, BytesWritten:PW
+
+  @DosDelete - Deletes a file
+  Parameters - FileName:PZ, Reserved:D
+
+  @DosDupHandle - Returns a new duplicate file handle for an open file
+  Parameters - OldFileHandle:W, NewFileHandle:PW
+
+  @DosQFHandState - Gets the state of the specified file
+  Parameters - FileHandle:W, FileHandleState:PW
+
+  @DosSetFHandState - Sets the state of a file
+  Parameters - FileHandle:W, FileHandleState:W
+
+  @DosQHandType - Determines whether a handle references a file or a device
+  Parameters - FileHandle:W, HandType:PW, FlagWord:PW
+
+  @DosReadAsync - Reads bytes from a file to a buffer asynchronously
+  Parameters - FileHandle:W, RamSemaphore:PD, ReturnCode:PW, BufferArea:PB,
+               BufferLength:W, BytesRead:PW
+
+  @DosWriteAsync - Writes bytes asynchronously from a buffer to a file
+  Parameters - FileHandle:W, RamSemaphore:PD, ReturnCode:PW,
+               BufferAddress:PB, BufferLength:W, BytesWritten:PW
+
+  @DosFindFirst - Finds the first directory entry matching a file specification
+  Parameters - FileName:PZ, DirHandle:PW, Attribute:W, ResultBuf:PS
+               ResultBufLen:W, SearchCount:PW, Reserved:D
+  Structure - FILEFINDBUF
+
+  @DosFindNext - Finds the next directory entry matching a file specification
+  Parameters - DirHandle:W, ResultBuf:PS, ResultBufLen:W, SerachCount:PW
+  Structure - FILEFINDBUF
+
+  @DosFindClose - Closes a directory search handle
+  Parameters - DirHandle:W
+
+  @DosNewSize - Changes the size of a file
+  Parameters - FileHandle:W, Size:D
+
+  @DosBufReset - Flushes a file buffer and updates directory information
+  Parameters - FileHandle:W
+
+  @DosChgFilePtr - Moves the read/write pointer according to a specified method
+  Parameters - FileHandle:W, Distance:D, MoveType:W, NewPointer:PD
+
+  @DosFileLocks - Locks or unlocks a range in an open file
+  Parameters - FileHandle:W, UnlockRange:PD, LockRange:PD
+
+  @DosMove - Moves (or renames) a specified file
+  Parameters - OldFilename:PZ, NewFileName:PZ, Reserved:D
+
+  @DosMkdir - Creates a directory
+  Parameters - DirName:PZ, Reserved:D
+
+  @DosRmdir - Removes a subdirectory from a disk
+  Parameters - DirName:PZ, Reserved:D
+
+  @DosSelectDisk - Selects a specified drive as the new default drive
+  Parameters - DriveNumber:W
+
+  @DosQCurDisk - Returns the current drive
+  Parameters - DriveNumber:PW, LogicalDriveMap:PD
+
+  @DosChdir - Changes to a specified directory
+  Parameters - DirName:PZ, Reserved:D
+
+  @DosQCurDir - Retrieves the full path of the current directory
+  Parameters - DriveNumber:W, DirPath:PB, DirPathLen:PW
+
+  @DosQFSInfo - Retrieves information from a file system device
+  Parameters - DriveNumber:W, FSInfoLevel:W, FSInfoBuf:PB, FSInfoBufSize:W
+  Structure - For GDInfoLevel 1, point FSInfoBuf to FSALLOCATE
+
+  @DosSetFSInfo - Sets information for a file system device
+  Parameters - DriveNumber:W, FSInfoLevel:W, FSInfoBuf:PB, FSInfoBufSize:W
+
+  @DosQVerify - Returns the value of the verify flag
+  Parameters - VerifySetting:PW
+
+  @DosSetVerify - Sets the verify flag
+  Parameters - VerifySetting:W
+
+  @DosSetMaxFH - Defines the maximum number of file handles
+  Parameters - NumberHandles:W
+
+  @DosQFileInfo - Returns information about a file
+  Parameters - FileHandle:W, FileInfoLevel:W, FileInfoBuf:PB, FileInfoBufSize:B
+  Structure - At FileInfoLevel 1, can point FileInfoBuf to FILESTATUS
+
+  @DosSetFileInfo - Specifies information for a file
+  Parameters - FileHandle:W, FileInfoLevel:W, FileInfoBuf:PB, FileInfoBufSize:W
+  Structure - At FileInfoLevel 1, can point FileInfoBuf to FILESTATUS
+
+  @DosQFileMode - Retrieves the mode (attribute) of a file
+  Parameters - FileName:PZ, Attribute:PW, Reserved:D
+
+  @DosSetFileMode - Changes the mode (attribute) of a file
+  Parameters - Filename:PZ, Attribute:W, Reserved:D
+
+
+Memory management constant - INCL_DOSMEMMGR
+
+  @DosAllocSeg - Allocates a segment of memory
+  Parameters - Size:W, Selector:PW, AllocFlags:W
+
+  @DosReallocSeg - Changes the size of an allocated segment
+  Parameters - Size:W, Selector:W
+
+  @DosFreeSeg - Deallocates a segment
+  Parameters - Selector:W
+
+  @DosGiveSeg - Gives another process access to a shared memory segment
+  Parameters - CallerSegHandle:W, ProcessID:W, RecipientSegHandle:PW
+
+  @DosGetSeg - Gets access to a shared memory segment
+  Parameters - Selector:W
+
+  @DosAllocHuge - Allocates memory potentially requiring multiple segments
+  Parameters - NumSeg:W, Size:W, Selector:PW, ShareInd:W, MaxNumSeg:W
+
+  @DosReallocHuge - Changes memory amount previously allocated by DosAllocHuge
+  Parameters - NumSet:W, Size:W, Selector:W
+
+  @DosGetHugeShift - Returns a shift count used to derive selectors to
+                     huge memory allocated with DosAllocHuge
+  Parameters - ShiftCount:PW
+
+  @DosAllocShrSeg - Allocates a shared memory segment
+  Parameters - Size:W, Name:PZ, Selector:PW
+
+  @DosLockSeg - Locks a discardable segment in memory
+  Parameters - Selector:W
+
+  @DosUnlockSeg - Unlocks a discardable segment
+  Parameters - Selector:W
+
+  @DosGetShrSeg - Allows a process to access a previously allocated shared
+                  memory segment and increments the segment reference count
+  Parameters - Name:PZ, Selector:PW
+
+  @DosMemAvail - Returns the size of the largest block of free memory
+  Parameters - MemAvailSize:PD
+
+  @DosCreateCSAlias - Creates an executable alias for a data type descriptor
+                      passed as input
+  Parameters - DataSelector:W, CodeSelector:PW
+
+  @DosSubAlloc - Allocates memory from within a segment that was previously
+                 allocated and initialized with DosSubSet
+  Parameters - SegSelector:W, BlockOffset:PW, Size:W
+
+  @DosSubFree - Frees memory previously allocated with DosSubAlloc
+  Parameters - SegSelector:W, BlockOffset:W, Size:W
+
+  @DosSubSet - Initializes a segment for suballocation, or changes the size
+               of a previous suballocation
+  Parameters - SegSelector:W, BlockOffset:W, Size:W
+
+
+Semaphore constant - INCL_DOSSEMAPHORES
+
+  @DosSemClear - Unconditionally clears a semaphore
+  Parameters - SemHandle:D
+
+  @DosSemSet - Unconditionally sets a semaphore
+  Parameters - SemHandle:D
+
+  @DosSemWait - Blocks current thread until a specified semaphore is cleared
+  Parameters - SemHandle:D, Timeout:D
+
+  @DosSemSetWait - Sets a specified semaphore and blocks current thread
+                   until the semaphore is cleared
+  Parameters - SemHandle:D, Timeout:D
+
+  @DosSemRequest - Obtains a semaphore
+  Parameters - SemHandle:D, Timeout:D
+
+  @DosCreateSem - Creates a system semaphore
+  Parameters - NoExclusive:W, SemHandle:PD, SemName:PZ
+
+  @DosOpenSem - Opens a semaphore and assigns it a handle
+  Parameters - SemHandle:PD, SemName:PZ
+
+  @DosCloseSem - Closes a system semaphore
+  Parameters - SemHandle:D
+
+  @DosMuxSemWait - Blocks the current thread until one or more specified
+                   semaphores is cleared
+  Parameters - IndexNum:PW, ListAddr:PS, Timeout:D
+  Structure - MUXSEMLIST (which contains MUXSEM structures)
+
+
+Date and time management constant - INCL_DOSDATETIME
+
+  @DosGetDateTime - Gets the current date and time
+  Parameters - DateTime:PS
+  Structure - DATETIME
+
+  @DosSetDateTime - Sets the date and time
+  Parameters - DateTime:PS
+  Structure - DATETIME
+
+  @DosTimerAsync - Starts a timer that is asynchronous to the launching thread
+  Parameters - TimeInterval:D, SemHandle:D, Handle:PW
+
+  @DosTimerStart - Starts a periodic interval timer
+  Parameters - TimeInterval:D, SemHandle:D, Handle:PW
+
+  @DosTimerStop - Stops an interval or asynchronous timer
+  Parameters - Handle:W
+
+
+Module management constant - INCL_DOSMODULEMGR
+
+  @DosLoadModule - Loads a dynamic-link module and assigns it a handle
+  Parameters - ObjNameBufAdd:PD, ObjNameBufL:W, ModuleName:PZ, ModuleHandle:PW
+
+  @DosFreeModule - Frees a reference to a dynamic-link module
+  Parameters - ModuleHandle:W
+
+  @DosGetProcAddr - Returns the far address of a procedure within a
+                    dynamic-link module
+  Parameters - ModuleHandle:W, ProcName:PZ, ProcAddress:PD
+
+  @DosGetModHandle - Tests whether a specified dynamic-link module is loaded
+  Parameters - ModuleName:PZ, ModuleHandle:PW
+
+  @DosGetModName - Returns the complete pathname of a specified module
+  Parameters - ModuleHandle:W, BufferLength:W, Buffer:PB
+
+
+Resource management constant - INCL_DOSRESOURCES
+
+  @DosGetResource - Returns the selector of a specified resource segment
+  Parameters - ModHandle:W, TypeID:W, NameID:W, Selector:PW
+
+
+National language support constant - INCL_DOSNLS
+
+  @DosGetCtryInfo - Obtains country-dependent formatting information
+  Parameters - Length:W, CountryCode:PS, MemoryBuffer:PS, DataLength:PW
+  Structures - COUNTTRYCODE, COUNTRYINFO
+
+  @DosGetDBCSEv - Obtains the DBCS environmental vector from COUNTRY.SYS
+  Parameters - Length:W, CountryCode:PS, MemoryBuffer:PW
+  Structure - COUNTRYCODE
+
+  @DosCaseMap - Does case mapping on an ASCII string
+  Parameters - Length:W, CountryCode:PS, String:PB
+  Structure - COUNTRYCODE
+
+  @DosGetCollate - Obtains an ASCII collating sequence table from COUNTRY.SYS
+  Parameters - Length:W, CountryCode:PS, MemoryBuffer:PB, DataLength:PW
+  Structure - COUNTRYCODE
+
+  @DosGetCp - Queries the current code page and the prepared system code pages
+  Parameters - Length:W, CodePageList:PW, DataLength:PW
+
+  @DosSetCp - Sets the code page
+  Parameters - CodePage:W, Reserved:W
+
+
+Signal management constant - INCL_DOSSIGNALS
+
+  @DosSetSigHandler - Establishes a signal handler
+  Parameters - RoutineAddress:D, PrevAddress:PD, PrevAction:PW, Action:W,
+               SigNumber:W
+
+  @DosFlagProcess - Sets an external event flag on another process
+  Parameters - ProcessID:W, Action:W, FlagNum:W, FlagArg:W
+
+  @DosHoldSignal - Temporarily enables or disables signal processing
+  Parameters - ActionCode:W
+
+  @DosSendSignal - Sends a CTRL-C or CTRL-BREAK signal
+  Parameters - ProcessID:W, SigNumber:W
+
+
+Monitor management constant - INCL_DOSMONITORS
+
+  @DosMonOpen - Initiates device monitoring and assigns a monitor handle
+  Parameters - DevName:PZ, Handle:PW
+
+  @DosMonClose - Terminates device monitoring
+  Parameters - Handle:W
+
+  @DosMonReg - Establishes input and output buffers to monitor an I/O stream
+  Parameters - Handle:W, BufferI:PB, BufferO:PB, PosFlag:W, Index:W
+
+  @DosMonRead - Waits for and reads input from the monitor buffer
+  Parameters - BufferI:PB, WaitFlag:W, DataBuffer:PB, ByteCnt:PW
+
+  @DosMonWrite - Writes data to the output buffer of a monitor
+  Parameters - BufferO:PB, DataBuffer:PB, ByteCnt:W
+
+
+Queue management constant - INCL_DOSQUEUES
+
+  @DosMakePipe - Creates a pipe
+  Parameters - ReadHandle:PW, WriteHandle:PW, PipeSize:W
+
+  @DosCloseQueue - Closes a queue
+  Parameters - QueueHandle:W
+
+  @DosCreateQueue - Creates and opens a queue
+  Parameters - QueueHandle:PW, QueuePrt:W, QueueName:PZ
+
+  @DosOpenQueue - Opens a queue
+  Parameters - OwnerPID:PW, QueueHandle:PW, QueueName:PZ
+
+  @DosPeekQueue - Retrieves, but does not remove, a queue element
+  Parameters - QueueHandle:W, Request:PD, DataLength:PW, DataAddress:PD
+               ElementCode:PW, NowWait:W, ElemPriority:PB, SemHandle:D
+
+  @DosPurgeQueue - Purges a queue of all elements
+  Parameters - QueueHandle:W
+
+  @DosQueryQueue - Finds the size of (number of elements in) a queue
+  Parameters - QueueHandle:W, NumberElements:PW
+
+  @DosReadQueue - Reads and removes an element from a queue
+  Parameters - QueueHandle:W, Request:PD, DataLength:PW, DataAddress:PD
+               ElementCode:W, NoWait:W, ElemPriority:PW, SemHandle:D
+
+  @DosWriteQueue - Adds an element to a queue
+  Parameters - QueueHandle:W, Request:W, DataLength:W, DataBuffer:PB,
+               ElemPriority:W
+
+Miscellaneous functions constant - INCL_DOSMISC
+
+  @DosError - Enables OS/2 to receive hard-error notification without
+              generating a hard-error signal
+  Parameters - Flag:W
+
+  @DosSetVec - Registers an address to be used when an exception occcurs
+  Parameters - VecNum:W, RoutineAddress:D, PrevAddress:PD
+
+  @DosGetMessage - Retrieves a message from a message file and inserts
+                   variable information into the message
+  Parameters - IvTable:PD, IvCount:W, DataArea:PB, DataLength:W,
+               MsgNumber:W, FileName:PZ, MsgLength:PW
+
+  @DosErrClass - Enables recognition and processing of error (exit) codes
+  Parameters - Code:W, Class:PW, Action:PW, Locus:PW
+
+  @DosInsMessage - Inserts variable text string information into a message
+  Parameters - IvTable:PD, IvCount:W, MsgInput:PZ, MsgInLength:W,
+               DataArea:PW, DataLength:W, MsgLength:PW
+
+  @DosPutMessage - Outputs a message from a buffer to a specified handle
+  Parameters - FileHandle:W, MessageLength:W, MessageBuffer:PB
+
+  @DosGetEnv - Gets the segment of the environment string and the
+               offset within it of the command line
+  Parameters - EnvPointer:PW, CmdOffset:PW
+
+  @DosScanEnv - Searches an environment segment for an environment variable
+  Parameters - EnvVarName:PZ, ResultPointer:PD
+
+  @DosSearchPath - Enables applications to find files in specified directories
+  Parameters - Control:W, PathRef:PZ, Filename:PZ, ResultBuffer:PB,
+               ResultBufferLen:W
+
+  @DosGetVersion - Gets the current DOS version
+  Parameters - VersionWord:PW
+
+  @DosGetMachineMode - Tells whether the processor is in real or protected mode
+  Parameters - MachineMode:PB
+
+
+Session management constant - INCL_DOSSESMGR
+
+  @DosStartSession - Starts a new session
+  Parameters - StartData:PS, SessID:PW, PID:PW
+  Structure - STARTDATA
+
+  @DosSetSession - Sets status of a child process
+  Parameters - SessID:W, StatusData:PS
+  Structure - STATUSDATA
+
+  @DosSelectSession - Enables a parent process to switch a child to foreground
+  Parameters - SessID,W, Reserved:D
+
+  @DosStopSession - Terminates session previously started with DosStartSession
+  Parameters - TargetOption:W, SessID:W, Reserved:D
+
+
+Device driver constant - INCL_DOSDEVICES
+
+  @DosDevConfig - Gets information about attached devices
+  Parameters - DeviceInfo:PB, Item:W, Parameter:W
+
+  @DosDevIOCtl - Performs control functions on a specified device
+  Parameters - Data:PB, ParmList:PB, Function:W, Category:W, Handle:W
+
+  @DosSystemService - Requests a special function from the system
+  Parameters - ServiceCategory:W, RequestPacket:PB, ResponsePacket:PB
+
+  @DosCLIAccess - Requests privilege to disable (CLI) or enable (STI) interrupts
+  Parameters - None
+
+  @DosPortAccess - Requests or releases privilege for I/O port access
+  Parameters - Reserved:W, TypeOfAccess:W, FirstPort:W, LastPort:W
+
+  @DosPhysicalDisk - Obtains information on partitionable disks
+  Parameters - Function:W, DataPtr:D, DataLength:W, ParmPtr:D, ParmLength:W
+
+
+Keyboard input constant - INCL_KBD
+
+  @KbdRegister - Registers a keyboard subsystem within a screen group
+  Parameters - ModuleName:PZ, EntryPoint:PZ, FunctionMask:D
+
+  @KbdCharIn - Returns a character/scan code from the keyboard
+  Parameters - CharData:PS, IOWait:W, KbdHandle:W
+  Structure - KBDKEYINFO
+
+  @KbdPeek - Returns a character and scan code, if available, without
+             removing it from the keystroke buffer
+  Parameters - CharData:PS, KbdHandle:W
+  Structure - KBDKEYINFO
+
+  @KbdStringIn - Reads a character string from the keyboard
+  Parameters - CharBuffer:PB, Length:PS, IOWait:W, KbdHandle:W
+  Structure - STRINGINBUF
+
+  @KbdFlushBuffer - Clears the keystroke buffer
+  Parameters - KbdHandle:W
+
+  @KbdSetStatus - Sets the characteristics of the keyboard
+  Parameters - Structure:PS, KbdHandle:W
+  Structure - KBDINFO
+
+  @KbdGetStatus - Gets status information about the keyboard
+  Parameters - Structure:PS, KbdHandle:W
+  Structure - KBDINFO
+
+  @KbdOpen - Creates a new logical keyboard
+  Parameters - KbdHandle:PW
+
+  @KbdClose - Ends a logical keyboard
+  Parameters - KbdHandle:W
+
+  @KbdSetCp - Sets the code page identifier for a logical keyboard
+  Parameters - Reserved:W, CodePageID:W, KbdHandle:W
+
+  @KbdGetCp - Retrieves the code page identifier for the logical keyboard
+  Parameters - Reserved:D, CodePageID:PW, KbdHandle:W
+
+  @KbdGetCp - Ends a logical keyboard
+  Parameters - KbdHandle:W
+
+  @KbdFreeFocus - Frees the logical-to-physical bond created by KbdGetFocus
+  Parameters - KbdHandle:W
+
+  @KbdGetFocus - Binds the logical keyboard to the physical keyboard
+  Parameters - IOWait:W, KbdHandle:W
+
+  @KbdSynch - Synchronizes access to the keyboard subsystem
+  Parameters - IOWait:W
+
+  @KbdXlate - Translates a scan code and its shift states into an ASCII code
+  Parameters - XlateRecord:PS, KbdHandle:W
+  Structure - KBDTRANSLATE
+
+  @KbdSetCustXt - Installs a custom translate table for the logical keyboard
+  Parameters - CodePage:PW, KbdHandle:W
+
+
+Video output constant - INCL_VIO
+
+  @VioRegister - Registers a video subsystem within a screen group
+  Parameters - ModuleName:PZ, EntryPoint:PZ, FunctionMask1:D, FunctionMask2:D
+
+  @VioDeRegister - Derestisters a previously registered video subsystem
+  Parameters - None
+
+  @VioGetBuf - Returns the address of the logical video buffer
+  Parameters - LVBPtr:PD, Length:PW, VioHandle:W
+
+  @VioGetCurPos - Returns the cursor position
+  Parameters - Row:PW, Column:PW, VioHandle:W
+
+  @VioSetCurPos - Sets the cursor position
+  Parameters - Row:W, Column:W, VioHandle:W
+
+  @VioGetCurType - Returns the cursor type
+  Parameters - CursorData:PS, VioHandle:W
+  Structure - VIOCURSORINFO
+
+  @VioSetCurType - Sets the cursor type
+  Parameters - CursorData:PS, VioHandle:W
+  Structure - VIOCURSORINFO
+
+  @VioGetMode - Returns display mode information
+  Parameters - ModeData:PS, VioHandle:W
+  Structure - VIOMODEINFO
+
+  @VioSetMode - Sets the display mode
+  Parameters - ModeData:PS, VioHandle:W
+  Structure - VIOMODEINFO
+
+  @VioGetPhysBuf - Returns the address of the physical video buffer
+  Parameters - Structure:PS, Reserved:W
+  Structure - VIOPHYSBUF
+
+  @VioReadCellStr - Reads a string of character-attributes (cells) from screen
+  Parameters - CellStr:PW, Length:PW, Row:W, Column:W, VioHandle:W
+
+  @VioReadCharStr - Reads a string of characters from screen
+  Parameters - CharStr:PB, Length:PW, Row:W, Column:W, VioHandle:W
+
+  @VioWrtCellStr - Writes a string of character-attributes (cells) to screen
+  Parameters - CellStr:PB, Length:W, Row:W, Column:W, VioHandle:W
+
+  @VioWrtCharStr - Writes a string of characters to screen
+  Parameters - CharStr:PB, Length:W, Row:W, Column:W, VioHandle:W
+
+
+  @VioScrollDn - Scrolls the current screen down
+  Parameters - TopRow:W, LeftCol:W, BotRow:W, RightCol:W, Lines:W
+               Cell:PW, VioHandle:W
+
+  @VioScrollUp - Scrolls the current screen up
+  Parameters - TopRow:W, LeftCol:W, BotRow:W, RightCol:W, Lines:W
+               Cell:PW, VioHandle:W
+
+  @VioScrollLf - Scrolls the current screen left
+  Parameters - TopRow:W, LeftCol:W, BotRow:W, RightCol:W, Lines:W
+               Cell:PW, VioHandle:W
+
+  @VioScrollRt - Scrolls the current screen right
+  Parameters - TopRow:W, LeftCol:W, BotRow:W, RightCol:W, Lines:W
+               Cell:PW, VioHandle:W
+
+  @VioWrtNAttr - Writes an attribute to the screen a specified number of times
+  Parameters - Attr:PB, Times:W, Row:w, Column:W, VioHandle:W
+
+  @VioWrtNCell - Writes a character-attribute (cell) to the screen
+                 a specified number of times
+  Parameters - Cell:PW, Times:W, Row:w, Column:W, VioHandle:W
+
+  @VioWrtNChar - Writes a character to the screen a specified number of times
+  Parameters - Char:PB, Times:W, Row:w, Column:W, VioHandle:W
+
+  @VioWrtTTy - Writes a character string from the current cursor position
+  Parameters - CharString:PB, Length:W, VioHandle:W
+
+  @VioWrtCharStrAtt - Writes a string of characters with a repeated
+                      attribute to screen
+  Parameters - CharStr:PB, Length:W, Row:W, Column:W, Attr:PB, VioHandle:W
+
+
+  @VioShowBuf - Updates the physical display with the logical video buffer
+  Parameters - Offset:W, Length:W, VioHandle:W
+
+  @VioSetAnsi - Activates or deactivates ANSI support
+  Parameters - Indicator:W, VioHandle:W
+
+  @VioGetAnsi - Returns the current ANSI state (on or off)
+  Parameters - Indicator:PW, VioHandle:W
+
+  @VioPrtSc - Copies the contents of the screen to the printer
+  Parameters - VioHandle:W
+
+  @VioPrtScToggle - Toggles whether session manager input is sent to printer
+  Parameters - VioHandle:W
+
+  @VioSavRedrawWait - Notifies a process that it must save or redraw its screen
+  Parameters - SavRedrawIndic:W, NotifyType:PW, VioHandle:W
+
+  @VioSavRedrawUndo - Cancels a VioSavRedrawWait issued by another thread
+                      within the same process
+  Parameters - OwnerIndic:W, KillIndic:W, VioHandle:W
+
+  @VioModeWait - Notifies a graphics application that it must restore its
+                 video mode
+  Parameters - RequestType:W, NotifyType:PW, Reserved:W
+
+  @VioModeUndo - Enables one thread within a process to cancel a VioModeWait
+                 issued by another thread in the same process
+  Parameters - OwnerIndic:W, KillIndic:W, Reserved:W
+
+  @VioScrLock - Locks the screen for I/O
+  Parameters - WaitFlag:W, Status:PB, VioHandle:W
+
+  @VioScrUnLock - Unlocks the screen for I/O
+  Parameters - VioHandle:W
+
+  @VioPopUp - Requests a temporary screen to display a message
+  Parameters - WaitFlags:PW, VioHandle:W
+
+  @VioEndPopUp - Releases a temporary screen obtained from a previous VioPopUp
+  Parameters - VioHandle:W
+
+  @VioGetConfig - Returns the configuration of the video display
+  Parameters - Reserved:W, ConfigData:PS, VioHandle:W
+  Structure - VIOCONFIGINFO
+
+  @VioGetFont - Returns either the font table of the specified size, or the
+                font currently in use
+  Parameters - RequestBlock:PS, VioHandle:W
+  Structure - VIOFONTINFO
+
+  @VioSetFont - Downloads a display font
+  Parameters - RequestBlock:PS, VioHandle:W
+  Structure - VIOFONTINFO
+
+  @VioGetCp - Returns the code page being used by the specified handle
+  Parameters - Reserved:W, CodePageID:PW, VioHandle:W
+
+  @VioSetCp - Sets the code page to be used by the specified handle
+  Parameters - Reserved:W, CodePageID:W, VioHandle:W
+
+  @VioGetState - Returns the current setting of either the palette registers,
+                 overscan (border) color, or blink/background intensity switch
+  Parameters - RequestBlock:PS, VioHandle:W
+  Structures - VIOPALSTATE, VIOOVERSCAN, or VIOINTENSITY
+
+  @VioSetState - Sets either the palette registers, overscan (border) color,
+                 or blink/background intensity switch
+  Parameters - RequestBlock:PS, VioHandle:W
+  Structures - VIOPALSTATE, VIOOVERSCAN, or VIOINTENSITY
+
+
+Mouse input constant - INCL_MOU
+
+  @MouRegister - Registers a mouse subsystem or environment manager
+  Parameters - ModuleName:PZ, EntryName:PZ, Mask:D
+
+  @MouDeRegister - Deregisters a mouse subsystem or environment manager
+  Parameters - None
+
+  @MouFlushQue - Flushes the mouse event queue
+  Parameters - DeviceHandle:W
+
+  @MouGetHotKey - Queries to determine which physical key (button) is the 
+                  system hot key
+  Parameters - ButtonMask:PW, DeviceHandle:W
+
+  @MouSetHotKey - Tells the mouse driver which physical key (button) is 
+                  the system hot key
+  Parameters - ButtonMask:PW, DeviceHandle:W
+
+  @MouGetPtrPos - Gets the coordinates (row and column) of the mouse pointer 
+  Parameters - PtrPos:PS, DeviceHandle:W
+  Structure - PTRLOC
+
+  @MouSetPtrPos - Sets new coordinates for the mouse pointer image 
+  Parameters - PtrPos:PS, DeviceHandle:W
+  Structure - PTRLOC
+
+  @MouSetPtrShape - Sets the shape and size for the mouse pointer image 
+  Parameters - PtrBuffer:PB, PtrDefRec:PS, DeviceHandle:W
+  Structure - PTRSHAPE
+
+  @MouGetPtrShape - Copies the pointer shape for the screen group 
+  Parameters - PtrBuffer:PB, PtrDefRec:PS, DeviceHandle:W
+  Structure - PTRSHAPE
+
+  @MouGetDevStatus - Returns the status flags for the mouse device driver 
+  Parameters - DeviceStatus:PW, DeviceHandle:W
+
+  @MouGetNumButtons - Returns the number of buttons 
+  Parameters - NumberOfButtons:PW, DeviceHandle:W
+
+  @MouGetNumMickeys - Returns the number of mickeys per centimeter 
+  Parameters - NumberOfMickeys:PW, DeviceHandle:W
+
+  @MouReadEventQue - Reads an event from the pointing device event queue 
+                     into the mouse event queue
+  Parameters - Event:PS, NoWait:PW, DeviceHandle:W
+  Structure - MOUEVENTINFO
+
+  @MouGetNumQueEl - Returns the status for the event queue 
+  Parameters - QueDataRecord:PS, DeviceHandle:W
+  Structure - MOUQUEINFO
+
+  @MouGetEventMask - Returns an event mask for the current pointing device 
+  Parameters - EventMask:PW, DeviceHandle:W
+
+  @MouSetEventMask - Assigns a new event mask to the current pointing device 
+  Parameters - EventMask:PW, DeviceHandle:W
+
+  @MouGetScaleFact - Gets scaling factors for the current pointing device 
+  Parameters - ScaleStruct:PS, DeviceHandle:W
+  Structure - SCALEFACT
+
+  @MouSetScaleFact - Assigns scaling factors for the current pointing device 
+  Parameters - ScaleStruct:PS, DeviceHandle:W
+  Structure - SCALEFACT
+
+  @MouOpen - Opens the mouse device for the current screen group 
+  Parameters - DriverName:PZ, DeviceHandle:PW
+
+  @MouClose - Closes the mouse device for the current screen group
+  Parameters - DeviceHandle:W
+
+  @MouRemovePtr - Notifies the mouse device dirver that a specified area is 
+                  for the exclusive use of the application
+  Parameters - PtrArea:PS, DeviceHandle:W
+  Structure - NOPTRRECT
+
+  @MouDrawPtr - Releases an area previously restricted to the pointer
+                image for use by the mouse device driver
+  Parameters - DeviceHandle:W
+
+  @MouSetDevStatus - Sets the pointing device driver status flags 
+  Parameters - DeviceStatus:PW, DeviceHandle:W
+
+  @MouInitReal - Initializes the real-mode mouse device driver 
+  Parameters - DriverName:PZ

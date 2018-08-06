@@ -1,0 +1,9 @@
+hello-c.obj : hello-c.asm
+  masm hello-c;
+
+hello-c.com : hello-c.obj
+  link hello-c;
+  exe2bin hello-c.exe hello-c.com
+  del hello-c.exe
+
+

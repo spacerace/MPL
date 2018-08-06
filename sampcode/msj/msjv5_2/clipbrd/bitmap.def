@@ -1,0 +1,16 @@
+LIBRARY      BITMAP
+STUB         'WINSTUB.EXE'
+DESCRIPTION  'Bitmap Format Display Library '
+
+CODE         MOVEABLE DISCARDABLE SHARED
+DATA         MOVEABLE SINGLE
+
+EXPORTS
+ BitmapInit      @1
+ BitmapCreate    @2
+ BitmapSize      @3
+ BitmapHScroll   @4
+ BitmapVScroll   @5
+ BitmapPaint     @6
+ BitmapDestroy   @7
+

@@ -1,0 +1,19 @@
+#include "style.h"	/* Smaller version of windows.h */
+#include "transacc.h"
+
+
+TRANSACCELMENU1  MENU
+BEGIN
+  MENUITEM "Press (F10) For Next Menu",       ID_NEXT
+END
+
+TRANSACCELMENU2  MENU
+BEGIN
+  MENUITEM "Press (F9) For Previous Menu",    ID_PREV
+END
+
+TRANSACCELMENU	ACCELERATORS       /* Defines the accelerators */
+BEGIN
+  VK_F10, ID_NEXT, VIRTKEY         
+  VK_F9,  ID_PREV, VIRTKEY
+END

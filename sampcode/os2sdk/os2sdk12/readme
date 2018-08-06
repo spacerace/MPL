@@ -1,0 +1,100 @@
+Sample Name	Illustrates...
+
+ACCEL           Calls included with INCL_WINACCELERATORS to generate keyboard
+                accelerators through a dialog box
+
+BIGBEN          Simple text-based clock program.  Uses various VIO calls.
+
+BIO		A biorhythm chart drawing application.  Demonstrates writing
+		to the clipboard, and GPI calls.
+
+BROWSE		Drawing in an AVIO Presentation Space, with scrollbars.
+		It allows you to browse through a specified file.
+
+CALC/DCALC	Bitmaps, hit testing, drawing using GpiBox, GpiLine;
+		and some manual drawing
+
+CASCADE         Demonstrates cascading menus
+
+CHASER          Multi-threaded text game which demonstrates Mouse API calls
+
+CLIPVIEW        Sample PM app; allows user to browse contents of clipboard.
+                Shows how to process clipboard formats, handle scroll bars,
+                use listboxes and save large BITMAP files.
+
+CLOCK           Window subclassing, frame control processing, Gpi transforms
+		This application displays a clock; the title and menu bars
+		can be removed by double-clicking; and dragging any part
+		of the window results in the entire window being moved
+
+COMTALK		A PM Terminal Application.  Uses AVIO, and multiple threads.
+
+CPGREP          A multi-threaded grep variation
+
+DDEML           DDE communications manager (DLL) and related sample apps.
+
+DLGSAMP		Demonstrates various types of dialog boxes
+
+EDPLINE		Demonstrates Gpi calls to draw lines and curves
+
+EXPAND          Dialog box expansion
+
+FATPEL		A nice drawing package which shows which pixels get lit up
+		when a line (or Fillet, Spline, Point Arc) is drawn
+
+FDIR            Conversion of long filenames to standard (8.3) and how to
+                determine the longname from the EA of a FAT file.
+
+HANOI           Towers of Hanoi solver.  Demonstrates use of multiple threads
+                to handle PM interface and recursive algorithm.
+
+INIEDIT		Allows browsing of OS2.INI file (WinProfile calls); also
+		loads printer options from OS2.INI properly for printing
+
+JIGSAW          A nice visual jigsaw puzzle application; demonstrates Gpi
+                calls for segment storage, clipping to regions, Bit Blts
+
+LINEFRAC	Drawing with multiple threads, bitmaps as menu items, how
+		to read/write bitmaps, and Gpi calls
+
+MDI		Demonstrates the standard Multiple Document Interface
+
+MSGBOX		Allows the user to experiment with various message box styles
+
+OPENDLG		Standardized "File...Open" and "File...Save As" dialog boxes
+		Includes a sample program (HELLO) to show how to use the DLL.
+
+PIPES           Uses DosMakePipe to demonstrate interprocess communication.
+
+PMCAP		Allows screen dumps to bitmap files
+
+SHARE           Use of shared memory and ram semaphores between seperate
+                processes.
+
+SNAP		Screen snapshotting utility.  Allows regions to be selected.
+
+SORT            Uses multiple threads to sort and plot data in PM window.
+
+SPY		Message hooking/debugging utility
+
+STOCK		A sample of how to print correctly from an OS/2 app.  Uses
+		simple line graphs for examples.
+
+SUSPEND         Demo of DosSuspendThread/DosResumeThread.
+
+TED             PM text editor which utilizes the IPFC Help Manager and an
+                MLE for text interaction.
+
+TERMINAL        Simple ANSI terminal emulator.
+
+VECTFONT	Shows off OS/2 Vector Font capabilities
+
+WMCHAR		Displays the various flags set when WM_CHAR message is sent
+
+Make sure that the INCLUDE subdirectory here is in your INCLUDE variable,
+that LIB is in your LIB variable, and that DLL is in your LIBPATH variable
+(of your CONFIG.SYS file).  This should happen as part of the SETUP process.
+
+Many samples compile with the slibcep library; a few link with mlibcep and
+llibcep.  These are protect mode, math emulator libraries which should be
+built when installing Microsoft C 5.10.

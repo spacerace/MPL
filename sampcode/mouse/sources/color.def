@@ -1,0 +1,1325 @@
+;       SAMPLE Microsoft Mouse COLOR MENU
+;
+; This menu displays the color options available for the
+; Microsoft Mouse Menus.
+;
+;
+BEGIN lb
+;
+lb:     execute popmen
+nul:    nothing
+;
+popmen:   POPUP 2,1,NORMAL
+text "ษQUITออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป"
+text "บ 000 016 032 048 064 080 096 112 128 144 160 176 192 208 224 240บ"
+text "บ 001 017 033 049 065 081 097 113 129 145 161 177 193 209 225 241บ"
+text "บ 002 018 034 050 066 082 098 114 130 146 162 178 194 210 226 242บ"
+text "บ 003 019 035 051 067 083 099 115 131 147 163 179 195 211 227 243บ"
+text "บ 004 020 036 052 068 084 100 116 132 148 164 180 196 212 228 244บ"
+text "บ 005 021 037 053 069 085 101 117 133 149 165 181 197 213 229 245บ"
+text "บ 006 022 038 054 070 086 102 118 134 150 166 182 198 214 230 246บ"
+text "บ 007 023 039 055 071 087 103 119 135 151 167 183 199 215 231 247บ"
+text "บ 008 024 040 056 072 088 104 120 136 152 168 184 200 216 232 248บ"
+text "บ 009 025 041 057 073 089 105 121 137 153 169 185 201 217 233 249บ"
+text "บ 010 026 042 058 074 090 106 122 138 154 170 186 202 218 234 250บ"
+text "บ 011 027 043 059 075 091 107 123 139 155 171 187 203 219 235 251บ"
+text "บ 012 028 044 060 076 092 108 124 140 156 172 188 204 220 236 252บ"
+text "บ 013 029 045 061 077 093 109 125 141 157 173 189 205 221 237 253บ"
+text "บ 014 030 046 062 078 094 110 126 142 158 174 190 206 222 238 254บ"
+text "บ 015 031 047 063 079 095 111 127 143 159 175 191 207 223 239 255บ"
+text "ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ"
+;
+   SELECT 1,2,4,nul
+   SELECT 1,6,4,lb
+   SELECT 1,10,4,lb
+   SELECT 1,14,4,lb
+   SELECT 1,18,4,lb
+   SELECT 1,22,4,lb
+   SELECT 1,26,4,lb
+   SELECT 1,30,4,lb
+   SELECT 1,34,4,lb
+   SELECT 1,38,4,lb
+   SELECT 1,42,4,lb
+   SELECT 1,46,4,lb
+   SELECT 1,50,4,lb
+   SELECT 1,54,4,lb
+   SELECT 1,58,4,lb
+   SELECT 1,62,4,lb
+   SELECT 2,2,4,lb
+   SELECT 3,2,4,m001
+   SELECT 4,2,4,m002
+   SELECT 5,2,4,m003
+   SELECT 6,2,4,m004
+   SELECT 7,2,4,m005
+   SELECT 8,2,4,m006
+   SELECT 9,2,4,m007
+   SELECT 10,2,4,m008
+   SELECT 11,2,4,m009
+   SELECT 12,2,4,m010
+   SELECT 13,2,4,m011
+   SELECT 14,2,4,m012
+   SELECT 15,2,4,m013
+   SELECT 16,2,4,m014
+   SELECT 17,2,4,m015
+   SELECT 2,6,4,m016
+   SELECT 3,6,4,m017
+   SELECT 4,6,4,m018
+   SELECT 5,6,4,m019
+   SELECT 6,6,4,m020
+   SELECT 7,6,4,m021
+   SELECT 8,6,4,m022
+   SELECT 9,6,4,m023
+   SELECT 10,6,4,m024
+   SELECT 11,6,4,m025
+   SELECT 12,6,4,m026
+   SELECT 13,6,4,m027
+   SELECT 14,6,4,m028
+   SELECT 15,6,4,m029
+   SELECT 16,6,4,m030
+   SELECT 17,6,4,m031
+   SELECT 2,10,4,m032
+   SELECT 3,10,4,m033
+   SELECT 4,10,4,m034
+   SELECT 5,10,4,m035
+   SELECT 6,10,4,m036
+   SELECT 7,10,4,m037
+   SELECT 8,10,4,m038
+   SELECT 9,10,4,m039
+   SELECT 10,10,4,m040
+   SELECT 11,10,4,m041
+   SELECT 12,10,4,m042
+   SELECT 13,10,4,m043
+   SELECT 14,10,4,m044
+   SELECT 15,10,4,m045
+   SELECT 16,10,4,m046
+   SELECT 17,10,4,m047
+   SELECT 2,14,4,m048
+   SELECT 3,14,4,m049
+   SELECT 4,14,4,m050
+   SELECT 5,14,4,m051
+   SELECT 6,14,4,m052
+   SELECT 7,14,4,m053
+   SELECT 8,14,4,m054
+   SELECT 9,14,4,m055
+   SELECT 10,14,4,m056
+   SELECT 11,14,4,m057
+   SELECT 12,14,4,m058
+   SELECT 13,14,4,m059
+   SELECT 14,14,4,m060
+   SELECT 15,14,4,m061
+   SELECT 16,14,4,m062
+   SELECT 17,14,4,m063
+   SELECT 2,18,4,m064
+   SELECT 3,18,4,m065
+   SELECT 4,18,4,m066
+   SELECT 5,18,4,m067
+   SELECT 6,18,4,m068
+   SELECT 7,18,4,m069
+   SELECT 8,18,4,m070
+   SELECT 9,18,4,m071
+   SELECT 10,18,4,m072
+   SELECT 11,18,4,m073
+   SELECT 12,18,4,m074
+   SELECT 13,18,4,m075
+   SELECT 14,18,4,m076
+   SELECT 15,18,4,m077
+   SELECT 16,18,4,m078
+   SELECT 17,18,4,m079
+   SELECT 2,22,4,m080
+   SELECT 3,22,4,m081
+   SELECT 4,22,4,m082
+   SELECT 5,22,4,m083
+   SELECT 6,22,4,m084
+   SELECT 7,22,4,m085
+   SELECT 8,22,4,m086
+   SELECT 9,22,4,m087
+   SELECT 10,22,4,m088
+   SELECT 11,22,4,m089
+   SELECT 12,22,4,m090
+   SELECT 13,22,4,m091
+   SELECT 14,22,4,m092
+   SELECT 15,22,4,m093
+   SELECT 16,22,4,m094
+   SELECT 17,22,4,m095
+   SELECT 2,26,4,m096
+   SELECT 3,26,4,m097
+   SELECT 4,26,4,m098
+   SELECT 5,26,4,m099
+   SELECT 6,26,4,m100
+   SELECT 7,26,4,m101
+   SELECT 8,26,4,m102
+   SELECT 9,26,4,m103
+   SELECT 10,26,4,m104
+   SELECT 11,26,4,m105
+   SELECT 12,26,4,m106
+   SELECT 13,26,4,m107
+   SELECT 14,26,4,m108
+   SELECT 15,26,4,m109
+   SELECT 16,26,4,m110
+   SELECT 17,26,4,m111
+   SELECT 2,30,4,m112
+   SELECT 3,30,4,m113
+   SELECT 4,30,4,m114
+   SELECT 5,30,4,m115
+   SELECT 6,30,4,m116
+   SELECT 7,30,4,m117
+   SELECT 8,30,4,m118
+   SELECT 9,30,4,m119
+   SELECT 10,30,4,m120
+   SELECT 11,30,4,m121
+   SELECT 12,30,4,m122
+   SELECT 13,30,4,m123
+   SELECT 14,30,4,m124
+   SELECT 15,30,4,m125
+   SELECT 16,30,4,m126
+   SELECT 17,30,4,m127
+   SELECT 2,34,4,m128
+   SELECT 3,34,4,m129
+   SELECT 4,34,4,m130
+   SELECT 5,34,4,m131
+   SELECT 6,34,4,m132
+   SELECT 7,34,4,m133
+   SELECT 8,34,4,m134
+   SELECT 9,34,4,m135
+   SELECT 10,34,4,m136
+   SELECT 11,34,4,m137
+   SELECT 12,34,4,m138
+   SELECT 13,34,4,m139
+   SELECT 14,34,4,m140
+   SELECT 15,34,4,m141
+   SELECT 16,34,4,m142
+   SELECT 17,34,4,m143
+   SELECT 2,38,4,m144
+   SELECT 3,38,4,m145
+   SELECT 4,38,4,m146
+   SELECT 5,38,4,m147
+   SELECT 6,38,4,m148
+   SELECT 7,38,4,m149
+   SELECT 8,38,4,m150
+   SELECT 9,38,4,m151
+   SELECT 10,38,4,m152
+   SELECT 11,38,4,m153
+   SELECT 12,38,4,m154
+   SELECT 13,38,4,m155
+   SELECT 14,38,4,m156
+   SELECT 15,38,4,m157
+   SELECT 16,38,4,m158
+   SELECT 17,38,4,m159
+   SELECT 2,42,4,m160
+   SELECT 3,42,4,m161
+   SELECT 4,42,4,m162
+   SELECT 5,42,4,m163
+   SELECT 6,42,4,m164
+   SELECT 7,42,4,m165
+   SELECT 8,42,4,m166
+   SELECT 9,42,4,m167
+   SELECT 10,42,4,m168
+   SELECT 11,42,4,m169
+   SELECT 12,42,4,m170
+   SELECT 13,42,4,m171
+   SELECT 14,42,4,m172
+   SELECT 15,42,4,m173
+   SELECT 16,42,4,m174
+   SELECT 17,42,4,m175
+   SELECT 2,46,4,m176
+   SELECT 3,46,4,m177
+   SELECT 4,46,4,m178
+   SELECT 5,46,4,m179
+   SELECT 6,46,4,m180
+   SELECT 7,46,4,m181
+   SELECT 8,46,4,m182
+   SELECT 9,46,4,m183
+   SELECT 10,46,4,m184
+   SELECT 11,46,4,m185
+   SELECT 12,46,4,m186
+   SELECT 13,46,4,m187
+   SELECT 14,46,4,m188
+   SELECT 15,46,4,m189
+   SELECT 16,46,4,m190
+   SELECT 17,46,4,m191
+   SELECT 2,50,4,m192
+   SELECT 3,50,4,m193
+   SELECT 4,50,4,m194
+   SELECT 5,50,4,m195
+   SELECT 6,50,4,m196
+   SELECT 7,50,4,m197
+   SELECT 8,50,4,m198
+   SELECT 9,50,4,m199
+   SELECT 10,50,4,m200
+   SELECT 11,50,4,m201
+   SELECT 12,50,4,m202
+   SELECT 13,50,4,m203
+   SELECT 14,50,4,m204
+   SELECT 15,50,4,m205
+   SELECT 16,50,4,m206
+   SELECT 17,50,4,m207
+   SELECT 2,54,4,m208
+   SELECT 3,54,4,m209
+   SELECT 4,54,4,m210
+   SELECT 5,54,4,m211
+   SELECT 6,54,4,m212
+   SELECT 7,54,4,m213
+   SELECT 8,54,4,m214
+   SELECT 9,54,4,m215
+   SELECT 10,54,4,m216
+   SELECT 11,54,4,m217
+   SELECT 12,54,4,m218
+   SELECT 13,54,4,m219
+   SELECT 14,54,4,m220
+   SELECT 15,54,4,m221
+   SELECT 16,54,4,m222
+   SELECT 17,54,4,m223
+   SELECT 2,58,4,m224
+   SELECT 3,58,4,m225
+   SELECT 4,58,4,m226
+   SELECT 5,58,4,m227
+   SELECT 6,58,4,m228
+   SELECT 7,58,4,m229
+   SELECT 8,58,4,m230
+   SELECT 9,58,4,m231
+   SELECT 10,58,4,m232
+   SELECT 11,58,4,m233
+   SELECT 12,58,4,m234
+   SELECT 13,58,4,m235
+   SELECT 14,58,4,m236
+   SELECT 15,58,4,m237
+   SELECT 16,58,4,m238
+   SELECT 17,58,4,m239
+   SELECT 2,62,4,m240
+   SELECT 3,62,4,m241
+   SELECT 4,62,4,m242
+   SELECT 5,62,4,m243
+   SELECT 6,62,4,m244
+   SELECT 7,62,4,m245
+   SELECT 8,62,4,m246
+   SELECT 9,62,4,m247
+   SELECT 10,62,4,m248
+   SELECT 11,62,4,m249
+   SELECT 12,62,4,m250
+   SELECT 13,62,4,m251
+   SELECT 14,62,4,m252
+   SELECT 15,62,4,m253
+   SELECT 16,62,4,m254
+   SELECT 17,62,4,m255
+   PEND
+;
+m001: MENU   "001",10,35,001
+      option "Blue\Black",lb
+      MEND
+;
+m002: MENU   "002",10,35,002
+      option "Green\Black",lb
+      MEND
+;
+m003: MENU   "003",10,35,003
+      option "Cyan\Black",lb
+      MEND
+;
+m004: MENU   "004",10,35,004
+      option "Red\Black",lb
+      MEND
+;
+m005: MENU   "005",10,35,005
+      option "Magenta\Black",lb
+      MEND
+;
+m006: MENU   "006",10,35,006
+      option "Brown \Black",lb
+      MEND
+;
+m007: MENU   "007",10,35,007
+      option "White\Black",lb
+      MEND
+;
+m008: MENU   "008",10,35,008
+      option "Gray\Black",lb
+      MEND
+;
+m009: MENU   "009",10,35,009
+      option "Lt. Blue\Black",lb
+      MEND
+;
+m010: MENU   "010",10,35,010
+      option "Lt. Green\Black",lb
+      MEND
+;
+m011: MENU   "011",10,35,011
+      option "Lt. Cyan\Black",lb
+      MEND
+;
+m012: MENU   "012",10,35,012
+      option "Lt. Red\Black",lb
+      MEND
+;
+m013: MENU   "013",10,35,013
+      option "Lt. Magenta\Black",lb
+      MEND
+;
+m014: MENU   "014",10,35,014
+      option "Yellow\Black",lb
+      MEND
+;
+m015: MENU   "015",10,35,015
+      option "Hi-int. White\Black",lb
+      MEND
+;
+m016: MENU   "016",10,35,016
+      option "Black\Blue",lb
+      MEND
+;
+m017: MENU   "017",10,35,017
+      option "Blue\Blue",lb
+      MEND
+;
+m018: MENU   "018",10,35,018
+      option "Green\Blue",lb
+      MEND
+;
+m019: MENU   "019",10,35,019
+      option "Cyan\Blue",lb
+      MEND
+;
+m020: MENU   "020",10,35,020
+      option "Red\Blue",lb
+      MEND
+;
+m021: MENU   "021",10,35,021
+      option "Magenta\Blue",lb
+      MEND
+;
+m022: MENU   "022",10,35,022
+      option "Brown\Blue",lb
+      MEND
+;
+m023: MENU   "023",10,35,023
+      option "White\Blue",lb
+      MEND
+;
+m024: MENU   "024",10,35,024
+      option "Gray\Blue",lb
+      MEND
+;
+m025: MENU    "025",10,35,025
+      option "Lt. Blue\Blue",lb
+      MEND
+;
+m026: MENU   "026",10,35,026
+      option "Lt. Green\Blue",lb
+      MEND
+;
+m027: MENU   "027",10,35,027
+      option "Lt. Cyan\Blue",lb
+      MEND
+;
+m028: MENU   "028",10,35,028
+      option "Lt. Red\Blue",lb
+      MEND
+;
+m029: MENU   "029",10,35,029
+      option "Lt. Magenta\Blue",lb
+      MEND
+;
+m030: MENU   "030",10,35,030
+      option "Yellow\Blue",lb
+      MEND
+;
+m031: MENU   "031",10,35,031
+      option "Hi-int. White\Blue",lb
+      MEND
+;
+m032: MENU   "032",10,35,032
+      option "Black\Green",lb
+      MEND
+;
+m033: MENU   "033",10,35,033
+      option "Blue\Green",lb
+      MEND
+;
+m034: MENU   "034",10,35,034
+      option "Green\Green",lb
+      MEND
+;
+m035: MENU   "035",10,35,035
+      option "Cyan\Green",lb
+      MEND
+;
+m036: MENU   "036",10,35,036
+      option "Red\Green",lb
+      MEND
+;
+m037: MENU   "037",10,35,037
+      option "Magenta\Green",lb
+      MEND
+;
+m038: MENU   "038",10,35,038
+      option "Brown\Green",lb
+      MEND
+;
+m039: MENU   "039",10,35,039
+      option "White\Green",lb
+      MEND
+;
+m040: MENU   "040",10,35,040
+      option "Gray\Green",lb
+      MEND
+;
+m041: MENU   "041",10,35,041
+      option "Lt. Blue\Green",lb
+      MEND
+;
+m042: MENU   "042",10,35,042
+      option "Lt. Green\Green",lb
+      MEND
+;
+m043: MENU   "043",10,35,043
+      option "Lt. Cyan\Green",lb
+      MEND
+;
+m044: MENU   "044",10,35,044
+      option "Lt. Red\Green",lb
+      MEND
+;
+m045: MENU   "045",10,35,045
+      option "Lt. Magenta\Green",lb
+      MEND
+;
+m046: MENU   "046",10,35,046
+      option "Yellow\Green",lb
+      MEND
+;
+m047: MENU   "047",10,35,047
+      option "Hi-int. White\Green",lb
+      MEND
+;
+m048: MENU   "048",10,35,048
+      option "Black\Cyan",lb
+      MEND
+;
+m049: MENU   "049",10,35,049
+      option "Blue\Cyan",lb
+      MEND
+;
+m050: MENU   "050",10,35,050
+      option "Green\Cyan",lb
+      MEND
+;
+m051: MENU   "051",10,35,051
+      option "Cyan\Cyan",lb
+      MEND
+;
+m052: MENU   "052",10,35,052
+      option "Red\Cyan",lb
+      MEND
+;
+m053: MENU   "053",10,35,053
+      option "Magenta\Cyan",lb
+      MEND
+;
+m054: MENU   "054",10,35,054
+      option "Brown\Cyan",lb
+      MEND
+;
+m055: MENU   "055",10,35,055
+      option "White\Cyan",lb
+      MEND
+;
+m056: MENU   "056",10,35,056
+      option "Gray\Cyan",lb
+      MEND
+;
+m057: MENU   "057",10,35,057
+      option "Lt. Blue\Cyan",lb
+      MEND
+;
+m058: MENU   "058",10,35,058
+      option "Lt. Green\Cyan",lb
+      MEND
+;
+m059: MENU   "059",10,35,059
+      option "Lt. Cyan\Cyan",lb
+      MEND
+;
+m060: MENU   "060",10,35,060
+      option "Lt. Red\Cyan",lb
+      MEND
+;
+m061: MENU   "061",10,35,061
+      option "Lt. Magenta\Cyan",lb
+      MEND
+;
+m062: MENU   "062",10,35,062
+      option "Yellow\Cyan",lb
+      MEND
+;
+m063: MENU   "063",10,35,063
+      option "Hi-int. White\Cyan",lb
+      MEND
+;
+m064: MENU   "064",10,35,064
+      option "Black\Red",lb
+      MEND
+;
+m065: MENU   "065",10,35,065
+      option "Blue\Red",lb
+      MEND
+;
+m066: MENU   "066",10,35,066
+      option "Green\Red",lb
+      MEND
+;
+m067: MENU   "067",10,35,067
+      option "Cyan\Red",lb
+      MEND
+;
+m068: MENU   "068",10,35,068
+      option "Red\Red",lb
+      MEND
+;
+m069: MENU   "069",10,35,069
+      option "Magenta\Red",lb
+      MEND
+;
+m070: MENU   "070",10,35,070
+      option "Brown\Red",lb
+      MEND
+;
+m071: MENU   "071",10,35,071
+      option "White\Red",lb
+      MEND
+;
+m072: MENU   "072",10,35,072
+      option "Gray\Red",lb
+      MEND
+;
+m073: MENU   "073",10,35,073
+      option "Lt. Blue\Red",lb
+      MEND
+;
+m074: MENU   "074",10,35,074
+      option "Lt. Green\Red",lb
+      MEND
+;
+m075: MENU   "075",10,35,075
+      option "Lt. Cyan\Red",lb
+      MEND
+;
+m076: MENU   "076",10,35,076
+      option "Lt. Red\Red",lb
+      MEND
+;
+m077: MENU   "077",10,35,077
+      option "Lt. Magenta\Red",lb
+      MEND
+;
+m078: MENU   "078",10,35,078
+      option "Yellow\Red",lb
+      MEND
+;
+m079: MENU   "079",10,35,079
+      option "Hi-int. White\Red",lb
+      MEND
+;
+m080: MENU   "080",10,35,080
+      option "Black\Magenta",lb
+      MEND
+;
+m081: MENU   "081",10,35,081
+      option "Blue\Magenta",lb
+      MEND
+;
+m082: MENU   "082",10,35,082
+      option "Green\Magenta",lb
+      MEND
+;
+m083: MENU   "083",10,35,083
+      option "Cyan\Magenta",lb
+      MEND
+;
+m084: MENU   "084",10,35,084
+      option "Red\Magenta",lb
+      MEND
+;
+m085: MENU   "085",10,35,085
+      option "Magenta\Magenta",lb
+      MEND
+;
+m086: MENU   "086",10,35,086
+      option "Brown\Magenta",lb
+      MEND
+;
+m087: MENU   "087",10,35,087
+      option "White\Magenta",lb
+      MEND
+;
+m088: MENU   "088",10,35,088
+      option "Gray\Magenta",lb
+      MEND
+;
+m089: MENU   "089",10,35,089
+      option "Lt. Blue\Magenta",lb
+      MEND
+;
+m090: MENU   "090",10,35,090
+      option "Lt. Green\Magenta",lb
+      MEND
+;
+m091: MENU   "091",10,35,091
+      option "Lt. Cyan\Magenta",lb
+      MEND
+;
+m092: MENU   "092",10,35,092
+      option "Lt. Red\Magenta",lb
+      MEND
+;
+m093: MENU   "093",10,35,093
+      option "Lt. Magenta\Magenta",lb
+      MEND
+;
+m094: MENU   "094",10,35,094
+      option "Yellow\Magenta",lb
+      MEND
+;
+m095: MENU   "095",10,35,095
+      option "Hi-int. White\Magenta",lb
+      MEND
+;
+m096: MENU   "096",10,35,096
+      option "Black\Brown",lb
+      MEND
+;
+m097: MENU   "097",10,35,097
+      option "Blue\Brown",lb
+      MEND
+;
+m098: MENU   "098",10,35,098
+      option "Green\Brown",lb
+      MEND
+;
+m099: MENU   "099",10,35,099
+      option "Cyan\Brown",lb
+      MEND
+;
+m100: MENU   "100",10,35,100
+      option "Red\Brown",lb
+      MEND
+;
+m101: MENU   "101",10,35,101
+      option "Magenta\Brown",lb
+      MEND
+;
+m102: MENU   "102",10,35,102
+      option "Brown\Brown",lb
+      MEND
+;
+m103: MENU   "103",10,35,103
+      option "White\Brown",lb
+      MEND
+;
+m104: MENU   "104",10,35,104
+      option "Gray\Brown",lb
+      MEND
+;
+m105: MENU   "105",10,35,105
+      option "Lt. Blue\Brown",lb
+      MEND
+;
+m106: MENU   "106",10,35,106
+      option "Lt. Green\Brown",lb
+      MEND
+;
+m107: MENU   "107",10,35,107
+      option "Lt. Cyan\Brown",lb
+      MEND
+;
+m108: MENU   "108",10,35,108
+      option "Lt. Red\Brown",lb
+      MEND
+;
+m109: MENU   "109",10,35,109
+      option "Lt. Magenta\Brown",lb
+      MEND
+;
+m110: MENU   "110",10,35,110
+      option "Yellow\Brown",lb
+      MEND
+;
+m111: MENU   "111",10,35,111
+      option "Hi-int. White\Brown",lb
+      MEND
+;
+m112: MENU   "112",10,35,112
+      option "Black\White",lb
+      MEND
+;
+m113: MENU   "113",10,35,113
+      option "Blue\White",lb
+      MEND
+;
+m114: MENU   "114",10,35,114
+      option "Green\White",lb
+      MEND
+;
+m115: MENU   "115",10,35,115
+      option "Cyan\White",lb
+      MEND
+;
+m116: MENU   "116",10,35,116
+      option "Red\White",lb
+      MEND
+;
+m117: MENU   "117",10,35,117
+      option "Magenta\White",lb
+      MEND
+;
+m118: MENU   "118",10,35,118
+      option "Brown\White",lb
+      MEND
+;
+m119: MENU   "119",10,35,119
+      option "White\White",lb
+      MEND
+;
+m120: MENU   "120",10,35,120
+      option "Gray\White",lb
+      MEND
+;
+m121: MENU   "121",10,35,121
+      option "Lt. Blue\White",lb
+      MEND
+;
+m122: MENU   "122",10,35,122
+      option "Lt. Green\White",lb
+      MEND
+;
+m123: MENU   "123",10,35,123
+      option "Lt. Cyan\White",lb
+      MEND
+;
+m124: MENU   "124",10,35,124
+      option "Lt. Red\White",lb
+      MEND
+;
+m125: MENU   "125",10,35,125
+      option "Lt. Magenta\White",lb
+      MEND
+;
+m126: MENU   "126",10,35,126
+      option "Yellow\White",lb
+      MEND
+;
+m127: MENU   "127",10,35,127
+      option "Hi-int White\White",lb
+      MEND
+;
+m128: MENU   "128",10,35,128
+      option "Black\Gray",lb
+      MEND
+;
+m129: MENU   "129",10,35,129
+      option "Blue\Gray",lb
+      MEND
+;
+m130: MENU   "130",10,35,130
+      option "Green\Gray",lb
+      MEND
+;
+m131: MENU   "131",10,35,131
+      option "Cyan\Gray",lb
+      MEND
+;
+m132: MENU   "132",10,35,132
+      option "Red\Gray",lb
+      MEND
+;
+m133: MENU   "133",10,35,133
+      option "Magenta\Gray",lb
+      MEND
+;
+m134: MENU   "134",10,35,134
+      option "Brown\Gray",lb
+      MEND
+;
+m135: MENU   "135",10,35,135
+      option "White\Gray",lb
+      MEND
+;
+m136: MENU   "136",10,35,136
+      option "Gray\Gray",lb
+      MEND
+;
+m137: MENU   "137",10,35,137
+      option "Lt. Blue\Gray",lb
+      MEND
+;
+m138: MENU   "138",10,35,138
+      option "Lt. Green\Gray",lb
+      MEND
+;
+m139: MENU   "139",10,35,139
+      option "Lt. Cyan\Gray",lb
+      MEND
+;
+m140: MENU   "140",10,35,140
+      option "Lt. Red\Gray",lb
+      MEND
+;
+m141: MENU   "141",10,35,141
+      option "Lt. Magenta\Gray",lb
+      MEND
+;
+m142: MENU   "142",10,35,142
+      option "Yellow\Gray",lb
+      MEND
+;
+m143: MENU   "143",10,35,143
+      option "Hi-int. White\Gray",lb
+      MEND
+;
+m144: MENU   "144",10,35,144
+      option "Black\Lt. Blue",lb
+      MEND
+;
+m145: MENU   "145",10,35,145
+      option "Blue\Lt. Blue",lb
+      MEND
+;
+m146: MENU   "146",10,35,146
+      option "Green\Lt. Blue",lb
+      MEND
+;
+m147: MENU   "147",10,35,147
+      option "Cyan\Lt. Blue",lb
+      MEND
+;
+m148: MENU   "148",10,35,148
+      option "Red\Lt. Blue",lb
+      MEND
+;
+m149: MENU   "149",10,35,149
+      option "Magenta\Lt. Blue",lb
+      MEND
+;
+m150: MENU   "150",10,35,150
+      option "Brown\Lt. Blue",lb
+      MEND
+;
+m151: MENU   "151",10,35,151
+      option "White\Lt. Blue",lb
+      MEND
+;
+m152: MENU   "152",10,35,152
+      option "Gray\Lt. Blue",lb
+      MEND
+;
+m153: MENU   "153",10,35,153
+      option "Lt. Blue\Lt. Blue",lb
+      MEND
+;
+m154: MENU   "154",10,35,154
+      option "Lt. Green\Lt. Blue",lb
+      MEND
+;
+m155: MENU   "155",10,35,155
+      option "Lt. Cyan\Lt. Blue",lb
+      MEND
+;
+m156: MENU   "156",10,35,156
+      option "Lt. Red\Lt. Blue",lb
+      MEND
+;
+m157: MENU   "157",10,35,157
+      option "Lt. Magenta\Lt. Blue",lb
+      MEND
+;
+m158: MENU   "158",10,35,158
+      option "Yellow\Lt. Blue",lb
+      MEND
+;
+m159: MENU   "159",10,35,159
+      option "Hi-int. White\Lt. Blue",lb
+      MEND
+;
+m160: MENU   "160",10,35,160
+      option "Black\Lt. Green",lb
+      MEND
+;
+m161: MENU   "161",10,35,161
+      option "Blue\Lt. Green",lb
+      MEND
+;
+m162: MENU   "162",10,35,162
+      option "Green\Lt. Green",lb
+      MEND
+;
+m163: MENU   "163",10,35,163
+      option "Cyan\Lt. Green",lb
+      MEND
+;
+m164: MENU   "164",10,35,164
+      option "Red\Lt. Green",lb
+      MEND
+;
+m165: MENU   "165",10,35,165
+      option "Magenta\Lt. Green",lb
+      MEND
+;
+m166: MENU   "166",10,35,166
+      option "Brown\Lt. Green",lb
+      MEND
+;
+m167: MENU   "167",10,35,167
+      option "White\Lt. Green",lb
+      MEND
+;
+m168: MENU   "168",10,35,168
+      option "Gray\Lt. Green",lb
+      MEND
+;
+m169: MENU   "169",10,35,169
+      option "Lt. Blue\Lt. Green",lb
+      MEND
+;
+m170: MENU   "170",10,35,170
+      option "Lt. Green\Lt. Green",lb
+      MEND
+;
+m171: MENU   "171",10,35,171
+      option "Lt. Cyan\Lt. Green",lb
+      MEND
+;
+m172: MENU   "172",10,35,172
+      option "Lt. Red\Lt. Green",lb
+      MEND
+;
+m173: MENU   "173",10,35,173
+      option "Lt. Magenta\Lt. Green",lb
+      MEND
+;
+m174: MENU   "174",10,35,174
+      option "Yellow\Lt. Green",lb
+      MEND
+;
+m175: MENU   "175",10,35,175
+      option "Hi-int. White\Lt. Green",lb
+      MEND
+;
+m176: MENU   "176",10,35,176
+      option "Black\Lt. Cyan",lb
+      MEND
+;
+m177: MENU   "177",10,35,177
+      option "Blue\Lt. Cyan",lb
+      MEND
+;
+m178: MENU   "178",10,35,178
+      option "Green\Lt. Cyan",lb
+      MEND
+;
+m179: MENU   "179",10,35,179
+      option "Cyan\Lt. Cyan",lb
+      MEND
+;
+m180: MENU   "180",10,35,180
+      option "Red\Lt. Cyan",lb
+      MEND
+;
+m181: MENU   "181",10,35,181
+      option "Magenta\Lt. Cyan",lb
+      MEND
+;
+m182: MENU   "182",10,35,182
+      option "Brown\Lt. Cyan",lb
+      MEND
+;
+m183: MENU   "183",10,35,183
+      option "White\Lt. Cyan",lb
+      MEND
+;
+m184: MENU   "184",10,35,184
+      option "Gray\Lt. Cyan",lb
+      MEND
+;
+m185: MENU   "185",10,35,185
+      option "Lt. Blue\Lt. Cyan",lb
+      MEND
+;
+m186: MENU   "186",10,35,186
+      option "Lt. Green\Lt. Cyan",lb
+      MEND
+;
+m187: MENU   "187",10,35,187
+      option "Lt. Cyan\Lt. Cyan",lb
+      MEND
+;
+m188: MENU   "188",10,35,188
+      option "Lt. Red\Lt. Cyan",lb
+      MEND
+;
+m189: MENU   "189",10,35,189
+      option "Lt. Magenta\Lt. Cyan",lb
+      MEND
+;
+m190: MENU   "190",10,35,190
+      option "Yellow\Lt. Cyan",lb
+      MEND
+;
+m191: MENU   "191",10,35,191
+      option "Hi-int. White\Lt. Cyan",lb
+      MEND
+;
+m192: MENU   "192",10,35,192
+      option "Black\Lt. Red",lb
+      MEND
+;
+m193: MENU   "193",10,35,193
+      option "Blue\Lt. Red",lb
+      MEND
+;
+m194: MENU   "194",10,35,194
+      option "Green\Lt. Red",lb
+      MEND
+;
+m195: MENU   "195",10,35,195
+      option "Cyan\Lt. Red",lb
+      MEND
+;
+m196: MENU   "196",10,35,196
+      option "Red\Lt. Red",lb
+      MEND
+;
+m197: MENU   "197",10,35,197
+      option "Magenta\Lt. Red",lb
+      MEND
+;
+m198: MENU   "198",10,35,198
+      option "Brown\Lt. Red",lb
+      MEND
+;
+m199: MENU   "199",10,35,199
+      option "White\Lt. Red",lb
+      MEND
+;
+m200: MENU   "200",10,35,200
+      option "Gray\Lt. Red",lb
+      MEND
+;
+m201: MENU   "201",10,35,201
+      option "Lt. Blue\Lt. Red",lb
+      MEND
+;
+m202: MENU   "202",10,35,202
+      option "Lt. Green\Lt. Red",lb
+      MEND
+;
+m203: MENU   "203",10,35,203
+      option "Lt. Cyan\Lt. Red",lb
+      MEND
+;
+m204: MENU   "204",10,35,204
+      option "Lt. Red\Lt. Red",lb
+      MEND
+;
+m205: MENU   "205",10,35,205
+      option "Lt. Magenta\Lt. Red",lb
+      MEND
+;
+m206: MENU   "206",10,35,206
+      option "Yellow\Lt. Red",lb
+      MEND
+;
+m207: MENU   "207",10,35,207
+      option "Hi-int. White\Lt. Red",lb
+      MEND
+;
+m208: MENU   "208",10,35,208
+      option "Black\Lt. Magenta",lb
+      MEND
+;
+m209: MENU   "209",10,35,209
+      option "Blue\Lt. Magenta",lb
+      MEND
+;
+m210: MENU   "210",10,35,210
+      option "Green\Lt. Magenta",lb
+      MEND
+;
+m211: MENU   "211",10,35,211
+      option "Cyan\Lt. Magenta",lb
+      MEND
+;
+m212: MENU   "212",10,35,212
+      option "Red\Lt. Magenta",lb
+      MEND
+;
+m213: MENU   "213",10,35,213
+      option "Magenta\Lt. Magenta",lb
+      MEND
+;
+m214: MENU   "214",10,35,214
+      option "Brown\Lt. Magenta",lb
+      MEND
+;
+m215: MENU   "215",10,35,215
+      option "White\Lt. Magenta",lb
+      MEND
+;
+m216: MENU   "216",10,35,216
+      option "Gray\Lt. Magenta",lb
+      MEND
+;
+m217: MENU   "217",10,35,217
+      option "Lt. Blue\Lt. Magenta",lb
+      MEND
+;
+m218: MENU   "218",10,35,218
+      option "Lt. Green\Lt. Magenta",lb
+      MEND
+;
+m219: MENU   "219",10,35,219
+      option "Lt. Cyan\Lt. Magenta",lb
+      MEND
+;
+m220: MENU   "220",10,35,220
+      option "Lt. Red\Lt. Magenta",lb
+      MEND
+;
+m221: MENU   "221",10,35,221
+      option "Lt. Magenta\Lt. Magenta",lb
+      MEND
+;
+m222: MENU   "222",10,35,222
+      option "Yellow\Lt. Magenta",lb
+      MEND
+;
+m223: MENU   "223",10,35,223
+      option "Hi-int. White\Lt. Magenta",lb
+      MEND
+;
+m224: MENU   "224",10,35,224
+      option "Black\Yellow",lb
+      MEND
+;
+m225: MENU   "225",10,35,225
+      option "Blue\Yellow",lb
+      MEND
+;
+m226: MENU   "226",10,35,226
+      option "Green\Yellow",lb
+      MEND
+;
+m227: MENU   "227",10,35,227
+      option "Cyan\Yellow",lb
+      MEND
+;
+m228: MENU   "228",10,35,228
+      option "Red\Yellow",lb
+      MEND
+;
+m229: MENU   "229",10,35,229
+      option "Magenta\Yellow",lb
+      MEND
+;
+m230: MENU   "230",10,35,230
+      option "Brown\Yellow",lb
+      MEND
+;
+m231: MENU   "231",10,35,231
+      option "White\Yellow",lb
+      MEND
+;
+m232: MENU   "232",10,35,232
+      option "Gray\Yellow",lb
+      MEND
+;
+m233: MENU   "233",10,35,233
+      option "Lt. Blue\Yellow",lb
+      MEND
+;
+m234: MENU   "234",10,35,234
+      option "Lt. Green\Yellow",lb
+      MEND
+;
+m235: MENU   "235",10,35,235
+      option "Lt. Cyan\Yellow",lb
+      MEND
+;
+m236: MENU   "236",10,35,236
+      option "Lt. Red\Yellow",lb
+      MEND
+;
+m237: MENU   "237",10,35,237
+      option "Lt. Magenta\Yellow",lb
+      MEND
+;
+m238: MENU   "238",10,35,238
+      option "Yellow\Yellow",lb
+      MEND
+;
+m239: MENU   "239",10,35,239
+      option "Hi-int. White\Yellow",lb
+      MEND
+;
+m240: MENU   "240",10,35,240
+      option "Black\Hi-int. White",lb
+      MEND
+;
+m241: MENU   "241",10,35,241
+      option "Blue\Hi-int. White",lb
+      MEND
+;
+m242: MENU   "242",10,35,242
+      option "Green\Hi-int. White",lb
+      MEND
+;
+m243: MENU   "243",10,35,243
+      option "Cyan\Hi-int. White",lb
+      MEND
+;
+m244: MENU   "244",10,35,244
+      option "Red\Hi-int. White",lb
+      MEND
+;
+m245: MENU   "245",10,35,245
+      option "Magenta\Hi-int. White",lb
+      MEND
+;
+m246: MENU   "246",10,35,246
+      option "Brown\Hi-int. White",lb
+      MEND
+;
+m247: MENU   "247",10,35,247
+      option "White\Hi-int. White",lb
+      MEND
+;
+m248: MENU   "248",10,35,248
+      option "Gray\Hi-int. White",lb
+      MEND
+;
+m249: MENU   "249",10,35,249
+      option "Lt. Blue\Hi-int. White",lb
+      MEND
+;
+m250: MENU   "250",10,35,250
+      option "Lt. Green\Hi-int. White",lb
+      MEND
+;
+m251: MENU   "251",10,35,251
+      option "Lt. Cyan\Hi-int. White",lb
+      MEND
+;
+m252: MENU   "252",10,35,252
+      option "Lt. Red\Hi-int. White",lb
+      MEND
+;
+m253: MENU   "253",10,35,253
+      option "Lt. Magenta\Hi-int. White",lb
+      MEND
+;
+m254: MENU   "254",10,35,254
+      option "Yellow\Hi-int. White",lb
+      MEND
+;
+m255: MENU   "255",10,35,255
+      option "Hi-int. White\Hi-int. White",lb
+      MEND
+;

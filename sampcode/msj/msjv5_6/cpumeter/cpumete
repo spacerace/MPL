@@ -1,0 +1,16 @@
+#-------------------
+# CPUmete make file
+#-------------------
+
+cpumete.obj : cpumete.c cpumete.h
+     cl -c -MT -G2sw -W3 cpumete.c
+
+cpumete.res : cpumete.rc cpumete.h
+     rc -r cpumete
+
+cpumete.exe : cpumete.obj cpumete.def
+     link cpumete, /align:16, NUL, /nod llibcmt os2, cpumete
+     rc cpumete.res cpumete.exe
+
+cpumete.exe : cpumete.res
+     rc cpumete.res cpumete.exe

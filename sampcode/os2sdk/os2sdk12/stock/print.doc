@@ -1,0 +1,1037 @@
+From:	Ben Slivka
+Subj:	Printing Made Easy in OS/2 v1.21
+Date:	06-May-1990 - Initial version
+	23-May-1990 - Identify incomplete sections
+	07-Jun-1990 - Fill in sections on application printing
+
+Contents
+
+    1...........Overview - Printing Made Easy
+	1.1.........A Small Number of Choices
+	1.2.........The Printer Installer
+
+    2...........How to Print from an Application
+	2.1.........Selecting a "printer"
+	2.2.........Managing Job Properties
+	2.3.........Opening a DC to Print
+	2.4.........Order of API calls
+
+    3...........PM Printer Driver Guildelines
+	3.1.........DLL Usage
+	3.2.........Multi-file Driver Installation
+	3.3.........File Versioning
+
+Appendicies
+    A...........Metafile Restrictions
+    B...........Application Printing API Order Sample Code
+    C...........Driver DLL Usage Sample Code
+
+Glossary
+
+
+-----------
+1. Overview
+-----------
+    The OS/2 printing environment is very complicated.	This complexity
+is a result of the many choices available at every turn to both application
+authors and printer driver authors.  This document eliminates this complexity
+by providing specific recommendations for all important printing operations.
+
+    For application authors, this document reduces the complexity of printing
+by providing sample code that abstracts *printer devices* and *queues* into
+a single entity -- a *printer*.  This greatly simplifies the printing model
+for you, allowing you to focus on your application code.
+
+    For driver authors, this document describes some simplifications in the
+printing environment, and addresses installation and DLL management.
+
+    Here is a summary of the changes versus OS/2 v1.2:
+
+    1)	The Print Manager (aka: Spooler) is always enabled.
+
+	This reduces the testing burden for application and PM printer driver
+	authors, and ensures that all OS/2 applications can print on the same
+	system (if app A only worked with the Print Manager enabled, and app
+	B only worked with the Print Manager disabled, then a user would not
+	be able to print with both A and B!)
+
+    2)	Setting up a Queue+Printer is strongly encouraged
+
+	This reduces the number of testing scenarios for application authors.
+	The Printer Installer applet always creates a Queue+Printer, and
+	since this is so much easier than using the Control Panel and the
+	Print Manager, we expect most users will always have this
+	configuration.
+
+    3)	PM_Q_STD is encouraged as the print job type.
+
+	This improves the responsiveness of the application -- it prints
+	faster because the rendering is done by the Print Manager.  PM_Q_STD
+	has some restrictions on GPI calls, however, so it is not for all
+	applications.
+
+
+------------------------------
+1.1. A Small Number of Choices
+------------------------------
+
+    Printing from a PM application involves the following tasks:
+	1)  Selecting a printer
+	2)  Managing Job Properties
+	3)  Opening a printer DC
+	4)  Associating a PS with the DC
+	5)  Issuing GPI calls to print
+	6)  Ending or aborting a print job
+
+    Tasks 1 through 3 are by far the most obscure in OS/2.  Section 2
+    below describes how to perform these tasks.  Sample code is provided
+    to illuminated the details.
+
+
+--------------------------
+1.2. The Printer Installer
+--------------------------
+    OS/2 v1.21 introduces a new system application, the Printer Installer
+(PMPRINST.EXE).  The Printer Installer provides a simple, quick method
+of installing a printer driver and creating a Queue+Printer pair -- a task
+that previously required the expert use of both the Control Panel and the
+Print Manager.
+
+    The Printer Installer performs the following operations that
+used to be the province of the Control Panel and the Print Manager:
+    a)	Install a printer driver
+    b)	Create a "printer"
+    c)	Create a "queue"
+    d)	Set Printer Properties
+    e)	Set Job Properties
+
+    The Control Panel and Print Manager retain the ability to perform
+these operations separately, as this is necessary for setting up
+complicated configurations (like pooled printers).  However, the Printer
+Installer will satisfy the needs of most users.
+
+
+
+-----------------------------------
+2. How to Print from an Application
+-----------------------------------
+
+    This section describes all the tasks a PM application must perform
+in order to print under PM.  These include:
+
+    a.	Enumeratating all printers + default printer
+    b.	Choosing a printer
+    c.	Managing job properties
+    d.	Opening/Closing/Aborting a print job
+    e.	Printing multiple pages
+
+    Other aspects of printing (coordinate transformations, font selection,
+etc.) are application-specific, and are not covered here.
+
+    In the following sections, references to the sample code will be used
+to provide concrete instruction.
+
+    NOTE: The printing functions in PRINT.C/PRINT.H are provided as
+	  sample code.	You are free to modify this code and include it
+	  in your application.
+
+	  You will likely have to modify the source code to support your
+	  particular memory management strategy, but otherwise the code
+	  should be usable as-is.
+
+
+--------------------------
+2.1. Selecting a "printer"
+--------------------------
+
+    The following functions in print.c are used to manage printers:
+
+      HPRINTERLIST PrintCreatePrinterList(HAB hab);
+      HPRINTER	   PrintQueryNextPrinter(HPRINTERLIST hprtlist,HPRINTER hprt);
+      HPRINTER	   PrintQueryDefaultPrinter(HPRINTERLIST hprtlist);
+      ULONG	   PrintQueryPrinterInfo(HPRINTER hprt,USHORT index);
+
+    PrintCreatePrinterList
+	Get list of all printers in the system.
+
+    PrintQueryNextPrinter
+	Walk through printer list.
+
+    PrintQueryDefaultPrinter
+	Get default printer.
+
+    PrintQueryPrinterInfo
+	Get information about a specific printer.
+
+
+    These functions are used by your user interface code to present the
+user with a list of possible printer destinations.  The default printer
+should be presented as the default choice.  The PrintQueryPrinterInfo API
+can be used to produce a nice name.
+
+----------------------------
+2.2. Managing Job Properties
+----------------------------
+
+    Job Properties are printer driver/model-specific data (in a private
+data format that is particular to the driver) that describe modifiable
+properties for a print job.  For example, common job properties are
+orientation (Portrait vs. Landscape), print quality, and paper form.
+
+    Your application should:
+	a)  Store job properties with each document
+	b)  Use stored job properties to select a target printer
+	c)  Use stored job properties on DevOpenDC
+	d)  Allow the user to change job properties on a per-document basis
+
+    The following functions in print.c are used to manage printers:
+
+      BOOL     PrintQueryJobProperties(HPRINTER hprt,USHORT *pcb,BYTE *pb);
+      BOOL     PrintChangeJobProperties(HPRINTER hprt);
+      VOID     PrintResetJobProperties(HPRINTER hprt);
+      HPRINTER PrintMatchPrinter(HPRINTERLIST hprtlist,USHORT cb,BYTE *pb);
+
+    PrintQueryJobProperties
+	Query job property information from a printer.	This is in a form
+	suitable for storing with an application document file, and is
+	passed to PrintMatchPrinter when the document is opened in the
+	future.
+
+    PrintChangeJobProperties
+	Let the user interact with the PM printer driver to inspect/modify
+	the job properties.
+
+    PrintResetJobProperties
+	Reset the printer job properties (for the application, not the
+	system) to the default job properties for the printer.
+
+    PrintMatchPrinter
+	Take job properties saved with a document (retrieved by
+	PrintQueryJobProperties in the first place) and find the printer
+	that most closely matches.  The match criteria are that the
+	driver name and model are identical, and the driver data size
+	is identical.  If no such match exists, NULL is returned, and you
+	should select the system default printer.
+
+
+    Your application should call PrintMatchPrinter when a document is
+opened which has job properties stored with it.  Your application user
+interface must provide a way to call PrintChangeJobProperties to let
+the user change the job properties.  Your application should store
+job properties with each document, but do so only if the users changes
+the job properties.  Optionally, your application may provide user
+interface to allow the user to reset the job properties to the system
+default for a selected printer.
+
+    NOTE: All of these functions have *no* affect on the system default
+	  job property settings.
+
+
+--------------------------
+2.3. Opening a DC to Print
+--------------------------
+
+    The PrintOpenDC function makes opening a DC very simple:
+
+	HDC PrintOpenDC(HAB hab,HPRINTER hprt,char *pszDataType);
+
+    The only choices you have a which printer (selected by the user)
+and the print job data type (PM_Q_STD or PM_Q_RAW).
+
+    A PM_Q_RAW print job is a stream of raw printer commands:
+	Advantages:
+	    +	All GPI commands are supported
+	Disadvantages:
+	    -	Print job is usually larger than PM_Q_STD
+
+    A PM_Q_STD print job is a stream of recorded GPI calls (called a metafile):
+	Advantages:
+	    +	Print job is usually smaller than PM_Q_RAW
+	    +	Application "finishes" printing sooner, since
+		translation of GPI to PDL is done after application has
+		spooled the metafile.
+	Disadvantages:
+	    -	Not all GPI calls are supported (see Appendix A -- Metafile
+		Restrictions).
+
+    If your application can live within the Metafile restrictions, you should
+always create PM_Q_STD print jobs.  If your application cannot live within
+these restrictions, PM_Q_RAW is fine.
+
+
+-----------------------
+2.4. Order of API calls
+-----------------------
+    A)	A well-behaved OS/2 v1.21 printing application will print a
+	document in the following manner:
+
+	 1. DevOpenDC()
+	 2. GpiAssociate/Create/SetPS()
+	 3. DevEscape(STARTDOC)
+	 4. <drawing commands>
+	 5. DevEscape(NEWFRAME) \==> Repeated 0 or more times
+	 6. <drawing commands>	/
+	 7. DevEscape(ENDDOC)
+	 8. GpiAssociate(hPS,NULL)
+	 9. GpiDestroyPS(hPS)
+	10. DevCloseDC();
+
+	NOTE: DevEscape(ENDDOC) performs an *implicit* NEWFRAME.  If you
+	      include a NEWFRAME just before the ENDDOC, you will get an
+	      extra (blank) page of output.
+
+    B)	DevEscape(ABORTDOC) is allowed anytime between a STARTDOC and
+	ENDDOC.  The ABORTDOC causes the driver to throw away any
+	buffered information, and behaves otherwise like an ENDDOC.
+
+    C)	The following chart documents the valid API calling order,
+	assuming the DC is already open:
+
+	    Last call made
+		Allowed calls
+	    -----------------------------
+	    DevOpenDC
+		GpiAssociate/Set/CreatePS
+		CloseDC
+
+	    GpiAssociate/Set/CreatePS
+		GpiAssociate/Set/CreatePS
+		STARTDOC
+		CloseDC
+
+	    STARTDOC, NEWFRAME, drawing
+		NEWFRAME
+		drawing
+		ENDDOC
+		ABORTDOC
+
+	    ENDDOC, ABORTDOC
+		GpiAssociate/Set/CreatePS
+		STARTDOC
+		CloseDC
+
+	Query calls on the DC and PS are always allowed, assuming the
+	DC and PS exist.
+
+    D)	Details on NEWFRAME
+
+	NEWFRAME is a page separator.  It signals that a page is complete,
+	and another page is starting.  The following pseudocode describes
+	how PM processes STARTDOC/NEWFRAME/ENDDOC:
+
+	    STARTDOC
+		do initialization stuff;
+		SetUpForPage();
+
+	    NEWFRAME
+		CloseCurrentPage();	// Form feed
+		SetUpForPage();
+
+	    ENDDOC
+		CloseCurrentPage();	// Form feed
+		do cleanup stuff;
+
+
+
+--------------------------------
+3. PM Printer Driver Guildelines
+--------------------------------
+
+    This section describes new conventions for OS/2 v1.21 PM printer
+drivers.  These conventions allow OS/2 to correctly install a PM printer
+driver, and ensure that the driver functions correctly.
+
+Key Points
+----------
+    a)	All files associated with a particular printer driver are
+	copied to a directory subtree (section 1).
+    b)	Printer driver files are not necessarily in LIBPATH (section 1).
+    c)	A printer driver must be careful about private DLL usage in
+	response to the DevQueryDeviceName API (section 4).
+    d)	EAs should be used for multi-file drivers (section 2).
+    e)	EAs should be used to indicate driver file version (section 3).
+
+
+    The OS/2 v1.21 Printer Installer (PMPRINST.EXE) is an application that
+    installs printer drivers and creates printers and queues.  It is
+    intended for use in place of the Control Panel and Print Manager for
+    these purposes, as it requires only half as many operations, and
+    requires no guessing on the part of the user.
+
+    In addition to making printer configuration simpler, the Printer
+    Installer also solves two install problems: 1) multi-file driver
+    installation, and 2) driver file versioning.
+
+    In order to successfully update multi-file printer drivers, such
+    printer drivers must be careful about how they load their (private)
+    DLLs.
+
+    PMPRINST copies all files for a single driver into either a single
+    directory, or into a directory subtree (depends upon EA settings
+    on the driver files).  In either case, any DLLs that are copied are
+    most probably not in a directory in LIBPATH.
+
+    Each driver is installed in a different directory.
+
+    Hence, a correctly written driver may only assume that all of its
+    files are in a single directory (or directory subtree).  See the
+    LoadDriverDLL(...) function in section 4 below for sample code used
+    to get the fully qualified path of a DRV/DLL.
+
+
+
+--------------
+3.1. DLL Usage
+--------------
+
+    In order to show the user a nice list of printers to be installed,
+    PMPRINST calls DevQueryDeviceNames (DQDN) on a driver to get all the
+    model names and descriptions that the driver supports.
+
+    If (an older version of) the driver is not installed, this works just fine.  However,
+    *if* the driver is installed, *and* it has supporting DLLs, *and* the
+    driver is not *careful* about how it loads its supporting DLLs in
+    response to the DQDN call, *then* PMPRINST will not be able to update the
+    supporting DLLs.
+
+    In order for PMPRINST to be able to update a printer driver, the driver
+    must adhere to one of these rules:
+
+    1)	Do not use *any* supporting DLLs on the DQDN call.
+-or-
+    2)	If a supporting DLL *is* used, it should be loaded from the
+	exact same directory that the .DRV file was loaded from.  The
+	code fragment below can be used to implement this logic.
+
+	Once the DLL has served its purpose, the driver should call
+	DosFreeModule to unload the DLL.
+
+    If one of these rules if not followed, PMPRINST will cause a supporting
+    DLL to be opened, PMPRINST will have no way of unloading it, and hence
+    PMPRINST will not be able to replace the DLL.
+
+    If you choose to follow rule 2, you should verify (during testing)
+    that DosFreeModule did its job by calling it again and checking that
+    you get the error ERROR_MOD_NOT_FOUND.
+
+
+
+-----------------------------------
+3.2. Multi-file Driver Installation
+-----------------------------------
+    A multi-file driver consists of a .DRV file and one or more supporting
+    files.  These files are commonly DLLs, fonts, or help files, but may
+    contain anything.
+
+    PMPRINST addresses the following problems:
+	1)  The PM Control Panel only copies the .DRV file.  It has no
+	    way to determine what other files are needed.
+	2)  There is no way for multiple printer drivers to share
+	    common files.
+	3)  There is no automatic way to avoid name collisions between
+	    files from different vendors.
+
+    PMPRINST introduces eight EAs for .DRV files to solve these problems.
+    The solutions to the above problems are as follows:
+
+	1)  Add EAs to the .DRV file to describe all required (and optional)
+	    files.
+
+	2)  Allow the .DRV file (via EAs) to describe a three-level
+	    directory hierarchy to support file sharing.
+
+	3)  Use directory hierarchy to avoid name collisions.
+
+    Here are the EAs that PMPRINST supports for multi-file drivers:
+
+	EA name
+	    EA contents
+	----------------------------------------------------------------
+	VendorName
+	    ASCIIZ string; must be a valid 8.3 FAT file name.
+	    Ignored if ClassName EA is not present.
+
+	    This name is used for the "vendor directory".  The
+	    vendor directory contains vendor-specific files and the
+	    "class directory".
+
+	    Files should be placed in this directory only if they are
+	    common across all printers made by a particular vendor,
+	    both now and in the future.
+
+	    It is more common that this directory will be empty (except
+	    for containing the "class directory"), since it's primary
+	    purpose is to ensure name uniqueness of class names across
+	    vendors.
+
+	ClassName
+	    ASCIIZ string; must be a valid 8.3 FAT file name.
+	    Ignored if VendorName EA is not present.
+
+	    This name is used for the "class directory".  The
+	    class directory contains class-specific files and the
+	    "driver directory".
+
+	    Files should be placed in this directory only if they are
+	    common across all printers of a particular class made by
+	    the vendor.  An example would be font files that are supported
+	    by several printers that have a different page description
+	    language, and hence have different drivers.
+
+	RequiredVendorFiles
+	RequiredClassFiles
+	RequiredDriverFiles
+	    ASCIIZ string; list of required files, separated
+	    by commas.	All valid file name characters, including
+	    blanks, are significant (except for commas, which
+	    are always treated as file name separators).
+	    The file names should be limited to valid 8.3 FAT names.
+	    Wild cards are supported, and follow the semantics of OS/2.
+
+	    PMPRINST looks for these files in the same source directory
+	    as the .DRV file, and then copies them to the target disk.
+
+	    PMPRINST will *fail* to install the driver if it cannot
+	    successfully copy all specified files to the target disk.
+
+	OptionalVendorFiles
+	OptionalClassFiles
+	OptionalDriverFiles
+	    Same format as the RequiredXxxFiles EAs.
+
+	    PMPRINST looks for these files in the same source directory
+	    as the .DRV file, and then copies them to the target disk.
+
+	    PMPRINST will successfully install the driver regardless of
+	    whether or not these files are found and copied.
+
+    NOTE: These EAs should be marked as "need" EAs (see EA.EXE description
+	  below), to tell OS/2 v1.2 that the EAs are important.  This does
+	  not guarantee that the EAs will remain with the file (you could
+	  copy the file under DOS, and the EAs would be lost), but it
+	  reduces the chances under OS/2.
+
+    These EAs are used to list the files the driver needs and wants,
+    and to describe where they are installed on the target disk.  The
+    following examples show the two cases.  In both cases, a root path
+    is used as the starting point.  These examples will show c:\os2\dll
+    as the root path.  The driver *may not* assume that location,
+    however, as it may change in future releases of OS/2:
+
+    Case 1: Driver *without* VendorName/ClassName EAs
+
+	This is the simple case.  A new directory is created on the
+	target disk, and all files for the driver are copied to that
+	directory.
+
+	Source location is A:\
+	    a:\speedy.drv
+		RequiredDriverFiles=render.dll
+		OptionalDriverFiles=*.fnt
+	    a:\render.dll
+	    a:\square.fnt
+	    a:\rounded.fnt
+
+	Target is C:\OS2\DLL
+	    c:\os2\dll\speedy\speedy.drv
+	    c:\os2\dll\speedy\render.dll
+	    c:\os2\dll\speedy\square.fnt
+	    c:\os2\dll\speedy\rounded.fnt
+
+    Case 2: Driver *with* VendorName/ClassName EAs
+
+	Source location is A:\
+	    a:\tpc1000.drv
+		VendorName=TPC
+		ClassName=OUTLINE
+		RequiredVendorFiles=help.dll
+		OptionalVendorFiles=*.hlp
+		RequiredClassFiles=font.dll
+		OptionalClassFiles=*.fnt
+		RequiredDriverFiles=render.dll
+		OptionalDriverFiles=*.crt
+	    a:\help.dll
+	    a:\tpc.hlp
+	    a:\font.dll
+	    a:\smooth.fnt
+	    a:\render.dll
+	    a:\tpcA.crt
+
+	Target is C:\OS2\DLL
+	    c:\os2\dll\tpc\outline\tpc1000\tpc1000.drv
+	    c:\os2\dll\tpc\outline\tpc1000\render.dll
+	    c:\os2\dll\tpc\outline\tpc1000\tpcA.crt
+	    c:\os2\dll\tpc\outline\font.dll
+	    c:\os2\dll\tpc\outline\smooth.fnt
+	    c:\os2\dll\tpc\help.dll
+	    c:\os2\dll\tpc\tpc.hlp
+
+    NOTES:
+	1)  To find its Required/OptionalDriverFiles, a driver must
+	    look in the directory containing the .DRV file.  See section
+	    4 -- Use of DLLs by Printer Drivers -- for details on how
+	    to determine this path.
+
+	2)  To find its Required/OptionalClassFiles, a driver must
+	    look in the directory one level up from the directory containing
+	    the .DRV file.  Be sure to use FindLastPathSeparator function
+	    (see code in section 4) in order to well-behaved on DBCS systems.
+
+	3)  To find its Required/OptionalVendorFiles, a driver must
+	    look in the directory twoe levels up from the directory containing
+	    the .DRV file.  Be sure to use FindLastPathSeparator function
+	    (see code in section 4) in order to well-behaved on DBCS systems.
+	    the drivers under the same VendorName.
+
+  ---------------------------------------------------------------------------
+
+    Use the EA.EXE tool to manipulate these EAs:
+
+	usage: ea -? | [-s[n] name=value | -d name] file
+	   This program manipulates text-valued EAs.
+	       -s  : Set EA.
+	       -sn : Set 'need' EA.
+	       -d  : Delete EA.
+	       -?  : Show this help information.
+	 Otherwise : Display all EAs.
+
+	 Examples:
+	   ea file.dat
+	   ea -s  'my pie'='apple and cherry' file.dat
+	   ea -s  language="french german"    file.dat
+	   ea -s  language=french	      file.dat
+	   ea -sn needEA='important value'    file.dat
+	   ea -d  language		      file.dat
+
+	 NOTES: 1) Wild cards are supported in the file name.
+		2) 'Need' EAs are displayed with a preceeding '*'.
+
+    To set the EAs for the two examples above:
+
+	ea -sn RequiredDriverFiles=render.dll	 speedy.drv
+	ea -sn OptionalDriverFiles=*.fnt	 speedy.drv
+
+	ea -sn VendorName=TPC			 tpc1000.drv
+	ea -sn ClassName=OUTLINE		 tpc1000.drv
+	ea -sn RequiredVendorFiles=help.dll	 tpc1000.drv
+	ea -sn OptionalVendorFiles=*.hlp	 tpc1000.drv
+	ea -sn RequiredClassFiles=font.dll	 tpc1000.drv
+	ea -sn OptionalClassFiles=*.fnt		 tpc1000.drv
+	ea -sn RequiredDriverFiles=render.dll	 tpc1000.drv
+	ea -sn OptionalDriverFiles=*.crt	 tpc1000.drv
+
+
+
+--------------------
+3.3. File Versioning
+--------------------
+
+    OS/2 users will encounter situations where they want to install
+    a "new" version of a printer driver that is already installed.
+
+    This will occur for two reasons:
+    1)	There will be many methods of printer driver distribution
+	(with OS/2 itself, with applications, on electronic bulletin
+	boards, etc.).
+    2)	Printer drivers will be enhanced and new version released.
+
+    The problem arises when a user installs what she *thinks* is a newer
+    version, but it is not a newer version.
+
+    PMPRINST solves this problem by respecting the .VERSION EA on all printer
+    driver files.
+
+    ALL DRIVER AUTHORS ARE STRONGLY ENCOURAGED TO SET .VERSION EAs, and
+    INCREMENT THE VERSION NUMBER WITH EACH PUBLIC RELEASE.
+
+    There is no explicit convention for the format of the .VERSION EA,
+    so PMPRINST introduces one.  A valid .VERSION EA value is a base-36
+    number in the range 000.000 to ZZZ.ZZZ.  There can be at most three
+    digits on the left of the decimal point and at most three digits on
+    the right of the decimal point.  Digits may be any letter (case is
+    ignored) or 0..9 (hence base 36).  The order of the digits is 0..9
+    followed by A..Z.
+
+    Here is a slightly more formal definition of the format:
+
+	digit	 ::= 0..9 A..Z	 // a..z == A..Z (case-insensitive)
+	3digits	 ::= digit | digit digit | digit digit digit
+	majorver ::= 3digits
+	minorver ::= 3digits
+	version	 ::= majorver [. minorver]
+
+    Here are some representative versions, sorted in increasing order:
+
+	  0.0
+	  0.001
+	  0.ZZZ
+	  1.000
+	  1.00b
+	  9.0
+	  A.Z
+	 22.0
+	 23.0
+	22B.0
+
+    A common practice is to use letter suffixes to indicate a minor release.
+
+    When installing a driver, the following table describes how PMPRINST
+    behaves in the case where a driver file already exists:
+
+	Old file	New file  Action
+	--------	--------  ------
+	no EA		no EA	  Ask user if new file should replace old file
+	no EA		EA	  Copy new file
+	EA less than	EA	  Copy new file
+	EA		no EA	  Do nothing (leave old file alone)
+	EA equal to	EA	  Do nothing (leave old file alone)
+	EA greater than EA	  Do nothing (leave old file alone)
+
+    Please use the EA.EXE tool to set driver file version numbers.
+    For example:
+
+	ea -sn .version=2.03a EPSONDAT.DLL
+	ea -sn .version=2.03a EPSON.HLP
+	ea -sn .version=2.03a EPSON.DRV
+
+    NOTE: This EA should be marked as a "need" EA, to improve the chances
+	  that it will stay with the file.  [See comments on the multi-file
+	  driver EAs in Section 3.2 above.]
+
+    EA.EXE supports wild-cards, so
+
+	ea -sn .version=2.03a EPSON*.*
+
+    would have the same effect (if the three files above were the only
+    files that matched the pattern EPSON*.*)
+
+
+
+***********
+APPENDICIES
+***********
+
+------------------------
+A. Metafile Restrictions
+------------------------
+
+A metafile can record most -- BUT NOT ALL -- DEV/GPI calls.  If an
+application can avoid making the non-recorded calls, then it can
+use PM_Q_STD on the DevOpenDC call.  This tells OS/2 to spool a
+metafile for printing, as opposed to raw printer commands.
+
+The advantages of printing using PM_Q_STD (as opposed to PM_Q_RAW) is
+that the (often time-consuming) translation of GPI to raw printer
+commands (e.g., PostScript, PCL) is done in the context of the
+Print Manager (aka: the spooler), and hence an application is "done"
+printing sooner, thus allowing a user to proceed with useful work.
+
+It is strongly recommended that an application use PM_Q_STD.
+
+PM_Q_RAW is supported, but an application should print with PM_Q_RAW
+only if it cannot live withing the metafile restrictions.  In this case,
+the GPI translation to raw printer commands is done in the context of the
+application, causing the application to take longer to print and resulting
+(generally) in a larger spool file.
+
+The text that followes was copied from:
+
+   Programming Reference
+   MS Operating System/2 Version 1.2
+   Technical Reference: Volume 3
+   November, 1989
+
+
+   This	 section  lists	 some  general rules  that  must be  followed  when
+   creating  a	metafile  that	 is  to	 be  acceptable	 to  SAA-conforming
+   implementations, or	replayed  into	a  presentation	 space	that  is in
+   'draw-and-retain' or 'retain'mode   (see GpiSetDrawingMode).
+
+   *   These  items  must be  established or defaulted	before	any drawing
+       occurs to the graphics presentation space:
+
+       -   The graphics field (GpiSetGraphicsField).  For an SAA-conforming
+	   metafile, the  graphics field  must	be defaulted or	 set to	 no
+	   clipping.
+       -   The code page for the default character set (GpiSetCp).
+       -   The color table (GpiCreateLogColorTable).  The size of the color
+	   table must not exceed 31KB.
+       -   the default viewing transform (GpiSetDefaultViewMatrix).
+       -   The	 setting   of  the   draw   controls   (GpiSetDrawControl).
+	   DCTL_DISPLAY must be defaulted or set on.
+       -   The	default values of attributes (see  GpiSetDefAttrs), viewing
+	   limits  (see	  GpiSetDefViewingLimits),   primitive	 tag   (see
+	   GpiSetDefTag) and arc parameters (see GpiSetDefArcParams).
+
+       These  items must not be changed while the  metafile context remains
+       open.
+
+   *   These calls must not be used:
+
+       -   GpiBitBlt
+       -   GpiDeleteSetId  (note  that this means  that	 local	identifiers
+	   cannot be used again within the picture)
+       -   GpiErase
+       -   GpiExcludeClipRectangle
+       -   GpiIntersectClipRectangle
+       -   GpiOffsetClipRegion
+       -   GpiPaintRegion
+       -   GpiResetPS
+       -   GpiSetClipRegion
+       -   GpiSetPel
+       -   GpiSetPS
+       -   DevEscape (for an escape which is metafiled).
+
+   *   The metafile context must not be reassociated.
+
+   *   If a bit map is used as the source of a GpiWCBitBlt operation, or as
+       an area-fill pattern, it must not be modified.
+
+   *   Only these foreground mixes must be used (see GpiSetMix):
+
+       -   FM_DEFAULT
+       -   FM_OR
+       -   FM_OVERPAINT
+       -   FM_LEAVEALONE.
+
+   *   Only these background mixes must be used (see GpiSetBackMix):
+
+       -   BM_DEFAULT
+       -   BM_OVERPAINT
+       -   BM_LEAVEALONE.
+
+   PROGRAMMING NOTE.
+	There is no  restriction concerning the use of primitives outside
+	segments.  These are metafiled in segment(s) with zero identifier.
+
+SUPPORTED Metafile DevEsc commands:
+    DEVESC_QUERYESCSUPPORT
+    DEVESC_GETSCALINGFACTOR
+    DEVESC_STARTDOC
+    DEVESC_ENDDOC
+    DEVESC_NEXTBAND
+    DEVESC_ABORTDOC
+    DEVESC_NEWFRAME
+    DEVESC_DRAFTMODE
+    DEVESC_FLUSHOUTPUT
+    DEVESC_RAWDATA
+    DEVESC_QUERYVIOCELLSIZES
+    DEVESC_BREAK_EXTRA
+    DEVESC_CHAR_EXTRA
+
+UNSUPPORTED Metafile DevEsc commands:
+    DEVESC_GETCP
+    DEVESC_SETMODE
+    DEVESC_DBE_FIRST
+    DEVESC_DBE_LAST
+    DEVESC_STD_JOURNAL
+
+
+---------------------------------------------
+B. Application Printing API Order Sample Code
+---------------------------------------------
+
+*** MAY BE OBSOLETE ***
+
+{
+// open printer DC
+if((hdc = GetPrintDC(hab, OD_QUEUED, PrinterSelected)) != NULL) {
+
+    // create printer PS, use selected mapping mode
+    hps = GpiCreatePS(hab,hdc,&sl,idMode|GPIA_ASSOC|GPIF_DEFAULT|GPIT_NORMAL);
+    if(hps != NULL) {
+	// Start document
+	pszJob = "Test print job";
+	DevEscape(hdc,DEVESC_STARTDOC,(LONG)strlen(pszJob),pszJob",0L,NULL);
+
+	// Print each page
+	do {
+	  cPages--;
+
+	  // Band, if banding device and desired
+	  DevQueryCaps( hdc, CAPS_RASTER_CAPS, 1L, &lItem );
+	  if (lItem & CAPS_RASTER_BANDING) {
+	    ...
+	    do {
+	      DevEscape( hdc, DEVESC_NEXTBAND, NULL, NULL, &cBand, &rcBand );
+	      // Output into each band.  Set flag when last band is done
+	      ...
+	    } while (!fLastBand); // Loop through each band until empty band
+
+	  } else // Not banding, just oputput
+	      // Output entire page. Could merge in with banding logic
+
+	  // Only issue NEWFRAME *between* pages
+	  if (cPages > 1)
+	      DevEscape(hdc,DEVESC_NEWFRAME,0L,NULL,0L,NULL);
+	} while( cPages > 0 );
+
+	// Should ENDDOC go here, or after unassociation?!?!?
+	DevEscape(hdc,DEVESC_ENDDOC,0L,NULL,0L,NULL);
+
+	// Cleanup resource usage
+	GpiAssociate(hps,NULL);
+	GpiDestroyPS(hps);
+    }
+    // Cleanup resource usage
+    DevCloseDC(hdc);
+
+}
+
+
+
+-------------------------------
+C. Driver DLL Usage Sample Code
+-------------------------------
+
+
+#define INCL_DOSMODULEMGR		// Get module APIs
+#define INCL_WINCOUNTRY			// Get WinNextChar
+#include <os2.h>
+
+#include <string.h>
+
+main()
+{
+    HMODULE hmod;
+
+    hmod = LoadDriverDLL("LASERJET.DRV","GENERIC.DLL");
+    if (hmod != 0)
+	// success, do DosGetProcAddr
+    else
+	// failure, could not find DLL
+}
+
+char achPath[CCHMAX];			// Works with SS != DS memory model
+
+/***	LoadDriverDLL - load DLL for printer driver
+ *
+ *	Entry
+ *	    pszDriver - file name of driver (laserjet.drv)
+ *	    pszDLL - file name of DLL (generic.dll)
+ *
+ *	Exit-Success
+ *	    returns non-NULL HMODULE
+ *
+ *	Exit-Failure
+ *	    returns NULL
+ *
+ *	Uses
+ *	    achPath
+ *
+ *	Pseudo-Code
+ *	    Get path where foo.drv came from;
+ *	    Build full path for DLL;
+ *	    Try loading full path;
+ *	    Try loading from LIBPATH;
+ */
+HMODULE LoadDriverDLL(char *pszDriver,char *pszDLL)
+{
+    HMODULE	hmod;
+    char *	pchLast;
+
+    // Get path of this driver
+
+    if (!DosGetModHandle(pszDriver,&hmod))  // Should never fail!
+	return NULL;
+    if (!DosGetModName(hmod,sizeof(achPath),achPath)) // Should never fail!
+	return NULL
+
+    //	Delete driver name from path
+
+    pchLast = FindLastPathSeparator(achPath); // pchLast -> "\foo.drv"
+    pchLast++;				// pchLast -> "foo.drv"
+    *pchLast = '\0';			// Trim off "foo.drv" for load module
+					// pch -> "c:\one\two\"
+
+    // NOTE: achPath now holds the path of the directory containing the
+    //	     *.DRV file.
+
+    // Build fully-qualified path for DLL
+    strcat(achPath,pszDLL);		// achPath = "c:\one\two\foo.dll"
+
+    // Try loading module
+    if (DosLoadModule(NULL,0,achPath,&hmod) // Try loading from same dir
+	return hmod;			// Found it
+
+    if (DosLoadModule(NULL,0,pszDLL,&hmod) // Try loading from LIBPATH
+	return hmod;			// Found it
+    else
+	return NULL;			// Did not find it
+}
+
+
+/***	FindLastPathSeparator - find last path separator in a string
+ *
+ *	This routine is well-behaved for DBCS systems.
+ *
+ *	Entry
+ *	    psz - string to search
+ *
+ *	Exit-Success
+ *	    returns pointer to last path separator
+ *
+ *	Exit-Failure
+ *	    returns NULL
+ */
+char *FindLastPathSeparator(char *psz)
+{
+    char *  pch;
+    char *  pchLast=NULL;
+
+    pch = psz;
+    while (*pch != '\0') {
+	if ((*pch == '/') || (*pch == '\\'))
+	    pchLast = pch;		// Save location of separator
+	pch = (char *)(USHORT)(ULONG)WinNextChar(hab,0,0,pch);
+    }
+    return pchLast;
+}
+
+
+********
+GLOSSARY
+********
+
+Logical Printer
+	Associates a Printer Driver with a Port.
+	The Printer Installer creates one of these in the process of
+	creating a Printer. A Logical Printer can be manipulated via the
+	"Setup Printers..." menu in the Print Manager.
+
+Logical Queue
+	Associates queuing (job spooling, priority scheduling, etc.)
+	with one or more Logical Printers.
+	The Printer Installer creates one of these in the process of
+	creating a Printer. A Logical Printer can be manipulated via the
+	"Setup Queues..." menu in the Print Manager.
+
+Metafile
+	A *partial* recording of GPI calls.  See Appendix A for Metafile
+	Restrictions.
+
+PDL
+Page Description Language
+	Native printer commands.
+	Examples are Adobe's PostScript and Hewlett-Packard's Page Control
+	Language (HP-PCL or PCL).
+
+Physical Printer
+	An actual printer, e.g., an HP LaserJet II, or an Apple Laserwriter.
+
+Port
+	Destination for a PDL byte stream.
+	Examples are LPT1, LPT2, COM1, etc.
+
+Printer
+	Another name for a Logical Queue.
+	This term is used in this document to enforce the notion (for
+	applications) that Logical Printers and Logical Queues are not
+	of interest to applications (as they certainly are of little
+	interest to most users).
+
+Printer Driver
+	A DLL that translates GPI drawing commands into a specific PDL.
+	Examples are LASERJET.DRV, PSCRIPT.DRV, IBM4201.DRV.
+
+<end of document>

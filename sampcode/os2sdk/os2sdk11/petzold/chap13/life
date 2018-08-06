@@ -1,0 +1,16 @@
+#----------------
+# LIFE make file
+#----------------
+
+life.obj : life.c life.h
+     cl -c -G2sw -W3 life.c
+
+life.res : life.rc life.h life.ico
+     rc -r life
+
+life.exe : life.obj life.def
+     link life, /align:16, NUL, os2, life
+     rc life.res
+
+life.exe : life.res
+     rc life.res

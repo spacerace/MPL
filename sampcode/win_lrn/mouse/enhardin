@@ -1,0 +1,6 @@
+
+enhardin.obj: enhardin.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 enhardin.c
+
+enhardin.exe: enhardin.obj enhardin.def
+    link4 /align:16 enhardin,,nul,slibw/NOE,enhardin.def

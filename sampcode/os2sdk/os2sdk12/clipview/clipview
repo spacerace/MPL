@@ -1,0 +1,34 @@
+# Makefile for CLIPVIEW.EXE
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC	=	cl -c -W3 -Asnd -G2cs -Lp -Od -Zip
+LF	=	/align:16 /codeview /map /NOD
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+all: clipview.exe
+
+# Resources
+#
+clipview.res:	clipview clipview.h clipview.ico clipview.rc
+
+# C files
+#
+clipview.obj:	clipview clipview.c clipview.h
+
+clipfile.obj:	clipview clipfile.c clipview.h
+
+# Main files:  CLIPVIEW.EXE
+#
+clipview.exe:	clipview clipview.def clipview.obj clipview.res clipfile.obj
+    link $(LF) clipview clipfile, , , opendlg os2 slibcep, clipview
+    rc clipview.res clipview.exe

@@ -1,0 +1,21 @@
+NAME    spy	WINDOWAPI
+
+DESCRIPTION 'Spy Application'
+
+STUB    'OS2STUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  4096
+STACKSIZE 12288
+
+EXPORTS
+    SpyWndProc          @1
+    SpyMsgDlgProc       @2
+    SpyOutputsDlgProc   @3
+    SpyWindowsDlgProc   @4
+    SpySaveListDlgProc  @5
+    AboutWndProc        @6
+    ListNearDlgProc     @7
+    SpyQueuesDlgProc    @8

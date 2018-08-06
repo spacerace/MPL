@@ -1,0 +1,2799 @@
+          CTask Manual          Version 1.1  88-07-01                Page 1
+
+
+
+
+                                        CTask
+                             A Multitasking Kernel for C
+
+                            Version 1.1  Released 88-07-01
+
+                          Public Domain Software written by
+
+                                    Thomas Wagner
+                                  Patschkauer Weg 31
+                                   D-1000 Berlin 33
+                                     West Germany
+
+                                   BIXmail: twagner
+
+
+                                     Introduction
+                                     ============
+
+          CTask  is a set of routines that allow your C program  to  execute 
+          functions  in parallel, without you having to build  in  sophisti-
+          cated  polling and switching schemes. CTask handles the  switching 
+          of processor time with a priority based, preemptive scheduler, and 
+          provides a fairly complete set of routines for inter-task communi-
+          cation,  event signalling, and task interlocking.  CTask also  in-
+          cludes  a  number of drivers for MS-DOS that build  on  the  basic 
+          functions  to allow you to include serial I/O, printer  buffering, 
+          and  concurrent  access to DOS functions into your  programs  with 
+          little programming effort.
+
+                                      An Example
+
+          To  illustrate one possible use of CTask, let me elaborate on  the 
+          following  example. Say you just finished your nifty  telecommuni-
+          cations  program, complete with download protocols,  scripts,  and 
+          everything.  But wouldn't it be nice to be able to print the  file 
+          you  just downloaded while receiving the next, and edit a  comment 
+          to some previous message without interrupting the transmission? So 
+          you take those editor routines from a previous project, plug  them 
+          in, and - oops, how do you switch back and forth between  editing, 
+          communication  and  printing? The answer to this is  CTask.  CTask 
+          allows your C program to do many different things at the same time 
+          by switching the processor between the tasks you define. And since 
+          most  of  the time your program is waiting for  some  slow  device 
+          (like the human hand) to provide feedback, this switching is  com-
+          pletely  transparent,  and will not noticeably slow  your  program 
+          down.  
+
+                                Switching the Context
+
+          So  what is needed to allow the user to edit a file while  at  the 
+          same  time  downloading another and printing a third?  First,  you 
+          have to have some form of *context switching*. This means that you 
+          have  to be able to interrupt the processing of the download  when 
+          CTask Manual          Version 1.1  88-07-01                Page 2
+
+
+
+          the  user presses a key, process the key, and return to the  down-
+          load  *task*  at  the exact same point  it  was  interrupted.  One 
+          solution  to this would be to include a poll for the  keyboard  at 
+          several points in the download routine, and call the editor *task* 
+          when a key is available.  But apart from cluttering your code with 
+          lots  of unrelated calls, there is another problem.  What  if  the 
+          operation  the user requested is more involved than  just  putting 
+          the character on the screen, like writing the file to disk?   This 
+          might  take so long that your download times out. There must be  a 
+          way  to  pass control back and forth between the two  tasks,  such 
+          that  no task is delayed for an extended period of time, and  also 
+          to  activate  the print spooler task at some defined  interval  to 
+          output  the data to the printer. This context switching is  called 
+          *scheduling* in CTask. The *scheduler* is invoked on every  system 
+          timer  tick,  and will save the context of the current  task.  The 
+          scheduler  then  takes the first element from the queue  of  tasks 
+          that  are  eligible to be run, and restores the  context  of  this 
+          task, returning to the point where the task was interrupted.  This 
+          switching  is completely automatic, and requires no  special  pro-
+          gramming in the tasks itself. All you have to do is to tell  CTask 
+          that  there are three tasks, the download task, the spooler  task, 
+          and the editor task.
+
+                                    You have Mail
+
+          All  you have to do for context switching, that is. There's a  bit 
+          more  to  multitasking  than meets the eye. How do  you  tell  the 
+          spooler task what files to spool, and the download task what files 
+          to  download? You can't call a task like an ordinary function,  so 
+          what  you need for this is *inter-task communication*. There  must 
+          be  a way to pass a message containing the filename to be  printed 
+          to  the spooler task, and there are several in CTask, one of  them 
+          the  *mailbox*.  The spooler can use a CTask call,  wait_mail,  to 
+          wait  for a message to arrive at its mailbox. As long  as  nothing 
+          arrives, the spooler task will no longer be scheduled, so if there 
+          is nothing to print, it will not use any processor time. When  you 
+          send  a  message with send_mail to the mailbox, the  spooler  will 
+          wake  up, and process the file. You can also send more  file  name 
+          messages to the spooler while it still prints a file, leaving  the 
+          messages in the mailbox until the spooler is ready to process  the 
+          next file.  
+
+                               Reentrancy and Resources
+
+          This  last  example  seems  innocent enough,  but  there's  a  big 
+          stumbling block hidden in it. You allocate the file name  messages 
+          in  the  controlling task with malloc, and you free  them  in  the 
+          spooler  with  free,  no problem, right? Wrong,  there  is  a  big 
+          problem,  *reentrancy*.  Reentrancy means that you can re-enter  a 
+          routine while another task is already using it, and that this will 
+          not disturb the operation of the interrupted task. But malloc  and 
+          free  share  and  modify global data, the  chain  of  free  memory 
+          blocks.  Imagine  the following: You just called malloc  from  the 
+          controlling task. Malloc has loaded the address of a free  element 
+          CTask Manual          Version 1.1  88-07-01                Page 3
+
+
+
+          into  a local variable, and is about to write back the pointer  to 
+          the  next free element into the last. At exactly this moment,  the 
+          timer  ticks, and the spooler is activated.  It has just  finished 
+          printing,  so it calls free. Free steps through the chain of  free 
+          blocks  to find the right place to insert the block. According  to 
+          Murphy's law, it will find just the place where malloc is about to 
+          write back the pointer. Free coerces the elements, points the next 
+          pointer  to the element malloc just wants to take off  the  chain, 
+          and returns. Malloc writes its next pointer into the middle of the 
+          newly coerced block, and now returns an element which is still  in 
+          the  free list. Compared to the job of finding this kind  of  bug, 
+          stepping  in for Tantalus may feel like a vacation. This  kind  of 
+          problem  code is called a *critical region*.  There must be a  way 
+          to make sure that no two tasks simultaneously enter such a region, 
+          and, you guessed it, CTask provides one, the *resource*. When  you 
+          call  request_resource  in  one task, all other  tasks  trying  to 
+          request  the same resource after that are put to sleep  until  you 
+          call  release_resource. Only then will the highest  priority  task 
+          that waits for the resource wake up, and get access to the protec-
+          ted region. So you would have to substitute malloc and free  calls 
+          in  your  routines with calls to functions that  first  request  a 
+          resource, execute the function, and then release the resource.
+
+                                      DOS Access
+
+          But, you might ask, isn't there another reentrancy problem in this 
+          example, since both the spooler and the download task might simul-
+          taneously call DOS to do their file-I/O, and DOS is not reentrant? 
+          Do I have to substitute all my calls to fread and fwrite, too? The 
+          answer  to this, luckily, is no. CTask traps all your  DOS  calls, 
+          and automatically encloses them in the necessary resource  request 
+          and release calls, so you don't have to worry about trashing  your 
+          disk by simultaneous DOS requests. The limited multitasking  capa-
+          bilities of DOS are exploited to allow some parallel processing in 
+          DOS,  and CTask will also detect and handle DOS calls by  resident 
+          background programs like the DOS PRINT utility. 
+
+                                 Piping the Keyboard
+
+          CTask  also  allows you to circumvent DOS for keyboard  input,  so 
+          that  waiting  for the keyboard will not block  other  tasks  from 
+          access  to  DOS functions. CTask uses another form  of  inter-task 
+          communication  for  storing  keys entered  on  the  keyboard,  the 
+          *pipe*.  The pipe is similar to the mailbox in that you  can  wait 
+          for  items to be sent to a pipe. But unlike mailboxes,  pipes  use 
+          their  own buffer to store the items (which are limited  to  bytes 
+          and  words),  so you don't have to allocate mail blocks  for  each 
+          item. When waiting on the pipe, your task is put to sleep, so  the 
+          processor  is  free  to do more interesting things  than  to  loop 
+          waiting for the user to press a key.  When a key is pressed, it is 
+          written to the pipe, waking your task. 
+
+          CTask Manual          Version 1.1  88-07-01                Page 4
+
+
+
+                               Serial I/O and Timeouts
+
+          Pipes are also used for the serial I/O handler included with CTask 
+          that  makes some of the work you've put into  your  communications 
+          package obsolete. When outputting data to the serial port via  the 
+          CTask routines, the data is buffered in a pipe, and incoming  data 
+          is  also  placed in a pipe. All interrupt handling, and  the  pro-
+          cessing of modem status and XON/XOFF protocols, is done by  CTask, 
+          so you can concentrate on implementing the higher level protocols. 
+          Since CTask allows all calls that wait for pipes, mail, and  other 
+          events, to specify a timeout that is based on the system tick, you 
+          do  not have to resort to timed waiting loops to  detect  communi-
+          cation line faults.  
+
+                                      Priorities
+
+          If the protocol you implement requires fast responses to  incoming 
+          blocks,  you  can  influence the response of CTask  to  your  comm 
+          task's  needs by giving this task a higher priority. CTask  allows 
+          65535 different priority levels, and tasks having higher  priority 
+          are  scheduled  before  tasks  with  lower  priority.  Also,  high 
+          priority  tasks  will get access to mail,  pipes,  and  resources, 
+          before  other tasks. It might even be sensible to split  the  comm 
+          task into two separate tasks, one of high priority that  assembles 
+          the  incoming  bytes into blocks and handles the protocol,  and  a 
+          lower priority task that reads the received blocks from a  mailbox 
+          and stores them on the disk. In extremely time critical applicati-
+          ons, you can even turn off task preemption, so the timer tick will 
+          no longer cause a task switch.  
+
+                                Change to your liking
+
+          CTask provides all basic building blocks for implementing  concur-
+          rent  programs in an easy and comprehensible way. Since  CTask  is 
+          mainly  implemented  in  C, it may not  be  the  fastest  possible 
+          system,  but  due  to the straightforward design  which  uses  few 
+          shortcuts, modifying the sources to suit your needs and taste  can 
+          be  done  without weeks of studying assembler code  that  squeezes 
+          every microsecond from the processor. CTask is public domain code, 
+          and  there  are no restrictions on its use. It is  distributed  in 
+          source form, so you are free to change all aspects of the package. 
+          Multitasking  programs, especially in embedded applications,  tend 
+          to  be  very diverse in their needs for  specific  constructs.  So 
+          although CTask is ready to run under DOS, and is easily  adaptable 
+          for embedded applications, you should see CTask more as a starting 
+          point  for your own thoughts, and as a toolbox from which you  can 
+          pick the instruments you need, than as a finished and fixed  block 
+          of code you simply plug into your application.
+
+          CTask Manual          Version 1.1  88-07-01                Page 5
+
+
+
+                                 How does CTask work
+                                 ===================
+
+                                        Queues
+
+          CTask  uses priority queues for most of its functions. A  priority 
+          queue differs from the usual FIFO (first in, first out) queues  in 
+          the insertion of elements into the queue. Rather than just placing 
+          new elements after the last queue member, the priority of the task 
+          determines  its place in the queue. A task is enqueued  after  all 
+          queue members with higher or equal priority, but before any member 
+          with  lower  priority. Removal from the queue takes place  at  the 
+          first element. These queues are used with all operations in  which 
+          a  task is made waiting, be it waiting to get run, or waiting  for 
+          an event. The advantage of this is the simplicity of  implementing 
+          priorities. Other schemes might rely on arrays of queues, or sear-
+          ching  through  lists, to determine the highest  priority  waiting 
+          task. With priority queues, the most time critical function, sche-
+          duling, is very fast, since it can simply take the first task from 
+          the  queue  of eligible functions. The disadvantage  is  the  time 
+          required to step through all greater or equal priority members  of 
+          a queue to find the right place to insert the task. But since  the 
+          number of tasks simultaneously enqueued in the same queue is  nor-
+          mally relatively small with most multitasking systems, this disad-
+          vantage is more than offset by the simple, and thus easy to imple-
+          ment  efficiently, scheme. The operation of removing a  task  from 
+          somewhere in the middle of a queue is rare (it will only occur  on 
+          task kill, task wake, or timeout), and thus the overhead of  mana-
+          ging a doubly linked list is not justified.
+
+                                    The Scheduler 
+
+          In  a  CTask system, there is at least one  essential  queue:  the 
+          eligible queue, which contains all tasks waiting to run. Each time 
+          the scheduler is invoked, it will first save all processor  regis-
+          ters  on the current stack, save the stack pointer in the  current 
+          tasks  control block, and then enqueue the current task  into  the 
+          appropriate  queue.   Normally, this will be the  eligible  queue. 
+          Then  the first element in the eligible queue is removed from  the 
+          queue,  the stack is switched to the stack of this task, and  pro-
+          cessor registers are restored from the new stack, returning to the 
+          point where the new task was interrupted. If the eligible queue is 
+          empty  the scheduler will loop with interrupts enabled. The  queue 
+          head pointer of the task control block of the current running task 
+          determines  what  will happen to the task when  the  scheduler  is 
+          invoked. If it points to an event control block, the task will  be 
+          enqueued  as waiting for this event. If it is NULL, the task  will 
+          not  be  enqueued  in any queue, effectively stopping  it.  If  it 
+          points to the eligible queue, the task will be enqueued there.  In 
+          any case, the scheduler does not care what queue the task is to be 
+          enqueued  in, since all queues use the same priority based  order-
+          ing. If a task is no longer in the eligible queue, it can only  be 
+          returned to this queue by an external event. 
+
+          CTask Manual          Version 1.1  88-07-01                Page 6
+
+
+
+                                        Events 
+
+          External  events  can  take several forms,  which  are  relatively 
+          similar on the inside. All CTask events use a control block,  with 
+          at  least one queue for tasks waiting for the event.  Although  it 
+          would  have been possible to summarize all events under  a  global 
+          structure,  this approach was not used in CTask, the main  reasons 
+          being execution speed and ease of use. So if you scan through  the 
+          source  files  for CTask events, you will see  many  very  similar 
+          routines, which only differ in the types of data and the names  of 
+          queues they process. In a class based language like C++, one would 
+          certainly  define  all events as instances or derivations  of  one 
+          class.  In plain C, the necessary type casting, and the  different 
+          handling of certain cases, would clobber the code to the point  of 
+          illegibility.
+
+                                      Resources
+
+          The  event types "resource", "flag", and "counter" differ only  in 
+          the  kind of wait operations and the handling of the  state  vari-
+          able.  The  resource is mainly for use  in  interlocking  critical 
+          regions  of  code, to protect access to  non-reentrant  resources. 
+          Only one task can "own" a resource, all other tasks requesting the 
+          resource are delayed until the owning task releases it. For  added 
+          protection,  CTask  stores the task control block address  of  the 
+          current owner of the resource in the resource control block, so no 
+          other task can erroneously release it. 
+
+                                        Flags
+
+          Flags, on the other hand, can be set and cleared by any task,  and 
+          also by interrupt handlers. Tasks can wait on either state of  the 
+          flag,  and all tasks waiting for a state are simultaneously  acti-
+          vated  when  the flag is changed to this state. This  makes  flags 
+          suitable for use as a global signalling mechanism.
+
+                                       Counters
+
+          Counters  are  a variation on the flag concept. A counter  can  be 
+          incremented  and cleared by any task, and by  interrupt  handlers. 
+          Tasks  can wait for a counter to be zero or nonzero.  Like  flags, 
+          all tasks waiting for the zero state are activated simultaneously. 
+          But  unlike  flags, only the first task waiting  for  the  nonzero 
+          state of a counter will be activated on incrementing the  counter, 
+          and  the  counter will be automatically decremented  by  one.  The 
+          counter is used inside CTask to handle timer interrupts. The timer 
+          counter  will  be incremented on each timer tick,  activating  the 
+          timer task. If for any reason the timer task is unable to complete 
+          its run until the next tick, this tick will not be lost, since the 
+          counter  is incremented, and the timer task will continue  to  run 
+          the next time it calls the counter wait request. 
+
+          CTask Manual          Version 1.1  88-07-01                Page 7
+
+
+
+                                 Mailboxes and Pipes
+
+          The  "mailbox"  and  "pipe"  events can  be  used  for  inter-task 
+          communication,   and  for  the  communication  between   interrupt 
+          handlers and tasks.
+
+                                      Mailboxes
+
+          Mailboxes can hold an unlimited number of mail blocks. Mail blocks 
+          have  no fixed structure, but the first doubleword in  each  block 
+          passed  to  a  mailbox routine is used as a  chain  pointer.  Mail 
+          blocks  are chained into a mailbox in FIFO order. Tasks  can  wait 
+          for  mail to arrive, or can conditionally read mail if a block  is 
+          available.  Tasks  and interrupt handlers can write  blocks  to  a 
+          mailbox. Since mailboxes don't need any copying of data, they  are 
+          suited  for high speed exchange of larger amounts of data  between 
+          tasks. The disadvantage of sending mail this way is that you  have 
+          to  make sure that a mail block is not re-used before it has  been 
+          read  out  of the box and processed by the  receiving  task.  When 
+          exchanging fixed length messages, you can build a free mail  block 
+          chain by using a mailbox to hold the available blocks. 
+
+                                  Pipes and Buffers
+
+          Buffered message exchange is possible using pipes. When creating a 
+          pipe,  you  specify  a buffer area and its length,  and  the  pipe 
+          routines  will buffer all data written to the pipe in  this  area. 
+          This implies that writing to a pipe may cause a task to be delayed 
+          until  there  is space available in the pipe. To  allow  interrupt 
+          handlers to write to pipes, there is a conditional write  request, 
+          which  will simply return if the pipe is full. Tasks can wait  for 
+          data  to  arrive  in a pipe, and for the pipe  to  be  emptied.  A 
+          conditional  read  request is also provided. The  disadvantage  of 
+          pipes  is that they are slightly slower than mailboxes due to  the 
+          necessary copying, and that you can only place word or byte  sized 
+          items  in  a pipe. When there is more than one  reader  or  writer 
+          task,  you  can  not  rely on the bytes in a  pipe  being  in  any 
+          specific  order.  A "buffer" construct is provided in  CTask  that 
+          expands pipes to allow arbitrary length messages to be written and 
+          read. This is implemented using a resource for reading and writing 
+          to  the pipe associated with the buffer, so the message is  always 
+          guaranteed  to  be  written  and read  in  one  piece.  But  since 
+          resources  can  not  be used in  interrupt  handlers,  using  such 
+          buffers is not allowed from interrupts.
+
+                                     Applications
+
+          There  are a number of routines included in the CTask package  for 
+          PC-specific tasks. Although they will be of limited use for embed-
+          ded  applications, studying the serial I/O and  printer  interface 
+          routines  will give you some hints on how to use the CTask  kernel 
+          for  implementing  your own device drivers. For  PC  based  appli-
+          cations,  the routines should be usable with no or little  changes 
+          for implementing complete communications packages.
+          CTask Manual          Version 1.1  88-07-01                Page 8
+
+
+
+
+          The  serial I/O handler uses interrupts for both input and  output 
+          of data, and supports both XON/XOFF and RTS/CTS handshake methods. 
+          The modem inputs can selectively be enabled to control data trans-
+          mission.   Pipes are used for transmit and receive data, with  the 
+          buffer  and  its size specified on initialization. Both  COM1  and 
+          COM2 can be active simultaneously, and other ports can be  suppor-
+          ted by editing a table in the source code. Since CTask allows  the 
+          access  to  all events in interrupt  handlers,  writing  interrupt 
+          based I/O drivers is relatively simple.  On receiving a character, 
+          the character and any associated errors are placed in the  receive 
+          pipe,  and the transmit pipe is read on transmit ready  interrupt. 
+          Note  that  conditional reads and writes have to be  used  in  the 
+          interrupt  handler,  since  you can't safely  delay  an  interrupt 
+          handler.
+
+          The  printer  output driver supports both  polling  and  interrupt 
+          output.  Again, a pipe is used for the output characters. However, 
+          since polling is supported, and because of the somewhat unreliable 
+          interrupt  structure  of the printer ports, a driver task  is  re-
+          quired.   This  task is automatically created  on  installing  the 
+          driver.  The  task first waits on the pipe for a character  to  be 
+          written  to  the printer.  When polling is enabled,  it  tries  to 
+          output the character directly, using a short busy-waiting loop. So 
+          as  not  to load the system too heavily by the polling,  the  task 
+          will delay itself for a defined amount of timer ticks if it  can't 
+          output  the character after a small number of loops.  When  inter-
+          rupts  are  enabled, the process is essentially the  same  at  the 
+          start,  but after the character is written to the port,  the  task 
+          will wait on a flag to be set. The interrupt handler will set  the 
+          flag  on  interrupt, enabling the task to get the  next  character 
+          from the pipe. Since interrupts are unreliable with most  printers 
+          due to the usually very short pulses on the acknowledge line,  the 
+          task  uses a timeout on the flag wait, so it does not hang  if  an 
+          interrupt  is missed. Studying the printer driver will  also  give 
+          you  an idea what the optional parameter on task creation  can  be 
+          used  for. In the printer driver, this parameter is used  to  pass 
+          the address of the printer control block, which contains the pipe, 
+          the  flag,  and the hardware info, to the task.  This  allows  the 
+          printer  driver to be simultaneously installed for any  number  of 
+          printers without having to write separate printer tasks. 
+          CTask Manual          Version 1.1  88-07-01                Page 9
+
+
+
+                                    General Notes
+                                    =============
+
+                           What can CTask NOT be used for?
+
+          CTask  is not intended to provide for multitasking on the  command 
+          level of MS-DOS.  Although CTask includes a module for  channeling 
+          simultaneous  DOS requests inside a program,  the strategy used in 
+          this module is not sufficient for the functionality required  when 
+          switching between programs. Adding this functionality would not be 
+          trivial (although certainly worthwhile).
+          Also, there is no warranty that CTask does perform without errors, 
+          or  does exactly what you or I intended.  So CTask should  not  be 
+          used  in  applications  in which malfunction of routines  of  this 
+          package would result in damage to property or health of any person 
+          without  *very*  extensive testing under all kinds  of  loads.  In 
+          using CTask, you do so at your own risk.
+
+
+                            What is required to use CTask?
+
+          To  compile  CTask,  Microsoft C 5.0 or later,  or Turbo C 1.0  or 
+          later  are required.  Microsoft MASM 5.0 or later is required  for 
+          the assembler parts.  Conversion to other compilers is possible if 
+          they  conform to the new ANSI (draft) standard. Conversion of  the 
+          assembler parts to other Assembler versions requires  substitution 
+          of  the  simplified  model directives by  explicit  segment  defi-
+          nitions, and adding the DGROUP to offsets referencing data.
+
+          CTask will add 8-12k of code to your program, depending on options 
+          and  installed drivers. The minimum static data used by  CTask  is 
+          approximately 4k.
+
+          Converting  CTask for stand-alone operation requires few  changes. 
+          Mainly,  the  timer interrupt handler (in "tsktim.asm") has to  be 
+          rewritten,  and the initialization code (in "tskmain.c") may  have 
+          to  be  changed. Changes to other modules  (naturally  except  the 
+          optional hardware drivers) should not be necessary.
+
+          Another requirement is a good debugger.  If you never before wrote 
+          multitasking  applications,  you're  in for  some  surprises.  The 
+          normal debugging tools (Symdeb, Codeview) are of only limited use, 
+          since they use DOS calls for their I/O, and thus may conflict with 
+          your background tasks.  One safety measure is to first  thoroughly 
+          test  your  program with preemption disabled,  possibly  inserting 
+          some schedule() calls, and only allow task preemption if you found 
+          most major bugs.  I personally recommend Periscope for  debugging, 
+          since  it  can be made resident and so is  always  available,  and 
+          because it does not use DOS.  Periscope III is the most  expensive 
+          solution,  and the best tool you can imagine (except for Periscope 
+          IV,  announced for April),  but the less costly versions will also 
+          help a lot.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 10
+
+
+
+                          Do I have to pay for using CTask?
+
+          No. One reason for writing CTask was to provide a free, no strings 
+          attached,  utility, instead of the usual "for personal  use  only" 
+          restriction.  Writing a multitasking application for personal  use 
+          only doesn't seem too interesting to me. CTask is completely free, 
+          and there is no restriction on its use. You may incorporate all or 
+          parts of CTask in your programs, and redistribute it in source  or 
+          binary form by any means. I also do not restrict the use of  CTask 
+          in  commercial  applications.  Since  trying  to  distribute   the 
+          unmodified CTask for money will only give you a bad name, you  may 
+          even do that if you find someone dumb enough to buy it. Naturally, 
+          if  you make a bundle from it, or simply like CTask, I  would  not 
+          reject a donation. However, this is not required, and it will  not 
+          give you any additional support.
+
+
+                              What support can I expect?
+
+          I  will try my best to eliminate any bugs reported to me,  and  to 
+          incorporate suggested enhancements and changes.  However, my spare 
+          time  is limited,  so I can not guarantee continued or  individual 
+          support.  (But since I am a free-lance consultant,  you can always 
+          hire me to do it...) 
+
+          At the time of this writing,  I'm connecting to BIX almost  daily. 
+          Problems  of limited general interest can be reported via BIXmail, 
+          suggested enhancements and changes,  plus bug reports,  should  be 
+          posted  in the c.language/tools conference on BIX (until responses 
+          warrant a new conference,  or I can't afford BIX any  longer),  so 
+          they can be discussed among all interested (I hope there will be a 
+          few).  Normal  mail  can  be used,  too,  but  don't  expect  fast 
+          responses.
+
+                                  About this Release
+
+          Since  the  Beta release of CTask in March, CTask has  been  down-
+          loaded  from BIX more than 90 times. Of all downloaders, just  six 
+          commented  on  CTasks  features, or sent bug  reports.  The  ideas 
+          presented by the commentors are mainly integrated in this version, 
+          as  are the fixes for the reported bugs. But since  comments  were 
+          sparse,  this is not a revolutionary new release. Many  areas  are 
+          completely unchanged, or just slightly modified to accommodate new 
+          flags  and  options. See the accompanying file  "changes.doc"  for 
+          a summary of the changes.
+
+          Although I currently have no new ideas that would warrant  another 
+          release,  I  again  would like to invite you to  voice  your  com-
+          plaints, suggest enhancements, supply your own code for  inclusion 
+          in  the package (note that any code submitted for  inclusion  must 
+          not be copyrighted or usage restricted, but I'll naturally respect 
+          copyrights  in  code  submitted for  demo  purposes),  or  suggest 
+          additions to this manual.
+          CTask Manual          Version 1.1  88-07-01                Page 11
+
+
+
+                                 Multitasking Basics
+                                 ===================
+
+                                        Tasks
+
+          In CTask, a "task" is defined as a (far) C function. The number of 
+          tasks  is  not limited,  and one function may be used for  several 
+          tasks.  There  is little difference between a task function and  a 
+          normal function. The usual form of a task function is
+
+               void far my_task (farptr arg)
+               {
+                    one-time initialization code
+                    while (TRUE)
+                      {
+                      processing code
+                      }
+               }
+
+          A task function is (usually) never called directly.  Rather, it is 
+          specified  in the call to the create_task routine,  and started by 
+          start_task.  It will then continue to run,  sharing the  processor 
+          time  with  all other tasks,  until it is "killed"  by  kill_task. 
+          Returning  from  the routine will have the same effect as a  kill. 
+          The sharing of processor time is accomplished by "preempting"  the 
+          tasks. Preemption means that the task is interrupted in the middle 
+          of some statement by a hardware interrupt (usually the timer), and 
+          is *not* immediately restarted when the interrupt handler returns. 
+          Instead,  the  next  task that is able to run is activated by  the 
+          "scheduler", with the interrupted task continuing its duty at some 
+          (normally  unpredictable)  later time.  You can also  have  multi-
+          tasking without preemption, and CTask supports this, too, but this 
+          requires full cooperation of all tasks in the system, such that no 
+          task  continues  to  run for an extended period  of  time  without 
+          passing control to other tasks by an explicit scheduling  request, 
+          or by waiting for an event.
+
+          The  optional  argument  to the task function may be used  if  one 
+          function is to be used for more than one task, for example to pass 
+          a  pointer to a static data area for use by this specific instance 
+          of the function.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 12
+
+
+
+                                        Events
+
+          Tasks alone would be of limited use.  If you have several routines 
+          which  just do number crunching or sorting or  such,  making  them 
+          into  parallel  tasks would be sensible only on  a  multiprocessor 
+          system.  Normally,  at least some of your tasks will wait for some 
+          outside  "event" to happen,  be it the user pressing a key,  or  a 
+          character  arriving from the modem.  Then there may be tasks which 
+          have to wait until another task finishes processing on some  piece 
+          of data before they can continue.  For this synchronization, there 
+          are  a number of constructs in CTask,  which I summarize under the 
+          name "event".  Common to all events are the operations of  waiting 
+          for  an  event  to  happen,  and signalling  that  the  event  has 
+          happened.  Using a CTask event is much more efficient than looping 
+          while  waiting on some shared data location to change  state,  and 
+          also  eliminates  concurrency problems inherent in such  a  simple 
+          approach.  Tasks  waiting for an event are taken off the scheduler 
+          queue, so they no longer use processor time.
+
+                                      Reentrancy
+
+          One of the biggest problem with multitasking in general,  and C on 
+          the PC in particular, is reentrancy. Reentrancy means that you can 
+          use  a routine,  be it you own,  or one of the C run-time library, 
+          from different tasks at the same time. When writing your own code, 
+          you can easily avoid problems, but when using the run-time library 
+          routines,  you often can only guess if the routines are  reentrant 
+          or not. 
+
+          A routine is NOT reentrant if it modifies static data. This can be 
+          illustrated by the following nonsense example:
+
+               int non_reentrant (int val)
+               {    static int temp;
+                    temp = val;
+                    return temp * 2;
+               }
+
+          Now take two tasks,  which call this routine.  Task1 calls it with 
+          val=3,  Task2  with val=7.  What will be the return value for both 
+          tasks? You never know. There are three possible outcomes:
+
+            1) The tasks execute sequentially.  Task1 will get 6,  and Task2 
+               14 as a result. This is what one normally expects.
+
+            2) Task1  runs  up to "temp = val",  then is interrupted by  the 
+               timer.  Task2  executes,  and gets 14 as result.  Then  Task1 
+               continues. Return for Task1 is 14.
+
+            3) Task2  runs up to "temp = val",  then is interrupted  by  the 
+               timer.  Task1  executes,  and  gets 6 as result.  Then  Task2 
+               continues. Return for Task2 is 6.
+
+          CTask Manual          Version 1.1  88-07-01                Page 13
+
+
+
+          add  to  this the effects of optimization,  and a  loop,  and  the 
+          outcome is completely random. 
+
+          Most  routines in the C library will not explicitly  do  something 
+          like this, but all functions that 
+
+               - do file I/O (read, write, printf, scanf, etc.) or
+               - change memory allocation (malloc, free, etc.)
+
+          have  to  use some static data to do buffering,  or to  store  the 
+          chain of memory blocks in. Interrupting such an operation may have 
+          disastrous effects.  The most devilish aspect of non-reentrancy is 
+          that  the  effects are unpredictable.  Your program may  run  1000 
+          times  without  any error,  and then on the 1001th time crash  the 
+          system so completely that only the big red switch will help.
+
+          So  what can you do about it?  A lot.  There are several  ways  to 
+          protect  "critical  regions" from being entered in  parallel.  The 
+          most simple method is to disable interrupts. This, however, should 
+          be  used only for *very* short periods of time,  and not for  rou-
+          tines  that  might themselves re-enable them  (like  file-I/O).  A 
+          better  method  is to temporarily  disable  task  preemption.  The 
+          routines  tsk_dis_preempt  and tsk_ena_preempt allow this form  of 
+          short-term task switch disable. Interrupts may still be processed, 
+          but  tasks  will  not  be preempted.  The best way  is  to  use  a 
+          "resource".  A resource is a special kind of event, which only one 
+          task  can  possess  at  a time.  Requesting  the  resource  before 
+          entering the routine,  and releasing it afterwards,  will  protect 
+          you  from  any  other task simultaneously  entering  the  critical 
+          region (assuming that this task also requests the resource).
+
+          It  is also reasonably safe to use file-I/O without protection  if 
+          it  goes  to  different  files.  The C  file  control  blocks  for 
+          different files are distinct, so there will be no conflict between 
+          tasks.  Since  DOS  access is automatically  protected  by  CTask, 
+          concurrent file I/O is possible.
+
+          What  you  may NEVER do is to use a non-reentrant routine that  is 
+          not  protected by an interrupt disable from an interrupt  handler. 
+          An interrupt handler is not a task,  and so can not safely request 
+          a resource or disable task preemption.  This is the reason why the 
+          CTask  routines  generally disable interrupts before  manipulating 
+          the internal queues rather than only disabling task preemption.
+
+
+                                      Deadlocks
+
+          One  thing to watch out for when using resources or similar  event 
+          mechanisms is not to get into a situation where Task 1 waits for a 
+          resource that Task 2 has requested,  while at the same time Task 2 
+          waits  for a resource that Task 1 already has.  This situation  is 
+          called a deadlock (or,  more picturesque,  deadly embrace), and it 
+          can only be resolved with outside help (e.g.  waking up one of the 
+          tasks forcibly). To illustrate, consider the following example:
+          CTask Manual          Version 1.1  88-07-01                Page 14
+
+
+
+
+               void far task_1 ()
+               {
+                 ...
+                 request_resource (&rsc1, 0L);
+                 request_resource (&rsc2, 0L);
+                 ...
+               }
+
+               void far task_2 ()
+               {
+                 ...
+                 request_resource (&rsc2, 0L);
+                 request_resource (&rsc1, 0L);
+                 ...
+               }
+
+          Since interrupts are always enabled on return from a task  switch, 
+          even if the statements are enclosed in a critical region, there is 
+          no  guarantee  that  the request_resource calls will  be  executed 
+          without interruption. In this example, the problem is obvious, but 
+          in  a more complex application,  where resource requests or  other 
+          waits might be buried in some nested routine, you should watch out 
+          for similar situations. One way to avoid problems would be in this 
+          example to change task_2 to
+
+               void far task_2 ()
+               {
+                    int again;
+                    ...
+                    do {
+                         request_resource (&rsc2, 0L);
+                         if (again = c_request_resource (&rsc1))
+                            {
+                            release_resource (&rsc2);
+                            delay (2L);
+                            }
+                       } while (again);
+                    ...
+               } 
+                       
+          Note that this is only one of many possible approaches,  and  that 
+          this approach favors task_1 over task_2.
+
+          You  should also take care not to kill tasks that currently own  a 
+          resource. CTask will not detect this, and the resource will  never 
+          be freed.
+          CTask Manual          Version 1.1  88-07-01                Page 15
+
+
+
+                                 Multitasking and DOS
+
+          CTask includes (and automatically installs) a routine which  traps 
+          all  DOS  calls,  and makes sure that no two tasks  simultaneously 
+          enter DOS. This is accomplished using the resource mechanism, with 
+          special  provisions  for  the  limited  multitasking  capabilities 
+          provided by DOS. There are a few calls, namely those with function 
+          codes  <=  0x0c,  which allow functions with codes >  0x0c  to  be 
+          executed  while  DOS is waiting for an external device  (generally 
+          the keyboard) to get ready.  This, however, limits the use of some 
+          C library functions,  namely scanf and fread,  for console  input. 
+          Both  these  functions  use  handle input,  and thus  can  not  be 
+          interrupted.  When  writing  routines  for  handling  user  input, 
+          keyboard  read  functions should either use  the  low-level  calls 
+          getch  and  gets,  or,  better yet,  the direct entries  into  the 
+          keyboard  handler,  t_read_key and t_keyhit,  and then process the 
+          string with sscanf if desired.  The keyboard handler (contained in 
+          tskkbd.asm) traps all keyboard interrupts, storing entered keys in 
+          a  pipe.  If a task reads from the keyboard,  it is  automatically 
+          waiting  for  this pipe.  Using getch and gets is  less  desirable 
+          since they use polling instead of waiting, and thus degrade system 
+          performance.  Also,  the t_read_key and t_keyhit functions do  not 
+          use DOS, so DOS functions <= 0C can be executed concurrently.
+
+          You  should  NEVER  circumvent DOS by  calling  the  BIOS-disk-I/O 
+          function (INT 13) directly.  This entry is not protected by CTask, 
+          and  using it in parallel to DOS file-I/O may send your  hard-disk 
+          FAT and directory into never-never land. If you really should need 
+          this  interrupt,  you should consider adding support for it in the 
+          DOS-handler module "tskdos.asm".  Using the direct sector read and 
+          write interrupts 25 and 26 is supported, however. Using other BIOS 
+          interrupts  directly  should  also  be  avoided,  unless  you  are 
+          absolutely  sure they will not be used by other routines via  DOS, 
+          or you provide your own critical region handling.  Using interrupt 
+          16, the keyboard interrupt, is safe, since it is redirected to the 
+          keyboard handler pipe.
+
+          The DOS access module has been tested to work with DOS  3.30,  and 
+          with the DOS 3.30 PRINT routine running in the background. Special 
+          provisions  are built into the DOS module to detect background DOS 
+          calls.  Using Sidekick also hasn't lead to any problems,  although 
+          you  may trash Sidekick's screen display by writing to the  screen 
+          while  Sidekick is active (note that your application  *continues* 
+          to  run  while Sidekick or other pop-ups are active).  I  can  not 
+          guarantee  complete compatibility with all background  and  pop-up 
+          programs  under all versions of DOS.  Specifically,  DOS  versions 
+          prior   to  3.1  have  significant  problems  with   multitasking. 
+          Upgrading  to a newer DOS version is recommended if you are  still 
+          using DOS < 3.2 (DOS 3.1 has some bugs in other areas).
+
+          Critical  errors  and  Control C occurring  while  concurrent  DOS 
+          access  takes  place may also be fatal.  Using the  ctrlbrk()  and 
+          dosexterr() functions of Turbo C, or their equivalents in MS C, to 
+          trap critical errors and Control C is highly recommended.
+          CTask Manual          Version 1.1  88-07-01                Page 16
+
+
+
+
+                                     Using CTask
+                                     ===========
+
+          CTask  comes  archived with both source and binaries.  The  binary 
+          version is compiled in the large model, but since the pre-compiled 
+          kernel  routines don't use any functions from the C  library,  you 
+          can  use  all functions in small or other model  programs  (except 
+          Tiny). The include files provided specify all model  dependencies, 
+          so you don't have to use the large model for your application, but 
+          always remember to include "tsk.h" for the type and routine proto-
+          types.  The  C  source files will work without  changes  for  both 
+          Microsoft  and Turbo C. The library files are not  compatible,  so 
+          use "ctaskms.lib" for Microsoft, and "ctasktc.lib" for Turbo C. In 
+          the distributed configuration (i.e. dynamic allocation of  control 
+          blocks enabled), the file TSKALLOC.C must be added to the  library 
+          or separately linked after compiling it *in the same model as  the 
+          main  program*. This file uses C-library routines, and  thus  must 
+          match  the  main  program's  memory  model.  The  same  goes   for 
+          TSKSNAP.C, an optional snapshot-dump utility.
+
+
+                                Configuration Options
+
+          The  file TSKCONF.H contains a number of #define's that allow  you 
+          to configure some CTask features. The entries are
+
+          TSK_DYNAMIC
+               If  1,  you can let CTask dynamically create task  and  event 
+               control  blocks,  task stacks, and pipe buffers,  by  passing 
+               NULL as the block address. Since this requires the C  runtime 
+               allocation calls, it is not suitable for non-DOS applications 
+               (except if you provide your own memory allocation routines).
+
+               This option is normally enabled (1).
+               Changing  this  option requires  changing  the  corresponding 
+               option in the Assembler macro file TSK.MAC.
+
+
+          TSK_NAMEPAR
+               If  1, all create_xxx calls accept an  additional  parameter, 
+               the name of the created control block. This name should  con-
+               tain  only  printeable characters, and should not  be  longer 
+               than  8 characters plus the zero terminator. This  option  is 
+               used together with TSK_NAMED (see below).
+
+               This option is normally enabled (1).
+               Changing  this  option requires  changing  the  corresponding 
+               option in the Assembler macro file TSK.MAC.
+
+
+          TSK_NAMED
+               If  1, all control blocks (except timer control  blocks)  are 
+               named  and linked on creation. This allows the snapshot  dump 
+          CTask Manual          Version 1.1  88-07-01                Page 17
+
+
+
+               routine  to  display the system state.  TSK_NAMEPAR  must  be 
+               defined for this option to work. Since it may be desirable to 
+               switch  off  the handling of the names  after  the  debugging 
+               phase, without having to change all create_xxx calls to  omit 
+               the  name  parameter,  the  name  parameter  is  ignored   if 
+               TSK_NAMED is undefined, but TSK_NAMEPAR is defined. 
+
+               This option is normally enabled (1).
+               Changing  this  option requires  changing  the  corresponding 
+               option in the Assembler macro file TSK.MAC.
+
+
+          CLOCK_MSEC     
+               If  1, all timeouts are specified in milliseconds instead  of 
+               timer  ticks. This allows programming of delays and  timeouts 
+               independent of the speedup-parameter or the system tick rate. 
+               Since  timeout calculations use floating point operations  if 
+               this  option is enabled, a floating point library is  needed. 
+               This precludes model independence of the CTask kernel.
+
+               This option is normally disabled (0).
+
+
+          PRI_TIMER
+               Specifies the priority of the timer task. Normally the  timer 
+               task should have a higher priority than any other task in the 
+               system.
+
+               The value is normally 0xf000.
+
+
+          PRI_STD
+               This  value  may  be used in your programs  as  the  standard 
+               priority  of  user tasks. Its value is arbitrary. It  is  not 
+               used in the kernel except for the definition of PRI_INT9 (see 
+               below).
+
+               The value is normally 100 (decimal).
+
+
+          PRI_INT9
+               Determines the priority of the "int9"-task. This task  chains 
+               to  the previous interrupt vector for the sytem  timer  tick, 
+               and  thus may activate resident TSR's. Since  TSR's  normally 
+               use  polling when accessing the keyboard and  other  devices, 
+               the  priority  of the int9-task should be equal to  or  lower 
+               than normal user-defined tasks to allow your program to  con-
+               tinue to run while the TSR is active. You can tune this value 
+               so  that some tasks are blocked by the TSR to avoid  trashing 
+               the screen.
+
+               The value is normally  PRI_STD - 1.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 18
+
+
+
+          IBM
+          DOS
+               Both IBM and DOS are more or less of informative value  only, 
+               to  point out those areas in the kernel that  need  attention 
+               when converting to non-IBM or non-DOS environments. Disabling 
+               one or both of this options requires the substitution of your 
+               own routines for installation and keyboard handling.
+
+               Both options must normally be enabled (1).
+
+
+          AT_BIOS
+               If enabled, the AT BIOS wait/post handler is installed. 
+               May be disabled when compatibility problems arise.
+
+               This option is normally enabled (1).
+               
+
+                                  Memory Allocation
+
+          TSKALLOC.C  is  needed if TSK_DYNAMIC is enabled in  tskconf.h  to 
+          handle  the allocation and free calls. If you want to use  dynamic 
+          allocation  in your own tasks, you should also use  the  functions 
+          tsk_alloc and tsk_free to avoid the reentrancy problems  mentioned 
+          in the introduction. If you should need other forms of alloc (like 
+          calloc)  the  recommended  way  is  to  add  those  functions   to 
+          TSKALLOC.C, requesting the resource alloc_resource before  calling 
+          the C memory-allocation function.
+
+
+                                       Snapshot
+
+          TSKSNAP.C is only needed if you want to include the snapshot  dump 
+          into  your  program. Note that you can *not* use snapshot  if  you 
+          disable TSK_NAMED in tskconf.h.
+
+
+                                      Task Stacks
+
+          When  compiling your application,  turn stack  checking  off.  The 
+          standard  stack check is of little use with task stacks,  and  may 
+          interfere with CTask's operation.  The stack area for tasks should 
+          be  allocated  on the main program's stack,  not in the static  or 
+          heap data space. The reason for this is that some of the C library 
+          routines check for stack overflow regardless of your  compile-time 
+          switches,  and  will  crash  your application if  you  use  stacks 
+          outside the normal stack. The stack allocation parameter with LINK 
+          (MS-C),  or the _stacksize variable (Turbo C) have to be increased 
+          to reflect the additional stack space. When calculating task stack 
+          sizes, keep in mind that library routines (esp. printf) allocate a 
+          lot of space on the stack for temporary variables. A minimum of 1k 
+          for  tasks using library routines is recommended,  2k puts you  on 
+          the  safe  side.  Tasks  not using C library routines  may  use  a 
+          smaller  stack,  about 256 bytes at a minimum,  plus space for any 
+          CTask Manual          Version 1.1  88-07-01                Page 19
+
+
+
+          local variables and nested routines. Then add up all task  stacks, 
+          and   add   space  for  the  main  task  (the   function   calling 
+          install_tasker), with this size also dependent on what you will do 
+          in  the main task while CTask is active. Stacks for tasks that  do 
+          not use C library routines may be allocated anywhere.
+
+
+                                        Drivers
+
+          The  keyboard  and DOS handlers are always installed  with  CTask. 
+          Using the serial I/O and printer drivers is optional,  so you have 
+          to  install them separately,  but only *after*  installing  CTask. 
+          When  using  the serial driver,  include "sio.h" in your  modules, 
+          when using the printer driver, include "prt.h".
+
+          Another  driver  that  is  automatically  installed  is  the  BIOS 
+          wait/post  handler  for  the IBM AT. The  AT  BIOS  contains  some 
+          multitasking  hooks  to  avoid busy waiting in the  BIOS.  If  you 
+          experience  problems with disk accesses or printer output  through 
+          BIOS  (not through the CTask printer driver), you  should  disable 
+          installation  of  this  driver  by  setting  AT_BIOS  to  zero  in 
+          tskconf.h.  Normally,  no problems should arise with  this  driver 
+          even in XT type machines.
+
+
+                                   Things to remember
+
+          Remember that tasks are not automatically started after  creation. 
+          Use start_task to allow a created task to run.
+
+          Always use create_xxx on resources,  pipes,  etc.  Using the event 
+          routines without doing so will have unpredictable results.
+
+          Before exiting the program, all installed drivers and CTask should
+          be  explicitly  removed.  Although  the  DOS  handler  traps   the 
+          terminate  call and automatically calls remove_tasker, you  should 
+          make  sure  that  all  tasks  are  completed  properly,  and  call 
+          remove_tasker yourself.
+
+          Deleting events before exiting the program is not  mandatory,  but 
+          recommended to kill all tasks waiting for the event. You should be 
+          careful  not  to  kill tasks while they are  active  in  DOS.  The 
+          kill_task routine should be reserved for fatal error handling. The 
+          best  way  is to let the tasks kill themselves depending  on  some 
+          global  variable or event.  If a task is killed while waiting  for 
+          input  in DOS, DOS operation may be severely impaired. If you  use 
+          the C console input routines, make sure that the task returns from 
+          DOS  before it is killed, if necessary by requesting the  user  to 
+          press a key.
+          CTask Manual          Version 1.1  88-07-01                Page 20
+
+
+
+                                  Priority Handling
+                                  =================
+
+          CTask   provides   for  prioritized  task  execution   and   event 
+          processing. This means that a task that has a higher priority will 
+          be  run  before any other tasks having  lower  priority.  Also,  a 
+          higher  priority  task will gain access  to  resources,  counters, 
+          pipes,   and  mail,   before  lower  priority  tasks.  With  fixed 
+          priorities,  this  means that a high priority task can  monopolize 
+          CPU  time,  even  if  it  calls  schedule()  explicitly.  Variable 
+          priority  increases each eligible task's priority by one  on  each 
+          scheduler  call,  so that lower priority tasks will slowly rise to 
+          the head of the queue until they get executed.  The priority  will 
+          be reset to the initial priority when a task is run.
+
+          Since  variable priority increases processing time in the critical 
+          region  of  the scheduler,  it is not recommended for  systems  in 
+          which  a  larger  number  of tasks  is  expected  to  be  eligible 
+          simultaneously.
+
+          Usually,  all  tasks  in a system should have the  same  priority, 
+          with   only  very  few  exceptions  for  non-critical   background 
+          processing  (low  priority)  or  very  time-critical  tasks  (high 
+          priority).  High  priority  tasks should be written in such a  way 
+          that  they  either  reduce  their  priority  when  processing   is 
+          completed,  or that they wait for an event. Busy waiting in a high 
+          priority  task will severely impair system operation with variable 
+          priority  enabled,  and  will stop the system until  the  task  is 
+          placed in a waiting state with fixed priority.
+
+          The  (automatically created) main task is started with the highest 
+          possible priority below the timer task, so that it can process all 
+          initialisations  before other tasks start running.  To  allow  the 
+          system to operate,  the priority of the main task must be reduced, 
+          or the main task must wait for an event or a timeout.
+          CTask Manual          Version 1.1  88-07-01                Page 21
+
+
+
+                                   CTask Data Types
+                                   ================
+
+          Note  that you do not have to know the innards of the  structures. 
+          All  structure fields are filled by the "create_xxx" routines  and 
+          modified  by the CTask functions.  You should NEVER modify a field 
+          in  one of the structures directly.  The structures are  explained 
+          here shortly only for those wanting to modify the routines. 
+
+          If  you only want to use the routines,  you should simply  include 
+          the file "tsk.h" in your source, and define variables of the types
+
+                tcb         - for task control blocks
+                tcbptr      - for far pointers to tcbs
+
+                flag        - for flag events
+                flagptr     - for far pointers to flags
+
+                resource    - for resource events
+                resourceptr - for far pointers to resources
+
+                counter     - for counter events
+                counterptr  - for far pointers to counters
+
+                mailbox     - for mailbox events
+                mailboxptr  - for far pointers to mailboxes
+
+                pipe        - for pipe events
+                pipeptr     - for far pointers to pipes
+
+                wpipe       - for word pipe events
+                wpipeptr    - for far pointers to word pipes
+
+                buffer      - for buffer events
+                bufferptr   - for far pointers to buffers
+
+                tlink       - for timeout control blocks
+                tlinkptr    - for far pointers to timeout control blocks
+
+                namerec     - for control block names
+                nameptr     - for name pointers
+
+          without caring what's behind them.
+
+          Additionally, you may use the types
+
+                byte        - for unsigned characters
+                word        - for unsigned short integers
+                dword       - for unsigned long integers
+
+                funcptr     - for pointers to task functions
+                farptr      - for far pointers to anything
+                byteptr     - for far pointers to byte arrays
+                wordptr     - for far pointers to word arrays
+          CTask Manual          Version 1.1  88-07-01                Page 22
+
+
+
+
+          in  defining  or typecasting items to be passed as  parameters  to 
+          CTask functions.
+
+
+                  Typedefs used for simplified type specifications
+
+             typedef unsigned char byte;
+             typedef unsigned short word;
+             typedef unsigned long dword;
+             typedef void (cdecl far *funcptr)();
+             typedef void far *farptr;
+             typedef byte far *byteptr;
+             typedef word far *wordptr;
+
+                      Error return values for mailbox functions
+
+             #define TTIMEOUT ((farptr) -1L)
+               This value is returned if a timeout occurred during a mailbox 
+               wait.
+
+             #define TWAKE    ((farptr) -2L)
+               This  value  is returned if the task was waked  up  during  a 
+               mailbox wait.
+
+
+                               The timer control block
+
+          The  timer control block is included in every task control  block. 
+          It  may  also be created as a separate entity to  specify  special 
+          actions  to be executed after or every n timer ticks.  The  "next" 
+          field links the active structures into the timer queue.
+
+          "timeout"  gives the number of timer ticks, "reload" is  used  for 
+          repetitive  timeout actions to reload the original timeout  value. 
+
+          "strucp"  points  to  the  structure to  be  acted  upon,  "tkind" 
+          specifies the kind of structure:
+
+               #define  TKIND_TASK        1
+                    Strucp  points  to the task control block of  which  the 
+                    element is a member. The task will be awakened when  the 
+                    timeout expires.
+
+               #define  TKIND_WAKE        2
+                    Strucp points to a task control block. Otherwise same as 
+                    TKIND_TASK.
+
+               #define  TKIND_PROC        3
+                    Strucp  contains the address of a function to be  called 
+                    on timeout.
+
+               #define  TKIND_FLAG        4
+                    Strucp points to a flag that should be set on timeout.
+          CTask Manual          Version 1.1  88-07-01                Page 23
+
+
+
+
+               #define  TKIND_COUNTER     5
+                    Strucp  points to a counter that should be increased  on 
+                    timeout.
+
+               #define  TKIND_TEMP        0x80
+                    This  is  a modifying flag. If set,  the  timer  control 
+                    block was allocated dynamically, and should be freed  on 
+                    timeout.
+
+
+          "tstate" contains the state of the element:
+
+               #define  TSTAT_REMOVE      -1
+                    The  element should be taken off the queue on  the  next 
+                    pass (if the TKIND_TEMP-flag is set, it will be freed).
+
+               #define  TSTAT_IDLE        0
+                    The element is not enqueued.
+
+               #define  TSTAT_COUNTDOWN   1
+                    The  timeout counter is counted down. If the timeout  is 
+                    reached, the element is removed from the queue.
+
+               #define  TSTAT_REPEAT      2
+                    The  timeout counter is counted down. If the timeout  is 
+                    reached, the timeout count is reloaded.
+
+
+             typedef struct tlink_rec far *tlinkptr;
+
+             struct tlink_rec {
+                              tlinkptr next;
+                              dword    timeout;
+                              dword    reload;
+                              farptr   strucp;
+                              byte     tstate;
+                              byte     tkind;
+                              };
+
+             typedef struct tlink_rec tlink;
+
+
+
+                               The name link structure
+
+          If  TSK_NAMED is enabled, all structures except the timer  control 
+          block contain a name link. All control blocks are linked and named 
+          via  this  element.  To facilitate removal from the  list,  it  is 
+          doubly  linked  via  the pointers "follow"  and  "prev".  
+
+          "strucp"  points to the head of the structure the name link is  an 
+          element of, with "nkind" specifying the type of structure:
+
+          CTask Manual          Version 1.1  88-07-01                Page 24
+
+
+
+               #define  TYP_TCB        1     task control block
+               #define  TYP_FLAG       2     flag event
+               #define  TYP_RESOURCE   3     resource event
+               #define  TYP_COUNTER    4     counter event
+               #define  TYP_MAILBOX    5     mailbox event
+               #define  TYP_PIPE       6     byte pipe
+               #define  TYP_WPIPE      7     word pipe
+               #define  TYP_BUFFER     8     buffer
+
+          The head element of the name list has its nkind field set to zero.
+
+          The  "name" field contains an up to 8-character name plus  a  zero 
+          terminator.
+
+               #define  NAMELENGTH     9
+
+               typedef struct name_rec far *nameptr;
+
+               struct name_rec {
+                               nameptr    follow;    
+                               nameptr    prev;      
+                               farptr     strucp;    
+                               byte       nkind;     
+                               char       name [NAMELENGTH];
+                               };
+
+               typedef struct name_rec namerec;
+
+
+
+                          The task control block structure
+
+          The  "next" field points to the next tcb in a queue.  The  "queue" 
+          pointer  points to the head of the queue the task is enqueued  in, 
+          or will be enqueued in on the next schedule request in the case of 
+          the current running task. 
+
+          "stack" contains the saved task stack pointer (offset and segment) 
+          if the task is not running. The field "stkbot" contains the bottom 
+          address  of  the task stack.  It is set  by  create_task,  but  is 
+          currently  not used anywhere else.  Stack checking routines  might 
+          use this value to test for stack overflow and/or stack usage.
+
+          "prior"  contains  the tasks current  priority,  with  0xffff  the 
+          highest possible priority, and 0 the lowest. "initprior" initially 
+          contains the same value.  If variable priority is enabled, "prior" 
+          is  incremented on each scheduler call,  and reset to  "initprior" 
+          when the task is activated.
+
+          "state" and "flags" contain the tasks state and flags.
+
+          "timerq" is a tlink structure used to chain the tcb into the timer 
+          queue,  if  the  task is waiting for a timeout. See  above  for  a 
+          description of the tlink structure.
+          CTask Manual          Version 1.1  88-07-01                Page 25
+
+
+
+
+          The fields "retptr" and "retsize" are used in event handling. They 
+          are  used  when a task is waiting for an event by the  task  acti-
+          vating the event,  and also by timeout and wake to indicate  error 
+          returns.   The  use of these pointers eliminates the need to  loop 
+          for  an  event,  which  requires slightly more code in  the  event 
+          handling routines, but reduces the need for task switching.
+
+          The  "name"  namerec  structure is present only  if  TSK_NAMED  is 
+          enabled.  It  may  be  used in debugging  (see  tsksnap.c  for  an 
+          example),  and in applications where the address of the  structure 
+          can not be passed directly.
+
+             typedef struct tcb_rec far *tcbptr;
+             typedef tcbptr far *tqueptr;
+
+             struct tcb_rec {
+                             tcbptr   next;
+                             tqueptr  queue;
+                             byteptr  stack;
+                             byteptr  stkbot;
+                             word     prior;
+                             word     initprior;
+                             byte     state;
+                             byte     flags;
+                             dlink    timerq;
+                             farptr   retptr;
+                             int      retsize;
+                            };
+
+             typedef struct tcb_rec tcb;
+
+
+                                     Task states
+
+             #define  ST_KILLED   0
+             #define  ST_STOPPED  1
+             #define  ST_DELAYED  2
+             #define  ST_WAITING  3
+             #define  ST_ELIGIBLE 4
+             #define  ST_RUNNING  5
+
+          CTask Manual          Version 1.1  88-07-01                Page 26
+
+
+
+                     Possible task states and queue association
+
+          ST_KILLED      The  task has been killed.  Restarting the task  is 
+                         not possible. Queue pointers are invalid.
+
+          ST_STOPPED     The  task is not enqueued in any queue.  To be  in-
+                         cluded  in  scheduling,  it  has to  be  explicitly 
+                         started. The queue head pointer is NULL.
+
+          ST_DELAYED     The task is enqueued in the timer queue only.  When 
+                         the  timer expires,  it is placed in  the  eligible 
+                         queue.  The queue head pointer is NULL.
+
+          ST_ELIGIBLE    The  task  is  enqueued in the queue  of  processes 
+                         eligible for running.  It can not be chained in the 
+                         timer queue.  The queue head pointer points to  the 
+                         eligible queue.
+
+          ST_RUNNING     The task is the current running process.   Although 
+                         it  is  not enqueued in any queue,  the queue  head 
+                         pointer in its control block is valid and points to 
+                         the  queue the process will be enqueued in  on  the 
+                         next schedule request.
+
+          ST_WAITING     The task is waiting for an event to happen.  It can 
+                         also  be chained into the timer queue if a  timeout 
+                         was specified in the call.   The queue head pointer 
+                         points to the queue head in the event control block 
+                         for the event the process is waiting on.
+
+
+                    Possible state transitions and their reasons
+
+             stopped  -> eligible    by start_task ()
+
+             delayed  -> killed      by kill_task ()
+                      -> eligible    by timer task, or wake_task ()
+             
+             eligible -> killed      by kill_task ()
+                      -> running     by scheduler
+
+             running  -> killed      by kill_task ()
+                      -> stopped     by delay (0)
+                      -> delayed     by delay (n != 0)
+                      -> eligible    by scheduler
+                      -> waiting     by wait_xxx ()
+
+             waiting  -> killed      by kill_task ()
+                      -> eligible    by event happening, timeout,
+                                     or wake_task()
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 27
+
+
+
+                                     Task flags
+
+          System flags:
+
+               #define  F_TEMP   0x80
+                    This tcb was allocated automatically, and must be free'd 
+                    on task kill.
+
+               #define  F_STTEMP 0x40
+                    The tasks stack was allocated automatically, and must be 
+                    free'd on task kill.
+
+          User changeable flags:
+
+               #define  F_CRIT   0x01
+                    This  task  may not be preempted. It will run  until  it 
+                    clears  this  flag, delays itself, calls  the  scheduler 
+                    explicitly, or waits for an event.
+
+
+
+                               The event control blocks
+
+          All event control blocks have two optional fields:
+
+          "name"  is only present if TSK_NAMED is enabled. It is  a  namerec 
+          structure as explained above.
+
+          "flags" is only present if TSK_DYNAMIC is enabled. It contains
+
+               F_TEMP    If this control block was allocated  automatically, 
+                         and must be free'd on delete.
+
+               F_STTEMP  If  the buffer for this event was  allocated  auto-
+                         matically, and must be free'd on delete (pipes  and 
+                         buffers only).
+
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 28
+
+
+
+                              The flag event structure
+
+          Contains  two queues for processes waiting on a flag state  (clear 
+          or set), plus the flag state (0 = clear, 1 = set).
+
+             typedef struct {
+                            tcbptr  wait_set;
+                            tcbptr  wait_clear;
+                            int     state;
+                            byte    flags;   (if TSK_DYNAMIC)
+                            namerec name;    (if TSK_NAMED)
+                            } flag;
+
+             typedef flag far *flagptr;
+
+
+                             The counter event structure
+
+          Similar to a flag, but contains a doubleword state counter.
+
+             typedef struct {
+                            tcbptr  wait_set;
+                            tcbptr  wait_clear;
+                            dword   state;
+                            byte    flags;   (if TSK_DYNAMIC)
+                            namerec name;    (if TSK_NAMED)
+                            } counter;
+
+             typedef counter far *counterptr;
+
+
+                            The resource event structure
+
+          Contains a queue for the tasks waiting for access to the resource, 
+          a  pointer  to  the current owner of the resource  (to  check  for 
+          illegal "release_resource" calls),  and the resource state (0 = in 
+          use, 1 = free).
+
+             typedef struct {
+                            tcbptr   waiting;
+                            tcbptr   owner;
+                            int      state;
+                            byte     flags;   (if TSK_DYNAMIC)
+                            namerec  name;    (if TSK_NAMED)
+                            } resource;
+
+             typedef resource far *resourceptr;
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 29
+
+
+
+                             The mailbox event structure
+
+          The msgptr type is only used internally to chain mail blocks  into 
+          the  mailbox.  The  mailbox  type contains a queue  of  the  tasks 
+          waiting  for mail,  and a first and last pointer for the chain  of 
+          mail blocks.  
+
+             struct msg_header {
+                               struct msg_header far *next;
+                               };
+
+             typedef struct msg_header far *msgptr;
+
+             typedef struct {
+                            tcbptr  waiting;
+                            msgptr  mail_first;
+                            msgptr  mail_last;
+                            byte    flags;   (if TSK_DYNAMIC)
+                            namerec name;    (if TSK_NAMED)
+                            } mailbox;
+
+             typedef mailbox far *mailboxptr;
+
+
+                        The pipe and word pipe event structure
+
+          Contains queues of the tasks waiting to read or write to the pipe, 
+          indices  for reading (outptr) and writing (inptr) into the buffer, 
+          the  buffer size,  the number of bytes or words currently  in  the 
+          pipe  ("filled"),  and the pointer to the buffer.  A word pipe  is 
+          handled exactly the same as a byte pipe, the only difference being 
+          the element size placed in the buffer.  With normal pipes, charac-
+          ters are buffered, with word pipes, words.
+
+             typedef struct {
+                            tcbptr   wait_read;
+                            tcbptr   wait_write;
+                            tcbptr   wait_clear;
+                            word     bufsize;
+                            word     filled;
+                            word     inptr;
+                            word     outptr;
+                            byteptr  contents;
+                            byte    flags;   (if TSK_DYNAMIC)
+                            namerec name;    (if TSK_NAMED)
+                            } pipe;
+
+             typedef pipe far *pipeptr;
+
+          CTask Manual          Version 1.1  88-07-01                Page 30
+
+
+
+             typedef struct {
+                            tcbptr   wait_read;
+                            tcbptr   wait_write;
+                            tcbptr   wait_clear;
+                            word     bufsize;
+                            word     filled;
+                            word     inptr;
+                            word     outptr;
+                            wordptr  wcontents;
+                            byte    flags;   (if TSK_DYNAMIC)
+                            namerec name;    (if TSK_NAMED)
+                            } wpipe;
+
+             typedef wpipe far *wpipeptr;
+
+
+                              The buffer event structure
+
+          Contains  resources for read and write access, the word pipe  used 
+          for buffering, and a message counter.
+
+             typedef struct {
+                             resource    buf_write;
+                             resource    buf_read;
+                             wpipe       pip;
+                             word        msgcnt;
+                             byte        flags;   (if TSK_DYNAMIC)
+                             namerec     name;    (if TSK_NAMED)
+                            } buffer;
+
+             typedef buffer far *bufferptr;
+
+
+
+          NOTE:  When  modifying CTask structures,  take care to modify  the 
+          equivalent  definitions  in the assembler include file  "tsk.mac". 
+          Some  of  the assembler routines have to use  field  offsets  into 
+          pointers,  so  having  different offsets in C and  assembler  will 
+          crash the system.
+          CTask Manual          Version 1.1  88-07-01                Page 31
+
+
+
+                                   CTask Routines
+                                   ==============
+
+                              Installation and Removal
+
+          void install_tasker (int varpri, int speedup);
+
+               Installs  the multitasker.  Must be called prior to any other 
+               routine. The calling routine is defined as the main task, and 
+               assigned  the  highest priority.   To allow  other  tasks  to 
+               execute,  the  main task must have its priority  reduced,  be 
+               delayed,  or  wait  on an event.   
+
+               The "varpri" parameter enables variable priority if nonzero.
+
+               The  "speedup" parameter is defined for the IBM  PC/XT/AT  as 
+               the clock tick speedup factor. The timer tick frequency  will 
+               be set to
+
+                    speedup  ticks/sec   msecs/tick
+                      0        18.2        54.9     (normal clock)
+                      1        36.4        27.5
+                      2        72.8        13.7
+                      3       145.6         6.9
+                      4       291.3         3.4
+
+               Note  that  all  timeouts are specified  in  tick  units,  so 
+               changing  the speedup parameter will influence  timeouts  and 
+               delays.  You  can enable CLOCK_MSECS in  tskconf.h  to  allow 
+               timeouts to be specified in milliseconds.
+               The system clock will not be disturbed by changing the speed. 
+               Using values above 2 can lead to interrupt overruns on slower 
+               machines and is not recommended.
+
+
+          void remove_tasker (void);
+
+               Uninstalls the multitasker. Must only be called from the main 
+               task, and should be called before exiting the program.
+
+
+
+                                    Miscellaneous
+
+
+          void preempt_off (void);
+
+               Disables task preemption. This is the default after installa-
+               tion.  With preemption turned off,  only delays, event waits, 
+               and explicit scheduler calls will cause a task switch.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 32
+
+
+
+          void preempt_on (void);
+
+               Enables  task preemption.  Task switches will occur on  timer 
+               ticks.
+
+
+          void far schedule (void);
+
+               Explicit  scheduling request.  The highest priority  eligible 
+               task will be made running.
+
+
+          void far c_schedule (void);
+
+               Conditional  scheduling request.  Scheduling will take  place 
+               only if preemption is allowed.
+
+
+          void tsk_dis_preempt (void)
+
+               Temporarily  disable task preemption.  Preemption will be re-
+               enabled  by  tsk_ena_preempt or  an  unconditional  scheduler 
+               call.
+
+
+          void tsk_ena_preempt (void)
+
+               Re-enable  task  preemption.  Note that  tsk_dis_preempt  and 
+               tsk_ena_preempt do not change the global preemption state set 
+               by preempt_off and preempt_on.
+
+
+          int tsk_dis_int (void)
+
+               Disable  interrupts.  Returns the state of the interrupt flag 
+               prior to this call (1 if interrupts were enabled).
+
+
+          void tsk_ena_int (int state)
+
+               Enables  interrupts if "state" is nonzero.  Normally used  in 
+               conjunction with tsk_dis_int.
+
+          The routines tsk_dis_int and tsk_ena_int may be used in a  simpli-
+          fied scheme with the defines
+
+               CRITICAL;      Declares "int crit_intsav;".
+               C_ENTER;       Expands to "crit_intsav = tsk_dis_int ();"
+               C_LEAVE;       Expands to "tsk_ena_int (crit_intsav);".
+
+
+          void tsk_cli (void)
+
+               Disables interrupts (intrinsic function).
+          CTask Manual          Version 1.1  88-07-01                Page 33
+
+
+
+
+
+          void tsk_sti (void)
+
+               Unconditionally enables interrupts (intrinsic function).
+
+
+          void tsk_outp (int port, byte b)
+
+               Outputs  the  value "b" to  hardware-port  "port"  (intrinsic 
+               function).
+
+          byte tsk_inp (int port)
+
+               Returns the value read from port "port" (intrinsic function).
+
+
+          The following entry points may be used from assembler routines:
+
+          extrn scheduler: far
+
+               Direct entry into the scheduler.  The stack must be set up as 
+               for an interrupt handler, e.g.
+                    pushf
+                    cli
+                    call  scheduler
+
+
+          extrn _sched_int: far
+
+               Conditional scheduling call.  The stack must be set up as for 
+               an interrupt handler.
+
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 34
+
+
+
+                                   Task Operations
+
+          tcbptr create_task (tcbptr task, funcptr func, byteptr stack,
+                              word stksz, word prior, farptr arg 
+                              [, byteptr name]);
+
+               Initialises a task.  Must be called prior to any other opera-
+               tions  on this task.  The task is in the stopped state  after 
+               creation. It must be started to be able to run.
+
+               "task"    is  a  pointer to a tcb (NULL for  automatic  allo-
+                         cation).
+               "func"    is a pointer to a void far function, with a single 
+                         dword sized parameter.
+               "stack"   is a pointer to a stack area for the task (NULL for 
+                         automatic allocation).
+               "stksz"   is the size of the stack area in bytes.
+               "prior"   is the tasks priority (0 lowest, 0xffff highest).
+               "arg"     is an argument to the created task. It may be used 
+                         to differentiate between tasks when using the same 
+                         function in different tasks.
+               "name"    is  the name of the task,  up to eight  characters, 
+                         plus  zero-terminator.  This  parameter is  defined 
+                         only if TSK_NAMEPAR is enabled in tskconf.h.
+
+
+          void kill_task (tcbptr task);
+
+               Kills a task. The task can no longer be used.
+
+
+          int start_task (tcbptr task);
+
+               Starts a task, i.e. makes it eligible for running.
+               Returns  0  if  task  was started,  -1 if the  task  was  not 
+               stopped.
+               A value of NULL for "task" will start the "main task".
+
+
+          int wake_task (tcbptr task);
+
+               Prematurely wakes a delayed or waiting task.
+               If the task was waiting for an event, it will be removed from 
+               the  waiting queue,  with the operation terminating  with  an 
+               error return value.
+               Returns  0 if task was waked,  -1 if the task was not delayed 
+               or waiting.
+               A value of NULL for "task" will wake the "main task".
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 35
+
+
+
+          void set_priority (tcbptr task, word prior)
+
+               Sets the priority of the specified task to "prior".
+               Note that you should NOT modify the priority field in the tcb 
+               structure directly.
+               A value of NULL for "task" will set the priority of the "main 
+               task".
+
+
+          void set_task_flags (tcbptr task, byte flags)
+
+               Sets the flags of the task to "flags".  Currently,  the  only 
+               flag that can be changed is
+
+                         F_CRIT   the task can not be preempted if set.
+
+               Note  that  you  may  NOT modify the flag field  in  the  tcb 
+               structure directly.
+               A  value of NULL for "task" will set the flags of  the  "main 
+               task".
+
+
+                                  Timer Operations
+
+          Timeouts are normally specified in timer ticks. If CLOCK_MSECS  is 
+          enabled, timeouts will be converted to the nearest number of timer 
+          ticks  automatically.  The global  word  variable  "ticks_per_sec" 
+          contains  a rough estimate of the number of ticks per second  even 
+          if CLOCK_MSECS is not enabled.
+
+
+                                 Event wait Timeouts
+
+          When  waiting  for  an event,  a timeout may  be  specified.   The 
+          operation will terminate with an error return value if the timeout 
+          is reached before the event occurs.
+          NOTE  that the timeout parameter is not optional.  To  specify  no 
+          timeout, use the value 0.
+
+
+                                       Delays
+
+          int t_delay (dword ticks);
+
+               Delay the current task for "ticks" clock ticks/milliseconds.
+               If ticks is 0, the task is stopped.
+
+
+                                    Timed Events
+
+          You can create timer control blocks to
+
+               - set a flag
+               - increment a counter
+          CTask Manual          Version 1.1  88-07-01                Page 36
+
+
+
+               - wake up a task
+               - call a function
+
+          after  a specified timeout interval.  The operation may optionally 
+          be  repeated.  For calling functions on a timeout,  the  following 
+          must be noted:
+
+               Timeout functions should be as short as possible, since they
+               run at the highest priority.
+               The  stack and data area is the area of the  timer  task.  Be 
+               careful when referencing variables.
+               Timeout  functions may not use any functions that could cause 
+               the timer task to be made waiting.
+
+
+          tlinkptr create_timer (tlinkptr elem, dword tout, farptr strucp,
+                                 byte kind, byte rept);
+
+               Create a timer control block.
+               Returns the address of the control block, NULL on error.
+
+               "elem"    is the control block to initialise (NULL for auto-
+                         matic allocation).
+               "tout"    specifies the timeout interval.
+               "strucp"  points  to  the structure to be  used.  This  is  a 
+                         flagptr  for  setting  a  flag,  a  counterptr  for 
+                         increasing counters, a tcbptr for waking a task, or 
+                         a funcptr for calling a function.
+               "kind"    gives the kind of structure "strucp" points to.  It 
+                         must be one of
+                              TKIND_WAKE     for task-wakeup
+                              TKIND_PROC     for function call
+                              TKIND_FLAG     for flag set
+                              TKIND_COUNTER  for counter increment.
+               "rept"    if  nonzero,  the action will be repeated on  every 
+                         "tout" timeout interval.
+
+               NOTE: Timer control blocks can not be named.
+               
+
+          void delete_timer (tlinkptr elem);
+
+               Deletes  a  timer  control block,  and removes  it  from  the 
+               timeout queue.
+
+
+          void change_timer (tlinkptr elem, dword tout, byte rept);
+
+               Changes  the  timeout  value and/or the repeat  flag  for  an 
+               existing timer control block. If "tout" is zero, the call has 
+               the same effect as delete_timer.
+
+
+          NOTE:  delete_timer  and change_timer should not be used on  auto-
+          CTask Manual          Version 1.1  88-07-01                Page 37
+
+
+
+          matically  allocated timer control blocks.  Since such blocks  are 
+          deallocated   once   the  timeout  expires  (except   for   repeat 
+          operations), the validity of the pointer is not guaranteed.
+
+
+                                  Event Operations
+                                  ================
+
+                                      Resources
+
+          A Resource is either in use or free, the default state is free.
+          If a task has requested a resource, its state is in use.
+          Tasks  requesting  a  resource  while it is in use  will  be  made 
+          waiting. If the resource is released, the highest priority waiting 
+          task is made eligible,  and is assigned the  resource.   Interrupt 
+          handlers    may   not   use   resource   functions   other    than 
+          "check_resource".
+
+
+          resourceptr create_resource (resourceptr rsc [, byteptr name]);
+
+               This initialises a resource.  Must be used prior to any other 
+               operations on a resource.
+
+               Returns the address of the control block, NULL on error.
+
+               "rsc"     is  the resource control block (NULL for  automatic 
+                         allocation).
+
+               "name"    is   the  name  of  the  resource,   up  to   eight 
+                         characters, plus zero-terminator. This parameter is 
+                         defined only if TSK_NAMEPAR is enabled in tskconf.h.
+
+
+          void delete_resource (resourceptr rsc);
+
+               Calling  this  routine is optional.  It will kill  all  tasks 
+               waiting for the resource.
+
+
+          void release_resource (resourceptr rsc);
+
+               Release the resource.  If the task does not own the resource, 
+               the call is ignored.
+               If  tasks  are waiting,  the highest priority task will  gain 
+               access to the resource.
+
+
+          int request_resource (resourceptr rsc, dword timeout);
+
+               Requests the resource.  If it is not available,  the task  is 
+               suspended. A timeout may be specified.
+               Returns  0  if  resource  was  allocated,  -1  if  a  timeout 
+               occurred, -2 on wake.
+          CTask Manual          Version 1.1  88-07-01                Page 38
+
+
+
+               This  call  is  ignored (returns a 0)  if  the  calling  task 
+               already owns the resource.
+
+
+          int c_request_resource (resourceptr rsc);
+
+               Requests the resource only if it is available.
+               Returns 0 if resource was allocated, -1 if unavailable.
+
+
+          int check_resource (resourceptr rsc);
+                
+               Returns 0 if resource is allocated, 1 if free.
+
+
+                                        Flags
+
+          A Flag can be either on or off, the default state is off (0).
+          Tasks  can  wait  on either state of the flag.  If  the  state  is 
+          changed,  all  tasks  waiting  for the state  are  made  eligible.  
+          Interrupt  handlers  may use  the  "set_flag",  "clear_flag",  and 
+          "check_flag" functions.
+
+
+          flagptr create_flag (flagptr flg [, byteptr name]);
+
+               This  initialises  a flag.  Must be used prior to  any  other 
+               operations on a flag. The state is set to 0.
+
+               Returns the address of the control block, NULL on error.
+
+               "flg"     is the flag control block (NULL for automatic allo-
+                         cation).
+
+               "name"    is  the name of the flag,  up to eight  characters, 
+                         plus  zero-terminator.  This  parameter is  defined 
+                         only if TSK_NAMEPAR is enabled in tskconf.h.
+
+
+          void delete_flag (flagptr flg);
+
+               Calling  this  routine is optional.  It will kill  all  tasks 
+               waiting for the flag.
+
+
+          void set_flag (flagptr flg);
+
+               This sets the flag.  All tasks waiting for the set state will 
+               be made eligible for running.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 39
+
+
+
+          void clear_flag (flagptr flg);
+
+               This  clears the flag.  All tasks waiting for the clear state 
+               will be made eligible for running.
+
+                      
+          int wait_flag_set (flagptr flg, dword timeout);
+
+               Waits for the set state of the flag.  If the flag is not set, 
+               the task is suspended. A timeout may be specified.
+               Returns 0 if the flag was set, -1 on timeout, -2 on wake.
+
+
+          int wait_flag_clear (flagptr flg, dword timeout);
+
+               Waits  for the clear state of the flag.  If the flag  is  not 
+               clear, the task is suspended. A timeout may be specified.  
+
+               Returns 0 if the flag was cleared, -1 on timeout, -2 on wake.
+
+
+          int clear_flag_wait_set (flagptr flg, dword timeout)
+
+               Combines the operations clear_flag and wait_flag_set.
+               Returns 0 if the flag was set, -1 on timeout, -2 on wake.
+
+          int check_flag (flagptr flg);
+
+               Returns 0 if flag clear, 1 if set.
+
+
+
+                                      Counters
+
+          A  Counter can have any value from 0L to 0xffffffffL,  the default 
+          value is 0. Tasks can wait for a counter being zero or non-zero.
+          If the counter is cleared or decremented to zero,  all tasks  wai-
+          ting for the zero condition are made eligible.
+          If  the counter is incremented,  the highest priority task waiting 
+          for non-zero is made eligible,  and the counter is decremented  by 
+          one.
+          Interrupt handlers may use the "clear_counter", "inc_counter", and 
+          "check_counter" functions.
+
+
+          counterptr create_counter (counterptr cnt [, byteptr name]);
+
+               This  initialises a counter.  Must be used prior to any other 
+               operations on a flag. The value is set to 0.
+
+               Returns the address of the control block, NULL on error.
+
+               "cnt"     is  the  counter control block (NULL for  automatic 
+                         allocation).
+          CTask Manual          Version 1.1  88-07-01                Page 40
+
+
+
+
+               "name"    is the name of the counter, up to eight characters, 
+                         plus  zero-terminator.  This parameter  is  defined 
+                         only if TSK_NAMEPAR is enabled in tskconf.h.
+
+
+          void delete_counter (counterptr cnt);
+
+               Calling  this  routine is optional.  It will kill  all  tasks 
+               waiting for the counter.
+
+
+          void clear_counter (counterptr cnt);
+
+               Clears  the counter to zero.  All tasks waiting for the  zero 
+               state will be made eligible for running.
+
+
+          int wait_counter_set (counterptr cnt, dword timeout);
+
+               Waits for the counter having a nonzero value. If the value is 
+               zero,  the task is suspended.  The value is decremented  when 
+               the task gets access to the counter.  A timeout may be speci-
+               fied.
+               Returns  0 if the counter was nonzero,  -1 on timeout,  -2 on 
+               wake.  
+
+
+          int wait_counter_clear (counterptr cnt, dword timeout);
+
+               Waits  for the counter having a zero value.  If the value  is 
+               nonzero, the task is suspended. A timeout may be specified.
+               Returns 0 if the counter was zero, -1 on timeout, -2 on wake.
+
+
+          void inc_counter (counterptr cnt);
+
+               Increments the counter.  If tasks are waiting for the nonzero 
+               state,  the  highest  priority task is given  access  to  the 
+               counter.
+
+
+          dword check_counter (counterptr cnt);
+
+               Returns the current value of the counter.
+
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 41
+
+
+
+                                      Mailboxes
+
+          A Mailbox can hold any number of mail blocks.
+          Tasks  can send mail to a mailbox and wait for mail to  arrive.  A 
+          mail block is assigned to the highest priority waiting task.  Care 
+          must  be  exercised not to re-use a mail block until it  has  been 
+          processed  by the receiving task.   The mail block format is  user 
+          defineable,  with the first doubleword in a block reserved for the 
+          tasking  system.   Interrupt  handlers  may use  the  "send_mail", 
+          "c_wait_mail", and "check_mailbox" functions.
+
+          Note  that mailboxes are well suited to provide the mechanism  for 
+          managing a chain of (equally sized) free mail blocks. On initiali-
+          sation,  all  free  blocks  would be "sent" to  the  manager  box. 
+          Requesting a free block would use "wait_mail",  and freeing a used 
+          block would again "send" it to the manager mailbox.
+
+
+          mailboxptr create_mailbox (mailboxptr box [, byteptr name]);
+
+               This initialises a mailbox.  Must be used prior to any  other 
+               operations on a mailbox.
+
+               Returns the address of the control block, NULL on error.
+
+               "box"     is  the mailbox control block (NULL  for  automatic 
+                         allocation).
+
+               "name"    is the name of the mailbox, up to eight characters, 
+                         plus  zero-terminator.  This  parameter is  defined 
+                         only if TSK_NAMEPAR is enabled in tskconf.h.
+
+
+          void delete_mailbox (mailboxptr box);
+
+               Calling  this  routine is optional.  It will kill  all  tasks 
+               waiting for mail.
+
+
+          void send_mail (mailboxptr box, farptr msg);
+
+               Sends  a message to the specified mailbox.  If tasks are wai-
+               ting for mail, the highest priority task will get it.  
+
+
+          farptr wait_mail (mailboxptr box, dword timeout);
+
+               Waits for mail.  If no mail is available, the task is suspen-
+               ded. A timeout may be specified.
+               Returns the pointer to the received mail block, TTIMEOUT 
+               (-1) on timeout, TWAKE (-2) on wake.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 42
+
+
+
+          farptr c_wait_mail (mailboxptr box);
+
+               Reads mail only if mail is available.
+               Returns  NULL  if there is no mail,  else a  pointer  to  the 
+               received message.
+
+
+          int check_mailbox (mailboxptr box);
+
+               Returns 0 if mailbox is empty, 1 otherwise.
+
+
+
+                                        Pipes
+
+          A Pipe has a buffer to hold character or word sized items.
+          An  item may be written to a pipe if there is space in the buffer. 
+          Otherwise,  the writing task will be made waiting.  A reading task 
+          will be made waiting if the buffer is empty.   If an item has been 
+          read,  the highest priority task waiting to write to the pipe will 
+          be allowed to write.
+          Interrupt  handlers  may  only use  pipe  functions  "check_pipe", 
+          "c_write_pipe", and "c_read_pipe".
+
+          Note  that  the  values -1 and -2 (0xffff and  0xfffe)  should  be 
+          avoided when writing to word pipes.  These values are used to mark 
+          timeout and wake when reading,  or pipe empty when checking a word 
+          pipe, and thus may lead to erroneous operation of your routines.
+
+
+          pipeptr create_pipe (pipeptr pip, farptr buf, word bufsize
+                               [, byteptr name]);
+          wpipeptr create_wpipe (wpipeptr pip, farptr buf, word bufsize
+                                 [, byteptr name]);
+
+               This  initialises  a pipe.  Must be used prior to  any  other 
+               operations on a pipe.  "bufsize" specifies the buffer size in 
+               bytes.  With word pipes,  the buffer size should be divisible 
+               by two.
+
+               Returns the address of the control block, NULL on error.
+
+               "pip"     is the pipe/wpipe control block (NULL for automatic 
+                         allocation).
+
+               "name"    is  the name of the pipe,  up to eight  characters, 
+                         plus  zero-terminator.  This  parameter is  defined 
+                         only if TSK_NAMEPAR is enabled in tskconf.h.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 43
+
+
+
+          void delete_pipe (pipeptr pip);
+          void delete_wpipe (wpipeptr pip);
+
+               Calling  this  routine is optional.  It will kill  all  tasks 
+               waiting to read or write messages.
+
+
+          int read_pipe (pipeptr pip, dword timeout);
+          word read_wpipe (wpipeptr pip, dword timeout);
+
+               Read an item from a pipe.  If no item is available,  the task 
+               is suspended. A timeout may be specified.
+               Returns the item, or -1 on timeout, -2 on wake.
+
+
+          int c_read_pipe (pipeptr pip);
+          word c_read_wpipe (wpipeptr pip);
+
+               Reads an item from a pipe only if one is available.
+               Returns the received item, or -1 if none is available.
+
+
+          int write_pipe (pipeptr pip, byte ch, dword timeout);
+          int write_wpipe (wpipeptr pip, word ch, dword timeout);
+
+               Writes an item to a pipe.  If the buffer is full, the task is 
+               suspended. A timeout may be specified.
+               If  tasks are waiting to read,  the item will be assigned  to 
+               the highest priority waiting task.
+               Returns 0 on success, or -1 on timeout, -2 on wake.
+                      
+
+          int c_write_pipe (pipeptr pip, byte ch);
+          int c_write_wpipe (wpipeptr pip, word ch);
+
+               Writes an item to a pipe only if enough space is available.
+               Returns 0 on success, or -1 if no space available.
+                      
+
+          int wait_pipe_empty (pipeptr pip, dword timeout);
+          int wait_wpipe_empty (wpipeptr pip, dword timeout);
+
+               Waits  for  the pipe to be emptied.  If the pipe  is  already 
+               empty  on  entry,  the task continues to run.  Returns  0  on 
+               empty, -1 on timeout, -2 on wake.
+
+
+          int check_pipe (pipeptr pip);
+          word check_wpipe (pipeptr pip);
+
+               Returns  -1 if the pipe is empty,  else the first item in the 
+               pipe. The item is not removed from the pipe.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 44
+
+
+
+          word pipe_free (pipeptr pip);
+          word wpipe_free (wpipeptr pip);
+
+                    Returns the number of free items available in the pipe.
+
+
+
+                                        Buffers
+
+          A Buffer has a buffer to hold message strings.
+          A  message may be written to a buffer if it fits into the  buffer. 
+          Otherwise,  the writing task will be made waiting.  A reading task 
+          will  be made waiting if the buffer is empty.   If a  message  has 
+          been  read,  the  highest  priority task waiting to write  to  the 
+          buffer  will  be  allowed to write if its message  fits  into  the 
+          available space.
+          Interrupt  handlers  may  not  use  buffer  functions  other  than 
+          "check_buffer".
+          The buffer routines are implemented using resources and pipes, and 
+          thus are not part of the true "kernel" routines.
+
+
+          bufferptr create_buffer (bufferptr buf, farptr pbuf, word bufsize
+                                   [, byteptr name]);
+
+               This  initialises a buffer.  Must be used prior to any  other 
+               operations on a buffer.
+               The minimum buffer size is the length of the longest expected 
+               message plus two.
+
+               Returns the address of the control block, NULL on error.
+
+               "buf"     is  the  buffer control block (NULL  for  automatic 
+                         allocation).
+
+               "name"    is the name of the buffer,  up to eight characters, 
+                         plus  zero-terminator.  This  parameter is  defined 
+                         only if TSK_NAMEPAR is enabled in tskconf.h.
+
+
+          void delete_buffer (bufferptr buf);
+
+               Calling  this  routine is optional.  It will kill  all  tasks 
+               waiting to read or write messages.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 45
+
+
+
+          int read_buffer (bufferptr buf, farptr msg, int size, 
+                           dword timeout);
+
+               Read a message from a buffer. If no message is available, the 
+               task is suspended. A timeout may be specified.
+               The  message  will  be copied to the  buffer  "buf",  with  a 
+               maximum length of "size" bytes.
+               Returns the length of the received message, -1 on timeout, -2 
+               on wake.
+
+
+          int c_read_buffer (bufferptr buf, farptr msg, int size);
+
+               Reads  a  message  from a buffer only if  one  is  available.  
+               Returns the length of the received message,  or -1 if none is 
+               available.
+
+
+          int write_buffer (bufferptr buf, farptr msg, int size, 
+                            dword timeout);
+
+               Writes  a message from "msg" with length "size" to a  buffer. 
+               If not enough space for the message is available, the task is 
+               suspended. A timeout may be specified.
+               If tasks are waiting for messages,  the highest priority task 
+               will get it.
+               Returns the length of the message, -1 on timeout, -2 on wake, 
+               -3 on error (length < 0 or length > buffer buffer size).
+
+                      
+          int c_write_buffer (bufferptr buf, farptr msg, int size);
+
+               Writes  a  message  to  a buffer  only  if  enough  space  is 
+               available.
+               Returns the length of the message,  -1 if no space available, 
+               or -3 on error (length < 0 or length > buffer buffer size).
+
+
+          word check_buffer (bufferptr buf);
+
+               Returns  the  current number of bytes (not messages)  in  the 
+               buffer, including the length words.
+
+
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 46
+
+
+
+                                 The Keyboard Handler
+                                 ====================
+
+          word t_read_key (void)
+
+               Waits for a key to be entered.  Returns the ASCII-code in the 
+               lower  byte,  and  the  scan-code in the upper  byte,  or  -2 
+               (0xfffe) on wake.
+
+
+          word t_wait_key (dword timeout)
+
+               Waits for a key to be entered.  Returns the ASCII-code in the 
+               lower  byte,  and  the scan-code in the  upper  byte,  or  -1 
+               (0xffff) on timeout, -2 (0xfffe) on wake.
+
+
+          word t_keyhit (void)
+
+               Returns -1 (0xffff) if no key was entered,  else the value of 
+               the key. The key is not removed.
+
+
+                                The Serial I/O handler
+                                ======================
+
+          The  serial I/O handler provides full duplex interrupt driven  I/O 
+          on the serial ports. Support for COM1 and COM2 is included, adding 
+          other  ports  is possible by changing the source  and/or  defining 
+          ports on-line.
+
+
+          int v24_define_port (int base, byte irq, byte vector)
+
+               Defines  a  new COM-port. This routine can only  be  used  if 
+               TSK_DYNAMIC is enabled.
+
+               "base" is the port base I/O address.
+
+               "irq" is the IRQ-line number (0-7 for XT, 0-15 for AT) the
+                     port uses for interrupts.
+
+               "vector" is the interrupt vector number (0-0xff).
+
+               The  return  value is the internal port number for  use  with 
+               v24_install. -1 is returned on error (memory full). 
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 47
+
+
+
+          sioptr v24_install (int port, int init,
+                              farptr rcvbuf, word rcvsize, 
+                              farptr xmitbuf, word xmitsize);
+
+               Installs the handler for the specified port. Currently, ports 
+               0  (COM1) and 1 (COM2) are supported. Both ports may be  used 
+               simultaneously,  the buffer areas for the ports must  not  be 
+               shared.
+
+               "rcvbuf" is a word pipe buffer area for received  characters, 
+               with "rcvsize" specifying the buffer size in bytes. Note that 
+               the  buffer  will  hold  rcvsize  /  2  received  characters. 
+               "rcvbuf" may be NULL for automatic allocation.
+
+               "xmitbuf"  is  a byte pipe buffer for characters  waiting  for 
+               transmissions, "xmitsize" gives its size in bytes.
+               "xmitbuf" may be NULL  for automatic allocation.
+
+               If  the  port number for v24_install is ORed with  0x80,  the 
+               port  is  *relative*. This means that the entry in  the  BIOS 
+               table for COM-Ports is used to search the tables internal  to 
+               the  driver  for the port information, instead of  using  the 
+               table  entry directly. If the port address cannot  be  found, 
+               the  driver returns with an error code. Note that  ports  are 
+               numbered from 0, so to specify COM1, pass 0x80 as parameter.  
+
+               If the "init" parameter is non-zero, the port is  initialised 
+               with  the  default  values specified in the  source.  If  the 
+               parameter  is zero, the control registers and baud  rates  on 
+               entry are not modified.
+
+               The  return value is a pointer to the sio control  block  for 
+               use with the other driver routines. NULL is returned on error 
+               (invalid   port   number,  bad  buffer   sizes,   nonexistent 
+               hardware, out of memory).
+
+
+          void v24_remove (sioptr sio, int restore);
+
+               Removes the driver for the specified control block.
+               Should  be called for all ports installed before exiting  the 
+               program.
+
+               If the "restore" parameter is nonzero, the control  registers 
+               and  the baud rate that were set before installation  of  the 
+               driver  are  restored. If the parameter is zero,  the  values 
+               are not changed.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 48
+
+
+
+          void v24_remove_all (void)
+
+               Removes  all  installed serial i/o drivers. This  routine  is 
+               automatically   called  on  remove_tasker  if  drivers   were 
+               installed. Note that you can not specify a restore parameter, 
+               the default restore parameter is used (constant in tsksio.c).
+
+
+          void v24_change_rts (sioptr sio, int on);
+
+               Changes the state of the RTS output line. A nonzero value for 
+               "on" will turn the output on.
+
+
+          void v24_change_dtr (sioptr sio, int on);
+
+               Changes the state of the DTR output line. A nonzero value for 
+               "on" will turn the output on.
+
+
+          extern void far v24_change_baud (sioptr sio, long rate);
+
+               Changes  the baud rate.  The following baud rates are suppor-
+               ted:
+
+               50,  75, 110, 134, 150, 300, 600, 1200, 1800, 2000, 
+               2400, 3600, 4800, 7200, 9600, 19200L, 38400L.
+
+               Note  that baud rates above 9600 may cause problems  on  slow 
+               machines.
+
+          extern void far v24_change_parity (sioptr sio, int par);
+
+               Changes  parity.  The parameter must be one of the  following 
+               values defined in "sio.h":
+
+                    PAR_NONE  no parity checks
+                    PAR_EVEN  even parity
+                    PAR_ODD   odd parity
+                    PAR_MARK  mark parity
+                    PAR_SPACE space parity
+
+
+          extern void far v24_change_wordlength (sioptr sio, int len);
+
+               Changes word length. Values 5, 6, 7, 8 may be given.
+
+
+          extern void far v24_change_stopbits (sioptr sio, int n);
+
+               Changes Stopbits. Values 1 and 2 are allowed.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 49
+
+
+
+          extern void far v24_watch_modem (sioptr sio, byte flags);
+
+               The  modem  status  input  lines  specified  in  the  "flags" 
+               parameter must be active to allow transmission.  Transmission 
+               will  stop if one of the lines goes inactive.  The  parameter 
+               may be combined from the following values defined in "sio.h":
+
+                    CTS  to watch clear to send
+                    DSR  to watch data set ready
+                    RI   to watch ring indicator
+                    CD   to watch carrier detect
+
+               A  value  of  zero  (the  default)  will  allow  transmission 
+               regardless of modem status.
+
+
+          extern void far v24_protocol (sioptr sio, int prot, 
+                                        word offthresh, word onthresh);
+
+               Sets the handshake protocol to use.  The "prot" parameter may 
+               be combined from the following values:
+
+                    XONXOFF   to enable XON/XOFF (DC1/DC3) handshake
+                    RTSCTS    to enable RTS/CTS handshake
+
+               The  "offthresh"  value specifies the minimum number of  free 
+               items in the receive buffer. If this threshold is reached, an 
+               XOFF is transmitted and/or the RTS line is inactivated.
+               The  "onthresh"  value specifies the minimum number of  items 
+               that  must be free before XON is transmitted and/or  the  RTS 
+               line is re-activated.
+
+               Enabling XONXOFF will remove all XON and XOFF characters from 
+               the input stream.  Transmission will be disabled when XOFF is 
+               received, and re-enabled when XON is received.
+
+               Enabling RTSCTS will stop transmission when the CTS modem 
+               input line is inactive.
+
+
+          int v24_send (sioptr sio, byte ch, dword timeout);
+
+               Transmits the character "ch". A timeout may be specified. 
+               Returns -1 on timeout, -2 on wake, else 0.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 50
+
+
+
+          int v24_receive (sioptr sio, dword timeout);
+
+               Waits  for  a  received  character.   A  timeout  may  be 
+               specified.  Returns -1 on timeout,  -2 on wake,  else the 
+               character  in the lower byte,  plus an error code in  the 
+               upper byte. The error code is the combination of
+
+                    0x02      overrun error
+                    0x04      parity error
+                    0x08      framing error
+                    0x10      break interrupt.
+
+
+          int v24_check (sioptr sio);
+
+               Returns -1 if no receive character is available, else the 
+               next  character  from  the pipe.  The  character  is  not 
+               removed.
+
+
+          int v24_overrun (sioptr sio);
+
+               Checks for receive pipe overrun.  Returns 1 if an overrun 
+               occurred, 0 otherwise. Clears the overrun flag.
+
+
+          int v24_modem_status (sioptr sio);
+
+               Returns the current modem status word.  The CTS, DSR, RI, 
+               and  CD  defines may be used to extract the  modem  input 
+               line status.
+
+
+          int v24_complete (sioptr sio);
+
+               Returns  1 if all characters in the transmit pipe  have  been 
+               sent, else 0.
+
+
+          int v24_wait_complete (sioptr sio, dword timeout);
+
+               Waits  for  the  transmit pipe to be  empty.  Returns  -1  on 
+               timeout, -2 on wake, else 0.
+
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 51
+
+
+
+                              The Printer Output Driver
+                              =========================
+
+          The  printer output driver provides for buffered output to  up  to 
+          three  printer  ports (more can be added by editing  the  source). 
+          Interrupt  or polling may be selected. Due to the  usual  hardware 
+          implementation  of  printers  and  the  printer  interface,  using 
+          polling  is  recommended. When using interrupts,  you  should  not 
+          simultaneously  install  both  port 0 and port  1  with  interrupt 
+          enabled, since both ports share the same interrupt line.
+
+
+          int prt_install (int port, byte polling, word prior, 
+                           farptr xmitbuf, word xmitsize);
+
+               Installs the printer driver for the specified port.  Ports  0 
+               (LPT1), 1 (LPT2), and 2 (LPT3) are supported.
+
+               The   "polling"  parameter  specifies  polling  output   when 
+               nonzero, interrupt output when zero.
+
+               The "prior" parameter sets the priority of the printer output 
+               task.
+
+               "xmitbuf"  is  a buffer area for the printer  output  buffer, 
+               "xmitsize" specifies its size in bytes.
+               The  buffer  pointer  may be specified as  NULL  for  dynamic 
+               allocation if TSK_DYNAMIC is enabled.
+
+               If  the  port number for prt_install is ORed with  0x80,  the 
+               port  is  *relative*. This means that the entry in  the  BIOS 
+               table for LPT-Ports is used to search the tables internal  to 
+               the  driver  for the port information, instead of  using  the 
+               table  entry directly. If the port address cannot  be  found, 
+               the  driver returns with an error code. Note that  ports  are 
+               numbered from 0, so to specify LPT1, pass 0x80 as parameter.  
+
+               The return value is the internal port number for use with the 
+               other driver routines. -1 is returned on error (invalid  port 
+               number, bad buffer sizes, nonexistent hardware).
+
+
+          void prt_remove (int port);
+
+               Removes  the  printer  driver for  the  specified  port.
+
+
+          void prt_remove_all (void)
+
+               Removes  all installed printer ports. This routine  is  auto-
+               matically called on remove_tasker if ports were installed.
+
+
+          CTask Manual          Version 1.1  88-07-01                Page 52
+
+
+
+          void prt_change_control (int port, byte control);
+
+               Changes  the  printer control output lines of the  port.  The 
+               value for "control" may be combined from the following values 
+               defined in "prt.h":
+
+                    AUTOFEED  will enable printer auto feed if set
+                    INIT      will initialise (prime) the printer if clear
+                    SELECT    will select the printer if set
+
+
+          int prt_write (int port, byte ch, dword timeout);
+
+               Write a byte to the printer.  A timeout may be given. Returns 
+               0 on success, -1 on timeout, -2 on wake.
+
+
+          int prt_status (int port);
+
+               Returns the current printer status lines,  combined from  the 
+               values
+
+                    BUSY      Printer is busy when 0
+                    ACK       Acknowledge (pulsed 0)
+                    PEND      Paper End detected when 0
+                    SELIN     Printer is selected (on line) when 1
+                    ERROR     Printer error when 0
+
+
+          int prt_complete (int port);
+
+               Returns 1 if the printer buffer has been completely transmit-
+               ted, 0 otherwise.
+
+
+          int prt_wait_complete (int port, dword timeout);
+
+               Waits for printer output to complete.  Returns 0 on  success, 
+               else -1 on timeout, -2 on wake.
+
+                                                                                                                               

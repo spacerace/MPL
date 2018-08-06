@@ -1,0 +1,6 @@
+globfree.obj: globfree.c
+   cl -c -W2 -AS -Gsw -Od -Zped globfree.c
+
+globfree.exe: globfree.obj globfree.def
+   link4 globfree,/align:16,/map/li,slibw,globfree.def
+   mapsym globfree

@@ -1,0 +1,22 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+gsyscolr.obj: gsyscolr.c
+
+gsyscolr.exe: gsyscolr.obj gsyscolr.def
+    link4 gsyscolr,/align:16,/map,slibw/NOE,gsyscolr.def
+    mapsym gsyscolr

@@ -1,0 +1,6 @@
+
+creliprg.obj: creliprg.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 creliprg.c
+
+creliprg.exe: creliprg.obj creliprg.def
+    link4 /align:16 creliprg,,nul,slibw/NOE,creliprg.def

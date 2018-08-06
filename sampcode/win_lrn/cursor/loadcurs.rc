@@ -1,0 +1,4 @@
+
+#include "style.h"
+
+mycursor CURSOR loadcurs.cur

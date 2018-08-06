@@ -1,0 +1,30 @@
+#
+# 	Makefile 
+# 
+
+# debug the file and do a 80286 model
+
+#CFLAGS = /DDEBUG /G0 /Zd /Od /Fc
+
+CFLAGS = /G0
+
+# All object modules
+
+rulecomp.obj : rulecomp.c expert.h keywords.h
+	msc $(CFLAGS) rulecomp.c ;
+
+getkeywo.obj : getkeywo.c expert.h
+	msc $(CFLAGS) getkeywo.c ;
+
+putstrin.obj : putstrin.c expert.h
+	msc $(CFLAGS) putstrin.c ;
+
+
+# 	rulecomp.exe -- main target
+#
+rulecomp.exe : rulecomp.obj getkeywo.obj putstrin.obj 
+	link rulecomp.obj getkeywo.obj putstrin.obj ,rulecomp.exe,/STACK:15000 ;
+#	link rulecomp.obj getkeywo.obj putstrin.obj ,rulecomp.exe,/MAP/LINE/STACK:15000 ;
+#
+#	mapsym rulecomp
+#

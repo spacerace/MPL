@@ -1,0 +1,8 @@
+NAME           getrop2
+DESCRIPTION    'This program demonstrates the Windows function GetROP2'
+STUB           'WINSTUB.EXE'
+CODE           MOVEABLE
+DATA           MOVEABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        WndProc

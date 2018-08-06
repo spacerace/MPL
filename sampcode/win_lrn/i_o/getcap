@@ -1,0 +1,6 @@
+getcap.obj: getcap.c
+    cl -d -c -AS -Gsw -Os -Zpe getcap.c
+
+getcap.exe: getcap.obj getcap.def
+    link4 getcap,/align:16,/map,slibw/NOE,getcap.def
+    mapsym getcap

@@ -1,0 +1,6 @@
+locreall.obj: locreall.c
+    cl -c -W2 -AS -Gsw -Od -Zped locreall.c
+
+locreall.exe: locreall.obj locreall.def
+    link4 locreall,/align:16,/map/li, slibw, locreall.def
+    mapsym locreall

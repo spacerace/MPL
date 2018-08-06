@@ -1,0 +1,9 @@
+tryint24.obj : tryint24.asm
+  masm tryint24;
+
+int24.obj : int24.asm
+  masm int24;
+
+tryint24.exe : tryint24.obj int24.obj
+  link tryint24+int24;
+

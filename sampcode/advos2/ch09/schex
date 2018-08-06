@@ -1,0 +1,7 @@
+schex.obj : schex.asm
+ masm schex;
+
+schex.exe : schex.obj schex.def
+ link schex,,,os2,schex
+
+

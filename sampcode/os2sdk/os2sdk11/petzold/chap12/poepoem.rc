@@ -1,0 +1,15 @@
+/*---------------------------------
+   POEPOEM.RC resource script file
+  ---------------------------------*/
+
+#include "poepoem.h"
+
+POINTER ID_RESOURCE poepoem.ico
+
+RESOURCE IDT_TEXT IDT_POEM poepoem.asc
+
+STRINGTABLE
+     {
+     IDS_CLASS, "PoePoem"
+     IDS_TITLE, " - ""Annabel Lee"" by Edgar Allan Poe"
+     }

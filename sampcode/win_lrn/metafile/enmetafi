@@ -1,0 +1,6 @@
+
+enmetafi.obj: enmetafi.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 enmetafi.c
+
+enmetafi.exe: enmetafi.obj enmetafi.def
+    link4 /align:16 enmetafi,,nul,slibw/NOE,enmetafi.def

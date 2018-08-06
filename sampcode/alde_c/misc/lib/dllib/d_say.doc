@@ -1,0 +1,39 @@
+
+
+
+
+
+
+        NAME
+                d_say -- display a string at a specific position
+                d_saypag -- same, with page specification
+
+        SYNOPSIS
+                void d_say(r, c, str);
+                void d_saypag(r, c, str, p);
+                int r;      row number
+                int c;      column number
+                char *str;  character string to display
+                int p;      video page (must match current mode)
+
+
+        DESCRIPTION
+        This function positions the cursor on the specified row
+        and column on video page 0, and then writes the string.
+        The d_saypag function also selects the video page on which
+        to place the cursor.
+
+        EXAMPLE
+
+             d_say(10, 15, "Hello World!\n");
+             d_saypag(5, 20, "Goodby!", 1);
+
+
+
+        CAVEAT:  The string is written to stdout.  Therefore, the
+                 results will not be as advertised if stdout has
+                 been redirected from the default video output.
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

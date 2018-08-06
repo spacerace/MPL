@@ -1,0 +1,81 @@
+/*
+	Spy utility resource file
+	Created by Microsoft Corporation, 1989
+*/
+#include <pmwin.h>
+#include "spy.h"
+
+POINTER  IDR_SPY spy.ico
+
+/******** Main Menu ********/
+
+MENU    IDR_SPY PRELOAD
+BEGIN
+    SUBMENU   "~Spy", 0x1000
+    BEGIN
+        MENUITEM        "~Spy Active\t^A", CMD_ACTIVE, MIS_TEXT, MIA_CHECKED
+        MENUITEM        "~Clear Window\t^C",CMD_CLRWIN
+        MENUITEM        "Save ~Window...",  CMD_SAVEWIN
+        MENUITEM        "Save ~Options", CMD_SAVEOPT
+        MENUITEM        "",             -10,   MIS_SEPARATOR
+        MENUITEM        "~List Near Symbol...", CMD_LISTNEAR
+        MENUITEM        "",             -10,   MIS_SEPARATOR
+        MENUITEM        "E~xit",        CMD_EXIT
+        MENUITEM        "~About Spy...",   CMD_ABOUT
+    END
+
+    SUBMENU   "~Windows", 0x1100
+    BEGIN
+        MENUITEM        "Window ~List...\t^W", CMD_WINDOWS
+        MENUITEM        "Message ~Queues...\t^Q", CMD_QUEUES
+        MENUITEM        "Mouse ~Select\t^S", CMD_WNMSSEL
+        MENUITEM        "Mouse ~Unselect\t^U", CMD_WNMSDSL
+        MENUITEM        "~All Windows", CMD_ALLWNDWS
+        MENUITEM        "All ~Frames\t^F", CMD_ALLFRAMES
+        MENUITEM        "Dump ~One Window", CMD_WNDPWIN
+        MENUITEM        "~Dump All Windows",CMD_WNDPALL
+    END
+
+    SUBMENU   "~Messages", 0x1200
+    BEGIN
+        MENUITEM        "Message ~List...\t^M", CMD_MESSAGES
+        MENUITEM        "~Disable Message\t^D", CMD_MGDABLE
+        MENUITEM        "~Enable Message\t^E", CMD_MGEABLE
+        MENUITEM        "", -20,   MIS_SEPARATOR
+        MENUITEM        "~Alpha Sort Message List", CMD_ALPHASORT
+    END
+    SUBMENU   "~Hooks", 0x1300
+    BEGIN
+        MENUITEM        "~Input Hook", CMD_INPUTHOOK, MIS_TEXT, MIA_CHECKED
+        MENUITEM        "~SendMsg Hook", CMD_SENDMSGHOOK, MIS_TEXT, MIA_CHECKED
+        SUBMENU         "SendMsg ~Outputs", -4
+        BEGIN
+            MENUITEM    "~Extended Data", CMD_SENDEXTEND, MIS_TEXT, MIA_CHECKED
+            MENUITEM    "~Call Stack", CMD_SENDSTACK, MIS_TEXT, MIA_CHECKED
+        END
+    END
+    SUBMENU   "~Outputs", 0x1400
+    BEGIN
+        MENUITEM        "~Screen Lines", CMD_OUTSCREEN, MIS_TEXT, MIA_CHECKED
+        MENUITEM        "~File", CMD_OUTFILE
+        MENUITEM        "", -20,   MIS_SEPARATOR
+        MENUITEM        "Outputs...\t^O", CMD_OUTPUTS
+    END
+END
+
+
+ACCELTABLE      IDR_SPY
+BEGIN
+    "^a",       CMD_ACTIVE
+    "^c",       CMD_CLRWIN
+    "^d",       CMD_MGDABLE
+    "^e",       CMD_MGEABLE
+    "^f",       CMD_ALLFRAMES
+    "^m",       CMD_MESSAGES
+    "^o",       CMD_OUTPUTS
+    "^q",       CMD_QUEUES
+    "^s",       CMD_WNMSSEL
+    "^u",       CMD_WNMSDSL
+    "^w",       CMD_WINDOWS
+END
+RCINCLUDE spydlgs.dlg

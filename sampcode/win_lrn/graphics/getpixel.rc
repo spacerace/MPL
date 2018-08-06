@@ -1,0 +1,26 @@
+#include  "GetPixel.h"
+#include  <windows.h>
+
+BitmapHelp  BITMAP  GetPixel.bmp
+
+GetPixel MENU
+    BEGIN
+        POPUP "&Select Pixel"
+            BEGIN
+                MENUITEM "&Choose Random Pixel",            IDM_RANDOM
+                MENUITEM "&Enter Pixel Coordinates",        IDM_ENTER
+            END					            
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+EnterPointDlg DIALOG LOADONCALL MOVEABLE DISCARDABLE 13, 14, 104, 58
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+     LTEXT "Enter Coordinates",     -1,    2,  4, 76, 10
+     LTEXT "x",                     -1,   26, 14,  4, 10
+     LTEXT "y",                     -1,   77, 14,  4, 10
+     EDITTEXT             IDD_X,           2, 24, 49, 12, ES_AUTOHSCROLL
+     EDITTEXT             IDD_Y,          53, 24, 49, 12, ES_AUTOHSCROLL
+     DEFPUSHBUTTON "&OK", IDOK,           27, 40, 50, 14, WS_GROUP
+END
+

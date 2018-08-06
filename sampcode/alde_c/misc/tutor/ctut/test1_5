@@ -1,0 +1,435 @@
+.T
+   and now a TEST   
+.R4C1
+1 ~b~Imain() {                            ~N
+2 ~b~I    char key;                       ~N
+3 ~b~I    printf("\n Press a key ");      ~N
+4 ~b~I    scanf("%c",key);                ~N
+5 ~b~I    printf("\n You pressed %c",key);~N
+6 ~b~I}                                   ~N
+
+.Q
+Which line has the error?
+4
+
+    Line ~I4~N should read:
+
+4 ~b~I    scanf("%c",~F&~N~b~Ikey);               ~N
+.K19,60
+[0mI[1;5;35mknow[0mthat!
+.WN
+
+
+1 ~b~Imain() {                            ~N
+2 ~b~I    char key;                       ~N
+3 ~b~I    printf("\n Press a key ");      ~N
+4 ~b~I    scanf("%c",&key);               ~N
+5 ~b~I    printf("\n You pressed %c",key) ~N
+6 ~b~I}                                   ~N
+
+.Q
+Which line has the error?
+5
+
+    Line ~I5~N should read:
+
+5 ~b~I    printf("\n You pressed %c",key)~F;~N
+.K19,60
+;;;;;;;;;;
+.WN
+
+.Q
+If x is an integer variable, then where in memory is it located?
+&x
+
+The ~Iaddress~N, in memory, of any variable ~b~Ix~N is ~b~I&x~N
+.K16,30
+&x=[0;1maddress
+.R9C1
+.Q
+&x is called a ?
+pointer
+.K16,30
+[0;31;47mpointer[0;1mto[0mx
+.WN
+1 ~b~Imain() {                       ~N
+2 ~b~I    int i;                     ~N
+3 ~b~I    char x='A';                ~N
+4 ~b~I    for (i=0; i<26; i++,x++)   ~N
+5 ~b~I        printf("%c",x);        ~N
+6 ~b~I}                              ~N
+.Q
+How many errors can you find ?
+0
+.R8C60
+~INO ERRORS!~N
+.R11C1
+4 ~b~I    for (i=0; i<26; i++,~Fx++~N~b~I)   ~N
+
+    Although ~b~Ix~N is declared a ~b~Ichar~N and given the 'value' ~b~IA~N,
+    the actual number stored in memory is (probably!) ~I65~N (in decimal)
+    which is the ASCII value for an ~IA~N. This ~I65~N is incremented via ~b~Ix++~N
+    and ~b~Iprintf()~N will print: ~r~IABCDEFGHIJKLMNOPQRSTUVWXYZ~N
+.K19,60
+probably??
+.W
+.R7C1B
+~V          DON'T TRUST THE INTERNAL COMPUTER 'VALUE' TO BE ASCII!!         
+.W
+.R7C1B
+~V   however, if x is the 'A'-value, x+1 SHOULD be the 'B'-value...right?   
+.WK8,30
+  RIGHT!
+.WN
+1 ~b~Imain() {                       ~N
+2 ~b~I    printf("%s,%s,%s",         ~N
+3 ~b~I        "Now is the time",     ~N
+4 ~b~I        "for all good me",     ~N
+5 ~b~I        "n to come to th",     ~N
+6 ~b~I        "e aid of thier ",     ~N
+7 ~b~I        "country.";            ~N
+8 ~b~I}                              ~N
+.Q
+How many errors here?
+2
+~V  i-before-e-except-after-c ? ~N
+.R6C1
+6 ~b~I        "he aid of ~Fthier~N~b~I",     ~N
+.K2,50
+  their
+.WR14C1
+    ...and the printout would be:
+
+~r~INow is the timefor all good men to come to the aid of thier country.~N
+              
+            tch!tch!
+.WN
+1 ~b~Imain() {                         ~N
+2 ~b~I    int w;                       ~N
+3 ~b~I    char z='z';                  ~N
+4 ~b~I    w=z;                         ~N
+5 ~b~I    while (z>'w');               ~N
+6 ~b~I        printf("%c=%d;",z--,w--);~N
+7 ~b~I}                                ~N
+
+.Q
+Which line has the error ?
+5
+    Line 5 shouldn't have a semi-colon! (NOT after ~Iwhile~N or ~Ifor~N):
+.R5C1
+5 ~b~I    while (z>'w')~F;~N~b~I               ~N
+.WK2,50
+[0;1mz--,w--[0m???
+.R14C1
+    Line 4 sets ~b~Iw~N to the ~Ivalue~N of ~b~Iz~N ( 122 in ASCII ).
+    Line 6 is executed, ~b~Iprintf~N-ing the ~b~I%c~Nhar ~b~Iz~N and the ~b~I%d~Necimal
+    ~b~Iw~N, then both ~b~Iz~N and ~b~Iw~N are ~IDECREMENTED~N (via ~b~Iz--,w--~N),
+    and line 6 is repeated ...as long as ~b~I%c~Nharacter ~b~Iz~N is greater than
+    ~b~I'w'~N (meaning the 'value' of ~b~Iz~N exceeds the 'value' of the character
+    ~b~Iw~N, which, in ASCII, is 119).
+
+.W
+    The printout would be:
+
+~r~Iz=122;y=121;x=120;~N
+.WK2,50
+[5mconfusing![0m
+.WN
+1 ~b~Imain() {                         ~N
+2 ~b~I    char s;                      ~N
+3 ~b~I    s="I'm a string";            ~N
+4 ~b~I        printf("%s",&s);         ~N
+5 ~b~I}                                ~N
+.Q
+Which line has the error(s) ?
+4
+    Line 4 should be:
+
+4 ~b~I        printf("%s",s);          ~N    ...without the ~b~I&~N !
+.R13C1
+    Although ~b~Iprintf()~N expects to recieve the ~Iaddress~N of a ~b~I%s~Ntring
+    variable (such as ~b~Is~N), we must ~V let C do it~N!  We just refer to ~b~Is~N,
+    in ~b~Iprintf("%s",s)~N, and the C-compiler will look after passing the address
+    to ~b~Iprintf()~N.
+.W
+.R13C1
+    Although ~b~Iprintf()~N expects to ~Frecieve~N the ~Iaddress~N of a ~b~I%s~Ntring
+.K2,50
+  sorry!
+.WR13C1
+    Although ~b~Iprintf()~N expects to receive the ~Iaddress~N of a ~b~I%s~Ntring
+.R18C1
+    The printout might be:
+
+~r~IÏI~N      ...or some other garbage!
+.WNT
+ single CHARacters and INTegers are the same ? 
+.R4C1
+1 ~b~Imain() {                         ~N
+2 ~b~I    char x;                      ~N
+3 ~b~I    for (x=0; x<=255; x++)       ~N
+4 ~b~I        printf("%c",x);          ~N
+5 ~b~I}                                ~N
+.Q
+Will this print the IBM PC character set ..once ?
+n
+    When we increment ~b~Ix~N from ~b~I0~N to ~b~I255~N we ~IDO~N get a
+    printout of the ~b~I%c~Nharacters whose 'values' are ~I0~N, ~I1~N, ~I2~N, etc.
+    BUT, because a ~b~I%c~Nharacter ~IALWAYS~N occupies a single byte in memory
+    their 'values' are ~IALWAYS~N ~b~I<=255~N (less-than-or-equal-to 255).
+    SO ...incrementing ~b~Ix~N, when it has the 'value' ~I255~N, will give the 'value'
+    ~b~I0~N ...and the above program will continue to cycle through the character
+    set ...forever!
+.K4,65
+ forever?
+.W
+1 ~b~Imain() {                         ~N  But ~Ithis~N program WILL stop
+2 ~b~I    int x;                       ~N  when the ~b~I%int~Neger ~b~Ix~N
+3 ~b~I    for (x=0; x<=255; x++)       ~N  reaches the value ~I256~N, since
+4 ~b~I        printf("%c",x);          ~N  ~b~Iint~Negers CAN be larger than ~I255~N
+5 ~b~I}                                ~N
+.K4,65
+int is big
+.WN
+1 ~b~Imain() {                         ~N
+2 ~b~I    float x, y;                  ~N
+3 ~b~I    printf("Enter two numbers);  ~N
+4 ~b~I    scanf("%f%f",x,y);           ~N
+5 ~b~I    printf("%s%f",               ~N
+6 ~b~I        "Their sum is ",         ~N
+7 ~b~I        sum(x,y);                ~N
+8 ~b~I}                                ~N
+9 ~b~Isum(a,b)                         ~N
+10~b~I{                                ~N
+11~b~Ifloat a, b;                      ~N
+12~b~Ireturn(a+b);                     ~N
+13~b~I}                                ~N
+.Q
+How many BUGS!@#$ ???
+4
+.WR18C1
+    Forgot something in line 3....
+.R3C38
+~b~I    printf("Enter two numbers~F"~N~b~I);  ~N
+.WR18C1
+    Forgot something in line 7 too!
+.R7C38
+~b~I        sum(x,y)~F)~N~b~I;                ~N
+.WR18C1
+    Forgot to declare the function type (else we'd get ~Iintegers~N returned!)
+.R9C38
+~b~I~Ffloat~N~b~I sum(a,b)                   ~N
+.WR18C1
+                                                                               
+.R18C1
+    We ~IMUST~N declare function arguments ~IIMMEDIATELY~N (~Ibefore~N the ~b~I{~N)!
+.R10C38
+~b~Ifloat a, b;                      ~N wrong
+.R11C38
+~b~I{                                ~N order
+.WN
+1 ~b~Imain() {                                     ~N
+2 ~b~I    int words=0;                             ~N
+3 ~b~I    char c;                                  ~N
+4 ~b~I    while ( (c=getchar())!='\r' && c!='\n') }~N
+5 ~b~I        if (c == ' ')                        ~N
+6 ~b~I            words++;                         ~N
+7 ~b~I    }                                        ~N
+8 ~b~I   printf("\n Number = %d",words);           ~N
+9 ~b~I}                                            ~N
+.Q
+Any errors here (y/n) ?
+n
+.R10C60
+~INO ERRORS~N
+.R4C1
+4 ~b~I    while ( (~Vc=getchar()~N~b~I)!='\r' && c!='\n') }~N
+.R13C1
+    Here we invoke the C-library function ~b~Igetchar()~N which inputs a
+    ~Isingle~N character, which we assign to our ~b~Ichar~Nacter variable ~b~Ic~N.
+.WR4C1
+4 ~b~I    while ( (c=getchar())~V!='\r' && c!='\n'~N~b~I) }~N
+.R13C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R13C1
+    Here we check to see that the ~b~Ic~Nharacter is NOT EQUAL (~b~I!=~N) to a
+    ~b~I\r~Neturn AND (~b~I&&~N) NOT EQUAL to a ~b~I\n~Newline. ( This then
+    will exit the ~b~Iwhile~N loop when we press the ~IEnter~N key ).
+    As long as it's NOT EQUAL, we execute the ~b~Iwhile~N loop.           
+.K2,60
+[0;1m&&[0m=[1mAND[0m !!
+.WR4C1
+4 ~b~I    while ( (c=getchar())!='\r' && c!='\n') }~N
+5 ~V        if (c == ' ')                ~N
+6 ~V            words++;                 ~N
+.R13C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R13C1
+    Inside the ~b~Iwhile~N, we check if the ~b~Ic~Nharacter ~b~I== ' '~N          
+    (~IEQUAL~N a space) and, if it is, we increment the ~b~Iint~Neger ~b~Iwords~N.     
+.WR5C1
+5 ~b~I        if (c == ' ')                ~N
+6 ~b~I            words++;                 ~N
+7 ~V    }                                ~N
+.R13C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R13C1
+    The first time that the ~IEnter~N key ~b~Ic~Nharacter occurs, we exit the
+    ~b~Iwhile~N loop ...and this ~b~I}~N defines the ~Iend-of-the-while~N.
+.WR7C1
+7 ~b~I    }                                ~N
+8 ~V   printf("\n Number = %d",words);   ~N
+.R13C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R13C1
+    After leaving the ~b~Iwhile~N, we ~b~Iprintf()~N the value of ~b~Iwords~N, which
+    may (or may not!) agree with the number of 'words' typed.                 
+    (It WILL if you ~Ifollow~N every word with ~Ione~N space!)
+.WR8C1
+8 ~b~I   printf("\n Number = %d",words);   ~N
+9 ~V}                                    ~N
+.R13C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R13C1
+    ...and the end of ~b~Imain()~N ( = end of the program! )
+.WR15C1
+    If we compiled/linked/ran this program, we'd get:
+
+~VThis is a line which has 7 words ~N       You type this, and press ~IEnter~N.
+~r~I Number = 8~N                           The computer responds thus!
+.WK2,60
+[5m  SMART![0m
+.WN
+    Suppose we have 3 ~b~Ichar~Nacter variables: ~b~Ix='A' ; y='a' ; z='B'~N
+.Q
+Is x!=y  (y/n)? 
+y
+.Q
+Is x!=z  (y/n)? 
+y
+.Q
+Is x!=x  (y/n)? 
+n
+.Q
+Is x!=y && x!=z (y/n)? 
+y
+.WR15C1
+    Since x ~IIS~N different from y,    the first  answer is ~Iy~N.
+    Since x ~IIS~N different from z,    the second answer is ~Iy~N.
+    Since x ~IIS NOT~N different from x, the third answer is ~In~N.
+    Since x ~IIS~N different from y ~IAND~N x ~IIS~N different from z
+                                    the fourth answer is ~Iy~N.
+.WN
+0 ~b~I#include <stdio.h>  ~N
+1 ~b~Imain()  {           ~N
+2 ~b~Ifloat x=34.56;      ~N
+3 ~b~Iprintf("%6.1f",x);  ~N
+4 ~b~Iprintf("%-6.1f",x); ~N
+5 ~b~Iprintf("%06.1f",x); ~N
+6 ~b~I}                   ~N
+
+.Q
+What will be printed in Line 3 ? 
+  34.6
+.Q
+What will be printed in Line 4 ? 
+34.6  
+.Q
+What will be printed in Line 5 ? 
+0034.6
+.WN
+.Q
+A C-expression meaning: n=n+1 
+n++
+.Q
+Another C-expression meaning: n=n+1 
+++n
+.Q
+A C-expression meaning: n=n+5 
+n+=5
+.Q
+A C-expression meaning: n=n/7
+n/=7
+.Q
+A C-expression meaning: n=n-2 
+n-=2
+.Q
+A C-expression meaning: n=n*9
+n*=9
+.WN
+~b~I    if ( (x IS GREATER THAN 5) AND (x IS NOT EQUAL TO 7) ) ~N
+~b~I        if ( x IS EQUAL TO 9 )                             ~N
+.Q
+What C operator should replace IS GREATER THAN ?
+>
+.Q
+What C operator should replace AND ? 
+&&
+.Q
+What C operator should replace IS NOT EQUAL TO
+!=
+.Q
+What C operator should replace IS EQUAL TO
+==
+.WN
+1 ~b~Imain()  {           ~N
+2 ~b~Iint i;              ~N
+3 ~b~Ifloat x;            ~N
+4 ~b~Ii=5.2;              ~N
+5 ~b~Ix=i/2;              ~N
+6 ~b~Iprintf("%f",x);     ~N
+7 ~b~I}                   ~N
+.Q
+What will be printed ?
+2.000000
+    In line 4, ~b~I5.2~N (a ~b~Ifloat~N) is converted to an ~b~Iint~N 'cause ~b~Ii~N
+    is declared to be an ~b~Iint~N in Line 2, so the number ~I5~N is assigned to ~b~Ii~N.
+
+    In Line 5, because both ~b~Ii~N and ~b~I2~N are ~b~Iint~Negers ( no decinal in ~b~I2~N,
+    remember?), the division gives ~I5/2~N without the decimal part, ~I2~N, which
+    is then converted to ~b~Ifloat~N ('cause ~b~Ix~N is a ~b~Ifloat~N) and assigned
+    to ~b~Ix~N ....and ~b~Iprintf()~N gives 6 decimal places (unless told otherwise!).
+.WN
+
+
+.T
+   That's all folks!   
+
+
+.K16,32
+au revoir!
+
+.q
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+Comments about DLGSAMP
+
+DLGSAMP is "well-documented" (perhaps to a far extreme).  Running the
+program is fairly self-explanatory.
+
+The icon is supposed to be a set of three radio buttons.  Modal/Modeless 
+refers to what type of dialog box style you want.
+
+  "A modal dialog is destroyed before control is returned to the
+   invoking winproc, so it must pass the contents of its Entry Fields etc.
+   back to the invoking window before it returns.
+
+   When a modeless dialog box returns it still continues to exist. It
+   could pass the contents of its Entry Fields etc. back to the
+   invoking window in several ways."
+
+
+File List:
+DLGSAMP		Makefile
+DLGSAMP.C	Source file
+DLGSAMP.DEF	Definition file
+DLGSAMP.DLG	Dialog resource file
+DLGSAMP.EXE	Executable
+DLGSAMP.H	Header file
+DLGSAMP.ICO	Icon
+DLGSAMP.RC	Resource file
+DLGSAMP.SYM	Symbol file
+DLGSAMP1.H	Header file
+PROBLEMS	Suggestions for improvements
+README		This file

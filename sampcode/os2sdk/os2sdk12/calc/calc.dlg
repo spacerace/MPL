@@ -1,0 +1,30 @@
+DLGINCLUDE 1 "CALC.H"
+
+DLGTEMPLATE IDR_CALC LOADONCALL MOVEABLE DISCARDABLE 
+BEGIN
+    DIALOG "", IDR_CALC, 27, 12, 190, 94, FS_ICON | FS_NOBYTEALIGN | 
+                FS_DLGBORDER | WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS
+    BEGIN
+        CONTROL "OS/2 Presentation Manager", 100, 30, 81, 121, 8, 
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "Calculator", 101, 71, 67, 47, 8, WC_STATIC, SS_TEXT | 
+                DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "Version 1.10", 256, 69, 56, 57, 8, WC_STATIC, SS_TEXT | 
+                DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL IDR_CALC, IDP_FINGER, 23, 56, 16, 21, WC_STATIC, SS_ICON | 
+                WS_GROUP | WS_VISIBLE
+        CONTROL "OK", IDR_CALC, 72, 26, 37, 9, WC_BUTTON, BS_PUSHBUTTON | 
+                BS_DEFAULT | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Q - Square Root", CMD_COPY, 11, 14, 71, 9, WC_STATIC, 
+                SS_TEXT | DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "N - Sign Change", CMD_PASTE, 102, 14, 72, 8, WC_STATIC, 
+                SS_TEXT | DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "Press 'M' and +, -, R, or C for", CMD_EXIT, 9, 5, 128, 7, 
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "Memory", CMD_ABOUT, 139, 4, 36, 8, WC_STATIC, SS_TEXT | 
+                DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "Created by Microsoft Corp., 1988", 264, 21, 40, 143, 8, 
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+    END
+END
+

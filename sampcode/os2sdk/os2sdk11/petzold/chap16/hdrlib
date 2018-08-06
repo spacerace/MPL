@@ -1,0 +1,9 @@
+#------------------
+# HDRLIB make file
+#------------------
+
+hdrlib.obj : hdrlib.c hdrlib.h
+     cl -c -Alfu -G2s -W3 hdrlib.c
+
+hdrlib.dll : hdrlib.obj hdrlib.def
+     link hdrlib, hdrlib.dll /align:16, NUL, /nod llibcdll os2, hdrlib

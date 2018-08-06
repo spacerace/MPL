@@ -1,0 +1,12 @@
+#-----------------
+# ORGAN make file
+#-----------------
+
+organ.obj : organ.c organ.h
+     cl -c -G2sw -W3 organ.c
+
+speaker.obj : speaker.asm
+     masm speaker ;
+
+organ.exe : organ.obj speaker.obj organ.def
+     link organ speaker, /align:16, NUL, os2, organ

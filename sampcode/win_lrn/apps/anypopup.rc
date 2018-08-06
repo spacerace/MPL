@@ -1,0 +1,8 @@
+#include "style.h"
+#include "anypopup.h"
+
+anypopup MENU
+BEGIN
+	MENUITEM "AnyPopup?",	  IDM_ANYPOPUP
+	MENUITEM "Create Popup",  IDM_CREATEPOPUP
+END

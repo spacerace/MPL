@@ -1,0 +1,274 @@
+
+;	module:		vlib
+;	programmer:	Ray L. McVay
+;	started:	10 Oct 82
+;	version:	2.01, 3 Aug 84
+;
+;	A library of c bios video functions originally written to
+;	replace the int10() function of small-c:PC.
+
+;	history:
+;	1.0	small-c:PC version
+;	2.0	ported to DeSmet c
+;   3.0 ported to AZTEC C
+	include lmacros.h
+;		Calling convention for DeSmet is to push parameters
+;		rightmost first then do an intrasegment call to the
+;		function.
+
+;		Char's, int's and unsigned's are returned in AX.
+;		Long's are returned in DX:AX.
+
+;		CS, DS, SS, SP and BP should be preserved.
+
+codeseg segment para public 'CODE'
+VIDEO	EQU	16	;BIOS video interrupt
+
+
+;	get video mode
+; int get_mode();
+
+	;PUBLIC	GET_MODE
+;GET_MODE:
+procdef get_mode
+	mov	ah,15
+	int	VIDEO
+	cbw
+	pret
+pend get_mode
+
+
+;	set video mode
+; set_mode(mode)
+; int	mode;
+
+	;PUBLIC	SET_MODE
+;SET_MODE:
+procdef	set_mode <<newmode,word>>
+	mov	ax,newmode
+	mov	ah,0
+	INT	VIDEO
+	pret
+pend set_mode
+
+
+;	cursor type		
+; curtype(start,end)
+; int	start,end;
+; Note: if start > end then cursor is turned off.
+
+	;PUBLIC	CURTYPE
+;CURTYPE:
+procdef curtype <<start,byte>,<_end,byte>>
+	mov	ch,start; top line
+	mov	cl,_end; bottom line
+	mov	ah,1
+	INT	VIDEO
+	pret
+pend curtype
+
+;	gotoxy - set cursor position	
+; gotoxy(x, y, page)
+; int	x,y,page;
+
+	;PUBLIC	GOTOXY
+;GOTOXY:
+procdef gotoxy <<x,byte>,<y,byte>,<page1,byte>>
+	mov	dl,x		; DL = x = column
+	mov	dh,y		; DH = y = row
+	mov	bh,page1		; BH = page1
+	mov	ah,2
+	INT	VIDEO
+	pret
+pend gotoxy
+
+;	read cursor position
+; getxy(page)
+; int	page;
+; xpos = getxy(page) & 255;
+; ypos = getxy(page) >> 8;
+
+	;PUBLIC	GETXY
+;GETXY:
+procdef getxy <<page2,byte>>
+	mov	bh,page2	;BH = page2
+	MOV	AH,3
+	INT	VIDEO
+	MOV	AX,DX		;return(256*row+column)
+	pret
+pend getxy
+
+;	get light pen position
+; int gltpen(buff)
+; int	buff[4];
+; Note: Returns 0 if pen was not triggered, 1 if it was.
+;	Stores XY values in integer array at buff.
+
+	;PUBLIC	GLTPEN
+;GLTPEN:
+procdef gltpen <<buff,ptr>>
+	MOV	AH,4
+	INT 	VIDEO
+	OR	AH,AH		;check status
+	JZ	DOSTAT		;it was bad
+	pushds
+	ldptr	si,buff,ds
+	MOV	[SI],BX		;buff[0]=X for graphics
+	MOV	2[SI],CH	;buff[1]=Y
+	MOV	4[SI],DL	;buff[2]=X for text
+	MOV	6[SI],DH	;buff[3]=Y for text
+	MOV	AH,1		;return OK status
+	popds
+DOSTAT:
+	MOV	AL,AH
+	CBW
+	pret
+pend gltpen
+;	select active page	
+; vsetpage(page)
+; int	page;
+
+	;PUBLIC	VSETPAGE
+;VSETPAGE:
+procdef	vsetpage <<page3,byte>>
+	mov	al,page3	;page3
+	MOV	AH,5
+	INT	VIDEO
+	pret
+pend vsetpage
+
+;	scroll a window up	
+; scrlup(window,count,attrib)
+; int window[4],count,attrib;
+; Note: Window defines the upper-left and lower-right
+;	character positions of an area of the text screen.
+;	A count of 0 clears the window.
+;	The attribute is used on the line(s) blanked.
+
+	;PUBLIC	SCRLUP
+;SCRLUP:
+procdef scrlup <<window,ptr>,<count,byte>,<attrib,byte>>
+	pushds
+	ldptr bx,window,ds
+	MOV	CL,[bx]		;window[0] = U.L. X
+	MOV	CH,2[bx]	;window[1] = U.L. Y
+	MOV	DL,4[bx]	;window[2] = L.R. X
+	MOV	DH,6[bx]	;window[3] = L.R. Y
+	mov	al,count	;AL = count
+	mov	bh,attrib	;BH = attribute
+	MOV	AH,6
+	INT	VIDEO
+	pret
+pend	scrlup
+
+;	scroll a window down	
+; scrldn(window,count,attrib)
+; int window[4],count,attrib;
+procdef scrldn <<window1,ptr>,<count1,byte>,<attrib1,byte>>
+	pushds
+	ldptr bx,window1,ds
+	MOV	CL,[bx]		;window1[0] = U.L. X
+	MOV	CH,2[bx]	;window1[1] = U.L. Y
+	MOV	DL,4[bx]	;window1[2] = L.R. X
+	MOV	DH,6[bx]	;window1[3] = L.R. Y
+	mov	al,count1	;AL = count
+	mov	bh,attrib1	;BH = attribute
+	MOV	AH,6
+	INT	VIDEO
+	pret
+pend	scrldn
+
+;	read character & attribute under the cursor
+; int vgetc(page)
+; int	page;
+
+	;PUBLIC	VGETC
+;VGETC:
+procdef	vgetc <<page4,byte>>
+	MOV	BH,page4
+	MOV	AH,8
+	INT	VIDEO
+	pret
+pend vgetc
+
+;	write character & attribute at cursor
+; vputca(chr,page,count)
+; int	chr,page,count;
+; Note: Chr contains attribute in hi byte.
+;	Count is the number of times to write the character.
+;	(Good for tops and bottoms of windows or boxes.)
+
+	;PUBLIC	VPUTCA
+;VPUTCA:
+procdef vputca <<chr,word>,<page5,byte>,<count3,word>>
+	mov	AX,chr;attrib/char
+	mov	bh,page5		;page
+	mov	CX,count3	;count
+	MOV	BL,AH		;attrib to BL
+	MOV	AH,9
+	INT	VIDEO
+pret
+pend vputca
+
+
+;	vputc - write character only at cursor	
+; vputc(chr,page,count)
+; int	chr,page,count;
+; Note:	Same as vputca() except uses existing attributes.
+procdef vputc <<chr1,word>,<page6,byte>,<count2,word>>
+	mov	AX,chr1;attrib/char
+	mov	bh,page6		;page
+	mov	CX,count2	;count
+	MOV	AH,9
+	INT	VIDEO
+pret
+pend vputc
+
+;	set background or pallet or alpha border color		
+; pcolor(id,val)
+; int	id,val;
+; Note:	If id == 0 then val is background color.
+;	If id == 1 and mode is graphics then val is pallet.
+;	If id == 1 and mode is text then val is border.
+
+	;PUBLIC	PCOLOR
+;PCOLOR:
+procdef pcolor <<id,byte>,<val,byte>>
+	mov	bh,id
+	mov	bl,val
+	MOV	AH,11
+	INT	VIDEO
+	pret
+pend pcolor
+
+
+;	write a graphics dot	
+; plot(color,horz,vert)
+; int	color,horz,vert;
+
+	;PUBLIC	PLOT
+;PLOT:
+procdef plot <<color,word>,<horz,word>,<vert,word>>
+	mov	AX,color
+	mov	CX,horz
+	mov	DX,vert
+	MOV	AH,12
+	INT	VIDEO
+	pret
+pend plot
+
+;	read a graphic dot color
+; int get_dot(dummy,horz,vert)	
+; int	dummy,horz,vert;
+; Note: the dummy parameter is used so SETDOT can be shared.
+
+procdef get_dot <<color1,word>,<horz1,word>,<vert1,word>>
+	mov	AX,color1
+	mov	CX,horz1
+	mov	DX,vert1
+	MOV	AH,13
+	INT	VIDEO
+	cbw
+	pret
+pend get_dot
+codeseg ends

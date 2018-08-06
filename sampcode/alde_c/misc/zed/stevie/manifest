@@ -1,0 +1,32 @@
+   File Name		Archive #	Description
+-----------------------------------------------------------
+ MANIFEST                   1	This shipping list
+ README                     1	
+ alloc.c                    1	
+ ascii.h                    1	
+ cmdline.c                  2	
+ edit.c                     2	
+ fileio.c                   1	
+ help.c                     2	
+ hexchars.c                 1	
+ keymap.h                   1	
+ linefunc.c                 1	
+ main.c                     2	
+ makefile.os2               1	
+ makefile.tos               1	
+ makefile.usg               1	
+ mark.c                     1	
+ misccmds.c                 2	
+ normal.c                   4	
+ os2.c                      1	
+ param.c                    1	
+ param.h                    1	
+ porting.doc                1	
+ ptrfunc.c                  1	
+ screen.c                   3	
+ search.c                   3	
+ source.doc                 1	
+ stevie.doc                 3	
+ term.h                     1	
+ tos.c                      1	
+ unix.c                     1	

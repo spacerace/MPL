@@ -1,0 +1,6 @@
+setwinex.obj: setwinex.c
+     cl  -d  -c  -Asnw	-Gsw  -Os  -Zdpe  setwinex.c
+
+setwinex.exe:  setwinex.obj setwinex.def
+     link4 setwinex,setwinex/align:16,setwinex/map,slibw,setwinex.def
+     mapsym setwinex

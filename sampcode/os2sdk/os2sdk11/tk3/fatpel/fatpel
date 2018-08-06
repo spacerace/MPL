@@ -1,0 +1,31 @@
+# Makefile for FATPEL.EXE
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC	=	cl -c -W3 -Alfw -G2sc -Od -Zip
+LF	=	/align:16 /codeview /map /NOD
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+# Resource files
+#
+fatpel.res:	dragclr.ptr dragsize.ptr fatpel fatpel.dlg fatpel.h fatpel.rc
+
+# C files
+#
+fatpel.obj:	fatpel fatpel.c fatpel.h
+
+# Files:  FATPEL.EXE, FATPEL.SYM
+#
+fatpel.exe:	fatpel fatpel.def fatpel.obj fatpel.res
+    link $(LF) fatpel, , fatpel.map, llibcmt opendlg os2, fatpel.def
+    rc fatpel.res
+    mapsym fatpel

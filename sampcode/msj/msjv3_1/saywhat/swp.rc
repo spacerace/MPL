@@ -1,0 +1,74 @@
+/*
+
+Figure 4pm
+=========
+
+*/
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *\
+ *  SWP.RC - Resource file for SayWhat - PM version              *
+\* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#include <os2pm.h>
+#include "swp.h"
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+STRINGTABLE
+{
+  STR_NAME,    "SayWhat!"
+  STR_TITLE,   "Say What!"
+  STR_WHAT,    "Hello Windows!"
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+MENU SayWhat!
+{
+  SUBMENU "~Say",                  -1
+  {
+    MENUITEM "~What...",           CMD_WHAT
+    MENUITEM SEPARATOR
+    MENUITEM "E~xit",              CMD_EXIT
+    MENUITEM SEPARATOR
+    MENUITEM "A~bout SayWhat!...", CMD_ABOUT
+  }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+DLGTEMPLATE DLG_ABOUT
+{
+  DIALOG "", DLG_ABOUT, 19, 17, 130, 83, FS_DLGBORDER | WS_SAVEBITS | WS_VISIBLE
+  {
+    CTEXT "Microsoft Windows",   -1,  0, 67, 127,  8
+    CTEXT "Say What!",           -1,  0, 57, 127,  8
+    CTEXT "Version 1.00",        -1,  0, 45, 127,  8
+    CTEXT "By Michael Geary",    -1,  0, 31, 129,  8
+    DEFPUSHBUTTON "Ok",        IDOK, 48,  7,  32, 14
+  }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+DLGTEMPLATE DLG_WHAT
+{
+  DIALOG "Say What!", DLG_WHAT, 49, 41, 177, 103, FS_TITLEBAR | FS_SYSMENU | FS_BORDER | WS_VISIBLE
+  {
+    CONTROL "Say ~What:"   -1,              8, 85,  40,  8, WC_STATIC,    SS_LEFT | WS_GROUP
+    CONTROL ""             ITEM_WHAT,      56, 83, 112, 12, WC_EDIT,      ES_LEFT | ES_AUTOSCROLL | ES_MARGIN | WS_TABSTOP
+    CONTROL "~Time Delay:" -1,              8, 66,  53,  9, WC_STATIC,    SS_LEFT
+    CONTROL ""             ITEM_INTBAR,    56, 67,  88,  8, WC_SCROLLBAR, SBS_HORZ | WS_TABSTOP
+    CONTROL ""             ITEM_INTERVAL, 152, 65,  16, 12, WC_EDIT,      ES_LEFT | ES_MARGIN | WS_TABSTOP
+    CONTROL "~Stability:"  -1,              8, 48,  56,  9, WC_STATIC,    SS_LEFT
+    CONTROL ""             ITEM_DISTBAR,   56, 49,  88,  8, WC_SCROLLBAR, SBS_HORZ | WS_TABSTOP
+    CONTROL ""             ITEM_DISTANCE, 152, 47,  16, 12, WC_EDIT,      ES_LEFT | ES_MARGIN | WS_TABSTOP
+    CONTROL "Painting:"    -1,              8, 31,  40,  8, WC_STATIC,    SS_LEFT
+    CONTROL "~Clean"       ITEM_CLEAN,     56, 29,  36, 12, WC_BUTTON,    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP
+    CONTROL "~Flicker"     ITEM_FLICKER,   96, 29,  42, 12, WC_BUTTON,    BS_AUTORADIOBUTTON
+    CONTROL "Enter"        IDOK,           24,  7,  48, 14, WC_BUTTON,    BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP
+    CONTROL "Esc=Close"    IDCANCEL,      104,  7,  48, 14, WC_BUTTON,    BS_PUSHBUTTON | WS_TABSTOP
+  }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

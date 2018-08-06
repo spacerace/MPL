@@ -1,0 +1,513 @@
+			       PACKING.LST File
+
+    Disk Contents for Microsoft (R) BASIC Professional Development System
+
+				 Version 7.00
+
+		    (C) Copyright Microsoft Corporation, 1989
+
+
+This file contains a complete list of all files and directories on the twelve
+distribution disks provided with this product.
+
+
+Disk #1 5.25", Disk #1 3.5"
+-------------------------------------------------------------------------------
+SETUP.EXE		BASIC installation program. Run this program to
+			install BASIC on your hard disk and build the
+			required libraries.
+READTHIS.NOW		Tells the user the first thing to do to install the
+			BASIC Professional Development System.
+PACKING.LST		List and description of all files provided with BASIC
+UNPACK.EXE		Utility for uncompressing files on distribution disks
+README.DOC		Information that was unavailable when the BASIC
+			manuals were printed.
+CHRTB.BAS		Presentation Graphics toolbox source code module
+CHRTB.BI		Include file for CHRTB.BAS
+CHRTASM.OBJ		Presentation Graphics toolbox assembly language routines
+FONTB.BAS		Fonts toolbox source code module
+FONTB.BI		Include file for FONTB.BAS
+FONTASM.OBJ		Font toolbox assembly language routines
+GENERAL.BAS		User Interface toolbox source code module
+GENERAL.BI		Include file for GENERAL.BAS
+MENU.BAS		User Interface toolbox source code module
+MENU.BI			Include file for MENU.BAS
+MOUSE.BAS		User Interface toolbox source code module
+MOUSE.BI		Include file for MOUSE.BAS
+WINDOW.BAS		User Interface toolbox source code module
+WINDOW.BI		Include file for WINDOW.BAS
+UIASM.OBJ		User Interface toolbox assembly language routines
+MATB.BAS		Matrix Math toolbox source code module
+MATB.BI			Include file for MATB.BAS
+MATBA.BAS		Matrix Math toolbox source code module for use with
+			alternate math package (currency support removed)
+MATBA.BI		Include file for MATBA.BAS
+BUILDRTM.EXE		Utility for creating default and extended run-time
+			modules and run-time module libraries
+
+Disk #2 5.25", Disk #1 3.5"
+-------------------------------------------------------------------------------
+BC.EXE			Microsoft BASIC compiler
+LINK.EXE		Microsoft Segmented-Executable Linker
+LIB.EXE			Microsoft Library Manager
+QBX.BI			Include file for use with BASIC programs that
+			call any of the following routines in the QBX.QLB
+			Quick library or in the QBX.LIB stand-alone library:
+			Absolute, Interrupt, InterruptX, Int86Old, or
+			Int86XOld.  The QBX.BI file defines the types for
+			arguments passed to these routines and also gives
+			DECLARE statements for these routines.
+QBX.LIB			Stand-alone library containing support routines
+			for DOS system calls.
+QBXQLB.LIB		Library of supporting routines used when creating
+			Quick libraries.
+DTFMTER.LIB		Date/Time and Format add-on library for 80x87 or
+			emulator math - DOS or OS/2 real-mode
+FINANCER.LIB		Financial functions add-on library for 80x87 or
+			emulator math - DOS or OS/2 real-mode
+NOCGA.OBJ		NO CGA graphics.  An object file to link with BASIC
+			programs that use a SCREEN statement, but do not use
+			any CGA screen modes.
+NOCOM.OBJ		NO COMmunication.  An object file to link with BASIC
+			programs that use some devices but do not use COMn:
+NOEDIT.OBJ		NO full-power INPUT editor. An object file to link
+			into a BASIC program that limits editing with an INPUT
+			statement to Enter and Backspace characters only.
+NOEGA.OBJ		NO EGA graphics.  An object file to link with BASIC
+			programs that use a SCREEN statement, but do not use
+			any EGA screen modes.
+NOEMS.OBJ		NO EMS memory. An object file to link with BASIC
+			programs when that forces overlays to swap to disk
+			instead of using EMS memory.
+NOEVENT.OBJ		NO EVENT support.  An object file to link into an
+			extended run-time module that does not use any event-
+			trapping statements.
+NOFLTIN.OBJ		NO floating point input. An object file to link with
+			BASIC programs that use INPUT, VAL, and READ without
+			floating-point support.
+NOGRAPH.OBJ		Combination of NOCGA, NOEGA, NOVGA, and NOHERC.
+NOHERC.OBJ		NO HERCules graphics.  An object file to link with
+			BASIC programs that use a SCREEN statement, but do
+			not use any Hercules screen modes.
+NOISAM.OBJ		NO ISAM. An object file to link with BASIC programs
+			that require no ISAM support.
+NOLPT.OBJ		NO Line PrinTer.  An object file to link with BASIC
+			programs that use some devices but do not use LPTn:
+NOOGA.OBJ		NO Olivetti graphics.  An object file to link with
+			BASIC programs that use a SCREEN statement, but do
+			not use any Olivetti screen modes.
+NOTRNEMR.LIB		No transcendental math. An object file to link with
+			BASIC programs that require no transcendental functions.
+			DOS or OS/2 real-mode
+NOVGA.OBJ		NO VGA graphics.  An object file to link with BASIC
+			programs that use a SCREEN statement, but do not use
+			any VGA screen modes.
+OVLDOS21.OBJ		Support DOS 2.1. An object file to link with BASIC
+			programs that are linked for overlays and designed
+			to work under DOS 2.1.
+SMALLERR.OBJ		Reduce error messages. An object file to link with
+			BASIC programs to reduce the length of run-time error
+			messages.
+TSCNIOFR.OBJ		Object file to link with far-string DOS or OS/2
+			real-mode BASIC programs that use text-only screen I/O.
+TSCNIONR.OBJ		An object file to link with near-string DOS or OS/2
+			real-mode BASIC programs that use text-only screen I/O.
+87.LIB			80x87 required emulator replacement
+EMR.LIB			80x87 DOS or OS/2 real-mode emulator
+BLIBFA.LIB		Alternate math library
+BLIBFP.LIB		Floating-point math library
+B70ORN.LIB		BASIC runtime constituent library
+
+
+Disk #3 5.25", Disk #2 3.5"
+-------------------------------------------------------------------------------
+B70OAF.LIB		BASIC runtime constituent library
+B70OAJ.LIB		  "	 "	   "	     "
+B70OAN.LIB		  "	 "	   "	     "
+B70OBF.LIB		  "	 "	   "	     "
+B70OBJ.LIB		  "	 "	   "	     "
+B70OBN.LIB		  "	 "	   "	     "
+B70OEJ.LIB		  "	 "	   "	     "
+B70OOF.LIB		  "	 "	   "	     "
+B70OON.LIB		  "	 "	   "	     "
+B70ORF.LIB		  "	 "	   "	     "
+B70RCF.LIB		  "	 "	   "	     "
+B70RCN.LIB		  "	 "	   "	     "
+B70RLF.LIB		  "	 "	   "	     "
+B70RLN.LIB		  "	 "	   "	     "
+B70ROAF.LIB		  "	 "	   "	     "
+B70ROAJ.LIB		  "	 "	   "	     "
+B70ROAN.LIB		  "	 "	   "	     "
+B70ROBF.LIB		  "	 "	   "	     "
+B70ROBJ.LIB		  "	 "	   "	     "
+B70ROBN.LIB		  "	 "	   "	     "
+B70ROEF.LIB		  "	 "	   "	     "
+B70ROEJ.LIB		  "	 "	   "	     "
+B70ROEN.LIB		  "	 "	   "	     "
+B70ROOF.LIB		  "	 "	   "	     "
+B70ROOJ.LIB		  "	 "	   "	     "
+B70ROON.LIB		  "	 "	   "	     "
+B70RORF.LIB		  "	 "	   "	     "
+B70RORJ.LIB		  "	 "	   "	     "
+B70RORN.LIB		  "	 "	   "	     "
+B70S.LIB		  "	 "	   "	     "
+
+
+Disk #4 5.25", Disk #2 3.5"
+-------------------------------------------------------------------------------
+B70ISD.LIB		ISAM constituent library
+B70IS.LIB		  "	  "	    "
+B70ISSTD.LIB		  "	  "	    "
+PROISAMT.LIB		  "	  "	    "
+PROISAM.OBJ		ISAM constituent file
+PROISAMD.OBJ		  "	  "	  "
+ISAMCVT.LIB		ISAM utility constituent library
+ISAMPACK.LIB		  "	"	  "	    "
+ISAMIO.LIB		  "	"	  "	    "
+ISAMREPR.LIB		  "	"	  "	    "
+
+
+Disk #5 5.25", Disk #3 3.5"
+-------------------------------------------------------------------------------
+B70ISDUT.OBJ		ISAM constituent file
+B70ISENG.OBJ		  "	  "	  "
+B70ISSCA.OBJ		  "	  "	  "
+B70ISSPA.OBJ		  "	  "	  "
+B70ISC.LIB		ISAM utility constituent library
+B70ISAMD.LIB		  "	"	  "	    "
+B70ISAM.LIB		  "	"	  "	    "
+DATIM.BI		Include file for Date/Time functions
+FORMAT.BI		Include file for Format functions
+FINANC.BI		Include file for Financial functions
+MKKEY.EXE		Utility to convert .KEY files to ASCII and ASCII
+			files to .KEY files
+FINANCAR.LIB		Financial functions add-on library for alternate math
+			DOS or OS/2 real-mode
+QBX.KEY			MKKEY QBX key definition file (default)
+BRIEF.KEY		MKKEY BRIEF key definition file
+EPSILON.KEY		MKKEY Epsilon key definition file
+ME.KEY			MKKEY Microsoft Editor key definition file
+CHRTASM.ASM		Presentation Graphics toolbox assembly language
+			routines source
+FONTASM.ASM		Font toolbox assembly language routines source
+UIASM.ASM		User interface toolbox assembly language routines
+			source
+HELVB.FON		Font toolbox Helvetica font file for 640x350 screen
+COURB.FON		Font toolbox Courier font file for 640x350 screen
+TMSRB.FON		Font toolbox Times Roman font file for 640x350 screen
+HELVA.FON		Font toolbox Helvetica font file for 640x200 screen
+COURA.FON		Font toolbox Courier font file for 640x200 screen
+TMSRA.FON		Font toolbox Times Roman font file 640x200 screen
+HELVE.FON		Font toolbox Helvetica font file for 640x480 screen
+COURE.FON		Font toolbox Courier font file for 640x480 screen
+TMSRE.FON		Font toolbox Times Roman font file for 640x480 screen
+
+
+Disk #6 5.25", Disk #3 3.5"
+-------------------------------------------------------------------------------
+QBX.EXE			Microsoft QuickBASIC Extended program development
+			environment.
+QBX.QLB			Stand-alone library containing support routines
+			for DOS system calls.
+QBX.PIF			File that provides information to aid in running
+			QuickBASIC under Microsoft Windows.
+HIMEM.SYS		High memory management device driver
+EXEHDR.EXE		Microsoft EXE File Header Utility
+BAS7ENER.HLP		File containing compressed online help information
+			about the QBX programming environment
+
+
+Disk #7 5.25", Disk #4 3.5"
+-------------------------------------------------------------------------------
+BAS7ADVR.HLP		File containing compressed online help information
+			for the QuickBASIC language.
+BAS7EX.HLP		File containing compressed online help code examples
+DTFMTAR.LIB		Date/Time and Format add-on library for alternate math
+			DOS or OS/2 real-mode
+PATCH87.EXE		Program that installs a patch for DOS 3.20. The patch
+			eliminates a problem with floating-point math in DOS
+			3.20. The problem arises ONLY on systems that boot from
+			a hard disk drive, have a math coprocessor (such as an
+			8087 chip), and that run programs that use floating-
+			point math.
+
+
+Disk #8 5.25", Disk #4 3.5"
+-------------------------------------------------------------------------------
+CV.EXE			CodeView Debugger
+BAS7QCK.HLP		File containing online help information dealing with
+			the Microsoft QuickBASIC language.
+BRIEF.INI		BRIEF initialization file for Microsoft Editor
+
+
+Disk #9 5.25", Disk #5 3.5"
+-------------------------------------------------------------------------------
+CVPACK.EXE		Compresses CodeView information
+CV.HLP			Codeview debugger help file
+NMAKE.EXE		Microsoft Program Maintenance Utility
+RM.EXE			Utility to delete files
+EXP.EXE			Utility to erase files
+UNDEL.EXE		Utility to undelete files
+SETENV.EXE		Microsoft Environment Expansion utility
+M.EXE			Microsoft Editor
+M.HLP			Microsoft Editor help file
+WS.MXT			Wordstar extension file for Microsoft Editor
+MHELP.MXT		Help extension file for Microsoft Editor
+TOOLS.PRE		Predefined and example Microsoft Editor macros
+EPSILON.INI		Epsilon initialization file for Microsoft Editor
+QUICK.INI		QuickBASIC initialization file for Microsoft Editor
+
+
+Disk #10 5.25", Disk #5 3.5"
+-------------------------------------------------------------------------------
+SMARTDRV.SYS		Disk cache device driver
+RAMDRIVE.SYS		Ram drive device driver
+MSHERC.COM		Driver file for use with computers equipped with
+			a Hercules(R) Graphics Card, Graphics Card Plus,
+			Hercules InColor Card, or 100%-compatible clones of
+			these graphics cards.  This file allows you to write
+			BASIC programs that use screen mode 3 for graphics
+			output.
+FIXSHIFT.COM		Terminate-and-stay-resident program that fixes a bug
+			in the ROM BIOS of some machines with keyboards that
+			have an extra set of DIRECTION (i.e. arrow) keys, in
+			addition to those on the numeric keypad.
+MOUSE.COM		Mouse driver for use with QuickBASIC and programs
+			that call mouse functions.
+HELPMAKE.EXE		Microsoft Help-File Creation utility
+UIDEMO.BAS		User Interface toolbox demonstration program
+FONTDEMO.BAS		Font toolbox demonstration program
+CHRTDEMO.BAS		Presentation Graphics demo (main module)
+CHRTDEMO.BI		Include file for Presentation Graphics demo
+CHRTDEM1.BAS		Presentation Graphics demo (module 1)
+CHRTDEM2.BAS		Presentation Graphics demo (module 2)
+SAMPLE.CHT		Presentation Graphics demo sample chart
+BOOKLOOK.BAS		Sample ISAM database program (main module)
+BOOKLOOK.BI		Include file for sample ISAM database program
+BOOKMOD1.BAS		Sample ISAM database program (module 1)
+BOOKMOD2.BAS		Sample ISAM database program (module 2)
+BOOKMOD3.BAS		Sample ISAM database program (module 3)
+BOOKS.MDB		Sample ISAM database file
+BOOKLOOK.MAK		File used by QBX to load all files required to run
+			the BOOKLOOK sample ISAM database program
+ADAPTER.BAS		Sample program to determine graphic adapter
+BALLPSET.BAS		Sample program - bouncing ball using PSET
+BALLXOR.BAS		Sample program - bouncing ball using XOR
+BAR.BAS			Sample program - bar chart
+BIGSTRIN.BAS		Sample program - far string demo
+CAL.BAS			Sample program - perpetual calendar
+CHECK.BAS		Sample program - checkbook program
+COLORS.BAS		Sample program - color and palette demo
+CRLF.BAS		Sample program - carriage return/line feed filter
+CUBE.BAS		Sample program - animated cube
+EDPAT.BAS		Sample program - pattern editor
+ENTAB.BAS		Sample program - replace tabs with spaces
+FLPT.BAS		Sample program - display floating-point numbers
+INDEX.BAS		Sample program - non-ISAM parts inventory
+MANDEL.BAS		Sample program - plots values in a Mandlebrot set
+MUSIC.BAS		Sample program - Event trapping demo, plays music
+PALETTE.BAS		Sample program - palette changing demo
+PASSWRD.BAS		Sample program - requests and verifies password
+PGBAR.BAS		Sample program - Presentation Graphics bar chart demo
+PGLINEMS.BAS		Sample program - Presentation Graphics line chart demo
+PGPIE.BAS		Sample program - Presentation Graphics pie chart demo
+PGSCAT.BAS		Sample program - Presentation Graphics scatter diagram
+			demo
+PLOTTER.BAS		Sample program - Draws lines using cursor keys
+QLBDUMP.BAS		Sample program that allows you to get a listing of the
+			PUBLIC code and data symbols in a QuickBASIC Quick
+			library.
+REMLINE.BAS		Sample program - removes remarks and lines numbers
+SINEWAVE.BAS		Sample program - draws sine wave on screen
+STRTONUM.BAS		Sample program - filters commas from numeric output
+TERMINAL.BAS		Sample program - terminal emulator
+TIMER.BAS		Sample program - timer event-trapping demo
+TIMERA.ASM		Sample ASM program for use with TIMER.BAS
+TOKEN.BAS		Sample program - breaks input string into components
+TORUS.BAS		Sample program - draws a colorful rotating torus
+WHEREIS.BAS		Sample program - locates files on disk
+MXADSTA.ASM		Mixed language sample program - far string usage demo
+MXADSTB.BAS		 "	"	"	"	"     "	    "	 "
+MXADSTC.C		 "	"	"	"	"     "	    "	 "
+MXADSTP.PAS		 "	"	"	"	"     "	    "	 "
+MXSHKA.ASM		 "	"	"	"	"     "	    "	 "
+MXSHKB.BAS		 "	"	"	"	"     "	    "	 "
+MXSHKC.C		 "	"	"	"	"     "	    "	 "
+MXSHKP.PAS		 "	"	"	"	"     "	    "	 "
+MXADSTF.FOR		 "	"	"	"	"     "	    "	 "
+MXSHKF.FOR		 "	"	"	"	"     "	    "	 "
+
+
+Disk #11 5.25", Disk #6 3.5"
+-------------------------------------------------------------------------------
+IMPLIB.EXE		Utility used to create OS/2 import libraries
+NOTRNEMP.LIB		No transcendental math. An object file to link with
+			BASIC programs that require no transcendental functions.
+			OS/2 protect-mode
+EMP.LIB			80x87 emulator OS/2 protect-mode
+TSCNIOFP.OBJ		Object file to link with far-string OS/2 protect-mode
+			BASIC programs that use text-only screen I/O.
+TSCNIONP.OBJ		Object file to link with near-string OS/2 protect-
+			mode BASIC programs that use text-only screen I/O.
+OS2.LIB			OS/2 interface library
+
+B70POBJ.LIB		Constituent protect-mode runtime library
+B70POOF.LIB		     "		  "	    "	    "
+B70POAJ.LIB		     "		  "	    "	    "
+B70POAF.LIB		     "		  "	    "	    "
+B70POAN.LIB		     "		  "	    "	    "
+B70POEJ.LIB		     "		  "	    "	    "
+B70POEF.LIB		     "		  "	    "	    "
+B70POEN.LIB		     "		  "	    "	    "
+B70POBF.LIB		     "		  "	    "	    "
+B70POBN.LIB		     "		  "	    "	    "
+B70POOJ.LIB		     "		  "	    "	    "
+B70POON.LIB		     "		  "	    "	    "
+B70PORJ.LIB		     "		  "	    "	    "
+B70PORF.LIB		     "		  "	    "	    "
+B70PCF.LIB		     "		  "	    "	    "
+B70PLF.LIB		     "		  "	    "	    "
+B70PORN.LIB		     "		  "	    "	    "
+B70PCN.LIB		     "		  "	    "	    "
+B70PLN.LIB		     "		  "	    "	    "
+
+BRTM70AP.DEF		Constituent protect-mode runtime file
+BRTM70EP.DEF		     "		  "	    "	   "
+
+
+Disk #12 5.25", Disk #6 3.5"
+-------------------------------------------------------------------------------
+DTFMTAP.LIB		Date/Time and Format add-on library for alternate math
+			OS/2 protect-mode
+FINANCAP.LIB		Financial functions add-on library for 80x87 or
+			emulator math - OS/2 protect-mode
+DTFMTEP.LIB		Date/Time and Format add-on library for 80x87 or
+			emulator math - OS/2 protect-mode
+FINANCEP.LIB		Financial functions add-on library for alternate math
+			OS/2 protect-mode
+MEP.EXE			Microsoft Editor (OS/2 protect-mode)
+WS.PXT			Wordstar extension file for Microsoft Editor (OS/2
+			protect-mode
+MHELP.PXT		Help extension file for Microsoft Editor (OS/2
+			protect-mode)
+MSHELP.DLL		OS/2 protect mode dynamic link library that implements
+			help for MEP.EXE and CVP.EXE.
+CVP.HLP			OS/2 CodeView Debugger help file
+CVP.EXE			OS/2 CodeView Debugger
+BSEDOSFL.BI		Include files for OS/2 interface
+BSEDOSPC.BI		   "	  "    "   "	   "
+BSEDOSPE.BI		   "	  "    "   "	   "
+BSESUBMO.BI		   "	  "    "   "	   "
+
+
+
+FILES BUILT DURING INSTALLATION:
+
+===============================================================================
+
+BCL70ENR.LIB		Combined library for stand-alone .EXE files 80x87 or
+			emulator math near-string DOS or OS/2 real-mode
+BCL70ENP.LIB		Combined library for stand-alone .EXE files 80x87 or
+			emulator math near-string OS/2 protect-mode
+BCL70EFR.LIB		Combined library for stand-alone .EXE files 80x87 or
+			emulator math far-string DOS or OS/2 real-mode
+BCL70EFP.LIB		Combined library for stand-alone .EXE files 80x87 or
+			emulator math far-string OS/2 protect-mode
+BCL70ANR.LIB		Combined library for stand-alone .EXE files
+			alternate math near-string DOS or OS/2 real-mode
+BCL70ANP.LIB		Combined library for stand-alone .EXE files
+			alternate math near-string OS/2 protect-mode
+BCL70AFR.LIB		Combined library for stand-alone .EXE files
+			alternate math far-string DOS or OS/2 real-mode
+BCL70AFP.LIB		Combined library for stand-alone .EXE files
+			alternate math far-string OS/2 protect-mode
+
+BRT70ENR.EXE		Runtime module 80x87 or emulator math near-string DOS
+			or OS/2 real-mode
+BRT70ENP.DLL		Runtime module 80x87 or emulator math near-string OS/2
+			protect-mode
+BRT70EFR.EXE		Runtime module 80x87 or emulator math far-string DOS
+			or OS/2 real-mode
+BRT70EFP.DLL		Runtime module 80x87 or emulator math far-string OS/2
+			protect-mode
+BRT70ANR.EXE		Runtime module alternate math near-string DOS or OS/2
+			real-mode
+BRT70ANP.DLL		Runtime module alternate math near-string OS/2
+			protect-mode
+BRT70AFR.EXE		Runtime module alternate math far-string DOS or OS/2
+			real-mode
+BRT70AFP.DLL		Runtime module alternate math far-string OS/2
+			protect-mode
+
+BRT70ENR.LIB		Runtime interface library to BRT70ENR.EXE
+BRT70EFR.LIB		Runtime interface library to BRT70EFR.EXE
+BRT70ANR.LIB		Runtime interface library to BRT70ANR.EXE
+BRT70AFR.LIB		Runtime interface library to BRT70AFR.EXE
+BRT70ENP.LIB		Runtime interface library to BRT70ENP.DLL
+BRT70EFP.LIB		Runtime interface library to BRT70EFP.DLL
+BRT70ANP.LIB		Runtime interface library to BRT70ANP.DLL
+BRT70AFP.LIB		Runtime interface library to BRT70AFP.DLL
+
+PROISAMD.LIB		ISAM library
+PROISAM.LIB		  "	"
+PROISAMD.EXE		ISAM Terminate-Stay Resident program
+PROISAM.EXE		  "	 "	"      "       "
+
+ISAMIO.EXE		ISAM ASCII import/export utility
+ISAMPACK.EXE		ISAM file compacting utility
+ISAMCVT.EXE		ISAM conversion utility
+ISAMREPR.EXE		ISAM repair utility
+
+FONTBENR.LIB		Font toolbox library - 80x87 or emulator math
+			near-string DOS or OS/2 real-mode
+FONTBEFR.LIB		Font toolbox library - 80x87 or emulator math far-string
+			DOS or OS/2 real-mode
+FONTBANR.LIB		Font toolbox library - alternate math near-string
+			DOS or OS/2 real-mode
+FONTBAFR.LIB		Font toolbox library - alternate math near-string
+			DOS or OS/2 real-mode
+FONTBEFR.QLB		Font toolbox quick library - 80x87 or emulator math
+			far-string DOS or OS/2 real-mode
+
+CHRTBENR.LIB		Presentation graphics toolbox library - 80x87 or
+			emulator math near-string DOS or OS/2 real-mode
+CHRTBEFR.LIB		Presentation graphics toolbox library - 80x87 or
+			emulator math far-string DOS or OS/2 real-mode
+CHRTBANR.LIB		Presentation graphics toolbox library - alternate math
+			near-string DOS or OS/2 real-mode
+CHRTBAFR.LIB		Presentation graphics toolbox library - alternate math
+			far-string DOS or OS/2 real-mode
+CHRTBEFR.QLB		Presentation graphics toolbox quick library - 80x87
+			or emulator math far-string DOS or OS/2 real-mode
+UITBENR.LIB		User interface toolbox library - 80x87 or emulator math
+			near-string DOS or OS/2 real-mode
+UITBEFR.LIB		User interface toolbox library - 80x87 or emulator math
+			far-string DOS or OS/2 real-mode
+UITBANR.LIB		User interface toolbox library - alternate math
+			near-string DOS or OS/2 real-mode
+UITBAFR.LIB		User interface toolbox library - alternate math
+			far-string DOS or OS/2 real-mode
+UITBEFR.QLB		User interface toolbox quick library - 80x87 or emulator
+			math far-string DOS or OS/2 real-mode
+MATBENR.LIB		Matrix math toolbox library - 80x87 or emulator math
+			near-string DOS or OS/2 real-mode
+MATBENP.LIB		Matrix math toolbox library - 80x87 or emulator math
+			near-string protect-mode
+MATBEFR.LIB		Matrix math toolbox library - 80x87 or emulator math
+			far-string DOS or OS/2 real-mode
+MATBEFP.LIB		Matrix math toolbox library - 80x87 or emulator math
+			far-string protect-mode
+MATBANR.LIB		Matrix math toolbox library - alternate math
+			near-string DOS or OS/2 real-mode
+MATBANP.LIB		Matrix math toolbox library - alternate math
+			near-string protect-mode
+MATBAFR.LIB		Matrix math toolbox library - alternate math
+			far-string DOS or OS/2 real-mode
+MATBAFP.LIB		Matrix math toolbox library - alternate math
+			far-string protect-mode
+MATBEFR.QLB		Matrix math toolbox quick library - 80x87 or emulator
+			math far-string DOS or OS/2 real-mode
+DTFMTER.QLB		Date/Time and Format quick library - 80x87 or emulator
+			math DOS or OS/2 real-mode
+FINANCER.QLB		Financial functions quick library for 80x87 or emulator
+			math DOS or OS/2 real-mode

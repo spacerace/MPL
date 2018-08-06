@@ -1,0 +1,14 @@
+; Definition file for MBOXTEST
+; Created by Microsoft Corp., 1988
+;
+NAME	MsgBox	WINDOWAPI
+
+DESCRIPTION 'Message Box Sample'
+
+STUB	'OS2STUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  1024
+STACKSIZE 4096

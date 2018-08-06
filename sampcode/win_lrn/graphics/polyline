@@ -1,0 +1,6 @@
+polyline.obj: polyline.c
+     cl  -d  -c  -Asnw	-Gsw  -Os  -Zdpe  polyline.c
+
+polyline.exe:  polyline.obj polyline.def
+     link4 polyline,polyline/align:16,polyline/map,slibw,polyline.def
+     mapsym polyline

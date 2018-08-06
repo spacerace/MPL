@@ -1,0 +1,39 @@
+
+
+
+        NAME
+                dstr_i -- make an ascii decimal string into an integer
+
+        SYNOPSIS
+                c = dstr_i(p, r);
+                char *p;
+                int *r;
+                int c;
+
+
+        DESCRIPTION
+        Read a string of ascii decimal digits and create an integer
+        from the result.  String must begin with a digit, +, or -.
+        Calculation proceeds to first non-ascii digit or NULL terminator.
+        Count of actual digits read is returned, and integer is placed
+        in specified destination.  '-' sign as first character returns
+        integer negated.
+
+
+        EXAMPLE
+
+               char string[] = "1357";
+               int result;
+               int count;
+               count = dstr_i(string, &result);
+                 count will equal 4
+                 result will equal 1357
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

@@ -1,0 +1,46 @@
+/*------------------------------
+   HEAD.RC resource script file
+  ------------------------------*/
+
+#include <os2.h>
+#include "head.h"
+
+MENU ID_RESOURCE
+     {
+     SUBMENU "~File",              IDM_FILE
+          {
+          MENUITEM "~Open...",          IDM_OPEN
+          MENUITEM SEPARATOR
+          MENUITEM "A~bout Head...",    IDM_ABOUT
+          }
+     }
+
+DLGTEMPLATE IDD_ABOUT
+  {
+  DIALOG "", 0, 32, 32, 200, 88,, FCF_DLGBORDER
+    {
+    CTEXT "Head"                                -1,  10, 64, 180,  8
+    CTEXT "File Head Display"                   -1,  10, 40, 180,  8
+    CTEXT "Copyright (C) Charles Petzold, 1988" -1,  10, 32, 180,  8
+    DEFPUSHBUTTON "OK"                      DID_OK,  80,  8,  40, 16, WS_GROUP
+    }
+  }
+
+DLGTEMPLATE IDD_OPEN
+  {
+  DIALOG "", 0, 8, 8, 240, 170,, FCF_DLGBORDER
+    {
+    CTEXT "Open File"              -1,             8, 154, 224,  8
+    LTEXT "Use mouse to choose file, or type filename." -1, 8, 138, 224, 8
+    LTEXT "Current Directory:"     -1,             8, 126,  80,  8
+    LTEXT ""                       IDD_PATH,      88, 126, 144,  8
+    LTEXT "Filename:"              -1,             8, 110,  48,  8
+    ENTRYFIELD ""                  IDD_FILEEDIT,  56, 110, 176,  8, ES_MARGIN
+    CTEXT "Directories"            -1,            16,  96,  92,  8
+    CTEXT "Files"                  -1,           134,  96,  92,  8
+    LISTBOX                        IDD_DIRLIST,   16,  32,  92, 64
+    LISTBOX                        IDD_FILELIST, 134,  32,  92, 64
+    DEFPUSHBUTTON "Open"           DID_OK,        32,   8,  64, 16, WS_GROUP
+    PUSHBUTTON "Esc=Cancel"        DID_CANCEL,   144,   8,  64, 16, WS_GROUP
+    }
+  }

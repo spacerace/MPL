@@ -1,0 +1,15 @@
+NAME    gnearclr
+
+DESCRIPTION 'Microsoft Windows Demonstration Application'
+
+STUB    'WINSTUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+HEAPSIZE  8198
+STACKSIZE 4096
+
+EXPORTS
+    NearestWndProc @1
+    ColorDlg       @2

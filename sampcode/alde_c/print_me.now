@@ -1,0 +1,51 @@
+     
+     **********************************************************************
+     **********************************************************************
+     **                                                                  **
+     **          Welcome to ALDE Publishing's ..... C CD-ROM             **
+     **                                                                  **
+     **********************************************************************
+     **********************************************************************
+     
+     
+     The following is the tree structure of ALDE_C:
+     
+     
+                                    ALDE_C
+                                      |
+                                      |
+                                      |
+       (Sub-Directories under ALDE_C) |
+       ----------------------------------------------------------------
+       |         |         |          |         |          |          |
+       |         |         |          |         |          |          |
+     CI_C86   AZTEC_C   DESMET_C   LATTICE     MISC       MSC      TURBO_C
+                                                |
+                                                |
+                                                |
+       (Sub-Directories under MISC)             |
+       ----------------------------------------------------------------
+       |        |        |        |        |        |        |        |
+       |        |        |        |        |        |        |        |
+      COMM     FUNC    GRAPH     LIB      PRNT    TUTOR     UTIL     ZED
+     
+     
+     
+     Also found in the ALDE_C subdirectory are the following files:
+     
+     
+          CCDROM.DIR - A complete catalog listing of the C CD-ROM
+     
+          PRINT_ME.NOW - The file you are currently reading
+     
+     
+     **********************************************************************
+     **********************************************************************
+     
+      For a complete catalog of ALDE products, please write, call, or fax:
+     
+                                ALDE Publishing
+                             4830 West 77th Street
+                             Minneapolis, MN 55435
+     
+                  (612) 835-5240 voice     (612) 835-3401 fax

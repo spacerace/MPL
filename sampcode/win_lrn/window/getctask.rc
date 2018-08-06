@@ -1,0 +1,8 @@
+#include "windows.h"
+#include "getctask.h"
+
+GetCTaskMenu     MENU
+BEGIN
+    MENUITEM  "&Trash Window",      IDM_TRASH
+END
+

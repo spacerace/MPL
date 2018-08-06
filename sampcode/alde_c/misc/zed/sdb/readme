@@ -1,0 +1,6 @@
+This is a working version of the  sdb database system. The backspace key is
+operative in this version as is also the ESC key to delete the current line.
+This version will compile and execute on a 320k pc executing dos 2.0. It
+was compiled using the Lattice C V1.04.
+
+

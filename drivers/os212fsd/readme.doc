@@ -1,0 +1,50 @@
+Software requirements:
+
+    OS2 1.2  after internal release 12.134 for minimal functionality.
+    OS2 1.21 after internal release 121.185 for CDROM required kernel
+             fixes.  This will give the most bug-free operation.
+
+Config.sys Parameters :    May be any of the following.
+
+    /k      Instructs the FSD to first search for a secondary volume
+    /K      descriptor.  If not found, the volume descriptors are
+            then searched for a primary volume descriptor.  This is
+            used to read Kanji disks.
+
+    /c:<#>  Tells the FSD how many 64K segments to use for the sector
+    /C:<#>  cache.  The default is 2, meaning 64 sectors are cached.
+            This value must be between 1 and 65535.  The actual number 
+            of cached sectors is this value times 32.
+
+    /m:<#>  Tells the FSD the maximum number of disk sectors to read at
+    /M:<#>  a time.  The default is 8 (16K).  The maximum is 31 sectors
+            or 25% of the total sector cache, whichever is smaller.
+
+    /quiet  Suppresses any signon messages.
+           
+    The /c parameter must appear before the /m parameter or the /m
+    parameter will be ignored and the default value used.
+
+    Example :   The following instructs the FSD to search for a secondary
+                volume descriptor, cache 128 sectors and read a maximum
+                of 20 sectors at a time.  In this case the FSD is 
+                put in a directory named c:\ifs.
+
+        ifs=c:\ifs\cdfs.ifs /k /c:4 /m:20
+
+                The following can be used to read the primary volume 
+                descriptor use the default cache and read-ahead values.
+
+        ifs=c:\ifs\cdfs.ifs
+
+The CDROM FSD swaps out the sector buffers into the swapfile on the 
+harddisk.  The value for the /C parameter is constrained by the swapfile
+not the physical memory of the machine.
+
+
+Put the dll, UCDFS.DLL in a directory on your libpath.
+
+    This dll provides compatibility for the utility functions SYS,
+    FORMAT, CHKDSK, and RECOVER.  These are basically no-ops for CDROM
+    except CHKDSK which returns the size of the CDROM volume.
+

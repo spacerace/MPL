@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "GetPAddr.h"
+
+GetPAddr MENU
+    BEGIN
+        POPUP "Menu"
+           BEGIN
+              MENUITEM "&GetProcAddress",                   IDM_GETPROCADDRESS
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

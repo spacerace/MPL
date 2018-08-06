@@ -1,0 +1,95 @@
+;       SAMPLE Microsoft Mouse `EXECUTE2' MENU
+;
+; NOTE: Review the comments below before you compile
+;       and use this source file as a mouse menu.
+;
+; The EXECUTE2 menu provides an example of 'semi-automatic'
+; mouse menu activation.  It demonstrates how you can
+; achieve subtle interaction between certain types of mouse
+; menu 'event trapping' (especially with mouse motion/MATCH
+; statement trapping).  This menu runs at the DOS level.
+; The comments included in the source code explain the
+; necessary complexity of the menu.
+
+; EXECUTE2 has two levels of menus.  The first menu is
+; activated by clicking a mouse button, and sets up the
+; conditions for entry into the second menu (horizontal
+; mouse motion combined with particular screen display
+; conditions).  Exiting the second menu ensures that the
+; proper conditions are set up for the first menu.
+;
+; The major reason for this menu's complexity is the speed
+; at which mouse motion trapping occurs.  If the entry and
+; exit conditions around the second menu are cut down, the
+; second menu may become active before the DOS 'cls'
+; statement is COMPLETELY processed.  In addition, mouse
+; motion in conjunction with a mouse button click within the
+; second menu could cause the second menu to be redisplayed
+; (this would occur if the 'cln:' "ASSIGN" statement was
+; EXECUTED upon exiting menu2).
+;
+; When working with menus with this style of user
+; interaction, ALL input and output conditions must be
+; thoroughly analyzed and accommodated.  Otherwise, the
+; intended entry conditions may be violated.
+;
+;
+BEGIN lb,nul,nul,nul,nul,nul,nul,32,16  ;left button is the only
+                                        ;entry into the initial menu
+;
+lb:     execute menu1
+;
+menu1: MENU   " sample 'match' function menu (1)",1,40,NORMAL
+       option " clear the screen, and run menu2 ",set
+       MEND
+;
+set:   execute cls,asn,nul             ;'cls:' clears the screen
+                                       ;'asn:' reassigns the menu
+                                       ; entry to allow horizontal
+                                       ; mouse motion to trigger the
+                                       ; second menu.
+                                       ;'nul:' is a "do nothing"
+;
+cls:   type "cls",enter
+asn:   ASSIGN lb,nul,nul,chk,chk,nul,nul,32,16
+nul:   nothing
+;
+chk:   MATCH 2,0,NORMAL,32,res,nul     ;When horizontal mouse motion
+                                       ; is detected, this statement
+                                       ; looks for a SPACE character
+                                       ; at the left margin of the
+                                       ; second line of the display,
+                                       ; indicating that the DOS 'cls'
+                                       ; command is complete...
+;
+res:   EXECUTE clr,menu2               ;When 'chk:' is satisfied, this
+                                       ; will cause the horizontal
+                                       ; motion sensitivity to be 
+                                       ; low, and reassigns all motion
+                                       ; trapping to a 'do nothing'
+                                       ; state, disallowing REENTRY
+                                       ; into the second menu (menu2).
+;
+clr:   ASSIGN lb,nul,nul,nul,nul,nul,nul,5000,16
+menu2: MENU   " sample 'execute' function menu (2)",1,40,NORMAL
+       option "             do nothing            ",org
+       option "             do nothing            ",org
+       MEND
+;
+org:   execute cln,zip                 ;This will reset the menu
+                                       ; parameters to the original
+                                       ; state at menu load-time,
+                                       ; and makes sure that there
+                                       ; is something other than
+                                       ; a SPACE at the left margin
+                                       ; of line 2 of the display
+                                       ; (depending on the DOS
+                                       ; PROMPT configuration)
+                                       ; - this will disallow early
+                                       ; entry into 'menu2' after
+                                       ; subsequent entry into
+                                       ; menu1.
+;
+cln:   ASSIGN lb,nul,nul,nul,nul,nul,nul,32,16
+zip:   type enter
+;

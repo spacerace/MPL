@@ -1,0 +1,15 @@
+        .
+        .
+        .
+        mov     ax,6601h        ; Function = get code page.
+        int     21h             ; Transfer to MS-DOS.
+        jc      error           ; Jump if function failed.
+
+        mov     bx,dx           ; Force active page = default.
+
+        mov     ax,6602h        ; Function = set code page.
+        int     21h             ; Transfer to MS-DOS.
+        jc      error           ; Jump if function failed.
+        .
+        .
+        .

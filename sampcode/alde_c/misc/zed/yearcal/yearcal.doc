@@ -1,0 +1,346 @@
+/***************************************************************/
+                YEARCAL v0.06T 4 Feb 1988
+
+        Copyright 1987, 1988 by Paul M. Sittler
+
+YEARCAL makes calendars (A) and schedules (M/W/D) for years after 1901.
+
+At the user's option, Normal, Fiscal Year, AGGIE, or 3-Digit Julian
+Date Calendars can be produced, in multiple copies, for a number of
+consecutive years, or both.  Fiscal Year calendars may be produced for
+any arbitrary 12 or 13 month fiscal year.  The user may select a
+Programmer's calendar, numbered in Hexadecimal or Octal numbers rather
+than decimal numbers, and may choose one of several languages.
+
+The calendars may be displayed on the screen, printed, or written to
+a file as desired.  If written to disk, files are named like YYYY.ENG
+(Normal ENGlish), YYYYFY.DUT (Fiscal-Year DUTch), YYYYAGG.TEX (Aggie-
+type TEXan), or YYYYJUL.POL (3-Digit Julian Date POLish) calendars,
+etc.  Hex or Octal calendar files will have an "H" or "O" added to
+their names, such as YYYYH.SPA, YYYYFYO.SER or YYYYAGGH.FRE.
+
+YEARCAL may be freely distributed, and used for non-commercial
+purposes, as long as the unmodified program source code and
+documentation files are distributed with it.
+
+/***************************************************************/
+
+Brief History:  Why (and much of How) YEARCAL came to be. . .
+
+In 1987, a fellow at the office asked if I could get him a calendar
+for 1989, as his desk calendar only went to 1988.  I grabbed a
+program that I had lying around, and did it.  I also went onto
+GENie and found a program there that did the same job.  Both of
+these programs were written in BASIC, and when interpreted ran
+slowly.  When compiled they took up 45-50 Kbytes or so.  I
+thought I might be able to make one a little smaller, faster,
+and with a few more useful features.
+
+Along the way, I discovered that 2000 will really be a leap
+year, while 1900 was not, and that the year 4000 will be weird
+too.  I also remembered a way of making an AGGIE calendar that
+has the information arranged a little differently, and added
+that capability to it as well.  I decided that one could
+logically wish to view a calendar on a screen, print a calendar
+on a printer, or write the calendar to a file.  It seemed useful
+to make runs of multiple years or copies, so it can do both.
+
+Then, Chris Lang suggested that it would really be neat to have
+a program that produced fiscal year calendars.  YEARCAL will now
+produce fiscal year calendars for an arbitrary 12 full-month
+fiscal year.  Rich Hedges suggested that it would really be neat
+to produce a fiscal year calendar for a fiscal year that begins
+on a weird date, like July 15th. . .  Well, not yet, and maybe
+never. . .
+
+Turned out that adding code to accommodate 13 month arbitrary
+starting dates was not all that difficult. . .  So now it does
+that as well.
+
+Then, Dale Schafer pointed out that on his IBM token ring
+network setup, a banner and a blank page were being printed
+between each successive calendar.  This was because I was
+skillfully closing the file (PRN, CON, etc.) after every
+calendar was written.  Hmmmm. . .  Also fairly easy to fix,
+but required a little bit of rethinking.
+
+I confess.  There was an undocumented feature in version 0.01c
+or 0.01d that allowed the "JANUARY" month of a fiscal year to be
+printed as "SUNDAY", and then "FEBRUARY" as "TUESDAY".  Further,
+Not everyone has or uses DeSmet C. . .  I converted YEARCAL to
+Borland's Turbo-C, and that wee beastie has been put to bed.
+Damn those entomological cybernoids!!
+
+A super serious individual (who shall remain nameless) asked me
+what the AGGIE calendar was good for.  I have been using it for
+some time time to keep up with meeting dates that occur more or
+less by formula.  You know, such things as "First Tuesday of
+every month at 7:30 pm" and the like.  No sense of humour. . .
+
+Then, one night an old CP/M-hacking KayPro user (Don Buzzingham)
+happened by, and after one too many cups of coffee, we were
+inspired to do a "Programmer's" calendar.  Where is it written
+that a calendar must represent the dates with decimal numbers?
+Why not Hexadecimal, or (for us real fossils) Octal? Why not
+Binary?  (Answer: binary representations won't fit easily and
+neatly on the screen. . .  )  Why not any arbitrary number
+base?  (Gag me with a spoon, Adolph!)  (Answer: unless the number
+base is larger than base 4, the dates won't fit nicely either.)
+In keeping with the concept of following the path of least
+resistance, I took the easy way out, and added the capability of
+doing Hex and Octal calendars too.
+
+Why not have it produce calendars in a number of different
+languages?  (Do you know how many languages exist?)  So, language
+support for sixteen different languages was added.  This
+created some problems with the limitations of the IBM(tm)
+character set that came stock with my computer.  Not all of the
+requisite special characters are there.  When I used the cute
+special characters, and sent them to several different printers,
+each printer decided to react to them in different ways, and
+usually NOT by printing the special character I had intended.
+Alas, proper use of the international characters is not to be,
+at least not yet. . .  I apologise in advance to all of those
+who care, and ask your indulgence.  I did try. . .  At the
+behest of several, I have added an optional pause at the end
+of each printed page, for those who wish to print out multiple
+calendars on single sheets using a daisy wheel printer that
+has neither forms tractor nor sheet feeder.  If you need it,
+it's there now.  If you don't need it, I don't think that it
+will get in the way too much. . .
+
+I dropped Greek and Russian because of the character set
+problem, and have made no attempt at adding any oriental
+languages for the same reason.  (I have been tempted to add
+Korean, using the McKune-Reischauer Romanisation scheme.  Let me
+know if anyone cares.)  Added Afrikaans at the suggestion of a
+friend. . .  Finally did add Korean (Romanised). . .
+Thanx to the mostly Reverend Daniel Marek, Pastor of the Caldwell
+Brethren Church, Caldwell, Texas, through the instrument of one
+Briggs Myrick (hacker friend and part time philosopher), we have
+now added Czech to our repertoire of voices!!
+
+I will gladly add any language that can be represented in a standard
+fashion by the Roman character set.  One fellow is supposedly trying
+to get Roumanian, and we may be able to produce the first automated
+calendars ever in a language used by an American Indian Tribe, if
+they decide to use the roman alphabet rather than rolling their own.
+The information that I need is simple:  the names of the days of the
+week and the names of the months.  I suspect that there is a standard
+technique for romanising Japanese, Thai, and Vietnamese, at least.
+
+I woke up late one night with a memory of another calendar
+hassle that I had experienced while in the forced employ of the
+Army.  The DOD and GAO find it useful to think of dates as mere
+numbers.  The so-called Julian-Date scheme is used there.  It
+basically takes note of the fact that there are either 365 or
+366 days in the Gregorian calendar year, and numbers a date by
+its relative position in the year.  Thus, January 1 would be
+001, and December 31st might be either 365 or 366.  This is
+referred to as a 3-digit Julian Date, and is mighty useful if
+you know what year it is.  It makes it really simple to find out
+how many days there are between dates, so you can find out how
+long your most important requisition has been backordered (also
+known as "Lost in the System").  For greater specificity, the
+Four-Digit, Five-Digit, Six-Digit, and Seven-Digit Julian Dates
+can be made by adding more or less of the year in front of the
+date.  February 29th, 1988 might be shown as 1988059 as a
+Seven-Digit Julian Date, and as 8059 for a Four-Digit Julian
+Date.
+
+GAO even puts out a clever little form that supply types often
+refer to when they can't find their desk calendars.  Made of
+heavy card-stock, it is called a "Perpetual Julian Date
+Calendar".  There are basically only two types of Julian Date
+Calendars, one for Leap Years and one for Non-Leap Years.  The
+hassle I had was that in the field we usually didn't have our
+desk calendars, and sometimes (usually) couldn't find our GAO
+cheat sheets.  Since no well-equipped armed force would dream of
+trying to operate without its computer(s), I added the
+capability to produce 3-Digit Julian Date calendars as well in
+decimal, hexadecimal, and octal numbering systems. . .  If you
+don't ordinarily take your computer(s) to the field, you have
+the option of printing them out on paper.
+
+I guess it had to happen.  If you solicit suggestions for
+enhancement, bug reports, and sound as if you are sincere,
+someone may take you up on it.  I received a Fido Message from
+Jim Gibbs of KIVY AM/FM in Crockett, TX.  suggesting that maybe
+I could modify it to do a "Broadcast" or "Advertising" calendar.
+Seems like all of the months in those industries begin on a
+Sunday.  If I only had a sample. . .   (Now I do!)  If I only had
+a little more time. . .
+
+Another Fido E-Mail message suggested that it would be nice if
+it would make Annual, Monthly, and Weekly calendars.  I got to
+thinking about that and decided that the Weekly and Daily
+Schedules would be helpful for time management, and that perhaps
+a monthly calendar would be pretty easy to do too.  I guess that
+most businesses have stopped giving them out at Christmas
+lately.  So, the ability to do Monthly calendars and Weekly and
+Daily schedules was added.  I decided that the schedules should
+be allowed to start on any given day, as some people like to
+start their weeks on Tuesday, or Thursday.  This will probably
+help in the Broadcast or Advertising week thing, as you may
+specify that the schedules will start on a Monday.  (More later
+for you, Jim. . . )  Chris Lang suggested that the ability to
+add user-specified title lines would be helpful, so that he could
+make his very own "Wildlife and Fisheries Science Department"
+"Monthly Vehicle Use Projection" type calendars.  I pointed out
+that he could simply edit the files that it could produce, but
+he said that I didn't have to put up with the whining of his
+office staff.  I quickly added that capability as well.  In fact,
+this capability has been implemented to almost the ridiculous, as
+there are now five (5) each user-definable title lines that may be
+set at will by the user.  (8 January 1988)
+
+Someone wanted it to do a Hebrew calendar, someone (else) an
+Islamic calendar (for equal time); a Lunar calendar, a Mayan
+calendar, a Babylonian calendar, . . .  I intend to contact
+the local neighborhood rabbi, (I know, things I should have
+learned in Schul).  I am even interested in a rumoured scheme
+for a thirteen-month calendar. . .  I had never realised how
+many ways there are for abstracting the same natural phenomenon
+(turn, turn, turn. . .).  (Let's hear it for them
+Byrd-brains!).
+
+Why not have the first screen ask which language to use in all
+supported languages? Then you could have instructions and
+prompts written in whatever language was selected. . .  Alas,
+I am not up to that linguistically.  Would need a little help
+from all of you out there in the world. . .  And that would
+make the program grow somewhat. . .  (Jiminy!! It's already up
+to 26 Kbytes, and runs slightly slower than it used to. . .).
+Would you believe 30 Kbytes now, with an automatic 717 byte
+weight gain when a virgin copy is run?  Some of that bulkiness
+is due to changing to Borland's v1.5, and some is due to putting
+back in certain functions that I had gotten rid of.  Some of it may
+actually be due to more code and (of course) greater functionality?
+(4 Feb 1988)
+
+Alan Holub writes a delightful column called "c chest" in Dr. Dobbs'
+Journal of Software Tools (formerly known as "Doctor Dobbs' Journal
+of Computer Calisthenics and Orthodontia, or Running Light without
+Overbyte") (No, it REALLY was!!  This is a Walt Disney True-life
+Adventure. . .)   In the February 1988 edition (#136), Alan suggests
+a method of keeping changeable or user configurable parameters
+right at the end of the MSDOS .EXE file.  This means a method of
+keeping user configurations without a need for a separate configuration
+file as I had done in the past.  Those Darn things always seem to
+get lost in the great bit bucket in the sky, or something that goes
+bump in the night munches them into teeny riney bits, or they get lost
+on a path of their own. . .  I had worked on a similar thingy, but
+gotten trapped by DOS's need for some sort of check-sum.  Alan was
+kind enough to show the way, so I have included his routines here.
+The bad news is that this technique may not really be portable, as it
+is (probably) MSDOS-specific.
+
+The net effect is that you may now set the parameters as you like
+them, and then save them as you exit.  They will be waiting for you
+the next time!!  This includes the five lines of user installable
+titles as well.  There is one little tiny bizarreness about it all,
+though.  If you compile the program or run a virgin copy, it will grow
+by around 700 bytes when you save your parameters as defaults.  The
+Date and Time will also change to the date and time that YOU saved it.
+You will need to get the date and version from the sign-on screen.
+However, you can set up your very own personally customized version,
+now.  (4 February 1988)
+
+In the realm of a more subtle change, the left margin offset may
+now be user customized in the various schedules so that you may
+really have a binder edge at 20 CPI.  The older versions had been
+stuck at an arbitrary seven (7) spaces, which becomes smaller than
+desirable when used on an Epson in the 20CPI condensed elite mode.
+(4 February 1988)
+
+Lately I have been dreaming about a "Random" calendar.  As I
+envision it, the months would be scrambled, and the days of the
+week would be scrambled randomly, but have the right dates under
+them. . .  How many possible permutations. . .
+
+Here is YEARCAL.  Enjoy it, and remember, the AGGIE calendar
+really does have a useful purpose.  I use it to help schedule
+meetings of the type of "First Tuesday Monthly" and that sort of
+thing.  The code is over commented by most 'c' programmer's
+standards.  I do that so that I can fix it easily three months
+later.  Plus, my mother was frightened by an assembler while
+carrying me.  By special request, for those purists out there, I
+can supply a version of the source that is devoid of white space
+that has all variable names shortened to two upper/lower case
+characters.
+
+There are some really cute functions there that may be useful
+for learning tools.  For example, I know of no way to more
+efficiently determine whether or not a year is leap year than
+the cute little sieve that I wrote.  (Sin of pride).
+
+By the way, the good news is that:
+
+The Unix System V version is due out "Real Soon Now". . . according to
+Ed Braaten, who writes a bit of very good code.  BTW, UPS charges
+$22.00 US to send a two-day packet to W.Germany, while the US Snail
+only charged $3.23 for Air-Snail service of same package.
+
+The CP/M version is due out "Real Soon Now". . . according to
+Jerry P., who writes a lot of very good fiction.
+
+/***************************************************************/
+
+Limitations:
+
+1) Date must be after 1901 and before 4000.  I understand that
+   there will be an adjustment of some kind in 4000, but am not
+   sure what it is to be.  Anyway, it will be after my shift. . .
+
+2) Assumes 80 column screen, and uses the DOS calls to do screen
+   I/O, thus there is no colour, no graphics, and it is s l o w.
+   However, it will therefor work on almost all MSDOS machines.
+
+3) Assumes MSDOS for date/time interrupt 21 call to get the DOS
+   date.  Source code should port easily to any c compiler, for
+   CP/M machines, VAXen, and other dinosaurs...
+
+4) It assumes a printer that can print at least 80 columns.  The
+   scheduling options for Monthly, Weekly, and Daily schedules
+   will ask for the printer page length and width values, and the
+   number of spaces for left margin offset, and adjust the output
+   accordingly.
+
+5) It assumes that the printer can respond to a form-feed character.
+
+6) It does not do any neat double-wide, emphasized print, nor
+   does it make use of any graphics characters.  It just puts out
+   vanilla ASCII text.  To do so would be to try to figure out all
+   of the many printer codes and do an installation program or
+   another menu or something.
+
+7) It does not work from a command line.  It is interactive.
+
+/***************************************************************/
+**  Copyright (c) 1987, 1988 by Paul M. Sittler.
+**  All rights reserved.  The copyright owner hereby authorizes the no-charge,
+**  noncommercial making and/or distribution of copies of the entirety of
+**  this work unchanged and unincorporated in any other work (except "LiBRary"
+**  or "ARChive" disk files for the sole purpose of no-charge noncommercial
+**  distribution).  No other reproduction or use is authorized without the
+**  express prior written consent of the copyright owner.
+
+**  Once upon a time, in a kingdom far away, people shared source code and
+**  many of us benefited from the sharing.  This silly little program is here
+**  presented with source in hopes that it may stimulate the renewed sharing
+**  of our efforts.
+
+**  I am open to comment, suggestions for enhancements, and bug
+**  reports.
+
+**  Paul M. Sittler
+**  1106 Berkeley Drive
+**  College Station, TX 77840
+
+**  Modem (409) 764-0056 300/1200/2400 baud 24 hours/day
+**  My Word #2 Fido 117/1
+**  GENie User mail address P.M.SITTLER
+
+/***************************************************************/
+
+

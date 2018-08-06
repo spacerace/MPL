@@ -1,0 +1,5 @@
+Code 03                                  -Disk Write
+
+Identical to the Disk Read, Code 02, with the exception that a SCSI Write 
+command (0A0) is issued to the specified drive.
+

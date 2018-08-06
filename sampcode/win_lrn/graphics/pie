@@ -1,0 +1,6 @@
+pie.obj:   pie.c
+     cl  -d  -c  -Asnw	-Gsw  -Os  -Zdpe  pie.c
+
+pie.exe:  pie.obj pie.def
+     link4 pie,pie/align:16,pie/map,slibw,pie.def
+     mapsym pie

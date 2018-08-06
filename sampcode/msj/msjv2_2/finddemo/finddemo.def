@@ -1,0 +1,9 @@
+
+NAME           FINDDEMO
+DESCRIPTION    'File Finder Demonstration Program'
+PROTMODE 
+DATA           MOVABLE 
+CODE           MOVABLE PURE
+HEAPSIZE       2048
+STACKSIZE      4096
+

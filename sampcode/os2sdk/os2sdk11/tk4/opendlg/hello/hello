@@ -1,0 +1,31 @@
+# Makefile for HELLO.EXE
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC	=	cl -c -W3 -Asnd -G2sc -Od -Zip
+LF	=	/codeview /NOD /align:16 /map
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+# Resources
+#
+hello.res:	hello hello.h hello.ico hello.rc
+
+# C files
+#
+hello.obj:	hello hello.c hello.h
+
+# Main files:  HELLO.EXE, HELLO.SYM
+#
+hello.exe:	hello hello.def hello.obj hello.res
+    link $(LF) hello.obj, hello.exe, hello.map, opendlg os2 slibce, hello.def
+    rc hello.res hello.exe
+    mapsym hello

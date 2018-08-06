@@ -1,0 +1,56 @@
+
+        NAME
+                enterfn -- enter a filename from keyboard
+                disp_enterfn -- same, use direct video access
+
+        SYNOPSIS
+                void enterdata(dest, qty, row, col, allow);
+                void disp_enterdata(dest, qty, row, col, allow);
+                char *dest;     destination for string
+                int qty;        maximum allowable chars + 1
+                int row, col;   row and column of string start*
+                int allow;      TRUE to allow entension entry
+
+        DESCRIPTION
+        These routines are essentially the same, except that
+        disp_enterfn uses the Datalite direct video access
+        functions.  enterfn() provides a convenient method
+        for entering a path and filename from the keyboard and
+        verifying the character syntax.  Line editing is
+        supported to enhance user input.  Entry is as follows:
+           Carriage Return terminates input.
+             If no other data was entered, destination string
+             is NULLed in the first position. CR is not placed
+             into destination.
+           ESCape terminates entry at once, NULLs destination,
+             and clears screen field.
+           HOME clears field, and restarts entry without returning.
+           BACKSPACE and Cursor Left will destructively backspace
+             up to beginning of field.
+           Only qty - 1 characters will be accepted.
+           Any error sounds console BELL.
+           If "allow" is TRUE, then a filename extension may be
+             entered.  Otherwise, no extension may be entered, since
+             the period character will be disallowed.
+           A drive may be specified; the colon is only allowed in the
+             second character string position.
+
+
+        EXAMPLE
+
+           char string[31];
+
+           d_pos(10, 20, 0);      /* cursor to row 10, column 20 */
+           fputs("Enter a filename: ", stdout);
+           enterfn(string, 31, 10, 38, TRUE));
+
+           fputs("Enter filename at current cursor position: ", stdout);
+           enterdata(string, 31, -1, 0, FALSE);
+
+        * for enterfn only: If row = -1, then current cursor position
+          will be used, and col value is ignored.
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

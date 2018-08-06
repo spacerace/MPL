@@ -1,0 +1,6 @@
+cpmetafi.obj: cpmetafi.c
+    cl -d -c -AS -Gsw -Os -Zpe cpmetafi.c
+
+cpmetafi.exe: cpmetafi.obj cpmetafi.def
+    link4 cpmetafi,/align:16,/map,slibw/NOE,cpmetafi.def
+    mapsym cpmetafi

@@ -1,0 +1,18 @@
+[version] 
+	1030
+	PL13
+	Programmer's Library
+[disc-verify]
+	books\hw.dat
+[msl]
+	windows,	Windows References,	mslib; books, 2012
+	os2,		OS/2 References,	mslib; books, 2011
+	net,		Network References,	mslib; books, 2013
+	msdos,		MS-DOS References,	mslib; books, 2014
+	msj,		MS Systems Journal,	mslib; books, 4015
+	hw,		Hardware References,	mslib; books, 4016
+	c,		C References,		mslib; books, 2017
+	masm,		MASM References,	mslib; books, 2018
+	basic,		BASIC References,	mslib; books, 2019
+	pascal, 	Pascal References,	mslib; books, 2020
+	fortran,	FORTRAN References,	mslib; books, 2021

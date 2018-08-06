@@ -1,0 +1,12 @@
+#--------------------
+# SQBTNLIB make file
+#--------------------
+
+sqbtnlib.obj : sqbtnlib.c sqbtnlib.h
+     cl -c -Alfw -G2sw -W3 sqbtnlib.c
+
+sqbtnlib.dll : sqbtnlib.obj sqbtnlib.def
+     link sqbtnlib, sqbtnlib.dll /align:16, NUL, /nod llibcdll os2, sqbtnlib
+
+sqbtnlib.lib : sqbtnlib.def
+     implib sqbtnlib.lib sqbtnlib.def

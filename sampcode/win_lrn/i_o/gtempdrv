@@ -1,0 +1,22 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+gtempdrv.obj: gtempdrv.c
+
+gtempdrv.exe: gtempdrv.obj gtempdrv.def
+    link4 gtempdrv,/align:16,/map,slibw/NOE,gtempdrv.def
+    mapsym gtempdrv

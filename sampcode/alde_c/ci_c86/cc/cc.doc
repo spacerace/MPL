@@ -1,0 +1,26 @@
+
+
+     This is for you people who are using the Computer Innovations C86
+     compiler.  This program integrates the compiler into one command
+     and simplifies use of the compiler.
+
+     CC PROGRAM <-options> </link>
+
+     This program supports any and all of the options doccumented in
+     the 2.20 manual plus the /LINK option which will cause the program
+     to be linked after the C compiler is done with it.
+
+     To use the /LINK option, the program expects a symbol to exist
+     in the environment space.  The symbol contains the path and names
+     of the libraries you wish to include in the link.  If this
+     symbol is not found, the program will prompt for the path.
+
+     SET CRLIB=<path of C libraries>
+
+     Please send any suggestions to me on this BBS and I will see
+     what I can do with them. (Terrapin Station -- 612/623-0152)
+
+               Thanks
+               Steve Ripley
+
+

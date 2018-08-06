@@ -1,0 +1,15 @@
+0 DIALOG LOADONCALL MOVEABLE DISCARDABLE 102, 3, 154, 152
+STYLE WS_DLGFRAME | WS_VISIBLE | WS_POPUP
+BEGIN
+	   CONTROL "Microsoft Windows" -1, "static", SS_CENTER | WS_GROUP | WS_CHILD, 0, 80, 154, 8
+	   CONTROL "" HELLOICON, "static", SS_ICON | WS_GROUP | WS_CHILD, 5, 81, 16, 21
+	   CONTROL "Hello application" -1, "static", SS_CENTER | WS_GROUP | WS_CHILD, 0, 95, 154, 8
+	   CONTROL "Version 1.03" -1, "static", SS_CENTER | WS_GROUP | WS_CHILD, 29, 110, 94, 8
+	   CONTROL "Copyright © 1985,1986, Microsoft Corp." -1, "static", SS_CENTER | WS_GROUP | WS_CHILD, 0, 124, 154, 9
+	   CONTROL "Ok" HELLOICON, "button", BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP | WS_CHILD, 61, 136, 32, 14
+	   CONTROL "Travis" 6, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 4, 81, 38, 14
+	   CONTROL "Text" 7, "scrollbar", SBS_VERT | WS_CHILD, 124, 1, 31, 95
+	   CONTROL "Text" HELLOICON, "static", SS_ICON | WS_GROUP | WS_CHILD, 31, 38, 16, 21
+	   CONTROL "Push this button" 9, "button", BS_RADIOBUTTON | WS_TABSTOP | WS_CHILD, 7, 17, 115, 10
+END
+

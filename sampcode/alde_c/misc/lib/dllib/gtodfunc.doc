@@ -1,0 +1,39 @@
+
+
+        NAME
+                gtodsub -- Get time of day to file pointer
+                gtodstr -- Get time of day to a string
+
+        SYNOPSIS
+                gtodsub(fp);
+                FILE *fp;
+                gtodstr(str);
+                char *str;
+
+
+        DESCRIPTION
+        This function reads the system date and time and sends them in a
+        formatted string to the specified output channel, or to a string.
+
+
+        EXAMPLE
+ 
+               gtodsub(stdout);   /* send date/time to stdout */
+
+               char string[30];
+               gtodstr(string);
+               printf("date and time are %s\n", string);  /* same result */
+            
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

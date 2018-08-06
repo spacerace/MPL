@@ -1,0 +1,12 @@
+setcomms.obj: setcomms.c 
+  cl -c -W2 -AS -Gsw -Od -Zped setcomms.c
+
+setcomms.res: setcomms.rc setcomms.ico
+  rc -r setcomms.rc
+
+setcomms.exe: setcomms.obj setcomms.def setcomms.res 
+    link4 setcomms,/align:16,,slibw,setcomms.def
+    rc setcomms.res
+    del setcomms.obj
+    del setcomms.map
+

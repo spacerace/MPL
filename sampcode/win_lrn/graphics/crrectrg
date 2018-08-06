@@ -1,0 +1,6 @@
+
+crrectrg.obj: crrectrg.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 crrectrg.c
+
+crrectrg.exe: crrectrg.obj crrectrg.def
+    link4 /align:16 crrectrg,,nul,slibw/NOE,crrectrg.def

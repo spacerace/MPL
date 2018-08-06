@@ -1,0 +1,11 @@
+dump.obj : dump.asm
+    masm /T dump.asm;
+
+argc.obj : argc.asm
+    masm /T argc.asm;
+
+argv.obj : argv.asm
+    masm /T argv.asm;
+
+dump.exe : dump.obj argc.obj argv.obj dump.def
+    link dump+argc+argv,,,os2,dump

@@ -1,0 +1,6 @@
+gcem.obj: gcem.c
+    cl -d -c -AS -Gsw -Os -Zpe gcem.c
+
+gcem.exe: gcem.obj gcem.def
+    link4 gcem,/align:16,/map,slibw/NOE,gcem.def
+    mapsym gcem

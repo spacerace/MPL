@@ -1,0 +1,10 @@
+gmenuiti.obj: gmenuiti.c gmenuiti.h
+    cl -d -c -AS -Gsw -Os -Zpe gmenuiti.c
+
+gmenuiti.res: gmenuiti.rc
+    rc -r gmenuiti.rc
+
+gmenuiti.exe: gmenuiti.obj gmenuiti.def
+    link4 gmenuiti,/align:16,/map,slibw/NOE,gmenuiti.def
+    mapsym gmenuiti
+    rc gmenuiti.res

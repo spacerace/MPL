@@ -1,0 +1,41 @@
+# HELLO makefile 
+# Created by Microsoft Corp., 1988
+#
+
+#===================================================================
+#
+#  Standard command line definitions
+#
+#===================================================================
+
+cp=cl -c -W3 -AS -G2sw -Os -Zpei
+
+#===================================================================
+#
+#  Default inference rules
+#
+#===================================================================
+
+.c.obj:
+    $(cp) $*.c
+
+.asm.obj:
+    masm $*.asm;
+
+.rc.res:
+    rc -r $*.rc
+
+all: Expand.EXE
+#===================================================================
+#
+#  Dependencies
+#
+#===================================================================
+
+Expand.OBJ: Expand.C
+
+Expand.res: Expand.RC Expand.ICO Expand.H Expand.DLG
+
+Expand.EXE: Expand.OBJ Expand.RES Expand.LNK Expand.DEF
+    Link @Expand.LNK
+    RC Expand.RES

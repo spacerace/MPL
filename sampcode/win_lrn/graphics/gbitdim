@@ -1,0 +1,10 @@
+gbitdim.obj: gbitdim.c
+    cl -d -c -AS -Gsw -Os -Zpe gbitdim.c
+
+gbitdim.res: gbitdim.rc
+     rc -r gbitdim.rc
+
+gbitdim.exe: gbitdim.obj gbitdim.def
+    link4 gbitdim,/align:16,/map,slibw/NOE,gbitdim.def
+    mapsym gbitdim
+    rc gbitdim.res

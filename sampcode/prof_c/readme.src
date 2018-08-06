@@ -1,0 +1,61 @@
+**************************
+** Proficient C Sources **
+**************************
+
+
+				 R E M A R K S
+
+    Files are stored on the diskette in subdirectories named for the original
+chapter (like \04stdlib) in which the code appeared or for the purpose served
+by the files (\lib\local).  Make working copies of the master diskette and
+store the original away in a safe place.
+    This distribution contains all of the source files plus some additional
+make files.  In addition, all source files for the utility library have been
+collected into the \util directory regardless of their original locations in
+the book.  
+
+
+				D I S K E T T E
+
+    If you have problems with the physical diskette, write to Microsoft:
+
+	Microsoft Press
+	16011 N.E. 36th Way
+	Redmond, Washington 98073-9717
+
+    If you have any questions about the files on the disks, send your
+written questions or comments directly to the author:
+
+	Augie Hansen
+	Omniware
+	P.O.Box 37048
+	Denver, CO 80237
+
+
+			     D I R E C T O R I E S
+
+03dos\		Basis DOS interactions
+04stdlib\	Standard library demonstration programs
+05oslib\	System library packages
+06user\		User interface routines
+07config\	Custom configuration routines
+08file\		Miscellaneous file-oriented utilities
+09print\	A flexible print program
+10dump\		A "debug"-style file dump utility
+11screen\	Display handling routines
+12sbuf\		A buffered-screen interface package
+13ansi\		ANSI device driver interface routines
+14view\		ViewFile -- a file viewing program
+util\		The utility routines
+include\local	The local header files
+
+
+				   F I L E S
+
+readme.src	This information file.
+error.lst	A list of known errors in the first printing of the book
+		and fixes for them.
+tools.ini	The default inference rules for the MAKE program
+		(Place tools.ini in the same directory as your C compiler
+		programs or in any directory that is named in the path
+		string.)

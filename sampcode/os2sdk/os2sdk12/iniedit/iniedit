@@ -1,0 +1,36 @@
+# Makefile for INIEDIT
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC      =       cl -c -AL -G2s -Od -W3 -Zpi
+LF	=	/align:16 /codeview /map /NOD
+OBJS	=	iniedit.obj dlgproc.obj print.obj utils.obj
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+all: iniedit.exe
+# Resources
+#
+iniedit.res: iniedit.rc iniedit.h inires.dlg
+
+# C Files
+#
+iniedit.obj:	iniedit.c iniedit.h inires.h
+
+dlgproc.obj:	dlgproc.c iniedit.h inires.h
+
+print.obj:	print.c
+
+utils.obj:	utils.c
+
+iniedit.exe: $(OBJS) iniedit.def iniedit.res
+    link $(LF) $(OBJS), , iniedit.map, llibcep os2, iniedit.def
+    rc iniedit.res

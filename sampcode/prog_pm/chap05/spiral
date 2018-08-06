@@ -1,0 +1,9 @@
+#------------------
+# SPIRAL make file
+#------------------
+
+spiral.obj : spiral.c
+     cl -c -G2sw -W3 spiral.c
+
+spiral.exe : spiral.obj spiral.def
+     link spiral, /align:16, NUL, os2, spiral

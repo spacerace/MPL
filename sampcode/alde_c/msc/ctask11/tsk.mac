@@ -1,0 +1,193 @@
+;
+;	CTask - Definitions for assembler routines
+;
+;	Public Domain Software written by
+;		Thomas Wagner
+;		Patschkauer Weg 31
+;		D-1000 Berlin 33
+;		West Germany
+;
+;	Define according to tskconf.h
+;
+TSK_DYNAMIC	=	1
+TSK_NAMED	=	1
+TSK_NAMEPAR	=	1
+;
+ST_KILLED	=	0
+ST_STOPPED	=	1
+ST_DELAYED	=	2
+ST_WAITING	=	3
+ST_ELIGIBLE	=	4
+ST_RUNNING	=	5
+;
+; Task flags
+;
+F_TEMP 		=	80h	; Task is temporary
+F_CRIT		=	01h	; Task is critical, may not be preempted
+;
+NAMELENGTH	=	9
+;
+tlink	struc
+;
+tnext	dd	?       ; next pointer
+tout	dd	?	; timeout counter
+reload	dd	?	; timeout counter reload
+strucp	dd	?	; structure pointer
+tstate  db      ?       ; timer state
+tkind   db      ?       ; timer kind
+;
+tlink	ends
+;
+;
+tcb	struc
+;
+next	dd	?	; pointer to next task in queue, undef if current
+queue	dd	?	; current queue head pointer, next queue if current
+stack	dd	?	; stack address
+stkbot	dd	?	; stack bottom
+prior	dw	?	; task priority
+iniprior dw	?	; initial task priority
+state	db	?	; task state
+flags	db	?	; task flags
+;
+tqnext  dd	?       ; next pointer
+tqtout	dd	?	; timeout counter
+tqrelo	dd	?       ; timeout counter reload
+tqstru	dd	?	; struct pointer
+tqstat	db	?	; timer state
+tqkind	db	?	; timer kind
+;
+retptr	dd	?	; return value pointer
+retsize	dw	?	; return value size
+;
+	IF	TSK_NAMED
+tnfollo	dd	?
+tnprev	dd	?
+tnstrup	dd	?
+tnkind	db	?
+tnname	db	NAMELENGTH dup(?)
+	ENDIF
+;
+tcb	ends
+;
+flag		struc
+;
+fwait_set	dd	?
+fwait_clear	dd	?
+fstate		dw	?
+
+	IF	TSK_DYNAMIC
+flflags	db	?
+	ENDIF
+	IF	TSK_NAMED
+flfollo	dd	?
+flprev	dd	?
+flstrup	dd	?
+flkind	db	?
+flname	db	NAMELENGTH dup(?)
+	ENDIF
+;
+flag		ends
+;
+counter		struc
+;
+cwait_set	dd	?
+cwait_clear	dd	?
+cstate		dd	?
+;
+	IF	TSK_DYNAMIC
+ctflags	db	?
+	ENDIF
+	IF	TSK_NAMED
+ctfollo	dd	?
+ctprev	dd	?
+ctstrup	dd	?
+ctkind	db	?
+ctname	db	NAMELENGTH dup(?)
+	ENDIF
+counter		ends
+;
+resource	struc
+;
+rwaiting	dd	?
+rowner		dd	?
+rstate		dw	?
+;
+	IF	TSK_DYNAMIC
+rsflags	db	?
+	ENDIF
+	IF	TSK_NAMED
+rsfollo	dd	?
+rsprev	dd	?
+rsstrup	dd	?
+rskind	db	?
+rsname	db	NAMELENGTH dup(?)
+	ENDIF
+
+resource	ends
+;
+mailbox		struc
+;
+mwaiting	dd	?
+mail_first	dd	?
+mail_last	dd	?
+;
+	IF	TSK_DYNAMIC
+mbflags	db	?
+	ENDIF
+	IF	TSK_NAMED
+mbfollo	dd	?
+mbprev	dd	?
+mbstrup	dd	?
+mbkind	db	?
+mbname	db	NAMELENGTH dup(?)
+	ENDIF
+mailbox		ends
+;
+pipe		struc
+;
+pwait_read	dd	?
+pwait_write	dd	?
+pwait_clear	dd	?
+pbufsize	dw	?
+pfilled		dw	?
+pinptr		dw	?
+poutptr		dw	?
+pcontents	dd	?
+;
+	IF	TSK_DYNAMIC
+ppflags	db	?
+	ENDIF
+	IF	TSK_NAMED
+ppfollo	dd	?
+ppprev	dd	?
+ppstrup	dd	?
+ppkind	db	?
+ppname	db	NAMELENGTH dup(?)
+	ENDIF
+pipe		ends
+;
+wpipe		struc
+;
+wwait_read	dd	?
+wwait_write	dd	?
+wwait_clear	dd	?
+wbufsize	dw	?
+wfilled		dw	?
+winptr		dw	?
+woutptr		dw	?
+wcontents	dd	?
+;
+	IF	TSK_DYNAMIC
+wpflags	db	?
+	ENDIF
+	IF	TSK_NAMED
+wpfollo	dd	?
+wpprev	dd	?
+wpstrup	dd	?
+wpkind	db	?
+wpname	db	NAMELENGTH dup(?)
+	ENDIF
+wpipe		ends
+;
+

@@ -1,0 +1,7 @@
+
+getlen.obj: getlen.c
+   cl -c -W2 -AS -Gsw -Od -Zped getlen.c
+
+getlen.exe: getlen.obj getlen.def
+   link4 getlen,/align:16,/map/li,slibw,getlen.def
+   mapsym getlen

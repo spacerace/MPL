@@ -1,0 +1,101 @@
+HMQ APIENTRY WinCreateMsgQueue( hab, sSize )
+    HAB         hab;
+    SHORT       sSize;
+{
+    PMYWND      pwnd;
+
+    /* Generic Macintosh initialization (already did memory stuff) */
+    
+    InitGraf( &thePort );
+    InitFonts();
+    FlushEvents( everyEvent, 0 );
+    SetEventMask( everyEvent );
+    InitWindows();
+    InitMenus();
+    TEInit();
+    InitDialogs( 0L );
+    InitCursor();
+
+    /* Initialize the SV_ values and register the predefined
+       window classes */
+
+    MpmInitSysValues();
+
+    if( ! WinRegisterClass( hab, WC_BUTTON, MpmFnwpButton,
+                            CS_MOVENOTIFY | CS_PUBLIC, 0 ) )
+      return NULL;
+
+    if( ! WinRegisterClass( hab, WC_DESKTOP, MpmFnwpDesktop,
+                            CS_PUBLIC, 0 ) )
+      return NULL;
+
+#ifdef FUTURE
+    if( ! WinRegisterClass( hab, WC_DIALOG, MpmFnwpDialog,
+                            CS_MOVENOTIFY | CS_PUBLIC, 0 ) )
+      return NULL;
+#endif
+
+    if( ! WinRegisterClass( hab, WC_ENTRYFIELD, MpmFnwpEntryField,
+                            CS_MOVENOTIFY | CS_PUBLIC, 0 ) )
+      return NULL;
+
+    if( ! WinRegisterClass( hab, WC_FRAME, MpmFnwpFrame,
+                            CS_MOVENOTIFY | CS_PUBLIC, 0x20 /*??*/ ) )
+      return NULL;
+
+    if( ! WinRegisterClass( hab, WC_LISTBOX, MpmFnwpListBox,
+                            CS_MOVENOTIFY | CS_PUBLIC, 0 ) )
+      return NULL;
+
+    if( ! WinRegisterClass( hab, WC_MENU, MpmFnwpMenu,
+                            CS_MOVENOTIFY | CS_PUBLIC, 0 ) )
+      return NULL;
+
+    if( ! WinRegisterClass( hab, WC_SCROLLBAR, MpmFnwpScrollBar,
+                            CS_MOVENOTIFY | CS_PUBLIC, 0 ) )
+      return NULL;
+
+    if( ! WinRegisterClass( hab, WC_SIZEBORDER, MpmFnwpSizeBorder,
+                            CS_MOVENOTIFY | CS_PUBLIC, 0 ) )
+      return NULL;
+
+    if( ! WinRegisterClass( hab, WC_STATIC, MpmFnwpStatic,
+                            CS_MOVENOTIFY | CS_PUBLIC, 0 ) )
+      return NULL;
+
+    if( ! WinRegisterClass( hab, WC_TITLEBAR, MpmFnwpTitleBar,
+                            CS_MOVENOTIFY | CS_PUBLIC, 0 ) )
+      return NULL;
+
+    /* Create the object and desktop windows */
+
+    _hwndObject =
+      WinCreateWindow(
+        NULL, WC_DESKTOP, _szNull,
+        0, 0, 0, 0, 0,
+        NULL, NULL, 0, NULL, NULL
+      );
+    if( ! _hwndObject )
+      return NULL;
+
+    pwnd = PMYWNDOF(_hwndObject);
+    pwnd->ucKind = WK_OBJECT;
+    pwnd->pfnwp  = MpmFnwpObject;
+
+    _hwndDesktop =
+      WinCreateWindow(
+        NULL, WC_DESKTOP, _szNull,
+        WS_DISABLED,
+        0, 0, 0, 0,
+        NULL, NULL, 0, NULL, NULL
+      );
+    if( ! _hwndDesktop )
+      return NULL;
+
+    pwnd = PMYWNDOF(_hwndDesktop);
+    pwnd->cx = _alSysVal[SV_CXSCREEN];
+    pwnd->cy = _alSysVal[SV_CYSCREEN];
+    pwnd->flStyle |= WS_VISIBLE;
+
+    return (HMQ)1;
+}

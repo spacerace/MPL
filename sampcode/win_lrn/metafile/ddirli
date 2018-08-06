@@ -1,0 +1,10 @@
+
+ddirli.obj: ddirli.c ddirli.h
+    cl  -c -AS -Gsw -Os -Zpe -W2 ddirli.c
+
+ddirli.res: ddirli.rc ddirli.h
+    rc -r ddirli.rc
+
+ddirli.exe: ddirli.obj ddirli.res ddirli.def
+    link4 /align:16 ddirli,,nul,slibw/NOE,ddirli.def
+    rc ddirli.res

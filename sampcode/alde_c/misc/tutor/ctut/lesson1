@@ -1,0 +1,515 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24
+.R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,30
+[1mPonzoTUTOR
+.WNT
+  Getting Started in C : INPUT and OUTPUT   
+    Using a word processor, we begin our C-program with ~b~Imain()~N and a
+    left curly bracket ~b~I{~N.  Now we can write a program and finish it 
+    with a right curly bracket: 
+
+~b~Imain() {~N
+~b~I.........................~N
+~b~Iyour program goes in here~N
+~b~I.........................~N
+~b~I}~N
+
+    Everything between ~b~I{~N and ~b~I}~N constitutes the ~b~Imain()~N program.
+    One of the things we will want to do is print to the screen. There is
+    a C command called ~b~Iprintf~N, meaning ~b~Iprint~N with ~b~If~Normat.
+
+~b~Iprintf("this is some text to print.");~N
+
+    The above command will simply print ~r~Ithis is some text to print.~N
+    The ~b~If~Normat part of ~b~Iprintf~N comes in handy if we want to print,
+    say, a number with a specified number of decimal places.
+.W
+.N
+.T
+  More on printf  
+.R4C1
+~b~Iprintf("the answer is %6d",x);~N
+.R6C1
+    The above will print the value of the variable ~b~Ix~N.   
+.W
+.R4C1
+~b~Iprintf("~Vthe answer is ~N~b~I%6d",x);~N
+.R6C1
+    This part just prints the words ~r~Ithe answer is ~N              
+.W
+.R4C1
+~b~Iprintf("the answer is ~V%6~N~b~Id",x);~N
+.R6C1
+    This says the number ~b~Ix~N is printed to ~b~I6~N digits.        
+.W
+.R4C1
+~b~Iprintf("the answer is %6~Vd~N~b~I",x);~N
+.R6C1
+    This says that a ~b~Id~Necimal is being printed.           
+.W
+.R4C1
+~b~Iprintf("the answer is %6d",~Vx~N~b~I);~N
+.R6C1
+    Here is the variable ~b~Ix~N which is to be printed.        
+.w
+.W
+.R4C1
+~b~Iprintf("the answer is %6d",x)~V;~N
+.R6C3
+~I
+.B
+    ~R...and (almost) EVERY C STATEMENT ENDS IN A SEMI-COLON !  ~N
+.W
+.R11C1
+    Here's the whole program:
+~b~Imain() {~N
+~b~Ix=1234~N
+~b~Iprintf("the answer is %6d",x);~N
+~b~I}~N
+    and we expect the program to give the output: ~r~Ithe answer is   1234~N
+    ...but it WON'T ( yet ).
+
+    (In fact, your ~IC-compiler~N won't compile the program!)
+.K17,60
+...alas...
+.WNT
+  A look at DATA TYPES  
+    When we write ~b~Ix=1234~N we expect the C compiler to reserve some memory
+    for the variable ~b~Ix~N and place in this memory the number ~b~I1234~N.
+    If, subsequently, we write ~b~Ix=12345678~N, will this fit into the memory
+    reserved for the variable ~b~Ix~N?  
+
+    In order to know ,in advance, how much memory to set aside for each
+    variable we use in our C program, we must declare the variable ~Itype~N.
+
+    If ~b~Ix~N is an integer (so we will NOT set ~b~Ix=1.234~N) then we say
+    so with the declaration: ~b~Iint x;~N
+
+    If ~b~Ix~N will take on values like ~b~I1.234~N (a ~Ifloating point~N
+    ~Inumber~N) then we write: ~b~Ifloat x;~N
+
+    If ~b~Ix~N is a ~Icharacter~N variable (for example ~b~Ix='A'~N) then
+    we declare this too: ~b~Ichar x;~N
+.WNT
+  Declaring the DATA TYPE  
+    Now we may write:
+
+~b~Imain() {~N
+~b~Iint x;~N
+~b~Ix=1234;~N
+~b~Iprint("the answer is %6d",x);~N
+~b~I}~N
+    and NOW our program WILL print: ~r~Ithe answer is   1234~N
+.WR13C1
+    What will the following program print?
+
+~b~Imain() {~N
+~b~Ifloat x;~N
+~b~Ix=1234;~N
+~b~Iprint("the answer is %6d",x);~N
+~b~I}~N
+.K17,60
+I give up!
+.WN
+~b~Imain() {~N
+~V~Ifloat x;~N
+~b~Ix=1234;~N
+~b~Iprint("the answer is %6d",x);~N
+~b~I}~N
+    Because we declared ~b~Ix~N to be a ~V~Ifloat~Ning point number
+    the value of ~b~Ix~N is stored in a different format, in memory.
+    As a ~V~Ifloat~N, ~b~Ix=1234~N will be stored as a number ~Iless than~N
+    ~I1~N together with an ~Iexponent~N ("scientific notation").
+
+    The above program will print: ~r~Ithe answer is 0~N !!!
+.WR2C1
+~b~Ifloat x;~N
+.R4C1
+~b~Iprint("the answer is %6~Vd~N~b",x);~N        Note the ~Vd~N.
+.R13C1
+    The ~b~Iprintf~N command expected a number in ~V~Id~Necimal format.
+    But ~b~Ix~N was stored in memory in ~b~Ifloat~N format.
+    The result is a misinterpretation of the value of ~b~Ix~N by ~b~Iprintf~N!
+.K17,60
+all greek 
+.W
+.N
+~b~Imain() {~N
+~b~Ifloat x;~N
+~b~Ix=1234;~N
+~b~Iprint("the answer is %6~Vf~N~b",x);~N         Note the ~Vf~N
+~b~I}~N                    
+    To tell ~b~Iprintf~N the format in which ~b~Ix~N was stored, we use an
+    ~V~If~N in the "format" portion of the ~b~Iprintf~N command (i.e. the
+    part within quotes).
+.WR4C1
+~b~Iprint("the answer is %6f",x);~N
+.R10C1
+~b~Imain() {~N
+~b~Ichar x;~N
+~b~Ix='A';~N
+~b~Iprintf("As a character, x has the value %c",x);~N
+~b~I}~N
+    What will this program print?
+.K17,60
+I give up!
+.WR17C1
+~r~IAs a character, x has the value A~N
+.WNT
+    INTEGERS and FLOATS    
+.R4C1
+~b~Ifloat x;~N
+~b~Ix=1234+1/2;~N
+
+    In the above program segment, what do you think the value of x is ?
+.W
+ 
+    It's ~I1234.0~N !!!
+.sR5C1
+~b~Ix=~V1234~N~b~I+~V1~N~b~I/~V2~N~b~I;~N
+.r
+
+    Numbers like ~b~I1234~N and ~b~I1~N and ~b~I2~N are automatically ~b~Iint~Negers
+    and dividing the last two would give ~I0~N (dropping the fractional part!)
+    so ~I1234+0~N gives ~I1234~N which (because ~b~Ix~N is a ~b~Ifloat~Ning point
+    number) is NOW converted to a ~b~Ifloat~N and assigned to ~b~Ix~N !!!
+
+    In order to yield the value ~I1234.5~N we ~Iinclude the decimal points~N:
+
+~b~Ix=1234.+1./2.;~N     
+
+    and NOW all numbers are ~b~Ifloat~Ning point and ~b~Ix~N will be assigned the
+    value ~I1234.5~N so ...~Iinclude the decimal points~N when necessary!
+.WN
+
+~b~Ifloat x;~N
+~b~Ix=1234+1./2.;~N
+
+    Here the ~b~I1./2.~N is evaluated as ~b~I.5~N (a float, because of the decimal
+    points) and ~b~I1234~N is converted to a float then added, giving ~I1234.5~N
+    which is assigned to ~b~Ix~N.
+
+~b~Ifloat x;~N
+~b~Ix=1234+1./2;~N
+
+    Here, the decimal associated with ~b~I1.~N causes the ~b~I2~N to be converted
+    to a float, so ~b~I1./2~N gives ~I.5~N, and the addition of ~b~I1234~N (which
+    is first converted to a float) gives ~b~I1234.5~N, which is then assigned to ~b~Ix~N.
+
+    The conclusion? ~IC~N tends to convert numbers in a ~Imixed~N expression to
+    ~b~Ifloat~Ning point before evaluation ....but don't rely on it! 
+
+    If you want ~b~Ifloat~Ning point operations, ~Iinclude the decimal points!~N
+.WNT
+  INPUT from the KEYBOARD with scanf()  
+    Now that we've been introduced to ~b~Iprintf~N (which will print things
+    on the screen, or to the printer, or to a disk file, as we will see...)
+    we should introduce ~b~Iscanf~N which allows us to input numbers 'n' such
+    from the keyboard.
+
+~b~Imain() {~N
+~b~Ichar x;~N
+~V~Iscanf("%c",x);~N                             Note the ~V~I%c~N!
+~b~Iprintf("You pressed the ~V%c~N~b key",x);~N        Note the ~V~I%c~N!
+~b~I}~N
+    The ~b~Iscanf~N command waits for the user to type something, and
+    ~b~Iscanf("%c",x)~N puts the ~b~Ic~Nharacter typed, into the memory
+    reserved for the variable ~b~Ix~N. When the compiled program is run
+    it will wait for the user to press a key (followed by the ~IEnter~N key).
+
+    Suppose you ran the program and pressed the ~Ia~N key (then ~IEnter~N).
+    What would the program print on the screen?
+.WR22C1
+~r~IYou pressed the  key~N       ~IIT DIDN'T WORK!!!~N
+.WNT
+  About Memory Locations...and the & prefix    
+
+~b~Imain() {~N
+~b~Ichar x;~N
+~V~Iscanf("%c",x);~N
+~b~Iprintf("You pressed the %c key",x);~N 
+~b~I}~N
+    When ~b~Iscanf()~N is used, we must tell it WHERE, in memory, to put
+    the ~b~Ichar~Nacter ~b~Ix~N. Saying ~b~Iscanf("%c",x)~N is not enough!
+    To identify the ~Imemory address~N for the variable ~b~Ix~N, we prefix
+    ~b~Ix~N with ~b~I&~N.
+
+    If ~b~Ix~N is ~Iany~N variable (~b~Iint~N or ~b~Ifloat~N or ~b~Ichar~N)
+    then ~b~I&x~N is the ~Iaddress~N in memory of ~b~Ix~N.
+.K17,60
+[1m&x[0m=address
+.WN
+~b~Imain() {~N
+~b~Ichar x;~N
+~V~Iscanf("%c",x);~N
+~b~Iprintf("You pressed the %c key",x);~N 
+~b~I}~N
+
+    The above program must be changed to read:
+
+~b~Imain() {~N
+~b~Ichar x;~N
+~b~Iscanf("%c",~V&x~N~b);~N                     Note the ~V&x~N.
+~b~Iprintf("You pressed the %c key",x);~N 
+~b~I}~N
+
+    ...THEN it will wait for a key-press (for example the letter ~Iz~N)
+    and print: ~r~IYou pressed the z key~N
+.W
+.R18C1
+    Since ~b~Ichar x;~N reserved only enough space for ~IONE~N character,
+    what would the printout be if you pressed several keys...say ~Ipqr~N?
+.W
+.R21C1
+~r~IYou pressed the p key~N       ~IJUST THE FIRST CHARACTER!~N
+.WNT
+    What's wrong with the following program? 
+.R4C1
+~b~Imain() {~N
+~V~Iint x;~N
+~V~Ichar y;~N
+~V~Ifloat z;~N
+~b~Iprintf("Enter 3 numbers (separated by a space)");~N
+~b~Iscanf("%d%c%f",&x,&y,&z);~N
+~b~Iprintf("x=%c y=%f z=%d",x,y,z);~N
+
+    Note that ~b~Ix~N, ~b~Iy~N and ~b~Iz~N are declared ~V~Iint~N, ~V~Ichar~N
+    and ~V~Ifloat~N.
+.WR5C1
+~b~Iint x;~N
+~b~Ichar y;~N
+~b~Ifloat z;~N
+~V~Iprintf("Enter 3 numbers (separated by a space)");~N
+.R12C1
+    This line just prints instructions:                                     
+~r~IEnter 3 numbers (separated by a space)~N
+.WR8C1
+~b~Iprintf("Enter 3 numbers (separated by a space)");~N
+~V~Iscanf("%d%c%f",&x,&y,&z);~N
+.R12C1
+    This line waits for you to type in the 3 numbers (with spaces).
+    Note the ~V~I&x~N, ~V~I&y~N and ~V~I&z~N as required by ~V~Iscanf()~N!
+.W
+.R9C1
+~b~Iscanf("%d%c%f",&x,&y,&z);~N
+~V~Iprintf("x=%c y=%f z=%d",x,y,z);~N
+.R12C1
+    Now we ~V~Iprintf()~N the 3 numbers, expecting the printout to appear as:
+~r~Ix=123 y=123 z=123~N  (assuming the 3 numbers were all ~I123~N).      
+
+    What do you think gets printed on the screen?
+.W
+.R10C1
+~b~Iprintf("x=~V%c~N~b y=~V%f~N~b z=~V%d~N~b",x,y,z);~N
+.R15C1
+    Alas, we gave ~b~Iprintf()~N the DATA TYPES in the wrong order!
+    Although ~b~Iscanf()~N got the ~b~Iint~Neger ~b~Ix~N as ~I123~N, and 
+    put it in the right memory location ('cause we said ~b~I&x~N)...and 
+    it also got ~b~Iy~N as ~I1~N (NOT 123), a single ~b~Ichar~N.....
+    (because the ~b~Iy~N memory location only holds a single character!)
+    and it also got ~b~Iz~N and stored it as a ~b~Ifloat~Ning point number,
+    and put it in the correct memory location...so ~Iwhat gets printed?~N
+.WN
+~b~Imain() {~N
+~b~Iint x;~N
+~b~Ichar y;~N
+~b~Ifloat z;~N
+~b~Iprintf("Enter 3 numbers (separated by a space)");~N
+~b~Iscanf("%d%c%f",%x,%y,%z);~N
+~b~Iprintf("x=%c y=%f z=%d",x,y,z);~N
+
+    The printout produced by the above program (after entering ~I123~N
+    for each of ~b~Ix~N, ~b~Iy~N and ~b~Iz~N, separated by a space) is:
+
+~r~Ix={ y=-2.000000 z=16478~N 
+.K2,60
+mamma mia!
+
+    ...so ~b~Iprintf()~N was confused once more!
+~I>~N It interpreted ~b~Ix~N as a ~b~I%c~Nharacter variable (!) and out came ~r~I{~N.
+    (the ASCII code for '{' is 123 ...but more on ASCII later).
+~I>~N It printed the contents of ~Iseveral~N memory locations, starting with
+    the ~IONE~N reserved for ~b~Iy~N (a ~b~Ic~Nhar) as a ~b~I%f~Nloating point
+    number (and out came ~r~I-2.000000~N).
+~I>~N Finally, it went to the memory location reserved for ~b~Iz~N (which held
+    a ~b~If~Nloating point number ... in "scientific" format, remember?)
+    and interpreted it as an ~b~Ii~Nnteger, namely ~r~I16478~N !!!
+.WNT
+   REVIEW of printf() and scanf()  
+.R4C1
+~b~Iprintf("~Vtext and 'format' info~N~b",variable names separated by commas);~N
+
+~b~Iscanf("NO TEXT, just 'format' info",variable names separated by commas);~N
+
+    We must give ~b~Iprintf()~N information about the 'format' of the
+    variables which are to be printed. Text may be mixed with the various
+    ~b~I%d~N, ~b~I%c~N and ~b~I%f~N format information.
+.W
+.R4C1
+~b~Iprintf("text and 'format' info",~Vvariable names separated by commas~N~b);~N
+.R12C1
+    In here goes the variables to be printed (if any).
+.W
+.R4C1
+~b~Iprintf("text and 'format' info",variable names separated by commas);~N
+
+~b~Iscanf("~VNO TEXT, just 'format' info~N~b",variable names separated by commas);~N
+.R14C1
+    In here goes ~IONLY~N format information for ~b~Iscanf()~N.
+.W
+.R6C1
+~b~Iscanf("NO TEXT, just 'format' info",~Vvariable names separated by commas~N~b);~N
+.R16C1
+    In here goes the names of the variables, like ~b~Ix,y,z~N....~Iright?~N
+.W
+.R18C1
+    ~IWRONG! WRONG! WRONG!~N
+    In here goes the ~Iaddresses~N of the variables, like ~b~I&x,&y,&z~N!
+
+~V~BNOTE: These addresses are  called  ~Rpointers~B,  because  they 'point'~N
+~V~B      to the memory locations which are reserved for the variables.~N
+.W
+.N
+.T
+  some final comments about printf() and scanf()  
+.R4C1
+    We saw, earlier in this lesson, the statement:
+
+~b~Iprintf("the answer is ~V%6~N~bd",x);~N
+                                 
+    We may specify the number of screen positions (the ~Ifield width~N) which the
+    number is to occupy when ~b~Iprintf()~N is invoked (in the above
+    example, it's ~b~I6~N positions). For an ~b~Iint~Neger, that's all
+    that's necessary, but for a ~b~Ifloat~Ning point number we may also
+    specify the number of digits after the decimal. If we just say ~b~I%f~N
+    then we will get ~I6~N decimal places (remember ~r~Iy=-2.000000~N?).
+.W
+.R15C1
+~b~Iprintf("the answer is ~V%6.3~N~bf",x);~N
+
+    In this statement, if ~b~Ix~N were a ~b~If~Nloat and equal to ~I12.3456~N
+    then what do you think would be printed?
+.W
+.R20C1
+~r~Ithe answer is 12.346~N        rounded to ~I3~N decimal places!
+.W
+.N
+~b~Imain() {~N
+~b~Ifloat x;~N
+~b~Ix=-12.3456;~N
+~b~Iprintf("x=%6.3",x);~N
+~b~I}~N
+    Note that ~b~Ix=-12.3456~N ~Icannot~N be printed in ~b~I6~N positions
+    with ~b~I3~N decimal places. The first ~b~I6~N positions would give 
+    only ~r~Ix=-12.34~N (or ~r~Ix=-12.35~N if rounded). But ~b~Iprintf()~N
+    is a smart guy (gal?) and ~V~Bincreases the field width as necessary~N
+    ...and prints:
+
+~r~Ix=-12.346~N
+
+    For numbers (either ~b~Iint~N or ~b~Ifloat~N) the ~Ifield width~N is
+    understandable....but what about ~b~Ichar~N variables which are single
+    characters and will only occupy ~Ione~N screen position anyway?
+
+~b~Ix='Z';~N                        What do you think
+~b~Iprintf("x=%6c",x);~N            this will print?
+.W
+.R22C1
+~r~Ix=     Z~N     the ~IZ~N is right-justified in a field width of ~I6~N!
+.WNT
+    ...and then there's CAST   
+
+
+    Suppose you desparately need to have an ~b~Iint~Neger variable converted
+    to a  ~b~Ifloat~Ning point number. Maybe you wanted to compute the sine
+    of an ~b~Iint~N called ~b~Ix~N. Using ~b~Isin(x)~N is no good because the
+    ~Isin(x)~N function only works for ~Ifloat~Ning ~b~Ix~N.
+
+    You could use a "spare" ~b~Ifloat~N variable, say ~b~I float y; ~N, and
+    say:
+
+    ~b~I y=x; ~N  (which does an ~Iautomatic conversion~N when it assigns
+                   the x-value to y, from ~b~Iint~N to ~b~Ifloat~N)
+    then use:
+
+    ~b~Isin(y)~N  (which is OK since ~b~Iy~N is now a ~b~Ifloat~N)
+
+    ~IOR~N, rather than having to declare ~b~I float y; ~N just to have ~b~Iy~N
+    in reserve for this "conversion" purpose, you may use the CAST.
+.WK10,32
+ a CAST?
+.WN
+
+
+    ~b~Isin( (float)x )~N  will temporarily convert the ~b~I int~Neger ~b~Ix~N
+                           to a ~b~Ifloat~N (for purposes of computing the
+                           ~b~Isin~N) but ~Ileave x unchanged~N.
+
+    This is called a CAST (in C-speak).
+.W
+
+~b~Iint x;~N
+~b~Ix=10;~N
+~b~Iprintf("Here's an integer, printed to 6 decimal places! %f",~V(float)~N~b~Ix);~N
+
+    The above reCASTs the ~b~Iint~Neger ~b~Ix~N for ~b~Iprintf~Ning as a 
+    ~b~I%f~Nloat, and you get the output:
+
+    ~r~IHere's an integer, printed to 6 decimal places! 10.000000~N
+
+    ...and of course you may refer to ~b~I(int)y~N to provide an ~b~Iint~Neger
+    copy of ~b~Iy~N (without changing ~b~Iy~N herself).
+.K19,60
+fantastico
+.WNT
+    ...a final note on DATA TYPES       
+
+    We have talked about numbers stored (in memory) in ~b~Iint~N and ~b~Ifloat~N
+    format. Whereas the ~b~Iint~N format can represent an integer in the range
+    -32768 to 32767 (with sign) and the ~b~Ifloat~N format can hold a number with
+    6 significant figures  (roughly) we also can declare a number to be ~b~Idouble~N
+    which is an ~Iextended~N floating point number and gives (about) 13 significant
+    figures.
+
+    Also, we can have an integer which runs from 0 to 65535 by declaring it to
+    be an ~b~Iunsigned int~N (which then is always non-negative). Although
+    this ~Itype~N occupies the same memory space as ~b~Iint~N, dropping the
+    'sign' allows for double the magnitude of integer.
+
+    We can also have a ~b~Ilong int~N which occupies twice as much memory
+    and can represent integers from (about) -2,000,000,000 to 2,000,000,000.
+
+.b21-23
+.R22C8
+The sizes given above, may differ from one machine to another!
+.WN
+
+
+
+.T
+  That's all folks!  
+.K16,32
+au revoir!
+
+.q
+

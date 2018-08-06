@@ -1,0 +1,39 @@
+
+
+
+        NAME
+                _getdi -- get device information for file handle
+
+        SYNOPSIS
+                r = _getdi(fh);
+                int r;      status byte, low 8 bits only
+                int fh;     DOS file handle to investigate
+
+
+        DESCRIPTION
+        This function returns the lower 8 bits of the control word for
+        the specified file handle, usually stdout, stdin, or one of the
+        other standard channels.  Note that a file handle, NOT file
+        descriptor is required.  Refer to the DOS manual for the
+        description of all the bits. Bit 7 set indicates a character
+        device, and bits 0,1 refer to the console.  This function
+        is called by the functions isatty() and iscons().
+
+
+        EXAMPLE
+              int r;
+              int fh;
+              fh = fileno(stdout);    /* get file handle for stdout */
+              r = _getdi(fh);
+              if(r >= 0x80) printf("stdout is a character device");
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

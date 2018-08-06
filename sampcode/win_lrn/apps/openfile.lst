@@ -1,0 +1,139 @@
+ 
+
+                                                                       PAGE   1
+                                                                       08-01-88
+                                                                       10:21:23
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+      1  /*   This program demonstrates the use of the function OpenFile
+      2   *   This function creates, opens, reopens or deletes a file.  In
+      3   *   this program, "OpenFile.txt" will be opened, and the contents
+      4   *   displayed in a MessageBox.
+      5   */
+      6  
+      7  #include "string.h"
+      8  #include <windows.h>
+      9  
+     10  #define Buf_Size 12                /* Buffer size to read with */
+     11  #define Name_Size 13               /* Max length for name of external 
+         file */
+     12  
+     13  int     read (int, char *, int);
+     14  int     close (int);
+     15  
+     16  int     PASCAL WinMain (hInstance, hPrevInstance, lpszCmdLine, cmdShow
+         )
+     17  HANDLE    hInstance, hPrevInstance;
+     18  LPSTR     lpszCmdLine;
+     19  int       cmdShow;
+     20    {
+     21    HANDLE hMem;
+     22  
+     23    OFSTRUCT ReOpenBuff;
+     24    int   errchk;
+     25    int   hFile;
+     26    char  *szBuf;
+     27  
+     28  /*********************************************************************
+         ******/
+     29  
+     30    MessageBox (NULL, (LPSTR)"About to open and read OPENFILE.TXT.",
+     31        (LPSTR)"Ready", MB_OK);
+     32  
+     33    hFile = OpenFile ( (LPSTR)"openfile.txt",   /* Open file.          *
+         /
+     34    (LPOFSTRUCT) & ReOpenBuff, OF_READ);
+     35    if (hFile == -1)
+     36      {                                      /* If not successful, say s
+         o.  */
+     37      MessageBox (NULL,
+     38          (LPSTR) "Problem opening file - OpenFile.txt",
+     39          (LPSTR) "Error",
+     40          MB_OK);
+     41      }
+     42    else
+     43      {
+     44      hMem = LocalAlloc (LMEM_FIXED | LMEM_ZEROINIT, Buf_Size);
+     45      szBuf = LocalLock (hMem);
+     46      errchk = read (hFile, szBuf, Buf_Size - 1);
+     47      szBuf[Buf_Size - 1] = '\0';
+     48  
+     49      if (errchk == -1)
+     50        {                     /* If problem while reading,   */
+     51                              /* say so.                     */
+ 
+
+                                                                       PAGE   2
+                                                                       08-01-88
+                                                                       10:21:23
+
+ Line#  Source Line                           Microsoft C Compiler Version 5.10
+
+     52        MessageBox (NULL, (LPSTR) "Problem reading file.",
+     53            (LPSTR) "ERROR", MB_OK);
+     54        }
+     55      errchk = close (hFile);
+     56      if (errchk != -1)
+     57        {                             /* If no error, print message box 
+         */
+     58                                      /* with file contents.            
+         */
+     59        MessageBox (NULL, (LPSTR) szBuf, (LPSTR) "Success", MB_OK);
+     60        }
+     61      else
+     62        {                             /* Error closing file.           *
+         /
+     63        MessageBox (NULL, (LPSTR) "File not closed", (LPSTR) "ERROR", MB
+         _OK);
+     64        }
+     65      }
+     66    LocalUnlock (hMem);
+     67    LocalFree (hMem);
+     68    return TRUE;
+     69    }
+
+
+WinMain  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+errchk. . . . . . . . . . auto                             -0090 
+ReOpenBuff. . . . . . . . auto                             -008e 
+szBuf . . . . . . . . . . auto                             -0006 
+hFile . . . . . . . . . . auto                             -0004 
+hMem. . . . . . . . . . . auto                             -0002 
+cmdShow . . . . . . . . . param                             0004
+lpszCmdLine . . . . . . . param                             0006
+hPrevInstance . . . . . . param                             000a
+hInstance . . . . . . . . param                             000c
+
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+LocalAlloc. . . . . . . . extern  far function       ***     ***
+LocalFree . . . . . . . . extern  far function       ***     ***
+LocalLock . . . . . . . . extern  far function       ***     ***
+LocalUnlock . . . . . . . extern  far function       ***     ***
+MessageBox. . . . . . . . extern  far function       ***     ***
+OpenFile. . . . . . . . . extern  far function       ***     ***
+WinMain . . . . . . . . . global  near function      ***    0000
+close . . . . . . . . . . extern  near function      ***     ***
+pLocalHeap. . . . . . . . common  near pointer         2     ***
+read. . . . . . . . . . . extern  near function      ***     ***
+
+Code size = 0116 (278)
+Data size = 009c (156)
+ 
+
+                                                                       PAGE   3
+                                                                       08-01-88
+                                                                       10:21:23
+
+                                              Microsoft C Compiler Version 5.10
+
+Bss size  = 0000 (0)
+
+No errors detected

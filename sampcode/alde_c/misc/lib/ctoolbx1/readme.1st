@@ -1,0 +1,54 @@
+Dave Miller
+8018 NE 123rd St 
+Kirkland, WA
+90034
+
+Please look at the read.me file and the manual.doc file for information
+relating directly to this library and its use.
+
+The original release date was set for 1 Oct 87 for this library but it is
+being released early while still in the Beta test stage in order to 
+prepare for the imminent release of Microsoft C version 5.0 and Quick C.
+
+This means that some of the planned functions ( such as menus and data
+entry) have been postponed until a later release ( probably about Jan 88 )
+There also remains a slight bug in the background sound routines that will
+be corrected in the next release.  This release is version 1.00.  The next
+release will be 1.xx and will be found on boards under the name CTB1xx.ARC
+just as this is labled CTB100.ARC.  A full update to version 2.00 is 
+planned for sometime in 1988 and will contain a wide variety of new 
+functions.  Further updates of version 1 are planned in the meantime.
+
+Future releases will identify the target compiler in the last letter.  The 
+next minor release of this version will actually be called CTB1xxT.ARC where
+the 'T' is for Turbo C.  There will also be an 'M' for Microsoft C and 
+possibly an 'L' for Lattice if enough users request it.  While we feel these
+versions will be the most requested we are willing to port the library to
+other compilers is the demand is high enough.
+
+We will always support the latest release of the target compiler in the case
+of Turbo and Microsoft C.  The latest release of this library should follow
+within a week the release of a new compiler release.
+
+There are two versions of the manual on this disk.  Manual.doc is in
+Wordstar format and manual.asc is in ASCII format.  The manual.asc file was
+created by running the Wordstar version through a conversion program and
+consequently has lost all the page formatting etc.  No attempt has been made
+to restore this in the board version of this manual.
+
+Pass copies of this library to your friends.  We hope you enjoy using this
+library, it has been an interesting project to date for the author.
+
+
+The author places updates drectly on the following boards in the Seattle
+area:
+
+Journey to Mars       (RBBS)   206   486-3136 log name Dave Miller
+PNW IBM User Group    (RBBS)   206   343-7843 log name David Miller
+
+
+                                        Dave Miller
+                                        29 Aug 1987
+
+
+

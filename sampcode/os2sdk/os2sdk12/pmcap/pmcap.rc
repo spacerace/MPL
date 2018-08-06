@@ -1,0 +1,99 @@
+/*-------------------------------
+   PMCAP.RC resource script file
+  -------------------------------*/
+
+#include <os2.h>
+#include "pmcap.h"
+
+MENU ID_RESOURCE
+     {
+     SUBMENU "~File",              IDM_FILE
+          {
+          MENUITEM "~Save bitmap file...",   IDM_SAVE
+          MENUITEM "Save ~Windows Paint file...", IDM_SAVEPAINT
+          MENUITEM SEPARATOR
+	  MENUITEM "E~xit",		SC_CLOSE,	MIS_SYSCOMMAND
+          MENUITEM "A~bout...",         IDM_ABOUT
+          }
+     SUBMENU "~Edit",              IDM_EDIT
+          {
+          MENUITEM "~Copy\tCtrl+Ins",        IDM_COPY
+          MENUITEM "~Paste\tShift+Ins",      IDM_PASTE
+          }
+     SUBMENU "~Capture",           IDM_CAPTURE
+          {
+          MENUITEM "~Begin countdown",       IDM_BEGIN
+          MENUITEM "~Abort",                 IDM_ABORT,,    MIA_DISABLED
+          MENUITEM SEPARATOR
+          MENUITEM "~Monochrome screen copy",IDM_MONO 
+          MENUITEM "~Hide during countdown", IDM_HIDE
+          MENUITEM "Auto ~Dialog display",   IDM_AUTODLG
+          MENUITEM "~Include pointer",       IDM_POINTER
+          }
+     SUBMENU "~Delay",             IDM_DELAY
+          {
+          MENUITEM "~1.\a5 seconds",         IDM_DELAY5
+          MENUITEM "~2.\a10 seconds",        IDM_DELAY10
+          MENUITEM "~3.\a15 seconds",        IDM_DELAY15
+          MENUITEM "~4.\a30 seconds",        IDM_DELAY30
+          MENUITEM "~5.\a60 seconds",        IDM_DELAY60
+          }
+     SUBMENU "Dis~play",           IDM_DISPLAY
+          {
+          MENUITEM "~Actual size",           IDM_ACTUAL
+          MENUITEM "~Stretch to window",     IDM_STRETCH
+          }
+     }
+
+ACCELTABLE ID_RESOURCE
+     {
+     VK_F3,     IDM_SAVE,  VIRTUALKEY
+     VK_INSERT, IDM_COPY,  VIRTUALKEY, CONTROL
+     VK_INSERT, IDM_PASTE, VIRTUALKEY, SHIFT
+     }
+
+DLGTEMPLATE IDD_ABOUT
+  {
+  DIALOG "", 0, 32, 32, 200, 88, FS_DLGBORDER
+    {
+    CTEXT "PMCAP 1.10",                           -1, 10, 64, 180,  8
+    CTEXT "Captures PM Screen to Bitmap"          -1, 10, 40, 180,  8
+    CTEXT "Copyright (C) Charles Petzold, 1988"   -1, 10, 32, 180,  8
+    DEFPUSHBUTTON "OK"                        DID_OK, 80,  8,  40, 16, WS_GROUP
+    }
+  }
+
+DLGTEMPLATE IDD_SAVE
+  {
+  DIALOG "", 0, 32, 32, 200, 80, FS_DLGBORDER
+    {
+    CTEXT         "Save Bitmap File", -1,            16, 64, 168,  8
+    LTEXT         "Filename:"         -1,             8, 32,  48,  8
+    EDITTEXT      ""                  IDD_FILENAME,  60, 32, 120,  8, ES_MARGIN
+    DEFPUSHBUTTON "Save"              DID_OK,        24,  8,  64, 16, WS_GROUP
+    PUSHBUTTON    "Esc=Cancel"        DID_CANCEL,   112,  8,  64, 16, WS_GROUP
+    }
+  }
+
+DLGTEMPLATE IDD_SAVEPAINT
+  {
+  DIALOG "", 0, 32, 32, 200, 80, FS_DLGBORDER
+    {
+    CTEXT         "Save Windows Paint File", -1,     16, 64, 168,  8
+    LTEXT         "Filename:"         -1,             8, 32,  48,  8
+    EDITTEXT      ""                  IDD_FILENAME,  60, 32, 120,  8, ES_MARGIN
+    DEFPUSHBUTTON "Save"              DID_OK,        24,  8,  64, 16, WS_GROUP
+    PUSHBUTTON    "Esc=Cancel"        DID_CANCEL,   112,  8,  64, 16, WS_GROUP
+    }
+  }
+
+STRINGTABLE
+     {
+     IDS_FILEOPEN,   "File cannot not be opened for writing."
+     IDS_DISKFULL,   "Cannot write to file.  Disk full."
+     IDS_BMPCREATE,  "Bitmap creation failed.  Not enough memory."
+     IDS_MULTIPLANE, "Multi-plane bitmaps not supported."
+     IDS_TIMER,      "Too many clocks or timers."
+     IDS_MEMORY,     "Not enough memory to save file."
+     IDS_MONOEGA,    "Paint format supported for EGA only."
+     }

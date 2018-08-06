@@ -1,0 +1,28 @@
+#include "windows.h"
+#include "senddlg.h"
+
+AboutBox DIALOG 22, 17, 144, 75
+STYLE WS_POPUP | WS_DLGFRAME
+BEGIN
+    CTEXT "Microsoft Windows"	  -1,	    0,	5, 144,	 8
+    CTEXT "SendDlg Application"	  -1,	    0, 14, 144,	 8
+    CTEXT "Version 1.0"		  -1,	    0, 34, 144,	 8
+    DEFPUSHBUTTON "OK"		IDOK,	   53, 59,  32, 14,	 WS_GROUP
+END
+
+ListIn DIALOG LOADONCALL MOVEABLE DISCARDABLE 8, 14, 178, 178
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+	   CONTROL "", ID_EDIT, "edit", ES_LEFT | WS_BORDER | WS_TABSTOP | WS_CHILD, 13, 28, 144, 12
+	   CONTROL "Please Enter a Name", 101, "static", SS_CENTER | WS_CHILD, 44, 8, 82, 12
+	   CONTROL "Add", ID_ADD, "button", BS_DEFPUSHBUTTON | WS_TABSTOP | WS_CHILD, 36, 48, 30, 14
+	   CONTROL "OK", ID_OK, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 72, 48, 30, 14
+	   CONTROL "Cancel", ID_CANCEL, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD, 107, 48, 29, 14
+	   CONTROL "", ID_LISTBOX, "listbox", LBS_NOTIFY | LBS_SORT | LBS_STANDARD | WS_BORDER | WS_VSCROLL | WS_CHILD, 14, 70, 144, 90
+END
+
+SendDlgMenu     MENU
+BEGIN
+    MENUITEM     "&Dialog",  200
+END
+

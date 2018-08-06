@@ -1,0 +1,73 @@
+For Version 0.01
+  1. " 's around command line parameters now bind.
+  2. Fix so non case sensitve link will work OK.
+  3. 'Q' command now gives restart option.
+  4. Abort if can't find 'exit()' or 'main()'.
+  5. Abort on no symbols or no line numbers.
+  6. Add register window to disassembly display.
+  7. Add Alt-D and Alt-U to resize windows.
+  8. Put segment prefixes on line with rest of instruction. (disassembly)
+  9. Add _AX, _BX, etc. to allow Examine/change and Watch registers.
+ 10. Handle long strings better in Examine and Watch.
+ 11. Change VF command to accept directory entries.
+ 12. Text file size now 40k, 700 symbols allowed.
+ 13. The 'X' format was fixed so a hex entry (not long hex) is expected.
+     Format characters correspond to 'printf', not 'scanf'.
+
+For Version 0.02
+  1. Fix F9 key transfer so wrong source lines won't get on assembly code.
+  2. Fix PgUp (assemblemode) so will stop at the top line.
+  3. Fix segment override (memory display) in disassembly listing.
+
+For Version 0.03
+  1. Add "RTN".  Standard stack frame option must be used.
+  2. Make 'Next' work in assemblemode.
+  3. Add 'X' (Translate).
+  4. Add passcount to permanemt breakpoints.
+  5. Add 'GT' command.
+  6. Add conditional break commands, BE, BN, and BC.
+  7. Single letter symbols didn't work with 'P' command.
+  8. Fix 'E' so change of register puts the changed value in program.
+  9. Add DisplayMemory window and command.
+ 10. Turn off colors if mode is 2 on entry.
+
+For Version 0.04
+  1. Make sure to switch to register window before updating it!
+  2. Add conditional compilation.
+
+For Version 0.05
+  1. String entry in BE command didn't work.
+  2. Allow F10 key (and others) to work at last "Restart program (y/n)"
+     message.
+  3. Check MAP and EXE file creation date, times.
+  4. Allow viewing assembly language by hex address.
+  5. When changing vars in Examine, floats went in as doubles.
+  6. Add array indices to be added to variables.
+
+For Version 0.06
+  1. Fix bug in determining RTN (P).
+  2. Update code display when registers changed.
+  3. Occasional crash with 8088 when doing a lot of tracing due to timer
+     interrupt.  Hopefully fixed.
+  4. Add TA command to set tab size.
+  5. Fix memory display on disassembly listing which was calculating memory
+     location wrong for large offsets.
+  6. Have memory display (disassembler) show pointers for les,lds instructions
+  7. Increase string length for command line parameters, add path to
+     called file name.
+  8. Fix bug in display mode 2 where screen swapping didn't work right.
+
+For Version 0.07
+  1. Fix bug when loading files from the root directory--too many '\\'.
+
+For Version 1.0
+  1. Add profiler.
+  2. Fix bad bug where a changed string in E command would always write
+     80 characters.
+  3. Change doview() to allow assemble mode viewing of library code by
+     specifying a symbol.
+  4. Change displaycode() to output symbol names when available.  Were
+     only being output if there was a source file available.
+  5. Add critical error handler.
+  6. Add ^C and ^break to readst().
+

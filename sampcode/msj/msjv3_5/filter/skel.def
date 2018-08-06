@@ -1,0 +1,9 @@
+;	Any Editor extension for OS/2 Protect mode must be linked
+;	with this .DEF file.  The resulting .DLL file must be
+;	placed in a directory pointed to by LIBPATH
+
+LIBRARY
+
+EXPORTS
+	_ModInfo
+	EntryPoint

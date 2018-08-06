@@ -1,0 +1,14 @@
+#
+# Makefile for the Mouse demonstration chaser.
+#
+# Created by Microsoft Corp. 1986
+#
+
+INC=..\..\..\include
+OPT=-Ox -G2 -Zip -I$(INC) -c
+
+all: chaser.exe
+
+chaser.exe: chaser.c chaser
+	    cl $(OPT) chaser.c
+            link chaser,,,/nod:slibce slibcep;

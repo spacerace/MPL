@@ -1,0 +1,44 @@
+
+			  SAMPLES.DOC File
+
+	  Notes on sample programs included with the Microsoft(R)
+		 C Optimizing Compiler Version 5.10
+
+	     (C) Copyright Microsoft Corporation, 1988
+
+
+This file describes the sample program included with the Microsoft C Optimizing
+Compiler, Version 5.10.
+
+
+    DEMO.C     Displays program arguments and environment in real, protected,
+	       or bound mode. This file is used in the practice session in
+	       Chapter 2 of the Microsoft C Optimizing Compiler User's Guide.
+    
+    CFLOW.C    Displays relationships between the functions of a C  program
+	       in real, protected, or bound mode. The file CFLOW.DOC describes
+	       how to use this utility.
+
+    SIEVE.C    Finds prime numbers using the Sieve of Eratosthenes 
+	       algorithm in real, protected, or bound mode.
+
+    GRDEMO.C   Illustrates functions of the graphics library in real
+               mode only. 
+
+    SORTDEMO.C Visually illustrates six different sorting algorithms in
+	       protected or bound mode. The source code demonstrates how to
+	       make OS/2 calls.
+
+    SNAP.C     Runs in the background and saves the current screen in
+	       a file when a hot key is pressed. This program runs only
+	       in protected mode.
+
+    MHELLO.C   Illustrates multiple threads. This program requires the
+	       multiple-thread library. It runs only in protected mode.
+
+    MTMAIN.C   Illustrates dynamic-link libraries. Both multiple-thread
+    MTDLL.C    (MT) and single-thread (ST) versions are provided. The 
+    STMAIN.C   .DLL modules are dynamic-link libraries. The MAIN modules
+    STDLL.C    are programs that call the dynamic-link libraries. This
+	       program runs only in protected mode.
+               

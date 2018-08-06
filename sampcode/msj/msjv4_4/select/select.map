@@ -1,0 +1,197 @@
+
+ SELECT
+
+ Start     Length     Name                   Class
+ 0001:0000 000BCH     _INIT                  CODE
+ 0002:0000 007CEH     _SELECT                CODE
+ 0003:0000 00178H     _TEXT                  CODE
+ 0004:0000 00010H     NULL                   BEGDATA
+ 0004:0010 00058H     _DATA                  DATA
+ 0004:0068 00000H     CDATA                  DATA
+ 0004:0068 00000H     XIB                    DATA
+ 0004:0068 00000H     XI                     DATA
+ 0004:0068 00000H     XIE                    DATA
+ 0004:0068 00000H     XPB                    DATA
+ 0004:0068 00000H     XP                     DATA
+ 0004:0068 00000H     XPE                    DATA
+ 0004:0068 00000H     XCB                    DATA
+ 0004:0068 00000H     XC                     DATA
+ 0004:0068 00000H     XCE                    DATA
+ 0004:0068 00000H     CONST                  CONST
+ 0004:0070 00000H     _BSS                   BSS
+ 0004:0070 00004H     c_common               BSS
+
+ Origin   Group
+ 0004:0   DGROUP
+
+ Address   Export                  Alias
+
+ 0002:0000 SelectWndProc           SelectWndProc
+
+  Address         Publics by Name
+
+ 0000:0000  Imp  BEGINPAINT           (USER.39)
+ 0000:0000  Imp  BITBLT               (GDI.34)
+ 0003:0020       chkstk
+ 0000:0000  Imp  CLIENTTOSCREEN       (USER.28)
+ 0000:0000  Imp  CREATEBITMAP         (GDI.48)
+ 0000:0000  Imp  CREATECOMPATIBLEDC   (GDI.52)
+ 0000:0000  Imp  CREATEWINDOW         (USER.41)
+ 0000:0000  Imp  DEFWINDOWPROC        (USER.107)
+ 0000:0000  Imp  DELETEOBJECT         (GDI.69)
+ 0000:0000  Imp  DESTROYWINDOW        (USER.53)
+ 0000:0000  Imp  ENABLEWINDOW         (USER.34)
+ 0000:0000  Imp  ENDPAINT             (USER.40)
+ 0000:0000  Imp  FATALEXIT            (KERNEL.1)
+ 0000:0000  Imp  GETCLIENTRECT        (USER.33)
+ 0000:0000  Imp  GETDC                (USER.66)
+ 0000:0000  Imp  GETPARENT            (USER.46)
+ 0000:0000  Imp  GETSYSTEMMETRICS     (USER.179)
+ 0000:0000  Imp  GETTEXTMETRICS       (GDI.93)
+ 0000:0000  Imp  GETWINDOWWORD        (USER.133)
+ 0000:0000  Imp  GLOBALALLOC          (KERNEL.15)
+ 0000:0000  Imp  GLOBALFREE           (KERNEL.17)
+ 0000:0000  Imp  INVALIDATERECT       (USER.125)
+ 0000:0000  Imp  INVERTRECT           (USER.82)
+ 0003:0010       LIBENTRY
+ 0001:0000       LIBMAIN
+ 0000:0000  Imp  LOADCURSOR           (USER.173)
+ 0000:0000  Imp  LOCALALLOC           (KERNEL.5)
+ 0000:0000  Imp  LOCALFREE            (KERNEL.7)
+ 0000:0000  Imp  LOCALINIT            (KERNEL.4)
+ 0000:0000  Imp  LOCALLOCK            (KERNEL.8)
+ 0000:0000  Imp  LOCALREALLOC         (KERNEL.6)
+ 0000:0000  Imp  LOCALSHRINK          (KERNEL.121)
+ 0000:0000  Imp  LOCALUNLOCK          (KERNEL.9)
+ 0000:0000  Imp  LOCKSEGMENT          (KERNEL.23)
+ 0000:0000  Imp  LSTRCPY              (KERNEL.88)
+ 0000:0000  Imp  LSTRLEN              (KERNEL.90)
+ 0000:0000  Imp  MESSAGEBOX           (USER.1)
+ 0000:0008  Abs  pAtomTable
+ 0000:0006  Abs  PLOCALHEAP
+ 0000:0000  Imp  POSTMESSAGE          (USER.110)
+ 0000:000E  Abs  pStackBot
+ 0000:000C  Abs  pStackMin
+ 0000:000A  Abs  pStackTop
+ 0000:0000  Imp  REGISTERCLASS        (USER.57)
+ 0000:0000  Imp  RELEASEDC            (USER.68)
+ 0004:0004       rsrvptrs
+ 0000:0000  Imp  SELECTOBJECT         (GDI.45)
+ 0002:0000       SelectWndProc
+ 0000:0000  Imp  SENDMESSAGE          (USER.111)
+ 0000:0000  Imp  SETFOCUS             (USER.22)
+ 0000:0000  Imp  SETWINDOWWORD        (USER.134)
+ 0000:0000  Imp  SHOWWINDOW           (USER.42)
+ 0004:0064       STKHQQ
+ 0000:0000  Imp  TEXTOUT              (GDI.33)
+ 0000:0000  Imp  UNLOCKSEGMENT        (KERNEL.24)
+ 0003:0020       _chkstk
+ 0004:0070       _edata
+ 0000:0000  Abs  _end
+ 0003:007C       _free
+ 0004:0070       _hBitmap
+ 0004:0072       _hInstLib
+ 0003:0062       _malloc
+ 0003:0096       _realloc
+ 0004:0060       __aaltstkovr
+ 0000:9876  Abs  __acrtused
+ 0000:9876  Abs  __acrtused2
+ 0004:0066       __amblksiz
+ 0003:0053       __amsg_exit
+ 0003:004A       __astkovr
+ 0003:0020       __chkstk
+ 0003:004D       __cintDIV
+ 0003:015D       __ffree
+ 0003:0125       __fmalloc
+ 0000:9876  Abs  __fptaskdata
+ 0003:0050       __fptrap
+ 0003:010A       __nfree
+ 0003:00C4       __nmalloc
+ 0003:005C       __NMSG_TEXT
+ 0003:005C       __NMSG_WRITE
+ 0003:0061       __nullcheck
+
+  Address         Publics by Value
+
+ 0000:0000  Imp  TEXTOUT              (GDI.33)
+ 0000:0000  Imp  LSTRCPY              (KERNEL.88)
+ 0000:0000  Imp  SETFOCUS             (USER.22)
+ 0000:0000  Imp  LSTRLEN              (KERNEL.90)
+ 0000:0000  Imp  GLOBALALLOC          (KERNEL.15)
+ 0000:0000  Imp  BITBLT               (GDI.34)
+ 0000:0000  Imp  UNLOCKSEGMENT        (KERNEL.24)
+ 0000:0000  Imp  CREATEWINDOW         (USER.41)
+ 0000:0000  Imp  GETWINDOWWORD        (USER.133)
+ 0000:0000  Imp  INVERTRECT           (USER.82)
+ 0000:0000  Imp  RELEASEDC            (USER.68)
+ 0000:0000  Imp  ENABLEWINDOW         (USER.34)
+ 0000:0000  Imp  MESSAGEBOX           (USER.1)
+ 0000:0000  Imp  CREATEBITMAP         (GDI.48)
+ 0000:0000  Imp  FATALEXIT            (KERNEL.1)
+ 0000:0000  Imp  GETDC                (USER.66)
+ 0000:0000  Imp  SETWINDOWWORD        (USER.134)
+ 0000:0000  Imp  CLIENTTOSCREEN       (USER.28)
+ 0000:0000  Imp  GLOBALFREE           (KERNEL.17)
+ 0000:0000  Imp  LOCALFREE            (KERNEL.7)
+ 0000:0000  Imp  BEGINPAINT           (USER.39)
+ 0000:0000  Imp  LOADCURSOR           (USER.173)
+ 0000:0000  Imp  REGISTERCLASS        (USER.57)
+ 0000:0000  Imp  LOCALLOCK            (KERNEL.8)
+ 0000:0000  Imp  LOCALSHRINK          (KERNEL.121)
+ 0000:0000  Imp  LOCALINIT            (KERNEL.4)
+ 0000:0000  Imp  CREATECOMPATIBLEDC   (GDI.52)
+ 0000:0000  Imp  SENDMESSAGE          (USER.111)
+ 0000:0000  Imp  POSTMESSAGE          (USER.110)
+ 0000:0000  Imp  DESTROYWINDOW        (USER.53)
+ 0000:0000  Imp  GETTEXTMETRICS       (GDI.93)
+ 0000:0000  Imp  SELECTOBJECT         (GDI.45)
+ 0000:0000  Imp  INVALIDATERECT       (USER.125)
+ 0000:0000  Imp  LOCALUNLOCK          (KERNEL.9)
+ 0000:0000  Imp  LOCKSEGMENT          (KERNEL.23)
+ 0000:0000  Imp  ENDPAINT             (USER.40)
+ 0000:0000  Abs  _end
+ 0000:0000  Imp  LOCALALLOC           (KERNEL.5)
+ 0000:0000  Imp  GETCLIENTRECT        (USER.33)
+ 0000:0000  Imp  LOCALREALLOC         (KERNEL.6)
+ 0000:0000  Imp  DELETEOBJECT         (GDI.69)
+ 0000:0000  Imp  GETPARENT            (USER.46)
+ 0000:0000  Imp  SHOWWINDOW           (USER.42)
+ 0000:0000  Imp  GETSYSTEMMETRICS     (USER.179)
+ 0000:0000  Imp  DEFWINDOWPROC        (USER.107)
+ 0000:0006  Abs  PLOCALHEAP
+ 0000:0008  Abs  pAtomTable
+ 0000:000A  Abs  pStackTop
+ 0000:000C  Abs  pStackMin
+ 0000:000E  Abs  pStackBot
+ 0000:9876  Abs  __acrtused
+ 0000:9876  Abs  __fptaskdata
+ 0000:9876  Abs  __acrtused2
+ 0001:0000       LIBMAIN
+ 0002:0000       SelectWndProc
+ 0003:0010       LIBENTRY
+ 0003:0020       __chkstk
+ 0003:0020       _chkstk
+ 0003:0020       chkstk
+ 0003:004A       __astkovr
+ 0003:004D       __cintDIV
+ 0003:0050       __fptrap
+ 0003:0053       __amsg_exit
+ 0003:005C       __NMSG_TEXT
+ 0003:005C       __NMSG_WRITE
+ 0003:0061       __nullcheck
+ 0003:0062       _malloc
+ 0003:007C       _free
+ 0003:0096       _realloc
+ 0003:00C4       __nmalloc
+ 0003:010A       __nfree
+ 0003:0125       __fmalloc
+ 0003:015D       __ffree
+ 0004:0004       rsrvptrs
+ 0004:0060       __aaltstkovr
+ 0004:0064       STKHQQ
+ 0004:0066       __amblksiz
+ 0004:0070       _hBitmap
+ 0004:0070       _edata
+ 0004:0072       _hInstLib
+
+Program entry point at 0003:0010

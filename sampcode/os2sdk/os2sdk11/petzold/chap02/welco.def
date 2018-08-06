@@ -1,0 +1,10 @@
+;----------------------------------
+; WELCO.DEF module definition file
+;----------------------------------
+
+NAME           WELCO     WINDOWAPI
+
+DESCRIPTION    'Welcome to PM -- Program No. 5 (C) Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      8192

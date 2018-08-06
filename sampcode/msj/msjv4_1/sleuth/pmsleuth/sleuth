@@ -1,0 +1,15 @@
+#----------------------------------------------------------------------------
+#  Sleuth make file
+#----------------------------------------------------------------------------
+
+Sleuth.res : Sleuth.rc Sleuth.h Sleuth.ico
+     rc -r Sleuth.rc
+
+Sleuth.obj : Sleuth.c Sleuth.h
+     cl -AL -c -G2sw -Od -W3 -Zip Sleuth.c
+
+Sleuth.exe : Sleuth.obj Sleuth.res Sleuth.def
+     link Sleuth, /code/align:16, NUL, os2 /nod:llibce llibcep, Sleuth
+     rc Sleuth.res
+
+#----------------------------------------------------------------------------

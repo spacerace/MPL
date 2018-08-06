@@ -1,0 +1,212 @@
+                     WINDOWS FOR MICROSOFT C
+
+                          INTRODUCTION
+
+    These routines were written using Microsoft C version 5.00 to 
+implement text windows on the IBM (or compatible) monochrome 
+adapter, color graphics adapter, or EGA adapter (they have not 
+been tested in a VGA environment).  The routines make use of the 
+graphics routines in the newest version of Microsoft C.  All 
+required function declarations, include statements, and global 
+variable definitions are contained in the windows.h file.  
+
+NOTE:  The set_text_mode routine must be called before any other 
+routine in this library.  This routine automatically configures 
+your program to address either the monochrome or color adapter 
+(whichever is present).
+
+    Feel free to use these routines whenever and wherever.  If you have
+any comments, corrections, or suggestions, contact me here under
+user-id 75216.2063.
+
+ANDY ECKHARDT
+
+
+                     USE OF WINDOW ROUTINES
+
+    Using the file placement scheme recommended by Microsoft, the 
+files required for linking in these routines should be placed as 
+follows:
+
+               File                          Library
+
+            windows.h                       \include
+            windows.lib                     \lib
+
+
+    Linking these routines is accomplished with the following 
+command:
+
+            cl yourpgm /link windows
+
+
+                     LIMITATIONS AND CHANGES
+
+     These routines can only be used for text output to the 
+windows created.  THEY WILL NOT WORK FOR GRAPHICS OUTPUT.
+
+The set_text_mode routine must be called before any other routine 
+in this library.  This routine automatically configures your 
+program to address either the monochrome or color adapter 
+(whichever is present).
+
+     The maximum number of windows is preset to 15.  In order to 
+change this to another value, change the MAX_WINDOW_NUMBER 
+definition in windows.h.  The value used should be the number of 
+windows required + 1 (the first window saved is always the screen 
+before any windows are drawn).
+
+     Keep in mind that drawing a window with a border actually 
+uses 2 of the available windows.  The resulting window space 
+available for output will be 4 columns and 2 rows smaller than 
+the corner values specified in the makebxwindow routine.  This 
+allows the window output to scroll normally without erasing the 
+border.
+
+     If used with a monochrome monitor, the windows and borders 
+will automatically be set to white on black.  The makewindow() 
+routine can be changed to the desired colors if this is not 
+acceptable.
+
+
+__________________________________________________________________
+
+                         WINDOW ROUTINES
+
+__________________________________________________________________
+
+void set_text_mode()
+
+    This routine automatically selects the highest video 
+operating mode and configures the program to use either 
+monochrome or color when creating windows.  
+
+NOTES:
+
+The mode selected by this routine will be stored in the global 
+variable video_mode_set which can be interrogated by your 
+program.  This is a short type with one of the values shown for 
+text modes in the graph.h header file.
+
+EXAMPLE:
+
+    #include <graph.h>
+    #include <windows.h>
+ 
+    main()
+      {
+      set_text_mode();
+      }
+__________________________________________________________________
+
+int makebxwindow(up_row,up_col,down_row,down_col,fore_color,
+  back_color,border_fore,border_back)
+  short up_row           /*upper left row of window*/
+  short up_col           /*upper left column of window*/
+  short down_row         /*lower right row of window*/
+  short down_col         /*lower right column of window*/
+  short fore_color       /*text color for window output*/
+  short back_color       /*background color for window output*/
+  short border_fore      /*color of double lines in the border*/
+  short border_back      /*background color of the border*/
+
+
+    This routine creates a window with a double-lined border 
+around it.  The window area available for output will be 2 rows 
+and 4 columns smaller than the upper-left and lower-right corner 
+values specified.  This allows output to the window to scroll 
+without erasing the border.  When used with a monochrome monitor, 
+the border will be white and the background will be black.
+
+NOTES:  Keep in mind that this routine takes 2 of the available 
+screens.  When erasing a boxed window, you must either call 
+unmakebxwindow() once or unmakewindow() twice.
+
+RETURN VALUES:  This routine will edit the upper_left and 
+lower_right corner values used in the call to ensure there is 
+room for the window and that the window is properly configured.  
+A return value of 0 indicates these edits were not passed and the 
+window was not created.  A return value of 1 indicates successful 
+completion.
+
+EXAMPLE:
+
+
+    #include <graph.h>
+    #include <windows.h>
+ 
+    main()
+      {
+      makebxwindow(5,5,20,60,YELLOW,BLACK,RED,BLUE);
+      }
+
+__________________________________________________________________
+
+
+int makewindow(up_row,up_col,down_row,down_col,fore_color,
+  back_color)
+  short up_row           /*upper left row of window*/
+  short up_col           /*upper left column of window*/
+  short down_row         /*lower right row of window*/
+  short down_col         /*lower right column of window*/
+  short fore_color       /*text color for window output*/
+  short back_color       /*background color for window output*/
+
+    This routine creates a window with no border around it.  The 
+window area available for output will be the upper-left and 
+lower-right corner values specified.  When used with a monochrome 
+monitor, the text will be white and the background will be black.
+
+NOTES:  Use the unmakewindow() routine to erase the window 
+created.
+
+RETURN VALUES:  This routine will edit the upper_left and 
+lower_right corner values used in the call to ensure there is 
+room for the window and that the window is properly configured.  
+A return value of 0 indicates these edits were not passed and the 
+window was not created.  A return value of 1 indicates successful 
+completion.
+
+EXAMPLE:
+
+
+    #include <graph.h>
+    #include <windows.h>
+ 
+    main()
+      {
+      makewindow(5,5,20,60,YELLOW,BLACK);
+      }
+
+__________________________________________________________________
+
+void unmakebxwindow()
+
+    This routine erases a boxed window and restores the screen to 
+its condition prior to the box being drawn.
+
+EXAMPLE:
+  
+    #include <graph.h>
+    #include <windows.h>
+
+    main()
+      {
+      unmakebxwindow();
+      }
+__________________________________________________________________
+
+void unmakewindow()
+
+    This routine erases an unboxed window and restores the screen 
+to its condition prior to the box being drawn.
+
+EXAMPLE:
+  
+    #include <graph.h>
+    #include <windows.h>
+
+    main()
+      {
+      unmakewindow();
+      }

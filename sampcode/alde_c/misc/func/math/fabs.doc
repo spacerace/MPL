@@ -1,0 +1,390 @@
+
+November 11, 1983  ( Initial )
+November 25, 1983  ( Added REPLACE and DELETE )
+
+FABS is an assembly language program module designed for use with the
+   IBM PC to maintain key files for fast retrieval of data using
+   random records.
+
+FABS is supplied by Computer Control Systems, Inc.
+                    298 21st Terrace S.E.
+                    Largo, Fl 33541
+
+FABS comes with an interface to BASIC ( Compiled and Interpreted )
+   and PASCAL. This documentation is for an interface to FABS that I
+   have written. I have also written an interface in FORTH.
+
+QUESTIONS, SUGGESTIONS and COMPLAINTS can be sent to me :
+   Norman McIntosh
+   771 Dolores
+   San Francisco, Ca. 94110
+   415-648-2476
+
+
+              F A B S      D O C U M E N T A T I O N
+              ======================================
+
+NAME
+   fabs_create -- create a FABS index file
+
+SYNOPSIS
+   fabs_create( file_name, key_len, num_keys, key_type, file_num )
+   char *file_name ;         FABS file name
+   int key_len ;             max number of bytes in a FABS key
+   int num_keys ;            number of FABS keys
+   char key_type ;           FABS file type 'A' or 'I'
+   int file_num ;            FABS file number
+
+DESCRIPTION
+   Creates the FABS index file with the name as supplied by
+   *file_name and *file_name.MAP. Deletes files if present.
+
+CAUTIONS
+   Aborts program if any errors occured.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_open -- open a FABS file
+
+SYNOPSIS
+   fabs_open( file_name, file_num )
+   char *file_name ;         FABS file name
+   int file_num ;            FABS file number
+
+DESCRIPTION
+   Opens FABS file as specified by *file_name.
+
+CAUTIONS
+   Aborts program if any errors occured.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_first -- find first key in FABS file
+
+SYNOPSIS
+   result = fabs_first( file_num, key_num )
+   int result ;              the warning code returned
+   int file_num ;            FABS file number
+   int key_num ;             the key number
+
+DESCRIPTION
+   Finds the first logical record in the FABS file based on key
+   key_num.
+
+RETURNS
+   result = error code
+   rec_fabs = record number in data file
+   key_fabs = The memory address (in FABS segment) of the key
+
+CAUTIONS
+   Aborts program if any fatal errors occured.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_last -- find last key in FABS file
+
+SYNOPSIS
+   result = fabs_last( file_num, key_num )
+   int result ;              the warning code returned
+   int file_num ;            FABS file number
+   int key_num ;             the key number
+
+DESCRIPTION
+   Finds the last logical record in the FABS file based on key
+   key_num.
+
+RETURNS
+   result = error code
+   rec_fabs = record number in data file
+   key_fabs = The memory address (in FABS segment) of the key
+
+CAUTIONS
+   Aborts program if any fatal errors occured.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_next -- find next record in FABS file
+
+SYNOPSIS
+   result = fabs_next( file_num )
+   int result ;              the warning code returned
+   int file_num ;            FABS file number
+
+DESCRIPTION
+   Finds the next logical record in the FABS file.
+
+RETURNS
+   result = error code
+   rec_fabs = record number in data file
+   key_fabs = The memory address (in FABS segment) of the key
+
+CAUTIONS
+   Aborts program if any fatal errors occured. Next will not cross
+   over primary key boundaries, that is, when SEARCHING NEXT for
+   a given primary key, an error #15 will will occur after reaching
+   the end of the group of primary keys.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_previous -- find previous record
+
+SYNOPSIS
+   result = fabs_previous( file_num )
+   int result ;   -------
+
+NAME
+   fabs_previous -- find previous record
+
+SYNOPSIS
+   result = fabs_previous( file_num )
+   int result ;              the warning code returned
+   int file_num ;            FABS file number
+
+DESCRIPTION
+   Finds the previous logical record in the FABS file.
+
+RETURNS
+   result = error code
+   rec_fabs = record number in data file
+   key_fabs = The memory address (in FABS segment) of the key
+
+CAUTIONS
+   Aborts program if any fatal errors occured. Previous will not cross
+   over primary key boundaries, that is, when SEARCHING PREVIOUS for
+   a given primary key, an error #13 will will occur after reaching
+   the bottom of the group of primary keys.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_generic -- search FABS file for first record => key
+
+SYNOPSIS
+   result = fabs_generic( key_num, file_num, key )
+   int result ;              the warning code returned
+   int key_num ;             the key number
+   int file_num ;            FABS file number
+   char *key ;               FABS key to find
+
+DESCRIPTION
+   Finds the first occurrence of the left justified partial key.
+
+RETURNS
+   result = error code
+   rec_fabs = record number in data file
+   key_fabs = The memory address (in FABS segment) of the key
+
+CAUTIONS
+   Aborts program if any fatal errors occured. Previous will not cross
+   over primary key boundaries, that is, when SEARCHING PREVIOUS for
+   a given primary key, an error #13 will will occur after reaching
+   the bottom of the group of primary keys.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_search -- search FABS file for record = key
+
+SYNOPSIS
+   result = fabs_search( key_num, file_num, key )
+   int result ;              the warning code returned
+   int key_num ;             the key number
+   int file_num ;            FABS file number
+   char *key ;               FABS key to find
+
+DESCRIPTION
+   Finds the record number of the key contained in *key.
+
+RETURNS
+   result = error code
+   rec_fabs = record number in data file
+   key_fabs = The memory address (in FABS segment) of the key
+
+CAUTIONS
+   Aborts program if any fatal errors occured.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_insert -- insert key into FABS file
+
+SYNOPSIS
+   fabs_insert( keys, file_num )
+   char *keys ;              FABS keys to insert
+   int file_num ;            FABS file number
+
+DESCRIPTION
+   Insert key contained in *key into the FABS file.
+
+RETURNS
+   rec_fabs = record number in data file
+
+CAUTIONS
+   Aborts program if any errors occured.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_delete -- delete key from FABS file
+
+SYNOPSIS
+   fabs_delete( rec_num, SBDF, file_num, keys )
+   int rec_num ;             File record number to delete
+   char SBDF ;               Search before delete if 'Y'
+   int file_num ;            FABS file number
+   char *keys ;              FABS keys to delete
+
+DESCRIPTION
+   Delete key contained in *key from the FABS file. If SBDF is 'N'
+   the keys are not searched to ensure they are correct before
+   deletion takes place.
+
+RETURNS
+   rec_fabs = record number in that was deleted ( same as rec_num )
+
+CAUTIONS
+   Aborts program if any errors occured.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_replace -- replace key in FABS file
+
+SYNOPSIS
+   fabs_replace( key_num, rec_num, file_num, old_key, new_key )
+   int key_num ;             Primary key number to replace
+   int rec_num ;             File record number to replace
+   int file_num ;            FABS file number
+   char *old_key ;           FABS old key to replace
+   char *new_key ;           FABS new key to replace
+
+DESCRIPTION
+   Replace the key contained in *old_key by the key contained in
+   *new_key.
+
+RETURNS
+   rec_fabs = record number in that was replaced ( same as rec_num )
+
+CAUTIONS
+   Aborts program if any errors occured.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_build -- insert key into FABS file, without update to map file
+
+SYNOPSIS
+   fabs_build( keys, file_num )
+   char *keys ;              FABS keys to insert
+   int file_num ;            FABS file number
+
+DESCRIPTION
+   Insert key contained in *key into the FABS file, but does not write
+   the map file to disk.
+
+RETURNS
+   rec_fabs = record number in data file
+
+CAUTIONS
+   Aborts program if any errors occured. A fabs_write must be executed
+   after a series of builds to update the map file.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_write -- write map file after series of builds
+
+SYNOPSIS
+   fabs_write( file_num )
+   int file_num ;            FABS file number
+
+DESCRIPTION
+   Write the map file to disk after a series of fabs_build.
+
+CAUTIONS
+   Aborts program if any errors occured.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_close -- close FABS file
+
+SYNOPSIS
+   fabs_write( file_num )
+   int file_num ;            FABS file number
+
+DESCRIPTION
+   Close the FABS file. This function is only needed before the
+   calling program exits.
+
+CAUTIONS
+   Aborts program if any errors occured.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_key_length -- get the maximum length of the FABS key
+
+SYNOPSIS
+   fabs_key_length( file_num )
+   int file_num ;            FABS file number
+
+DESCRIPTION
+   Gets the maximum length of the FABS key.
+
+RETURNS
+   rec_fabs = the maximum length of the key file
+
+CAUTIONS
+   Aborts program if any errors occured.
+
+---------------------------------------------------------------------
+
+NAME
+   fabs_get_key -- get FABS key from index area
+
+SYNOPSIS
+   fabs_get_key( file_num, key )
+   int file_num ;            FABS file number
+   char *key ;               FABS current key
+
+DESCRIPTION
+   Gets the current key in the FABS file.
+
+RETURNS
+   key = the key of the current record in the FABS file
+
+CAUTIONS
+   Aborts program if any errors occured.
+
+---------------------------------------------------------------------
+
+               F A B S   E R R O R S   /   W A R N I N G S
+               ===========================================
+
+ERROR#  WARN   DESCRIPTION
+------  ----   ------------------------------------------------------
+   4           Imporper key for integer key file
+   5           Attempted generic search on integer key
+   6           Key not found on delete
+   7           Incorrect number of primary keys
+   8           Syntax error in command string
+   9           No more key space
+  10           Input key larger than maximum
+  11           Tried to access unopened file
+  12     **    Key not found, but keys both larger and smaller
+  13     **    Key not found, key smaller than all keys
+  15     **    Key not found, key larger than all keys
+  16     **    Key not found, no keys in key file
+  22           Key file not present when opened
+  23           Out of directory space
+  24           Diskette full
+  25           Write error
+  26           File not present when closed
+  27           Read error, end of file
+

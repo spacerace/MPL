@@ -1,0 +1,10 @@
+
+    NAME           PMBASIC      WINDOWAPI
+
+    DESCRIPTION    'PM Demo Program written in BASIC'
+    PROTMODE
+    HEAPSIZE       1024
+    STACKSIZE      8192
+    EXPORTS        BasClientWndProc
+
+

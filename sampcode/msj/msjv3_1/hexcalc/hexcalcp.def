@@ -1,0 +1,14 @@
+; Figure 4pm
+; =========
+
+
+;-----------------------------------------------------------------
+; HEXCALCP.DEF module definition file (OS/2 Presentation Manager)
+;-----------------------------------------------------------------
+
+NAME           HEXCALCP
+DESCRIPTION    'Hexadecimal Calculator (C) Charles Petzold 1987'
+STUB           'OS2STUB.EXE'
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        ClientWndProc

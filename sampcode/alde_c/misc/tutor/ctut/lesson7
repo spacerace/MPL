@@ -1,0 +1,341 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,32
+[1mPonzoTUTOR
+.WNT
+   More FUNCTIONS, including main()   
+
+
+
+
+    You may recall, in a previous lesson, that we passed ~b~Ifloat~N arguments
+    ~b~Ix~N and ~b~Iy~N to a function ( which we called ~b~Iaverage(x,y)~N ) which
+    returned the average: (x+y)/2. It was something like:
+.WN
+1  ~b~Imain() {                                                      ~N
+2  ~b~I    float x,y,a;                                              ~N
+3  ~b~I    printf("\n Enter two numbers (separated by a space) : "); ~N
+4  ~b~I    scanf("%f%f",&x,&y);                                      ~N
+5  ~b~I    a=average(x,y);                                           ~N
+6  ~b~I    printf("\n The average of %f and %f is %f",x,y,a);        ~N
+7  ~b~I}                                                             ~N
+8  ~b~Ifloat average (a,b);                                          ~N
+9  ~b~Ifloat a, b;                                                   ~N
+10 ~b~I{                                                             ~N
+11 ~b~I    float z;                                                  ~N
+12 ~b~I    z=(a+b)/2;                                                ~N
+13 ~b~I    return(z);                                                ~N
+14 ~b~I}                                                             ~N
+    The function ~b~Iaverage(a,b)~N was invoked in line 5, where we passed
+    it ~Icopies~N of the variables ~b~Ix~N and ~b~Iy~N. The function itself
+    starts in line 8 and it makes no difference what name the function gives
+    to its arguments ..they are, after all, only private copies of the two
+    variables which ~b~Imain()~N uses. Whatever ~b~Iaverage~N does with its
+    copies, it does NOT effect the ~Ioriginal~N ~b~Ix~N and ~b~Iy~N.
+.WR15C1
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+.R15C1
+    We could have simplified the function by replacing lines 11, 12, 13 by:
+    ~b~I    return( (a+b)/2 );                                        ~N
+
+    Anyway, we mentioned that ~b~Iprintf()~N, ~b~Iscanf()~N, ~b~Igetchar()~N
+    and ~b~Imain()~N were ALL functions. Whereas WE write the functions ~b~Imain()~N
+    and (in this example) ~b~Iaverage()~N, the others are a ~Istandard~N part
+    of the ~IC-library~N.
+.WN
+
+
+
+    Some C-compilers automatically give your ~b~Imain()~N program access to
+    the ~Ist~Nan~Id~Nard ~Ii~Nnput ~Io~Nutput~N ( ~Istdio~N ) routines such
+    as ~b~Iprintf()~N, etc. BUT, SOME DO NOT.
+
+    To be sure that you include these ~Istdio~N functions in your ~b~Imain()~N
+    program (assuming you will be using them) you should begin your program...
+
+~b~I#include <stdio.h>~N     ~IDON'T FORGET TO BEGIN WITH THIS !!~N
+~b~Imain()  {         ~N
+~b~I    ........      ~N
+~b~I    ........      ~N
+~b~I}                 ~N
+    When the C-compiler sees the ~b~I#include <stdio.h>~N it will append to
+    your ~b~Imain()~N program all the ~Iio~N functions in the C library.
+.WN
+
+
+
+.T
+    don't forget STDIO.H    
+.WN
+    Now, if ~b~Iprintf()~N and ~b~Iscanf()~N and ~b~Iaverage()~N etc. can be
+    passed arguments, why not ~b~Imain()~N ???
+
+    As a matter of fact, we CAN pass arguments to ~b~Imain()~N.
+
+    Suppose your ~b~Imain()~N program was expected to add a series of numbers
+    and that you compiled/linked it with the name ~Isum~N. Now you could run
+    the ~Isum~N program by typing its name, ~Isum~N, after which a ~b~Iscanf()~N 
+    function call (in the program) would input the numbers which were to be
+    added. Then your program would ~b~Iprintf()~N the sum.
+
+    BUT, wouldn't it be nice to run the ~Isum~N program by typing:
+
+~Isum  10.5 -15.23 6.7~N   and have the ~Isum~N program run, and also have the
+                       numbers ~I10.5 -15.23~N and ~I6.7~N passed to the program
+                       as arguments ?
+.K19,32
+main(?,?)
+    We'll talk about how to do this in C....
+.WK19,60
+wunderbar!
+.WNT
+    The main() arguments   
+.R4C1
+~V0  #include <stdio.h>                                            ~N
+1  ~b~Imain(number,term)                                             ~N
+2  ~b~Iint number;                     /* first  main() argument */  ~N
+3  ~b~Ichar *term[];                   /* second main() argument */  ~N
+4  ~b~I{                               /* NOW start main()       */  ~N
+5  ~b~I  ...........                                                 ~N
+6  ~b~I  ...........                   /* program goes here      */  ~N
+7  ~b~I}                               /* end of main()          */  ~N
+.R15C1
+     Here we ~V#include~N the stdio.h library (we'll need this stuff).
+.WR4C1
+0  ~b~I#include <stdio.h>                                            ~N
+~V1  main(number,term)                                             ~N
+.R15C1
+                                                                            
+.R15C1
+    NOW our main program expects two arguments called ~b~Inumber~N and ~b~Iterm~N.
+.WR5C1
+1  ~b~Imain(number,term)                                             ~N
+~V2  int number;                     /* first  main() argument */  ~N
+~V3  char *term[];                   /* second main() argument */  ~N
+.R15C1
+                                                                            
+.R15C1
+    The first argument (here called ~b~Inumber~N) is ALWAYS an ~b~Iint~Neger!
+    The second argument (here called ~b~Iterm~N) is ALWAYS declared as:
+    ~b~Ichar *name[]~N;   
+          
+          name of second argument goes in here (in our example, it's ~b~Iterm~N).
+.WR6C1
+2  ~b~Iint number;                     /* first  main() argument */  ~N
+.R15C1
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+.R15C1
+    BECAUSE it is declared ~b~Ichar *term~N we see that ~b~Iterm~N is a ~r~Ipointer~N!
+    BECAUSE we refer to it as ~b~Iterm[]~N we see that ~b~Iterm~N is an ~IARRAY~N!
+
+    In fact, the second argument is ALWAYS an ARRAY of POINTERS which point
+    to ~b~Ichar~Nacter strings (that's why we said ~b~Ichar~N).
+.WR15C1
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+.R15C1
+    If we called upon our (compiled/linked) program with the command string:
+    ~Isum  10.5 -15.23 6.7~N then this contains ~I4~N elements, namely:
+    ~Vsum~N and ~V10.5~N and ~V-15.23~N and ~V6.7~N (separated by a space).
+    It is the number ~I4~N which gets passed to ~b~Imain()~N as its first
+    argument! ( ..in our example, ~b~Inumber~N is the ~b~Iint~Neger ~I4~N).
+.WR15C1
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+.R15C1
+    And the second argument?
+    The second argument which gets passed to ~b~Imain()~N is (are?) the 
+    strings: ~Vsum~N and ~V10.5~N and ~V-15.23~N and ~V6.7~N
+    BUT, ~b~Imain()~N receives this list of strings as an ARRAY of POINTERS.
+
+    term[0] points to the string ~Vsum~N 
+    term[1] points to the string ~V10.5~N 
+    term[2] points to the string ~V-15.23~N 
+    term[3] points to the string ~V6.7~N 
+.WR15C1
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+.R15C1
+    NOTE: when we refer to the ~Istring -15.23~N we mean a collection of 7
+          characters: '-' and '1' and '5' and '.' and '2' and '3' and '\0'.
+          (remember the '\0' which terminates strings?)
+    We may pick out the numbers ~I10.5~N and ~I-15.23~N etc. by referring to
+    ~b~Iterm[1]~N and ~b~Iterm[2]~N etc.
+
+    Of course, they are NOT (really) numbers (?!@#$) but strings of ASCII
+    characters. To add them up, we must convert them to ~b~Ifloat~Ning point
+    numbers....
+.WK6,32
+GO!GO!GO!
+.WN
+
+
+
+
+.T
+    Some SUM programming ...  
+.WN
+0  ~b~I#include <stdio.h>                                                ~N
+1  ~b~Imain(number,term)                                                 ~N
+2  ~b~Iint number;                         /* first  main() argument */  ~N
+3  ~b~Ichar *term[];                       /* second main() argument */  ~N
+4  ~b~I{                                   /* NOW start main()       */  ~N
+5  ~b~I    float next, sum=0;              /* couple of floats       */  ~N
+6  ~b~I    int n;  .                       /* an int to count terms  */  ~N
+7  ~b~I    for (n=1; n<number; n++); {     /* loop thru' terms       */  ~N
+8  ~b~I        next=atof(term[n]);         /* CONVERT next term      */  ~N
+9  ~b~I        sum=sum+next;               /* add it to sum          */  ~N
+10 ~b~I        printf("\n    %8.3f",next); /* print each term        */  ~N
+11 ~b~I    }                               /* end of for-loop        */  ~N
+12 ~b~I    printf("\nSUM=%8.3f,sum);       /* print the sum          */  ~N
+13 ~b~I}                                   /* end of main()          */  ~N
+.R8C1
+~V7      for (n=1; n<number; n++); {     /* loop thru' terms       */  ~N
+.R15C1
+    Here we begin our loop, which sums the terms.
+    Beginning with ~b~Iterm[1]~N (the first number) we let ~b~In~N cycle thru'
+    the terms (incrementing each time, with ~b~In++~N).
+.WR8C1
+7  ~b~I    for (n=1; n<number; n++); {     /* loop thru' terms       */  ~N
+~V8          next=atof(term[n]);         /* CONVERT next term      */  ~N
+.R15C1
+                                                                             
+                                                                             
+                                                                             
+.R15C1
+    Here's our conversion of the ASCII string (one for each number) to a
+    ~b~Ifloat~N. (This ~Ia~Nscii ~Ito~N ~If~Nloat function is part of any
+    respectable C-library ...which is one reason why we #included stdio.h).
+    Note that we give to ~b~Iatof()~N the ~r~Ipointer~N to the ASCII string,
+    namely ~b~Iterm[n]~N (for each value of ~b~In~N in our for-loop).
+.WR9C1
+8  ~b~I        next=atof(term[n]);         /* CONVERT next term      */  ~N
+~V9          sum=sum+next;               /* add it to sum          */  ~N
+.R15C1
+                                                                             
+                                                                             
+                                                                             
+                                                                             
+                                                                             
+.R15C1
+    Here we add the ~b~Ifloat~N ( generated in Line 8 by ~b~Iatof()~N ) to our
+    ~b~Isum~N ( which was initialized to ~b~I0~N in Line 5 ).
+.WR10C1
+9  ~b~I        sum=sum+next;               /* add it to sum          */  ~N
+~V10         printf("\n    %8.3f",next); /* print each term        */  ~N
+.R15C1
+                                                                             
+                                                                             
+                                                                             
+.R15C1
+    Just to prove that ~b~Iatof()~N is doing its job, we'll print each ~b~Ifloat~N
+    which it generates ...each on a ~b~I\n~Newline.
+.WR11C1
+10 ~b~I        printf("\n    %8.3f",next); /* print each term        */  ~N
+~V11     }                               /* end of for-loop        */  ~N
+~V12     printf("\nSUM=%8.3f,sum);       /* print the sum          */  ~N
+.R15C1
+                                                                             
+                                                                             
+.R15C1
+    We end the for-loop, after which we ~b~Iprintf()~N our ~b~Isum~N (using ~I8~N
+    positions on the screen, and printing to ~I3~N decimal places).
+.WR12C1
+11 ~b~I    }                               /* end of for-loop        */  ~N
+12 ~b~I    printf("\nSUM=%8.3f,sum);       /* print the sum          */  ~N
+~V13 }                                   /* end of main()          */  ~N
+.R15C1
+                                                                             
+                                                                             
+.R15C1
+    Finally, we come to the end of ~b~Imain()~N.
+.K19,32
+magnifique
+.WN
+0  ~b~I#include <stdio.h>                                                ~N
+1  ~b~Imain(number,term)                                                 ~N
+2  ~b~Iint number;                         /* first  main() argument */  ~N
+3  ~b~Ichar *term[];                       /* second main() argument */  ~N
+4  ~b~I{                                   /* NOW start main()       */  ~N
+5  ~b~I    float next, sum=0;              /* couple of floats       */  ~N
+6  ~b~I    int n;  .                       /* an int to count terms  */  ~N
+7  ~b~I    for (n=1; n<number; n++); {     /* loop thru' terms       */  ~N
+8  ~b~I        next=atof(term[n]);         /* CONVERT next term      */  ~N
+9  ~b~I        sum=sum+next;               /* add it to sum          */  ~N
+10 ~b~I        printf("\n    %8.3f",next); /* print each term        */  ~N
+11 ~b~I    }                               /* end of for-loop        */  ~N
+12 ~b~I    printf("\nSUM=%8.3f,sum);       /* print the sum          */  ~N
+13 ~b~I}                                   /* end of main()          */  ~N
+    In response to ~Isum  10.5 -15.23 6.7~N, our program will print:
+~r~I      10.500~N      Note: Each term is printed after 4 spaces, then 
+~r~I     -15.230~N            occupies a field width of ~I8~N and is
+~r~I       6.700~N            right-justified!
+~r~ISUM=   1.970~N      Note: 4 spaces was just enough for:~r~ISUM=~N.
+.K19,62
+looks nice
+.WN
+.R10C1
+   Although ( in our program ) ~b~Iterm[0]~N is supposed to point to the ~Iname~N
+   of the program ( in our example it was ~Isum~N ) some C-compilers do NOT
+   provide this! In particular, MS-DOS does NOT  pass the ~Iname~N to the compiled
+   program, so C-compilers running under MS-DOS do not (CANNOT) implement this
+   feature of the C language. Instead, reference to this ~Izero~Nth string
+   may yield garbage or a blank (NULL) string or some home-made string!
+.b8-17
+.K19,32
+ noname?
+.WN
+
+
+
+
+
+.T
+   That's all folks!   
+.K16,32
+au revoir!
+
+
+.q
+

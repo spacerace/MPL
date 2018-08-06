@@ -1,0 +1,28 @@
+# Makefile for WMCHAR application
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+CC = cl -c -u -Asnd -G2cs -Od -W3 -Zip
+LF = /align:16 /codeview /map /NOD
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.rc.res:
+    rc -r $*.rc
+
+all: wmchar.exe
+
+# Dependencies
+#
+wmchar.res: wmchar wmchar.h wmchar.rc
+
+wmchar.obj: wmchar wmchar.h wmchar.c
+
+wmchar.exe: wmchar wmchar.res wmchar.obj
+    link $(LF) wmchar, , , os2 slibcep, wmchar.def
+    rc wmchar.res

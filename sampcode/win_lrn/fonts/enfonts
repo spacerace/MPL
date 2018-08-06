@@ -1,0 +1,6 @@
+
+enfonts.obj: enfonts.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 enfonts.c
+
+enfonts.exe: enfonts.obj enfonts.def
+    link4 /align:16 enfonts,,nul,slibw/NOE,enfonts.def

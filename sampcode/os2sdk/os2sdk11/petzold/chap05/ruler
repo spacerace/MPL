@@ -1,0 +1,9 @@
+#-----------------
+# RULER make file
+#-----------------
+
+ruler.obj : ruler.c
+     cl -c -G2sw -W3 ruler.c
+
+ruler.exe : ruler.obj ruler.def
+     link ruler, /align:16, NUL, os2, ruler

@@ -1,0 +1,7 @@
+closesnd.obj: closesnd.c
+  cl -c -Fs -W2 -AS -Gsw -Od -Zped closesnd.c
+
+closesnd.exe: closesnd.obj closesnd.def
+    link4 closesnd,/align:16,,slibw/NOE,closesnd.def
+    del closesnd.obj
+    del closesnd.map

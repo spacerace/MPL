@@ -1,0 +1,42 @@
+# Makefile for the SPYHOOK Global Input Hook Interface Library
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+
+ASM	= masm
+CC 	= cl -c -u -Asnw -G2csw -Od -W3 -Zpei
+LF	= /align:16 /codeview /map /NOD
+
+# Inference Rules
+#
+.c.obj:
+    $(CC) $*.c
+
+.asm.obj:
+    $(ASM) $*.asm;
+
+all:spyhook.dll
+
+# Dependencies
+#
+spyhook.lib:	spyhook spyhook.def
+    implib spyhook.lib spyhook.def
+
+spyhstrt.obj:	spyhook spyhstrt.asm
+
+spyhook.obj:	spyhook spyhook.c spyhook.h
+
+# Output files:  SPYHOOK.DLL
+#
+spyhook.dll:	spyhook spyhstrt.obj spyhook.obj spyhook.def spyhook.lib
+    link $(LF) spyhook spyhstrt,spyhook.dll,spyhook.map,os2 slibcep, spyhook.def
+
+# Copy the DLL, H, LIB files to the appropriate places for other apps.
+#
+    copy spyhook.dll ..\dll
+    del spyhook.dll
+    copy spyhook.h ..\include
+    copy spyhook.lib ..\lib
+    del spyhook.lib

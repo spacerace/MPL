@@ -1,0 +1,18 @@
+#include "style.h"
+#include "textalgn.h"
+
+TextAlgn MENU
+BEGIN
+    POPUP "&Options"
+    BEGIN
+	MENUITEM "Align &Left",		IDM_ALIGNLEFT,	     CHECKED
+	MENUITEM "Align &Center",	IDM_ALIGNCENTER
+	MENUITEM "Align &Right",	IDM_ALIGNRIGHT
+	MENUITEM SEPARATOR
+	MENUITEM "Position T&op",	IDM_ALIGNTOP
+	MENUITEM "Position Botto&m",	IDM_ALIGNBOTTOM
+	MENUITEM "Position Ba&seline",	IDM_ALIGNBASE,	     CHECKED
+	MENUITEM SEPARATOR
+	MENUITEM "&Erase Screen",	IDM_CLEAR
+    END
+END

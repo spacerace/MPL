@@ -1,0 +1,32 @@
+/*
+ * DEBUG TEST PROGRAM - RESOURCE FILE
+ *
+ * LANGUAGE : Microsoft C 5.0
+ * MODEL    : small
+ * STATUS	: operational
+ *
+ * 12/11/87 1.00 - Kevin P. Welch - initial creation.
+ *
+ */
+
+#include <style.h>
+#include "debug.h"
+
+BugTestIcon	ICON	bugtest.ico
+
+DebugControl DIALOG LOADONCALL MOVEABLE DISCARDABLE 8, 20, 185, 81
+CAPTION "Debug Control Panel"
+STYLE WS_BORDER | WS_CAPTION | WS_DLGFRAME | WS_POPUP
+BEGIN
+   CONTROL "OFF - debug &inactive." BUG_OFF, "button", STD_RADIO, 5, 3, 130, 12
+   CONTROL "ON  - debug &active." BUG_ON, "button", STD_RADIO, 5, 15, 128, 12
+   CONTROL "&Count debug events." BUG_COUNT, "button", STD_CHECKBOX, 18, 26, 114, 12
+   CONTROL "&Display in debug window." BUG_DISPLAY, "button", STD_CHECKBOX, 18, 38, 114, 12
+   CONTROL "&Filter" BUG_FILTER, "button", STD_CHECKBOX, 18, 50, 34, 12
+   CONTROL "" BUG_FILTERLIST, "edit", STD_EDITFIELD, 55, 50, 78, 12
+   CONTROL "&Log to" BUG_LOG, "button", STD_CHECKBOX, 18, 62, 36, 12
+   CONTROL "" BUG_LOGFILE, "edit", STD_EDITFIELD , 55, 63, 78, 12
+   CONTROL "" -1, "static", STD_FRAME, 142, 0, 1, 81
+   CONTROL "Ok" BUG_OK, "button", DEF_BUTTON, 148, 4, 32, 14
+   CONTROL "Cancel" BUG_CANCEL, "button", STD_BUTTON, 148, 21, 32, 14
+END

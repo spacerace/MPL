@@ -1,0 +1,13 @@
+crcaret.obj: crcaret.c crcaret.h
+    cl -c -Gw -Zp crcaret.c
+
+crcaret.exe: crcaret.obj crcaret.def
+    link4 crcaret, , , slibw/noe, crcaret.def
+
+crcaret.res: crcaret.rc crcaret.h
+    rc -r crcaret.rc
+    
+crcaret.exe: crcaret.res
+    rc crcaret.res
+
+

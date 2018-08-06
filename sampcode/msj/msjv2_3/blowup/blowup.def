@@ -1,0 +1,8 @@
+NAME           BLOWUP
+DESCRIPTION    'Capture Screen Image to Clipboard by Charles Petzold'
+STUB           'WINSTUB.EXE'
+CODE           MOVABLE
+DATA           MOVABLE MULTIPLE
+HEAPSIZE       1024
+STACKSIZE      4096
+EXPORTS        WndProc

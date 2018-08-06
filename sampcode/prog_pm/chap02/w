@@ -1,0 +1,9 @@
+#-------------
+# W make file
+#-------------
+
+w.obj : w.c
+     cl -c -G2 -W3 w.c
+
+w.exe : w.obj w.def
+     link w, /align:16, NUL, os2, w

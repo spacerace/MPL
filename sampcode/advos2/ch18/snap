@@ -1,0 +1,5 @@
+snap.obj : snap.asm
+  masm /T snap.asm;
+
+snap.exe : snap.obj snap.def
+  link snap,,,os2,snap

@@ -1,0 +1,948 @@
+SDB (Small Data Base) documentation:
+
+
+
+                       SDB - a Simple Database System
+
+                              by David Betz
+                            114 Davenport Ave.
+                           Manchester, NH 03103
+                             (603) 625-4691
+
+                        converted to the IBM/PC by
+                              David N. Smith
+                            44 Ole Musket Lane
+                             Danbury CT 06810
+                              (203) 748-5934
+
+
+        1.0  INTRODUCTION
+
+        SDB is a simple database manager for small systems.  It  was
+        developed  to  provide  a relatively low overhead system for
+        storing data  on  machines  with  limited  disk  and  memory
+        resources.   The current version runs on a PDT-11/150 with 2
+        RX01 floppy disk drives and 60K bytes of  memory  under  the
+        RT-11 operating system, the VAX under VMS,  or on the IBM/PC
+        under PC/DOS.
+
+        SDB was originally intended  to  be  a  relational  database
+        system, so many of the terms used in describing it are taken
+        from the relational database literature.  Within the context
+        of SDB the user can safely make the following associations:
+
+             1.  RELATION can be taken to mean FILE
+
+             2.  TUPLE can be taken to mean RECORD
+
+             3.  ATTRIBUTE can be taken to mean FIELD
+
+        It should be noted that SDB is not a  relationally  complete
+        system.   It  provides  the relational operations of SELECT,
+        PROJECT, and JOIN, but does not provide the  set  operations
+        of  UNION,  INTERSECTION,  or  DIFFERENCE  as  well  as some
+        others.
+
+
+        2.0  RELATION FILE FORMATS
+
+        SDB maintains a separate file for  each  relation  that  the
+        user  creates.  This file contains a header block containing
+        the definition of the relation including the names and types
+        of  all  of the relation's attributes.  The remainder of the
+        file contains fixed length records each containing one tuple
+        from the relation.
+
+        Tuples can be of three types:
+
+             1.  active - tuples that contain actual active data
+
+             2.  deleted - tuples that have been deleted
+
+             3.  unused - tuples that haven't been used yet
+
+
+        Initially, all tuples are  unused.   When  a  new  tuple  is
+        stored  into  a  relation,  the  first unused tuple is found
+        (they are all contiguous at the end of the  relation  file).
+        The new tuple is stored as an active tuple.
+
+        When a tuple is deleted, it is marked as  such.   The  space
+        previously  allocated  to  the  deleted tuple is left unused
+        until the relation is compressed.
+
+        It is possible that when attempting to store a new tuple, no
+        unused  tuple can be found even though the relation contains
+        fewer than the maximum active  tuples.   This  happens  when
+        tuples  have  been  deleted since the time the relation file
+        was last compressed.
+
+        The compress function  allows  all  of  the  space  lost  by
+        deleting tuples to be regained.  It does this by copying all
+        of the active tuples as far backward in the file as possible
+        leaving  all  of  the  available space toward the end of the
+        file.
+
+
+
+        3.0  SELECTION EXPRESSIONS
+
+        A selection expression specifies a set of tuples over  which
+        some  SDB  operation  is  to  be executed.  The syntax for a
+        selection expression is:
+
+        <rse>           ::= <rnames> [ where <boolean> ]
+        <rnames>        ::= <rname> [ , <rname> ] ...
+        <rname>         ::= <relation-name> [ <alias> ]
+
+        When a single relation name  is  specified  in  a  selection
+        expression,  each  tuple  within  that  relation  becomes  a
+        candidate for selection.
+
+        When more than one relation name is  specified,  the  tuples
+        are  formed  by  taking  the  cross product of all specified
+        relations.  If a relation is to be crossed with  itself,  an
+        alias must be given to one or both of the occurances of that
+        relation name in the selection expression.  This allows  SDB
+        to determine which relation occurance is being refered to in
+        the boolean part of the selection expression.
+
+        After the set of candidate tuples is determined, the boolean
+        expression  is evaluated for each candidate.  The candidates
+        for which the boolean expression evaluates  to  TRUE  become
+        the selected tuples.
+
+
+        4.0  INITIALIZATION FILE AND COMMAND FILES
+
+        When SDB is first run,  it  attempts  to  read  and  process
+        commands  from  a  file  named "SDB.INI".  This file usually
+        contains macro definitions, but can contain  any  valid  SDB
+        command.   In  addition,  it  is possible to process command
+        files from within SDB.   This  is  done  by  typing  an  '@'
+        followed by the command file name after the SDB prompt.
+
+
+
+        5.0  FILE NAMES
+
+        Whenever a file name is allowed in the syntax for a command,
+        it  is  possible  to  use  either  an identifier or a quoted
+        string.  An identifier is interpreted as the file name and a
+        string  is  interpreted  as  a full file specification.  The
+        string form allows for the  specification  of  an  alternate
+        device or extension.
+
+
+
+        6.0  FORM DEFINITION FILES
+
+        A form  definition  file  contains  a  template  into  which
+        attribute  values  are substituted during a print operation.
+        There are two types of information that can be included in a
+        form definition:
+
+             1.  Literal text
+
+             2.  Attribute references
+
+        Attribute references are indicated by placing  the  name  of
+        the  attribute  being  referenced  between  a  pair of angle
+        brackets.  Literal text is anything that is not enclosed  in
+        angle brackets.
+
+
+        Example:
+        ________
+
+        print using test amount,category from checks;
+
+        Where test.frm contains:
+
+        Amount: <amount>
+        Category: <category>
+
+
+        7.0  ALIASES FOR RELATIONS AND ATTRIBUTES
+
+        When a relation or attribute name is specified  in  a  print
+        statement,  it  is possible to provide an alternate name for
+        that relation or attribute.  This is useful  for  relations,
+        when  it  is  necessary to join a relation to itself.  It is
+        useful for attributes when it is  desired  that  the  column
+        headers  in  a  table be different from the actual attribute
+        names.  Also, alternate  attribute  names  can  be  used  in
+        references  to that attribute in the where clause as well as
+        in a  form  definition  file.   The  syntax  for  specifying
+        aliases is:
+
+            <name> <alias>
+
+
+        Example:
+        ________
+
+        print using test amount a,category c from checks;
+
+        Where test.frm contains:
+
+        Amount: <a>
+        Category: <c>
+
+
+        8.0  BOOLEAN EXPRESSIONS
+
+        The syntax for boolean expressions:
+
+        <expr>          ::= <land> [ '|' <land> ]
+        <land>          ::= <relat> [ '&' <relat> ]
+        <relat>         ::= <primary> [ <relop> <primary> ]
+        <primary>       ::= <term> [ <addop> <term> ]
+        <term>          ::= <unary> [ <mulop> <unary> ]
+        <unary>         ::= <factor> | <unop> <unary>
+        <factor>        ::= <operand> | '(' <expr> ')'
+        <operand>       ::= <number> | <string> | <attribute>
+        <attribute>     ::= [ <rname> . ] <aname>
+        <relop>         ::= '=' | '<>' | '<' | '>' | '<=' | '>='
+        <addop>         ::= '+' | '-'
+        <mulop>         ::= '*' | '/'
+        <unop>          ::= '+' | '-' | '~'
+
+
+        Operators:
+
+             1.  '=' - equal
+
+             2.  '<>' - not equal
+
+             3.  '<' - less than
+
+             4.  '>' - greater than
+
+             5.  '<=' - less than or equal
+
+             6.  '>=' - greater than or equal
+
+             7.  '+' - addition or unary plus (not implemented)
+
+             8.  '-' - subraction or unary minus (not implemented)
+
+             9.  '*' - multiplication (not implemented)
+
+            10.  '/' - division (not implemented)
+
+            11.  '&' - logical and
+
+            12.  '|' - logical or
+
+            13.  '~' - logical not
+
+        Operands:
+
+             1.  number - a string of digits containing at most  one
+                 decimal point
+
+             2.  string - a string of characters enclosed in  double
+                 quotes
+
+
+             3.  attribute - an attribute name optionally  qualified
+                 by a relation name
+
+
+        9.0  INTERACTIVE COMMAND DESCRIPTIONS
+
+        Function:
+        _________
+
+        Create a relation file
+
+
+        Format:
+        _______
+
+        create <rname> ( <alist> ) <size>
+
+
+        Rules:
+        ______
+
+             1.  <rname> is the name of the relation file
+
+             2.  <alist> is a list of attribute definitions  of  the
+                 form:
+
+                   <aname> { char | num } <size>
+
+                 where:
+
+                 1.  <aname> is the name of the attribute
+
+                 2.  the type of the attribute is either  "char"  or
+                     "num"
+
+                 3.  <size> is the number of bytes allocated to  the
+                     attribute value
+
+
+             3.  <size> is the maximum number of tuples the file  is
+                 to hold
+
+
+
+        Example:
+        ________
+
+        create checks (
+            number      num     4
+            date        char    8
+            payee       char    20
+            amount      num     8
+            category    char    5
+        ) 200
+
+        This command creates a relation file named "checks.sdb" with
+        attributes   "number",   "date",   "payee",   "amount",  and
+        "category" and space to store 200 tuples.
+
+
+        Function:
+        _________
+
+        Insert tuples into a relation
+
+
+        Format:
+        _______
+
+        insert <rname>
+
+
+        Rules:
+        ______
+
+             1.  <rname> is the name of a relation
+
+             2.  the user will be prompted for  the  values  of  the
+                 attributes for the tuple to be inserted
+
+             3.  a  null  response  to  an  attribute  prompt   will
+                 terminate tuple entry
+
+             4.  if a null value is desired, a single space  can  be
+                 entered
+
+
+
+        Function:
+        _________
+
+        Delete tuples from a set of relations
+
+
+        Format:
+        _______
+
+        delete <rse> ;
+
+
+        Rules:
+        ______
+
+             1.  <rse> is a tuple selection expression
+
+             2.  selected tuples are deleted
+
+
+
+        Example:
+        ________
+
+        delete checks where category = "junk";
+
+
+
+        Function:
+        _________
+
+        Update the values of selected attributes in selected tuples
+
+
+        Format:
+        _______
+
+        update { <attrs> | * } from <rse> ;
+
+
+        Rules:
+        ______
+
+             1.  <attrs> is a list of attribute names to be updated
+
+             2.  * means all attributes
+
+             3.  <rse> is a tuple selection expression
+
+             4.  for each  set  of  selected  tuples,  the  user  is
+                 prompted for new values for the selected attributes
+
+             5.  a null response to an attribute prompt will  retain
+                 the previous attribute value
+
+             6.  if a null value is desired, a single space  can  be
+                 entered
+
+
+
+        Example:
+        ________
+
+        update amount,category from checks where number > 10;
+
+
+        Function:
+        _________
+
+        Print a table of values of selected attributes
+
+
+        Format:
+        _______
+
+        print [ using <fname> ] { <attrs> | * } from  <rse>  [  into
+        <fname> ] ;
+
+
+        Rules:
+        ______
+
+             1.  using  <fname>  indicates  output  using   a   form
+                 definition file (.FRM)
+
+             2.  <attrs> is a list of attribute names to be printed
+
+             3.  * means all attributes
+
+             4.  <rse> is a tuple selection expression
+
+             5.  <fname> is the name of an file to which  the  table
+                 will be output (.TXT)
+
+             6.  if the output file name is omitted,  output  is  to
+                 the terminal
+
+             7.  for each set of selected tuples, a table  entry  is
+                 printed containing the selected attributes
+
+
+
+        Example:
+        ________
+
+        print payee,amount from checks where category = "junk";
+
+
+        Function:
+        _________
+
+        Import tuples from a file into a relation
+
+
+        Format:
+        _______
+
+        import <fname> into <rname>
+
+
+        Rules:
+        ______
+
+             1.  <fname> is the name of the input file (.DAT)
+
+             2.  the input file contains the  values  of  the  tuple
+                 attributes with each on a separate line
+
+             3.  <rname> is the name of a relation
+
+             4.  tuples are appended to the named relation
+
+
+
+        Function:
+        _________
+
+        Export tuples from a relation into a file
+
+
+        Format:
+        _______
+
+        export <rname> [ into <fname> ] ;
+
+
+        Rules:
+        ______
+
+             1.  <rname> is the name of a relation
+
+             2.  <fname> is the name of the output file (.DAT)
+
+             3.  if the output file name is omitted,  output  is  to
+                 the terminal
+
+             4.  tuples are written to  the  output  file  with  one
+                 attribute value per line
+
+
+
+        Function:
+        _________
+
+        Extract the definition of a relation into a file
+
+
+        Format:
+        _______
+
+        extract <rname> [ into <fname> ] ;
+
+
+        Rules:
+        ______
+
+             1.  <rname> is the name of a relation
+
+             2.  <fname> is the name of the output file (.DEF)
+
+             3.  if the output file name is omitted,  output  is  to
+                 the terminal
+
+             4.  the definition of the relation is  written  to  the
+                 output file
+
+
+
+        Function:
+        _________
+
+        Compress a relation file
+
+
+        Format:
+        _______
+
+        compress <rname>
+
+
+        Rules:
+        ______
+
+             1.  <rname> is the name of a relation file
+
+             2.  tuples are copied toward the front of the  relation
+                 file  such  that  any  space  freed  by  previously
+                 deleted tuples becomes adjacent to the  free  space
+                 at the end of the file, thus becoming available for
+                 use in inserting new tuples
+
+
+
+        Function:
+        _________
+
+        Sort a relation file
+
+
+        Format:
+        _______
+
+        sort <rname> by <sname> { , <sname } ...  ;
+
+
+        Rules:
+        ______
+
+             1.  <rname> is the name of a relation file
+
+             2.  <sname> is the name of  an  attribute  to  sort  on
+                 followed optionally by "ascending" or "descending"
+
+             3.  if a sort order  is  not  specified,  ascending  is
+                 assumed
+
+             4.  tuples within the  relation  are  sorted  in  place
+                 using the attributes indicated
+
+
+
+        Function:
+        _________
+
+        Define a macro
+
+
+        Format:
+        _______
+
+        define <mname>
+
+
+        Rules:
+        ______
+
+             1.  <mname> is the name of the macro being defined
+
+             2.  if a macro with the specified name already  exists,
+                 it is replaced
+
+             3.  after entering the define command, definition  mode
+                 is entered
+
+             4.  definition  mode  is  indicated   by   the   prompt
+                 "SDB-DEF>"
+
+             5.  all lines typed in definition mode are added to the
+                 macro definition
+
+             6.  a blank line terminates definition mode
+
+             7.  a macro can be deleted by entering a blank line  as
+                 the only line in the definition
+
+             8.  after a macro is defined, every  occurance  of  the
+                 macro name is replaced by the macro definition
+
+
+
+        Function:
+        _________
+
+        Show a macro definition
+
+
+        Format:
+        _______
+
+        show <mname>
+
+
+        Rules:
+        ______
+
+             1.  <mname> is the name of a macro whose definition  is
+                 to be shown
+
+
+
+        Function:
+        _________
+
+        Print a short help message
+
+
+
+        Format:
+        _______
+
+        help
+
+
+        Rules:
+        ______
+
+             1.  (none)
+
+
+
+        Function:
+        _________
+
+        Exit from SDB
+
+
+        Format:
+        _______
+
+        exit
+
+
+        Rules:
+        ______
+
+             1.  (none)
+
+
+
+        10.0  PROGRAM INTERFACE
+
+        SDB provides a callable program interface to allow  programs
+        written  in  DECUS-C  to access relation files.  In order to
+        use the call interface, the users program should  be  linked
+        with  the SDBUSR.OBJ object library.  Also, additional stack
+        space should be allocated at link  time  using  the  /BOTTOM
+        qualifier  on  the link command.  /BOTTOM:3000 seems to work
+        well, but it is probably possible to get away with less.
+
+        Example:
+        ________
+
+        #include <stdio.h>
+        #include "sdb.h"
+
+        main()
+        {
+            DB_SEL *sptr;
+            char payee[100],amount[100];
+
+            /* setup retrieval */
+            if ((sptr = db_retrieve("checks where amount > 25.00")) == NULL) {
+                printf("*** error: %s ***\n",db_ertxt(dbv_errcode));
+                exit();
+            }
+
+            /* bind user variables to attributes */
+            db_bind(sptr,"checks","payee",payee);
+            db_bind(sptr,"checks","amount",amount);
+
+            /* loop through selection */
+            while (db_fetch(sptr))
+                printf("%s\t%s\n",payee,amount);
+
+            /* finish selection */
+            db_done(sptr);
+        }
+
+
+        Function:
+        _________
+
+        Setup a tuple retrieval context
+
+
+        Format:
+        _______
+
+        dbptr = db_retrieve(sexpr [ ,arg ]...)
+
+
+        Rules:
+        ______
+
+             1.  sexpr is a pointer to a string containing an rse
+
+             2.  arg is a "printf" argument
+
+             3.  dbptr is a database context pointer
+
+             4.  db_retrieve returns NULL on errors
+
+             5.  on errors, the error code is in dbv_errcode
+
+
+
+        Function:
+        _________
+
+        Fetch the next set of tuples from a retrieval context
+
+
+        Format:
+        _______
+
+        db_fetch(dbptr)
+
+
+        Rules:
+        ______
+
+             1.  dbptr is a database context pointer
+
+             2.  updates the values of all bound user variables
+
+             3.  db_fetch returns FALSE if no more tuples  match  or
+                 if an error occurs
+
+             4.  on errors, the error code is in dbv_errcode
+
+
+
+        Function:
+        _________
+
+        Update the current tuple within a retrieval context
+
+
+        Format:
+        _______
+
+        db_update(dbptr)
+
+
+        Rules:
+        ______
+
+             1.  dbptr is a database context pointer
+
+             2.  db_update returns FALSE if an error occurs
+
+             3.  on errors, the error code is in dbv_errcode
+
+
+
+        Function:
+        _________
+
+        Store a new tuple within a retrieval context
+
+
+        Format:
+        _______
+
+        db_store(dbptr)
+
+
+        Rules:
+        ______
+
+             1.  dbptr is a database context pointer
+
+             2.  db_store returns FALSE if an error occurs
+
+             3.  on errors, the error code is in dbv_errcode
+
+
+
+        Function:
+        _________
+
+        Bind a user variable to  the  value  of  a  tuple  attribute
+        within a retrieval context
+
+
+        Format:
+        _______
+
+        db_bind(dbptr,rname,aname,value)
+
+
+        Rules:
+        ______
+
+             1.  dbptr is a database context pointer
+
+             2.  rname is a pointer to the relation name
+
+             3.  aname is a pointer to the attribute name
+
+             4.  value is a pointer to a character array to  receive
+                 the attribute value
+
+             5.  db_bind returns FALSE if an error occurs
+
+             6.  on errors, the error code is in dbv_errcode
+
+
+
+        Function:
+        _________
+
+        Get the value  of  a  tuple  attribute  within  a  retrieval
+        context
+
+
+        Format:
+        _______
+
+        db_get(dbptr,rname,aname,value)
+
+
+        Rules:
+        ______
+
+             1.  dbptr is a database context pointer
+
+             2.  rname is a pointer to the relation name
+
+             3.  aname is a pointer to the attribute name
+
+             4.  value is a pointer to a character array to  receive
+                 the attribute value
+
+             5.  db_get returns FALSE if an error occurs
+
+             6.  on errors, the error code is in dbv_errcode
+
+
+
+        Function:
+        _________
+
+        Put the value  of  a  tuple  attribute  within  a  retrieval
+        context
+
+
+        Format:
+        _______
+
+        db_put(dbptr,rname,aname,value)
+
+
+        Rules:
+        ______
+
+             1.  dbptr is a database context pointer
+
+             2.  rname is a pointer to the relation name
+
+             3.  aname is a pointer to the attribute name
+
+             4.  value is a pointer to the new value
+
+             5.  db_put returns FALSE if an error occurs
+
+             6.  on errors, the error code is in dbv_errcode
+
+
+
+        Function:
+        _________
+
+        Discontinue usage of a retrieval context
+
+
+
+        Format:
+        _______
+
+        db_done(dbptr)
+
+
+        Rules:
+        ______
+
+             1.  dbptr is a database context pointer
+
+
+
+        Function:
+        _________
+
+        Translate an error code to an error message text
+
+
+        Format:
+        _______
+
+        db_ertxt(errcode)
+
+
+        Rules:
+        ______
+
+             1.  errcode is an SDB error code
+
+             2.  db_ertxt returns a pointer  to  the  error  message
+                 text
+
+
+

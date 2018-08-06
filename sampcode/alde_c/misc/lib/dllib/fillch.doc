@@ -1,0 +1,39 @@
+
+
+       NAME
+               fillch -- fill a string with a character
+
+       SYNOPSIS
+               void fillch(dest, chr, qty);
+               char *dest      destination string
+               char chr        character to place
+               int qty         number to place
+
+       DESCRIPTION
+       This function fills string "dest" with "qty" number of characters
+       "chr".  The destination string must be large enough to hold the
+       indicated quantity, as no check is made. In addition, a NULL
+       is not placed after the last character.
+
+       EXAMPLE
+               char string[20];
+               fillch(string, 'A', 19);
+               string[20] = NULL;
+
+        makes a usable string of 19 "A" characters.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       This function is found in SMDLx.LIB for the Datalight Compiler.
+

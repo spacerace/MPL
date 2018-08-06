@@ -1,0 +1,9 @@
+#--------------------
+# CHECKER3 make file
+#--------------------
+
+checker3.obj : checker3.c
+     cl -c -G2sw -W3 checker3.c
+
+checker3.exe : checker3.obj checker3.def
+     link checker3, /align:16, NUL, os2, checker3

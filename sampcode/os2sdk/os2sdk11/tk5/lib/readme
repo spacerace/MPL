@@ -1,0 +1,2 @@
+To place "opendlg.lib" in this directory, "cd ..\opendlg" and "make opendlg".
+To place "spyhook.lib" in this directory, "cd ..\spy" and "make spy(hook)".

@@ -1,0 +1,96 @@
+
+
+    Bug.h     Copyright (c) 1985   Dr. Bob's Utilities
+    This file  may be used freely without royalty or fee.
+    No warranty of any kind is expressed or implied.
+
+                   Dr. Bob's Utilities
+                   444 Maple Lane
+                   St. Paul,  MN  55112
+
+    Dr. Bob can be reached at
+
+                   Terrapin Station BBS
+                   (612) 623-0152
+                   HOURS - 24 hours a day, every day
+
+
+    Bug.h is a set of macro definitions that allow you fairly fine
+    control over what parts of a program execute.  It allows you to
+    designate portions of code and printf statements that will execute
+    only when you are debugging, and portions that will execute only
+    when you are NOT debugging.  Debugging messages can be left in the
+    source code at no cost in object size.  Time consuming portions of
+    code that are known to work well can be skipped during debugging and
+    will automatically be included in a regular compile.  Messages that
+    identify functions or specific locations as well as the value of
+    variables will automatically be included when debugging and ignored
+    when not debugging.
+
+    The compiler directive -D is used to tell the compiler when you
+    are debugging; when debugging use:
+
+                cc  -ddebug  file.c
+
+    When through debugging, use:
+
+                cc  file.c
+
+    Put the following include as the last of your include statements:
+
+    #include bug.h
+
+    Then you can use the following macros to set up your file and the
+    compiler will handle the details.
+
+
+    The following two macros take the place of printf() statements
+    you would normally use for debugging.  All the normal printf()
+    functions are supported.
+    
+    DB_PRINT(stuff);  prints stuff only when Debug is defined
+    NDB_PRINT(stuff);  prints stuff only when Debug is NOT defined
+
+    Inside of parends is exactly like inside of parends in printf()
+    EXCEPT!  you must use COMMA instead of actual ","  The word
+    COMMA must be in capital letters (So must DB_PRINT etc.)
+
+    Example:   DB_PRINT("This will be printed only when debugging\n");
+               DB_PRINT("x = %d   temp = %s" COMMA x COMMA temp);
+
+
+    The following two macros allow sections of code to be ignored
+    or executed depending on whether you are debugging or not.
+
+    DEBUG(
+          statement;
+          statement;
+          etc.
+          )       statements execute only when debug is defined
+
+    N_DEBUG(
+          statement;
+          statement;
+          etc.
+          )     statements execute only when debug is NOT defined
+
+    Your compiler may limit the amount of material allowed between
+    the parends of these statements.  You may get a "Macro too long"
+    error.  If so, split the stuff up into several DEBUG( sections.
+
+
+    The following macro provides an easy way to tell how far a program
+    gets in execution. the "msg" in HERE is usually a label or the
+    name of the current function.
+
+    HERE("msg")  put anywhere in source file will print the
+    msg, source file name and line number on screen if debug is defined
+    ... otherwise HERE() is ignored & uses no memory.
+
+
+    see bug.c for examples of how to use these macros
+
+    have fun,
+
+                 Dr. Bob
+

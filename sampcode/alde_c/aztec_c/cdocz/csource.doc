@@ -1,0 +1,128 @@
+CSOURCE V1.0
+------------
+
+     Thanks for using CSOURCE.  I'm sure it will prove as useful to you
+as it does for me.  CSOURCE requires very little printed documentation.  
+Most of the help you will need can be obtained through CSOURCE itself.  The
+following is a brief summary of how to start CSOURCE and a few other pieces
+of information that you may find useful.
+
+
+GETTING STARTED
+---------------
+
+     To get started, type CSOURCE at the DOS prompt.  You will be presented
+with an input screen.  Pressing F2 displays a help screen (after first
+displaying an introduction screen) showing the various ways possible to
+enter source files.  There are basically three ways to enter files:
+
+     1.  C>  CSOURCE
+         --- No command line parameters.  When CSOURCE sees that there are
+             no command line parameters, you are taken directly to the
+             input screen where source files are entered manually.
+
+     2.  C>  CSOURCE FILES.LST
+         --- A file name is passed as a command line parameter.  Since there
+             are no wildcard characters in the file name, CSOURCE assumes
+             that all the files you wish entered are contained in file
+             FILES.LST.  Note that this file name could have contained a full
+             drive and path name.  For example, "c:\directory\files.lst"
+             would have been perfectly ok.
+
+     3.  C>  CSOURCE *.c
+         --- The command line parameter contains wildcard characters.  CSOURCE
+             will therefore include all files with a ".c" extension.  A drive 
+             and path name could be included.  For example,  "c:\directory\*.c"
+             will include all ".c" files in the "directory" directory.
+
+
+INPUT SCREEN
+------------
+
+     Only the first method listed above takes you to the input screen.  The
+other two causes the input screen to be bypassed.  Once here, entering files
+is simple.  If a file name is entered without a drive letter or path name,
+the current working directory is searched.  Otherwise, the path name is
+searched.
+     Wildcard characters are permitted.  Entering "*.c" causes the current
+working directory to be searched for all ".c" files.  Entering "c:\*.c"
+causes the root directory to be searched for all ".c" files.  When entering
+wildcard characters, after the search for files is completed, a message will
+be displayed telling you how many files were found.
+     If a file cannot be found or a subdirectory does not exist, a message 
+will pop up informing you of a problem.  Once the message disappears, you
+are free to make any changes you wish to the file name.  You can edit the
+line of input using the arrow keys and backspace and delete keys.
+     You should also notice a status line on the bottom of the screen giving
+more directions.
+     The limit on the number of source files that can be entered is 500.
+
+
+
+
+MAIN MENU
+---------
+
+     After the input screen is completed or if you chose to enter files by
+one of the last two methods listed above, you are taken to the main menu
+screen.  All the help you will need can be obtained by positioning the cursor
+over a particular field of input and pressing the F1 key.  CSOURCE keeps 
+track of where you are in the menu and will display the appropiate help
+message.
+     One area that may not be clear is extractions.  CSOURCE lets you extract
+portions of you code to the screen, printer or a file of your choice.
+After you press the F10 key to tell CSOURCE that you are done, you will be
+given the chance to extract portions of your source code (assuming you
+selected the extract option).  It will look as follows:
+
+     Source File:  c:\directory\filename.ext
+
+     Extraction #1:  
+
+You are allowed 10 extractions.  Enter extractions as follows (where the
+numbers are line numbers):
+
+     Extraction #1:  45:90    (or)  45-90
+     Extraction #2:  121:209  (or)  121-209
+     Extraction #3:  300:415  (or)  300-415
+     Extraction #4:  (Press <return> to tell CSOURCE you're done)
+
+If you entered more than one source file, you will be given the chance to
+extract code from each file.
+
+
+ERROR CHECKING
+--------------
+
+     CSOURCE does some error checking on your source code.  It will tell
+you if you have mismatched braces, mismatched single or double quotation
+marks and mismatched comment symbols.  Since most compilers do not allow
+nested comments, CSOURCE will not allow it either.  If you have mismatched
+braces, CSOURCE will display a message telling you so but will keep going.  
+Any other error causes CSOURCE to stop and tell you the problem and the line
+number(s) of occurrence.  You will then be taken back to the DOS prompt to
+correct the error and to try again.
+
+
+SOURCE CODE AVAILABLE
+---------------------
+
+     If you are a first time user, please press F2 at the input screen.  The
+shareware nature of this program will be explained as well as how to get a
+copy of the source code.  If you have any further questions, you can contact
+me at the address listed or through Compuserve.  Thanks again for using
+CSOURCE.
+
+
+FOR YOUR INFORMATION
+--------------------
+
+     CSOURCE was written entirely in C and contains approximately 3,500 lines
+of code.  The version you are currently using was compiled under Aztec C.
+I am in the process of converting to Turbo C.
+
+
+
+
+
+

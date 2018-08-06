@@ -1,0 +1,10 @@
+;------------------------------------
+; THREADS.DEF module definition file
+;------------------------------------
+
+NAME           THREADS   WINDOWCOMPAT
+
+DESCRIPTION    'Multi-Thread Demo Program by Charles Petzold, 1988'
+PROTMODE
+HEAPSIZE       1024
+STACKSIZE      4096

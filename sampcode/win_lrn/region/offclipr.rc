@@ -1,0 +1,7 @@
+#include <style.h>
+#include "offclipr.h"
+
+OFFCLIP MENU
+    BEGIN
+         MENUITEM  "&Region",    IDM_BOX
+    END

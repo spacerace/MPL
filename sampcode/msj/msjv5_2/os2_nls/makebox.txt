@@ -1,0 +1,4 @@
+MKB
+MKB0000I: Command Line Arguments to  %1: %2 %3 %4
+ 
+

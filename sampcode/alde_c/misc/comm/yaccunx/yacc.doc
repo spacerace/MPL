@@ -1,0 +1,64 @@
+        yacc -- LALR(1) Parser Generator
+
+
+        NAME:  yacc - LALR(1) Parser Generator
+
+        SYNOPSIS:
+
+                yacc [options] file
+
+        DESCRIPTION:
+
+                Yacc is the full UNIX V7 LALR(1) parser generator.  This
+                version has smaller allocations for the work tables, but
+                is otherwise exactly  the  UNIX  version.   For  further
+                documentation  on the use and operation of yacc, see the
+                UNIX documentation.  The following options are defined:
+
+                -h              Generate "file.H" containing  the  token
+                                code  #defines for your lexical analyzer
+                                to #include.
+
+                -i              Generate "file.I" containing a  descrip-
+                                tion   of   the   parser   as   to   the
+                                shift-reduce  actions,  and  a  set   of
+                                informative statistics about parser con-
+                                struction.
+
+        DIAGNOSTICS:
+
+                Usage ...
+
+                        Illegal  options  cause  an   extensive   "help"
+                        message to be printed.
+
+                Many other fairly descriptive error messages.
+
+        BUGS:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

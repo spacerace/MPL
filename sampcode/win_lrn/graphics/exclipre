@@ -1,0 +1,6 @@
+
+exclipre.obj: exclipre.c
+    cl  -c -AS -Gsw -Os -Zpe -W2 exclipre.c
+
+exclipre.exe: exclipre.obj exclipre.def
+    link4 /align:16 exclipre,,nul,slibw/NOE,exclipre.def

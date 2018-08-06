@@ -1,0 +1,39 @@
+
+
+
+
+        NAME
+                iscons -- is file descriptor the console
+
+        SYNOPSIS
+                r = iscons(fd);
+                BOOL r;
+                FILE *fd;
+
+
+        DESCRIPTION
+        The specified file descriptor (not file handle!) is tested
+        to see if it refers to the console device.  TRUE (not 0)
+        is returned if it does, and FALSE (0) otherwise.
+        This is a test primarily aimed at detecting if stdin or
+        stdout have been redirected away from the default console.
+
+
+
+        EXAMPLE
+                if(iscons(stdin) puts("stdin is the keyboard");
+                else ("stdin is probably a file");
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler
+

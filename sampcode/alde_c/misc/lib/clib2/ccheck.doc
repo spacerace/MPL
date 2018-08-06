@@ -1,0 +1,198 @@
+
+
+
+     ccheck			MS-DOS 2.x		      ccheck
+
+
+
+     NAME
+	  ccheck - C program checker
+
+     SYNOPSIS
+	  ccheck [-q] [-v] [files ...]
+
+     EXAMPLE
+	       ccheck foo.c >foo.err
+
+     DESCRIPTION
+	  Ccheck checks	C programs for correctly matching brackets of
+	  all kinds, including quotes and comment brackets, checks
+	  that the indentation of matching brackets also matches, and
+	  checks for symptoms of 3 kinds of errors that	the C compiler
+	  allows without warning: "dangling else" errors where an else
+	  is bound to the wrong	preceding if, nested comments, where
+	  the first close-comment bracket prematurely ends the outer
+	  comment, and the use of assignment ('=') where equality-test
+	  ('==') was meant.  It	is meant to be run as a	pre-check on C
+	  programs before calling the compiler.	 Its virtues are that
+	  it allows you	to weed	out some trivial syntactic errors
+	  faster; for the errors it detects it produces	better error
+	  messages than	the compiler; and it detects the errors
+	  mentioned above that the compiler ignores.
+
+	  The indentation rules	it applies are that the	indentation of
+	  the first non-white character	on the line holding an opener
+	  should match that on the line	holding	the matching closer.
+	  These	rules are fairly weak (e.g. they are compatible	with
+	  but do not enforce the Ingres	format standard), though they
+	  may still conflict with your own habits.  The	-q (quiet)
+	  option suppresses messages classed as	warnings, which
+	  includes those about mismatched indentations.	 The -v
+	  (verbose) option prints more information -- it shows what is
+	  on its internal stack	at the time an error is	detected.  It
+	  is probably only of real use for debugging ccheck itself.
+
+	  The distinction between warnings and errors is somewhat
+	  arbitrary.  Because C	allows certain errors it would be
+	  inappropriate	here to	make the distinction between
+	  compilable and non-compilable	programs.  Basically only
+	  indentation mismatches are warnings, and the symptoms	of
+	  dangling elses or using assignment ('=') instead of equality
+	  ('==') are treated as	errors.	 The program will always print
+	  some message if you have an error involving mismatched
+	  brackets of some kind, and will pass any legal program if
+	  its indentation is also correct, unless '=' is used in the
+	  top level of a condition expression.	For cases in between
+	  it tries hard	but may	make mistakes, though if you are
+	  aiming for a properly	indented program you can be sure that
+	  an error means that something	is wrong.
+
+
+
+
+     Page 1					      (printed 1/9/83)
+
+
+
+
+
+
+     ccheck			MSs-DOS 2.x		      ccheck
+
+
+
+	  When it detects signs	of a bracket mismatch it makes a
+	  decision on the spot about the most likely underlying	cause.
+	  It does not wait for more evidence to	disambiguate this, so
+	  on the occasions it is wrong,	not only are the messages
+	  inappropriate	to some	degree,	but several messages may be
+	  produced concerning what is really a single (unrecognized)
+	  error.  The most common example of this is if	you have the
+	  wrong	indent on a closing brace such that it matches an
+	  earlier opening brace, ccheck	assumes	first that there is a
+	  missing closing brace, and then when it finds	the second
+	  closing brace	that this has no matching opening brace	(this
+	  having been already wrongly accounted	for).  The summary it
+	  gives	at the end tells you whether there was really a	net
+	  imbalance of brackets, which may help	sort out these cases.
+
+	  Ccheck was written as	a result of the	following
+	  observations.
+	   1)  In Unix,	modularity suggests that it is appropriate to
+	  have different programs with different special expertise
+	  where	other systems would cram them all into one program.
+	  Thus lint incorporates special knowledge about type-checking
+	  and portability considerations that would be inappropriate
+	  in a compiler.  Ccheck like lint takes advantage of the fact
+	  that since it	is not the compiler it can be wrong some of
+	  the time without preventing anyone from doing	anything.
+	   2)  C has, in my opinion, some bad choices in its syntax
+	  that cause frequent errors by	users.	It turns out, though,
+	  that these can largely be checked for	cheaply, which
+	  alleviates the original poor design choice.  These are:
+	       a) Not supporting nested	comments (nor warning about
+	  them in the compiler).
+	       b) Not having an	"endif"	(or "fi") closer to terminate
+	  if statements, thus leaving users open to the	dangling else
+	  problem.  (This is the problem that if you have nested if
+	  statements the following else	will get bound to the nearest
+	  preceding one, which is not always the intuitively
+	  reasonable one.)  This is especially troublesome, as it
+	  means	among other things that	if you modify a	program	by
+	  adding an else clause	to an existing if statement, you may
+	  have to modify (by adding braces) not	the if statement to
+	  which	you are	attaching the else, but	a nested if statement
+	  acting as its	"then" clause.
+	       c) The use of '=' for assignment, following Fortran's
+	  bad usage.  It seems to be the case that both	'=' and	'=='
+	  get seen and mentally	read as	"equals" so that it is hard to
+	  spot if you write '='	for '==' in conditionals, an error
+	  that may happen either because of the	language-promoted
+	  confusion itself, or because of a typing slip	(which is then
+	  hard to spot).
+	   3) The C compiler produces outstandingly unhelpful error
+	  messages as a	rule, from the point of	view of	a user who
+	  wants	to make	corrections as fast as possible.  Once past
+
+
+
+     Page 2					      (printed 1/9/83)
+
+
+
+
+
+
+     ccheck			MS-DOS 2.x		      ccheck
+
+
+
+	  the beginner stage however, a	user can usually do all	right
+	  by ignoring the text of the error message, which almost
+	  never	tells her/him what to correct, and attending to	the
+	  line-number:	generally when your attention is directed to
+	  only a line or two you can tell what is wrong.  This breaks
+	  down when the	compiler fails to generate anything like the
+	  helpful line number.	This is	usually	however	in cases of
+	  failure to match brackets of some sort -- something which is
+	  easy for another program to check.  Furthermore attending to
+	  the user's indentation usually allows	accurate diagnoses and
+	  helpful messages to be generated in just these cases.
+
+	  Ccheck, then,	attempts to address these points largely by
+	  checking bracket matches and using indentation to guess what
+	  the real problem was -- whether a missing opener, a missing
+	  closer, wrong	indentation, or	some other mistake such	as a
+	  spurious character.  Like the	compiler, it has only a	fair
+	  chance of recovering after an	error and commenting
+	  intelligently	on the remaining code.	However	its relatively
+	  fast running time means that correcting only the first error
+	  in each cycle	is not too time	consuming.
+
+     BUGS
+	  It inflicts its own idea of good indentation,	which neither
+	  matches a recognized standard	exactly	nor your own
+	  practices.  It can generate several error descriptions where
+	  there	is only	one error -- one that it does not describe.
+
+	  It does not deal with	the preprocessor intelligently.	 There
+	  are two kinds	of case	to note:
+	   1) defines may themselves not be good C e.g.
+	       #define ctrl(letter) ('letter' &	077)
+	  will work ok in the program but will draw "bad character
+	  constant" from ccheck. Similarly, though more	questionable,
+	  you might define your	own opener and closer e.g.
+	       #define then {
+	       #define endif }
+	   2)  Some uses of #ifdef will	confuse	ccheck,	for instance
+	  if alternative if-condition lines are	given, controlled by
+	  #ifdef ... #else ccheck will see them	both.  Similarly using
+	  "#ifdef comment" to comment out parts	of the text in order
+	  to overcome the lack of nested comments in C will draw fire
+	  if the commented out section is not legal C.
+
+	  Do-while loops within	an "if"	clause result in the "if"
+	  being	forgotten.
+
+     AUTHOR
+	  Steve	Draper
+
+     PROVIDER
+	  Jeff Martin
+
+
+
+     Page 3					      (printed 1/9/83)
+
+
+

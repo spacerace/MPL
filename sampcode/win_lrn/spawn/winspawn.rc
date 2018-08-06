@@ -1,0 +1,30 @@
+#include <windows.h>
+#include  "WinSpawn.h"
+
+
+WinSpawn MENU
+    BEGIN
+        POPUP "&Choose Application"
+            BEGIN
+                MENUITEM "&MS-DOS dir | sort",              IDM_DOSDIRSORT
+                MENUITEM "MS-DOS &type winspawn.c",         IDM_DOSTYPE
+                MENUITEM "&Windows Clock",                  IDM_CLOCK
+                MENUITEM "&Notepad winspawn.c",             IDM_NOTEPAD
+                MENUITEM "&Reply Using ReplyMessage",       IDM_REPLY
+                MENUITEM "Reply Regular &Spawn",            IDM_REPLYREGULAR
+                MENUITEM "&Spawn All",                      IDM_SPAWNALL
+            END					            
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+EnterPointDlg DIALOG LOADONCALL MOVEABLE DISCARDABLE 13, 14, 104, 72
+STYLE WS_DLGFRAME | WS_POPUP
+BEGIN
+     LTEXT "Program To Spawn",     -1,     2,  4, 76, 10
+     EDITTEXT             IDD_X,           2, 14,100, 12, ES_AUTOHSCROLL
+     LTEXT "Command Line",         -1,     2, 28, 76, 10
+     EDITTEXT             IDD_Y,           2, 42,100, 12, ES_AUTOHSCROLL
+     DEFPUSHBUTTON "&OK", IDOK,           27, 56, 50, 14, WS_GROUP
+END
+
+

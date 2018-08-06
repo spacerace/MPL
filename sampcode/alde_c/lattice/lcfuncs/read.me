@@ -1,0 +1,118 @@
+LCFUNCS.ARC - Access Lattice library from Assembler programs
+
+You should have the following files in LCFUNCS.ARC:
+
+LATTICE  MAC    19274   3-21-87   1:05a
+CLINK    BAT       70   3-15-87   9:35p
+CLINKM   BAT       83   3-15-87   9:35p
+SKELETON LC       782   3-18-87   8:38p
+LATTICE  ASM     2416   3-18-87   8:30p
+CALC     ASM     5006   3-21-87   1:22a
+SAVINT   ASM      915   3-14-87  11:45p
+GETINT   ASM      920   3-14-87  11:45p
+UNWS     ASM     3492   4-11-87   2:18p
+
+Besides the above files, you must have the following LICENSED software:
+
+Lattice C 2.14 libraries LCS.LIB and LCMS.LIB
+Microsoft Macro Assembler  (tested with version 3.0)
+Microsoft Linker
+exe2bin.exe
+
+The Following is a brief description of the above files.  Before I get
+into the description of the files, an editorial comment:
+
+-----------------------------------------------------
+The one thing I can't stand about Public domain and shareware programs
+is the format of the documentation included with the program.  Shareware
+authors often will send a printed, and possibly even bound copy of the
+documentation, which I feel is well worth the small fee they charge.  For
+those of you who don't offer this service, the least you can do is to keep
+the files in STANDARD ASCII format.  What I mean is NO CONTROL characters,
+expand all your tabs, (they get shrunk with ARC anyways), and NO pretty line
+graphics please!  There are those of us who don't have IBM graphics
+printers, or who want to look at the documentation with our favorite (or
+handy) editor.  I know indexes are great, but I'd rather sacrifice them in
+order that I may format MY printer output to MY standards.  Cut out the page
+numbers.  The programs in this library do not have any un-standard
+characters, and all tabs are expanded to spaces so us less fortunate ones
+can continue to use editors such as Turbo Pascal, or SideKick which barf at
+tabs.  Enclosed is a short program UNWS.ASM, which cuts out all control
+characters except CR and LF.  It also expands tabs.  End of editorial.
+-----------------------------------------------------
+
+LATTICE.MAC
+
+This is the main engine for interfacing your assembler programs to Lattice
+C 2.14 library.  It contains dozens of macroes ranging from proper segment
+naming to advanced floating point IO.  there are plenty of comments.  You may
+want to print this file as it has detailed information on how to implement
+Lattice functions, and also gives a description of each of the macros.
+
+NOTE:  If you aren't using Floating-Point, you can disable all related
+macroes by defining a the constant NOMATH before including LATTICE.MAC.
+
+--
+CLINK.BAT
+
+Sample batch file for linking NON-FLOATING-POINT programs to the Lattice
+library.  This batch file assumes that you have a directory 'C:\LATTICE'
+which contains your Lattice library.
+
+--
+CLINKM.BAT
+
+Same as above, but for numeric applications
+
+--
+SKELETON.LC
+
+This is a basic skeleton of an assembler program that will access the
+Lattice Library.  In this skeleton, Console Input and Output are opened
+as two different files.
+
+--
+LATTICE.ASM
+Demo program inputs two Floting-Point numbers, performs some math functions,
+and prints the results.  There is some 8087 dependent stuff here which can
+be deleted if you don't have an 8087.
+
+--
+CALC.ASM
+Demo program simulates a desk calculator.  Functions are + - / * ^ and
+A)rctangent, and sQuare root.  There is an accumulator so you can do chain
+calculations.
+
+--
+SAVINT.ASM and GETINT.ASM
+Demo program saves interrupt vectors 0x80 thru 0xff to file 'D:SAVE.INT'
+The reason this program exists is because the debugger CODESMITH86 wipes
+out some interrupt vectors above 0x80 that are used by my Western Digital
+disk controller.  So, when I need to debug a program, I run SAVINT to save
+the interrupt vectors to my ram disk, and run GETINT after from the ram-disk
+so I don't have to re-boot the computer.
+
+--
+UNWS.ASM
+Program to Un-Wordstar a file.  Expands tabs out to every 8th column, and
+eliminates some control characters.  Also sets bit 7 of each character to
+zero.
+
+--------------------------------------------------------------
+If you like this program please feel free to distribute it in any way you
+choose.  All I ask is that if you use it for commercial use or distribution,
+please obtain written consent from the author.
+
+
+  Mark E Johnson
+  Johnson Brothers Wholesale Liquor Company
+  2341 University Avenue
+  St. Paul MN  55114
+
+day: 612-646-2736
+eve:     698-3686
+
+
+Lattice and Lattice C are trademarks of Lattice Corporation.
+
+

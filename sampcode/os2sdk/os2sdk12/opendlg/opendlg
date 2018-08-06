@@ -1,0 +1,86 @@
+# Makefile for OPENDLG.DLL
+# Created by Microsoft Corporation, 1989
+#
+
+# Abbreviations
+#
+ASM	= masm
+CC	= cl -Zip -W3 -c -u -J -Asnw -G2sc -Od -NT
+LF	= /far /align:16 /map /nod /codeview
+OBJS	= tool.obj tool1.obj toola.obj data.obj\
+	  file.obj file1.obj init.obj gpi.obj
+
+# Inference Rules
+#
+
+all: opendlg.dll opendlg.lib ..\lib\opendlg.lib ..\include\opendlg.h ..\dll\opendlg.dll
+
+
+.asm.obj:
+    $(ASM) $*.asm;
+
+.c.obj:
+    $(CC) _TEXT $*.c
+
+# Resources
+#
+opendlg.res:	opendlg opendlg.dlg opendlg.h opendlg.rc tool.h
+    rc -r opendlg.rc
+
+# Import Libraries
+#
+opendlg.lib:	opendlg opendlg.def
+    implib $*.lib $*.def
+
+# MASM files
+#
+toola.obj:	opendlg toola.asm
+
+# C files
+#
+tool.obj:	opendlg tool.c
+
+data.obj:	opendlg data.c
+    $(CC) _INIT data.c
+
+gpi.obj:	opendlg gpi.c
+    $(CC) _INIT gpi.c
+
+tool1.obj:	opendlg tool1.c
+    $(CC) _INIT tool1.c
+
+init.obj:	opendlg init.c
+    $(CC) _INIT init.c
+
+file.obj:	opendlg file.c
+    $(CC) _FILE file.c
+
+file1.obj:	opendlg file1.c
+    $(CC) _FILE file1.c
+
+# Main files:  OPENDLG.DLL
+#
+opendlg.lnk:	opendlg
+    echo $(OBJS)	>  opendlg.lnk
+    echo opendlg.dll	>> opendlg.lnk
+    echo opendlg.map	>> opendlg.lnk
+    echo opendlg os2	>> opendlg.lnk
+    echo opendlg.def	>> opendlg.lnk
+
+opendlg.dll:	opendlg opendlg.def opendlg.res opendlg.lnk $(OBJS)
+    link $(LF) @opendlg.lnk
+    rc opendlg.res opendlg.dll
+    del opendlg.lnk
+
+# Files used by other apps
+#
+..\include\opendlg.h:	opendlg opendlg.h
+    copy opendlg.h   ..\include
+
+..\lib\opendlg.lib:	opendlg opendlg.lib
+    copy opendlg.lib ..\lib
+    del opendlg.lib
+
+..\dll\opendlg.dll:	opendlg opendlg.dll
+    copy opendlg.dll ..\dll
+    del opendlg.dll

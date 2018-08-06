@@ -1,0 +1,54 @@
+To run these programs:
+
+1. Run DISERVER. If you run it in a full-screen or text window, you can
+optionally turn on the verbose mode with the /v option:
+
+DISERVER /V
+
+Or, you can run the program in the DETACHed screen group with:
+
+DETACH DISERVER
+
+
+Note that DIPOP and LS will wait for you to run DISERVER if you haven't
+run it when you run them.
+
+2. Run either DIPOP or LS (or both in different windows). The options for LS
+are available with:
+
+LS -?
+
+
+To use DIPOP:
+
+You can use either the keyboard or the mouse for most operations.
+
+
+To create a directory specification:
+
+1. Select the drive by clicking left or right on the drive button, "-C-".
+2. View the directory list by clicking left or right on the directory
+   box. 
+3. To select a directory, click left on the "[..]" to move to the parent
+   directory, or click right to move to the currently displayed child.
+4. Click on the '[\]' button to jump to the root of the current drive.
+
+To build a filespec:
+1. Use the keyboard to enter characters in the filespec.
+2. You can also use '*', '\', '.' and '?' buttons to enter these
+   characters.
+3. Use the mouse to click on the attribute buttons (Directory, Read-Only)
+   to build an attribute. You can also use Alt-D, Alt-S, etc.
+
+When you're ready to see a directory press ENTER or click on the 'Enter'
+button. You can click on the 'Pause' button to pause the scrolling.
+
+
+To clear a filespec from the data entry box, click on the 'Clear' button.
+To exit the program, press Esc or click on the 'Esc' button.
+
+
+Note: there is no exception handling other to beep when the user attempts
+an illegal command. And there is no critical error exception handling.
+
+RHS

@@ -1,0 +1,13 @@
+; Definition file for LINEFRAC application
+; Created by Microsoft Corporation, 1989
+;
+NAME	LineFrac	WINDOWAPI
+
+DESCRIPTION 'OS/2 Presentation Manager LineFractal Application'
+
+STUB    'OS2STUB.EXE'
+
+CODE    MOVEABLE
+DATA    MOVEABLE MULTIPLE
+
+STACKSIZE   4096

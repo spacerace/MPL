@@ -1,0 +1,39 @@
+
+
+        NAME
+                aabort -- terminate a program
+
+        SYNOPSIS
+                aabort(code);
+                int code;     exit error code
+
+
+        DESCRIPTION
+        The program is aborted (using the common_exit() function) after sending
+        the BELL character to stderr.  By using the common_exit() routine,
+        any common exit function which has been installed will be called.
+
+
+
+
+
+        EXAMPLE
+
+                aabort(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This function is found in SMDLx.LIB for the Datalight Compiler.
+

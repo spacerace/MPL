@@ -1,0 +1,41 @@
+#
+#   NEAD Application Make file
+#
+
+#
+# Default compilation macros
+#
+
+CC= cl -Zi -W3 -DLINT_ARGS -c -G2sw -Od -Zped
+
+#
+# Default inference rules
+#
+
+.c.obj:
+    $(CC) $*.c
+
+.asm.obj:
+    $(ASM) $*.asm;
+
+.rc.res:
+    rc -r $*.rc
+
+all:nead.exe
+
+#
+# Dependencies
+#
+
+nead.res: nead.rc nead.h nead.ico
+
+nead.obj: nead.c nead.h
+
+neadea.obj: neadea.c nead.h
+
+neadfile.obj: neadfile.c nead.h
+
+nead.exe: nead.obj neadfile.obj neadea.obj nead.res nead.def nead.ico
+ link nead neadfile neadea,nead/codeview ,nead/map, os2  slibcep/nod, nead.def
+    markexe lfns nead.exe
+    rc nead.res

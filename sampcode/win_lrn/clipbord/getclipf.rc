@@ -1,0 +1,14 @@
+#include <windows.h>
+#include  "GetClipF.h"
+
+GetClipF MENU
+    BEGIN
+        POPUP "Menu"
+           BEGIN
+              MENUITEM "&GetClipboardFormatName",           IDM_GETCLIPFNAME
+           END
+        MENUITEM "\a&Help"                                  IDM_HELP  HELP
+    END
+
+
+

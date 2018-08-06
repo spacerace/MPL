@@ -1,0 +1,29 @@
+
+#
+#  Standard command line definitions
+#
+
+cp=cl -Fs -d -c -AS -Gsw -Os -Zpe
+
+#
+#  Standard inference rules
+#
+.c.obj:
+    $(cp) $*.c
+
+#
+#  The C File List
+#
+
+freeres1.obj: freeres1.c freeres1.h
+
+freeres1.res: freeres1.rc freeres1.ico freeres1.h
+    rc -r freeres1.rc
+
+freeres1.exe: freeres1.obj freeres1.res freeres1.def
+    link4 freeres1,/align:16,/map,slibw/NOE,freeres1.def
+    mapsym freeres1
+    rc freeres1.res
+    del freeres1.obj
+    del freeres1.map
+    del freeres1.sym

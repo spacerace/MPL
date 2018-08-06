@@ -1,0 +1,405 @@
+.NT
+ A NOTE ABOUT THE LESSONS in C 
+.b4-24
+.R5C4
+These were written while the author was ~Ilearning~N  the language and since
+.R6C4
+they  are  ~Ifree~N ( to  copy  and/or  distribute ) there  is  a money-back
+.R7C4
+guarantee on the accuracy of each and every statement in the lessons (!)
+.R9C4
+The  ~Idisplay~N  program was written ( in C ) in order to provide a vehicle
+.R10C4
+for displaying the lessons.
+.R12C5
+.B
+P.J.Ponzo
+.B
+Dept. of Applied Math
+.B
+Univ. of Waterloo
+.B
+Ontario N2L 3G1
+.K16,30
+[1mPonzoTUTOR
+.WNT
+   FOR WHILE and other good stuff   
+.R4C1
+~b~Imain() ~F{~N
+~b~Iint i~N
+~b~Ii=1;~N
+~b~Iwhile (i<11); {~N
+~b~Iprintf("\n The square of %d is %d",i,i*i);~N
+~b~Ii=i+1;~N
+~b~I}~N
+~b~I}~N
+.R12C1
+    This is the opening ~b~I{~N for ~b~Imain()~N.
+.WR11C1
+~b~I~F}~N
+.R4C1
+~b~Imain() {~N
+.R12C1
+    This is the closing ~b~I}~N for ~b~Imain()~N.
+.WR11C1
+~b~I}~N
+.R5C1
+~Vint i~N
+~Vi=1;~N
+.R12C1
+    Here we declare ~b~Ii~N to be an ~b~Iint~Neger variable, and define it
+    to be (initially) the integer ~b~I1~N.
+
+    ~IFind the error here!~N
+.WR5C1
+~Vint i~N        should be  ~b~Iint i~F;~N
+.R17C1
+    WE FORGOT THE SEMI-COLON!
+.WR5C1
+~Vint i;~N                                   with SEMI-COLON!
+.R12C1
+    Now that we're debugging our program, let's change these lines so that
+    the declaration and the initialization of ~b~Ii~N are together:
+
+                                             
+                                             
+                                             
+                                             
+                                             
+.WR4C1
+~b~Imain() {~N
+~b~Iint i=1;~N                                                   
+~b~Iwhile (i<11); {~N                                   
+~b~Iprintf("\n The square of %d is %d",i,i*i);~N         
+~b~Ii=i+1;~N                                              
+~b~I}~N                                                    
+~b~I}~N                                                     
+          
+.K4,60
+ int i=1[0;1m;
+.WNR2C1
+~b~Imain() {~N
+~b~Iint i=1;~N                                         
+~Vwhile (i<11); {~N                                   
+~b~Iprintf("\n The square of %d is %d",i,i*i);~N         
+~b~Ii=i+1;~N                                              
+~b~I}~N                                                    
+~b~I}~N                                                     
+.R10C1
+    Here's something new...it says to execute certain statements again
+    and again ~Ias long as i is less than 11~N ( or ~b~Iwhile~N i<11 ).
+
+    Execute what statements?
+.WR4C1
+~b~Iwhile (i<11); ~F{~N
+.R7C1
+~b~I~F}~N
+.R15C1
+    All the stuff between these curly brackets!
+    ...and this stuff says to ~b~Iprintf~N:
+
+~r~I The square of ~N    ~r~Iis~N 
+                     
+          value of ~b~Ii~N     value of ~b~Ii*i~N (the square of ~b~Ii~N)
+          goes in here.        goes in here.
+.WR23C1
+    THIS PROGRAM IS HARD TO READ!
+.K19,60
+[5mchange it![0m
+.WNT
+  PRETTY PROGRAMS  
+.R4C1
+~b~Imain()                                              /* sexy program */~N
+~b~I{                                                   /* start main() */~N
+~b~I    int i=1;                                        /* declare i=1  */~N
+~b~I    while (i<11); {                                 /* while i<11   */~N
+~b~I        printf("\n The square of %d is %d",i,i*i);  /* print i, i*i */~N
+~b~I        i=i+1;                                      /* increment i  */~N
+~b~I    }                                               /* end of while */~N
+~b~I}                                                   /* end of main  */~N
+
+    Here's the same program again...but nicer to read!
+
+    Anything between ~b~I/*~N and ~b~I*/~N is a ~Icomment~N and is ignored
+    by the C-compiler (it's for human consumption only) so we've added a
+    comment to every line. NOW we can see what the program does by reading
+    ~Ionly~N the comments!
+
+    Indenting the various parts makes for easier reading (again for human
+    consumption ...the  compiler doesn't care).
+.WR5C1
+~F~b~I{~N
+.R11C1
+~F~b~I}~N
+.w
+.R13C1
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+.R13C1
+    The start and end of ~b~Imain()~N are easy to spot.
+    (Although different programmers use different formats, ~IWE~N will 
+     always start and end ~b~Imain()~N with ~b~I{~N and ~b~I}~N in the ~Ifirst~N
+     column)    Well ...sometimes we will start with: ~b~Imain() {~N
+.WR5C1
+~b~I{~N
+.R11C1
+~b~I}~N
+.R7C1
+~b~I    while (i<11); ~F{~N~b~I~W                                 /* while i<11   */~N
+.R10C1
+~b~I    ~F}~N~b~I~W                                               /* end of while */~N
+.R18C1
+    ...and we start a ~b~Iwhile~N loop with ~b~Iwhile (....) ~F{~N and end it
+    with ~b~I~F}~N placed directly below the ~b~Iw~N in ~b~Iw~Nhile.
+
+    ...and we will always (?) ~Iindent~N (by 4 spaces) these ~Iinside loops~N.
+.W
+.K5,35
+[1m ALWAYS!?
+.WNR1C1
+~b~Imain()                                              /* sexy program */~N
+~b~I{                                                   /* start main() */~N
+~b~I    int i=1;                                        /* declare i=1  */~N
+~b~I    while (i<11); {                                 /* while i<11   */~N
+~b~I        printf("\n The square of %d is %d",i,i*i);  /* print i, i*i */~N
+~b~I        i=i+1;                                      /* increment i  */~N
+~b~I    }                                               /* end of while */~N
+~b~I}                                                   /* end of main  */~N
+
+    Alas, this program won't even compile!
+
+    Whereas most C statements end in a SEMI-COLON, the ~b~Iwhile (...)~N does 
+    ~INOT~N. We must delete the ~b~I;~N after a ~b~Iwhile~N.
+.R4C1
+~b~I    while (i<11)~F;~N~b~I~W {                                 /* while i<11   */~N
+.WR4C1
+~b~I    while (i<11)  {                                 /* while i<11   */~N
+.WNR1C1
+~b~Imain()                                              /* sexy program */~N
+~b~I{                                                   /* start main() */~N
+~b~I    int i=1;                                        /* declare i=1  */~N
+~b~I    while (i<11)  {                                 /* while i<11   */~N
+~b~I        printf("\n The square of %d is %d",i,i*i);  /* print i, i*i */~N
+~b~I        i=i+1;                                      /* increment i  */~N
+~b~I    }                                               /* end of while */~N
+~b~I}                                                   /* end of main  */~N
+    The construction:   ~V i=1;                     ~N
+                        ~V while (i<11)  {          ~N
+                        ~V     some statements;     ~N
+                        ~V     i=i+1;               ~N
+                        ~V }                        ~N
+
+    occurs so often (in any language) that a slick mechanism exists ~Ifor~N
+    handling this loop:
+
+                        ~V for (i=1; i<11; i=i+1) { ~N
+                        ~V     some statements;     ~N
+                        ~V }                        ~N
+.WNR1C1
+~b~Imain()                                              /* sexy program */~N
+~b~I{                                                   /* start main() */~N
+~b~I    int i;                                          /* declare i    */~N
+~b~I    for (i=1; i<11; i=i+1) {                        /* the for loop */~N
+~b~I        printf("\n The square of %d is %d",i,i*i);  /* print i, i*i */~N
+~b~I    }                                               /* end of for   */~N
+~b~I}                                                   /* end of main  */~N
+
+    Note that the ~Ifor loop~N automatically initializes ~b~Ii~N to ~b~I1~N,
+    then does the ~b~Iprintf()~N again and again, each time incrementing ~b~Ii~N,
+    until ~b~Ii~N has the value ~I11~N ( ..then the program exits from this loop
+    after ~b~Iprintf~N-ing for the last time with ~b~Ii~N=10). 
+
+    The value of ~b~Ii~N, after the exit from the loop, is ~I11~N.
+.K19,60
+ NOT [0;1m10[0m
+.WN
+    ..and, just to check it all out, we leave our word processor after saving
+    this ~Isource~N code under the name ~Iprogram2.c~N, then type:
+
+~Icc program2~N
+
+    then (assuming it compiles without errors!) we finish with:
+
+~Ilink program2~N
+
+    then ( since this ~Icompile/link~N procedure will generate an ~Iexe~Ncutable
+    file called ~Iprogram2.exe~N ) we type:
+
+~Iprogram2~N
+
+    and the ~Iexe~Ncutable program will load from disk, then execute, to give:
+.K17,30
+GO!GO!GO!
+.WN
+
+~r~I The square of 1 is 1~N
+~r~I The square of 2 is 4~N
+~r~I The square of 3 is 9~N
+~r~I The square of 4 is 16~N
+~r~I The square of 5 is 25~N
+~r~I The square of 6 is 36~N
+~r~I The square of 7 is 49~N
+~r~I The square of 8 is 64~N
+~r~I The square of 9 is 81~N
+~r~I The square of 10 is 100~N
+.K17,30
+!
+.K17,30
+l!
+.K17,30
+ul!
+.K17,30
+ful!
+.K17,30
+rful!
+.K17,30
+erful!
+.K17,30
+derful!
+.K17,30
+nderful!
+.K17,30
+onderful!
+.K17,30
+wonderful!
+.K17,30
+[0;1mwonderful!
+.WN
+1 ~b~I    i=5;                  ~N
+2 ~b~I    while (i<5) {         ~N
+3 ~b~I        some statements;  ~N
+4 ~b~I    }                     ~N
+
+    In this piece of code, the ~b~Iwhile~N loop will be executed only as long as
+    ~b~Ii<5~N. Since we set ~b~Ii=5~N in Line 1, the loop would be bypassed.
+
+    ~IThe condition, in a while loop, is checked at the beginning of the loop!~N
+
+    Usually this is what we want .... but, sometimes it is NOT:
+.W
+
+~b~I    while (sam>100)    {                              ~N
+~b~I        --------------------------------------------  ~N
+~b~I        some statements which calculate some numbers  ~N
+~b~I        and use these to compute the value of sam.    ~N
+~b~I        --------------------------------------------  ~N
+~b~I    }                                                 ~N
+
+    In this piece of code the value of ~b~Isam~N is not even known until we go
+    through the ~b~Iwhile~N loop ...so we want to check the ~Iwhile-condition~N
+    at the END of the loop !!!
+.WNT
+    now DO this for a WHILE    
+.R4C1
+~b~I    while (sam>100)    {                              ~N
+~b~I        --------------------------------------------  ~N
+~b~I        some statements which calculate some numbers  ~N
+~b~I        and use these to compute the value of sam.    ~N
+~b~I        --------------------------------------------  ~N
+~b~I    }                                                 ~N
+
+    We replace the above construction by a ~IDO-WHILE~N:
+
+~b~I    do  {                                             ~N
+~b~I        --------------------------------------------  ~N
+~b~I        some statements which calculate some numbers  ~N
+~b~I        and use these to compute the value of sam.    ~N
+~b~I        --------------------------------------------  ~N
+~b~I    }   while (sam>100)~F;~N~b~I                              ~N
+
+    ...and (magic) the ~Iwhile-condition~N is checked at the
+    ~Iend of the loop~N!
+.K19,60
+while[1;5m;[0m
+.WN
+1 ~b~I    double x=1.0, y, e;       /* double precision  ! */ ~N
+2 ~b~I    do  {                     /* start of the do-loop*/ ~N
+3 ~b~I        y=2.0*sin(x);         /* calculate y         */ ~N
+4 ~b~I        e=fabs(y-x);          /* calculate error     */ ~N
+5 ~b~I        x=y;                  /* change x to y       */ ~N
+6 ~b~I    }   while (e>.0000005);   /* end condition       */ ~N
+7 ~b~I    printf("x-2sin(x)=%f when x=%f",e,x);               ~N
+
+    This program calulates the root of the equation: ~Ix-2*sin(x)=0~N
+    by starting with ~b~Ix=1.0~N (Line 1), then repeatedly replacing ~b~Ix~N
+    by y in Line 5 ( where y is calculated as 2.0*sin(x) in Line 3 ).
+
+    While the error,( the ~b~If~Nloating point ~b~Iabs~Nolute value of ~b~Iy-x~N,
+    calculated in Line 4) exceeds ~b~I.0000005~N we repeat the loop.
+
+    Finally, when the ~Iwhile-condition~N (in Line 6) is false (i.e. when 
+    ~b~Ie~N is LESS THAN OR EQUAL to .0000005), we print:
+
+~r~Ix-2sin(x)=0.000000 when x=1.895494~N   correct to 6 decimal places!
+.W
+
+    ..and it's nice to check the error ~b~Ie~N after we go thru' the loop!
+.WNT
+ a REVIEW 
+.R5C1
+~b~Iwhile (something is true ) {~N
+~b~I    do these statements;    ~N
+~b~I}                           ~N
+
+~b~Ifor (initialize variables;repeat,if this is true;do this at end of loop) {~N
+~b~I    do these statements;                                                  ~N
+~b~I}                                                                         ~N
+
+    ~INOTE~N: If there is only ~Ione~N statement to perform, in either a ~b~Iwhile~N
+            or a ~b~Ifor~N loop, then we don't need the ~b~I{~N and ~b~I}~N:
+
+~b~I                                               ~N 
+~b~Ifor (i=0; i<11; i=i+1)                         ~N     NO OPENING {
+~b~I    printf("\n The square of %d is %d",i,i*i); ~N     or CLOSING }
+~b~I                                               ~N 
+.WN
+~b~Ido  {                        ~N
+~b~I    do these statements;     ~N
+~b~I} while (something is true)~F;~N~b~I ~N
+.R10C1
+        ~INOTE~N: The ~Iwhile~N which occurs at the end of a ~IDO loop~N needs
+              a ~ISEMI-COLON~N !!!
+.b9-12
+.K17,32
+but..but..
+.WN
+    We can also invoke a function ( like ~b~Igetchar()~N ) ~Iwhile~N inside....
+~b~Ichar key;                                ~N
+~b~Iwhile ( (key = getchar()) != 'e' )       ~N
+~b~I    printf(" You pressed %c \n",key);    ~N
+~b~Iprintf("\n  THAT'S THE eND");            ~N
+
+..where we wait for a ~Isingle~N keypress (that's what ~b~Igetchar()~N does!),
+and assign the key to the ~b~Ichar~N variable ~b~Ikey~N via ~b~Ikey=getchar()~N,
+and so long as ~b~Ikey~N is ~Inot equal~N to the letter ~I'e'~N, we ~b~Iprintf()~N
+the ~b~Ikey~N  (as a ~b~I%c~Nharacter) and then a ~b~I\n~Newline .
+
+~INOTE~N: ~b~Iscanf("%c",&key)~N would require your pressing the ~Ienter~N key
+after each of the letters ~Ia~N, ~Ib~N, etc.  ... so we used ~b~Igetchar()~N!
+
+    This program would give (if you pressed ~Ia~N then ~Ib~N then ~Ic~N etc.):
+
+~Ia ~r You pressed a~N
+~Ib ~r You pressed b~N
+~Ic ~r You pressed c~N
+~Id ~r You pressed d~N
+~Ie~N
+~r~I  THAT'S THE eND~N
+.WN
+
+
+.T
+   THAT'S THE eND FOLKS!   
+.K16,30
+au revoir!
+
+
+.q
+

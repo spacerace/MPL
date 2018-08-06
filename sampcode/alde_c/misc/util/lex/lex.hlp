@@ -1,0 +1,107 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                     LEX - Lexical Analyzer Generator
+                     ================================
+
+  LEX is a program which will generate a table-driven lexical analyzer in
+  C.  It takes as it's input a lexical specification in a special
+  language which supports "regular expression" notation.  The theory and
+  operation of LEX is somewhat complex, so it is suggested that you read
+  the LEX documentation before trying to use LEX.
+
+  LEX normally reads the grammar from the standard input, writing the C
+  program to the file 'lextab.c'.  It may be further controlled by using
+  the following flags upon invocation:
+
+        -i filename     The grammar is read from 'filename'.
+        -o filename     The analyser is written to 'filename'.
+        -t name         The default finite-state automaton is named
+                        lextab (and it is, by default, written to file
+                        'lextab.c').  The -t switch causes the internal
+                        tables to be named 'name' and, if the -o switch
+                        is not given, written to file 'name.c'.  This is
+                        necessary if the processor-switching capabilities
+                        described in a later section are to be used.
+        -e name         "Easy" command line. "-e name" is equivalent to
+                        typing:
+                                 -i name.LXI -o name.C -t name
+
+                        Do not include device names or file extensions on
+                        the "easy" command line.
+
+        -v [filename]   Internal state info is written to filename.
+                        If filename not present, state information is
+                        written to file 'lex.out.'
+        -d              Enable various debugging printouts.
+        -s              Generate analyzer without references to standard
+                        I/O.  Used for programs which do not employ the
+                        standard I/O functions.
+
+d
+                        I/O.  Used for programs which do not employ the
+    

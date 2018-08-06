@@ -1,0 +1,7 @@
+
+hilite.obj: hilite.c
+   cl -c -W2 -AS -Gsw -Od -Zped hilite.c
+
+hilite.exe: hilite.obj hilite.def
+   link4 hilite,/align:16,/map/li,slibw,hilite.def
+   mapsym hilite
